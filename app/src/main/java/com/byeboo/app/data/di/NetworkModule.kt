@@ -21,11 +21,15 @@ import retrofit2.Retrofit
 object NetworkModule {
     @Provides
     @Singleton
-    fun providesLoggingInterceptor() =
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    fun providesLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
-
+    }
     @Provides
     @Singleton
     fun providesOkHttpClient(
