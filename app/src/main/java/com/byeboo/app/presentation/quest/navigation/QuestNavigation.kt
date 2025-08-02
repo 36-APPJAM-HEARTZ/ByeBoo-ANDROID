@@ -16,7 +16,7 @@ import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
 import com.byeboo.app.presentation.quest.review.QuestReviewScreen
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
-import com.byeboo.app.presentation.quest.tip.QuestTipScreen
+import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
 fun NavController.navigateToQuestStart(navOptions: NavOptions? = null) {
     navigate(QuestStart, navOptions)
@@ -78,9 +78,9 @@ fun NavGraphBuilder.questGraph(
             val questId = questTip.questId
             val questType = questTip.questType
 
-            QuestTipScreen(
-                navigateToQuest = navigateUp,
+            QuestTipRoute(
                 questId = questId,
+                navigateToQuest = navigateUp,
                 questType = questType,
                 bottomPadding = padding
             )
