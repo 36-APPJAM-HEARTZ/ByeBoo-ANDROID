@@ -14,7 +14,7 @@ import com.byeboo.app.presentation.quest.QuestViewModel
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
-import com.byeboo.app.presentation.quest.review.QuestReviewScreen
+import com.byeboo.app.presentation.quest.review.QuestReviewRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
@@ -90,7 +90,7 @@ fun NavGraphBuilder.questGraph(
             val questReview = backStackEntry.toRoute<QuestReview>()
             val questId = questReview.questId
 
-            QuestReviewScreen(
+            QuestReviewRoute(
                 questId = questId,
                 navigateToBack = navigateUp,
                 bottomPadding = padding
