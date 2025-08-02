@@ -64,9 +64,8 @@ fun QuestRecordingCompleteRoute(
     BackHandler { viewModel.onCloseClick() }
 
     QuestRecordingCompleteScreen(
-        questId = questId,
-        navigateToQuest = navigateToQuest,
         bottomPadding = bottomPadding,
+        onCloseClick = viewModel::onCloseClick,
         stepNumber = uiState.stepNumber,
         questNumber = uiState.questNumber,
         createdAt = uiState.createdAt,
@@ -79,9 +78,8 @@ fun QuestRecordingCompleteRoute(
 
 @Composable
 fun QuestRecordingCompleteScreen(
-    questId: Long,
-    navigateToQuest: () -> Unit,
     bottomPadding: Dp,
+    onCloseClick: () -> Unit,
     stepNumber: Long,
     questNumber: Long,
     createdAt: String,
@@ -90,7 +88,6 @@ fun QuestRecordingCompleteScreen(
     emotionDescription: String,
     selectedEmotion: LargeTagType,
     modifier: Modifier = Modifier,
-    viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
 ) {
     Column(
         modifier = modifier
@@ -107,7 +104,7 @@ fun QuestRecordingCompleteScreen(
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
                 .align(Alignment.End)
-                .clickable { viewModel.onCloseClick() }
+                .clickable { onCloseClick() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

@@ -71,7 +71,6 @@ fun QuestReviewRoute(
     }
 
     QuestReviewScreen(
-        questId = questId,
         bottomPadding = bottomPadding,
         navigateToBack = navigateToBack,
         stepNumber = uiState.stepNumber,
@@ -88,7 +87,6 @@ fun QuestReviewRoute(
 
 @Composable
 fun QuestReviewScreen(
-    questId: Long,
     bottomPadding: Dp,
     navigateToBack: () -> Unit,
     stepNumber: Long,
