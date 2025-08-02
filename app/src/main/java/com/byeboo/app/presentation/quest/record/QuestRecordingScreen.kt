@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
+import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -45,28 +47,27 @@ import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
+import com.byeboo.app.domain.model.quest.QuestWritingState
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QuestRecordingScreen(
+fun QuestRecordingRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
     bottomPadding: Dp,
-    modifier: Modifier = Modifier,
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showQuitModal by viewModel.showQuitModal.collectAsStateWithLifecycle()
     val showBottomSheet by viewModel.showBottomSheet.collectAsStateWithLifecycle()
     val isEmotionSelected by viewModel.isEmotionSelected.collectAsStateWithLifecycle()
-    val focusManager = LocalFocusManager.current
+
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
 
@@ -114,6 +115,60 @@ fun QuestRecordingScreen(
         )
     }
 
+    QuestRecordingScreen(
+        bottomPadding = bottomPadding,
+        onBackClick = viewModel::onBackClick,
+        stepNumber = uiState.stepNumber,
+        step = uiState.step,
+        questNumber = uiState.questNumber,
+        questQuestion = uiState.questQuestion,
+        onTipClick = viewModel::onTipClick,
+        bringIntoViewRequester = bringIntoViewRequester,
+        isFocused = isFocused,
+        contentsState = uiState.contentsState,
+        onClickCompleteButton = viewModel::openBottomSheet,
+        questAnswer = uiState.questAnswer,
+        onUpdateContent = viewModel::updateContent,
+        navigateButton = viewModel::postQuestRecording,
+        onBottomSheetDismiss = viewModel::closeBottomSheet,
+        showBottomSheet = showBottomSheet,
+        onEmotionSelected = { selectedEmotion ->
+            viewModel.isEmotionSelected(true)
+            viewModel.updateSelectedEmotion(selectedEmotion)
+        },
+        onSelectedChanged = { isSelected ->
+            viewModel.isEmotionSelected(isSelected)
+        },
+        isEmotionSelected = isEmotionSelected
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuestRecordingScreen(
+    bottomPadding: Dp,
+    onBackClick: () -> Unit,
+    stepNumber: Long,
+    step: String,
+    questNumber: Long,
+    questQuestion: String,
+    onTipClick: () -> Unit,
+    bringIntoViewRequester: BringIntoViewRequester,
+    isFocused: MutableState<Boolean>,
+    contentsState: QuestWritingState,
+    onClickCompleteButton: () -> Unit,
+    questAnswer: String,
+    onUpdateContent: (Boolean, String) -> Unit,
+    navigateButton: () -> Unit,
+    onBottomSheetDismiss: () -> Unit,
+    onEmotionSelected: (LargeTagType) -> Unit,
+    onSelectedChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    showBottomSheet: Boolean = false,
+    isEmotionSelected: Boolean = false
+) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -132,7 +187,7 @@ fun QuestRecordingScreen(
                     bottom = screenHeightDp(16.dp)
                 )
                 .align(Alignment.Start)
-                .clickable { viewModel.onBackClick() }
+                .clickable { onBackClick() }
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -149,14 +204,14 @@ fun QuestRecordingScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SmallTag(
-                        tagText = "STEP ${uiState.stepNumber}",
+                        tagText = "STEP ${stepNumber}",
                         tagColor = ByeBooTheme.colors.gray300
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                     Text(
-                        text = uiState.step,
+                        text = step,
                         style = ByeBooTheme.typography.body2,
                         color = ByeBooTheme.colors.gray500
                     )
@@ -167,7 +222,7 @@ fun QuestRecordingScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = "${uiState.questNumber}번째 퀘스트",
+                    text = "${questNumber}번째 퀘스트",
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.secondary300,
                     style = ByeBooTheme.typography.body5,
@@ -179,7 +234,7 @@ fun QuestRecordingScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = uiState.questQuestion,
+                    text = questQuestion,
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray100,
                     style = ByeBooTheme.typography.head1,
@@ -197,7 +252,7 @@ fun QuestRecordingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
-                        modifier = Modifier.clickable { viewModel.onTipClick() }
+                        modifier = Modifier.clickable { onTipClick() }
                     )
                 }
             }
@@ -211,11 +266,11 @@ fun QuestRecordingScreen(
                         .bringIntoViewRequester(bringIntoViewRequester)
                 ) {
                     QuestTextField(
-                        questWritingState = uiState.contentsState,
-                        value = uiState.questAnswer,
+                        questWritingState = contentsState,
+                        value = questAnswer,
                         onValueChange = {
                             if (it.length <= 500) {
-                                viewModel.updateContent(isFocused = true, it)
+                                onUpdateContent(isFocused.value, it)
                             }
                         },
                         placeholder = "글로 적다 보면, 스스로에게 한 걸음 더 가까워질 수 있어요.",
@@ -244,8 +299,8 @@ fun QuestRecordingScreen(
                     buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
                     buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
-                    onClick = viewModel::openBottomSheet,
-                    isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
+                    onClick = onClickCompleteButton,
+                    isEnabled = QuestContentLengthValidator.validButton(questAnswer)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -254,19 +309,11 @@ fun QuestRecordingScreen(
     }
 
     ByeBooBottomSheet(
-        navigateButton = viewModel::postQuestRecording,
+        navigateButton = navigateButton,
         showBottomSheet = showBottomSheet,
-        onDismiss = {
-            viewModel.closeBottomSheet()
-        },
-        onEmotionSelected = { selectedEmotion ->
-            viewModel.isEmotionSelected(true)
-            viewModel.updateSelectedEmotion(selectedEmotion)
-            viewModel.closeBottomSheet()
-        },
-        onSelectedChanged = { isSelected ->
-            viewModel.isEmotionSelected(isSelected)
-        },
+        onDismiss = onBottomSheetDismiss,
+        onEmotionSelected = onEmotionSelected,
+        onSelectedChanged = onSelectedChanged,
         isSelected = isEmotionSelected
     )
 }

@@ -40,11 +40,10 @@ import com.byeboo.app.presentation.quest.component.text.QuestContent
 import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
-fun QuestRecordingCompleteScreen(
+fun QuestRecordingCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     bottomPadding: Dp,
-    modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,6 +63,32 @@ fun QuestRecordingCompleteScreen(
 
     BackHandler { viewModel.onCloseClick() }
 
+    QuestRecordingCompleteScreen(
+        bottomPadding = bottomPadding,
+        onCloseClick = viewModel::onCloseClick,
+        stepNumber = uiState.stepNumber,
+        questNumber = uiState.questNumber,
+        createdAt = uiState.createdAt,
+        question = uiState.question,
+        answer = uiState.answer,
+        emotionDescription = uiState.emotionDescription,
+        selectedEmotion = uiState.selectedEmotion
+    )
+}
+
+@Composable
+private fun QuestRecordingCompleteScreen(
+    bottomPadding: Dp,
+    onCloseClick: () -> Unit,
+    stepNumber: Long,
+    questNumber: Long,
+    createdAt: String,
+    question: String,
+    answer: String,
+    emotionDescription: String,
+    selectedEmotion: LargeTagType,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -79,7 +104,7 @@ fun QuestRecordingCompleteScreen(
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
                 .align(Alignment.End)
-                .clickable { viewModel.onCloseClick() }
+                .clickable { onCloseClick() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -110,12 +135,12 @@ fun QuestRecordingCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${uiState.stepNumber}")
+                        SmallTag(tagText = "STEP ${stepNumber}")
 
                         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                         Text(
-                            text = "${uiState.questNumber}번째 퀘스트",
+                            text = "${questNumber}번째 퀘스트",
                             style = ByeBooTheme.typography.body2,
                             color = ByeBooTheme.colors.gray500
                         )
@@ -123,12 +148,12 @@ fun QuestRecordingCompleteScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    CreatedText(uiState.createdAt)
+                    CreatedText(createdAt)
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = uiState.question,
+                        text = question,
                         style = ByeBooTheme.typography.head1,
                         color = ByeBooTheme.colors.gray100,
                         modifier = Modifier.fillMaxWidth(),
@@ -140,14 +165,14 @@ fun QuestRecordingCompleteScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer
+                        contentText = answer
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     QuestEmotionDescriptionContent(
-                        questEmotionDescription = uiState.emotionDescription,
-                        emotionType = uiState.selectedEmotion
+                        questEmotionDescription = emotionDescription,
+                        emotionType = selectedEmotion
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))

@@ -48,10 +48,10 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun QuestReviewScreen(
+fun QuestReviewRoute(
     questId: Long,
-    navigateToBack: () -> Unit,
     bottomPadding: Dp,
+    navigateToBack: () -> Unit,
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,8 +70,38 @@ fun QuestReviewScreen(
         }
     }
 
+    QuestReviewScreen(
+        bottomPadding = bottomPadding,
+        navigateToBack = navigateToBack,
+        stepNumber = uiState.stepNumber,
+        questNumber = uiState.questNumber,
+        createdAt = uiState.createdAt,
+        question = uiState.question,
+        hasImage = hasImage,
+        imageUrl = uiState.imageUrl,
+        answer = uiState.answer,
+        emotionDescription = uiState.emotionDescription,
+        selectedEmotion = uiState.selectedEmotion
+    )
+}
+
+@Composable
+private fun QuestReviewScreen(
+    bottomPadding: Dp,
+    navigateToBack: () -> Unit,
+    stepNumber: Long,
+    questNumber: Long,
+    createdAt: String,
+    question: String,
+    hasImage: Boolean,
+    imageUrl: String?,
+    answer: String,
+    emotionDescription: String,
+    selectedEmotion: LargeTagType,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
@@ -97,10 +127,10 @@ fun QuestReviewScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
                 QuestTitle(
-                    stepNumber = uiState.stepNumber,
-                    questNumber = uiState.questNumber,
-                    createdAt = uiState.createdAt,
-                    questQuestion = uiState.question
+                    stepNumber = stepNumber,
+                    questNumber = questNumber,
+                    createdAt = createdAt,
+                    questQuestion = question
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
@@ -141,7 +171,7 @@ fun QuestReviewScreen(
                                 .aspectRatio(1f),
                             model = ImageRequest
                                 .Builder(LocalContext.current)
-                                .data(uiState.imageUrl)
+                                .data(imageUrl)
                                 .memoryCachePolicy(CachePolicy.DISABLED)
                                 .diskCachePolicy(CachePolicy.DISABLED)
                                 .build(),
@@ -157,9 +187,9 @@ fun QuestReviewScreen(
                             }
                         )
                     }
-                    if (uiState.answer.isNotBlank()) {
+                    if (answer.isNotBlank()) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        ContentText(uiState.answer)
+                        ContentText(answer)
                     }
                 }
             } else {
@@ -167,7 +197,7 @@ fun QuestReviewScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer
+                        contentText = answer
                     )
                 }
             }
@@ -176,8 +206,8 @@ fun QuestReviewScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                 QuestEmotionDescriptionContent(
-                    questEmotionDescription = uiState.emotionDescription,
-                    emotionType = uiState.selectedEmotion
+                    questEmotionDescription = emotionDescription,
+                    emotionType = selectedEmotion
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(28.dp)))
