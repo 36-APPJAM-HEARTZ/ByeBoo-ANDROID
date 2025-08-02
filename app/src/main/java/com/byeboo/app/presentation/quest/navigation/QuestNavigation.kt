@@ -15,7 +15,7 @@ import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
 import com.byeboo.app.presentation.quest.review.QuestReviewScreen
-import com.byeboo.app.presentation.quest.start.QuestStartScreen
+import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipScreen
 
 fun NavController.navigateToQuestStart(navOptions: NavOptions? = null) {
@@ -53,7 +53,7 @@ fun NavGraphBuilder.questGraph(
 ) {
     routeNavigation<Quest, QuestStart> {
         composable<QuestStart> {
-            QuestStartScreen(
+            QuestStartRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToHome = navigateUp,
                 padding = padding
