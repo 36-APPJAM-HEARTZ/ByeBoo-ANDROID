@@ -34,22 +34,21 @@ class HomeViewModel @Inject constructor(
             val dialogue = dialogueResult.getOrNull()?.dialogue
                 ?: "천천히, 하지만 분명하게. 오늘도 나아가 봐요."
 
-            _uiState.update {
-                it.copy(isQuestStarted = isStarted, journey = journey, dialogue = dialogue)
-            }
-
+            var currentStep: Int? = null
             if (isStarted) {
-                questStateRepository.getQuestCount().collect { model ->
-                    _uiState.update { current ->
-                        current.copy(
-                            isQuestStarted = isStarted,
-                            journey = journey,
-                            dialogue = dialogue,
-                            currentStep = model.count,
-                            totalSteps = 30
-                        )
+                questStateRepository.getQuestCount()
+                    .onSuccess { model ->
+                        currentStep = model.count
                     }
-                }
+            }
+            _uiState.update {
+                it.copy(
+                    isQuestStarted = isStarted,
+                    journey = journey,
+                    dialogue = dialogue,
+                    currentStep = currentStep ?: 0,
+                    totalSteps = 30
+                )
             }
         }
     }
