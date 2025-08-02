@@ -45,7 +45,7 @@ fun NavGraphBuilder.questBehaviorGraph(
         }
 
         composable<QuestBehaviorComplete> { backStackEntry ->
-            val questRecording = backStackEntry.toRoute<QuestBehaviorWriting>()
+            val questRecording = backStackEntry.toRoute<QuestBehaviorComplete>()
             val questId = questRecording.questId
 
             QuestBehaviorCompleteScreen(
