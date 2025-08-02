@@ -10,7 +10,7 @@ interface UserRepository {
     suspend fun getUserEntity(): UserEntity
     suspend fun getUserJourney(): Result<UserJourney>
     suspend fun isLoggedIn(): Boolean
-    fun getNickname(): Flow<String?>
+    fun getNickname(): Flow<String>
     suspend fun getUserId(): Long?
     suspend fun clear()
 }
