@@ -60,7 +60,7 @@ fun QuestStartRoute(
 @Composable
 fun QuestStartScreen(
     onBackClick: () -> Unit,
-    userName: String,
+    userName: String?,
     journeyName: String,
     onStartClick: () -> Unit,
     padding: Dp,
