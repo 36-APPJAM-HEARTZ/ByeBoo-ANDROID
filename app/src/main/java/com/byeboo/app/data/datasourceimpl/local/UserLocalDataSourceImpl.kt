@@ -42,10 +42,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         }.getOrElse { false }
     }
 
-    override fun getNickname(): Flow<String?> {
+    override fun getNickname(): Flow<String> {
         return dataStore.data
-            .map { preferences -> preferences[NICKNAME] }
-            .catch { emit(null) }
+            .map { preferences -> preferences[NICKNAME] ?: ""}
+            .catch { emit("") }
     }
 
     override suspend fun setLoggedIn(loggedIn: Boolean) {

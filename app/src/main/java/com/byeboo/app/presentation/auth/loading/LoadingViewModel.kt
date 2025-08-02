@@ -21,11 +21,11 @@ class LoadingViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<LoadingSideEffect>()
     val sideEffect: SharedFlow<LoadingSideEffect> = _sideEffect.asSharedFlow()
 
-    val nickname: StateFlow<String?> = userRepository.getNickname()
+    val nickname: StateFlow<String> = userRepository.getNickname()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
+            initialValue = ""
         )
 
     init {
