@@ -83,7 +83,7 @@ fun QuestTipRoute(
 }
 
 @Composable
-fun QuestTipScreen(
+private fun QuestTipScreen(
     onCloseClick: () -> Unit,
     stepNumber: Long,
     questNumber: Long,

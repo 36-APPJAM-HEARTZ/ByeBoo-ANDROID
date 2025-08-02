@@ -145,7 +145,7 @@ fun QuestRecordingRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QuestRecordingScreen(
+private fun QuestRecordingScreen(
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     stepNumber: Long,

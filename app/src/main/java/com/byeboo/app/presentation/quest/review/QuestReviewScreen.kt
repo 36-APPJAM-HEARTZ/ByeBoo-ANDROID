@@ -86,7 +86,7 @@ fun QuestReviewRoute(
 }
 
 @Composable
-fun QuestReviewScreen(
+private fun QuestReviewScreen(
     bottomPadding: Dp,
     navigateToBack: () -> Unit,
     stepNumber: Long,

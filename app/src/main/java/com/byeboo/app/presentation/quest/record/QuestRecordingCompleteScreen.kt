@@ -77,7 +77,7 @@ fun QuestRecordingCompleteRoute(
 }
 
 @Composable
-fun QuestRecordingCompleteScreen(
+private fun QuestRecordingCompleteScreen(
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
     stepNumber: Long,
