@@ -10,7 +10,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorCompleteScreen
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
-import com.byeboo.app.presentation.quest.behavior.QuestBehaviorWritingScreen
+import com.byeboo.app.presentation.quest.behavior.QuestBehaviorWritingRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorComplete
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorWriting
 
@@ -34,7 +34,7 @@ fun NavGraphBuilder.questBehaviorGraph(
             val questRecording = backStackEntry.toRoute<QuestBehaviorWriting>()
             val questId = questRecording.questId
 
-            QuestBehaviorWritingScreen(
+            QuestBehaviorWritingRoute(
                 viewModel = viewModel,
                 questId = questId,
                 navigateToQuest = navigateToQuest,
