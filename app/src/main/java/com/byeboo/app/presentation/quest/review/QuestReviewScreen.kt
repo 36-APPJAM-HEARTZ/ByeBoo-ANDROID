@@ -55,7 +55,6 @@ fun QuestReviewRoute(
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val hasImage = !uiState.imageUrl.isNullOrBlank()
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -71,33 +70,17 @@ fun QuestReviewRoute(
     }
 
     QuestReviewScreen(
+        uiState = uiState,
         bottomPadding = bottomPadding,
-        navigateToBack = navigateToBack,
-        stepNumber = uiState.stepNumber,
-        questNumber = uiState.questNumber,
-        createdAt = uiState.createdAt,
-        question = uiState.question,
-        hasImage = hasImage,
-        imageUrl = uiState.imageUrl,
-        answer = uiState.answer,
-        emotionDescription = uiState.emotionDescription,
-        selectedEmotion = uiState.selectedEmotion
+        navigateToBack = navigateToBack
     )
 }
 
 @Composable
 private fun QuestReviewScreen(
+    uiState: QuestReviewState,
     bottomPadding: Dp,
     navigateToBack: () -> Unit,
-    stepNumber: Long,
-    questNumber: Long,
-    createdAt: String,
-    question: String,
-    hasImage: Boolean,
-    imageUrl: String?,
-    answer: String,
-    emotionDescription: String,
-    selectedEmotion: LargeTagType,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -127,16 +110,24 @@ private fun QuestReviewScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
                 QuestTitle(
-                    stepNumber = stepNumber,
-                    questNumber = questNumber,
-                    createdAt = createdAt,
-                    questQuestion = question
+                    stepNumber = uiState.stepNumber,
+                    questNumber = uiState.questNumber,
+                    createdAt = uiState.createdAt,
+                    questQuestion = uiState.question
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
             }
 
-            if (hasImage) {
+            if (uiState.imageUrl.isNullOrBlank()) {
+                item {
+                    QuestContent(
+                        titleIcon = QuestContentType.THINKING,
+                        titleText = "이렇게 생각했어요",
+                        contentText = uiState.answer
+                    )
+                }
+            } else {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -171,7 +162,7 @@ private fun QuestReviewScreen(
                                 .aspectRatio(1f),
                             model = ImageRequest
                                 .Builder(LocalContext.current)
-                                .data(imageUrl)
+                                .data(uiState.imageUrl)
                                 .memoryCachePolicy(CachePolicy.DISABLED)
                                 .diskCachePolicy(CachePolicy.DISABLED)
                                 .build(),
@@ -187,18 +178,10 @@ private fun QuestReviewScreen(
                             }
                         )
                     }
-                    if (answer.isNotBlank()) {
+                    if (uiState.answer.isNotBlank()) {
                         Spacer(modifier = Modifier.height(8.dp))
-                        ContentText(answer)
+                        ContentText(uiState.answer)
                     }
-                }
-            } else {
-                item {
-                    QuestContent(
-                        titleIcon = QuestContentType.THINKING,
-                        titleText = "이렇게 생각했어요",
-                        contentText = answer
-                    )
                 }
             }
 
@@ -206,8 +189,8 @@ private fun QuestReviewScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                 QuestEmotionDescriptionContent(
-                    questEmotionDescription = emotionDescription,
-                    emotionType = selectedEmotion
+                    questEmotionDescription = uiState.emotionDescription,
+                    emotionType = uiState.selectedEmotion
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(28.dp)))
