@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -39,7 +40,9 @@ import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
+import com.byeboo.app.domain.model.auth.QuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.StepProgressBar
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
 import com.byeboo.app.presentation.auth.userinfo.screen.UserInfoEmotionScreen
@@ -48,17 +51,59 @@ import com.byeboo.app.presentation.auth.userinfo.screen.UserInfoQuestScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserInfoScreen(
+fun UserInfoRoute(
     navigateToLoading: () -> Unit,
     modifier: Modifier = Modifier,
     padding: Dp,
     viewModel: UserInfoViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
     var previousPage by remember { mutableStateOf(0) }
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is UserInfoSideEffect.NavigateToLoading -> navigateToLoading()
+            }
+        }
+    }
+
+    UserInfoScreen(
+        uiState = uiState,
+        pagerState = pagerState,
+        previousPage = previousPage,
+        onUpdatePreviousPage = { previousPage = it },
+        onNicknameChange = viewModel::updateNickname,
+        onEmotionSelect = viewModel::updateEmotion,
+        onQuestSelect = viewModel::updateQuest,
+        onResetEmotion = viewModel::resetEmotion,
+        onResetQuest = viewModel::resetQuest,
+        onSubmit = viewModel::finishUserInfo,
+        modifier = modifier,
+        padding = padding
+    )
+}
+
+
+@Composable
+private fun UserInfoScreen(
+    uiState: UserInfoState,
+    pagerState: PagerState,
+    previousPage: Int,
+    onUpdatePreviousPage: (Int) -> Unit,
+    onNicknameChange: (String) -> Unit,
+    onEmotionSelect: (Feeling) -> Unit,
+    onQuestSelect: (QuestStyle) -> Unit,
+    onResetEmotion: () -> Unit,
+    onResetQuest: () -> Unit,
+    onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
+    padding: Dp
+) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+
     val isStepValid by remember(
         pagerState.currentPage,
         uiState.nicknameValidation,
@@ -74,24 +119,16 @@ fun UserInfoScreen(
             }
         }
     }
+
     if (pagerState.currentPage != 0) {
         BackHandler {
             coroutineScope.launch {
-                val targetPage = pagerState.currentPage - 1
-                previousPage = pagerState.currentPage
-                pagerState.scrollToPage(targetPage)
+                onUpdatePreviousPage(pagerState.currentPage)
+                pagerState.scrollToPage(pagerState.currentPage - 1)
             }
         }
     } else {
         ByeBooBackHandler()
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { effect ->
-            when (effect) {
-                is UserInfoSideEffect.NavigateToLoading -> navigateToLoading()
-            }
-        }
     }
 
     Box(
@@ -105,12 +142,15 @@ fun UserInfoScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
         ) {
             Spacer(modifier = Modifier.padding(top = screenHeightDp(padding + 27.dp)))
+
+            // 뒤로가기 아이콘
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,16 +165,15 @@ fun UserInfoScreen(
                             .size(24.dp)
                             .noRippleClickable {
                                 coroutineScope.launch {
-                                    val targetPage = pagerState.currentPage - 1
-                                    previousPage = pagerState.currentPage
-                                    pagerState.scrollToPage(targetPage)
+                                    onUpdatePreviousPage(pagerState.currentPage)
+                                    pagerState.scrollToPage(pagerState.currentPage - 1)
                                 }
                             }
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
+            Spacer(modifier = Modifier.height(16.dp))
             StepProgressBar(currentStep = pagerState.currentPage + 1)
 
             HorizontalPager(
@@ -145,20 +184,21 @@ fun UserInfoScreen(
                     0 -> UserInfoNicknameScreen(
                         nickname = uiState.nickname,
                         validationState = uiState.nicknameValidation.toValidationState(),
-                        onTextChange = viewModel::updateNickname
+                        onTextChange = onNicknameChange
                     )
 
                     1 -> UserInfoEmotionScreen(
                         selectedEmotion = uiState.selectedEmotion,
-                        onEmotionSelect = viewModel::updateEmotion
+                        onEmotionSelect = onEmotionSelect
                     )
 
                     2 -> UserInfoQuestScreen(
                         selectedQuest = uiState.selectedQuest,
-                        onQuestSelect = viewModel::updateQuest
+                        onQuestSelect = onQuestSelect
                     )
                 }
             }
+
             Spacer(modifier = Modifier.weight(1f))
 
             ByeBooActivationButton(
@@ -172,26 +212,22 @@ fun UserInfoScreen(
                         val nextPage = pagerState.currentPage + 1
 
                         when (pagerState.currentPage) {
-                            0 -> {
-                                if (previousPage > 0) {
-                                    viewModel.resetEmotion()
-                                    viewModel.resetQuest()
-                                }
+                            0 -> if (previousPage > 0) {
+                                onResetEmotion()
+                                onResetQuest()
                             }
 
-                            1 -> {
-                                if (previousPage > 1) {
-                                    viewModel.resetQuest()
-                                }
+                            1 -> if (previousPage > 1) {
+                                onResetQuest()
                             }
                         }
 
-                        previousPage = pagerState.currentPage
+                        onUpdatePreviousPage(pagerState.currentPage)
 
                         if (pagerState.currentPage < 2) {
                             pagerState.scrollToPage(nextPage)
                         } else {
-                            viewModel.finishUserInfo()
+                            onSubmit()
                         }
                     }
                 }

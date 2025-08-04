@@ -29,7 +29,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
-fun LoadingScreen(
+fun LoadingRoute(
     navigateToHomeAmulet: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoadingViewModel = hiltViewModel()
@@ -39,11 +39,22 @@ fun LoadingScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                LoadingSideEffect.NavigateToHomeAmulet -> navigateToHomeAmulet()
+                is LoadingSideEffect.NavigateToHomeAmulet -> navigateToHomeAmulet()
             }
         }
     }
 
+    LoadingScreen(
+        nickname = nickname ?: "",
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun LoadingScreen(
+    nickname: String,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -68,6 +79,7 @@ fun LoadingScreen(
                 iterations = LottieConstants.IterateForever
             )
         }
+
         Text(
             buildAnnotatedString {
                 withStyle(
