@@ -48,8 +48,9 @@ import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.CreatedText
 
+
 @Composable
-fun QuestBehaviorCompleteScreen(
+fun QuestBehaviorCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     bottomPadding: Dp,
@@ -75,6 +76,21 @@ fun QuestBehaviorCompleteScreen(
 
     BackHandler { viewModel.onCloseClick() }
 
+    QuestBehaviorCompleteScreen(
+        uiState = uiState,
+        bottomPadding = bottomPadding,
+        onCloseClick = viewModel::onCloseClick,
+        imageUri = imageUri
+    )
+}
+
+@Composable
+private fun QuestBehaviorCompleteScreen(
+    uiState: QuestBehaviorState,
+    bottomPadding: Dp,
+    onCloseClick: () -> Unit,
+    imageUri: Uri?
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +106,7 @@ fun QuestBehaviorCompleteScreen(
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
                 .align(Alignment.End)
-                .clickable { viewModel.onCloseClick() }
+                .clickable { onCloseClick() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

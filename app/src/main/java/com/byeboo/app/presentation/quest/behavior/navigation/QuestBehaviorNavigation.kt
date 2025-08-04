@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
-import com.byeboo.app.presentation.quest.behavior.QuestBehaviorCompleteScreen
+import com.byeboo.app.presentation.quest.behavior.QuestBehaviorCompleteRoute
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorWritingRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorComplete
@@ -48,7 +48,7 @@ fun NavGraphBuilder.questBehaviorGraph(
             val questRecording = backStackEntry.toRoute<QuestBehaviorComplete>()
             val questId = questRecording.questId
 
-            QuestBehaviorCompleteScreen(
+            QuestBehaviorCompleteRoute(
                 viewModel = viewModel,
                 questId = questId,
                 navigateToQuest = navigateToQuest,
