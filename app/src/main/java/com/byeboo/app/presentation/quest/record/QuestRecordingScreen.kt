@@ -101,33 +101,19 @@ fun QuestRecordingRoute(
 
     BackHandler { viewModel.onBackClick() }
 
-    if (showQuitModal) {
-        QuestQuitModal(
-            onDismissRequest = { viewModel.onDismissModal() },
-            stayButton = {
-                viewModel.onDismissModal()
-            },
-            quitButton = {
-                viewModel.onDismissModal()
-                viewModel.onQuitClick()
-            },
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
-        )
-    }
-
     QuestRecordingScreen(
+        uiState = uiState,
+        onDismissModal = viewModel::onDismissModal,
+        onClickQuitButton = {
+            viewModel::onDismissModal
+            viewModel::onQuitClick
+        },
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClick,
-        stepNumber = uiState.stepNumber,
-        step = uiState.step,
-        questNumber = uiState.questNumber,
-        questQuestion = uiState.questQuestion,
         onTipClick = viewModel::onTipClick,
         bringIntoViewRequester = bringIntoViewRequester,
         isFocused = isFocused,
-        contentsState = uiState.contentsState,
         onClickCompleteButton = viewModel::openBottomSheet,
-        questAnswer = uiState.questAnswer,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::postQuestRecording,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
@@ -146,18 +132,15 @@ fun QuestRecordingRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun QuestRecordingScreen(
+    uiState: QuestRecordingState,
+    onDismissModal: () -> Unit,
+    onClickQuitButton: () -> Unit,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
-    stepNumber: Long,
-    step: String,
-    questNumber: Long,
-    questQuestion: String,
     onTipClick: () -> Unit,
     bringIntoViewRequester: BringIntoViewRequester,
     isFocused: MutableState<Boolean>,
-    contentsState: QuestWritingState,
     onClickCompleteButton: () -> Unit,
-    questAnswer: String,
     onUpdateContent: (Boolean, String) -> Unit,
     navigateButton: () -> Unit,
     onBottomSheetDismiss: () -> Unit,
@@ -168,6 +151,15 @@ private fun QuestRecordingScreen(
     isEmotionSelected: Boolean = false
 ) {
     val focusManager = LocalFocusManager.current
+
+    if (uiState.showQuitModal) {
+        QuestQuitModal(
+            onDismissRequest = onDismissModal,
+            stayButton = onDismissModal,
+            quitButton = onClickQuitButton,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+        )
+    }
 
     Column(
         modifier = modifier
@@ -204,14 +196,14 @@ private fun QuestRecordingScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SmallTag(
-                        tagText = "STEP ${stepNumber}",
+                        tagText = "STEP ${uiState.stepNumber}",
                         tagColor = ByeBooTheme.colors.gray300
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                     Text(
-                        text = step,
+                        text = uiState.step,
                         style = ByeBooTheme.typography.body2,
                         color = ByeBooTheme.colors.gray500
                     )
@@ -222,7 +214,7 @@ private fun QuestRecordingScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = "${questNumber}번째 퀘스트",
+                    text = "${uiState.questNumber}번째 퀘스트",
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.secondary300,
                     style = ByeBooTheme.typography.body5,
@@ -234,7 +226,7 @@ private fun QuestRecordingScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = questQuestion,
+                    text = uiState.questQuestion,
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray100,
                     style = ByeBooTheme.typography.head1,
@@ -266,8 +258,8 @@ private fun QuestRecordingScreen(
                         .bringIntoViewRequester(bringIntoViewRequester)
                 ) {
                     QuestTextField(
-                        questWritingState = contentsState,
-                        value = questAnswer,
+                        questWritingState = uiState.contentsState,
+                        value = uiState.questAnswer,
                         onValueChange = {
                             if (it.length <= 500) {
                                 onUpdateContent(isFocused.value, it)
@@ -300,7 +292,7 @@ private fun QuestRecordingScreen(
                     buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = onClickCompleteButton,
-                    isEnabled = QuestContentLengthValidator.validButton(questAnswer)
+                    isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
