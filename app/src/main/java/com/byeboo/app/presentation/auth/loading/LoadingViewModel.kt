@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -21,11 +22,11 @@ class LoadingViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<LoadingSideEffect>()
     val sideEffect: SharedFlow<LoadingSideEffect> = _sideEffect.asSharedFlow()
 
-    val nickname: StateFlow<String?> = userRepository.getNickname()
+    val nickname: StateFlow<String> = userRepository.getNickname().filterNotNull()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
+            initialValue = ""
         )
 
     init {

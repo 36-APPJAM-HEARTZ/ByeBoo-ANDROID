@@ -40,8 +40,8 @@ fun HomeRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                HomeSideEffect.NavigateToQuest -> navigateToQuest()
-                HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is HomeSideEffect.NavigateToQuest -> navigateToQuest()
+                is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
             }
         }
     }

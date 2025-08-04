@@ -45,7 +45,7 @@ fun LoadingRoute(
     }
 
     LoadingScreen(
-        nickname = nickname ?: "",
+        nickname = nickname,
         modifier = modifier
     )
 }
