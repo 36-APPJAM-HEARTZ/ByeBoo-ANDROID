@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +37,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun OnboardingScreen(
+fun OnboardingRoute(
     navigateToUserInfo: () -> Unit,
     padding: Dp,
     viewModel: OnboardingViewModel = hiltViewModel()
@@ -45,9 +46,6 @@ fun OnboardingScreen(
 
     val contents = viewModel.currentContents()
 
-    val pageSpace = if (pageIndex == 2) 24.dp else 16.dp
-
-    val buttonText = if (pageIndex == 2) "시작하기" else "다음으로"
 
     if (pageIndex != 0) {
         BackHandler {
@@ -56,6 +54,39 @@ fun OnboardingScreen(
     } else {
         ByeBooBackHandler()
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when(effect) {
+                is OnboardingSideEffect.NavigationToUserInfo -> navigateToUserInfo()
+            }
+        }
+    }
+
+    OnboardingScreen(
+        padding = padding,
+        pageIndex = pageIndex,
+        contents = contents,
+        onSkipPage = viewModel::skipPage,
+        onNextPage = viewModel::onNextPage,
+        onShowPageNumber = viewModel::showPageNumber,
+    )
+
+
+}
+
+@Composable
+private fun OnboardingScreen(
+    padding: Dp,
+    pageIndex: Int,
+    contents: List<OnboardingState>,
+    onSkipPage: () -> Unit,
+    onNextPage: () -> Unit,
+    onShowPageNumber: () -> String,
+) {
+    val pageSpace = if (pageIndex == 2) 24.dp else 16.dp
+
+    val buttonText = if (pageIndex == 2) "시작하기" else "다음으로"
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -73,7 +104,7 @@ fun OnboardingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = viewModel.showPageNumber(),
+                    text = onShowPageNumber(),
                     color = ByeBooTheme.colors.primary300,
                     style = ByeBooTheme.typography.body5
                 )
@@ -82,7 +113,7 @@ fun OnboardingScreen(
 
                 if (pageIndex != 2) {
                     Row(
-                        modifier = Modifier.clickable { viewModel.skipPage(navigateToUserInfo) },
+                        modifier = Modifier.clickable { onSkipPage() },
                         verticalAlignment = Alignment.CenterVertically
 
                     ) {
@@ -141,13 +172,7 @@ fun OnboardingScreen(
                     .padding(horizontal = screenWidthDp(24.dp))
                     .padding(bottom = padding),
                 buttonText = buttonText,
-                onClick = {
-                    if (pageIndex == 2) {
-                        navigateToUserInfo()
-                    } else {
-                        viewModel.nextPage()
-                    }
-                },
+                onClick = onNextPage,
                 buttonTextColor = ByeBooTheme.colors.white,
                 buttonBackgroundColor = ByeBooTheme.colors.primary300
             )

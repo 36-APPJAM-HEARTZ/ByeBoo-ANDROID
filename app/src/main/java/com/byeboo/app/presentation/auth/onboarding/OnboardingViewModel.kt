@@ -3,16 +3,23 @@ package com.byeboo.app.presentation.auth.onboarding
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.byeboo.app.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor() : ViewModel() {
     private val _pageIndex = mutableIntStateOf(0)
     val pageIndex: State<Int> = _pageIndex
+
+    private val _sideEffect = MutableSharedFlow<OnboardingSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     private val pages: PersistentList<List<OnboardingState>> = persistentListOf(
         persistentListOf(
@@ -51,6 +58,17 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
         )
     )
 
+    fun onNextPage() {
+        if (_pageIndex.intValue == 2) {
+            viewModelScope.launch {
+                _sideEffect.emit(OnboardingSideEffect.NavigationToUserInfo)
+            }
+
+        } else {
+            nextPage()
+        }
+    }
+
     fun nextPage() {
         if (_pageIndex.intValue < pages.lastIndex) {
             _pageIndex.intValue += 1
@@ -63,8 +81,10 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun skipPage(navigateToUserInfo: () -> Unit) {
-        navigateToUserInfo()
+    fun skipPage() {
+        viewModelScope.launch {
+            _sideEffect.emit(OnboardingSideEffect.NavigationToUserInfo)
+        }
     }
 
     fun currentContents(): List<OnboardingState> = pages[_pageIndex.value]
