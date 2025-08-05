@@ -2,10 +2,12 @@ package com.byeboo.app.presentation.quest
 
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class QuestUiState(
     val quest: Quest = Quest(),
-    val questGroups: List<QuestGroup> = emptyList(),
+    val questGroups: ImmutableList<QuestGroup> = persistentListOf(),
     val progressPeriod: Long = 1L,
     val journeyTitle: String = "",
     val currentStepIndex: Int = 0,
