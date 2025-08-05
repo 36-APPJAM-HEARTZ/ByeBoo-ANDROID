@@ -8,6 +8,6 @@ data class OnboardingState(
     val imageRes: Int
 )
 
-sealed class OnboardingSideEffect {
-    object NavigationToUserInfo : OnboardingSideEffect()
+sealed interface OnboardingSideEffect {
+    data object NavigationToUserInfo : OnboardingSideEffect
 }
