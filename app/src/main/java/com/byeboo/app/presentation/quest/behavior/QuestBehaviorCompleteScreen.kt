@@ -34,6 +34,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
@@ -57,8 +58,12 @@ fun QuestBehaviorCompleteRoute(
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val imageUri = uiState.selectedImageUri ?: uiState.imageUrl.takeIf { it.isNotBlank() }
-        ?.let { Uri.parse(it) }
+
+    val imageUri = when {
+        uiState.selectedImageUri != null -> uiState.selectedImageUri
+        uiState.imageUrl.isNotBlank() -> uiState.imageUrl.toUri()
+        else -> null
+    }
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
