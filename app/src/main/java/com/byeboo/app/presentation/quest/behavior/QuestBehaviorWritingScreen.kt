@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
@@ -155,7 +154,7 @@ private fun QuestBehaviorWritingScreen(
     bringIntoViewRequester: BringIntoViewRequester,
     isFocused: MutableState<Boolean>,
     onClickCompleteButton: () -> Unit,
-    onUpdateContent: (Boolean, String) -> Unit,
+    onUpdateContent: (String) -> Unit,
     navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
@@ -306,7 +305,7 @@ private fun QuestBehaviorWritingScreen(
                         value = uiState.contents,
                         onValueChange = {
                             if (it.length <= 200) {
-                                onUpdateContent(isFocused.value, it)
+                                onUpdateContent(it)
                             }
                         },
                         placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
