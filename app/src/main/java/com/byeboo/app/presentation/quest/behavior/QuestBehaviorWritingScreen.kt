@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.behavior
 
 import QuestPhotoPicker
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
@@ -67,9 +69,9 @@ fun QuestBehaviorWritingRoute(
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
+
     val isFocused = remember { mutableStateOf(false) }
 
     LaunchedEffect(questId) {
@@ -126,7 +128,7 @@ fun QuestBehaviorWritingRoute(
         isFocused = isFocused,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
-        navigateButton = {viewModel.uploadImage(context)},
+        navigateButton = viewModel::uploadImage,
         onClickCompleteButton = viewModel::openBottomSheet,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion ->
@@ -154,12 +156,13 @@ private fun QuestBehaviorWritingScreen(
     isFocused: MutableState<Boolean>,
     onClickCompleteButton: () -> Unit,
     onUpdateContent: (Boolean, String) -> Unit,
-    navigateButton: () -> Unit,
+    navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -336,7 +339,7 @@ private fun QuestBehaviorWritingScreen(
     }
 
     ByeBooBottomSheet(
-        navigateButton = navigateButton,
+        navigateButton = {navigateButton(context)},
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
