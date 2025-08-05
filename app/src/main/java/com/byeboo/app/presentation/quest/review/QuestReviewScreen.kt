@@ -52,6 +52,7 @@ fun QuestReviewRoute(
     questId: Long,
     bottomPadding: Dp,
     navigateToBack: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -72,7 +73,8 @@ fun QuestReviewRoute(
     QuestReviewScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        navigateToBack = navigateToBack
+        navigateToBack = navigateToBack,
+        modifier = modifier
     )
 }
 

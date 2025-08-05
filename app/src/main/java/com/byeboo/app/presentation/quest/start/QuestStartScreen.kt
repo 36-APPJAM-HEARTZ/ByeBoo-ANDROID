@@ -35,6 +35,7 @@ fun QuestStartRoute(
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
     padding: Dp,
+    modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -52,7 +53,8 @@ fun QuestStartRoute(
         uiState = uiState,
         onBackClick = viewModel::onBackClick,
         onStartClick = viewModel::onStartClick,
-        padding = padding
+        padding = padding,
+        modifier = modifier
     )
 }
 

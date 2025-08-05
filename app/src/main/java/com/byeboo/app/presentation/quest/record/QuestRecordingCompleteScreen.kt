@@ -44,6 +44,7 @@ fun QuestRecordingCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     bottomPadding: Dp,
+    modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -66,7 +67,8 @@ fun QuestRecordingCompleteRoute(
     QuestRecordingCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = viewModel::onCloseClick
+        onCloseClick = viewModel::onCloseClick,
+        modifier = modifier
     )
 }
 
