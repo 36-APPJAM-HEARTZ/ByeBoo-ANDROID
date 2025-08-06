@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.auth.userinfo.model.UserInfoValidationState
@@ -37,8 +40,9 @@ import com.byeboo.app.presentation.auth.userinfo.model.UserInfoValidationState
 @Composable
 fun NicknameTextField(
     value: String,
-    onValueChange: (String) -> Unit,
     validationState: UserInfoValidationState,
+    onValueChange: (String) -> Unit,
+    onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
@@ -57,17 +61,14 @@ fun NicknameTextField(
     } else {
         Color.Transparent
     }
-
-    val guideColor = when (validationState) {
-        UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
-        UserInfoValidationState.Invalid -> ByeBooTheme.colors.error300
-        UserInfoValidationState.Empty -> ByeBooTheme.colors.gray400
-    }
+    val validColor =
+        if (focusState.value) ByeBooTheme.colors.gray400 else ByeBooTheme.colors.primary300
 
     Column(modifier = modifier.padding(vertical = screenHeightDp(8.dp))) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = screenHeightDp(57.dp))
                 .border(1.dp, borderColor, shape)
                 .clip(shape)
                 .background(ByeBooTheme.colors.whiteAlpha10)
@@ -112,59 +113,84 @@ fun NicknameTextField(
                 }
             )
 
-            if (validationState == UserInfoValidationState.Invalid && focusState.value) {
+            if (value.isNotEmpty() && focusState.value) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_error),
-                    contentDescription = "Invalid",
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete),
+                    contentDescription = "Clear text",
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
+                        .noRippleClickable(onClearClick)
                 )
             }
         }
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
 
-        if (validationState == UserInfoValidationState.Valid) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "* 설정 가능한 닉네임이에요!",
-                    style = ByeBooTheme.typography.cap2,
-                    color = guideColor,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = "${value.length}/5",
-                    style = ByeBooTheme.typography.cap2,
-                    color = ByeBooTheme.colors.gray400
-                )
-            }
-        } else {
-            Column {
+        when (validationState) {
+            UserInfoValidationState.Valid -> {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "* 공백 없이 영어, 숫자와 한글로 구성",
+                        text = "* 설정 가능한 닉네임이에요!",
                         style = ByeBooTheme.typography.cap2,
-                        color = guideColor,
+                        color = validColor,
                         modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = "${value.length}/5",
                         style = ByeBooTheme.typography.cap2,
-                        color = guideColor
+                        color = validColor
                     )
                 }
+            }
 
-                Text(
-                    text = "* 2자 이상 5자 이하",
-                    style = ByeBooTheme.typography.cap2,
-                    color = guideColor
-                )
+
+            UserInfoValidationState.Invalid -> {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_error),
+                        contentDescription = "에러",
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .padding(end = 3.dp)
+                            .size(12.dp)
+                    )
+                    Text(
+                        text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
+                        style = ByeBooTheme.typography.cap2,
+                        color = ByeBooTheme.colors.error300,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "${value.length}/5",
+                        style = ByeBooTheme.typography.cap2,
+                        color = ByeBooTheme.colors.error300
+                    )
+                }
+            }
+
+            UserInfoValidationState.Empty -> {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "* 2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
+                        style = ByeBooTheme.typography.cap2,
+                        color = ByeBooTheme.colors.gray400,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = "${value.length}/5",
+                        style = ByeBooTheme.typography.cap2,
+                        color = ByeBooTheme.colors.gray400
+                    )
+                }
             }
         }
     }

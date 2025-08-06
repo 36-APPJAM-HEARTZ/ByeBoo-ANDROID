@@ -24,7 +24,8 @@ fun UserInfoNicknameScreen(
         NicknameTextField(
             value = nickname,
             validationState = validationState,
-            onValueChange = onTextChange
+            onValueChange = onTextChange,
+            onClearClick = { onTextChange("") }
         )
     }
 }
