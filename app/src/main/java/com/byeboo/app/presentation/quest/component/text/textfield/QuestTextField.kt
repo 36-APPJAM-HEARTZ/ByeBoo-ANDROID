@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.quest.component.text.textfield
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -115,7 +114,6 @@ fun QuestTextField(
                     .height(screenHeightDp(275.dp))
                     .verticalScroll(scrollState)
                     .onFocusChanged { focusStateChanged ->
-                        Log.d("NicknameTextField", "Focus changed: ${focusStateChanged.isFocused}")
                         focusState.value = focusStateChanged.isFocused
                         onFocusChanged?.invoke(focusStateChanged.isFocused)
                     },
@@ -142,7 +140,8 @@ fun QuestTextField(
                     innerTextField()
                 },
                 onTextLayout = { layoutResult ->
-                    lastLineBottom.value = layoutResult.getLineBottom(layoutResult.lineCount - 1).toInt()
+                    lastLineBottom.value =
+                        layoutResult.getLineBottom(layoutResult.lineCount - 1).toInt()
                 }
             )
 
