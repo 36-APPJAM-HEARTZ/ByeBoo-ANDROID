@@ -120,7 +120,7 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    fun updateContent(isFocused: Boolean, text: String) {
+    fun updateContent(text: String) {
         val contentState = if (text.isEmpty()) {
             QuestWritingState.Ready
         } else {
@@ -156,16 +156,8 @@ class QuestBehaviorViewModel @Inject constructor(
     fun onQuitClick() {
         viewModelScope.launch {
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
-
-            delay(300)
-
-            _uiState.update {
-                it.copy(
-                    selectedImageUri = null,
-                    imageCount = 0,
-                    contents = ""
-                )
-            }
+            delay(NAVIGATION_DELAY_MS)
+            clearQuestInput()
         }
     }
 
@@ -196,5 +188,9 @@ class QuestBehaviorViewModel @Inject constructor(
         viewModelScope.launch {
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
         }
+    }
+
+    companion object {
+        private const val NAVIGATION_DELAY_MS = 300L
     }
 }
