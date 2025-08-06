@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -34,8 +35,9 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import kotlinx.coroutines.flow.collectLatest
 
+
 @Composable
-fun QuestScreen(
+fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
@@ -51,9 +53,7 @@ fun QuestScreen(
         if (uiState.questGroups.isNotEmpty() && uiState.currentStepIndex >= 0) {
             val scrollIndex = uiState.questGroups
                 .take(uiState.currentStepIndex)
-                .sumOf { group ->
-                    1 + (group.quests.size + 2) / 3
-                }
+                .sumOf { 1 + (it.quests.size + 2) / 3 }
             listState.animateScrollToItem(index = scrollIndex)
         }
     }
@@ -61,26 +61,52 @@ fun QuestScreen(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest {
             when (it) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    it.questId,
-                    it.questType
-                )
+                is QuestSideEffect.NavigateToQuestTip ->
+                    navigateToQuestTip(it.questId, it.questType)
 
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(it.questId)
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(it.questId)
-                is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
-                is QuestSideEffect.NavigateToHome -> navigateToHome()
+                is QuestSideEffect.NavigateToQuestRecording ->
+                    navigateToQuestRecording(it.questId)
+
+                is QuestSideEffect.NavigateToQuestBehavior ->
+                    navigateToQuestBehavior(it.questId)
+
+                is QuestSideEffect.NavigateToQuestReview ->
+                    navigateToQuestReview(it.questId)
+
+                is QuestSideEffect.NavigateToHome ->
+                    navigateToHome()
             }
         }
     }
 
+    QuestScreen(
+        uiState = uiState,
+        listState = listState,
+        bottomPadding = bottomPadding,
+        onQuestClick = viewModel::onQuestClick,
+        onDismissModal = viewModel::onDismissModal,
+        onTipClick = viewModel::onTipClick,
+        onQuestStart = viewModel::onQuestStart
+    )
+}
+
+@Composable
+private fun QuestScreen(
+    uiState: QuestUiState,
+    listState: LazyListState,
+    bottomPadding: Dp,
+    onQuestClick: (Long) -> Unit,
+    onDismissModal: () -> Unit,
+    onTipClick: () -> Unit,
+    onQuestStart: () -> Unit
+) {
     if (uiState.showQuitModal) {
         QuestModal(
-            onDismissRequest = { viewModel.onDismissModal() },
+            onDismissRequest = onDismissModal,
             questNumber = uiState.selectedQuest?.questNumber ?: 0L,
             questQuestion = uiState.selectedQuest?.questQuestion ?: "",
-            navigateToTip = viewModel::onTipClick,
-            progressButton = viewModel::onQuestStart,
+            navigateToTip = onTipClick,
+            progressButton = onQuestStart,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(24.dp))
@@ -110,16 +136,17 @@ fun QuestScreen(
                 bottom = 18.dp
             )
         }
+
         LazyColumn(
             state = listState,
+            verticalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp)),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(ByeBooTheme.colors.black),
-            verticalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
-            contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp))
+                .background(ByeBooTheme.colors.black)
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
-                item(key = "header_$stepIndex") {
+                item("header_$stepIndex") {
                     Column {
                         HorizontalDivider(
                             thickness = 1.dp,
@@ -134,9 +161,10 @@ fun QuestScreen(
                         Spacer(modifier = Modifier.padding(top = 8.dp))
                     }
                 }
+
                 val questChunks = group.quests.chunked(3)
                 questChunks.forEachIndexed { chunkIndex, questChunk ->
-                    item(key = "quest_row_${stepIndex}_$chunkIndex") {
+                    item("quest_row_${stepIndex}_$chunkIndex") {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp))
@@ -147,7 +175,7 @@ fun QuestScreen(
                                     questId = quest.questId,
                                     questNumber = quest.questNumber,
                                     state = quest.state,
-                                    onQuestClick = viewModel::onQuestClick
+                                    onQuestClick = { onQuestClick(quest.questId) }
                                 )
                             }
                             repeat(3 - questChunk.size) {

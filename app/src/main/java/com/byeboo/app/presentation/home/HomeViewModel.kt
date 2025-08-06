@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,18 +22,32 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
+
+    fun onClickQuest() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuest)
+        }
+    }
+
+    fun onClickQuestStart() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart)
+        }
+    }
+
     init {
         viewModelScope.launch {
             userRepository.getNickname().collect { name ->
                 _uiState.update { it.copy(nickname = name) }
             }
         }
+
         viewModelScope.launch {
             val isStarted = questStateRepository.isQuestStarted()
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
-
-            val dialogueResult = questStateRepository.getQuestDialogue()
-            val dialogue = dialogueResult.getOrNull()?.dialogue
+            val dialogue = questStateRepository.getQuestDialogue().getOrNull()?.dialogue
                 ?: "천천히, 하지만 분명하게. 오늘도 나아가 봐요."
 
             _uiState.update {
@@ -42,9 +58,6 @@ class HomeViewModel @Inject constructor(
                 questStateRepository.getQuestCount().collect { model ->
                     _uiState.update { current ->
                         current.copy(
-                            isQuestStarted = isStarted,
-                            journey = journey,
-                            dialogue = dialogue,
                             currentStep = model.count,
                             totalSteps = 30
                         )

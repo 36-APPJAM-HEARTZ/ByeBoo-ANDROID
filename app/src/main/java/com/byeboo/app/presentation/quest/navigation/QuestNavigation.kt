@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
-import com.byeboo.app.presentation.quest.QuestScreen
+import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.QuestViewModel
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
@@ -62,7 +62,7 @@ fun NavGraphBuilder.questGraph(
 
         composable<Quest> { backStackEntry ->
             val viewModel = hiltViewModel<QuestViewModel>(backStackEntry)
-            QuestScreen(
+            QuestRoute(
                 viewModel = viewModel,
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,

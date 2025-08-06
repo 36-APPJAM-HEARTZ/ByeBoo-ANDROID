@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.navigation.MainTabRoute
 import com.byeboo.app.core.navigation.Route
-import com.byeboo.app.presentation.home.HomeScreen
-import com.byeboo.app.presentation.home.homeamulet.HomeAmuletScreen
-import com.byeboo.app.presentation.home.homeonboarding.HomeOnboardingScreen
+import com.byeboo.app.presentation.home.HomeRoute
+import com.byeboo.app.presentation.home.homeamulet.HomeAmuletRoute
+import com.byeboo.app.presentation.home.homeonboarding.HomeOnboardingRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
@@ -33,21 +33,21 @@ fun NavGraphBuilder.homeGraph(
     bottomPadding: Dp
 ) {
     composable<Home> {
-        HomeScreen(
+        HomeRoute(
             navigateToQuest = navigateToQuest,
             navigateToQuestStart = navigateToQuestStart
         )
     }
     composable<HomeOnboarding> {
         ByeBooBackHandler()
-        HomeOnboardingScreen(
+        HomeOnboardingRoute(
             navigateToHome = navigateToHome,
             bottomPadding = bottomPadding
         )
     }
     composable<HomeAmulet> {
         ByeBooBackHandler()
-        HomeAmuletScreen(
+        HomeAmuletRoute(
             navigateToHomeOnboarding = navigateToHomeOnboarding
         )
     }
