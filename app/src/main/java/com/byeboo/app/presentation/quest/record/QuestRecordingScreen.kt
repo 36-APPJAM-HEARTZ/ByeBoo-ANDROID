@@ -27,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -159,6 +162,15 @@ private fun QuestRecordingScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
+            .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                    focusManager.clearFocus(force = true)
+                    isFocused.value = false
+                    true
+                } else {
+                    false
+                }
+            }
             .addFocusCleaner(focusManager)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(bottomPadding))
