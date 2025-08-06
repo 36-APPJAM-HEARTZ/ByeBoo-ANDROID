@@ -43,7 +43,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeOnboardingScreen(
+fun HomeOnboardingRoute(
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier,
+    bottomPadding: Dp
+) {
+    HomeOnboardingScreen(
+        navigateToHome = navigateToHome,
+        modifier = modifier,
+        bottomPadding = bottomPadding
+    )
+}
+
+@Composable
+private fun HomeOnboardingScreen(
     navigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp
