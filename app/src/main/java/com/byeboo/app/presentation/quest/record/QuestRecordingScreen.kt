@@ -93,8 +93,8 @@ fun QuestRecordingRoute(
         uiState = uiState,
         onDismissModal = viewModel::onDismissModal,
         onClickQuitButton = {
-            viewModel::onDismissModal
-            viewModel::onQuitClick
+            viewModel.onDismissModal()
+            viewModel.onQuitClick()
         },
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClick,
