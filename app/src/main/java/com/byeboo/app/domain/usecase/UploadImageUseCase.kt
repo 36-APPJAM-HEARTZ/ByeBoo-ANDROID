@@ -16,11 +16,11 @@ class UploadImageUseCase @Inject constructor(
         answer: String,
         emotion: String
     ): Result<Unit> = runCatching {
-        val signedUrl = questBehaviorAnswerRepository.postQuestSignedUrl(
+        val signedUrl = questBehaviorAnswerRepository.requestQuestSignedUrl(
             SignedUrlRequestModel(contentType, imageKey)
         ).getOrThrow()
 
-        questBehaviorAnswerRepository.putImageToSignedUrl(signedUrl, imageBytes, contentType)
+        questBehaviorAnswerRepository.uploadImageToSignedUrl(signedUrl, imageBytes, contentType)
 
         val request = BehaviorAnswerRequestModel(
             answer = answer,
@@ -28,6 +28,6 @@ class UploadImageUseCase @Inject constructor(
             imageKey = imageKey
         )
 
-        questBehaviorAnswerRepository.postQuestBehaviorAnswer(questId, request)
+        questBehaviorAnswerRepository.uploadQuestBehaviorAnswer(questId, request)
     }
 }
