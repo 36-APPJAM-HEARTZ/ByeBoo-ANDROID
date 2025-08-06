@@ -22,6 +22,7 @@ class SplashViewModel @Inject constructor(
         checkUserStatusAndNavigate()
     }
 
+    // TODO: 소셜 로그인 생기면 로직 변경 예정
     private fun checkUserStatusAndNavigate() {
         viewModelScope.launch {
             delay(1000)

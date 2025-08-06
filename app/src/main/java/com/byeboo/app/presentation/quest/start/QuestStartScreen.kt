@@ -31,13 +31,12 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.modal.GuideContent
 
 @Composable
-fun QuestStartScreen(
+fun QuestStartRoute(
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
     padding: Dp,
-    modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
-) {
+){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -48,6 +47,25 @@ fun QuestStartScreen(
             }
         }
     }
+
+    QuestStartScreen(
+        onBackClick = viewModel::onBackClick,
+        userName = uiState.nickname,
+        journeyName = uiState.journeyName,
+        onStartClick = viewModel::onStartClick,
+        padding = padding,
+    )
+}
+
+@Composable
+private fun QuestStartScreen(
+    onBackClick: () -> Unit,
+    userName: String?,
+    journeyName: String,
+    onStartClick: () -> Unit,
+    padding: Dp,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -67,7 +85,7 @@ fun QuestStartScreen(
                 tint = ByeBooTheme.colors.white,
                 modifier = Modifier
                     .size(24.dp)
-                    .noRippleClickable { viewModel.onBackClick() }
+                    .noRippleClickable { onBackClick() }
             )
         }
 
@@ -78,15 +96,15 @@ fun QuestStartScreen(
                 .fillMaxWidth()
         ) {
             GuideContent(
-                userName = uiState.nickname,
-                guideText = "님의 상황에 꼭 맞춘\n${uiState.journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해나가요!"
+                userName = userName,
+                guideText = "님의 상황에 꼭 맞춘\n${journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해나가요!"
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         ByeBooButton(
-            onClick = viewModel::onStartClick,
+            onClick = onStartClick,
             buttonText = "시작하기",
             buttonTextColor = ByeBooTheme.colors.white,
             buttonBackgroundColor = ByeBooTheme.colors.primary300,

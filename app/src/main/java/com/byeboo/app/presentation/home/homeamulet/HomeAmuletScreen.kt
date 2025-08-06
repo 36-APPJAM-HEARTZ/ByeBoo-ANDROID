@@ -32,7 +32,7 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.home.component.HomeAmuletCard
 
 @Composable
-fun HomeAmuletScreen(
+fun HomeAmuletRoute(
     navigateToHomeOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeAmuletViewModel = hiltViewModel()
@@ -48,6 +48,23 @@ fun HomeAmuletScreen(
         }
     }
 
+    HomeAmuletScreen(
+        uiState = uiState,
+        isFlipped = isFlipped,
+        onFlip = { isFlipped = true },
+        onConfirm = viewModel::navigateToHomeOnboarding,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun HomeAmuletScreen(
+    uiState: HomeAmuletState,
+    isFlipped: Boolean,
+    onFlip: () -> Unit,
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
@@ -69,9 +86,7 @@ fun HomeAmuletScreen(
                 .padding(horizontal = screenWidthDp(35.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier.height(screenHeightDp(80.dp)),
                     contentAlignment = Alignment.Center
@@ -94,7 +109,7 @@ fun HomeAmuletScreen(
                     backImageRes = uiState.journey.backImg,
                     description = uiState.journeyDescription,
                     isFlipped = isFlipped,
-                    onFlip = { isFlipped = true },
+                    onFlip = onFlip,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -112,9 +127,7 @@ fun HomeAmuletScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = screenHeightDp(32.dp))
-                                .noRippleClickable {
-                                    viewModel.navigateToHomeOnboarding()
-                                }
+                                .noRippleClickable { onConfirm() }
                         )
                     }
                 }

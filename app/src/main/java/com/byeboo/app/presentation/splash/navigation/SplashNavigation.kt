@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.navigation.Route
-import com.byeboo.app.presentation.splash.SplashScreen
+import com.byeboo.app.presentation.splash.SplashRoute
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.splashGraph(
@@ -13,7 +13,7 @@ fun NavGraphBuilder.splashGraph(
     padding: Dp
 ) {
     composable<Splash> {
-        SplashScreen(
+        SplashRoute(
             navigateToHome = navigateToHome,
             navigateToOnboarding = navigateToOnboarding,
             padding = padding

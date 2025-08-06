@@ -13,7 +13,7 @@ data class QuestBehaviorState(
     val question: String = "",
     val imageCount: Int = 0,
     val createdAt: String = java.time.LocalDate.now().toString(),
-    var contents: String = "",
+    val contents: String = "",
     val answer: String = "",
     val imageUrl: String = "",
     val questEmotionState: String = "",

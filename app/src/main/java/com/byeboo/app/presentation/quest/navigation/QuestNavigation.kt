@@ -9,14 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
-import com.byeboo.app.presentation.quest.QuestScreen
+import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.QuestViewModel
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
-import com.byeboo.app.presentation.quest.review.QuestReviewScreen
-import com.byeboo.app.presentation.quest.start.QuestStartScreen
-import com.byeboo.app.presentation.quest.tip.QuestTipScreen
+import com.byeboo.app.presentation.quest.review.QuestReviewRoute
+import com.byeboo.app.presentation.quest.start.QuestStartRoute
+import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
 fun NavController.navigateToQuestStart(navOptions: NavOptions? = null) {
     navigate(QuestStart, navOptions)
@@ -53,7 +53,7 @@ fun NavGraphBuilder.questGraph(
 ) {
     routeNavigation<Quest, QuestStart> {
         composable<QuestStart> {
-            QuestStartScreen(
+            QuestStartRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToHome = navigateUp,
                 padding = padding
@@ -62,7 +62,7 @@ fun NavGraphBuilder.questGraph(
 
         composable<Quest> { backStackEntry ->
             val viewModel = hiltViewModel<QuestViewModel>(backStackEntry)
-            QuestScreen(
+            QuestRoute(
                 viewModel = viewModel,
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
@@ -78,9 +78,9 @@ fun NavGraphBuilder.questGraph(
             val questId = questTip.questId
             val questType = questTip.questType
 
-            QuestTipScreen(
-                navigateToQuest = navigateUp,
+            QuestTipRoute(
                 questId = questId,
+                navigateToQuest = navigateUp,
                 questType = questType,
                 bottomPadding = padding
             )
@@ -90,7 +90,7 @@ fun NavGraphBuilder.questGraph(
             val questReview = backStackEntry.toRoute<QuestReview>()
             val questId = questReview.questId
 
-            QuestReviewScreen(
+            QuestReviewRoute(
                 questId = questId,
                 navigateToBack = navigateUp,
                 bottomPadding = padding

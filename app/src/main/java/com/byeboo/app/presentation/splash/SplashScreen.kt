@@ -16,7 +16,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
-fun SplashScreen(
+fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToOnboarding: () -> Unit,
     padding: Dp,
@@ -31,6 +31,18 @@ fun SplashScreen(
             }
         }
     }
+
+    SplashScreen(
+        modifier = modifier,
+        padding = padding
+    )
+}
+
+@Composable
+fun SplashScreen(
+    padding: Dp,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -45,7 +57,6 @@ fun SplashScreen(
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = screenHeightDp(76.dp))
-                // TODO: 화면 비율을 맞춰 보겠습니다~
                 .padding(top = screenHeightDp(padding + 250.dp))
         )
     }

@@ -34,12 +34,12 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ByeBooBottomSheet(
-    modifier: Modifier = Modifier,
-    showBottomSheet: Boolean = false,
     navigateButton: () -> Unit,
     onDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType) -> Unit = {},
+    onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    showBottomSheet: Boolean = false,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     isBackgroundDimmed: Boolean = true,
     dragHandle: @Composable () -> Unit = {},

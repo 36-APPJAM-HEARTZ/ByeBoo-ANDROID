@@ -13,27 +13,27 @@ class QuestBehaviorAnswerRepositoryImpl @Inject constructor(
     private val questBehaviorAnswerDataSource: QuestBehaviorAnswerDataSource
 ) : QuestBehaviorAnswerRepository {
 
-    override suspend fun postQuestSignedUrl(request: SignedUrlRequestModel): Result<String> {
+    override suspend fun requestQuestSignedUrl(request: SignedUrlRequestModel): Result<String> {
         return runCatching {
-            val response = questBehaviorAnswerDataSource.postQuestSignedUrl(request.toData())
+            val response = questBehaviorAnswerDataSource.requestQuestSignedUrl(request.toData())
             response.data.signedUrl
         }
     }
 
-    override suspend fun putImageToSignedUrl(
+    override suspend fun uploadImageToSignedUrl(
         signUrl: String,
         imageBytes: ByteArray,
         contentType: String
     ): Result<Unit> {
         return runCatching {
             val body = imageBytes.toRequestBody(contentType.toMediaTypeOrNull())
-            questBehaviorAnswerDataSource.putImageToSignedUrl(signUrl, body)
+            questBehaviorAnswerDataSource.uploadImageToSignedUrl(signUrl, body)
         }
     }
 
-    override suspend fun postQuestBehaviorAnswer(questId: Long, request: BehaviorAnswerRequestModel): Result<Unit> {
+    override suspend fun uploadQuestBehaviorAnswer(questId: Long, request: BehaviorAnswerRequestModel): Result<Unit> {
         return runCatching {
-            questBehaviorAnswerDataSource.postQuestBehaviorAnswer(questId, request.toData())
+            questBehaviorAnswerDataSource.uploadQuestBehaviorAnswer(questId, request.toData())
         }
     }
 }

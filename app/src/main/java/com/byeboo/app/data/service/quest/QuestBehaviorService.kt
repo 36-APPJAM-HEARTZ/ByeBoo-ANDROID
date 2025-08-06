@@ -16,18 +16,18 @@ import retrofit2.http.Url
 interface QuestBehaviorService {
 
     @POST("/api/v1/quests/images/signed-url")
-    suspend fun postQuestSignedUrl(
+    suspend fun requestQuestSignedUrl(
         @Body request: QuestSignedUrlRequestDto
     ): BaseResponse<QuestSingedUrlResponseDto>
 
     @PUT
-    suspend fun putImageToUrl(
+    suspend fun uploadImageToUrl(
         @Url presignedUrl: String,
         @Body requestBody: RequestBody
     ): Response<Unit>
 
     @POST("/api/v1/quests/{questId}/active")
-    suspend fun postQuestAnswer(
+    suspend fun uploadQuestAnswer(
         @Path("questId") questId: Long,
         @Body request: QuestBehaviorAnswerRequestDto
     ): NullableBaseResponse<Unit>

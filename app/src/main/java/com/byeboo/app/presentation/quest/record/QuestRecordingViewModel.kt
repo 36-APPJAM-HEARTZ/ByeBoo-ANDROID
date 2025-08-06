@@ -76,6 +76,7 @@ class QuestRecordingViewModel @Inject constructor(
             val result = questRecordingRepository.postRecording(questId, request)
 
             if (result.isSuccess) {
+                _showBottomSheet.value = false
                 _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId))
             }
         }
