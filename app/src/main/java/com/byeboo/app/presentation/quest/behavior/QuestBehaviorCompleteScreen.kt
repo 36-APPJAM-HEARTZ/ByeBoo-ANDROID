@@ -55,6 +55,7 @@ fun QuestBehaviorCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     bottomPadding: Dp,
+    modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -71,10 +72,9 @@ fun QuestBehaviorCompleteRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { effect ->
-            when (effect) {
-                is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                else -> ""
+        viewModel.sideEffect.collect {
+            if (it is QuestBehaviorSideEffect.NavigateToQuest) {
+                navigateToQuest()
             }
         }
     }
@@ -85,7 +85,8 @@ fun QuestBehaviorCompleteRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onCloseClick = viewModel::onCloseClick,
-        imageUri = imageUri
+        imageUri = imageUri,
+        modifier = modifier
     )
 }
 
@@ -94,55 +95,56 @@ private fun QuestBehaviorCompleteScreen(
     uiState: QuestBehaviorState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
-    imageUri: Uri?
+    imageUri: Uri?,
+    modifier: Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(bottomPadding))
     ) {
-        Spacer(modifier = Modifier.height(67.dp))
+        Spacer(modifier = modifier.height(67.dp))
 
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.End)
                 .clickable { onCloseClick() }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = modifier.height(16.dp))
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth()
         ) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = modifier.height(8.dp))
 
                 QuestCompleteCard(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = modifier.height(32.dp))
             }
 
             item {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
                         SmallTag(tagText = "STEP ${uiState.stepNumber}")
 
-                        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+                        Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 
                         Text(
                             text = "${uiState.questNumber}번째 퀘스트",
@@ -151,11 +153,11 @@ private fun QuestBehaviorCompleteScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(12.dp))
 
                     CreatedText(uiState.createdAt)
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(12.dp))
 
                     Text(
                         text = uiState.question,
@@ -165,7 +167,7 @@ private fun QuestBehaviorCompleteScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(24.dp))
                 }
             }
 
@@ -174,7 +176,7 @@ private fun QuestBehaviorCompleteScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
-                        modifier = Modifier
+                        modifier = modifier
                             .fillMaxWidth()
                             .aspectRatio(312 / 312f)
                             .clip(RoundedCornerShape(12.dp))
@@ -188,11 +190,11 @@ private fun QuestBehaviorCompleteScreen(
                                     .diskCachePolicy(coil.request.CachePolicy.DISABLED)
                                     .build(),
                                 contentDescription = "uploaded image",
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop,
                                 loading = {
                                     Box(
-                                        modifier = Modifier.fillMaxSize(),
+                                        modifier = modifier.fillMaxSize(),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         CircularProgressIndicator()
@@ -203,10 +205,10 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = modifier.height(8.dp))
                         ContentText(uiState.answer)
                     }
-                    Spacer(modifier = Modifier.height(21.dp))
+                    Spacer(modifier = modifier.height(21.dp))
                 }
             }
 
@@ -217,7 +219,7 @@ private fun QuestBehaviorCompleteScreen(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_change),
                         contentDescription = "title icon",
-                        modifier = Modifier.padding(end = 8.dp),
+                        modifier = modifier.padding(end = 8.dp),
                         tint = Color.Unspecified
                     )
 
@@ -228,14 +230,14 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = modifier.height(12.dp))
 
                 QuestEmotionDescriptionCard(
                     questEmotionDescription = uiState.emotionDescription,
                     emotionType = uiState.selectedEmotion
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
             }
         }
     }

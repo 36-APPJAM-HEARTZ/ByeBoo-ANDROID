@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.auth.onboarding
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.R
@@ -21,7 +22,10 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
     private val _sideEffect = MutableSharedFlow<OnboardingSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    private val pages: PersistentList<List<OnboardingState>> = persistentListOf(
+    val pageNumber: String
+        get() = "${_pageIndex.intValue + 1}/${pages.size}"
+
+    private val pages: PersistentList<PersistentList<OnboardingState>> = persistentListOf(
         persistentListOf(
             OnboardingState(
                 title = "저는 당신이 털어놓은 감정을 담는 보따리,\n보리라고 해요.",
@@ -87,6 +91,6 @@ class OnboardingViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun currentContents(): List<OnboardingState> = pages[_pageIndex.value]
-    fun showPageNumber(): String = "${_pageIndex.intValue + 1}/${pages.size}"
+    fun currentContents(): PersistentList<OnboardingState> = pages[_pageIndex.intValue]
+
 }

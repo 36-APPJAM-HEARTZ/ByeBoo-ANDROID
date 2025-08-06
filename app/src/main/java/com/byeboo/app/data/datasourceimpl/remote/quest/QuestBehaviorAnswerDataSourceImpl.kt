@@ -15,18 +15,18 @@ class QuestBehaviorAnswerDataSourceImpl @Inject constructor(
     private val questBehaviorService: QuestBehaviorService
 ) : QuestBehaviorAnswerDataSource {
 
-    override suspend fun postQuestSignedUrl(request: QuestSignedUrlRequestDto): BaseResponse<QuestSingedUrlResponseDto> {
-        return questBehaviorService.postQuestSignedUrl(request = request)
+    override suspend fun requestQuestSignedUrl(request: QuestSignedUrlRequestDto): BaseResponse<QuestSingedUrlResponseDto> {
+        return questBehaviorService.requestQuestSignedUrl(request = request)
     }
 
-    override suspend fun putImageToSignedUrl(signedUrl: String, requestBody: RequestBody): Response<Unit> {
-        return questBehaviorService.putImageToUrl(signedUrl, requestBody)
+    override suspend fun uploadImageToSignedUrl(signedUrl: String, requestBody: RequestBody): Response<Unit> {
+        return questBehaviorService.uploadImageToUrl(signedUrl, requestBody)
     }
 
-    override suspend fun postQuestBehaviorAnswer(
+    override suspend fun uploadQuestBehaviorAnswer(
         questId: Long,
         request: QuestBehaviorAnswerRequestDto
     ): NullableBaseResponse<Unit> {
-        return questBehaviorService.postQuestAnswer(questId = questId, request = request)
+        return questBehaviorService.uploadQuestAnswer(questId = questId, request = request)
     }
 }
