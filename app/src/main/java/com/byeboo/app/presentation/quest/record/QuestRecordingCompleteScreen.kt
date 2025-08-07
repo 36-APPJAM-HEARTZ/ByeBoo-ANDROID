@@ -44,6 +44,7 @@ fun QuestRecordingCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     bottomPadding: Dp,
+    modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,29 +65,18 @@ fun QuestRecordingCompleteRoute(
     BackHandler { viewModel.onCloseClick() }
 
     QuestRecordingCompleteScreen(
+        uiState = uiState,
         bottomPadding = bottomPadding,
         onCloseClick = viewModel::onCloseClick,
-        stepNumber = uiState.stepNumber,
-        questNumber = uiState.questNumber,
-        createdAt = uiState.createdAt,
-        question = uiState.question,
-        answer = uiState.answer,
-        emotionDescription = uiState.emotionDescription,
-        selectedEmotion = uiState.selectedEmotion
+        modifier = modifier
     )
 }
 
 @Composable
 private fun QuestRecordingCompleteScreen(
+    uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
-    stepNumber: Long,
-    questNumber: Long,
-    createdAt: String,
-    question: String,
-    answer: String,
-    emotionDescription: String,
-    selectedEmotion: LargeTagType,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -135,12 +125,12 @@ private fun QuestRecordingCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${stepNumber}")
+                        SmallTag(tagText = "STEP ${uiState.stepNumber}")
 
                         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                         Text(
-                            text = "${questNumber}번째 퀘스트",
+                            text = "${uiState.questNumber}번째 퀘스트",
                             style = ByeBooTheme.typography.body2,
                             color = ByeBooTheme.colors.gray500
                         )
@@ -148,12 +138,12 @@ private fun QuestRecordingCompleteScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    CreatedText(createdAt)
+                    CreatedText(uiState.createdAt)
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = question,
+                        text = uiState.question,
                         style = ByeBooTheme.typography.head1,
                         color = ByeBooTheme.colors.gray100,
                         modifier = Modifier.fillMaxWidth(),
@@ -165,14 +155,14 @@ private fun QuestRecordingCompleteScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 생각했어요",
-                        contentText = answer
+                        contentText = uiState.answer
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     QuestEmotionDescriptionContent(
-                        questEmotionDescription = emotionDescription,
-                        emotionType = selectedEmotion
+                        questEmotionDescription = uiState.emotionDescription,
+                        emotionType = uiState.selectedEmotion
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))

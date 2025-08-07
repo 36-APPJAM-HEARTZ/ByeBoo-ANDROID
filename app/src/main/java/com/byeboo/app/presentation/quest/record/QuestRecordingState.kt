@@ -14,8 +14,9 @@ data class QuestRecordingState(
     val questQuestion: String = "",
     val questAnswer: String = "",
     val contentsState: QuestWritingState = QuestWritingState.Empty,
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL
-)
+    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
+    val showQuitModal: Boolean = false
+    )
 
 sealed interface QuestRecordingSideEffect {
     data object NavigateToQuest : QuestRecordingSideEffect
