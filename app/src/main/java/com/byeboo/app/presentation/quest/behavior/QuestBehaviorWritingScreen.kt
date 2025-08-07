@@ -150,7 +150,7 @@ private fun QuestBehaviorWritingScreen(
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
