@@ -138,7 +138,7 @@ private fun QuestTipScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SmallTag(tagText = "STEP ${stepNumber}")
+                    SmallTag(tagText = "STEP $stepNumber")
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
