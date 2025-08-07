@@ -7,9 +7,6 @@ import com.byeboo.app.domain.model.quest.QuestDialogue
 import com.byeboo.app.domain.model.quest.QuestStateModel
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import javax.inject.Inject
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class QuestStateRepositoryImpl @Inject constructor(
     private val questStateDataSource: QuestStateDataSource,
@@ -44,15 +41,11 @@ class QuestStateRepositoryImpl @Inject constructor(
         return userLocalDataSource.isQuestStarted()
     }
 
-    override fun getQuestCount(): Flow<QuestStateModel> = flow {
-        while (true) {
-            runCatching {
-                questStateDataSource.getQuestCount()
-            }.onSuccess { dto ->
-                emit(dto.data.toDomain())
-            }
-            // 추후 바텀시트 버튼 완료시 프로그래스 상태를 업데이트하는 로직으로 변경 예정
-            delay(30000L)
+    override suspend fun getQuestCount(): Result<QuestStateModel> {
+        return runCatching {
+            val response = questStateDataSource.getQuestCount()
+            response.data.toDomain()
         }
     }
+
 }

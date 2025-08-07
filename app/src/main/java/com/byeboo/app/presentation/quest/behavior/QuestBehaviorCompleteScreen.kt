@@ -96,7 +96,7 @@ private fun QuestBehaviorCompleteScreen(
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier

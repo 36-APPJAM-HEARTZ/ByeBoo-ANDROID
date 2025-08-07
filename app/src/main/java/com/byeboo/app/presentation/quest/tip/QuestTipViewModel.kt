@@ -6,8 +6,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import com.byeboo.app.presentation.quest.model.Quest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestTipViewModel @Inject constructor(
@@ -42,7 +41,12 @@ class QuestTipViewModel @Inject constructor(
                         stepNumber = tip.stepNumber,
                         questNumber = tip.questNumber,
                         question = tip.question,
-                        tipAnswer = tip.tips.map { it.tipAnswer }.toImmutableList()
+                        tipAnswer = QuestTipAnswers(
+                            reason = tip.tips.getOrNull(0)?.tipAnswer ?: "",
+                            suggestion = tip.tips.getOrNull(1)?.tipAnswer ?: "",
+                            change = tip.tips.getOrNull(2)?.tipAnswer ?: ""
+
+                        )
                     )
                 }
             }

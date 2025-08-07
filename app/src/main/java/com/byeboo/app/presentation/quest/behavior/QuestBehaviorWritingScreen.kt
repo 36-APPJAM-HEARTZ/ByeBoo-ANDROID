@@ -24,13 +24,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
@@ -70,7 +72,6 @@ fun QuestBehaviorWritingRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
         viewModel.getQuestDetailInfo(questId)
@@ -102,7 +103,8 @@ fun QuestBehaviorWritingRoute(
             stayButton = { viewModel.onDismissModal() },
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick() },
+                viewModel.onQuitClick()
+            },
             modifier = modifier.padding(horizontal = 24.dp)
         )
     }
@@ -139,7 +141,7 @@ fun QuestBehaviorWritingRoute(
 private fun QuestBehaviorWritingScreen(
     uiState: QuestBehaviorState,
     bottomPadding: Dp,
-    onBackClick:() -> Unit,
+    onBackClick: () -> Unit,
     onTipClick: () -> Unit,
     onUpdateSelectedImage: (Uri?) -> Unit,
     onClickCompleteButton: () -> Unit,
@@ -148,14 +150,13 @@ private fun QuestBehaviorWritingScreen(
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
 
     val focusManager = LocalFocusManager.current
 
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
-
     val isFocused = remember { mutableStateOf(false) }
 
     LaunchedEffect(isFocused.value) {
@@ -169,6 +170,15 @@ private fun QuestBehaviorWritingScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
+            .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                    focusManager.clearFocus(force = true)
+                    isFocused.value = false
+                    true
+                } else {
+                    false
+                }
+            }
             .addFocusCleaner(focusManager)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(bottomPadding))
@@ -339,7 +349,7 @@ private fun QuestBehaviorWritingScreen(
     }
 
     ByeBooBottomSheet(
-        navigateButton = {navigateButton(context)},
+        navigateButton = { navigateButton(context) },
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,

@@ -38,7 +38,6 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.QuestViewModel
 import com.byeboo.app.presentation.quest.component.text.QuestContent
 import com.byeboo.app.presentation.quest.component.type.QuestContentType
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun QuestTipRoute(
@@ -46,9 +45,10 @@ fun QuestTipRoute(
     navigateToQuest: () -> Unit,
     questType: QuestType,
     bottomPadding: Dp,
+    modifier: Modifier = Modifier,
     viewModel: QuestTipViewModel = hiltViewModel(),
     questViewModel: QuestViewModel = hiltViewModel()
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val questUiState by questViewModel.uiState.collectAsStateWithLifecycle()
     val questGroups = questUiState.questGroups
@@ -72,23 +72,18 @@ fun QuestTipRoute(
     }
 
     QuestTipScreen(
+        uiState = uiState,
         onCloseClick = viewModel::onCloseClick,
-        stepNumber = uiState.stepNumber,
-        questNumber = uiState.questNumber,
-        question = uiState.question,
-        tipAnswers = uiState.tipAnswer,
         questType = questType,
-        bottomPadding = bottomPadding
+        bottomPadding = bottomPadding,
+        modifier = modifier
     )
 }
 
 @Composable
 private fun QuestTipScreen(
+    uiState: QuestTipState,
     onCloseClick: () -> Unit,
-    stepNumber: Long,
-    questNumber: Long,
-    question: String,
-    tipAnswers: ImmutableList<String>,
     questType: QuestType,
     bottomPadding: Dp,
     modifier: Modifier = Modifier
@@ -138,12 +133,12 @@ private fun QuestTipScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SmallTag(tagText = "STEP $stepNumber")
+                    SmallTag(tagText = "STEP ${uiState.stepNumber}")
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                     Text(
-                        text = "${questNumber}번째 퀘스트",
+                        text = "${uiState.questNumber}번째 퀘스트",
                         style = ByeBooTheme.typography.body2,
                         color = ByeBooTheme.colors.gray500
                     )
@@ -154,7 +149,7 @@ private fun QuestTipScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = question,
+                    text = uiState.question,
                     style = ByeBooTheme.typography.head1,
                     color = ByeBooTheme.colors.gray100,
                     modifier = Modifier.fillMaxWidth(),
@@ -167,8 +162,8 @@ private fun QuestTipScreen(
 
                 QuestContent(
                     titleIcon = QuestContentType.QUEST_REASON,
-                    titleText = "${questNumber}번째 퀘스트로 드리는 이유",
-                    contentText = tipAnswers[0]
+                    titleText = "${uiState.questNumber}번째 퀘스트로 드리는 이유",
+                    contentText = uiState.tipAnswer.reason
                 )
             }
 
@@ -191,13 +186,13 @@ private fun QuestTipScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이런 걸 생각해보며 작성해 주세요.",
-                        contentText = tipAnswers[1]
+                        contentText = uiState.tipAnswer.suggestion
                     )
                 } else {
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 해보면 좋아요.",
-                        contentText = tipAnswers[1]
+                        contentText = uiState.tipAnswer.suggestion
                     )
                 }
             }
@@ -220,7 +215,7 @@ private fun QuestTipScreen(
                 QuestContent(
                     titleIcon = QuestContentType.FEELING_CHANGE,
                     titleText = "이 퀘스트가 끝나면 어떤 변화가 생길까요?",
-                    contentText = tipAnswers[2]
+                    contentText = uiState.tipAnswer.change
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))

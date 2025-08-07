@@ -9,6 +9,7 @@ import com.byeboo.app.presentation.quest.model.QuestGroup
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,9 +58,9 @@ class QuestViewModel @Inject constructor(
                             questQuestion = quest.question,
                             type = QuestType.from(quest.questStyle)
                         )
-                    }
+                    }.toImmutableList()
                 )
-            }
+            }.toImmutableList()
 
             val currentStepIndex = questGroups.indexOfFirst {
                 it.quests.any { it.state is QuestState.Available }
