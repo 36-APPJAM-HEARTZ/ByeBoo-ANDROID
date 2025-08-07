@@ -157,14 +157,16 @@ fun NicknameTextField(
                         contentDescription = "에러",
                         tint = Color.Unspecified,
                         modifier = Modifier
-                            .padding(end = 3.dp)
+                            .padding(2.dp)
                             .size(12.dp)
                     )
                     Text(
                         text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.error300,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .padding(start= 3.dp)
+                            .weight(1f)
                     )
                     Text(
                         text = "${value.length}/5",
