@@ -181,11 +181,21 @@ fun NicknameTextField(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_default_error),
+                        contentDescription = "기본",
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .size(12.dp)
+                    )
                     Text(
-                        text = "* 2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
+                        text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.gray400,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .padding(start = 3.dp)
+                            .weight(1f)
                     )
                     Text(
                         text = "${value.length}/5",
