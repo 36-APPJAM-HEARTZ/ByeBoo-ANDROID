@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 val primary50 = Color(0xFFF5F2FC)
 val primary100 = Color(0xFFF0EBFA)
 val primary200 = Color(0xFFE0D5F5)
-val primary300 = Color(0xFF9C79DE)
+val primary300 = Color(0xFFAA7CFF)
 val primary400 = Color(0xFF8C6DC8)
 val primary500 = Color(0xFF7D61B2)
 val primary600 = Color(0xFF755BA7)
@@ -38,14 +38,14 @@ val sand100 = Color(0xFFFFF8E5)
 val orange300 = Color(0xFFFDC6B0)
 
 val warning50 = Color(0xFFFFF5E6)
-val warning300 = Color(0xFFFF9601)
+val warning300 = Color(0xFFFFA01A)
 
 // state
 val success50 = Color(0xFFE8F4FC)
-val success300 = Color(0xFF1491E0)
+val success300 = Color(0xFF2C9CE3)
 
 val error50 = Color(0xFFFCEAEA)
-val error300 = Color(0xFFE03130)
+val error300 = Color(0xFFF15655)
 
 // grayscale
 val gray50 = Color(0xFFFEFEFE)
