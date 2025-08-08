@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.core.designsystem.component.tag.LargeTag
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
@@ -32,9 +34,9 @@ fun EmotionChip(
     }
 
     val textColor = if (isSelected) {
-        ByeBooTheme.colors.white
+        ByeBooTheme.colors.primary200
     } else {
-        ByeBooTheme.colors.gray300
+        ByeBooTheme.colors.gray400
     }
 
     val textStyle = if (isSelected) {
@@ -57,17 +59,27 @@ fun EmotionChip(
             painter = painterResource(emotionType.titleIcon),
             contentDescription = null,
             modifier = Modifier
-                .width(screenWidthDp(85.dp))
-                .height(screenHeightDp(84.dp))
+                .width(screenWidthDp(72.dp))
+                .height(screenHeightDp(56.dp))
         )
 
         Spacer(modifier = modifier.height(screenHeightDp(8.dp)))
 
-        LargeTag(
-            largeTagType = emotionType,
-            backgroundColor = backgroundColor,
-            textColor = textColor,
-            textStyle = textStyle
+        Text(
+            text = stringResource(emotionType.titleResId),
+            color = textColor,
+            style = textStyle
         )
+
+
+    }
+}
+
+
+@Preview
+@Composable
+private fun QuestEmotionChipPreview() {
+    ByeBooTheme {
+        EmotionChip(emotionType = LargeTagType.EMOTION_NEUTRAL)
     }
 }
