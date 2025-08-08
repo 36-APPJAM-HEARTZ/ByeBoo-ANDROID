@@ -1,10 +1,14 @@
 package com.byeboo.app.presentation.quest.component.chip
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +32,7 @@ fun EmotionChip(
     onChipClick: ((LargeTagType) -> Unit)? = null
 ) {
     val backgroundColor = if (isSelected) {
-        ByeBooTheme.colors.primary300
+        ByeBooTheme.colors.primary300Alpha20
     } else {
         ByeBooTheme.colors.whiteAlpha10
     }
@@ -42,17 +46,34 @@ fun EmotionChip(
     val textStyle = if (isSelected) {
         ByeBooTheme.typography.body4
     } else {
-        ByeBooTheme.typography.body5
+        ByeBooTheme.typography.body6
     }
 
-    Column(
-        modifier = modifier.then(
+    val shape = RoundedCornerShape(12.dp)
+
+    val baseModifier = modifier
+        .then(
             if (onChipClick != null && enabled) {
                 Modifier.noRippleClickable { onChipClick(emotionType) }
+
             } else {
                 Modifier
             }
-        ),
+        )
+        .background(
+            color = backgroundColor,
+            shape = shape
+        )
+        .then(
+            if (isSelected) {
+                Modifier.border(1.dp, ByeBooTheme.colors.primary300, shape)
+            } else {
+                Modifier
+            }
+        )
+
+    Column(
+        modifier = baseModifier.padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -62,8 +83,6 @@ fun EmotionChip(
                 .width(screenWidthDp(72.dp))
                 .height(screenHeightDp(56.dp))
         )
-
-        Spacer(modifier = modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = stringResource(emotionType.titleResId),
