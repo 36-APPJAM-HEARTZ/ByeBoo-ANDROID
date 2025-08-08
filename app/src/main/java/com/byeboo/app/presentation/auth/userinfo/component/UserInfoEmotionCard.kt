@@ -34,7 +34,7 @@ fun UserInfoEmotionCard(
     modifier: Modifier = Modifier
 ) {
     val borderColor = if (isSelected) ByeBooTheme.colors.primary300 else Color.Transparent
-    val textColor = if (isSelected) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray300
+    val textColor = if (isSelected) ByeBooTheme.colors.primary200 else ByeBooTheme.colors.gray300
     val backgroundColor =
         if (isSelected) {
             ByeBooTheme.colors.primary300Alpha10
