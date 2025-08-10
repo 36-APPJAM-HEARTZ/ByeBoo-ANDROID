@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class QuestStartState(
-    val nickname: String? = "하츠핑",
+    val nickname: String = "하츠핑",
     val journeyName: String = ""
 )
 

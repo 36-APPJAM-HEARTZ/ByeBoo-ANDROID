@@ -44,7 +44,7 @@ class UserRepositoryImpl @Inject constructor(
         return userLocalDataSource.isLoggedIn()
     }
 
-    override fun getNickname(): Flow<String?> {
+    override fun getNickname(): Flow<String> {
         return userLocalDataSource.getNickname()
     }
 
