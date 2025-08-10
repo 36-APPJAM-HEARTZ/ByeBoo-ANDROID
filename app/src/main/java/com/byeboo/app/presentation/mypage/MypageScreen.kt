@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.mypage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -82,22 +83,12 @@ fun MyPageScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-        Row() {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-            Text(
-                text = "나의 기록",
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.gray200
-
-            )
-        }
+        //TODO : 추후 UI 확정되면 글꼴 확인하기
+        Text(
+            text = "나의 기록",
+            style = ByeBooTheme.typography.body2,
+            color = ByeBooTheme.colors.gray300
+        )
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
@@ -113,11 +104,78 @@ fun MyPageScreen(
                 )
                 .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(21.dp))
         ) {
+            //TODO : 추후 UI 확정되면 글꼴 확인하기
             Text(
                 text = "완료한 여정 돌아보기",
                 style = ByeBooTheme.typography.body2,
                 color = ByeBooTheme.colors.gray50
             )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(8.dp)),
+            thickness = 1.dp,
+            color = ByeBooTheme.colors.whiteAlpha10
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp))
+        ) {
+            Text(
+                text = "약관 및 정책",
+                style = ByeBooTheme.typography.body2,
+                color = ByeBooTheme.colors.gray300
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "개인정보 처리 방침",
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray300
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "위치정보 이용 약관",
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray300
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "마케팅 정보 수신 동의 약관",
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray300
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "버전 정보",
+                    style = ByeBooTheme.typography.body3,
+                    color = ByeBooTheme.colors.gray300
+                )
+
+                Text(
+                    text = "v1.2.0 | 최신 버전",
+                    style = ByeBooTheme.typography.body3,
+                    color = ByeBooTheme.colors.gray600
+                )
+            }
         }
     }
 }
