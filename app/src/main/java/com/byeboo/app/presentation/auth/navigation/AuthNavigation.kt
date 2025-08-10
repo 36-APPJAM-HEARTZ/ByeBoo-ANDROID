@@ -9,7 +9,6 @@ import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.auth.loading.LoadingRoute
 import com.byeboo.app.presentation.auth.userinfo.UserInfoRoute
-import com.byeboo.app.presentation.auth.onboarding.OnboardingRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateToOnboarding(navOptions: NavOptions? = null) {
@@ -25,17 +24,10 @@ fun NavController.navigateToLoading(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.authGraph(
-    navigateToUserInfo: () -> Unit,
     navigateToLoading: () -> Unit,
     navigateToHomeAmulet: () -> Unit,
     padding: Dp
 ) {
-    composable<Onboarding> {
-        OnboardingRoute(
-            navigateToUserInfo = navigateToUserInfo,
-            padding = padding
-        )
-    }
     composable<UserInfo> {
         UserInfoRoute(
             navigateToLoading = navigateToLoading,

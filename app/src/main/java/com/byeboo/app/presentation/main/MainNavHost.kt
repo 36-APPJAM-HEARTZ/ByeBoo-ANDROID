@@ -52,7 +52,6 @@ fun MainNavHost(
             padding = padding
         )
         authGraph(
-            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             navigateToLoading = { navigator.navigateToLoading(clearStackNavOptions) },
             navigateToHomeAmulet = { navigator.navigateToHomeAmulet(clearStackNavOptions) },
             padding = padding
