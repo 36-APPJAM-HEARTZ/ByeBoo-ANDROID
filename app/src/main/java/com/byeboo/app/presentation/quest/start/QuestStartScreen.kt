@@ -106,6 +106,7 @@ private fun QuestStartScreen(
         ByeBooButton(
             onClick = onStartClick,
             buttonText = "시작하기",
+            buttonStyle = ByeBooTheme.typography.body2,
             buttonTextColor = ByeBooTheme.colors.white,
             buttonBackgroundColor = ByeBooTheme.colors.primary300,
             modifier = Modifier
