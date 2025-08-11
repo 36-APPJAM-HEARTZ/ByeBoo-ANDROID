@@ -48,6 +48,7 @@ class ByeBooTypography internal constructor(
     body3: TextStyle,
     body4: TextStyle,
     body5: TextStyle,
+    body6: TextStyle,
     cap1: TextStyle,
     cap2: TextStyle
 ) {
@@ -73,6 +74,8 @@ class ByeBooTypography internal constructor(
         private set
     var body5 by mutableStateOf(body5)
         private set
+    var body6 by mutableStateOf(body5)
+        private set
     var cap1 by mutableStateOf(cap1)
         private set
     var cap2 by mutableStateOf(cap2)
@@ -90,6 +93,7 @@ class ByeBooTypography internal constructor(
         body3 = body3,
         body4 = body4,
         body5 = body5,
+        body6 = body6,
         cap1 = cap1,
         cap2 = cap2
     )
@@ -106,6 +110,7 @@ class ByeBooTypography internal constructor(
         body3 = typography.body3
         body4 = typography.body4
         body5 = typography.body5
+        body6 = typography.body6
         cap1 = typography.cap1
         cap2 = typography.cap2
     }
@@ -175,6 +180,12 @@ fun ByeBooTypography(): ByeBooTypography {
             letterSpacing = 0.em
         ),
         body5 = ByeBooTextStyle(
+            fontFamily = pretendardMedium,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
+            letterSpacing = 0.em
+        ),
+        body6 = ByeBooTextStyle(
             fontFamily = pretendardRegular,
             fontSize = 14.sp,
             lineHeight = 18.sp,
