@@ -85,8 +85,8 @@ class UserLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {
-        dataStore.edit { prefs ->
-            prefs[HAS_SEEN_ABOUT_HELP] = seen
+        dataStore.edit { preferences ->
+            preferences[HAS_SEEN_ABOUT_HELP] = seen
         }
     }
 
