@@ -31,12 +31,6 @@ class QuestRecordingViewModel @Inject constructor(
     val sideEffect: SharedFlow<QuestRecordingSideEffect>
         get() = _sideEffect
 
-    private val _showBottomSheet = MutableStateFlow(false)
-    val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
-
-    private val _isEmotionSelected = MutableStateFlow(false)
-    val isEmotionSelected: StateFlow<Boolean> = _isEmotionSelected.asStateFlow()
-
     fun setQuestId(questId: Long) {
         _uiState.update {
             it.copy(questId = questId)
@@ -72,7 +66,7 @@ class QuestRecordingViewModel @Inject constructor(
             val result = questRecordingRepository.postRecording(questId, request)
 
             if (result.isSuccess) {
-                _showBottomSheet.value = false
+                _uiState.update { it.copy(showBottomSheet = false) }
                 _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId))
             }
         }
@@ -115,15 +109,15 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun openBottomSheet() {
-        _showBottomSheet.value = true
+        _uiState.update { it.copy(showBottomSheet = true) }
     }
 
     fun closeBottomSheet() {
-        _showBottomSheet.value = false
+        _uiState.update { it.copy(showBottomSheet = false) }
     }
 
     fun isEmotionSelected(isSelected: Boolean) {
-        _isEmotionSelected.value = isSelected
+        _uiState.update { it.copy(isEmotionSelected = isSelected) }
     }
 
     fun updateSelectedEmotion(emotion: LargeTagType) {

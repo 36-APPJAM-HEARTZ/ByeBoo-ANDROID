@@ -66,8 +66,6 @@ fun QuestRecordingRoute(
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val showBottomSheet by viewModel.showBottomSheet.collectAsStateWithLifecycle()
-    val isEmotionSelected by viewModel.isEmotionSelected.collectAsStateWithLifecycle()
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -113,9 +111,7 @@ fun QuestRecordingRoute(
         onSelectedChanged = { isSelected ->
             viewModel.isEmotionSelected(isSelected)
         },
-        isEmotionSelected = isEmotionSelected,
-        modifier = modifier,
-        showBottomSheet = showBottomSheet
+        modifier = modifier
     )
 }
 
@@ -134,9 +130,7 @@ private fun QuestRecordingScreen(
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    showBottomSheet: Boolean = false,
-    isEmotionSelected: Boolean = false
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -308,10 +302,10 @@ private fun QuestRecordingScreen(
 
     ByeBooBottomSheet(
         navigateButton = navigateButton,
-        showBottomSheet = showBottomSheet,
+        showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
         onSelectedChanged = onSelectedChanged,
-        isSelected = isEmotionSelected
+        isSelected = uiState.isEmotionSelected
     )
 }
