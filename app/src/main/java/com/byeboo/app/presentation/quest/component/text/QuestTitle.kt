@@ -39,7 +39,7 @@ fun QuestTitle(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SmallTag(tagText = "STEP $stepNumber")
+            SmallTag(tagText = "STEP $stepNumber", tagColor = ByeBooTheme.colors.gray500)
 
             Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
@@ -49,6 +49,7 @@ fun QuestTitle(
                 style = ByeBooTheme.typography.body5
             )
         }
+
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 

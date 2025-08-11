@@ -68,20 +68,20 @@ fun QuestQuitModal(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ByeBooButton(
-                    onClick = stayButton,
-                    buttonText = "머무르기",
-                    buttonTextColor = ByeBooTheme.colors.white,
-                    buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                    onClick = quitButton,
+                    buttonText = "나가기",
+                    buttonTextColor = ByeBooTheme.colors.gray200,
+                    buttonStrokeColor = ByeBooTheme.colors.gray400,
                     modifier = Modifier.weight(1f)
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
 
                 ByeBooButton(
-                    onClick = quitButton,
-                    buttonText = "나가기",
-                    buttonTextColor = ByeBooTheme.colors.gray200,
-                    buttonStrokeColor = ByeBooTheme.colors.gray400,
+                    onClick = stayButton,
+                    buttonText = "머무르기",
+                    buttonTextColor = ByeBooTheme.colors.white,
+                    buttonBackgroundColor = ByeBooTheme.colors.primary300,
                     modifier = Modifier.weight(1f)
                 )
             }

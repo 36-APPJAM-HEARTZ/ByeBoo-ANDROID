@@ -35,7 +35,8 @@ fun NavGraphBuilder.homeGraph(
     composable<Home> {
         HomeRoute(
             navigateToQuest = navigateToQuest,
-            navigateToQuestStart = navigateToQuestStart
+            navigateToQuestStart = navigateToQuestStart,
+            bottomPadding = bottomPadding
         )
     }
     composable<HomeOnboarding> {
