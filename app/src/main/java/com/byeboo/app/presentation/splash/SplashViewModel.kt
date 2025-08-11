@@ -32,7 +32,7 @@ class SplashViewModel @Inject constructor(
             val effect = if (isLoggedIn) {
                 SplashState.NavigateToHome
             } else {
-                SplashState.NavigateToOnboarding
+                SplashState.NavigateToUserInfo
             }
 
             _sideEffect.emit(effect)

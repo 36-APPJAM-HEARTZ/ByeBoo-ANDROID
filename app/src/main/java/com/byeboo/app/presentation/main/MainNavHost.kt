@@ -48,11 +48,10 @@ fun MainNavHost(
     ) {
         splashGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
-            navigateToOnboarding = { navigator.navigateToOnboarding(clearStackNavOptions) },
+            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             padding = padding
         )
         authGraph(
-            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             navigateToLoading = { navigator.navigateToLoading(clearStackNavOptions) },
             navigateToHomeAmulet = { navigator.navigateToHomeAmulet(clearStackNavOptions) },
             padding = padding
