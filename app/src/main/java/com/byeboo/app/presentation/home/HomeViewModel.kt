@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,19 +23,18 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
+
     init {
         viewModelScope.launch {
-            userRepository.getNickname().collect { name ->
-                _uiState.update { it.copy(nickname = name) }
-            }
-        }
-        viewModelScope.launch {
+
+            val nickname = userRepository.getNickname().firstOrNull() ?: "하츠핑"
+
             val isStarted = questStateRepository.isQuestStarted()
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
 
-            val dialogueResult = questStateRepository.getQuestDialogue()
-            val dialogue = dialogueResult.getOrNull()?.dialogue
-                ?: "천천히, 하지만 분명하게. 오늘도 나아가 봐요."
+            val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
             var currentStep: Int? = null
             if (isStarted) {
@@ -41,15 +43,36 @@ class HomeViewModel @Inject constructor(
                         currentStep = model.count
                     }
             }
+
             _uiState.update {
                 it.copy(
+                    nickname = nickname,
                     isQuestStarted = isStarted,
                     journey = journey,
-                    dialogue = dialogue,
                     currentStep = currentStep ?: 0,
-                    totalSteps = 30
+                    totalSteps = 30,
+                    hasSeenAboutHelp = hasSeenAboutHelp
                 )
             }
+        }
+    }
+
+    fun onClickQuest() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuest)
+        }
+    }
+
+    fun onClickQuestStart() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart)
+        }
+    }
+
+    fun onHelpIconClicked() {
+        viewModelScope.launch {
+            userRepository.setHasSeenAboutHelp(true)
+            _uiState.update { it.copy(hasSeenAboutHelp = true) }
         }
     }
 }
