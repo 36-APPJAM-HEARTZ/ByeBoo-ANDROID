@@ -35,11 +35,11 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun onLogoutClick(){
+    fun onLogoutClicked(){
         _uiState.update { it.copy(showLogoutModal = true) }
     }
 
-    fun onDeleteAccountClick(){
+    fun onDeleteAccountClicked(){
         _uiState.update { it.copy(showDeleteAccountModal = true) }
     }
 

@@ -49,10 +49,10 @@ fun QuestStartRoute(
     }
 
     QuestStartScreen(
-        onBackClick = viewModel::onBackClick,
+        onBackClick = viewModel::onBackClicked,
         userName = uiState.nickname,
         journeyName = uiState.journeyName,
-        onStartClick = viewModel::onStartClick,
+        onStartClick = viewModel::onStartClicked,
         padding = padding,
     )
 }

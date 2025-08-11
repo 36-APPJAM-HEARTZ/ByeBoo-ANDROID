@@ -103,7 +103,7 @@ fun QuestBehaviorWritingRoute(
             stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick()
+                viewModel.onQuitClicked()
             },
             modifier = modifier.padding(horizontal = 24.dp)
         )
@@ -116,13 +116,13 @@ fun QuestBehaviorWritingRoute(
         }
     }
 
-    BackHandler { viewModel.onBackClick() }
+    BackHandler { viewModel.onBackClicked() }
 
     QuestBehaviorWritingScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = viewModel::onBackClick,
-        onTipClick = viewModel::onTipClick,
+        onBackClick = viewModel::onBackClicked,
+        onTipClick = viewModel::onTipClicked,
         bringIntoViewRequester = bringIntoViewRequester,
         isFocused = isFocused,
         onUpdateSelectedImage = viewModel::updateSelectedImage,

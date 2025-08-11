@@ -68,8 +68,8 @@ fun MyPageRoute(
         onServiceWithByeBooClick = {},
         onPrivacyPolicyClick = {},
         onTermsOfServiceClick = {},
-        onLogoutClick = viewModel::onLogoutClick,
-        onDeleteAccountClick = viewModel::onDeleteAccountClick,
+        onLogoutClick = viewModel::onLogoutClicked,
+        onDeleteAccountClick = viewModel::onDeleteAccountClicked,
         modifier = modifier
     )
 

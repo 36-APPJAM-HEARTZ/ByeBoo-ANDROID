@@ -26,7 +26,7 @@ class QuestTipViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<QuestTipSideEffect>()
     val sideEffect: SharedFlow<QuestTipSideEffect> = _sideEffect
 
-    fun onCloseClick() {
+    fun onCloseClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestTipSideEffect.NavigateToQuest)
         }

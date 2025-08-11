@@ -72,7 +72,7 @@ fun QuestTipRoute(
     }
 
     QuestTipScreen(
-        onCloseClick = viewModel::onCloseClick,
+        onCloseClick = viewModel::onCloseClicked,
         stepNumber = uiState.stepNumber,
         questNumber = uiState.questNumber,
         question = uiState.question,

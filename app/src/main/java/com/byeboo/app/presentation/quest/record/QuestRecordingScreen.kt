@@ -95,7 +95,7 @@ fun QuestRecordingRoute(
         }
     }
 
-    BackHandler { viewModel.onBackClick() }
+    BackHandler { viewModel.onBackClicked() }
 
     if (uiState.showQuitModal) {
         QuestQuitModal(
@@ -103,7 +103,7 @@ fun QuestRecordingRoute(
             stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick()
+                viewModel.onQuitClicked()
             },
             modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
         )
@@ -112,12 +112,12 @@ fun QuestRecordingRoute(
     QuestRecordingScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = viewModel::onBackClick,
+        onBackClick = viewModel::onBackClicked,
         stepNumber = uiState.stepNumber,
         step = uiState.step,
         questNumber = uiState.questNumber,
         questQuestion = uiState.questQuestion,
-        onTipClick = viewModel::onTipClick,
+        onTipClick = viewModel::onTipClicked,
         bringIntoViewRequester = bringIntoViewRequester,
         isFocused = isFocused,
         contentsState = uiState.contentsState,
