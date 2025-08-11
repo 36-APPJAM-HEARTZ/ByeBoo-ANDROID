@@ -73,7 +73,7 @@ fun QuestTipRoute(
 
     QuestTipScreen(
         uiState = uiState,
-        onCloseClick = viewModel::onCloseClick,
+        onCloseClick = viewModel::onCloseClicked,
         questType = questType,
         bottomPadding = bottomPadding,
         modifier = modifier

@@ -51,8 +51,8 @@ fun QuestStartRoute(
 
     QuestStartScreen(
         uiState = uiState,
-        onBackClick = viewModel::onBackClick,
-        onStartClick = viewModel::onStartClick,
+        onBackClick = viewModel::onBackClicked,
+        onStartClick = viewModel::onStartClicked,
         padding = padding,
         modifier = modifier
     )
