@@ -68,8 +68,8 @@ fun HomeAmuletCard(
 
                 Text(
                     text = description,
-                    style = ByeBooTheme.typography.body5,
-                    color = ByeBooTheme.colors.secondary100,
+                    style = ByeBooTheme.typography.body6,
+                    color = ByeBooTheme.colors.secondary50,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()

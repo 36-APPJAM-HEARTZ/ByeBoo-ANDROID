@@ -12,5 +12,7 @@ interface UserRepository {
     suspend fun isLoggedIn(): Boolean
     fun getNickname(): Flow<String?>
     suspend fun getUserId(): Long?
+    suspend fun setHasSeenAboutHelp(seen: Boolean)
+    suspend fun hasSeenAboutHelp(): Boolean
     suspend fun clear()
 }

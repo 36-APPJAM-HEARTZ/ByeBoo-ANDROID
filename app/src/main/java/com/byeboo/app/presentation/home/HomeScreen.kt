@@ -1,17 +1,36 @@
 package com.byeboo.app.presentation.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,10 +41,12 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.home.component.HomeProgressCard
 import com.byeboo.app.presentation.home.component.HomeQuestCard
-import com.byeboo.app.presentation.home.component.HomeTextCard
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -33,12 +54,13 @@ fun HomeRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestStart: () -> Unit,
     modifier: Modifier = Modifier,
+    bottomPadding: Dp,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { effect ->
+        viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is HomeSideEffect.NavigateToQuest -> navigateToQuest()
                 is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
@@ -50,6 +72,8 @@ fun HomeRoute(
         uiState = uiState,
         onClickQuest = viewModel::onClickQuest,
         onClickQuestStart = viewModel::onClickQuestStart,
+        onHelpIconClick = viewModel::onHelpIconClicked,
+        bottomPadding = bottomPadding,
         modifier = modifier
     )
 }
@@ -59,9 +83,22 @@ private fun HomeScreen(
     uiState: HomeUiState,
     onClickQuest: () -> Unit,
     onClickQuestStart: () -> Unit,
+    onHelpIconClick: () -> Unit,
+    bottomPadding: Dp,
     modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_home))
+
+    var showBubble by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState.isQuestStarted, uiState.hasSeenAboutHelp) {
+        if (uiState.isQuestStarted == false && !uiState.hasSeenAboutHelp) {
+            delay(300)
+            showBubble = true
+        } else {
+            showBubble = false
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -100,11 +137,78 @@ private fun HomeScreen(
                     subtitle = "제가 옆에서 함께할게요!",
                     onClick = onClickQuestStart
                 )
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_question),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .noRippleClickable {
+                            onHelpIconClick()
+                            showBubble = false
+                        }
+                )
+                Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
+                AnimatedVisibility(
+                    visible = showBubble && !uiState.hasSeenAboutHelp,
+                    enter = fadeIn(animationSpec = tween(220)) +
+                            scaleIn(
+                                initialScale = 0.96f,
+                                animationSpec = tween(300, easing = FastOutSlowInEasing)
+                            ),
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_about_bori),
+                        contentDescription = "보리 소개 말풍선"
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-            HomeTextCard(title = uiState.dialogue)
+
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = screenHeightDp(322.dp) + bottomPadding)
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_speech_bubble),
+                contentDescription = "말풍선",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenHeightDp(24.dp))
+            )
+
+            if (uiState.isQuestStarted == true) {
+                Text(
+                    text = "${uiState.nickname}님만의 속도로 나아가봐요",
+                    style = ByeBooTheme.typography.body2,
+                    color = ByeBooTheme.colors.primary50,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 13.dp)
+                )
+            } else {
+                Text(
+                    text = "${uiState.nickname}님의 이별 극복을 도와드릴게요",
+                    style = ByeBooTheme.typography.body2,
+                    color = ByeBooTheme.colors.primary50,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 13.dp)
+                )
+            }
         }
     }
 }
