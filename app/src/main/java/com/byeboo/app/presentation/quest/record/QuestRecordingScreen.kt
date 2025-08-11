@@ -203,7 +203,7 @@ private fun QuestRecordingScreen(
                 ) {
                     SmallTag(
                         tagText = "STEP ${uiState.stepNumber}",
-                        tagColor = ByeBooTheme.colors.gray300
+                        tagColor = ByeBooTheme.colors.gray500
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -222,7 +222,7 @@ private fun QuestRecordingScreen(
                 Text(
                     text = "${uiState.questNumber}번째 퀘스트",
                     modifier = Modifier.fillMaxWidth(),
-                    color = ByeBooTheme.colors.secondary300,
+                    color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body5,
                     textAlign = TextAlign.Center
                 )

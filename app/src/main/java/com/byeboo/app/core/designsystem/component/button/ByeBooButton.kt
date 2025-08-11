@@ -42,7 +42,7 @@ fun ByeBooButton(
     ) {
         Text(
             text = buttonText,
-            style = ByeBooTheme.typography.body3,
+            style = ByeBooTheme.typography.body2,
             color = buttonTextColor,
             textAlign = textAlign
         )

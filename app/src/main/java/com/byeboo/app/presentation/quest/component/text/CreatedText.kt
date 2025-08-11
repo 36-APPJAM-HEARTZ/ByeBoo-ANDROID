@@ -16,6 +16,6 @@ fun CreatedText(createdAt: String) {
     Text(
         text = "$date",
         style = ByeBooTheme.typography.body5,
-        color = ByeBooTheme.colors.gray400
+        color = ByeBooTheme.colors.gray500
     )
 }
