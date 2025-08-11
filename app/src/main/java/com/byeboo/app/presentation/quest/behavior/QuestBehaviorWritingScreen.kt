@@ -150,6 +150,7 @@ private fun QuestBehaviorWritingScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+
     val focusManager = LocalFocusManager.current
 
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -201,7 +202,7 @@ private fun QuestBehaviorWritingScreen(
                 ) {
                     SmallTag(
                         tagText = "STEP ${uiState.stepNumber}",
-                        tagColor = ByeBooTheme.colors.gray300
+                        tagColor = ByeBooTheme.colors.gray500
                     )
 
                     Spacer(modifier = modifier.width(screenWidthDp(12.dp)))
@@ -219,7 +220,7 @@ private fun QuestBehaviorWritingScreen(
             item {
                 Text(
                     text = "${uiState.questNumber}번째 퀘스트",
-                    color = ByeBooTheme.colors.secondary300,
+                    color = ByeBooTheme.colors.gray500,
                     textAlign = TextAlign.Center,
                     style = ByeBooTheme.typography.body5,
                     modifier = modifier.fillMaxWidth()
