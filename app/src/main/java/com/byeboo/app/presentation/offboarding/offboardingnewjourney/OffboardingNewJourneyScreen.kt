@@ -177,7 +177,7 @@ private fun OffboardingNewJourneyScreen(
                 )
             }
 
-            repeat(uiState.unCompleted) {
+            repeat(uiState.completed) {
                 JourneyCard(
                     journeyType = uiState.journeyType,
                     onJourneyCardClick = onJourneyCompletedCardClick,
@@ -208,6 +208,5 @@ private fun PreparingCard() {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-
     }
 }
