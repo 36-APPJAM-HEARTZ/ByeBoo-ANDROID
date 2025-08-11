@@ -84,6 +84,17 @@ class UserLocalDataSourceImpl @Inject constructor(
         return dataStore.data.first()[JOURNEY]
     }
 
+    override suspend fun setHasSeenAboutHelp(seen: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[HAS_SEEN_ABOUT_HELP] = seen
+        }
+    }
+
+
+    override suspend fun hasSeenAboutHelp(): Boolean {
+        return dataStore.data.first()[HAS_SEEN_ABOUT_HELP] ?: false
+    }
+
     override suspend fun clear() {
         runCatching {
             dataStore.edit { preferences ->
@@ -98,5 +109,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         private val USERID = longPreferencesKey("USERID")
         private val IS_QUEST_STARTED = booleanPreferencesKey("IS_QUEST_STARTED")
         private val JOURNEY = stringPreferencesKey("JOURNEY")
+        private val HAS_SEEN_ABOUT_HELP = booleanPreferencesKey("HAS_SEEN_ABOUT_HELP")
     }
 }
