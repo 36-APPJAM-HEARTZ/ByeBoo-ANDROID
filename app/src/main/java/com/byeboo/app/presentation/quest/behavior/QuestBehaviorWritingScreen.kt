@@ -357,4 +357,3 @@ private fun QuestBehaviorWritingScreen(
         isUploading = uiState.isUploading
     )
 }
-
