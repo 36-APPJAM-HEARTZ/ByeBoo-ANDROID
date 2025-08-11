@@ -3,7 +3,9 @@ package com.byeboo.app.presentation.mypage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -18,12 +21,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
@@ -33,6 +40,7 @@ import com.byeboo.app.presentation.mypage.component.MyPageModal
 
 @Composable
 fun MyPageRoute(
+    bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
@@ -61,6 +69,7 @@ fun MyPageRoute(
 
     // TODO: 클릭 시 화면 이동 관련 추후에 할 예정
     MyPageScreen(
+        bottomPadding = bottomPadding,
         onNicknameChangeClick = {},
         onCompletedJourneyClick = {},
         onGoToByeBooUniverse = {},
@@ -77,6 +86,7 @@ fun MyPageRoute(
 
 @Composable
 private fun MyPageScreen(
+    bottomPadding: Dp,
     onNicknameChangeClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
     onGoToByeBooUniverse: () -> Unit,
@@ -96,7 +106,11 @@ private fun MyPageScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = 67.dp)
+            .padding(top = 67.dp),
+        contentPadding = PaddingValues(
+            top = 8.dp,
+            bottom = bottomPadding
+        )
     ) {
         stickyHeader {
             Text(
@@ -104,7 +118,11 @@ private fun MyPageScreen(
                 style = ByeBooTheme.typography.sub1,
                 color = ByeBooTheme.colors.white,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(ByeBooTheme.colors.black) // ← 중요
+                    .padding(vertical = 16.dp)
+                    .zIndex(1f)                            // ← 선택
             )
         }
 
@@ -130,10 +148,10 @@ private fun MyPageScreen(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
                     contentDescription = "",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
+                    tint = ByeBooTheme.colors.gray50
                 )
             }
-
             Spacer(modifier = Modifier.height(8.dp))
         }
 
@@ -150,12 +168,25 @@ private fun MyPageScreen(
         item {
             Spacer(modifier = Modifier.height(24.dp))
 
-            //TODO :  아이콘 넣기
-            Text(
-                text = "나의 기록",
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.gray200
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
+                    contentDescription = "",
+                    tint = Color.Unspecified
+                )
+
+                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+                Text(
+                    text = "나의 기록",
+                    style = ByeBooTheme.typography.body2,
+                    color = ByeBooTheme.colors.gray200
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -185,12 +216,25 @@ private fun MyPageScreen(
         item {
             Spacer(modifier = Modifier.height(24.dp))
 
-            //TODO :  아이콘 넣기
-            Text(
-                text = "보리가 궁금하다면?",
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.gray200
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
+                    contentDescription = "",
+                    tint = Color.Unspecified
+                )
+
+                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+                Text(
+                    text = "보리가 궁금하다면?",
+                    style = ByeBooTheme.typography.body2,
+                    color = ByeBooTheme.colors.gray200
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -309,6 +353,12 @@ private fun MyPageScreen(
                 color = ByeBooTheme.colors.gray50,
                 modifier = Modifier.clickable(onClick = onDeleteAccountClick)
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(14.dp))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.mypage.navigation
 
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,9 +13,10 @@ fun NavController.navigateToMyPage(navOptions: NavOptions? = null) {
     navigate(MyPage, navOptions)
 }
 
-fun NavGraphBuilder.myPageGraph() {
+fun NavGraphBuilder.myPageGraph(bottomPadding: Dp) {
     composable<MyPage> {
         MyPageRoute(
+            bottomPadding = bottomPadding
         )
     }
 }
