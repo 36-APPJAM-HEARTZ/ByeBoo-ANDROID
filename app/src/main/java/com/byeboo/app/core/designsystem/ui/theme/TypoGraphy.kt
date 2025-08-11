@@ -74,7 +74,7 @@ class ByeBooTypography internal constructor(
         private set
     var body5 by mutableStateOf(body5)
         private set
-    var body6 by mutableStateOf(body5)
+    var body6 by mutableStateOf(body6)
         private set
     var cap1 by mutableStateOf(cap1)
         private set
