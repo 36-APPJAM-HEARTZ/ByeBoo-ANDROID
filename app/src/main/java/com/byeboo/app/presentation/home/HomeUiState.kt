@@ -5,7 +5,7 @@ data class HomeUiState(
     val journey: String = "",
     val currentStep: Int = 0,
     val totalSteps: Int = 30,
-    val nickname: String? = "하츠핑",
+    val nickname: String = "하츠핑",
     val hasSeenAboutHelp: Boolean = false
 )
 sealed interface HomeSideEffect {

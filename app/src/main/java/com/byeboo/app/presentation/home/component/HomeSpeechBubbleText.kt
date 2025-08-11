@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -43,50 +42,30 @@ fun SpeechBubbleWithText(firstText: String, secondText: String, thirdText: Strin
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentSize()
+            .wrapContentSize(),
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_speech_bubble),
             contentDescription = "말풍선",
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
+            modifier = Modifier.fillMaxWidth()
         )
-
-        when {
-            showFirstText -> {
-                Text(
-                    text = firstText,
-                    style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.primary50,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
-            showSecondText -> {
-                Text(
-                    text = secondText,
-                    style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.primary50,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
-            showThirdText -> {
-                Text(
-                    text = thirdText,
-                    style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.primary50,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
-            }
+        val textToShow = when {
+            showFirstText -> firstText
+            showSecondText -> secondText
+            showThirdText -> thirdText
+            else -> null
+        }
+        if (textToShow != null) {
+            Text(
+                text = textToShow,
+                style = ByeBooTheme.typography.body2,
+                color = ByeBooTheme.colors.primary50,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 13.5.dp)
+                    .padding(top = 13.2.dp)
+            )
         }
     }
 }

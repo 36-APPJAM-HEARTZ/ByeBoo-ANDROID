@@ -29,12 +29,12 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
-            val nickname = userRepository.getNickname().firstOrNull()
+            val nickname = userRepository.getNickname().firstOrNull() ?: "하츠핑"
 
             val isStarted = questStateRepository.isQuestStarted()
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
 
-            val seenAboutHelp = userRepository.hasSeenAboutHelp()
+            val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
             var currentStep: Int? = null
             if (isStarted) {
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
                     journey = journey,
                     currentStep = currentStep ?: 0,
                     totalSteps = 30,
-                    hasSeenAboutHelp = seenAboutHelp
+                    hasSeenAboutHelp = hasSeenAboutHelp
                 )
             }
         }
