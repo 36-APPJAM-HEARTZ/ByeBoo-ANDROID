@@ -69,7 +69,8 @@ fun QuestBehaviorWritingRoute(
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val isFocused = remember { mutableStateOf(false) }
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -98,23 +99,32 @@ fun QuestBehaviorWritingRoute(
 
     if (uiState.showQuitModal) {
         QuestQuitModal(
-            onDismissRequest = { viewModel.onDismissModal() },
-            stayButton = { viewModel.onDismissModal() },
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick() },
+                viewModel.onQuitClick()
+            },
             modifier = modifier.padding(horizontal = 24.dp)
         )
     }
 
+    LaunchedEffect(isFocused.value) {
+        if (isFocused.value) {
+            delay(300)
+            bringIntoViewRequester.bringIntoView()
+        }
+    }
 
-    BackHandler { viewModel.onBackClicked() }
+    BackHandler { viewModel.onBackClick() }
 
     QuestBehaviorWritingScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = viewModel::onBackClicked,
+        onBackClick = viewModel::onBackClick,
         onTipClick = viewModel::onTipClick,
+        bringIntoViewRequester = bringIntoViewRequester,
+        isFocused = isFocused,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::uploadImage,
@@ -139,8 +149,10 @@ fun QuestBehaviorWritingRoute(
 private fun QuestBehaviorWritingScreen(
     uiState: QuestBehaviorState,
     bottomPadding: Dp,
-    onBackClick:() -> Unit,
+    onBackClick: () -> Unit,
     onTipClick: () -> Unit,
+    bringIntoViewRequester: BringIntoViewRequester,
+    isFocused: MutableState<Boolean>,
     onUpdateSelectedImage: (Uri?) -> Unit,
     onClickCompleteButton: () -> Unit,
     onUpdateContent: (String) -> Unit,
@@ -152,17 +164,6 @@ private fun QuestBehaviorWritingScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
-
-    val isFocused = remember { mutableStateOf(false) }
-
-    LaunchedEffect(isFocused.value) {
-        if (isFocused.value) {
-            delay(300)
-            bringIntoViewRequester.bringIntoView()
-        }
-    }
 
     Column(
         modifier = modifier
@@ -338,7 +339,7 @@ private fun QuestBehaviorWritingScreen(
     }
 
     ByeBooBottomSheet(
-        navigateButton = {navigateButton(context)},
+        navigateButton = { navigateButton(context) },
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
