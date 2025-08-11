@@ -88,18 +88,18 @@ fun QuestRecordingRoute(
         }
     }
 
-    BackHandler { viewModel.onBackClick() }
+    BackHandler { viewModel.onBackClicked() }
 
     QuestRecordingScreen(
         uiState = uiState,
         onDismissModal = viewModel::onDismissModal,
         onClickQuitButton = {
             viewModel.onDismissModal()
-            viewModel.onQuitClick()
+            viewModel.onQuitClicked()
         },
         bottomPadding = bottomPadding,
-        onBackClick = viewModel::onBackClick,
-        onTipClick = viewModel::onTipClick,
+        onBackClick = viewModel::onBackClicked,
+        onTipClick = viewModel::onTipClicked,
         onClickCompleteButton = viewModel::openBottomSheet,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::postQuestRecording,

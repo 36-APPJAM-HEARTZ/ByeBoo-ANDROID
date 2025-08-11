@@ -99,11 +99,11 @@ fun QuestBehaviorWritingRoute(
 
     if (uiState.showQuitModal) {
         QuestQuitModal(
-            onDismissRequest = { viewModel.onDismissModal() },
-            stayButton = { viewModel.onDismissModal() },
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick()
+                viewModel.onQuitClicked()
             },
             modifier = modifier.padding(horizontal = 24.dp)
         )
@@ -116,7 +116,7 @@ fun QuestBehaviorWritingRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClicked,
-        onTipClick = viewModel::onTipClick,
+        onTipClick = viewModel::onTipClicked,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::uploadImage,
@@ -130,10 +130,7 @@ fun QuestBehaviorWritingRoute(
             viewModel.isEmotionSelected(isSelected)
         },
         modifier = modifier
-
     )
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

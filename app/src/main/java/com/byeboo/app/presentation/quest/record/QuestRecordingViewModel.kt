@@ -82,7 +82,7 @@ class QuestRecordingViewModel @Inject constructor(
         }
     }
 
-    fun onBackClick() {
+    fun onBackClicked() {
         _uiState.update { it.copy(showQuitModal = true) }
     }
 
@@ -90,13 +90,13 @@ class QuestRecordingViewModel @Inject constructor(
         _uiState.update { it.copy(showQuitModal = false) }
     }
 
-    fun onQuitClick() {
+    fun onQuitClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuest)
         }
     }
 
-    fun onTipClick() {
+    fun onTipClicked() {
         val questId = uiState.value.questId
         viewModelScope.launch {
             _sideEffect.emit(
