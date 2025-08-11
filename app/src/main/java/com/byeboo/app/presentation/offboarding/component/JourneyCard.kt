@@ -49,7 +49,7 @@ fun JourneyCard(
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
             .padding(horizontal = 24.dp, vertical = 18.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = chipBackgroundColor)
@@ -60,14 +60,14 @@ fun JourneyCard(
                 color = chipTextColor,
                 style = ByeBooTheme.typography.cap1
             )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(12.dp)))
-
-            Text(
-                text = journeyTitle,
-                color = journeyTitleTextColor,
-                style = ByeBooTheme.typography.body2
-            )
         }
+
+        Spacer(modifier = Modifier.width(screenWidthDp(12.dp)))
+
+        Text(
+            text = journeyTitle,
+            color = journeyTitleTextColor,
+            style = ByeBooTheme.typography.body2
+        )
     }
 }
