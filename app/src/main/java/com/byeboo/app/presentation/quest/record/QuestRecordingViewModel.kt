@@ -9,7 +9,6 @@ import com.byeboo.app.domain.model.quest.QuestRecording
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestRecordingViewModel @Inject constructor(
@@ -30,16 +30,6 @@ class QuestRecordingViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<QuestRecordingSideEffect>()
     val sideEffect: SharedFlow<QuestRecordingSideEffect>
         get() = _sideEffect
-
-    private val _showBottomSheet = MutableStateFlow(false)
-    val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
-
-    private val _isEmotionSelected = MutableStateFlow(false)
-    val isEmotionSelected: StateFlow<Boolean> = _isEmotionSelected.asStateFlow()
-
-    private val _showQuitModal = MutableStateFlow(false)
-    val showQuitModal: StateFlow<Boolean>
-        get() = _showQuitModal.asStateFlow()
 
     fun setQuestId(questId: Long) {
         _uiState.update {
@@ -76,7 +66,7 @@ class QuestRecordingViewModel @Inject constructor(
             val result = questRecordingRepository.postRecording(questId, request)
 
             if (result.isSuccess) {
-                _showBottomSheet.value = false
+                _uiState.update { it.copy(showBottomSheet = false) }
                 _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId))
             }
         }
@@ -92,18 +82,12 @@ class QuestRecordingViewModel @Inject constructor(
         }
     }
 
-    fun updateTextFieldContent(isFocused: Boolean, questAnswer: String) {
-        _uiState.update {
-            it.copy(questAnswer = questAnswer)
-        }
-    }
-
     fun onBackClick() {
-        _showQuitModal.value = true
+        _uiState.update { it.copy(showQuitModal = true) }
     }
 
     fun onDismissModal() {
-        _showQuitModal.value = false
+        _uiState.update { it.copy(showQuitModal = false) }
     }
 
     fun onQuitClick() {
@@ -125,15 +109,15 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun openBottomSheet() {
-        _showBottomSheet.value = true
+        _uiState.update { it.copy(showBottomSheet = true) }
     }
 
     fun closeBottomSheet() {
-        _showBottomSheet.value = false
+        _uiState.update { it.copy(showBottomSheet = false) }
     }
 
     fun isEmotionSelected(isSelected: Boolean) {
-        _isEmotionSelected.value = isSelected
+        _uiState.update { it.copy(isEmotionSelected = isSelected) }
     }
 
     fun updateSelectedEmotion(emotion: LargeTagType) {

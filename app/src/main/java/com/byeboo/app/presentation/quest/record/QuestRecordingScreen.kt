@@ -64,10 +64,6 @@ fun QuestRecordingRoute(
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val showQuitModal by viewModel.showQuitModal.collectAsStateWithLifecycle()
-    val showBottomSheet by viewModel.showBottomSheet.collectAsStateWithLifecycle()
-    val isEmotionSelected by viewModel.isEmotionSelected.collectAsStateWithLifecycle()
-
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
 
@@ -101,12 +97,10 @@ fun QuestRecordingRoute(
 
     BackHandler { viewModel.onBackClick() }
 
-    if (showQuitModal) {
+    if (uiState.showQuitModal) {
         QuestQuitModal(
-            onDismissRequest = { viewModel.onDismissModal() },
-            stayButton = {
-                viewModel.onDismissModal()
-            },
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
                 viewModel.onQuitClick()
@@ -116,6 +110,7 @@ fun QuestRecordingRoute(
     }
 
     QuestRecordingScreen(
+        uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClick,
         stepNumber = uiState.stepNumber,
@@ -131,21 +126,20 @@ fun QuestRecordingRoute(
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::postQuestRecording,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
-        showBottomSheet = showBottomSheet,
         onEmotionSelected = { selectedEmotion ->
             viewModel.isEmotionSelected(true)
             viewModel.updateSelectedEmotion(selectedEmotion)
         },
         onSelectedChanged = { isSelected ->
             viewModel.isEmotionSelected(isSelected)
-        },
-        isEmotionSelected = isEmotionSelected
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun QuestRecordingScreen(
+    uiState: QuestRecordingState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     stepNumber: Long,
@@ -163,9 +157,7 @@ private fun QuestRecordingScreen(
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    showBottomSheet: Boolean = false,
-    isEmotionSelected: Boolean = false
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -310,10 +302,10 @@ private fun QuestRecordingScreen(
 
     ByeBooBottomSheet(
         navigateButton = navigateButton,
-        showBottomSheet = showBottomSheet,
+        showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
         onSelectedChanged = onSelectedChanged,
-        isSelected = isEmotionSelected
+        isSelected = uiState.isEmotionSelected
     )
 }
