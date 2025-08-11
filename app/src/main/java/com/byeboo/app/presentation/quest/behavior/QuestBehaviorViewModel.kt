@@ -145,7 +145,7 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    fun onBackClicked() {
+    fun onBackClick() {
         _uiState.update { it.copy(showQuitModal = true) }
     }
 
