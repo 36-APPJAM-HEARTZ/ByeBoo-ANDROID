@@ -159,7 +159,6 @@ private fun OffboardingNewJourneyScreen(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -205,8 +204,8 @@ private fun PreparingCard() {
             text = "준비 중",
             color = ByeBooTheme.colors.gray600,
             style = ByeBooTheme.typography.body6,
+            textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+            )
     }
 }
