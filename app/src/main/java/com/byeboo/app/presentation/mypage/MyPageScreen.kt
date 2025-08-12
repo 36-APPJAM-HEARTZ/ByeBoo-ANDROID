@@ -20,17 +20,18 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
@@ -45,6 +46,7 @@ fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val localUriHandler = LocalUriHandler.current
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -67,16 +69,26 @@ fun MyPageRoute(
         )
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is MyPageSideEffect.OpenUrl -> runCatching {
+                    localUriHandler.openUri(effect.url)
+                }
+            }
+        }
+    }
+
     // TODO: 클릭 시 화면 이동 관련 추후에 할 예정
     MyPageScreen(
         bottomPadding = bottomPadding,
         onNicknameChangeClick = {},
         onCompletedJourneyClick = {},
         onGoToByeBooUniverse = {},
-        onAskingByeBooClick = {},
-        onServiceWithByeBooClick = {},
-        onPrivacyPolicyClick = {},
-        onTermsOfServiceClick = {},
+        onAskingByeBooClick = viewModel::onAskingByeBooClicked,
+        onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
+        onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
         modifier = modifier
@@ -120,9 +132,8 @@ private fun MyPageScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(ByeBooTheme.colors.black) // ← 중요
+                    .background(ByeBooTheme.colors.black)
                     .padding(vertical = 16.dp)
-                    .zIndex(1f)                            // ← 선택
             )
         }
 
