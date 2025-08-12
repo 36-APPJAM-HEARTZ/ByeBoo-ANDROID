@@ -26,12 +26,13 @@ class MyPageViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<MyPageSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    val nickname: StateFlow<String?> = userRepository.getNickname()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
-        )
+    init {
+        viewModelScope.launch {
+            userRepository.getNickname().collect { nickname ->
+                _uiState.update { it.copy(nickname = nickname) }
+            }
+        }
+    }
 
     private fun emitOpenUrl(url: String) {
         viewModelScope.launch {

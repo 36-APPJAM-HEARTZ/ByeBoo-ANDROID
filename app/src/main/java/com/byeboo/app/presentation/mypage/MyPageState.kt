@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.mypage
 
 data class MyPageState(
+    val nickname: String = "",
     val showLogoutModal: Boolean = false,
     val showDeleteAccountModal: Boolean = false
 )

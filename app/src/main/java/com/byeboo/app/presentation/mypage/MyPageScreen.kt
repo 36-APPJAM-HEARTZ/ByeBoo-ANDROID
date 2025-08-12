@@ -81,6 +81,7 @@ fun MyPageRoute(
 
     // TODO: 클릭 시 화면 이동 관련 추후에 할 예정
     MyPageScreen(
+        uiState = uiState,
         bottomPadding = bottomPadding,
         onNicknameChangeClick = {},
         onCompletedJourneyClick = {},
@@ -98,6 +99,7 @@ fun MyPageRoute(
 
 @Composable
 private fun MyPageScreen(
+    uiState: MyPageState,
     bottomPadding: Dp,
     onNicknameChangeClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
@@ -108,11 +110,8 @@ private fun MyPageScreen(
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: MyPageViewModel = hiltViewModel()
+    modifier: Modifier = Modifier
 ) {
-    val nickname by viewModel.nickname.collectAsStateWithLifecycle()
-
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -149,7 +148,7 @@ private fun MyPageScreen(
                     .padding(horizontal = screenWidthDp(24.dp), vertical = 18.5.dp)
             ) {
                 Text(
-                    text = nickname ?: "",
+                    text = uiState.nickname,
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray300
                 )
