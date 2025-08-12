@@ -88,15 +88,21 @@ fun QuestRecordingRoute(
         }
     }
 
+    if (uiState.showQuitModal) {
+        QuestQuitModal(
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
+            quitButton = {
+                viewModel.onDismissModal()
+                viewModel.onQuitClicked()
+            },
+        )
+    }
+
     BackHandler { viewModel.onBackClicked() }
 
     QuestRecordingScreen(
         uiState = uiState,
-        onDismissModal = viewModel::onDismissModal,
-        onClickQuitButton = {
-            viewModel.onDismissModal()
-            viewModel.onQuitClicked()
-        },
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClicked,
         onTipClick = viewModel::onTipClicked,
@@ -119,8 +125,6 @@ fun QuestRecordingRoute(
 @Composable
 private fun QuestRecordingScreen(
     uiState: QuestRecordingState,
-    onDismissModal: () -> Unit,
-    onClickQuitButton: () -> Unit,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     onTipClick: () -> Unit,
@@ -141,15 +145,6 @@ private fun QuestRecordingScreen(
             delay(300)
             bringIntoViewRequester.bringIntoView()
         }
-    }
-
-    if (uiState.showQuitModal) {
-        QuestQuitModal(
-            onDismissRequest = onDismissModal,
-            stayButton = onDismissModal,
-            quitButton = onClickQuitButton,
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
-        )
     }
 
     Column(

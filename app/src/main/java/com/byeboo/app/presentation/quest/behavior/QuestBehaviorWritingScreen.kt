@@ -104,8 +104,7 @@ fun QuestBehaviorWritingRoute(
             quitButton = {
                 viewModel.onDismissModal()
                 viewModel.onQuitClicked()
-            },
-            modifier = modifier.padding(horizontal = 24.dp)
+            }
         )
     }
 
