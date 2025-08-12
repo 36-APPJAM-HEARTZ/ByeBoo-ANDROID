@@ -80,7 +80,7 @@ private fun OffboardingNewJourneyScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "어떤 여정을 시작해볼까요?",
+            text = "어떤 여정을 시작해 볼까요?",
             color = ByeBooTheme.colors.gray50,
             style = ByeBooTheme.typography.head1
         )
@@ -88,7 +88,7 @@ private fun OffboardingNewJourneyScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "각 여정 당 30개의 퀘스트를 제공해드려요",
+            text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body6
         )
