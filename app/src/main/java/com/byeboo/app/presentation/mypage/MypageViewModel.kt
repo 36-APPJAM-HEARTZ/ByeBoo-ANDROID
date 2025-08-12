@@ -6,8 +6,6 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
@@ -34,29 +33,19 @@ class MyPageViewModel @Inject constructor(
             initialValue = null
         )
 
-    fun onAskingByeBooClicked() {
+    private fun emitOpenUrl(url: String) {
         viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.OpenUrl(Urls.ASKING_BYEBOO))
+            _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
         }
     }
 
-    fun onServiceWithByeBooClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.OpenUrl(Urls.SERVICE))
-        }
-    }
+    fun onAskingByeBooClicked() = emitOpenUrl(Urls.ASKING_BYEBOO)
 
-    fun onPrivacyPolicyClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.OpenUrl(Urls.PRIVACY_POLICY))
-        }
-    }
+    fun onServiceWithByeBooClicked() = emitOpenUrl(Urls.SERVICE)
 
-    fun onTermsOfServiceClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.OpenUrl(Urls.TERMS_OF_SERVICE))
-        }
-    }
+    fun onPrivacyPolicyClicked() = emitOpenUrl(Urls.PRIVACY_POLICY)
+
+    fun onTermsOfServiceClicked() = emitOpenUrl(Urls.TERMS_OF_SERVICE)
 
     fun onDismissModal(modalType: ModalType) {
         when (modalType) {
