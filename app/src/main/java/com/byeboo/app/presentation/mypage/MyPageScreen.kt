@@ -214,8 +214,6 @@ private fun MyPageScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
