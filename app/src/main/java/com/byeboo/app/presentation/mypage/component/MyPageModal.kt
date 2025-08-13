@@ -41,7 +41,7 @@ fun MyPageModal(
             modifier = modifier
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.gray900Alpha80)
+                .background(color = ByeBooTheme.colors.gray900)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
