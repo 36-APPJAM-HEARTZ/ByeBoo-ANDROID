@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -118,13 +119,15 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             (uiState.completedCards).forEach { card ->
-                JourneyCard(
-                    journeyType = card.journeyType,
-                    onJourneyCardClick = onJourneyCompletedCardClick,
-                    chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
-                    chipTextColor = ByeBooTheme.colors.gray300,
-                    journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                )
+                key (card){
+                    JourneyCard(
+                        journeyType = card.journeyType,
+                        onJourneyCardClick = onJourneyCompletedCardClick,
+                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
+                        chipTextColor = ByeBooTheme.colors.gray300,
+                        journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                    )
+                }
             }
 
             if (uiState.completed == 0) {
