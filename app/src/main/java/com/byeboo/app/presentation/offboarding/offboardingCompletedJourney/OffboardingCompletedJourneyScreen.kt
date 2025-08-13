@@ -108,7 +108,7 @@ private fun OffboardingCompletedJourneyScreen(
                     style = ByeBooTheme.typography.cap2
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
                     text = "${uiState.completed}개",
@@ -128,7 +128,6 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             if (uiState.completed == 0) {
-
                 Spacer(modifier = Modifier.height(188.5.dp))
 
                 Text(
