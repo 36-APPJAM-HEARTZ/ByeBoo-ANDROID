@@ -187,8 +187,6 @@ private fun OffboardingNewJourneyScreen(
             }
         }
     }
-
-
 }
 
 @Composable
