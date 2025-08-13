@@ -11,12 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -67,6 +69,7 @@ private fun OffboardingNewJourneyScreen(
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = 24.dp)
             .padding(top = 67.dp, bottom = bottomPadding)
+            .verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
@@ -124,15 +127,15 @@ private fun OffboardingNewJourneyScreen(
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
-                    text = "${uiState.unCompleted}개",
+                    text = "${uiState.uncompleted}개",
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body2
                 )
             }
 
-            repeat(uiState.unCompleted) {
+            (uiState.uncompletedCards).forEach { card ->
                 JourneyCard(
-                    journeyType = uiState.journeyType,
+                    journeyType = card.journeyType,
                     onJourneyCardClick = onJourneyUncompletedCardClick,
                     chipBackgroundColor = ByeBooTheme.colors.primary300,
                     chipTextColor = ByeBooTheme.colors.white,
@@ -176,9 +179,9 @@ private fun OffboardingNewJourneyScreen(
                 )
             }
 
-            repeat(uiState.completed) {
+            (uiState.completedCards).forEach { card ->
                 JourneyCard(
-                    journeyType = uiState.journeyType,
+                    journeyType = card.journeyType,
                     onJourneyCardClick = onJourneyCompletedCardClick,
                     chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                     chipTextColor = ByeBooTheme.colors.gray300,
@@ -204,6 +207,6 @@ private fun PreparingCard() {
             style = ByeBooTheme.typography.body6,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
-            )
+        )
     }
 }
