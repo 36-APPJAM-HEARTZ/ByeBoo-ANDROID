@@ -315,7 +315,7 @@ private fun QuestBehaviorWritingScreen(
                                 onUpdateContent(it)
                             }
                         },
-                        placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
+                        placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해 보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
                         isQuestion = false,
                         onFocusChanged = {
                             isFocused.value = it

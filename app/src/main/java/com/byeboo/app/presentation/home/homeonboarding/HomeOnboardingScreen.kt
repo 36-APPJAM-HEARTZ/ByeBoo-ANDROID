@@ -107,7 +107,7 @@ private fun HomeOnboardingScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     if (showInstructionText) {
                         Text(
-                            text = "보리를 꾸욱 눌러주세요 !",
+                            text = "보리를 꾸욱 눌러주세요!",
                             style = ByeBooTheme.typography.body3,
                             color = ByeBooTheme.colors.whiteAlpha50,
                             textAlign = TextAlign.Center,

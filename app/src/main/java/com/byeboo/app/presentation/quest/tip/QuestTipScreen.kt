@@ -185,7 +185,7 @@ private fun QuestTipScreen(
                 if (questType.questName == "RECORDING") {
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
-                        titleText = "이런 걸 생각해보며 작성해 주세요.",
+                        titleText = "이런 걸 생각해 보며 작성해 주세요.",
                         contentText = uiState.tipAnswer.suggestion
                     )
                 } else {

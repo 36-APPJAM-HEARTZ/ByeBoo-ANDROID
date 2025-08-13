@@ -51,7 +51,7 @@ fun MyPageRoute(
     if (uiState.showLogoutModal) {
         MyPageModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            myPageModalMainText = "로그아웃 하시겠어요?",
+            myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
             onConfirmClick = {},
             onConfirmText = "로그아웃"
@@ -260,7 +260,7 @@ private fun MyPageScreen(
                     .padding(horizontal = screenWidthDp(24.dp), vertical = 21.dp)
             ) {
                 Text(
-                    text = "Bye Boo 세계관 보러가기",
+                    text = "Bye Boo 세계관 보러 가기",
                     style = ByeBooTheme.typography.body6,
                     color = ByeBooTheme.colors.gray50
                 )

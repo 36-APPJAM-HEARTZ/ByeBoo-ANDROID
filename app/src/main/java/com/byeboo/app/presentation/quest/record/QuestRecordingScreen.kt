@@ -268,7 +268,7 @@ private fun QuestRecordingScreen(
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                     Text(
-                        text = "*10글자 이상 입력해주세요.",
+                        text = "*10글자 이상 작성해 주세요.",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.gray400,
                         modifier = Modifier.fillMaxWidth(),
