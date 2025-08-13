@@ -2,15 +2,14 @@ package com.byeboo.app.presentation.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.BuildConfig
 import com.byeboo.app.domain.repository.auth.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,13 +39,13 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun onAskingByeBooClicked() = emitOpenUrl(Urls.ASKING_BYEBOO)
+    fun onAskingByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_ASKING)
 
-    fun onServiceWithByeBooClicked() = emitOpenUrl(Urls.SERVICE)
+    fun onServiceWithByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_SERVICE)
 
-    fun onPrivacyPolicyClicked() = emitOpenUrl(Urls.PRIVACY_POLICY)
+    fun onPrivacyPolicyClicked() = emitOpenUrl(BuildConfig.BYEBOO_PRIVACY_POLICY)
 
-    fun onTermsOfServiceClicked() = emitOpenUrl(Urls.TERMS_OF_SERVICE)
+    fun onTermsOfServiceClicked() = emitOpenUrl(BuildConfig.BYEBOO_TERMS_OF_SERVICE)
 
     fun onDismissModal(modalType: ModalType) {
         when (modalType) {
@@ -67,14 +66,5 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.clear()
         }
-    }
-
-    object Urls {
-        const val ASKING_BYEBOO = "https://forms.gle/AhqzzkHKWYAgo4m96"
-        const val SERVICE = "https://forms.gle/BA77gAgZ1NCatart5"
-        const val PRIVACY_POLICY =
-            "https://www.notion.so/24cab823e68d80a19ab1fbf87d6cfbc3?source=copy_link"
-        const val TERMS_OF_SERVICE =
-            "https://www.notion.so/24cab823e68d801aac95ec5d0389d192?source=copy_link"
     }
 }

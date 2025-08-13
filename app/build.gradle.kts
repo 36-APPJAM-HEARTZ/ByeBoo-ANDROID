@@ -34,6 +34,10 @@ android {
             "KAKAO_NATIVE_APP_KEY",
             properties["kakao.native.app.key"].toString()
         )
+        buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
+        buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
+        buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
+        buildConfigField("String", "BYEBOO_TERMS_OF_SERVICE", properties["byeboo.terms.of.service"].toString())
     }
 
     buildTypes {
