@@ -9,13 +9,13 @@ import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.splashGraph(
     navigateToHome: () -> Unit,
-    navigateToOnboarding: () -> Unit,
+    navigateToUserInfo: () -> Unit,
     padding: Dp
 ) {
     composable<Splash> {
         SplashRoute(
             navigateToHome = navigateToHome,
-            navigateToOnboarding = navigateToOnboarding,
+            navigateToUserInfo = navigateToUserInfo,
             padding = padding
         )
     }
