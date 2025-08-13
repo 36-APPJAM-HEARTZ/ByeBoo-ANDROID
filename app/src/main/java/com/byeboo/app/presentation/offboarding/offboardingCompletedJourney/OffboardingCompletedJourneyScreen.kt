@@ -9,11 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -24,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
@@ -39,6 +44,7 @@ fun OffboardingCompletedJourneyRoute(
     OffboardingCompletedJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
+        onBackClick = {},
         onJourneyCompletedCardClick = {},
         modifier = modifier
     )
@@ -48,6 +54,7 @@ fun OffboardingCompletedJourneyRoute(
 private fun OffboardingCompletedJourneyScreen(
     uiState: OffboardingCompletedJourneyState,
     bottomPadding: Dp,
+    onBackClick: () -> Unit,
     onJourneyCompletedCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -56,13 +63,14 @@ private fun OffboardingCompletedJourneyScreen(
             .fillMaxSize()
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(top = 67.dp, bottom = bottomPadding)
+            .verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "",
             modifier = Modifier
-                .fillMaxWidth()
-                .size(24.dp),
+                .size(24.dp)
+                .noRippleClickable(onClick = onBackClick),
             tint = ByeBooTheme.colors.gray50,
         )
 
@@ -90,14 +98,17 @@ private fun OffboardingCompletedJourneyScreen(
                 .padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = "완료",
                     color = ByeBooTheme.colors.gray300,
                     style = ByeBooTheme.typography.cap2
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = "${uiState.completed}개",
@@ -114,10 +125,6 @@ private fun OffboardingCompletedJourneyScreen(
                     chipTextColor = ByeBooTheme.colors.gray300,
                     journeyTitleTextColor = ByeBooTheme.colors.gray300,
                 )
-            }
-
-            (uiState.completedCards).forEach { card ->
-
             }
 
             if (uiState.completed == 0) {
