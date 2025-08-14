@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -78,7 +79,7 @@ fun TermsOfServiceScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Column(
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 15.dp)
             ) {
                 TermType.entries.forEach { term ->
                     TermsButton(
@@ -96,7 +97,8 @@ fun TermsOfServiceScreen(
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonText = "다음으로",
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
-                onClick = {uiState.nextEnabled}
+                isEnabled = uiState.isAllChecked,
+                onClick = {}
             )
         }
     }
