@@ -30,6 +30,7 @@ fun TermsAllButton(
     isChecked: Boolean = false,
 
 ) {
+    val checkedIcon = if (isChecked) R.drawable.ic_terms_checked else R.drawable.ic_terms_unchecked
     val textColor = if (isChecked) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray300
     val backgroundColor = if (isChecked) ByeBooTheme.colors.primary300Alpha20 else ByeBooTheme.colors.whiteAlpha10
 
@@ -41,18 +42,21 @@ fun TermsAllButton(
             modifier = modifier
                 .fillMaxWidth()
                 .background(
-                    color = backgroundColor, shape = RoundedCornerShape(12.dp)
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(12.dp)
                 )
                 .then(
                     if (isChecked) Modifier.border(
-                        width = 1.dp, color = ByeBooTheme.colors.primary300
+                        width = 1.dp,
+                        color = ByeBooTheme.colors.primary300,
+                        shape = RoundedCornerShape(12.dp)
                     ) else Modifier
                 )
                 .padding(vertical = 18.dp, horizontal = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_background_check),
+                imageVector = ImageVector.vectorResource(checkedIcon),
                 contentDescription = "all agree checkButton",
                 tint = Color.Unspecified,
                 modifier = modifier
