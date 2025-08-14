@@ -79,12 +79,12 @@ fun QuestBehaviorCompleteRoute(
         }
     }
 
-    BackHandler { viewModel.onCloseClick() }
+    BackHandler { viewModel.onCloseClicked() }
 
     QuestBehaviorCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = viewModel::onCloseClick,
+        onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
         modifier = modifier
     )

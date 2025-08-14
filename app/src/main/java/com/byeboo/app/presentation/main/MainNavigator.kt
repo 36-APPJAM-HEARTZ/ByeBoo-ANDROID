@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.auth.navigation.navigateToLoading
-import com.byeboo.app.presentation.auth.navigation.navigateToOnboarding
 import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.navigateToHome
 import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
@@ -67,10 +66,6 @@ class MainNavigator(
         MainNavTab.contains {
             currentDestination?.hasRoute(it::class) == true
         }
-
-    fun navigateToOnboarding(navOptions: NavOptions) {
-        navController.navigateToOnboarding(navOptions)
-    }
 
     fun navigateToHome(navOptions: NavOptions) {
         navController.navigateToHome(navOptions)

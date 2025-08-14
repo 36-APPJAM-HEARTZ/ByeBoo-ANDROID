@@ -38,7 +38,7 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun SplashRoute(
     navigateToHome: () -> Unit,
-    navigateToOnboarding: () -> Unit,
+    navigateToUserInfo: () -> Unit,
     padding: Dp,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
@@ -47,7 +47,7 @@ fun SplashRoute(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 SplashState.NavigateToHome -> navigateToHome()
-                SplashState.NavigateToOnboarding -> navigateToOnboarding()
+                SplashState.NavigateToUserInfo -> navigateToUserInfo()
             }
         }
     }
