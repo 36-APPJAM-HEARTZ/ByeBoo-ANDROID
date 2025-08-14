@@ -153,7 +153,7 @@ class QuestBehaviorViewModel @Inject constructor(
         _uiState.update { it.copy(showQuitModal = false) }
     }
 
-    fun onQuitClick() {
+    fun onQuitClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
             delay(NAVIGATION_DELAY_MS)
@@ -161,7 +161,7 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    fun onTipClick() {
+    fun onTipClicked() {
         val questId = uiState.value.questId
         viewModelScope.launch {
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestTip(questId, QuestType.ACTIVE))
@@ -184,7 +184,7 @@ class QuestBehaviorViewModel @Inject constructor(
         _uiState.update { it.copy(selectedEmotion = emotion) }
     }
 
-    fun onCloseClick() {
+    fun onCloseClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
         }

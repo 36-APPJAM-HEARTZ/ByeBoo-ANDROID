@@ -92,6 +92,8 @@ fun MainNavHost(
             viewModel = questBehaviorViewModel,
             padding = padding
         )
-        myPageGraph()
+        myPageGraph(
+            bottomPadding = padding
+        )
     }
 }

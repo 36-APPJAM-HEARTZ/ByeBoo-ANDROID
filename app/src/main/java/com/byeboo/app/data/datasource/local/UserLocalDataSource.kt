@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserLocalDataSource {
     suspend fun getUserEntity(): UserEntity
     suspend fun getUserId(): Long?
-    fun getNickname(): Flow<String?>
+    fun getNickname(): Flow<String>
     suspend fun saveId(userId: Long)
     suspend fun saveNickname(nickname: String)
     suspend fun setLoggedIn(loggedIn: Boolean)
