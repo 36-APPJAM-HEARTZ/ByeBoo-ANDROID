@@ -22,6 +22,7 @@ lifecycle = "2.8.1"
 activityCompose = "1.9.0"
 composeBom = "2025.04.01"
 navigationCompose = "2.8.9"
+browser="1.8.0"
 
 # Test
 junit = "4.13.2"
@@ -89,7 +90,7 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
-
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser"}
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
