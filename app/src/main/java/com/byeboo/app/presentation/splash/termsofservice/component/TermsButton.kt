@@ -8,16 +8,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -30,9 +25,8 @@ fun TermsButton(
     isSelected: Boolean = false,
     hasMoreText: Boolean,
     onCheckClick: (Boolean) -> Unit,
-
+    onLinkClick: () -> Unit
 ) {
-
     val contentColor = if (isSelected) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray400
 
     Row(
@@ -41,7 +35,6 @@ fun TermsButton(
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check),
             contentDescription = "check button",
@@ -66,17 +59,10 @@ fun TermsButton(
                 text = "더보기",
                 style = ByeBooTheme.typography.cap2,
                 color = contentColor,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
+                modifier = modifier.noRippleClickable(onClick = onLinkClick )
             )
         }
     }
 }
 
-@Preview
-@Composable
-private fun TermsButtonPreview() {
-    ByeBooTheme {
-        var checked by remember { mutableStateOf(false) }
-        TermsButton(title = "(필수) 서비스 이용약관 동의", isSelected = checked, hasMoreText = true, onCheckClick = {checked = it}, modifier = Modifier )
-    }
-}
