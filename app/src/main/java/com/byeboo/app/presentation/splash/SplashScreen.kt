@@ -1,7 +1,5 @@
 package com.byeboo.app.presentation.splash
 
-import android.R.attr.onClick
-import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,7 +30,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
-import com.byeboo.app.core.util.screenWidthDp
+
 
 @Composable
 fun SplashRoute(
