@@ -13,16 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsButton
 
@@ -32,14 +32,15 @@ fun TermsOfServiceRoute(
     modifier: Modifier = Modifier,
     viewModel: TermsOfServiceViewModel = hiltViewModel()
 ) {
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     TermsOfServiceScreen(
         uiState = uiState,
         padding = padding,
-        onAllTermsClick = {viewModel.onAllTermsClick()},
+        onAllTermsClick = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
+        onLinkClick = { url -> openUrl(context, url) },
         modifier = modifier
     )
 
@@ -51,6 +52,7 @@ fun TermsOfServiceScreen(
     padding: Dp,
     onAllTermsClick: () -> Unit,
     onCheckClick : (TermType) -> Unit,
+    onLinkClick: (String) -> Unit,
     modifier: Modifier
 ) {
     Box(
@@ -73,7 +75,7 @@ fun TermsOfServiceScreen(
 
             TermsAllButton(
                 isChecked = uiState.isAllChecked,
-                onClick = {onAllTermsClick()}
+                onClick = { onAllTermsClick() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -86,7 +88,8 @@ fun TermsOfServiceScreen(
                         title = term.content,
                         hasMoreText = term.hasMoreText,
                         isSelected = uiState.isChecked(term),
-                        onCheckClick = {onCheckClick(term)}
+                        onCheckClick = {onCheckClick(term)},
+                        onLinkClick = { term.link?.let { onLinkClick(it) } }
                     )
                 }
             }
@@ -126,12 +129,3 @@ private fun TermsHeader() {
     }
 }
 
-
-
-@Preview
-@Composable
-private fun TermsOfServiceScreenPreview() {
-    ByeBooTheme {
-        //TermsOfServiceScreen(modifier = Modifier)
-    }
-}
