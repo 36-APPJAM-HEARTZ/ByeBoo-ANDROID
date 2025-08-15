@@ -92,7 +92,7 @@ fun SplashScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.primary300)
+                    .background(color = ByeBooTheme.colors.kakaoYellow)
                     .noRippleClickable(onClick = onClick)
                     .padding(vertical = 16.dp)
                 ,
