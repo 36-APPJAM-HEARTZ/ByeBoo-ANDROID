@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.browser)
 
     // Google
     implementation(platform(libs.google.firebase.bom))
