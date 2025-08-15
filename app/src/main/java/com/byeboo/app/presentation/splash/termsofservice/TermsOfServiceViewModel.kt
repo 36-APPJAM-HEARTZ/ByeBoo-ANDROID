@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @HiltViewModel
-class TermsOfServiceViewModel () : ViewModel() {
-
+class TermsOfServiceViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(TermsOfServiceUiState())
     val uiState: StateFlow<TermsOfServiceUiState> = _uiState.asStateFlow()
