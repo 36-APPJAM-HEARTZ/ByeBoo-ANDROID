@@ -79,6 +79,9 @@ val secondary300Alpha10 = secondary300.copy(alpha = 0.1f)
 
 val gray900Alpha80 = gray900.copy(alpha = 0.8f)
 
+// kakao
+val kakaoYellow = Color(0xFFFEE500)
+
 @Stable
 class ByeBooColors(
     primary50: Color,
@@ -129,6 +132,7 @@ class ByeBooColors(
     secondary300Alpha30: Color,
     secondary300Alpha10: Color,
     gray900Alpha80: Color,
+    kakaoYellow: Color,
     isLight: Boolean
 ) {
     var primary50 by mutableStateOf(primary50)
@@ -227,6 +231,8 @@ class ByeBooColors(
         private set
     var gray900Alpha80 by mutableStateOf(gray900Alpha80)
         private set
+    var kakaoYellow by mutableStateOf(kakaoYellow)
+        private set
     var isLight by mutableStateOf(isLight)
 
     fun copy(): ByeBooColors = ByeBooColors(
@@ -278,6 +284,7 @@ class ByeBooColors(
         secondary300Alpha30,
         secondary300Alpha10,
         gray900Alpha80,
+        kakaoYellow,
         isLight
     )
 
@@ -330,6 +337,7 @@ class ByeBooColors(
         secondary300Alpha30 = colors.secondary300Alpha30
         secondary300Alpha10 = colors.secondary300Alpha10
         gray900Alpha80 = colors.gray900Alpha80
+        kakaoYellow = colors.kakaoYellow
         isLight = colors.isLight
     }
 }
@@ -382,7 +390,8 @@ fun ByeBooDarkColors(
     Primary50Alpha50: Color = primary50Alpha50,
     Secondary300Alpha30: Color = secondary300Alpha30,
     Secondary300Alpha10: Color = secondary300Alpha10,
-    Gray900Alpha80: Color = gray900Alpha80
+    Gray900Alpha80: Color = gray900Alpha80,
+    KakaoYellow: Color = kakaoYellow,
 ) = ByeBooColors(
     Primary50,
     Primary100,
@@ -432,5 +441,6 @@ fun ByeBooDarkColors(
     Secondary300Alpha30,
     Secondary300Alpha10,
     Gray900Alpha80,
+    KakaoYellow,
     isLight = true
 )
