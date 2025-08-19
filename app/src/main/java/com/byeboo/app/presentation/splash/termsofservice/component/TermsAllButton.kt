@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -52,16 +51,14 @@ fun TermsAllButton(
                         shape = RoundedCornerShape(12.dp)
                     ) else Modifier
                 )
-                .padding(vertical = 18.dp, horizontal = 24.dp),
+                .padding(vertical = 18.dp, horizontal = 24.dp)
+                .noRippleClickable { onClick(!isChecked) },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(checkedIcon),
                 contentDescription = "all agree checkButton",
-                tint = Color.Unspecified,
-                modifier = modifier
-                    .size(24.dp)
-                    .noRippleClickable { onClick(!isChecked) }
+                tint = Color.Unspecified
             )
 
             Spacer(modifier = modifier.width(8.dp))
