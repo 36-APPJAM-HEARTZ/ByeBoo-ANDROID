@@ -99,13 +99,12 @@ fun QuestBehaviorWritingRoute(
 
     if (uiState.showQuitModal) {
         QuestQuitModal(
-            onDismissRequest = { viewModel.onDismissModal() },
-            stayButton = { viewModel.onDismissModal() },
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
             quitButton = {
                 viewModel.onDismissModal()
-                viewModel.onQuitClick()
-            },
-            modifier = modifier.padding(horizontal = 24.dp)
+                viewModel.onQuitClicked()
+            }
         )
     }
 
@@ -116,7 +115,7 @@ fun QuestBehaviorWritingRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClicked,
-        onTipClick = viewModel::onTipClick,
+        onTipClick = viewModel::onTipClicked,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::uploadImage,
@@ -130,10 +129,7 @@ fun QuestBehaviorWritingRoute(
             viewModel.isEmotionSelected(isSelected)
         },
         modifier = modifier
-
     )
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -319,7 +315,7 @@ private fun QuestBehaviorWritingScreen(
                                 onUpdateContent(it)
                             }
                         },
-                        placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
+                        placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해 보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
                         isQuestion = false,
                         onFocusChanged = {
                             isFocused.value = it
@@ -358,4 +354,3 @@ private fun QuestBehaviorWritingScreen(
         isUploading = uiState.isUploading
     )
 }
-

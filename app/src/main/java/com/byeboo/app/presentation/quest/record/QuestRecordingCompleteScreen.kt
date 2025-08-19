@@ -62,12 +62,12 @@ fun QuestRecordingCompleteRoute(
         }
     }
 
-    BackHandler { viewModel.onCloseClick() }
+    BackHandler { viewModel.onCloseClicked() }
 
     QuestRecordingCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = viewModel::onCloseClick,
+        onCloseClick = viewModel::onCloseClicked,
         modifier = modifier
     )
 }

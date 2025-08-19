@@ -16,7 +16,7 @@ fun UserInfoNicknameScreen(
     Column {
         DescriptionText(
             title = "닉네임",
-            guideText = "을 입력해주세요",
+            guideText = "을 입력해 주세요",
             contentText = "어떤 이름으로 불러드릴까요?",
             top = 20.dp,
             bottom = 20.dp

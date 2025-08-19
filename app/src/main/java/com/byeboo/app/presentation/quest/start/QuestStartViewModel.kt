@@ -41,7 +41,7 @@ class QuestStartViewModel @Inject constructor(
         }
     }
 
-    fun onStartClick() {
+    fun onStartClicked() {
         viewModelScope.launch {
             questStateRepository.updateQuestState()
             questStateRepository.setQuestStarted(true)
@@ -49,7 +49,7 @@ class QuestStartViewModel @Inject constructor(
         }
     }
 
-    fun onBackClick() {
+    fun onBackClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestStartSideEffect.NavigateToHome)
         }
