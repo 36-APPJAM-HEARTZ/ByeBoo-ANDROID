@@ -45,7 +45,7 @@ fun OffboardingNewJourneyButton(
             modifier = Modifier.size(24.dp)
         )
 
-        Spacer(modifier = Modifier.width(screenWidthDp(1.5.dp)))
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
         Text(
             text = "새로운 이별 극복 여정 시작하기",
