@@ -1,5 +1,7 @@
 package com.byeboo.app.presentation.splash.termsofservice
 
+import com.byeboo.app.BuildConfig
+
 enum class TermType(
     val content: String,
     val hasMoreText: Boolean,
@@ -8,13 +10,13 @@ enum class TermType(
     SERVICE_TERM(
         content = "(필수) 서비스 이용약관 동의",
         hasMoreText = true,
-        link = "https://www.notion.so/24cab823e68d801aac95ec5d0389d192?source=copy_link"
+        link = BuildConfig.BYEBOO_TERMS_OF_SERVICE
     ),
 
     PRIVACY_TERM(
         content = "(필수) 개인정보 수집·이용 동의",
         hasMoreText = true,
-        link = "https://www.notion.so/24cab823e68d80a19ab1fbf87d6cfbc3?source=copy_link"
+        link = BuildConfig.BYEBOO_PRIVACY_POLICY
     ),
 
     AGE_TERM(
