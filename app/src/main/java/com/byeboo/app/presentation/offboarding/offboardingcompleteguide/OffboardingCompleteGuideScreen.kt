@@ -105,24 +105,33 @@ private fun OffboardingCompleteGuideScreen(
                         .noRippleClickable(onCloseClick)
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
-                Text(
-                    text = "🎉${uiState.journeyName}을 완료했어요!🎉",
-                    color = ByeBooTheme.colors.secondary300,
-                    style = ByeBooTheme.typography.sub2
-                )
-
-                SubTextSequence(
-                    paragraphs = persistentListOf(
-                        "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
-                        "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
-                        "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
-                    )
-                )
-
-                Box(
+                Column(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .height(159.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "🎉${uiState.journeyName}을 완료했어요!🎉",
+                        color = ByeBooTheme.colors.secondary300,
+                        style = ByeBooTheme.typography.sub2
+                    )
+
+                    SubTextSequence(
+                        paragraphs = persistentListOf(
+                            "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
+                            "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
+                            "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
+                        )
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(screenHeightDp(348.dp))
                         .padding(horizontal = 16.dp, vertical = 34.dp)
                 ) {
                     // TODO: 로티 넣을 예정
@@ -130,7 +139,7 @@ private fun OffboardingCompleteGuideScreen(
                         painter = painterResource(id = R.drawable.bori_cake),
                         contentDescription = "",
                         modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.FillWidth
+                        contentScale = ContentScale.FillWidth,
                     )
                 }
 
