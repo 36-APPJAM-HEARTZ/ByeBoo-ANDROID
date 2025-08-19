@@ -86,10 +86,10 @@ fun SplashScreen(
                 .padding(bottom = padding),
         ) {
 
-            Spacer(modifier = modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
                     .background(color = ByeBooTheme.colors.kakaoYellow)
@@ -104,7 +104,7 @@ fun SplashScreen(
                     contentDescription = "kakao logo"
                 )
 
-                Spacer(modifier = modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
                 Text(
                     text = "Kakao로 시작하기",
