@@ -24,7 +24,7 @@ import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
-import com.byeboo.app.presentation.splash.termsofservice.component.TermsButton
+import com.byeboo.app.presentation.splash.termsofservice.component.TermsCheckButton
 
 @Composable
 fun TermsOfServiceRoute(
@@ -47,7 +47,7 @@ fun TermsOfServiceRoute(
 }
 
 @Composable
-fun TermsOfServiceScreen(
+private fun TermsOfServiceScreen(
     uiState: TermsOfServiceUiState,
     padding: Dp,
     onAllTermsClick: () -> Unit,
@@ -67,8 +67,8 @@ fun TermsOfServiceScreen(
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp).padding(top = 67.dp)
-                .padding(bottom = padding)
+            modifier = Modifier.padding(horizontal = 24.dp)
+                .padding(top = 67.dp, bottom = padding)
                 .fillMaxSize()
         ) {
             TermsHeader()
@@ -84,7 +84,7 @@ fun TermsOfServiceScreen(
                 modifier = Modifier.padding(horizontal = 15.dp)
             ) {
                 TermType.entries.forEach { term ->
-                    TermsButton(
+                    TermsCheckButton(
                         title = term.content,
                         hasMoreText = term.hasMoreText,
                         isSelected = uiState.isChecked(term),
