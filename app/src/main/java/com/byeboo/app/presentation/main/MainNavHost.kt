@@ -15,6 +15,7 @@ import com.byeboo.app.presentation.mypage.navigation.myPageGraph
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
+import com.byeboo.app.presentation.splash.termsofservice.navigation.termsGraph
 
 @Composable
 fun MainNavHost(
@@ -94,6 +95,10 @@ fun MainNavHost(
         )
         myPageGraph(
             bottomPadding = padding
+        )
+
+        termsGraph(
+            padding = padding
         )
     }
 }
