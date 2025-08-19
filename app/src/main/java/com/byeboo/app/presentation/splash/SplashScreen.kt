@@ -30,6 +30,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 
 
 @Composable
@@ -57,7 +58,7 @@ fun SplashRoute(
 }
 
 @Composable
-fun SplashScreen(
+private fun SplashScreen(
     padding: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -76,7 +77,7 @@ fun SplashScreen(
             painter = painterResource(R.drawable.img_splash_logo),
             contentDescription = null,
             modifier = Modifier
-                .padding(horizontal = screenHeightDp(76.dp))
+                .padding(horizontal = screenWidthDp(76.dp))
                 .padding(top = screenHeightDp(padding + 250.dp))
         )
 
