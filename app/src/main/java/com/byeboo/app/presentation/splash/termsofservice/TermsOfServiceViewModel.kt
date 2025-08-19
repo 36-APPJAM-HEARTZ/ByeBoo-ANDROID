@@ -14,15 +14,13 @@ class TermsOfServiceViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(TermsOfServiceUiState())
     val uiState: StateFlow<TermsOfServiceUiState> = _uiState.asStateFlow()
 
+    private val ALL_TERMS: Set<TermType> = TermType.entries.toSet()
 
     fun onAllTermsClick() {
-        _uiState.update {
-            it.copy(
-                checkedTerms = if (uiState.value.isAllChecked) {
-                    emptySet()
-                } else{
-                    TermType.entries.toSet()
-                }
+        _uiState.update { state ->
+            state.copy(
+                checkedTerms = if (state.isAllChecked) emptySet() else ALL_TERMS
+
             )
         }
     }
