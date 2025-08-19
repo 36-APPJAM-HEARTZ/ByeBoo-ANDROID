@@ -19,7 +19,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 
 @Composable
-fun TermsButton(
+fun TermsCheckButton(
     modifier: Modifier = Modifier,
     title: String,
     isSelected: Boolean = false,
@@ -44,7 +44,7 @@ fun TermsButton(
                 .noRippleClickable{ onCheckClick(!isSelected) }
         )
 
-        Spacer(modifier = modifier.padding(end = 16.dp))
+        Spacer(modifier = modifier.padding(horizontal = 8.dp))
 
         Text(
             text = title,
