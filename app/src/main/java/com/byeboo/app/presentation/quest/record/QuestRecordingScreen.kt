@@ -66,8 +66,6 @@ fun QuestRecordingRoute(
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val showBottomSheet by viewModel.showBottomSheet.collectAsStateWithLifecycle()
-    val isEmotionSelected by viewModel.isEmotionSelected.collectAsStateWithLifecycle()
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -90,18 +88,24 @@ fun QuestRecordingRoute(
         }
     }
 
-    BackHandler { viewModel.onBackClick() }
+    if (uiState.showQuitModal) {
+        QuestQuitModal(
+            onDismissRequest = viewModel::onDismissModal,
+            stayButton = viewModel::onDismissModal,
+            quitButton = {
+                viewModel.onDismissModal()
+                viewModel.onQuitClicked()
+            },
+        )
+    }
+
+    BackHandler { viewModel.onBackClicked() }
 
     QuestRecordingScreen(
         uiState = uiState,
-        onDismissModal = viewModel::onDismissModal,
-        onClickQuitButton = {
-            viewModel.onDismissModal()
-            viewModel.onQuitClick()
-        },
         bottomPadding = bottomPadding,
-        onBackClick = viewModel::onBackClick,
-        onTipClick = viewModel::onTipClick,
+        onBackClick = viewModel::onBackClicked,
+        onTipClick = viewModel::onTipClicked,
         onClickCompleteButton = viewModel::openBottomSheet,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::postQuestRecording,
@@ -113,9 +117,7 @@ fun QuestRecordingRoute(
         onSelectedChanged = { isSelected ->
             viewModel.isEmotionSelected(isSelected)
         },
-        isEmotionSelected = isEmotionSelected,
-        modifier = modifier,
-        showBottomSheet = showBottomSheet
+        modifier = modifier
     )
 }
 
@@ -123,8 +125,6 @@ fun QuestRecordingRoute(
 @Composable
 private fun QuestRecordingScreen(
     uiState: QuestRecordingState,
-    onDismissModal: () -> Unit,
-    onClickQuitButton: () -> Unit,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     onTipClick: () -> Unit,
@@ -134,9 +134,7 @@ private fun QuestRecordingScreen(
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType) -> Unit,
     onSelectedChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    showBottomSheet: Boolean = false,
-    isEmotionSelected: Boolean = false
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -147,15 +145,6 @@ private fun QuestRecordingScreen(
             delay(300)
             bringIntoViewRequester.bringIntoView()
         }
-    }
-
-    if (uiState.showQuitModal) {
-        QuestQuitModal(
-            onDismissRequest = onDismissModal,
-            stayButton = onDismissModal,
-            quitButton = onClickQuitButton,
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
-        )
     }
 
     Column(
@@ -203,7 +192,7 @@ private fun QuestRecordingScreen(
                 ) {
                     SmallTag(
                         tagText = "STEP ${uiState.stepNumber}",
-                        tagColor = ByeBooTheme.colors.gray300
+                        tagColor = ByeBooTheme.colors.gray500
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -222,7 +211,7 @@ private fun QuestRecordingScreen(
                 Text(
                     text = "${uiState.questNumber}번째 퀘스트",
                     modifier = Modifier.fillMaxWidth(),
-                    color = ByeBooTheme.colors.secondary300,
+                    color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body5,
                     textAlign = TextAlign.Center
                 )
@@ -279,7 +268,7 @@ private fun QuestRecordingScreen(
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                     Text(
-                        text = "*10글자 이상 입력해주세요.",
+                        text = "*10글자 이상 작성해 주세요.",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.gray400,
                         modifier = Modifier.fillMaxWidth(),
@@ -306,10 +295,10 @@ private fun QuestRecordingScreen(
 
     ByeBooBottomSheet(
         navigateButton = navigateButton,
-        showBottomSheet = showBottomSheet,
+        showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
         onSelectedChanged = onSelectedChanged,
-        isSelected = isEmotionSelected
+        isSelected = uiState.isEmotionSelected
     )
 }

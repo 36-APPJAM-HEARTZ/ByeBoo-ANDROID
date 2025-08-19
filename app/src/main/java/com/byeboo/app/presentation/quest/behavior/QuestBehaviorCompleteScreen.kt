@@ -79,12 +79,12 @@ fun QuestBehaviorCompleteRoute(
         }
     }
 
-    BackHandler { viewModel.onCloseClick() }
+    BackHandler { viewModel.onCloseClicked() }
 
     QuestBehaviorCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = viewModel::onCloseClick,
+        onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
         modifier = modifier
     )
@@ -142,7 +142,7 @@ private fun QuestBehaviorCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${uiState.stepNumber}")
+                        SmallTag(tagText = "STEP ${uiState.stepNumber}", tagColor = ByeBooTheme.colors.gray500)
 
                         Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 

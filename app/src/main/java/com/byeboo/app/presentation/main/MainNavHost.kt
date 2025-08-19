@@ -48,7 +48,7 @@ fun MainNavHost(
     ) {
         splashGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
-            navigateToOnboarding = { navigator.navigateToOnboarding(clearStackNavOptions) },
+            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             padding = padding
         )
         authGraph(
@@ -92,6 +92,8 @@ fun MainNavHost(
             viewModel = questBehaviorViewModel,
             padding = padding
         )
-        myPageGraph()
+        myPageGraph(
+            bottomPadding = padding
+        )
     }
 }

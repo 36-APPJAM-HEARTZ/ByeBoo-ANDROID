@@ -109,7 +109,6 @@ private fun QuestScreen(
             progressButton = onQuestStart,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp))
         )
     }
 

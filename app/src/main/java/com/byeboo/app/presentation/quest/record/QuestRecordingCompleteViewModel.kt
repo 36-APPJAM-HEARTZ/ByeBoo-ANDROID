@@ -44,7 +44,7 @@ class QuestRecordingCompleteViewModel @Inject constructor(
         }
     }
 
-    fun onCloseClick() {
+    fun onCloseClicked() {
         viewModelScope.launch {
             _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
         }

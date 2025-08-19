@@ -52,6 +52,14 @@ class UserRepositoryImpl @Inject constructor(
         return userLocalDataSource.getUserId()
     }
 
+    override suspend fun setHasSeenAboutHelp(seen: Boolean) {
+        userLocalDataSource.setHasSeenAboutHelp(seen)
+    }
+
+    override suspend fun hasSeenAboutHelp(): Boolean {
+        return userLocalDataSource.hasSeenAboutHelp()
+    }
+
     override suspend fun clear() {
         userLocalDataSource.clear()
     }

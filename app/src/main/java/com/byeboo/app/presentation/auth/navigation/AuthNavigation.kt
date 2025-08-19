@@ -11,10 +11,6 @@ import com.byeboo.app.presentation.auth.loading.LoadingRoute
 import com.byeboo.app.presentation.auth.userinfo.UserInfoRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateToOnboarding(navOptions: NavOptions? = null) {
-    navigate(Onboarding, navOptions)
-}
-
 fun NavController.navigateToUserInfo(navOptions: NavOptions? = null) {
     navigate(UserInfo, navOptions)
 }
@@ -41,9 +37,6 @@ fun NavGraphBuilder.authGraph(
         )
     }
 }
-
-@Serializable
-data object Onboarding : Route
 
 @Serializable
 data object UserInfo : Route

@@ -15,5 +15,7 @@ interface UserLocalDataSource {
     suspend fun isQuestStarted(): Boolean
     suspend fun saveJourney(journey: String)
     suspend fun getJourney(): String?
+    suspend fun setHasSeenAboutHelp(seen: Boolean)
+    suspend fun hasSeenAboutHelp(): Boolean
     suspend fun clear()
 }
