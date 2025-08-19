@@ -119,7 +119,7 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             (uiState.completedCards).forEach { card ->
-                key (card){
+                key(card) {
                     JourneyCard(
                         journeyType = card.journeyType,
                         onJourneyCardClick = onJourneyCompletedCardClick,
