@@ -3,13 +3,15 @@ package com.byeboo.app.presentation.splash.termsofservice
 data class TermsOfServiceUiState(
     val checkedTerms: Set<TermType> = emptySet()
 ) {
+    companion object {
+        private val ALL_TERMS = TermType.entries.toSet()
+    }
+
     val isAllChecked: Boolean
-        get() = TermType.entries
-            .all { checkedTerms.contains(it) }
+        get() = checkedTerms == ALL_TERMS
 
     val nextEnabled: Boolean
-        get() = TermType.entries
-            .all { checkedTerms.contains(it) }
+        get() = isAllChecked
 
-    fun isChecked(term: TermType): Boolean = checkedTerms.contains(term)
+    fun isChecked(term: TermType): Boolean = term in checkedTerms
 }
