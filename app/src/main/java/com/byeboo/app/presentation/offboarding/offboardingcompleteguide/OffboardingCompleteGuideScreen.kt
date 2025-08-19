@@ -145,7 +145,7 @@ private fun OffboardingCompleteGuideScreen(
                 ByeBooButton(
                     onClick = onCompletedJourneyClick,
                     buttonText = "완료한 여정 다시보기",
-                    buttonStyle = ByeBooTheme.typography.body1,
+                    buttonStyle = ByeBooTheme.typography.body2,
                     buttonTextColor = ByeBooTheme.colors.primary400,
                     buttonBackgroundColor = ByeBooTheme.colors.primary50,
                 )

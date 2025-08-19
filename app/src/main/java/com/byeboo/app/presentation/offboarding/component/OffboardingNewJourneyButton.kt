@@ -50,7 +50,7 @@ fun OffboardingNewJourneyButton(
         Text(
             text = "새로운 이별 극복 여정 시작하기",
             color = ByeBooTheme.colors.white,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body2
         )
     }
 }
