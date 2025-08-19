@@ -67,7 +67,7 @@ fun TermsOfServiceScreen(
         )
 
         Column(
-            modifier = modifier.padding(horizontal = 24.dp).padding(top = 67.dp)
+            modifier = Modifier.padding(horizontal = 24.dp).padding(top = 67.dp)
                 .padding(bottom = padding)
                 .fillMaxSize()
         ) {
