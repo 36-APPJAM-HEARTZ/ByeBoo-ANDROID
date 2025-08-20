@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingCompletedJourney
+package com.byeboo.app.presentation.offboarding.offboardingcompletedjourney
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

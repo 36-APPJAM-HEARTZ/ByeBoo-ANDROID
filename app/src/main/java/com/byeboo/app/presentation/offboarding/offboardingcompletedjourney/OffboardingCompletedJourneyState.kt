@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingCompletedJourney
+package com.byeboo.app.presentation.offboarding.offboardingcompletedjourney
 
 import com.byeboo.app.presentation.offboarding.model.JourneyCards
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
