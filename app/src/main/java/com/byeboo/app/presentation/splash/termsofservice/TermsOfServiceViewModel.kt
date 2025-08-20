@@ -26,7 +26,7 @@ class TermsOfServiceViewModel @Inject constructor() : ViewModel() {
     fun onTermsLinkClicked(url: String?) {
         viewModelScope.launch {
             url?.let {
-                _sideEffect.emit(TermsOfServiceSideEffect.OpenUrl(url))
+                _sideEffect.emit(TermsOfServiceSideEffect.OpenUrl(it))
             }
         }
     }
