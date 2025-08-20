@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingCompletedJourney
+package com.byeboo.app.presentation.offboarding.offboardingcompletedjourney
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
