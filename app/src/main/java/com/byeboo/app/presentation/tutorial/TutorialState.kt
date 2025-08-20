@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.tutorial.navigation
+package com.byeboo.app.presentation.tutorial
 
 import com.byeboo.app.R
 
