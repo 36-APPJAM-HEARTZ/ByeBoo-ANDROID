@@ -6,7 +6,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class QuestUiState(
-    val quest: Quest = Quest(),
     val questGroups: ImmutableList<QuestGroup> = persistentListOf(),
     val progressPeriod: Long = 1L,
     val journeyTitle: String = "",
@@ -14,5 +13,5 @@ data class QuestUiState(
     val userName: String = "",
     val selectedQuest: Quest? = null,
     val showQuitModal: Boolean = false,
-    val isLoading: Boolean = false
+    val error: String? = null
 )
