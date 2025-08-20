@@ -3,10 +3,10 @@ package com.byeboo.app.presentation.quest.model
 import com.byeboo.app.core.model.quest.QuestType
 
 sealed class QuestState {
-    object Available : QuestState()
-    object Complete : QuestState()
-    data class TimerLocked(val remainTime: String) : QuestState()
-    object Locked : QuestState()
+    data object Available : QuestState()
+    data object Complete : QuestState()
+    data object Locked : QuestState()
+    data class TimerLocked(val remainTime: Long) : QuestState()
 }
 
 sealed interface QuestSideEffect {
