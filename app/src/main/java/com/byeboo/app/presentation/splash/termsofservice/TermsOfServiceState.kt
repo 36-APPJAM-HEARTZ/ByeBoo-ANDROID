@@ -15,3 +15,7 @@ data class TermsOfServiceUiState(
 
     fun isChecked(term: TermType): Boolean = term in checkedTerms
 }
+
+sealed interface TermsOfServiceSideEffect {
+    data class OpenUrl(val url: String): TermsOfServiceSideEffect
+}
