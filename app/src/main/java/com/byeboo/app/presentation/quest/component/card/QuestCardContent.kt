@@ -14,6 +14,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.formatHourMinutes
 
 @Composable
 fun CompleteContent(
@@ -59,7 +60,7 @@ fun AvailableContent(
 @Composable
 fun TimerLockedContent(
     questNumber: Long,
-    remainingTime: String,
+    remainingTime: Long,
     modifier: Modifier = Modifier
 ) {
     QuestCardContainer(
@@ -87,7 +88,7 @@ fun TimerLockedContent(
             )
 
             Text(
-                text = remainingTime,
+                text = formatHourMinutes(remainingTime),
                 style = ByeBooTheme.typography.cap1,
                 color = ByeBooTheme.colors.secondary300,
                 textAlign = TextAlign.Center,
