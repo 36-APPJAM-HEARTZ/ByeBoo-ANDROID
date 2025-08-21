@@ -1,9 +1,10 @@
 package com.byeboo.app.presentation.tutorial
 
+import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 
 enum class TutorialContent(
-    val image: Int,
+    @DrawableRes val image: Int,
     val content: String
 ) {
     FIRST_CONTENT(
