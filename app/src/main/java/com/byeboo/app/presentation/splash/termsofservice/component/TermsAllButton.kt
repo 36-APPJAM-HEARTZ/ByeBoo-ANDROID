@@ -24,10 +24,9 @@ import com.byeboo.app.core.util.noRippleClickable
 
 @Composable
 fun TermsAllButton(
-    onClick: (Boolean) -> Unit,
+    onTermsAllClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isChecked: Boolean = false,
-
+    isChecked: Boolean = false
 ) {
     val checkedIcon = if (isChecked) R.drawable.ic_terms_checked else R.drawable.ic_terms_unchecked
     val textColor = if (isChecked) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray300
@@ -38,7 +37,7 @@ fun TermsAllButton(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(
                     color = backgroundColor,
@@ -52,7 +51,7 @@ fun TermsAllButton(
                     ) else Modifier
                 )
                 .padding(vertical = 18.dp, horizontal = 24.dp)
-                .noRippleClickable { onClick(!isChecked) },
+                .noRippleClickable(onClick = onTermsAllClick),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
