@@ -47,11 +47,8 @@ fun NicknameTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     val focusState = remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
-
     val shape = remember { RoundedCornerShape(12.dp) }
-
     val borderColor = if (focusState.value) {
         when (validationState) {
             UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
