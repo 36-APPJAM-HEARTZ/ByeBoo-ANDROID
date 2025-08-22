@@ -51,7 +51,8 @@ fun EditProfileRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onNicknameChange= viewModel::updateNickname,
-        onBackClick = viewModel::onBackClicked
+        onBackClick = viewModel::onBackClicked,
+        onCompleteClick = viewModel::finishEditProfile
     )
 }
 
@@ -61,6 +62,7 @@ private fun EditProfileScreen(
     bottomPadding: Dp,
     onNicknameChange: (String) -> Unit,
     onBackClick: () -> Unit,
+    onCompleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
@@ -119,7 +121,7 @@ private fun EditProfileScreen(
             buttonText = "완료",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             isEnabled = isNicknameValid,
-            onClick = {}
+            onClick = onCompleteClick
 
         )
 
@@ -135,7 +137,8 @@ private fun EditProfileScreenPreview() {
             uiState = EditProfileState(),
             bottomPadding = 0.dp,
             onNicknameChange = {},
-            onBackClick = {}
+            onBackClick = {},
+            onCompleteClick = {}
         )
     }
 }

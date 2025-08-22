@@ -61,13 +61,15 @@ class EditProfileViewModel @Inject constructor(
 
     fun finishEditProfile() {
 
-        val nickname = uiState.value.nickname
-
         viewModelScope.launch {
+            val nickname = uiState.value.nickname
             if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
 
             val result = userRepository.updateUserNickName(nickname)
 
+            if (result.isSuccess) {
+                _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
+            }
         }
     }
 
