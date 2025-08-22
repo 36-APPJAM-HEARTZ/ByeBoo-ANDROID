@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,28 +12,58 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.presentation.auth.userinfo.UserInfoState
+import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
+import com.byeboo.app.presentation.auth.userinfo.model.UserInfoValidationState
 
 @Composable
 fun EditProfileRoute(
+    navigateToMyPage: () -> Unit,
     bottomPadding: Dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: EditProfileViewModel = hiltViewModel()
 ){
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect {
+            if (it is EditProfileSideEffect.NavigateToMyPage) {
+                navigateToMyPage()
+            }
+        }
+    }
+
     EditProfileScreen(
-        bottomPadding = bottomPadding
+        uiState = uiState,
+        bottomPadding = bottomPadding,
+        onNicknameChange= viewModel::updateNickname,
+        onBackClick = viewModel::onBackClicked
+
     )
 }
 
 @Composable
 private fun EditProfileScreen(
+    uiState: EditProfileState,
     bottomPadding: Dp,
+    onNicknameChange: (String) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -51,7 +82,9 @@ private fun EditProfileScreen(
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                 contentDescription = "",
-                tint = ByeBooTheme.colors.gray50
+                tint = ByeBooTheme.colors.gray50,
+                modifier = Modifier
+                    .clickable(onClick = onBackClick)
             )
 
             Text(
@@ -73,5 +106,26 @@ private fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        NicknameTextField(
+            value = uiState.nickname,
+            validationState = uiState.nicknameValidation.toValidationState(),
+            onValueChange = onNicknameChange,
+            onClearClick = { onNicknameChange("") }
+        )
+
+    }
+}
+
+
+@Preview
+@Composable
+private fun EditProfileScreenPreview() {
+    ByeBooTheme {
+        EditProfileScreen(
+            uiState = EditProfileState(),
+            bottomPadding = 0.dp,
+            onNicknameChange = {},
+            onBackClick = {}
+        )
     }
 }
