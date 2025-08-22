@@ -64,7 +64,7 @@ class UserRepositoryImpl @Inject constructor(
         userLocalDataSource.clear()
     }
 
-    override suspend fun updateUserNickName(nickname: String) {
-        userLocalDataSource.saveNickname(nickname)
+    override suspend fun updateUserNickName(nickname: String): Result<Unit> {
+         return runCatching { userLocalDataSource.saveNickname(nickname) }
     }
 }
