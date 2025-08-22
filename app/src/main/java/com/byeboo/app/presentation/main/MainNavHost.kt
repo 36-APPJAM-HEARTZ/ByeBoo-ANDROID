@@ -94,7 +94,9 @@ fun MainNavHost(
             padding = padding
         )
         myPageGraph(
-            bottomPadding = padding
+            bottomPadding = padding,
+            navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
+            navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) }
         )
 
         termsGraph(

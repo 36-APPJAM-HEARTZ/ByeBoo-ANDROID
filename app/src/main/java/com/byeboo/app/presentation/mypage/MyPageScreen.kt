@@ -42,6 +42,7 @@ import com.byeboo.app.presentation.mypage.component.MyPageModal
 
 @Composable
 fun MyPageRoute(
+    navigateToEditProfile: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel()
@@ -83,7 +84,7 @@ fun MyPageRoute(
     MyPageScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onNicknameChangeClick = {},
+        onNicknameChangeClick = navigateToEditProfile,
         onCompletedJourneyClick = {},
         onGoToByeBooUniverse = {},
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
