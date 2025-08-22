@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.repository.auth.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +10,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -56,6 +56,18 @@ class EditProfileViewModel @Inject constructor(
 
         viewModelScope.launch {
             _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
+        }
+    }
+
+    fun finishEditProfile() {
+
+        val nickname = uiState.value.nickname
+
+        viewModelScope.launch {
+            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
+
+            val result = userRepository.updateUserNickName(nickname)
+
         }
     }
 

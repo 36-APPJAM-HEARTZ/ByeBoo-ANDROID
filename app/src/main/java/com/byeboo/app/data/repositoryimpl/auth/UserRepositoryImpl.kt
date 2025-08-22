@@ -63,4 +63,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun clear() {
         userLocalDataSource.clear()
     }
+
+    override suspend fun updateUserNickName(nickname: String) {
+        userLocalDataSource.saveNickname(nickname)
+    }
 }
