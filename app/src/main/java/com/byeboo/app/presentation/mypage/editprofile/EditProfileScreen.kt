@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +27,7 @@ import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
+import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
 
 @Composable
 fun EditProfileRoute(
@@ -66,6 +66,7 @@ private fun EditProfileScreen(
     modifier: Modifier = Modifier
 ){
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
+    val showValidMessage = !uiState.isPristine
 
     Column(
         modifier = modifier
@@ -111,7 +112,8 @@ private fun EditProfileScreen(
             value = uiState.nickname,
             validationState = uiState.nicknameValidation.toValidationState(),
             onValueChange = onNicknameChange,
-            onClearClick = { onNicknameChange("") }
+            onClearClick = { onNicknameChange("") },
+            showValidMessage = showValidMessage
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -124,21 +126,7 @@ private fun EditProfileScreen(
             onClick = onCompleteClick
 
         )
-
     }
 }
 
 
-@Preview
-@Composable
-private fun EditProfileScreenPreview() {
-    ByeBooTheme {
-        EditProfileScreen(
-            uiState = EditProfileState(),
-            bottomPadding = 0.dp,
-            onNicknameChange = {},
-            onBackClick = {},
-            onCompleteClick = {}
-        )
-    }
-}

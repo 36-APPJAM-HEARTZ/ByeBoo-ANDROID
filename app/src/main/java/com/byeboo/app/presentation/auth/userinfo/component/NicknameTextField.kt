@@ -44,7 +44,8 @@ fun NicknameTextField(
     onValueChange: (String) -> Unit,
     onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    showValidMessage: Boolean = true
 ) {
     val focusState = remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -125,21 +126,23 @@ fun NicknameTextField(
 
         when (validationState) {
             UserInfoValidationState.Valid -> {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "* 설정 가능한 닉네임이에요!",
-                        style = ByeBooTheme.typography.cap2,
-                        color = validColor,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "${value.length}/5",
-                        style = ByeBooTheme.typography.cap2,
-                        color = validColor
-                    )
+                if (showValidMessage) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "* 설정 가능한 닉네임이에요!",
+                            style = ByeBooTheme.typography.cap2,
+                            color = validColor,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = "${value.length}/5",
+                            style = ByeBooTheme.typography.cap2,
+                            color = validColor
+                        )
+                    }
                 }
             }
 

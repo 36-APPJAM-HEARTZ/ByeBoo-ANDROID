@@ -34,8 +34,13 @@ class EditProfileViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             userRepository.getNickname().collect { nickname ->
-                _uiState.update { it.copy(nickname = nickname) }
-            }
+                _uiState.update { it.copy(
+                    nickname = nickname,
+                    initialNickname = nickname,
+                    isPristine = true
+                )
+              }
+           }
         }
     }
 
@@ -45,7 +50,8 @@ class EditProfileViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     nickname = input,
-                    nicknameValidation = NicknameValidator.validate(input)
+                    nicknameValidation = NicknameValidator.validate(input),
+                    isPristine = it.isPristine && (input == it.initialNickname)
                 )
             }
         }
@@ -53,14 +59,12 @@ class EditProfileViewModel @Inject constructor(
 
     fun onBackClicked() {
         val nickname = uiState.value.nickname
-
         viewModelScope.launch {
             _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
         }
     }
 
     fun finishEditProfile() {
-
         viewModelScope.launch {
             val nickname = uiState.value.nickname
             if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
@@ -72,5 +76,4 @@ class EditProfileViewModel @Inject constructor(
             }
         }
     }
-
 }
