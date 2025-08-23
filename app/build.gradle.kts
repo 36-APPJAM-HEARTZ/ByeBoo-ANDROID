@@ -38,6 +38,7 @@ android {
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
         buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
         buildConfigField("String", "BYEBOO_TERMS_OF_SERVICE", properties["byeboo.terms.of.service"].toString())
+        buildConfigField("String", "MASTER_KEY", properties["masterkey"].toString())
     }
 
     buildTypes {
