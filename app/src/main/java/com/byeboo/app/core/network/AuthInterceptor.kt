@@ -12,15 +12,15 @@ class AuthInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val userId = runBlocking { tokenRepository.getUserId() }
+        val masterToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTU4MDM3NjEsImV4cCI6MTc1NzAxMzM2MX0.xbZVCx2_3gyGxRAQzbNnGN4Pp2Rwwv-0j4whiGBMOlY"
 
         val newRequest = request.newBuilder()
-            .addHeader(USER_ID_HEADER_KEY, userId?.toString() ?: "")
+            .addHeader(AUTH_HEADER_KEY, "Bearer $masterToken")
             .build()
         return chain.proceed(newRequest)
     }
 
     companion object {
-        const val USER_ID_HEADER_KEY = "userId"
+        const val AUTH_HEADER_KEY = "Authorization"
     }
 }
