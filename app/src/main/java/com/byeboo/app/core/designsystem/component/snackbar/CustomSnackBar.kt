@@ -1,0 +1,67 @@
+package com.byeboo.app.core.designsystem.component.snackbar
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+
+@Composable
+fun CustomSnackBar(
+    message: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .background(
+                color = ByeBooTheme.colors.blackAlpha80,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_alert),
+            contentDescription = "알림",
+            tint = Color.Unspecified,
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = message,
+            style = ByeBooTheme.typography.body6,
+            color = ByeBooTheme.colors.gray50
+        )
+    }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CustomSnackBarPreview() {
+    ByeBooTheme {
+        CustomSnackBar(
+            message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+    }
+}
