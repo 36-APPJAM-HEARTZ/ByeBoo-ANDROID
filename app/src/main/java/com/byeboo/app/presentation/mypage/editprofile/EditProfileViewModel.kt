@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class EditProfileViewModel @Inject constructor(
     val uiState: StateFlow<EditProfileState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<EditProfileSideEffect>()
-    val sideEffect: SharedFlow<EditProfileSideEffect> = _sideEffect
+    val sideEffect: SharedFlow<EditProfileSideEffect> = _sideEffect.asSharedFlow()
 
     companion object {
         private const val MAX_NICKNAME_LENGTH = 5
