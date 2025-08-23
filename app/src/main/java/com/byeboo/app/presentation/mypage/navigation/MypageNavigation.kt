@@ -34,12 +34,10 @@ fun NavGraphBuilder.myPageGraph(
     }
 
     composable<EditProfile> {
-        ByeBooBackHandler()
         EditProfileRoute(
             navigateToMyPage = navigateToMyPage,
             bottomPadding = bottomPadding
         )
-
     }
 }
 
