@@ -15,4 +15,5 @@ interface UserRepository {
     suspend fun setHasSeenAboutHelp(seen: Boolean)
     suspend fun hasSeenAboutHelp(): Boolean
     suspend fun clear()
+    suspend fun updateUserNickname(nickname: String): Result<Unit>
 }
