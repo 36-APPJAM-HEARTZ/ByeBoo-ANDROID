@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
@@ -33,17 +34,16 @@ import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
 fun EditProfileRoute(
     navigateToMyPage: () -> Unit,
     bottomPadding: Dp,
-    modifier: Modifier = Modifier,
     viewModel: EditProfileViewModel = hiltViewModel()
 ){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect {
-            if (it is EditProfileSideEffect.NavigateToMyPage) {
-                navigateToMyPage()
-            }
+        viewModel.sideEffect.collect { effect ->
+           when(effect) {
+               is EditProfileSideEffect.NavigateToMyPage -> navigateToMyPage()
+           }
         }
     }
 
@@ -51,6 +51,7 @@ fun EditProfileRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onNicknameChange= viewModel::updateNickname,
+        onClearClick = { viewModel.updateNickname("") },
         onBackClick = viewModel::onBackClicked,
         onCompleteClick = viewModel::finishEditProfile
     )
@@ -61,12 +62,13 @@ private fun EditProfileScreen(
     uiState: EditProfileState,
     bottomPadding: Dp,
     onNicknameChange: (String) -> Unit,
+    onClearClick: () -> Unit,
     onBackClick: () -> Unit,
     onCompleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
-    val showValidMessage = !uiState.isPristine
+    val showValidMessage = !uiState.isInitial
 
     Column(
         modifier = modifier
@@ -86,7 +88,7 @@ private fun EditProfileScreen(
                 contentDescription = "",
                 tint = ByeBooTheme.colors.gray50,
                 modifier = Modifier
-                    .clickable(onClick = onBackClick)
+                    .noRippleClickable(onClick = onBackClick)
             )
 
             Text(
@@ -112,7 +114,7 @@ private fun EditProfileScreen(
             value = uiState.nickname,
             validationState = uiState.nicknameValidation.toValidationState(),
             onValueChange = onNicknameChange,
-            onClearClick = { onNicknameChange("") },
+            onClearClick = onClearClick,
             showValidMessage = showValidMessage
         )
 

@@ -38,7 +38,7 @@ class EditProfileViewModel @Inject constructor(
                 _uiState.update { it.copy(
                     nickname = nickname,
                     initialNickname = nickname,
-                    isPristine = true
+                    isInitial = true
                 )
               }
            }
@@ -52,7 +52,7 @@ class EditProfileViewModel @Inject constructor(
                 it.copy(
                     nickname = input,
                     nicknameValidation = NicknameValidator.validate(input),
-                    isPristine = it.isPristine && (input == it.initialNickname)
+                    isInitial = it.isInitial && (input == it.initialNickname)
                 )
             }
         }
@@ -70,7 +70,7 @@ class EditProfileViewModel @Inject constructor(
             val nickname = uiState.value.nickname
             if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
 
-            val result = userRepository.updateUserNickName(nickname)
+            val result = userRepository.updateUserNickname(nickname)
 
             if (result.isSuccess) {
                 _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
