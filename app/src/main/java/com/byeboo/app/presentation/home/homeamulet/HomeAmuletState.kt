@@ -4,11 +4,13 @@ import com.byeboo.app.R
 
 data class HomeAmuletState(
     val journey: AmuletType = AmuletType.EMOTION_FACE,
-    val journeyDescription: String = ""
+    val journeyDescription: String = "",
+    val canFlip: Boolean = false
 )
 
 sealed interface HomeAmuletSideEffect {
     data object NavigateToHomeOnboarding : HomeAmuletSideEffect
+    data class ShowSnackBar(val message: String) : HomeAmuletSideEffect
 }
 
 enum class AmuletType(

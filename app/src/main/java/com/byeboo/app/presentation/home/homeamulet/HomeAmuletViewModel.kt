@@ -29,35 +29,35 @@ class HomeAmuletViewModel @Inject constructor(
 
     init {
         fetchJourneyFromLocal()
-        fetchJourneyFromServer()
     }
 
     private fun fetchJourneyFromLocal() {
         viewModelScope.launch {
             val localJourney: String? = questStateRepository.getUserJourney()
-
             if (localJourney != null) {
                 val amuletType = AmuletType.from(localJourney)
-
-                _uiState.update {
-                    it.copy(journey = amuletType)
-                }
+                _uiState.update { it.copy(journey = amuletType) }
             }
         }
     }
 
-    private fun fetchJourneyFromServer() {
+    fun fetchJourneyFromServer() {
         viewModelScope.launch {
-            val result = userRepository.getUserJourney()
-            if (result.isSuccess) {
-                val data = result.getOrThrow()
-                _uiState.update {
-                    it.copy(
-                        journey = AmuletType.from(data.journey),
-                        journeyDescription = data.description
+            userRepository.getUserJourney()
+                .onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            journey = AmuletType.from(data.journey),
+                            journeyDescription = data.description,
+                            canFlip = true
+                        )
+                    }
+                }
+                .onFailure { e ->
+                    _sideEffect.emit(
+                        HomeAmuletSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )
                 }
-            }
         }
     }
 
