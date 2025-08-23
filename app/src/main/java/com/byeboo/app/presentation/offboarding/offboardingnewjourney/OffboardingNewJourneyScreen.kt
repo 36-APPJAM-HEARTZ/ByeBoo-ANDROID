@@ -145,50 +145,6 @@ private fun OffboardingNewJourneyScreen(
 
             PreparingCard()
         }
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "완료",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2
-                )
-
-                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                Text(
-                    text = "${uiState.completed}개",
-                    color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2
-                )
-            }
-
-            (uiState.completedCards).forEach { card ->
-                JourneyCard(
-                    journeyType = card.journeyType,
-                    onJourneyCardClick = onJourneyCompletedCardClick,
-                    chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
-                    chipTextColor = ByeBooTheme.colors.gray300,
-                    journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                )
-            }
-        }
     }
 }
 
