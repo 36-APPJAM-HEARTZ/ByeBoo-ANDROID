@@ -4,31 +4,39 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.usecase.QuestUseCase
-import com.byeboo.app.presentation.quest.model.Quest
-import com.byeboo.app.presentation.quest.model.QuestGroup
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
+import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
+import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class QuestViewModel @Inject constructor(
-    private val questUseCase: QuestUseCase
+    private val questUseCase: QuestUseCase,
+    private val mapper: QuestUiModelMapper
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QuestUiState())
     val uiState: StateFlow<QuestUiState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestSideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
+    val sideEffect: SharedFlow<QuestSideEffect> = _sideEffect.asSharedFlow()
+
+    private var countdownJob: Job? = null
 
     init {
         loadQuests()
@@ -36,68 +44,69 @@ class QuestViewModel @Inject constructor(
 
     private fun loadQuests() {
         viewModelScope.launch {
-            val data = questUseCase()
-
-            val currentStep = data.inProgressQuest.currentStep
-            val steps = data.inProgressQuest.steps
-
-            val questGroups = steps.map { step ->
-                QuestGroup(
-                    questNumber = step.stepNumber,
-                    stepTitle = step.stepTitle,
-                    quests = step.quests.map { quest ->
-                        val state = when {
-                            quest.questNumber < currentStep -> QuestState.Complete
-                            quest.questNumber == currentStep.toLong() -> QuestState.Available
-                            else -> QuestState.Locked
-                        }
-                        Quest(
-                            questId = quest.questId,
-                            questNumber = quest.questNumber,
-                            state = state,
-                            questQuestion = quest.question,
-                            type = QuestType.from(quest.questStyle)
+            runCatching { questUseCase() }
+                .mapCatching { data -> mapper.mapToPresentationModel(data) }
+                .onSuccess { output ->
+                    _uiState.update {
+                        it.copy(
+                            questGroups = output.questGroups,
+                            currentStepIndex = output.activeStepIndex,
+                            progressPeriod = output.progressPeriod,
+                            journeyTitle = output.journeyTitle,
+                            userName = output.userName,
+                            error = null
                         )
-                    }.toImmutableList()
-                )
-            }.toImmutableList()
+                    }
 
-            val currentStepIndex = questGroups.indexOfFirst {
-                it.quests.any { it.state is QuestState.Available }
-            }.coerceAtLeast(0)
-
-            _uiState.update {
-                it.copy(
-                    questGroups = questGroups,
-                    currentStepIndex = currentStepIndex,
-                    progressPeriod = data.inProgressQuest.progressPeriod,
-                    journeyTitle = data.journeyTitle,
-                    userName = data.userNickname
-                )
-            }
+                    countdownJob?.cancel()
+                    if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
+                        countdownJob = QuestCountdownTimer
+                            .countdownFlow(output.openAt, output.serverNow)
+                            .onEach { minutes ->
+                                updateTimerLockedMinutes(minutes)
+                            }
+                            .onCompletion {
+                                viewModelScope.launch { unlockTimerLocked() }
+                            }
+                            .launchIn(viewModelScope)
+                    }
+                }
+                .onFailure { t ->
+                    // TODO: 추후 수정 예정
+                    _uiState.update { it.copy(error = t.message ?: "알 수 없는 오류가 발생했어요") }
+                }
         }
     }
 
-    fun onQuestClick(questId: Long) {
-        viewModelScope.launch {
-            val quest = uiState.value.questGroups
-                .flatMap { it.quests }
-                .find { it.questId == questId }
-
-            when (quest?.state) {
-                is QuestState.Available -> {
-                    _uiState.update { it.copy(selectedQuest = quest, showQuitModal = true) }
-                }
-
-                is QuestState.Complete -> {
-                    _sideEffect.emit(
-                        QuestSideEffect.NavigateToQuestReview(questId = quest.questId)
+    private fun updateTimerLockedMinutes(minutes: Long) {
+        _uiState.update { state ->
+            state.copy(
+                questGroups = state.questGroups.map { group ->
+                    group.copy(
+                        quests = group.quests.map { quest ->
+                            if (quest.state is QuestState.TimerLocked)
+                                quest.copy(state = quest.state.copy(remainTime = minutes))
+                            else quest
+                        }.toImmutableList()
                     )
-                }
+                }.toImmutableList()
+            )
+        }
+    }
 
-                else -> {
-                }
-            }
+    private fun unlockTimerLocked() {
+        _uiState.update { state ->
+            state.copy(
+                questGroups = state.questGroups.map { group ->
+                    group.copy(
+                        quests = group.quests.map { quest ->
+                            if (quest.state is QuestState.TimerLocked)
+                                quest.copy(state = QuestState.Available)
+                            else quest
+                        }.toImmutableList()
+                    )
+                }.toImmutableList()
+            )
         }
     }
 
@@ -117,13 +126,29 @@ class QuestViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(showQuitModal = false) }
             when (quest.type) {
-                QuestType.RECORDING -> _sideEffect.emit(
-                    QuestSideEffect.NavigateToQuestRecording(quest.questId)
-                )
+                QuestType.RECORDING ->
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
 
-                QuestType.ACTIVE -> _sideEffect.emit(
-                    QuestSideEffect.NavigateToQuestBehavior(quest.questId)
-                )
+                QuestType.ACTIVE ->
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
+            }
+        }
+    }
+
+    fun onQuestClick(questId: Long) {
+        viewModelScope.launch {
+            val quest = uiState.value.questGroups
+                .flatMap { it.quests }
+                .find { it.questId == questId }
+
+            when (quest?.state) {
+                is QuestState.Available ->
+                    _uiState.update { it.copy(selectedQuest = quest, showQuitModal = true) }
+
+                is QuestState.Complete ->
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
+
+                else -> Unit
             }
         }
     }
