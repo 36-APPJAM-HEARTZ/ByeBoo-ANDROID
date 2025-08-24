@@ -1,18 +1,9 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,33 +18,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.offboarding.component.OffboardingNewJourneyButton
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 
 @Composable
@@ -85,6 +76,13 @@ private fun OffboardingCompleteGuideScreen(
     onCompletedJourneyClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var index by remember { mutableIntStateOf(0) }
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_cake))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever
+    )
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -96,7 +94,9 @@ private fun OffboardingCompleteGuideScreen(
         )
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.blackAlpha80)
         ) {
             Column(
                 modifier = Modifier
@@ -128,14 +128,18 @@ private fun OffboardingCompleteGuideScreen(
                         color = ByeBooTheme.colors.secondary300,
                         style = ByeBooTheme.typography.sub2
                     )
-
                     SubTextSequence(
-                        paragraphs = persistentListOf(
+                        paragraphs = listOf(
                             "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
                             "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
                             "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
-                        )
+                        ),
+                        index = index,
+                        gap = 16.dp,
+                        topGap = 32.dp,
+                        onAdvance = { idx -> index = idx }
                     )
+
                 }
 
                 Column(
@@ -144,13 +148,10 @@ private fun OffboardingCompleteGuideScreen(
                         .height(screenHeightDp(348.dp))
                         .padding(horizontal = 16.dp, vertical = 34.dp)
                 ) {
-                    // TODO: 로티 넣을 예정
-                    Image(
-                        painter = painterResource(id = R.drawable.bori_cake),
-                        contentDescription = "",
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.FillWidth,
-                    )
+                    LottieAnimation(
+                        composition = composition,
+                        progress = progress
+                        )
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -175,195 +176,103 @@ private fun OffboardingCompleteGuideScreen(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun SubTextSequence(
-    paragraphs: ImmutableList<String>,
-    firstHoldMs: Long = 1000L,
-    holdMs: Long = 2000L
+fun SubTextSequence(
+    paragraphs: List<String>,
+    index: Int,
+    gap: Dp,
+    topGap: Dp,
+    onAdvance: (Int) -> Unit = {}
 ) {
-    val gap = 16.dp
+    val current = paragraphs.getOrNull(index) ?: ""
+    // 이번 사이클 프리뷰는 동결
+    val frozenNext = remember(index) { paragraphs.getOrNull(index + 1) }
 
-    val topGap: Dp = screenHeightDp(32.dp)
-    val topGapPx = with(LocalDensity.current) { topGap.roundToPx() }
+    var animating by remember(index) { mutableStateOf(false) }
 
-    var index by remember { mutableIntStateOf(0) }
+    // 대기 후 페이드 시작
     LaunchedEffect(index) {
-        val d = if (index == 0) firstHoldMs else holdMs
-        if (index < paragraphs.lastIndex) {
-            delay(d)
-            index++
-        }
+        val firstHold = 1000L
+        val hold = 2000L
+        delay(if (index == 0) firstHold else hold)
+        if (frozenNext != null) animating = true
     }
-    val exitDur = 420
-    val enterDur = 440               // 들어오는 쪽은 좀 더 느리게
-    val enterDelay = exitDur         // 나간 뒤에 들어오도록 완전 시퀀스
 
-    Spacer(Modifier.height(screenHeightDp(32.dp)))
+    LiftUpTextsFadeOutOnly(
+        current = current,
+        next = frozenNext,
+        topGap = topGap,                 // 32.dp 유지
+        gap = gap,                       // 16.dp 유지
+        durationMillis = 280,
+        textStyleTop = ByeBooTheme.typography.body3,   // 위: body3
+        textStyleBottom = ByeBooTheme.typography.cap2, // 아래: cap2
+        colorTop = ByeBooTheme.colors.white,
+        colorBottom = ByeBooTheme.colors.secondary50,
+        animating = animating
+    ) {
+        // 중요: 페이드 끝난 뒤 교체
+        animating = false
+        if (frozenNext != null) onAdvance(index + 1)
+    }
+}
+
+@Composable
+private fun LiftUpTextsFadeOutOnly(
+    current: String,            // 현재 1번째 문장
+    next: String?,              // 2번째(프리뷰)
+    topGap: Dp,                 // 32.dp
+    gap: Dp,                    // 16.dp
+    durationMillis: Int = 280,
+    textStyleTop: TextStyle,    // body3 (메인)
+    textStyleBottom: TextStyle, // cap2 (프리뷰)
+    colorTop: Color,
+    colorBottom: Color,
+    animating: Boolean,
+    onFadeOutFinished: (() -> Unit)? = null
+) {
+    // 위 여백 고정
+    Spacer(Modifier.height(topGap))
+
+    // animating: true일 때만 current 알파가 1→0으로 감소
+    val t = androidx.compose.animation.core.updateTransition(
+        targetState = animating,
+        label = "fade_only"
+    )
+    val currentAlpha by t.animateFloat(
+        transitionSpec = { tween(durationMillis) },
+        label = "currentAlpha"
+    ) { isAnimating -> if (isAnimating) 0f else 1f }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        // Top (현재 문장) — 위치 고정, 알파만 변화
+        Text(
+            text = current,
+            color = colorTop.copy(alpha = currentAlpha),
+            style = textStyleTop,               // body3
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-        // 현재 문장(윗문장): 위로 올라가며 사라짐
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+        // 고정 간격
+        Spacer(Modifier.height(gap))
 
-            AnimatedContent(
-                targetState = index,
-                contentAlignment = Alignment.TopCenter,
-                transitionSpec = {
-                    // ENTER: 전부 delay를 exitDur만큼
-                    (
-                            fadeIn(tween(enterDur, delayMillis = enterDelay, easing = LinearOutSlowInEasing)) +
-                                    scaleIn(
-                                        initialScale = 0.94f,
-                                        animationSpec = tween(enterDur, delayMillis = enterDelay, easing = LinearOutSlowInEasing)
-                                    ) +
-                                    slideInVertically(
-                                        initialOffsetY = { it / 10 },
-                                        animationSpec = tween(enterDur, delayMillis = enterDelay, easing = LinearOutSlowInEasing)
-                                    )
-                            ).togetherWith(
-                            // EXIT: 지금 쓰는 그대로
-                            fadeOut(tween(exitDur + 100, delayMillis = 20, easing = LinearOutSlowInEasing)) +
-                                    scaleOut(
-                                        targetScale = 0.75f,
-                                        animationSpec = tween(exitDur, easing = LinearOutSlowInEasing),
-                                        transformOrigin = TransformOrigin.Center
-                                    ) +
-                                    slideOutVertically(
-                                        targetOffsetY = { -topGapPx },
-                                        animationSpec = tween(exitDur, easing = LinearOutSlowInEasing)
-                                    )
-                        ).using(SizeTransform(clip = false))
-                }
-            ) { i ->
-                Text(
-                    text = paragraphs[i],
-                    color = ByeBooTheme.colors.white,
-                    textAlign = TextAlign.Center,
-                    style = ByeBooTheme.typography.body3
-                )
-            }
-        }
-
-        // ✅ 항상 간격 확보 (겹침 방지)
-        Spacer(modifier = Modifier.height(gap))
-
-        // 아래 문장(next): 고정 위치 (겹치지 않음)
-        val next = paragraphs.getOrNull(index + 1)
+        // Bottom (프리뷰) — 애니 동안에도 그대로 보여줌
         if (next != null) {
             Text(
                 text = next,
-                color = ByeBooTheme.colors.secondary50,
+                color = colorBottom,            // cap2 색/스타일 그대로
+                style = textStyleBottom,        // cap2
                 textAlign = TextAlign.Center,
-                style = ByeBooTheme.typography.cap2
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
+
+    // 페이드 아웃 종료 후 콜백
+    LaunchedEffect(animating) {
+        if (animating) {
+            kotlinx.coroutines.delay(durationMillis.toLong())
+            onFadeOutFinished?.invoke()
+        }
+    }
 }
-
-// 1) 위에서부터 아래로 내려오는 알파 마스크 (progress: 0f->1f)
-private fun Modifier.topToBottomFadeMask(
-    progress: Float,            // 0: 안 가림, 1: 다 가림(완전 투명)
-    featherPx: Float = 20f      // 경계 부드럽게(페더) 두께
-): Modifier = drawWithContent {
-    drawContent()
-
-    val h = size.height
-    val cutoff = (h * progress).coerceIn(0f, h) // 여기까지 투명
-    // 그라디언트: 위(완전 투명) → 아래(완전 불투명)로 내려감
-    // DstIn 블렌드로 기존 컨텐츠 * 마스크 알파
-    drawRect(
-        brush = Brush.verticalGradient(
-            colorStops = arrayOf(
-                0f to Color.Transparent,
-                ((cutoff - featherPx).coerceAtLeast(0f) / h) to Color.Transparent,
-                (cutoff / h) to Color.Black,
-                1f to Color.Black
-            )
-        ),
-        size = size,
-        blendMode = BlendMode.DstIn
-    )
-}
-
-//@OptIn(ExperimentalAnimationApi::class)
-//@Composable
-//private fun SubTextSequence(
-//    paragraphs: ImmutableList<String>,
-//    firstHoldMs: Long = 1000L,
-//    holdMs: Long = 2000L
-//) {
-//    var index by remember { mutableIntStateOf(0) }
-//
-//    LaunchedEffect(index) {
-//        val d = if (index == 0) firstHoldMs else holdMs
-//        if (index < paragraphs.lastIndex) {
-//            delay(d)
-//            index++
-//        }
-//    }
-//    Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
-//
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        AnimatedContent(
-//            targetState = index,
-//            contentAlignment = Alignment.Center,
-//            transitionSpec = {
-//
-//                (fadeIn(tween(240, delayMillis = 90)) +
-//                        scaleIn(initialScale = 0.94f, animationSpec = tween(240, delayMillis = 90)) +
-//                        slideInVertically(
-//                            initialOffsetY = { fullHeight -> fullHeight / 10 }, // 화면 높이의 10% 아래에서 올라옴
-//                            animationSpec = tween(240, delayMillis = 90)
-//                        )
-//                        ).togetherWith(
-//                        fadeOut(tween(180)) +
-//                                scaleOut(targetScale = 0.82f, animationSpec = tween(180)) +
-//                                slideOutVertically(
-//                                    targetOffsetY = { fullHeight -> fullHeight / 10 }, // 내려가며 사라짐
-//                                    animationSpec = tween(180)
-//                                )
-//                    )
-//
-////                // 등장: 살짝 작게 시작 → 제자리로 커지며 나타남
-////                (fadeIn(tween(240, delayMillis = 90)) +
-////                        scaleIn(initialScale = 0.94f, animationSpec = tween(240, delayMillis = 90)))
-////                    .togetherWith(
-////                        // 퇴장: 페이드아웃 + 중앙 기준으로 축소
-////                        fadeOut(tween(180)) +
-////                                scaleOut(targetScale = 0.82f, animationSpec = tween(180))
-////                    )
-//            }
-////            transitionSpec = {
-////                (fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-////                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)))
-////                    .togetherWith(
-////                        fadeOut(animationSpec = tween(220))
-////                                //+ scaleOut(targetScale = 0.7f, animationSpec = tween(220))
-////                    )
-////            },
-//        ) { i ->
-//            Text(
-//                text = paragraphs[i],
-//                color = ByeBooTheme.colors.white,
-//                textAlign = TextAlign.Center,
-//                style = ByeBooTheme.typography.body3
-//            )
-//        }
-//
-//        val next = paragraphs.getOrNull(index + 1)
-//
-//        if (next != null) {
-//            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-//
-//            Text(
-//                text = next,
-//                color = ByeBooTheme.colors.secondary50,
-//                textAlign = TextAlign.Center,
-//                style = ByeBooTheme.typography.cap2
-//            )
-//        }
-//    }
-//}

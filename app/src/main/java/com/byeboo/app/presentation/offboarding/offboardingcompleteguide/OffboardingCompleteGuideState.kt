@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
 
 data class OffboardingCompleteGuideState(
-    val nickname: String = "하츠핑",
+    val nickname: String = "",
     val journeyName: String = ""
 )
 
