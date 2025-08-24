@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.type.TagColorType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -17,6 +18,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 fun MiddleTag(
     middleTagType: MiddleTagType,
     text: String,
+    textStyle: TextStyle,
     modifier: Modifier = Modifier
 ) {
     val tagText = if (middleTagType.dynamicContent) {
@@ -39,7 +41,7 @@ fun MiddleTag(
         Text(
             text = tagText,
             color = middleTagColor(middleTagType.textColor),
-            style = ByeBooTheme.typography.cap2
+            style = textStyle
         )
     }
 }

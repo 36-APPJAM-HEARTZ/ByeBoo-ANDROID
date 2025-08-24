@@ -239,6 +239,7 @@ private fun QuestRecordingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
+                        textStyle = ByeBooTheme.typography.cap1,
                         modifier = Modifier.clickable { onTipClick() }
                     )
                 }
