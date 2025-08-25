@@ -19,11 +19,13 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 }
 
 fun NavGraphBuilder.offboardingGraph(
+    navigateToQuestStart: () -> Unit,
     navigateToMyPage: () -> Unit,
     padding: Dp
 ) {
     composable<OffboardingNewJourney> {
         OffboardingNewJourneyRoute(
+            navigateToQuestStart = navigateToQuestStart,
             bottomPadding = padding
         )
     }

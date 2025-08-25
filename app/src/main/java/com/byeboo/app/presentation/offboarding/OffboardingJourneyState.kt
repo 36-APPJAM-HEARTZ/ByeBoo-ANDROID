@@ -16,7 +16,3 @@ data class OffboardingJourneyState(
     val completedCount: Int get() = completedCards.size
     val uncompletedCount: Int get() = uncompletedCards.size
 }
-
-sealed interface OffboardingJourneySideEffect {
-    data object NavigateToMyPage : OffboardingJourneySideEffect
-}

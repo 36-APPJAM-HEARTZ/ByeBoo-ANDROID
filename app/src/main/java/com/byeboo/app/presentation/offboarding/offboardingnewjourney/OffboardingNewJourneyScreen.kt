@@ -18,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -37,22 +38,32 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
+import com.byeboo.app.presentation.offboarding.model.JourneyType
 
 @Composable
 fun OffboardingNewJourneyRoute(
+    navigateToQuestStart: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingJourneyViewModel = hiltViewModel()
+    viewModel: OffboardingJourneyViewModel = hiltViewModel(),
+    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        offboardingNewJourneyViewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart()
+            }
+        }
+    }
 
     // TODO: 클릭 시 이동 관련 추후에 구현할 예정
     OffboardingNewJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = {},
-        onJourneyUncompletedCardClick = {},
-        onJourneyCompletedCardClick = {},
+        onJourneyUncompletedCardClick = { type -> offboardingNewJourneyViewModel.postNewJourney(type) },
         modifier = modifier
     )
 }
@@ -62,8 +73,7 @@ private fun OffboardingNewJourneyScreen(
     uiState: OffboardingJourneyState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
-    onJourneyUncompletedCardClick: () -> Unit,
-    onJourneyCompletedCardClick: () -> Unit,
+    onJourneyUncompletedCardClick: (JourneyType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -140,7 +150,7 @@ private fun OffboardingNewJourneyScreen(
                 key(card) {
                     JourneyCard(
                         journeyType = card.journeyType,
-                        onJourneyCardClick = onJourneyUncompletedCardClick,
+                        onJourneyCardClick = { onJourneyUncompletedCardClick(card.journeyType) },
                         chipBackgroundColor = ByeBooTheme.colors.primary300,
                         chipTextColor = ByeBooTheme.colors.white,
                         journeyTitleTextColor = ByeBooTheme.colors.gray50,
@@ -150,53 +160,6 @@ private fun OffboardingNewJourneyScreen(
             }
 
             PreparingCard()
-        }
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "완료",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2
-                )
-
-                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                Text(
-                    text = "${uiState.completedCount}개",
-                    color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2
-                )
-            }
-
-            (uiState.completedCards).forEach { card ->
-                key(card) {
-                    JourneyCard(
-                        journeyType = card.journeyType,
-                        onJourneyCardClick = onJourneyCompletedCardClick,
-                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
-                        chipTextColor = ByeBooTheme.colors.gray300,
-                        journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                        journeyCardTextStyle = ByeBooTheme.typography.body2
-                    )
-                }
-            }
         }
     }
 }
