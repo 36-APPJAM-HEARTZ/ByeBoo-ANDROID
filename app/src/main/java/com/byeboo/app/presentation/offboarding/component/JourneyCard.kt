@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.offboarding.JourneyType
+import com.byeboo.app.presentation.offboarding.model.JourneyType
 
 @Composable
 fun JourneyCard(

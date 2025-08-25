@@ -1,8 +1,6 @@
 package com.byeboo.app.presentation.offboarding.model
 
-import com.byeboo.app.domain.model.offboarding.JourneyType
-
-data class JourneyCards(
+data class JourneyCard(
     val journeyType: JourneyType,
     val status: JourneyStatus
 )
