@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class KakaoLoginRequest(
+data class KakaoLoginRequestDto(
     @SerialName("platform")
     val platform: String = "KAKAO"
 )
