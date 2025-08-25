@@ -130,6 +130,7 @@ private fun OffboardingCompletedJourneyScreen(
                         chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                        journeyCardTextStyle = ByeBooTheme.typography.body3
                     )
                 }
             }

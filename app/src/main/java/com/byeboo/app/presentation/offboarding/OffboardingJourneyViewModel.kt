@@ -2,7 +2,9 @@ package com.byeboo.app.presentation.offboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
+import com.byeboo.app.domain.repository.offboarding.OffboardingNewJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OffboardingJourneyViewModel @Inject constructor(
     private val offboardingJourneyRepository: OffboardingJourneyRepository,
+    private val offboardingNewJourneyRepository: OffboardingNewJourneyRepository,
     private val mapper: OffboardingJourneyMapper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OffboardingJourneyState())
@@ -35,7 +38,19 @@ class OffboardingJourneyViewModel @Inject constructor(
                             journeyCards = output.journeyCards
                         )
                     }
-            }
+                }
+                .onFailure { e ->
+
+                }
+        }
+    }
+
+    fun postNewJourney(journey: String) {
+        viewModelScope.launch {
+            offboardingNewJourneyRepository.postOffboardingNewJourney(journey)
+                .onSuccess {
+
+                }
                 .onFailure { e ->
 
                 }

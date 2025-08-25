@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
@@ -26,6 +27,7 @@ fun JourneyCard(
     chipBackgroundColor: Color,
     chipTextColor: Color,
     journeyTitleTextColor: Color,
+    journeyCardTextStyle: TextStyle,
     modifier: Modifier = Modifier,
     borderColor: Color = Color.Unspecified
 ) {
@@ -66,7 +68,7 @@ fun JourneyCard(
         Text(
             text = journeyTitle,
             color = journeyTitleTextColor,
-            style = ByeBooTheme.typography.body2
+            style = journeyCardTextStyle
         )
     }
 }

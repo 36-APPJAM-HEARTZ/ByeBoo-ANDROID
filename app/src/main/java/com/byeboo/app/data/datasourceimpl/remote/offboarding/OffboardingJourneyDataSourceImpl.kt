@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class OffboardingJourneyDataSourceImpl @Inject constructor(
     private val offboardingJourneyService: OffboardingJourneyService
-): OffboardingJourneyDataSource {
+) : OffboardingJourneyDataSource {
     override suspend fun getOffboardingJourney(): BaseResponse<OffboardingJourneyResponseDto> {
         return offboardingJourneyService.getOffboardingJourney()
     }

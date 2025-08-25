@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.offboarding.util
 
 import com.byeboo.app.domain.model.offboarding.OffboardingJourneyModel
+import com.byeboo.app.domain.model.offboarding.OffboardingJourneyType
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
@@ -17,11 +18,15 @@ class OffboardingJourneyMapper @Inject constructor() {
             else -> JourneyType.ACTIVE
         }
 
+    private fun String.toCategory(): OffboardingJourneyType =
+        OffboardingJourneyType.fromDisplayName(this)
+
     fun toUiState(model: OffboardingJourneyModel): OffboardingJourneyState {
         val journeyCardList = buildList {
             model.uncompletedCards.forEach { card ->
                 add(
                     JourneyCard(
+                        category = card.journey.toCategory(),
                         journeyType = card.style.toJourneyType(),
                         status = JourneyStatus.UNCOMPLETED
                     )
@@ -31,6 +36,7 @@ class OffboardingJourneyMapper @Inject constructor() {
             model.completedCards.forEach { card ->
                 add(
                     JourneyCard(
+                        category = card.journey.toCategory(),
                         journeyType = card.style.toJourneyType(),
                         status = JourneyStatus.COMPLETED
                     )

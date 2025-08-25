@@ -1,4 +1,4 @@
-package com.byeboo.app.data.repositoryimpl.mypage
+package com.byeboo.app.data.repositoryimpl.offboarding
 
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingJourneyDataSource
 import com.byeboo.app.data.mapper.offboarding.toDomain

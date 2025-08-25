@@ -144,6 +144,7 @@ private fun OffboardingNewJourneyScreen(
                         chipBackgroundColor = ByeBooTheme.colors.primary300,
                         chipTextColor = ByeBooTheme.colors.white,
                         journeyTitleTextColor = ByeBooTheme.colors.gray50,
+                        journeyCardTextStyle = ByeBooTheme.typography.body2
                     )
                 }
             }
@@ -192,6 +193,7 @@ private fun OffboardingNewJourneyScreen(
                         chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                        journeyCardTextStyle = ByeBooTheme.typography.body2
                     )
                 }
             }

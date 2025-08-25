@@ -2,6 +2,7 @@ package com.byeboo.app.data.di
 
 import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingJourneyDataSource
+import com.byeboo.app.data.datasource.remote.offboarding.OffboardingNewJourneyDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestBehaviorAnswerDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestDetailRemoteDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestInProgressDataSource
@@ -11,6 +12,7 @@ import com.byeboo.app.data.datasource.remote.quest.QuestStateDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestTipDataSource
 import com.byeboo.app.data.datasourceimpl.remote.auth.UserRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingJourneyDataSourceImpl
+import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingNewJourneyDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestBehaviorAnswerDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestDetailRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestInProgressDataSourceImpl
@@ -62,4 +64,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindOffboardingJourneyDataSource(impl: OffboardingJourneyDataSourceImpl): OffboardingJourneyDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindOffboardingNewJourneyDataSource(impl: OffboardingNewJourneyDataSourceImpl): OffboardingNewJourneyDataSource
 }
