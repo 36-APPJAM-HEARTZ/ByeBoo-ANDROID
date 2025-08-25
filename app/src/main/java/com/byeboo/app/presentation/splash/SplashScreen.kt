@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
@@ -31,28 +32,48 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.kakao.sdk.user.UserApiClient
 
 
 @Composable
 fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
+    navigateToTermsOfService: () -> Unit,
     padding: Dp,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
+
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                SplashState.NavigateToHome -> navigateToHome()
-                SplashState.NavigateToUserInfo -> navigateToUserInfo()
+                is SplashStateSideEffect.NavigateToHome -> navigateToHome()
+                is SplashStateSideEffect.NavigateToUserInfo -> navigateToUserInfo()
+                is SplashStateSideEffect.NavigateToTermsOfService -> navigateToTermsOfService()
+                is SplashStateSideEffect.StartKakaoTalkLogin ->  {
+                    UserApiClient.instance.loginWithKakaoTalk(
+                        context = context,
+                        callback = viewModel::updateLoginResult
+                    )
+                }
+
+                is SplashStateSideEffect.StartKakaoWebLogin ->  {
+                    UserApiClient.instance.loginWithKakaoAccount(
+                        context = context,
+                        callback = viewModel::updateLoginResult
+                    )
+                }
             }
         }
     }
 
     SplashScreen(
         padding = padding,
-        onClick = { },
+        onClick = {
+            viewModel.startKakaoLogin(UserApiClient.instance.isKakaoTalkLoginAvailable(context))
+        },
         modifier = modifier,
     )
 }
@@ -110,7 +131,7 @@ private fun SplashScreen(
                 Text(
                     text = "Kakao로 시작하기",
                     style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.black
+                    color = ByeBooTheme.colors.black,
                 )
             }
         }

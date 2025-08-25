@@ -1,6 +1,9 @@
 package com.byeboo.app.presentation.splash
 
-sealed interface SplashState {
-    data object NavigateToHome : SplashState
-    data object NavigateToUserInfo : SplashState
+sealed interface SplashStateSideEffect {
+    data object NavigateToHome : SplashStateSideEffect
+    data object NavigateToUserInfo : SplashStateSideEffect
+    data object NavigateToTermsOfService : SplashStateSideEffect
+    data object StartKakaoTalkLogin : SplashStateSideEffect
+    data object StartKakaoWebLogin : SplashStateSideEffect
 }

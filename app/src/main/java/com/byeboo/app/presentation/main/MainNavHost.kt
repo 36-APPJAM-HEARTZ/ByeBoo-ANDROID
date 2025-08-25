@@ -50,6 +50,7 @@ fun MainNavHost(
         splashGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
+            navigateToTermsOfService = { navigator.navigateToTerms(clearStackNavOptions )},
             padding = padding
         )
         authGraph(
