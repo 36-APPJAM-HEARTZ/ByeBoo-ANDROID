@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompletedjourney
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -64,6 +65,7 @@ private fun OffboardingCompletedJourneyScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(top = 67.dp, bottom = bottomPadding)
             .verticalScroll(rememberScrollState())
