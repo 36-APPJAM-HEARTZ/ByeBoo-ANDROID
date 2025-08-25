@@ -23,6 +23,7 @@ import com.byeboo.app.core.designsystem.component.snackbar.CustomSnackBar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.main.component.MainBottomBar
 import kotlinx.collections.immutable.toImmutableList
@@ -67,6 +68,7 @@ fun MainScreen(
                 SnackbarHost(
                     hostState = snackBarHostState,
                     modifier = Modifier
+                        .padding(horizontal = screenWidthDp(24.dp))
                         .padding(bottom = screenHeightDp(68.dp))
                 ) { snackBar ->
                     CustomSnackBar(message = snackBar.visuals.message)

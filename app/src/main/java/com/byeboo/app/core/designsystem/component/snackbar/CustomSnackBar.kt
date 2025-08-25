@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -28,7 +27,6 @@ fun CustomSnackBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
             .background(
                 color = ByeBooTheme.colors.blackAlpha80,
                 shape = RoundedCornerShape(12.dp)
@@ -48,20 +46,6 @@ fun CustomSnackBar(
             text = message,
             style = ByeBooTheme.typography.body6,
             color = ByeBooTheme.colors.gray50
-        )
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CustomSnackBarPreview() {
-    ByeBooTheme {
-        CustomSnackBar(
-            message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
         )
     }
 }
