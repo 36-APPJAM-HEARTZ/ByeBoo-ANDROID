@@ -34,13 +34,15 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingNewJourneyRoute(
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingNewJourneyViewModel = hiltViewModel()
+    viewModel: OffboardingJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -57,7 +59,7 @@ fun OffboardingNewJourneyRoute(
 
 @Composable
 private fun OffboardingNewJourneyScreen(
-    uiState: OffboardingNewJourneyState,
+    uiState: OffboardingJourneyState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: () -> Unit,
@@ -128,7 +130,7 @@ private fun OffboardingNewJourneyScreen(
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
-                    text = "${uiState.uncompleted}개",
+                    text = "${uiState.uncompletedCount}개",
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body2
                 )
@@ -176,7 +178,7 @@ private fun OffboardingNewJourneyScreen(
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
-                    text = "${uiState.completed}개",
+                    text = "${uiState.completedCount}개",
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body2
                 )
