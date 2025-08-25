@@ -15,6 +15,7 @@ val properties =
         load(project.rootProject.file("local.properties").inputStream())
     }
 
+
 android {
     namespace = "com.byeboo.app"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -29,13 +30,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", properties["base.url"].toString())
+
+        val kakaoNativeAppKey = properties["kakao.native.app.key"].toString()
+
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            properties["kakao.native.app.key"].toString()
+            "\"$kakaoNativeAppKey\""
         )
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["kakao.native.app.key"].toString()
 
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
