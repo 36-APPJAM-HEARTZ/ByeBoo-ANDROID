@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.tutorial
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,16 +25,28 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 
 @Composable
 fun TutorialRoute(
+    navigateToUp: () -> Unit,
     bottomPadding: Dp,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: TutorialViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                TutorialSideEffect.NavigateToUp -> navigateToUp()
+            }
+        }
+    }
+
     TutorialScreen(
         bottomPadding = bottomPadding,
+        onCancelClick = viewModel::onCancelClicked,
         modifier = modifier
     )
 }
@@ -40,10 +54,11 @@ fun TutorialRoute(
 @Composable
 private fun TutorialScreen(
     bottomPadding: Dp,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = 24.dp)
@@ -53,7 +68,9 @@ private fun TutorialScreen(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = "",
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable(onClick = onCancelClick)
         )
 
         Column(
