@@ -43,11 +43,19 @@ class QuestStartViewModel @Inject constructor(
 
     fun onStartClicked() {
         viewModelScope.launch {
-            questStateRepository.updateQuestState()
-            questStateRepository.setQuestStarted(true)
-            _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
+            runCatching {
+                questStateRepository.updateQuestState()
+                questStateRepository.setQuestStarted(true)
+            }.onSuccess {
+                _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
+            }.onFailure { e ->
+                _sideEffect.emit(
+                    QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
+            }
         }
     }
+
 
     fun onBackClicked() {
         viewModelScope.launch {
