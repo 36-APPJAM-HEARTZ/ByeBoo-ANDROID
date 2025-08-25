@@ -31,7 +31,8 @@ fun QuestJourneyTitle(
     ) {
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_START_DAY,
-            text = dayCount.toString()
+            text = dayCount.toString(),
+            textStyle = ByeBooTheme.typography.cap2
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
