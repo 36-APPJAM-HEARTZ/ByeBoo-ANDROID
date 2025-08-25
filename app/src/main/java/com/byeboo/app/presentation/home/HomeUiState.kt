@@ -1,7 +1,9 @@
 package com.byeboo.app.presentation.home
 
+import com.byeboo.app.domain.model.home.HomeStatus
+
 data class HomeUiState(
-    val isQuestStarted: Boolean? = false,
+    val status: HomeStatus = HomeStatus.INITIAL_START,
     val journey: String = "",
     val currentStep: Int = 0,
     val totalSteps: Int = 30,
