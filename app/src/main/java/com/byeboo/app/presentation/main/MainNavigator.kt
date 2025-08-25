@@ -15,9 +15,9 @@ import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.navigateToHome
 import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
-import com.byeboo.app.presentation.mypage.navigation.MyPage
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
@@ -27,6 +27,7 @@ import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
+import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
 class MainNavigator(
     val navController: NavHostController
@@ -69,12 +70,16 @@ class MainNavigator(
             currentDestination?.hasRoute(it::class) == true
         }
 
-    fun navigateToHome(navOptions: NavOptions) {
-        navController.navigateToHome(navOptions)
+    fun navigateUp() {
+        navController.navigateUp()
     }
 
-    fun navigateToMyPage(navOptions: NavOptions? = null) {
-        navController.navigateToMyPage(navOptions)
+    fun navigateToHomeAmulet(navOptions: NavOptions) {
+        navController.navigateToHomeAmulet(navOptions)
+    }
+
+    fun navigateToHome(navOptions: NavOptions) {
+        navController.navigateToHome(navOptions)
     }
 
     fun navigateToLoading(navOptions: NavOptions) {
@@ -87,10 +92,6 @@ class MainNavigator(
 
     fun navigateToUserInfo(navOptions: NavOptions) {
         navController.navigateToUserInfo(navOptions)
-    }
-
-    fun navigateUp() {
-        navController.navigateUp()
     }
 
     fun navigateToQuestStart(navOptions: NavOptions) {
@@ -125,12 +126,20 @@ class MainNavigator(
         navController.navigateToQuestReview(questId, navOptions)
     }
 
-    fun navigateToHomeAmulet(navOptions: NavOptions) {
-        navController.navigateToHomeAmulet(navOptions)
+    fun navigateToMyPage(navOptions: NavOptions? = null) {
+        navController.navigateToMyPage(navOptions)
     }
 
     fun navigateToEditProfile(navOptions: NavOptions) {
         navController.navigateToEditProfile(navOptions)
+    }
+
+    fun navigateToTutorial(navOptions: NavOptions) {
+        navController.navigateToTutorial(navOptions)
+    }
+
+    fun navigateToOffboardingCompletedJourney(navOptions: NavOptions) {
+        navController.navigateToOffboardingCompletedJourney(navOptions)
     }
 }
 

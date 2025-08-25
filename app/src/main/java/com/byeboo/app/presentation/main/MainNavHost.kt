@@ -12,10 +12,12 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
 import com.byeboo.app.presentation.splash.termsofservice.navigation.termsGraph
+import com.byeboo.app.presentation.tutorial.navigation.tutorialGraph
 
 @Composable
 fun MainNavHost(
@@ -52,11 +54,17 @@ fun MainNavHost(
             navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             padding = padding
         )
+
+        termsGraph(
+            padding = padding
+        )
+
         authGraph(
             navigateToLoading = { navigator.navigateToLoading(clearStackNavOptions) },
             navigateToHomeAmulet = { navigator.navigateToHomeAmulet(clearStackNavOptions) },
             padding = padding
         )
+
         homeGraph(
             bottomPadding = padding,
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
@@ -65,6 +73,7 @@ fun MainNavHost(
             navigateToQuestStart = { navigator.navigateToQuestStart(questNavOptions) }
 
         )
+
         questGraph(
             navigateToQuest = { navigator.navigateToQuest(clearStackNavOptions) },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
@@ -93,13 +102,25 @@ fun MainNavHost(
             viewModel = questBehaviorViewModel,
             padding = padding
         )
+
         myPageGraph(
-            bottomPadding = padding,
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
-            navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) }
+            navigateToOffboardingCompletedJourney = {
+                navigator.navigateToOffboardingCompletedJourney(
+                    clearStackNavOptions
+                )
+            },
+            navigateToTutorial = { navigator.navigateToTutorial(clearStackNavOptions) },
+            navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
+            padding = padding,
         )
 
-        termsGraph(
+        offboardingGraph(
+            padding = padding
+        )
+
+        tutorialGraph(
+            navigateToUp = navigator::navigateUp,
             padding = padding
         )
     }

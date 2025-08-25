@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.navigation.MainTabRoute
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.mypage.MyPageRoute
@@ -23,20 +22,24 @@ fun NavController.navigateToEditProfile(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.myPageGraph(
     navigateToEditProfile: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
+    navigateToTutorial: () -> Unit,
     navigateToMyPage: () -> Unit,
-    bottomPadding: Dp,
+    padding: Dp,
 ) {
     composable<MyPage> {
         MyPageRoute(
             navigateToEditProfile = navigateToEditProfile,
-            bottomPadding = bottomPadding
+            navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
+            navigateToTutorial = navigateToTutorial,
+            bottomPadding = padding
         )
     }
 
     composable<EditProfile> {
         EditProfileRoute(
             navigateToMyPage = navigateToMyPage,
-            bottomPadding = bottomPadding
+            bottomPadding = padding
         )
     }
 }
