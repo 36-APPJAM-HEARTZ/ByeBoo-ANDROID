@@ -116,6 +116,7 @@ fun MainNavHost(
         )
 
         offboardingGraph(
+            navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             padding = padding
         )
 

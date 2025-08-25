@@ -17,6 +17,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -32,23 +33,33 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingCompletedJourneyRoute(
+    navigateToMyPage: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingJourneySideEffect.NavigateToMyPage -> navigateToMyPage()
+            }
+        }
+    }
+
     // TODO: 클릭 시 이동 관련 추후에 구현할 예정
     OffboardingCompletedJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = {},
+        onBackClick = viewModel::onBackClicked,
         onJourneyCompletedCardClick = {},
         modifier = modifier
     )

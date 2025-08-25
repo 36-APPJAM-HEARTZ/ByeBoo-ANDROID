@@ -18,6 +18,7 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
@@ -136,6 +137,10 @@ class MainNavigator(
 
     fun navigateToTutorial(navOptions: NavOptions) {
         navController.navigateToTutorial(navOptions)
+    }
+
+    fun navigateToOffboardingNewJourney(navOptions: NavOptions) {
+        navController.navigateToOffboardingNewJourney(navOptions)
     }
 
     fun navigateToOffboardingCompletedJourney(navOptions: NavOptions) {
