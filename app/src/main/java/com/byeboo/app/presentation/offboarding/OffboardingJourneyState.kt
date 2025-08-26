@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.offboarding
 
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
+import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneySideEffect
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -15,4 +16,8 @@ data class OffboardingJourneyState(
         get() = journeyCards.filter { it.status == JourneyStatus.COMPLETED }.toImmutableList()
     val completedCount: Int get() = completedCards.size
     val uncompletedCount: Int get() = uncompletedCards.size
+}
+
+sealed interface OffboardingJourneySideEffect {
+    data object NavigateToUp : OffboardingJourneySideEffect
 }
