@@ -43,6 +43,7 @@ import com.byeboo.app.presentation.offboarding.model.JourneyType
 @Composable
 fun OffboardingNewJourneyRoute(
     navigateToQuestStart: () -> Unit,
+    navigateToUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
@@ -54,15 +55,15 @@ fun OffboardingNewJourneyRoute(
         offboardingNewJourneyViewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is OffboardingNewJourneySideEffect.NavigateToUp -> navigateToUp()
             }
         }
     }
 
-    // TODO: 클릭 시 이동 관련 추후에 구현할 예정
     OffboardingNewJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = {},
+        onBackClick = offboardingNewJourneyViewModel::onBackClicked,
         onJourneyUncompletedCardClick = { type -> offboardingNewJourneyViewModel.postNewJourney(type) },
         modifier = modifier
     )

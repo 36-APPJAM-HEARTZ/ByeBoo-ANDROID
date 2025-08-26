@@ -21,6 +21,12 @@ class OffboardingNewJourneyViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<OffboardingNewJourneySideEffect>()
     val sideEffect: SharedFlow<OffboardingNewJourneySideEffect> = _sideEffect.asSharedFlow()
 
+    fun onBackClicked() {
+        viewModelScope.launch {
+            _sideEffect.emit(OffboardingNewJourneySideEffect.NavigateToUp)
+        }
+    }
+
     fun postNewJourney(journey: JourneyType) {
         val journeyType = journey.toOffboardingJourneyType()
         val journeyKey = journeyType.serverKey

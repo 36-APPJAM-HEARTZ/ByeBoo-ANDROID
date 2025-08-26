@@ -117,6 +117,7 @@ fun MainNavHost(
 
         offboardingGraph(
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
+            navigateToUp = navigator::navigateUp,
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             padding = padding
         )
