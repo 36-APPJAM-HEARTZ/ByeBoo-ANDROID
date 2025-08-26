@@ -1,14 +1,39 @@
 package com.byeboo.app.data.repositoryimpl.auth
 
-import com.byeboo.app.data.datasource.local.UserLocalDataSource
+import com.byeboo.app.core.model.auth.TokenEntity
+import com.byeboo.app.data.datasource.local.TokenDataSource
 import com.byeboo.app.domain.repository.auth.TokenRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
-    private val userLocalDataSource: UserLocalDataSource
+    private val tokenDataSource: TokenDataSource
 ) : TokenRepository {
 
-    override suspend fun getUserId(): Long? {
-        return userLocalDataSource.getUserId()
+    @Volatile private var cachedAccessToken: String = ""
+
+    override suspend fun getAccessToken(): Flow<String> = tokenDataSource.getAccessToken()
+
+    override suspend fun getRefreshToken(): Flow<String> = tokenDataSource.getRefreshToken()
+
+    override suspend fun saveTokens(tokens: TokenEntity) {
+        tokenDataSource.updateTokens(tokens.accessToken, tokens.refreshToken)
+        updateCachedAccessToken(tokens.accessToken)
+    }
+
+    override suspend fun clearTokens() {
+        tokenDataSource.clearTokens()
+        updateCachedAccessToken("")
+    }
+
+    override suspend fun initCachedAccessToken() {
+        cachedAccessToken = tokenDataSource.getAccessToken().firstOrNull().orEmpty()
+    }
+
+    override fun getCachedAccessToken(): String = cachedAccessToken
+
+    override fun updateCachedAccessToken(token: String) {
+        cachedAccessToken = token
     }
 }
