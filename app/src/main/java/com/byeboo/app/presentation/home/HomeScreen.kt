@@ -217,7 +217,7 @@ private fun HomeScreen(
                 HomeStatus.INITIAL_START -> "${uiState.nickname}님의 이별 극복을 도와드릴게요"
                 HomeStatus.TODAY_INCOMPLETE -> "${uiState.nickname}님만의 속도로 나아가봐요"
                 HomeStatus.TODAY_COMPLETE -> "오늘도 잘 이겨내셨어요!"
-                HomeStatus.JOURNEY_COMPLETE -> "저는 언제 여기에 있어요!"
+                HomeStatus.JOURNEY_COMPLETE -> "저는 언제나 여기에 있어요!"
             }
 
             Text(

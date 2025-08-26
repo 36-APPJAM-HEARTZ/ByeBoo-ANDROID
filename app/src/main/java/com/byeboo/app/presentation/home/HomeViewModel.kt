@@ -56,16 +56,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onClickQuest() = viewModelScope.launch {
-        _sideEffect.emit(HomeSideEffect.NavigateToQuest)
+    fun onClickQuest() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuest)
+        }
     }
 
-    fun onClickQuestStart() = viewModelScope.launch {
-        _sideEffect.emit(HomeSideEffect.NavigateToQuestStart)
+    fun onClickQuestStart() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart)
+        }
     }
 
-    fun onHelpIconClicked() = viewModelScope.launch {
-        userRepository.setHasSeenAboutHelp(true)
-        _uiState.update { it.copy(hasSeenAboutHelp = true) }
+    fun onHelpIconClicked() {
+        viewModelScope.launch {
+            userRepository.setHasSeenAboutHelp(true)
+            _uiState.update { it.copy(hasSeenAboutHelp = true) }
+        }
     }
 }
