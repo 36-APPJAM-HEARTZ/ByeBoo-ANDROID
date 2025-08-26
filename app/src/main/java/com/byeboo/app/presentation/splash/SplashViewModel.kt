@@ -2,10 +2,8 @@ package com.byeboo.app.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byeboo.app.domain.model.auth.AuthResult
-import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
-import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.usecase.LoginUseCase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
@@ -20,16 +18,18 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val authRepository: AuthRepository,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
+
     init {
-        //checkUserStatusAndNavigate()
+        viewModelScope.launch {
+            tokenRepository.initCachedAccessToken()
+        }
     }
 
     fun startKakaoLogin(isLoginAvailable: Boolean) {
@@ -46,7 +46,18 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             when {
                 token != null -> {
-                    kakaoSignIn(token)
+                    val result = loginUseCase(token.accessToken, platform = KAKAO)
+
+                    result.onSuccess { auth ->
+                        if (auth.isRegistered) {
+                            delay(1000)
+                            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+                        } else {
+                            _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
+                        }
+                    }.onFailure { e ->
+                        //Todo: 스낵바
+                    }
                 }
 
                 error is ClientError && error.reason == ClientErrorCause.Cancelled -> {
@@ -64,36 +75,7 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private fun kakaoSignIn(token: OAuthToken, platform: String = "KAKAO")
-    {
-        viewModelScope.launch {
-                authRepository.loginWithKakao(
-                    token = token.accessToken,
-                    platform = platform
-                ).onSuccess { authResult ->
-
-                }.onFailure { e ->
-
-                }
-
-        }
-
-    }
-
-    // TODO: 소셜 로그인 생기면 로직 변경 예정
-    private fun checkUserStatusAndNavigate() {
-        viewModelScope.launch {
-            delay(1000)
-
-            val isLoggedIn = userRepository.isLoggedIn()
-
-            val effect = if (isLoggedIn) {
-                SplashStateSideEffect.NavigateToHome
-            } else {
-                SplashStateSideEffect.NavigateToTermsOfService
-            }
-
-            _sideEffect.emit(effect)
-        }
+    companion object {
+        private const val KAKAO = "KAKAO"
     }
 }
