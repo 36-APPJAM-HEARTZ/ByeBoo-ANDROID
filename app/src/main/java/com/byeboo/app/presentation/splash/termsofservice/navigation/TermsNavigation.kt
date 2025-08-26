@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.navigation.Route
+import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.splash.termsofservice.TermsOfServiceRoute
 import kotlinx.serialization.Serializable
 
@@ -15,12 +16,12 @@ fun NavController.navigateToTerms(navOptions: NavOptions? = null) {
     navigate(Terms, navOptions)
 }
 fun NavGraphBuilder.termsGraph(
-    navigateToHome: () -> Unit,
+    navigateToUserInfo: () -> Unit,
     padding: Dp
 ) {
     composable<Terms> {
         TermsOfServiceRoute(
-            navigateToHome = navigateToHome,
+            navigateToUserInfo = navigateToUserInfo,
             padding = padding
         )
     }

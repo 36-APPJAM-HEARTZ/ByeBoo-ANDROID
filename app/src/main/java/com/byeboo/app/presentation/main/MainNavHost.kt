@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.byeboo.app.presentation.auth.navigation.authGraph
+import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
@@ -101,7 +102,7 @@ fun MainNavHost(
         )
 
         termsGraph(
-            navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
+            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             padding = padding
         )
     }

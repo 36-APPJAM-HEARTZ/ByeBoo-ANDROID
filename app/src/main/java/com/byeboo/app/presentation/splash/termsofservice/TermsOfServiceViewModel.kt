@@ -53,7 +53,7 @@ class TermsOfServiceViewModel @Inject constructor() : ViewModel() {
 
     fun onCompleteButtonClick() {
         viewModelScope.launch {
-            _sideEffect.emit(TermsOfServiceSideEffect.NavigateToHome)
+            _sideEffect.emit(TermsOfServiceSideEffect.NavigateToUserInfo)
         }
     }
 }
