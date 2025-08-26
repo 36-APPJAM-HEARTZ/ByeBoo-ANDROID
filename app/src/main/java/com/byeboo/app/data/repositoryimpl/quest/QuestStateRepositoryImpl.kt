@@ -13,10 +13,12 @@ class QuestStateRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource
 ) : QuestStateRepository {
     override suspend fun updateQuestState() {
-        runCatching {
-            questStateDataSource.updateQuestState()
+        val response = questStateDataSource.updateQuestState()
+        if (!response.success) {
+            throw IllegalStateException(response.message)
         }
     }
+
 
     override suspend fun updateUserJourney(journey: String) {
         userLocalDataSource.saveJourney(journey)

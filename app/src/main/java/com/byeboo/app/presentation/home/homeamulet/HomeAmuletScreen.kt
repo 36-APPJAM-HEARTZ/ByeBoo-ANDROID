@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -38,20 +39,34 @@ fun HomeAmuletRoute(
     viewModel: HomeAmuletViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
     var isFlipped by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
-            if (effect is HomeAmuletSideEffect.NavigateToHomeOnboarding) {
-                navigateToHomeOnboarding()
+            when (effect) {
+                is HomeAmuletSideEffect.NavigateToHomeOnboarding -> navigateToHomeOnboarding()
+                is HomeAmuletSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
+        }
+    }
+
+    LaunchedEffect(uiState.canFlip) {
+        if (uiState.canFlip && !isFlipped) {
+            isFlipped = true
         }
     }
 
     HomeAmuletScreen(
         uiState = uiState,
         isFlipped = isFlipped,
-        onFlip = { isFlipped = true },
+        onFlip = {
+            if (uiState.canFlip) {
+                isFlipped = true
+            } else {
+                viewModel.fetchJourneyFromServer()
+            }
+        },
         onConfirm = viewModel::navigateToHomeOnboarding,
         modifier = modifier
     )
