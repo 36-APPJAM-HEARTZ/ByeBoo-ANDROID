@@ -14,7 +14,8 @@ class LoginUseCase @Inject constructor(
         token: String, platform: String
     ): Result<AuthResult> {
         return authRepository.loginWithKakao(
-            token = token, platform = platform
+            token = token,
+            platform = platform
         ).mapCatching { auth ->
             tokenRepository.clearTokens()
 
@@ -23,7 +24,6 @@ class LoginUseCase @Inject constructor(
                     accessToken = auth.tokens.accessToken, refreshToken = auth.tokens.refreshToken
                 )
             )
-
             AuthResult(tokens = auth.tokens, isRegistered = auth.isRegistered)
         }
     }

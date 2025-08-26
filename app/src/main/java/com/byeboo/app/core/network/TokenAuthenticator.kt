@@ -21,8 +21,8 @@ class TokenAuthenticator @Inject constructor(
         val refreshToken = tokenRepository.getRefreshToken().firstOrNull() ?: return@runBlocking null
 
         val result = authRepository.reissueAccessToken(refreshToken)
-        val newAuthenticatedToken = result.getOrNull()
 
+        val newAuthenticatedToken = result.getOrNull()
 
         if (newAuthenticatedToken == null) {
             tokenRepository.clearTokens()
@@ -52,5 +52,4 @@ class TokenAuthenticator @Inject constructor(
         const val AUTHORIZATION = "Authorization"
         const val BEARER = "Bearer"
     }
-
 }

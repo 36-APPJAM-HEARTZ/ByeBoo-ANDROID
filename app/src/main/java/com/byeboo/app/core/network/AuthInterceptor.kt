@@ -22,7 +22,6 @@ class AuthInterceptor @Inject constructor(
                 header(AUTHORIZATION, "$BEARER $accessToken")
             }
         }.build()
-
         return chain.proceed(authenticatedRequest)
     }
 
