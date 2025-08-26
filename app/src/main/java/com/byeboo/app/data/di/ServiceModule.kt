@@ -1,5 +1,6 @@
 package com.byeboo.app.data.di
 
+import com.byeboo.app.core.network.qualifier.Auth
 import com.byeboo.app.data.service.auth.AuthService
 import com.byeboo.app.data.service.auth.UserService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
@@ -64,7 +65,7 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesAuthService(retrofit: Retrofit): AuthService = retrofit.create(
+    fun providesAuthService(@Auth retrofit: Retrofit): AuthService = retrofit.create(
         AuthService::class.java
     )
 }
