@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.splash.termsofservice.navigation
 
+import android.R.attr.padding
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -14,10 +15,12 @@ fun NavController.navigateToTerms(navOptions: NavOptions? = null) {
     navigate(Terms, navOptions)
 }
 fun NavGraphBuilder.termsGraph(
+    navigateToHome: () -> Unit,
     padding: Dp
 ) {
     composable<Terms> {
         TermsOfServiceRoute(
+            navigateToHome = navigateToHome,
             padding = padding
         )
     }

@@ -50,4 +50,10 @@ class TermsOfServiceViewModel @Inject constructor() : ViewModel() {
             state.copy(checkedTerms = terms)
         }
     }
+
+    fun onCompleteButtonClick() {
+        viewModelScope.launch {
+            _sideEffect.emit(TermsOfServiceSideEffect.NavigateToHome)
+        }
+    }
 }

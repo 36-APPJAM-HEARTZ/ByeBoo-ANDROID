@@ -101,10 +101,7 @@ fun MainNavHost(
         )
 
         termsGraph(
-            padding = padding
-        )
-
-        termsGraph(
+            navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             padding = padding
         )
     }
