@@ -5,6 +5,7 @@ import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.request.auth.UserInfoRequestDto
 import com.byeboo.app.data.dto.response.auth.UserInfoResponseDto
 import com.byeboo.app.data.dto.response.auth.UserJourneyResponseDto
+import com.byeboo.app.data.dto.response.auth.UserNicknameChangeResponseDto
 import com.byeboo.app.data.service.auth.UserService
 import javax.inject.Inject
 
@@ -17,5 +18,9 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getUserJourney(): BaseResponse<UserJourneyResponseDto> {
         return userService.getJourney()
+    }
+
+    override suspend fun updateUserNickname(): BaseResponse<UserNicknameChangeResponseDto> {
+        return userService.updateUserNickname()
     }
 }
