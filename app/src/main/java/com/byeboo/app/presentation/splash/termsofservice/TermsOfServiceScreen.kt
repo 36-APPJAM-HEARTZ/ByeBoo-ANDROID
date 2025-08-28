@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,12 +36,21 @@ fun TermsOfServiceRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is TermsOfServiceSideEffect.OpenUrl -> openUrl(context = context, effect.url)
+            }
+        }
+    }
+
     TermsOfServiceScreen(
         uiState = uiState,
         padding = padding,
-        onAllTermsClick = viewModel::onAllTermsClick,
+        onTermsAllClicked = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
-        onLinkClick = { url -> openUrl(context, url) },
+        onTermsLinkClick = { url -> viewModel.onTermsLinkClicked(url) },
+        onNextButton = {},
         modifier = modifier
     )
 
@@ -50,10 +60,11 @@ fun TermsOfServiceRoute(
 private fun TermsOfServiceScreen(
     uiState: TermsOfServiceUiState,
     padding: Dp,
-    onAllTermsClick: () -> Unit,
-    onCheckClick : (TermType) -> Unit,
-    onLinkClick: (String) -> Unit,
-    modifier: Modifier
+    onTermsAllClicked: () -> Unit,
+    onCheckClick: (TermType) -> Unit,
+    onTermsLinkClick: (String?) -> Unit,
+    onNextButton: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -67,15 +78,16 @@ private fun TermsOfServiceScreen(
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp)
-                .padding(top = 107.dp, bottom = padding)
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .padding(top = 67.dp, bottom = padding)
                 .fillMaxSize()
         ) {
             TermsHeader()
 
             TermsAllButton(
+                onTermsAllClick = onTermsAllClicked,
                 isChecked = uiState.isAllChecked,
-                onClick = { onAllTermsClick() }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -88,8 +100,8 @@ private fun TermsOfServiceScreen(
                         title = term.content,
                         hasMoreText = term.hasMoreText,
                         isSelected = uiState.isChecked(term),
-                        onCheckClick = {onCheckClick(term)},
-                        onLinkClick = { term.link?.let { onLinkClick(it) } }
+                        onCheckClick = { onCheckClick(term) },
+                        onLinkClick = { onTermsLinkClick(term.link) }
                     )
                 }
             }
@@ -101,7 +113,7 @@ private fun TermsOfServiceScreen(
                 buttonText = "다음으로",
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = uiState.isAllChecked,
-                onClick = {}
+                onClick = onNextButton
             )
         }
     }

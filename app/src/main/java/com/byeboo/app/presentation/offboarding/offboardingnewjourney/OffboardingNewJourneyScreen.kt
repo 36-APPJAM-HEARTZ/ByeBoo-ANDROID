@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,7 +50,6 @@ fun OffboardingNewJourneyRoute(
         bottomPadding = bottomPadding,
         onBackClick = {},
         onJourneyUncompletedCardClick = {},
-        onJourneyCompletedCardClick = {},
         modifier = modifier
     )
 }
@@ -60,7 +60,6 @@ private fun OffboardingNewJourneyScreen(
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: () -> Unit,
-    onJourneyCompletedCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -134,13 +133,15 @@ private fun OffboardingNewJourneyScreen(
             }
 
             (uiState.uncompletedCards).forEach { card ->
-                JourneyCard(
-                    journeyType = card.journeyType,
-                    onJourneyCardClick = onJourneyUncompletedCardClick,
-                    chipBackgroundColor = ByeBooTheme.colors.primary300,
-                    chipTextColor = ByeBooTheme.colors.white,
-                    journeyTitleTextColor = ByeBooTheme.colors.gray50,
-                )
+                key(card) {
+                    JourneyCard(
+                        journeyType = card.journeyType,
+                        onJourneyCardClick = onJourneyUncompletedCardClick,
+                        chipBackgroundColor = ByeBooTheme.colors.primary300,
+                        chipTextColor = ByeBooTheme.colors.white,
+                        journeyTitleTextColor = ByeBooTheme.colors.gray50,
+                    )
+                }
             }
 
             PreparingCard()

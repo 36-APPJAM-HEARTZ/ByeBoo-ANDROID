@@ -6,10 +6,10 @@ import com.byeboo.app.data.dto.response.auth.UserInfoResponseDto
 import com.byeboo.app.data.dto.response.auth.UserJourneyResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.PATCH
 
 interface UserService {
-    @POST("/api/v1/users")
+    @PATCH("/api/v1/users")
     suspend fun updateUserInfo(
         @Body request: UserInfoRequestDto
     ): BaseResponse<UserInfoResponseDto>

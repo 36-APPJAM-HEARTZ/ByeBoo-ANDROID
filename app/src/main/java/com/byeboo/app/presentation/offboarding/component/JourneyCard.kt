@@ -2,7 +2,6 @@ package com.byeboo.app.presentation.offboarding.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,13 +30,13 @@ fun JourneyCard(
     borderColor: Color = Color.Unspecified
 ) {
     val journeyTypeText = when (journeyType) {
-        JourneyType.QUESTION -> "질문형"
-        JourneyType.ACTION -> "행동형"
+        JourneyType.RECORDING -> "질문형"
+        JourneyType.ACTIVE -> "행동형"
     }
 
     val journeyTitle = when (journeyType) {
-        JourneyType.QUESTION -> "감정 정리 여정"
-        JourneyType.ACTION -> "감정 직면 여정"
+        JourneyType.RECORDING -> "감정 정리 여정"
+        JourneyType.ACTIVE -> "감정 직면 여정"
     }
 
     Row(

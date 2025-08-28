@@ -9,6 +9,10 @@ data class QuestInProgressResponseDto(
     val progressPeriod: Long,
     @SerialName("currentStep")
     val currentStep: Int,
+    @SerialName("questOpenTime")
+    val questOpenTime: String? = null,
+    @SerialName("currentTime")
+    val currentTime: String? = null,
     @SerialName("steps")
     val steps: List<QuestInProgressStepResponseDto>
 )

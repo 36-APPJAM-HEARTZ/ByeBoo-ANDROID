@@ -15,6 +15,7 @@ import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.navigateToHome
 import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
+import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
@@ -125,6 +126,10 @@ class MainNavigator(
 
     fun navigateToHomeAmulet(navOptions: NavOptions) {
         navController.navigateToHomeAmulet(navOptions)
+    }
+
+    fun navigateToEditProfile(navOptions: NavOptions) {
+        navController.navigateToEditProfile(navOptions)
     }
 }
 
