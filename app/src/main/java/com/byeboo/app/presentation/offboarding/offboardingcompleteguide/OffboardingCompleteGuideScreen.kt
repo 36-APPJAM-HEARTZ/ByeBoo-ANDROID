@@ -169,9 +169,7 @@ private fun OffboardingCompleteGuideScreen(
                     )
                 }
 
-                OffboardingNewJourneyButton(
-                    onClick = onNewJourneyClick
-                )
+                OffboardingNewJourneyButton(onClick = onNewJourneyClick)
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
@@ -209,8 +207,7 @@ fun TextSequence(
             text = firstSentence,
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.secondary50,
-            textAlign = TextAlign.Center,
-            softWrap = true
+            textAlign = TextAlign.Center
         )
         return
     }
@@ -224,8 +221,8 @@ fun TextSequence(
         gap = gap,
         mainSentenceStyle = ByeBooTheme.typography.body3,
         subSentenceStyle = ByeBooTheme.typography.cap2,
-        colorStrong = ByeBooTheme.colors.secondary50,
-        colorWeak = ByeBooTheme.colors.secondary50.copy(alpha = 0.5f),
+        activatedColor = ByeBooTheme.colors.secondary50,
+        unactivatedColor = ByeBooTheme.colors.secondary50.copy(alpha = 0.5f),
         onFinished = {
             if (index + 3 < paragraphs.size) {
                 onAdvance(index + 1)
@@ -243,8 +240,8 @@ private fun ThreeLineAnimation(
     gap: Dp,
     mainSentenceStyle: TextStyle,
     subSentenceStyle: TextStyle,
-    colorStrong: Color,
-    colorWeak: Color,
+    activatedColor: Color,
+    unactivatedColor: Color,
     onFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -252,21 +249,21 @@ private fun ThreeLineAnimation(
     val density = LocalDensity.current
     val gapPx = with(density) { gap.roundToPx().toFloat() }
 
-    val screenW = LocalConfiguration.current.screenWidthDp.dp
-    val availW = with(density) { (screenW - 24.dp * 2).roundToPx() }
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val availableWidth = with(density) { (screenWidth - 24.dp * 2).roundToPx() }
 
-    fun measureH(text: String, style: TextStyle) =
+    fun measureHeight(text: String, style: TextStyle) =
         measurer.measure(
             text = AnnotatedString(text),
             style = style,
-            constraints = Constraints(maxWidth = availW)
+            constraints = Constraints(maxWidth = availableWidth)
         ).size.height.toFloat()
 
-    val hFirst = measureH(firstSentence, mainSentenceStyle)
-    val hSecond = measureH(secondSentence, subSentenceStyle)
+    val firstHeight = measureHeight(firstSentence, mainSentenceStyle)
+    val secondHeight = measureHeight(secondSentence, subSentenceStyle)
 
-    val secondTop = hFirst + gapPx
-    val thirdTop = hFirst + gapPx + hSecond + gapPx
+    val secondTop = firstHeight + gapPx
+    val thirdTop = firstHeight + gapPx + secondHeight + gapPx
 
     val firstAlpha = remember { Animatable(1f) }
     val firstTY = remember { Animatable(0f) }
@@ -276,8 +273,8 @@ private fun ThreeLineAnimation(
         { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
     )
 
-    val secondColor = remember { Animatable(colorWeak, colorToVector) }
-    val thirdColor = remember { Animatable(colorWeak, colorToVector) }
+    val secondColor = remember { Animatable(unactivatedColor, colorToVector) }
+    val thirdColor = remember { Animatable(unactivatedColor, colorToVector) }
 
     val secondAlpha = remember { Animatable(1f) }
     val secondTY = remember { Animatable(0f) }
@@ -288,7 +285,7 @@ private fun ThreeLineAnimation(
     val thirdScale = remember { Animatable(1f) }
 
     LaunchedEffect(Unit) {
-        launch { secondColor.animateTo(colorStrong, tween(durationMillis = 2100)) }
+        launch { secondColor.animateTo(activatedColor, tween(durationMillis = 2100)) }
 
         delay(1000)
 
@@ -327,7 +324,7 @@ private fun ThreeLineAnimation(
             }
             launch {
                 thirdTY.animateTo(
-                    targetValue = -(hFirst + gapPx),
+                    targetValue = -(firstHeight + gapPx),
                     animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
                 )
             }
@@ -363,7 +360,7 @@ private fun ThreeLineAnimation(
             }
             launch {
                 thirdColor.animateTo(
-                    targetValue = colorStrong,
+                    targetValue = activatedColor,
                     animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
                 )
             }
@@ -378,7 +375,7 @@ private fun ThreeLineAnimation(
         Text(
             text = firstSentence,
             style = mainSentenceStyle,
-            color = colorStrong,
+            color = activatedColor,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -417,7 +414,7 @@ private fun ThreeLineAnimation(
             modifier = Modifier
                 .fillMaxWidth()
                 .graphicsLayer {
-                    translationY = thirdTY.value + (secondScale.value - 1f) * hSecond
+                    translationY = thirdTY.value + (secondScale.value - 1f) * secondHeight
                     scaleX = thirdScale.value
                     scaleY = thirdScale.value
                     alpha = thirdAlpha.value
