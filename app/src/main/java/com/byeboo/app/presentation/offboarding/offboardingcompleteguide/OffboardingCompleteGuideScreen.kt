@@ -214,7 +214,7 @@ fun SubTextSequence(
 
     Spacer(modifier = Modifier.height(topGap))
 
-    ThreeLineIOSAnimation(
+    ThreeLineAnimation(
         firstSentence = firstSentence,
         secondSentence = secondSentence,
         thirdSentence = thirdSentence,
@@ -233,7 +233,7 @@ fun SubTextSequence(
 }
 
 @Composable
-private fun ThreeLineIOSAnimation(
+private fun ThreeLineAnimation(
     firstSentence: String,
     secondSentence: String,
     thirdSentence: String,
