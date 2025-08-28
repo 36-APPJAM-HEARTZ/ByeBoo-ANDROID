@@ -279,7 +279,7 @@ private fun QuestRecordingScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(screenHeightDp(54.dp)))
 
                 ByeBooActivationButton(
                     buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
