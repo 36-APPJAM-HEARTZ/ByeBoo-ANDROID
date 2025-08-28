@@ -56,7 +56,7 @@ fun OffboardingModal(
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
             Text(
-                text = "{$journeyName}을\n모두 마무리했어요",
+                text = "${journeyName}을\n모두 마무리했어요",
                 style = ByeBooTheme.typography.sub3,
                 color = ByeBooTheme.colors.gray50,
                 textAlign = TextAlign.Center
