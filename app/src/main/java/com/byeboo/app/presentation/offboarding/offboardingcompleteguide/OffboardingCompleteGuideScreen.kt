@@ -1,6 +1,9 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
 
-import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector4D
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.TwoWayConverter
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -18,18 +22,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,7 +55,9 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.offboarding.component.OffboardingNewJourneyButton
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun OffboardingCompleteGuideRoute(
@@ -55,7 +67,6 @@ fun OffboardingCompleteGuideRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // TODO: 클릭 기능 추후 네비 세팅할 때 할 예정
     OffboardingCompleteGuideScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
@@ -64,7 +75,6 @@ fun OffboardingCompleteGuideRoute(
         onCompletedJourneyClick = {},
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -120,7 +130,7 @@ private fun OffboardingCompleteGuideScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(159.dp),
+                        .requiredHeight(220.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -128,6 +138,7 @@ private fun OffboardingCompleteGuideScreen(
                         color = ByeBooTheme.colors.secondary300,
                         style = ByeBooTheme.typography.sub2
                     )
+
                     SubTextSequence(
                         paragraphs = listOf(
                             "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
@@ -139,7 +150,6 @@ private fun OffboardingCompleteGuideScreen(
                         topGap = 32.dp,
                         onAdvance = { idx -> index = idx }
                     )
-
                 }
 
                 Column(
@@ -151,7 +161,7 @@ private fun OffboardingCompleteGuideScreen(
                     LottieAnimation(
                         composition = composition,
                         progress = progress
-                        )
+                    )
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -182,97 +192,234 @@ fun SubTextSequence(
     index: Int,
     gap: Dp,
     topGap: Dp,
+    modifier: Modifier = Modifier,
     onAdvance: (Int) -> Unit = {}
 ) {
-    val current = paragraphs.getOrNull(index) ?: ""
-    // 이번 사이클 프리뷰는 동결
-    val frozenNext = remember(index) { paragraphs.getOrNull(index + 1) }
+    val firstSentence = paragraphs.getOrNull(index) ?: return
+    val secondSentence = paragraphs.getOrNull(index + 1)
+    val thirdSentence = paragraphs.getOrNull(index + 2)
 
-    var animating by remember(index) { mutableStateOf(false) }
+    if (secondSentence == null || thirdSentence == null) {
+        Spacer(modifier = Modifier.height(topGap))
 
-    // 대기 후 페이드 시작
-    LaunchedEffect(index) {
-        val firstHold = 1000L
-        val hold = 2000L
-        delay(if (index == 0) firstHold else hold)
-        if (frozenNext != null) animating = true
+        Text(
+            text = firstSentence,
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.secondary50,
+            textAlign = TextAlign.Center,
+            softWrap = true
+        )
+        return
     }
 
-    LiftUpTextsFadeOutOnly(
-        current = current,
-        next = frozenNext,
-        topGap = topGap,                 // 32.dp 유지
-        gap = gap,                       // 16.dp 유지
-        durationMillis = 280,
-        textStyleTop = ByeBooTheme.typography.body3,   // 위: body3
-        textStyleBottom = ByeBooTheme.typography.cap2, // 아래: cap2
-        colorTop = ByeBooTheme.colors.white,
-        colorBottom = ByeBooTheme.colors.secondary50,
-        animating = animating
-    ) {
-        // 중요: 페이드 끝난 뒤 교체
-        animating = false
-        if (frozenNext != null) onAdvance(index + 1)
-    }
+    Spacer(modifier = Modifier.height(topGap))
+
+    ThreeLineIOSAnimation(
+        firstSentence = firstSentence,
+        secondSentence = secondSentence,
+        thirdSentence = thirdSentence,
+        gap = gap,
+        mainSentenceStyle = ByeBooTheme.typography.body3,
+        subSentenceStyle = ByeBooTheme.typography.cap2,
+        colorStrong = ByeBooTheme.colors.secondary50,
+        colorWeak = ByeBooTheme.colors.secondary50.copy(alpha = 0.5f),
+        onFinished = {
+            if (index + 3 < paragraphs.size) {
+                onAdvance(index + 1)
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
-private fun LiftUpTextsFadeOutOnly(
-    current: String,            // 현재 1번째 문장
-    next: String?,              // 2번째(프리뷰)
-    topGap: Dp,                 // 32.dp
-    gap: Dp,                    // 16.dp
-    durationMillis: Int = 280,
-    textStyleTop: TextStyle,    // body3 (메인)
-    textStyleBottom: TextStyle, // cap2 (프리뷰)
-    colorTop: Color,
-    colorBottom: Color,
-    animating: Boolean,
-    onFadeOutFinished: (() -> Unit)? = null
+private fun ThreeLineIOSAnimation(
+    firstSentence: String,
+    secondSentence: String,
+    thirdSentence: String,
+    gap: Dp,
+    mainSentenceStyle: TextStyle,
+    subSentenceStyle: TextStyle,
+    colorStrong: Color,
+    colorWeak: Color,
+    onFinished: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    // 위 여백 고정
-    Spacer(Modifier.height(topGap))
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    val gapPx = with(density) { gap.roundToPx().toFloat() }
 
-    // animating: true일 때만 current 알파가 1→0으로 감소
-    val t = androidx.compose.animation.core.updateTransition(
-        targetState = animating,
-        label = "fade_only"
+    val screenW = LocalConfiguration.current.screenWidthDp.dp
+    val availW = with(density) { (screenW - 24.dp * 2).roundToPx() }
+
+    fun measureH(text: String, style: TextStyle) =
+        measurer.measure(
+            text = AnnotatedString(text),
+            style = style,
+            constraints = Constraints(maxWidth = availW)
+        ).size.height.toFloat()
+
+    val hFirst = measureH(firstSentence, mainSentenceStyle)
+    val hSecond = measureH(secondSentence, subSentenceStyle)
+
+    val secondTop = hFirst + gapPx
+    val thirdTop = hFirst + gapPx + hSecond + gapPx
+
+    val firstAlpha = remember { Animatable(1f) }
+    val firstTY = remember { Animatable(0f) }
+
+    val colorToVector = TwoWayConverter(
+        { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
+        { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
     )
-    val currentAlpha by t.animateFloat(
-        transitionSpec = { tween(durationMillis) },
-        label = "currentAlpha"
-    ) { isAnimating -> if (isAnimating) 0f else 1f }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        // Top (현재 문장) — 위치 고정, 알파만 변화
-        Text(
-            text = current,
-            color = colorTop.copy(alpha = currentAlpha),
-            style = textStyleTop,               // body3
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
+    val secondColor = remember { Animatable(colorWeak, colorToVector) }
+    val thirdColor = remember { Animatable(colorWeak, colorToVector) }
 
-        // 고정 간격
-        Spacer(Modifier.height(gap))
+    val secondAlpha = remember { Animatable(1f) }
+    val secondTY = remember { Animatable(0f) }
+    val secondScale = remember { Animatable(1f) }
 
-        // Bottom (프리뷰) — 애니 동안에도 그대로 보여줌
-        if (next != null) {
-            Text(
-                text = next,
-                color = colorBottom,            // cap2 색/스타일 그대로
-                style = textStyleBottom,        // cap2
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+    val thirdAlpha = remember { Animatable(0f) }
+    val thirdTY = remember { Animatable(0f) }
+    val thirdScale = remember { Animatable(1f) }
+
+    LaunchedEffect(Unit) {
+        launch { secondColor.animateTo(colorStrong, tween(durationMillis = 2100)) }
+
+        delay(1000)
+
+        coroutineScope {
+            launch {
+                firstTY.animateTo(
+                    -20f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                firstAlpha.animateTo(
+                    0f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+
+            launch {
+                secondTY.animateTo(
+                    -secondTop,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                secondScale.animateTo(
+                    1.2f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+
+            launch {
+                thirdAlpha.animateTo(
+                    1f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                thirdTY.animateTo(
+                    targetValue = -(hFirst + gapPx),
+                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
         }
+
+        delay(1000)
+
+        coroutineScope {
+            launch {
+                secondTY.animateTo(
+                    -secondTop - 20f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                secondAlpha.animateTo(
+                    0f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+
+            launch {
+                thirdTY.animateTo(
+                    targetValue = -thirdTop,
+                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                thirdScale.animateTo(
+                    1.2f,
+                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+            launch {
+                thirdColor.animateTo(
+                    targetValue = colorStrong,
+                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                )
+            }
+        }
+        onFinished()
     }
 
-    // 페이드 아웃 종료 후 콜백
-    LaunchedEffect(animating) {
-        if (animating) {
-            kotlinx.coroutines.delay(durationMillis.toLong())
-            onFadeOutFinished?.invoke()
-        }
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = firstSentence,
+            style = mainSentenceStyle,
+            color = colorStrong,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationY = firstTY.value
+                    alpha = firstAlpha.value
+                    transformOrigin = TransformOrigin(0.5f, 0f)
+                }
+        )
+
+        Spacer(modifier = Modifier.height(gap))
+
+        Text(
+            text = secondSentence,
+            style = subSentenceStyle,
+            color = secondColor.value,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationY = secondTY.value
+                    scaleX = secondScale.value
+                    scaleY = secondScale.value
+                    alpha = secondAlpha.value
+                    transformOrigin = TransformOrigin(0.5f, 0f)
+                }
+        )
+
+        Spacer(modifier = Modifier.height(gap))
+
+        Text(
+            text = thirdSentence,
+            style = subSentenceStyle,
+            color = thirdColor.value,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    translationY = thirdTY.value + (secondScale.value - 1f) * hSecond
+                    scaleX = thirdScale.value
+                    scaleY = thirdScale.value
+                    alpha = thirdAlpha.value
+                    transformOrigin = TransformOrigin(0.5f, 0f)
+                }
+        )
     }
 }
