@@ -203,13 +203,14 @@ private fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
+                .aspectRatio(312f / 62f)
                 .padding(horizontal = screenHeightDp(24.dp))
                 .padding(bottom = screenHeightDp(322.dp) + bottomPadding)
-                .aspectRatio(312f / 62f)
+
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_speech_bubble),
-                contentDescription = "말풍선",
+                contentDescription = "null",
                 modifier = Modifier.matchParentSize()
             )
 
@@ -217,7 +218,7 @@ private fun HomeScreen(
                 HomeStatus.INITIAL_START -> "${uiState.nickname}님의 이별 극복을 도와드릴게요"
                 HomeStatus.TODAY_INCOMPLETE -> "${uiState.nickname}님만의 속도로 나아가봐요"
                 HomeStatus.TODAY_COMPLETE -> "오늘도 잘 이겨내셨어요!"
-                HomeStatus.JOURNEY_COMPLETE -> "저는 언제 여기에 있어요!"
+                HomeStatus.JOURNEY_COMPLETE -> "저는 언제나 여기에 있어요!"
             }
 
             Box(

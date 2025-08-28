@@ -149,7 +149,7 @@ private fun HomeOnboardingScreen(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(bottomPadding + 89.dp))
+                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
                         .then(
                             if (showInstructionText) {
                                 Modifier.noRippleCombineClickable(

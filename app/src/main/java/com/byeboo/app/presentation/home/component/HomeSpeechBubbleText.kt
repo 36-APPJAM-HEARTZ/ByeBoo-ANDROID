@@ -47,7 +47,7 @@ fun SpeechBubbleWithText(firstText: String, secondText: String, thirdText: Strin
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_speech_bubble),
-            contentDescription = "말풍선",
+            contentDescription = "null",
             modifier = Modifier.matchParentSize()
         )
         val textToShow = when {
