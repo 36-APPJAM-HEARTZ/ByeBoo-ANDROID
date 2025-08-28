@@ -149,7 +149,7 @@ private fun OffboardingCompleteGuideScreen(
                         index = index,
                         gap = 16.dp,
                         topGap = 32.dp,
-                        onAdvance = { idx -> index = idx }
+                        onAdvance = { nextIndex -> index = nextIndex }
                     )
                 }
 
