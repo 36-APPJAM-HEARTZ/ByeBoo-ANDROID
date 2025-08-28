@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -125,12 +126,12 @@ private fun OffboardingCompleteGuideScreen(
                         .noRippleClickable(onCloseClick)
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
 
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .requiredHeight(220.dp),
+                        .requiredHeight(200.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -139,7 +140,7 @@ private fun OffboardingCompleteGuideScreen(
                         style = ByeBooTheme.typography.sub2
                     )
 
-                    SubTextSequence(
+                    TextSequence(
                         paragraphs = listOf(
                             "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
                             "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
@@ -152,19 +153,21 @@ private fun OffboardingCompleteGuideScreen(
                     )
                 }
 
-                Column(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(screenHeightDp(348.dp))
-                        .padding(horizontal = 16.dp, vertical = 34.dp)
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     LottieAnimation(
                         composition = composition,
-                        progress = progress
+                        progress = progress,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
                     )
                 }
-
-                Spacer(modifier = Modifier.weight(1f))
 
                 OffboardingNewJourneyButton(
                     onClick = onNewJourneyClick
@@ -187,7 +190,7 @@ private fun OffboardingCompleteGuideScreen(
 }
 
 @Composable
-fun SubTextSequence(
+fun TextSequence(
     paragraphs: List<String>,
     index: Int,
     gap: Dp,
