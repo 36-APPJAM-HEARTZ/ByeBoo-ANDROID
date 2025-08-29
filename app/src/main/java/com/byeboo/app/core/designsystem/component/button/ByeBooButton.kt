@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 
@@ -23,6 +23,7 @@ import com.byeboo.app.core.util.screenHeightDp
 fun ByeBooButton(
     onClick: () -> Unit,
     buttonText: String,
+    buttonStyle: TextStyle,
     buttonTextColor: Color,
     modifier: Modifier = Modifier,
     buttonBackgroundColor: Color = Color.Unspecified,
@@ -42,7 +43,7 @@ fun ByeBooButton(
     ) {
         Text(
             text = buttonText,
-            style = ByeBooTheme.typography.body2,
+            style = buttonStyle,
             color = buttonTextColor,
             textAlign = textAlign
         )

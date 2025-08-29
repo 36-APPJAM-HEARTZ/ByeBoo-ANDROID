@@ -248,6 +248,7 @@ private fun QuestBehaviorWritingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
+                        textStyle = ByeBooTheme.typography.cap1,
                         modifier = modifier.clickable { onTipClick() })
                 }
 
@@ -256,7 +257,11 @@ private fun QuestBehaviorWritingScreen(
 
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    MiddleTag(middleTagType = MiddleTagType.QUEST_ESSENTIAL, text = "필수")
+                    MiddleTag(
+                        middleTagType = MiddleTagType.QUEST_ESSENTIAL,
+                        text = "필수",
+                        textStyle = ByeBooTheme.typography.cap1
+                    )
 
                     Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 
@@ -291,7 +296,11 @@ private fun QuestBehaviorWritingScreen(
 
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    MiddleTag(middleTagType = MiddleTagType.QUEST_OPTIONAL, text = "선택")
+                    MiddleTag(
+                        middleTagType = MiddleTagType.QUEST_OPTIONAL,
+                        text = "선택",
+                        textStyle = ByeBooTheme.typography.cap1
+                    )
 
                     Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 
