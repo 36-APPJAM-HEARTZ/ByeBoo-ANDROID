@@ -37,8 +37,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -131,7 +132,7 @@ private fun OffboardingCompleteGuideScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .requiredHeight(200.dp),
+                        .requiredHeight(220.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -219,10 +220,8 @@ fun TextSequence(
         secondSentence = secondSentence,
         thirdSentence = thirdSentence,
         gap = gap,
-        mainSentenceStyle = ByeBooTheme.typography.body3,
-        subSentenceStyle = ByeBooTheme.typography.cap2,
-        activatedColor = ByeBooTheme.colors.secondary50,
-        unactivatedColor = ByeBooTheme.colors.secondary50.copy(alpha = 0.5f),
+        mainSentenceColor = ByeBooTheme.colors.secondary50,
+        subSentenceColor = ByeBooTheme.colors.secondary50.copy(alpha = 0.5f),
         onFinished = {
             if (index + 3 < paragraphs.size) {
                 onAdvance(index + 1)
@@ -238,186 +237,153 @@ private fun ThreeLineAnimation(
     secondSentence: String,
     thirdSentence: String,
     gap: Dp,
-    mainSentenceStyle: TextStyle,
-    subSentenceStyle: TextStyle,
-    activatedColor: Color,
-    unactivatedColor: Color,
+    mainSentenceColor: Color,
+    subSentenceColor: Color,
     onFinished: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
-    val gapPx = with(density) { gap.roundToPx().toFloat() }
+    val gapPx = with(density) { gap.toPx() }
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val availableWidth = with(density) { (screenWidth - 24.dp * 2).roundToPx() }
 
-    fun measureHeight(text: String, style: TextStyle) =
-        measurer.measure(
-            text = AnnotatedString(text),
-            style = style,
-            constraints = Constraints(maxWidth = availableWidth)
-        ).size.height.toFloat()
 
-    val firstHeight = measureHeight(firstSentence, mainSentenceStyle)
-    val secondHeight = measureHeight(secondSentence, subSentenceStyle)
+    val textStyle = ByeBooTheme.typography.cap2.copy(
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Top,
+            trim = LineHeightStyle.Trim.Both
+        )
+    )
 
-    val secondTop = firstHeight + gapPx
-    val thirdTop = firstHeight + gapPx + secondHeight + gapPx
+    fun measureHeight(t: String) = measurer.measure(
+        AnnotatedString(t),
+        style = textStyle,
+        constraints = Constraints(maxWidth = availableWidth)
+    ).size.height.toFloat()
 
-    val firstAlpha = remember { Animatable(1f) }
-    val firstTY = remember { Animatable(0f) }
+    val height1 = measureHeight(firstSentence)
+    val height2 = measureHeight(secondSentence)
+    val height3 = measureHeight(thirdSentence)
+
+    val activeScale = 1.3f
+    val maxH = maxOf(height1, height2, height3)
+    val lineBoxH = maxH * activeScale
+    val totalH = lineBoxH * 3 + gapPx * 2
+    val totalHdp = with(density) { totalH.toDp() }
+
+    val base1 = 0f
+    val base2 = lineBoxH + gapPx
+
+    val shift1 = remember { Animatable(0f) }
+    val alpha1 = remember { Animatable(1f) }
+    val scale1 = remember { Animatable(activeScale) }
 
     val colorToVector = TwoWayConverter(
         { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
         { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
     )
+    val color2 = remember { Animatable(subSentenceColor, colorToVector) }
+    val color3 = remember { Animatable(subSentenceColor, colorToVector) }
 
-    val secondColor = remember { Animatable(unactivatedColor, colorToVector) }
-    val thirdColor = remember { Animatable(unactivatedColor, colorToVector) }
+    val shift2 = remember { Animatable(0f) }
+    val alpha2 = remember { Animatable(1f) }
+    val scale2 = remember { Animatable(1f) }
 
-    val secondAlpha = remember { Animatable(1f) }
-    val secondTY = remember { Animatable(0f) }
-    val secondScale = remember { Animatable(1f) }
-
-    val thirdAlpha = remember { Animatable(0f) }
-    val thirdTY = remember { Animatable(0f) }
-    val thirdScale = remember { Animatable(1f) }
+    val shift3 = remember { Animatable(0f) }
+    val alpha3 = remember { Animatable(0f) }
+    val scale3 = remember { Animatable(1f) }
 
     LaunchedEffect(Unit) {
-        launch { secondColor.animateTo(activatedColor, tween(durationMillis = 2100)) }
+        delay(2000)
+        coroutineScope {
+            launch { shift1.animateTo(-20f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { alpha1.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
+
+            launch { shift2.animateTo(-base2, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { scale2.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }
+            launch {
+                color2.animateTo(
+                    mainSentenceColor,
+                    tween(1000, easing = FastOutSlowInEasing)
+                )
+            }
+
+            launch { alpha3.animateTo(1f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { shift3.snapTo(0f) }
+        }
 
         delay(1000)
+        val anchorForThird = (base2 + shift2.value) + (height2 * scale2.value) + gapPx
 
         coroutineScope {
-            launch {
-                firstTY.animateTo(
-                    -20f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                firstAlpha.animateTo(
-                    0f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
+            launch { shift2.animateTo(-base2 - 20f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { alpha2.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
 
+            launch { shift3.animateTo(-anchorForThird, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { scale3.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }
             launch {
-                secondTY.animateTo(
-                    -secondTop,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                secondScale.animateTo(
-                    1.2f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-
-            launch {
-                thirdAlpha.animateTo(
-                    1f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                thirdTY.animateTo(
-                    targetValue = -(firstHeight + gapPx),
-                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
+                color3.animateTo(
+                    mainSentenceColor,
+                    tween(1000, easing = FastOutSlowInEasing)
                 )
             }
         }
 
-        delay(1000)
-
-        coroutineScope {
-            launch {
-                secondTY.animateTo(
-                    -secondTop - 20f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                secondAlpha.animateTo(
-                    0f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-
-            launch {
-                thirdTY.animateTo(
-                    targetValue = -thirdTop,
-                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                thirdScale.animateTo(
-                    1.2f,
-                    tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-            launch {
-                thirdColor.animateTo(
-                    targetValue = activatedColor,
-                    animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing)
-                )
-            }
-        }
         onFinished()
     }
 
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(totalHdp)
     ) {
-        Text(
-            text = firstSentence,
-            style = mainSentenceStyle,
-            color = activatedColor,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .graphicsLayer {
-                    translationY = firstTY.value
-                    alpha = firstAlpha.value
-                    transformOrigin = TransformOrigin(0.5f, 0f)
-                }
-        )
+        @Composable
+        fun Line(
+            text: String,
+            baseTop: Float,
+            shift: Float,
+            alpha: Float,
+            scale: Float,
+            color: Color
+        ) {
+            Text(
+                text = text,
+                style = ByeBooTheme.typography.cap2,
+                color = color,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .graphicsLayer {
+                        translationY = baseTop + shift
+                        scaleX = scale
+                        scaleY = scale
+                        this.alpha = alpha
+                        transformOrigin = TransformOrigin(0.5f, 0f)
+                    }
+            )
+        }
 
-        Spacer(modifier = Modifier.height(gap))
+        val line2Top = base2 + shift2.value
 
-        Text(
-            text = secondSentence,
-            style = subSentenceStyle,
-            color = secondColor.value,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .graphicsLayer {
-                    translationY = secondTY.value
-                    scaleX = secondScale.value
-                    scaleY = secondScale.value
-                    alpha = secondAlpha.value
-                    transformOrigin = TransformOrigin(0.5f, 0f)
-                }
-        )
+        Line(firstSentence, base1, shift1.value, alpha1.value, scale1.value, mainSentenceColor)
 
-        Spacer(modifier = Modifier.height(gap))
+        Line(secondSentence, base2, shift2.value, alpha2.value, scale2.value, color2.value)
 
         Text(
             text = thirdSentence,
-            style = subSentenceStyle,
-            color = thirdColor.value,
+            style = ByeBooTheme.typography.cap2,
+            color = color3.value,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .graphicsLayer {
-                    translationY = thirdTY.value + (secondScale.value - 1f) * secondHeight
-                    scaleX = thirdScale.value
-                    scaleY = thirdScale.value
-                    alpha = thirdAlpha.value
+                    translationY = line2Top + (height2 * scale2.value) + gapPx + shift3.value
+                    scaleX = scale3.value
+                    scaleY = scale3.value
+                    alpha = alpha3.value
                     transformOrigin = TransformOrigin(0.5f, 0f)
                 }
         )
