@@ -239,6 +239,7 @@ private fun QuestRecordingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
+                        textStyle = ByeBooTheme.typography.cap1,
                         modifier = Modifier.clickable { onTipClick() }
                     )
                 }
@@ -274,8 +275,6 @@ private fun QuestRecordingScreen(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Start
                     )
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
                 }
             }
 
@@ -290,7 +289,7 @@ private fun QuestRecordingScreen(
                     isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
         }
     }

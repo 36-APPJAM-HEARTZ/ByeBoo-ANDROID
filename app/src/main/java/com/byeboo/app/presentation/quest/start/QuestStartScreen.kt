@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -39,12 +40,14 @@ fun QuestStartRoute(
     viewModel: QuestStartViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestStartSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestStartSideEffect.NavigateToHome -> navigateToHome()
+                is QuestStartSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }
@@ -106,6 +109,7 @@ private fun QuestStartScreen(
         ByeBooButton(
             onClick = onStartClick,
             buttonText = "시작하기",
+            buttonStyle = ByeBooTheme.typography.body2,
             buttonTextColor = ByeBooTheme.colors.white,
             buttonBackgroundColor = ByeBooTheme.colors.primary300,
             modifier = Modifier

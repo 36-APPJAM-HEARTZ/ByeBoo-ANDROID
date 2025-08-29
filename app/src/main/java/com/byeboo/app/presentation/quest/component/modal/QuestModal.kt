@@ -96,6 +96,7 @@ fun QuestModal(
             ByeBooButton(
                 onClick = progressButton,
                 buttonText = "진행하기",
+                buttonStyle = ByeBooTheme.typography.body3,
                 buttonTextColor = ByeBooTheme.colors.white,
                 buttonBackgroundColor = ByeBooTheme.colors.primary300
             )

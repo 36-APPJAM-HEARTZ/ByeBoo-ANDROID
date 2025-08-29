@@ -122,7 +122,8 @@ private fun QuestScreen(
         Column(modifier = Modifier.fillMaxWidth()) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
-                text = uiState.progressPeriod.toString()
+                text = uiState.progressPeriod.toString(),
+                textStyle = ByeBooTheme.typography.cap2
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -131,7 +132,7 @@ private fun QuestScreen(
                 nicknameText = "${uiState.userName}님, 지금",
                 title = "${uiState.journeyTitle} 여정",
                 guideText = "을 진행 중이에요",
-                contentText = "오늘도 한 걸음 나아가볼까요?",
+                contentText = "오늘도 한 걸음 나아가 볼까요?",
                 bottom = 18.dp
             )
         }

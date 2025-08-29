@@ -17,8 +17,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +30,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
@@ -62,6 +66,12 @@ fun NicknameTextField(
     val validColor =
         if (focusState.value) ByeBooTheme.colors.gray400 else ByeBooTheme.colors.primary300
 
+    var textFieldValue by remember(value) {
+        mutableStateOf(
+            TextFieldValue(value, selection = TextRange(value.length))
+        )
+    }
+
     Column(modifier = modifier.padding(vertical = screenHeightDp(8.dp))) {
         Box(
             modifier = Modifier
@@ -73,11 +83,23 @@ fun NicknameTextField(
                 .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
         ) {
             BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
+                value = textFieldValue,
+                onValueChange = { newValue ->
+                    textFieldValue = newValue
+                    if (newValue.text != value) {
+                        onValueChange(newValue.text)
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onFocusChanged { focusState.value = it.isFocused },
+                    .onFocusChanged { focus ->
+                        focusState.value = focus.isFocused
+                        if (focus.isFocused) {
+                            textFieldValue = textFieldValue.copy(
+                                selection = TextRange(textFieldValue.text.length)
+                            )
+                        }
+                    },
                 textStyle = ByeBooTheme.typography.body3.copy(color = ByeBooTheme.colors.white),
                 singleLine = true,
                 cursorBrush = SolidColor(ByeBooTheme.colors.white),
@@ -98,7 +120,7 @@ fun NicknameTextField(
                             modifier = Modifier.weight(1f),
                             contentAlignment = Alignment.CenterStart
                         ) {
-                            if (value.isEmpty()) {
+                            if (textFieldValue.text.isEmpty()) {
                                 Text(
                                     text = "닉네임을 입력해주세요",
                                     style = ByeBooTheme.typography.body3,
@@ -111,14 +133,17 @@ fun NicknameTextField(
                 }
             )
 
-            if (value.isNotEmpty() && focusState.value) {
+            if (textFieldValue.text.isNotEmpty() && focusState.value) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete),
                     contentDescription = "Clear text",
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .noRippleClickable(onClearClick)
+                        .noRippleClickable{
+                            textFieldValue = TextFieldValue("", selection = TextRange(0))
+                            onClearClick()
+                        }
                 )
             }
         }
@@ -138,7 +163,7 @@ fun NicknameTextField(
                             modifier = Modifier.weight(1f)
                         )
                         Text(
-                            text = "${value.length}/5",
+                            text = "${textFieldValue.text.length}/5",
                             style = ByeBooTheme.typography.cap2,
                             color = validColor
                         )
@@ -165,11 +190,11 @@ fun NicknameTextField(
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.error300,
                         modifier = Modifier
-                            .padding(start= 3.dp)
+                            .padding(start = 3.dp)
                             .weight(1f)
                     )
                     Text(
-                        text = "${value.length}/5",
+                        text = "${textFieldValue.text.length}/5",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.error300
                     )
@@ -198,7 +223,7 @@ fun NicknameTextField(
                             .weight(1f)
                     )
                     Text(
-                        text = "${value.length}/5",
+                        text = "${textFieldValue.text.length}/5",
                         style = ByeBooTheme.typography.cap2,
                         color = ByeBooTheme.colors.gray400
                     )

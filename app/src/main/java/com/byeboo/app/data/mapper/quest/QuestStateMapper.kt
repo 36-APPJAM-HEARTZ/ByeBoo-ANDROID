@@ -8,6 +8,7 @@ import com.byeboo.app.domain.model.quest.QuestStateModel
 fun QuestCountResponseDto.toDomain(): QuestStateModel {
     return QuestStateModel(
         todayComplete = this.todayComplete,
+        userCurrentStatus = this.userCurrentStatus,
         count = this.count.toInt()
     )
 }

@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.noRippleClickable
@@ -58,6 +59,7 @@ fun UserInfoRoute(
     viewModel: UserInfoViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
     var previousPage by remember { mutableStateOf(0) }
 
@@ -65,6 +67,9 @@ fun UserInfoRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is UserInfoSideEffect.NavigateToLoading -> navigateToLoading()
+                is UserInfoSideEffect.ShowSnackBar -> {
+                    showSnackBar(effect.message)
+                }
             }
         }
     }
@@ -150,7 +155,6 @@ private fun UserInfoScreen(
         ) {
             Spacer(modifier = Modifier.padding(top = screenHeightDp(padding + 27.dp)))
 
-            // 뒤로가기 아이콘
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
