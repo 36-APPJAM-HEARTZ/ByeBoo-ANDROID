@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.splash
 
+import android.app.ProgressDialog.show
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -46,6 +48,8 @@ fun SplashRoute(
 ) {
 
     val context = LocalContext.current
+    val showSnackBar = LocalSnackBarTrigger.current
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
@@ -58,13 +62,13 @@ fun SplashRoute(
                         callback = viewModel::updateLoginResult
                     )
                 }
-
                 is SplashStateSideEffect.StartKakaoWebLogin ->  {
                     UserApiClient.instance.loginWithKakaoAccount(
                         context = context,
                         callback = viewModel::updateLoginResult
                     )
                 }
+                is SplashStateSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
             }
         }
     }

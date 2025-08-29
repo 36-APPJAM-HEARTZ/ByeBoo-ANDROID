@@ -54,8 +54,10 @@ class SplashViewModel @Inject constructor(
                         } else {
                             _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
                         }
-                    }.onFailure { e ->
-                        //Todo: 스낵바
+                    }.onFailure {
+                        _sideEffect.emit(
+                            SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                        )
                     }
                 }
 
@@ -65,10 +67,6 @@ class SplashViewModel @Inject constructor(
 
                 error is AuthError -> {
                     _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
-                }
-
-                else -> {
-                    // 카카오 로그인 실패
                 }
             }
         }

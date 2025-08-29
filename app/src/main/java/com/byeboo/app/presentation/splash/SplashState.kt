@@ -6,4 +6,5 @@ sealed interface SplashStateSideEffect {
     data object NavigateToTermsOfService : SplashStateSideEffect
     data object StartKakaoTalkLogin : SplashStateSideEffect
     data object StartKakaoWebLogin : SplashStateSideEffect
+    data class ShowSnackBar(val message: String) : SplashStateSideEffect
 }
