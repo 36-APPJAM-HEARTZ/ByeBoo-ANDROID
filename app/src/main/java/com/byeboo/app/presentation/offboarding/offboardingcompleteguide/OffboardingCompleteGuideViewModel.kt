@@ -32,6 +32,12 @@ class OffboardingCompleteGuideViewModel @Inject constructor(
         }
     }
 
+    fun onCloseClicked(){
+        viewModelScope.launch {
+            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToHome)
+        }
+    }
+
     fun onNewJourneyClicked(){
         viewModelScope.launch {
             _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToOffboardingNewJourney)

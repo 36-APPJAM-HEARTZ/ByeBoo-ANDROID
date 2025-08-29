@@ -86,7 +86,7 @@ fun OffboardingCompleteGuideRoute(
     OffboardingCompleteGuideScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = {},
+        onCloseClick = viewModel::onCloseClicked,
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
         modifier = modifier
