@@ -63,18 +63,32 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OffboardingCompleteGuideRoute(
+    navigateToHome: () -> Unit,
+    navigateToOffboardingNewJourney: () -> Unit,
+    navigateToOffboardingCompleteJourney: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingCompleteGuideViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingCompleteGuideSideEffect.NavigateToHome -> navigateToHome()
+                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
+                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompleteJourney -> navigateToOffboardingCompleteJourney()
+            }
+        }
+
+    }
+
     OffboardingCompleteGuideScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onCloseClick = {},
-        onNewJourneyClick = {},
-        onCompletedJourneyClick = {},
+        onNewJourneyClick = viewModel::onNewJourneyClicked,
+        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
         modifier = modifier
     )
 }

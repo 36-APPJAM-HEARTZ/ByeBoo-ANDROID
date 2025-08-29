@@ -116,6 +116,8 @@ fun MainNavHost(
         )
 
         offboardingGraph(
+            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(clearStackNavOptions) },
+            navigateToOffboardingCompleteJourney = { navigator.navigateToOffboardingCompletedJourney(clearStackNavOptions) },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
             navigateToUp = navigator::navigateUp,
             padding = padding

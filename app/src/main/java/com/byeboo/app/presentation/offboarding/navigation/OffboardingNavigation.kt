@@ -7,8 +7,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.offboarding.offboardingcompletedjourney.OffboardingCompletedJourneyRoute
+import com.byeboo.app.presentation.offboarding.offboardingcompleteguide.OffboardingCompleteGuideRoute
 import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneyRoute
 import kotlinx.serialization.Serializable
+
+fun NavController.navigateToOffboardingCompleteGuide(navOptions: NavOptions? = null) {
+    navigate(OffboardingCompleteGuide, navOptions)
+}
 
 fun NavController.navigateToOffboardingNewJourney(navOptions: NavOptions? = null) {
     navigate(OffboardingNewJourney, navOptions)
@@ -19,10 +24,21 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 }
 
 fun NavGraphBuilder.offboardingGraph(
+    navigateToOffboardingNewJourney: () -> Unit,
+    navigateToOffboardingCompleteJourney: () -> Unit,
     navigateToQuestStart: () -> Unit,
     navigateToUp: () -> Unit,
     padding: Dp
 ) {
+    composable<OffboardingCompleteGuide> {
+        OffboardingCompleteGuideRoute(
+            navigateToHome = { },
+            navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
+            navigateToOffboardingCompleteJourney = navigateToOffboardingCompleteJourney,
+            bottomPadding = padding
+        )
+    }
+
     composable<OffboardingNewJourney> {
         OffboardingNewJourneyRoute(
             navigateToQuestStart = navigateToQuestStart,
@@ -38,6 +54,9 @@ fun NavGraphBuilder.offboardingGraph(
         )
     }
 }
+
+@Serializable
+data object OffboardingCompleteGuide : Route
 
 @Serializable
 data object OffboardingNewJourney : Route

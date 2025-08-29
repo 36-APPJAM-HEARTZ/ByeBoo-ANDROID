@@ -139,6 +139,10 @@ class MainNavigator(
         navController.navigateToTutorial(navOptions)
     }
 
+    fun navigateToOffboardingCompleteGuide(navOptions: NavOptions) {
+        navController.navigateToOffboardingCompletedJourney(navOptions)
+    }
+
     fun navigateToOffboardingNewJourney(navOptions: NavOptions) {
         navController.navigateToOffboardingNewJourney(navOptions)
     }
