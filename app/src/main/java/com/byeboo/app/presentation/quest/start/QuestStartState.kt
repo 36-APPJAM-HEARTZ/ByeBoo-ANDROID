@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class QuestStartState(
     val nickname: String = "하츠핑",
-    val journeyName: String = ""
+    val journeyName: String = "감정 직면"
 )
 
 sealed interface QuestStartSideEffect {
