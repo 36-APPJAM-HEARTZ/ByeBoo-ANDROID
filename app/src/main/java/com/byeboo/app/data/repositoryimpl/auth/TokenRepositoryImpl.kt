@@ -13,9 +13,9 @@ class TokenRepositoryImpl @Inject constructor(
 
     @Volatile private var cachedAccessToken: String = ""
 
-    override suspend fun getAccessToken(): Flow<String> = tokenDataSource.getAccessToken()
+    override fun getAccessToken(): Flow<String> = tokenDataSource.getAccessToken()
 
-    override suspend fun getRefreshToken(): Flow<String> = tokenDataSource.getRefreshToken()
+    override fun getRefreshToken(): Flow<String> = tokenDataSource.getRefreshToken()
 
     override suspend fun saveTokens(tokens: TokenEntity) {
         tokenDataSource.updateTokens(tokens.accessToken, tokens.refreshToken)

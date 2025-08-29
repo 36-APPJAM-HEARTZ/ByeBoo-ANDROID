@@ -14,11 +14,11 @@ class TokenDataSourceImpl @Inject constructor(
     private val datastore: DataStore<Preferences>
 ) : TokenDataSource {
 
-    override suspend fun getAccessToken(): Flow<String> = datastore.data.map {
+    override fun getAccessToken(): Flow<String> = datastore.data.map {
         preferences -> preferences[ACCESS_TOKEN] ?: ""
     }
 
-    override suspend fun getRefreshToken(): Flow<String> = datastore.data.map {
+    override fun getRefreshToken(): Flow<String> = datastore.data.map {
         preferences -> preferences[REFRESH_TOKEN] ?: ""
     }
 

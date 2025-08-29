@@ -17,8 +17,6 @@ class LoginUseCase @Inject constructor(
             token = token,
             platform = platform
         ).mapCatching { auth ->
-            tokenRepository.clearTokens()
-
             tokenRepository.saveTokens(
                 TokenEntity(
                     accessToken = auth.tokens.accessToken, refreshToken = auth.tokens.refreshToken

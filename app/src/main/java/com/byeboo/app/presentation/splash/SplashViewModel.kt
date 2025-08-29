@@ -50,7 +50,6 @@ class SplashViewModel @Inject constructor(
 
                     result.onSuccess { auth ->
                         if (auth.isRegistered) {
-                            delay(1000)
                             _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
                         } else {
                             _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
