@@ -71,6 +71,7 @@ fun MyPageModal(
                 ByeBooButton(
                     onClick = onCancelClick,
                     buttonText = "취소",
+                    buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.gray200,
                     buttonStrokeColor = ByeBooTheme.colors.gray400,
                     modifier = Modifier.weight(1f)
@@ -81,6 +82,7 @@ fun MyPageModal(
                 ByeBooButton(
                     onClick = onConfirmClick,
                     buttonText = onConfirmText,
+                    buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
                     modifier = Modifier.weight(1f)

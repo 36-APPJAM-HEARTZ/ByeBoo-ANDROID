@@ -1,7 +1,6 @@
 package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,30 +31,37 @@ import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
+import kotlinx.coroutines.delay
 
 @Composable
 fun EditProfileRoute(
     navigateToMyPage: () -> Unit,
     bottomPadding: Dp,
     viewModel: EditProfileViewModel = hiltViewModel()
-){
-
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
-           when(effect) {
-               is EditProfileSideEffect.NavigateToMyPage -> navigateToMyPage()
-           }
+            when (effect) {
+                is EditProfileSideEffect.NavigateToMyPage -> navigateToMyPage()
+            }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        delay(100)
+        focusRequester.requestFocus()
     }
 
     EditProfileScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onNicknameChange= viewModel::updateNickname,
-        onClearClick = { viewModel.updateNickname("") },
         onBackClick = viewModel::onBackClicked,
+        onNicknameChange = viewModel::updateNickname,
+        onClearClick = { viewModel.updateNickname("") },
+        focusRequester = focusRequester,
         onCompleteClick = viewModel::finishEditProfile
     )
 }
@@ -61,12 +70,13 @@ fun EditProfileRoute(
 private fun EditProfileScreen(
     uiState: EditProfileState,
     bottomPadding: Dp,
+    onBackClick: () -> Unit,
     onNicknameChange: (String) -> Unit,
     onClearClick: () -> Unit,
-    onBackClick: () -> Unit,
+    focusRequester: FocusRequester,
     onCompleteClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
     val showValidMessage = !uiState.isInitial
 
@@ -115,7 +125,8 @@ private fun EditProfileScreen(
             validationState = uiState.nicknameValidation.toValidationState(),
             onValueChange = onNicknameChange,
             onClearClick = onClearClick,
-            showValidMessage = showValidMessage
+            showValidMessage = showValidMessage,
+            modifier = Modifier.focusRequester(focusRequester)
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -126,9 +137,6 @@ private fun EditProfileScreen(
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             isEnabled = isNicknameValid,
             onClick = onCompleteClick
-
         )
     }
 }
-
-
