@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.component
+package com.byeboo.app.presentation.quest.component.modal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
