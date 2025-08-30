@@ -39,6 +39,10 @@ fun MainNavHost(
         restoreState = true
     }
     val questBehaviorViewModel: QuestBehaviorViewModel = hiltViewModel()
+    val keepStackNavOptions = navOptions {
+        launchSingleTop = true
+        restoreState = true
+    }
 
     NavHost(
         modifier = modifier,
@@ -107,18 +111,18 @@ fun MainNavHost(
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
             navigateToOffboardingCompletedJourney = {
                 navigator.navigateToOffboardingCompletedJourney(
-                    clearStackNavOptions
+                    keepStackNavOptions
                 )
             },
-            navigateToTutorial = { navigator.navigateToTutorial(clearStackNavOptions) },
+            navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             padding = padding,
         )
 
         offboardingGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
-            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(clearStackNavOptions) },
-            navigateToOffboardingCompleteJourney = { navigator.navigateToOffboardingCompletedJourney(clearStackNavOptions) },
+            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(keepStackNavOptions) },
+            navigateToOffboardingCompleteJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
             navigateToUp = navigator::navigateUp,
             padding = padding
