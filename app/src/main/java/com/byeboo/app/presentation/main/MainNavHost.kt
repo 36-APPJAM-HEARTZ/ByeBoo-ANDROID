@@ -109,11 +109,7 @@ fun MainNavHost(
 
         myPageGraph(
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
-            navigateToOffboardingCompletedJourney = {
-                navigator.navigateToOffboardingCompletedJourney(
-                    keepStackNavOptions
-                )
-            },
+            navigateToOffboardingCompletedJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             padding = padding,
