@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingCompletedGuideViewModel @Inject constructor(
-    userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val questStateRepository: QuestStateRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow(OffboardingCompletedGuideState())
     val uiState: StateFlow<OffboardingCompletedGuideState> = _uiState.asStateFlow()
@@ -25,10 +27,18 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     val sideEffect: SharedFlow<OffboardingCompletedGuideSideEffect> = _sideEffect.asSharedFlow()
 
     init {
+        loadInitialData()
+    }
+
+    private fun loadInitialData() {
         viewModelScope.launch {
-            userRepository.getNickname().collect { nickname ->
-                _uiState.update { it.copy(nickname = nickname) }
+            userRepository.getNickname().collect { name ->
+                _uiState.update { it.copy(nickname = name) }
             }
+        }
+        viewModelScope.launch {
+            val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+            _uiState.update { it.copy(journeyName = journey) }
         }
     }
 
