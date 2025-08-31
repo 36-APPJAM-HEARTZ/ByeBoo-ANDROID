@@ -22,6 +22,12 @@ object ServiceModule {
 
     @Provides
     @Singleton
+    fun providesAuthService(@Auth retrofit: Retrofit): AuthService = retrofit.create(
+        AuthService::class.java
+    )
+
+    @Provides
+    @Singleton
     fun providesUserService(retrofit: Retrofit): UserService = retrofit.create(
         UserService::class.java
     )

@@ -17,9 +17,6 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
-import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
-import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
-import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
@@ -29,7 +26,7 @@ import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
-import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
+import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
 
 class MainNavigator(
     val navController: NavHostController
@@ -74,6 +71,10 @@ class MainNavigator(
 
     fun navigateUp() {
         navController.navigateUp()
+    }
+
+    fun navigateToTerms(navOptions: NavOptions) {
+        navController.navigateToTerms(navOptions)
     }
 
     fun navigateToHomeAmulet(navOptions: NavOptions) {

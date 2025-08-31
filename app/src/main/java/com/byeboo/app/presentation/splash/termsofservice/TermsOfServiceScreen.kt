@@ -24,11 +24,13 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
+import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsCheckButton
 
 @Composable
 fun TermsOfServiceRoute(
+    navigateToUserInfo: () -> Unit,
     padding: Dp,
     modifier: Modifier = Modifier,
     viewModel: TermsOfServiceViewModel = hiltViewModel()
@@ -40,6 +42,7 @@ fun TermsOfServiceRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is TermsOfServiceSideEffect.OpenUrl -> openUrl(context = context, effect.url)
+                is TermsOfServiceSideEffect.NavigateToUserInfo -> navigateToUserInfo()
             }
         }
     }
@@ -50,10 +53,9 @@ fun TermsOfServiceRoute(
         onTermsAllClicked = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
         onTermsLinkClick = { url -> viewModel.onTermsLinkClicked(url) },
-        onNextButton = {},
+        onNextButton = viewModel::onCompleteButtonClick,
         modifier = modifier
     )
-
 }
 
 @Composable
