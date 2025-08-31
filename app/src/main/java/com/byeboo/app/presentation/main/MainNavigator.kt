@@ -17,6 +17,9 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
@@ -27,6 +30,7 @@ import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecord
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
+import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
 class MainNavigator(
     val navController: NavHostController

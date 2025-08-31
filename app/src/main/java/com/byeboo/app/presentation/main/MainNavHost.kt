@@ -12,10 +12,12 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
 import com.byeboo.app.presentation.splash.termsofservice.navigation.termsGraph
+import com.byeboo.app.presentation.tutorial.navigation.tutorialGraph
 
 @Composable
 fun MainNavHost(
