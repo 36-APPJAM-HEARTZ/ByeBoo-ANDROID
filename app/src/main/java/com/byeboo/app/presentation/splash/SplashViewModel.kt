@@ -44,7 +44,7 @@ class SplashViewModel @Inject constructor(
 
     fun updateLoginResult(token: OAuthToken?, error: Throwable?) {
         viewModelScope.launch {
-            when {
+            /*when {
                 token != null -> {
                     val result = loginUseCase(token.accessToken, platform = KAKAO)
 
@@ -67,6 +67,37 @@ class SplashViewModel @Inject constructor(
 
                 error is AuthError -> {
                     _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
+                }
+            }*/
+
+            if (token != null) {
+                loginUseCase(token.accessToken, platform = KAKAO)
+                    .onSuccess { auth ->
+                        if (auth.isRegistered) {
+                            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+                        } else {
+                            _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                        )
+                    }
+                return@launch
+
+                when (error) {
+                    is ClientError -> {
+                        when(error.reason) {
+                            ClientErrorCause.Cancelled -> {}
+                            else -> {}
+                        }
+                    }
+
+                    is AuthError -> {
+                        _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
+                    }
+
+                    else -> {}
                 }
             }
         }

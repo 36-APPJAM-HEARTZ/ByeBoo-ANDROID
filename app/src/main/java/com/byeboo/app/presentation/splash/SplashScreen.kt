@@ -135,7 +135,7 @@ private fun SplashScreen(
                 Text(
                     text = "Kakao로 시작하기",
                     style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.black,
+                    color = ByeBooTheme.colors.black
                 )
             }
         }
