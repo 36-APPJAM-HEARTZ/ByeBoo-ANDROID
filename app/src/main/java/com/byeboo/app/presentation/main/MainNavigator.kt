@@ -26,6 +26,7 @@ import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
+import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
 
 class MainNavigator(
     val navController: NavHostController
@@ -130,6 +131,10 @@ class MainNavigator(
 
     fun navigateToEditProfile(navOptions: NavOptions) {
         navController.navigateToEditProfile(navOptions)
+    }
+
+    fun navigateToTerms(navOptions: NavOptions) {
+        navController.navigateToTerms(navOptions)
     }
 }
 

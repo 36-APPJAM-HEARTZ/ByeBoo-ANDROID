@@ -10,11 +10,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -155,6 +155,7 @@ private fun HomeScreen(
                         )
                     }
                 }
+
                 HomeStatus.TODAY_INCOMPLETE -> {
                     HomeQuestCard(
                         title = "오늘의 퀘스트 하러가기",
@@ -201,16 +202,16 @@ private fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentSize()
                 .align(Alignment.BottomCenter)
+                .aspectRatio(312f / 62f)
+                .padding(horizontal = screenHeightDp(24.dp))
                 .padding(bottom = screenHeightDp(322.dp) + bottomPadding)
+
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_speech_bubble),
-                contentDescription = "말풍선",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenHeightDp(24.dp))
+                contentDescription = "null",
+                modifier = Modifier.matchParentSize()
             )
 
             val bottomBubbleText = when (uiState.status) {
@@ -220,16 +221,20 @@ private fun HomeScreen(
                 HomeStatus.JOURNEY_COMPLETE -> "저는 언제나 여기에 있어요!"
             }
 
-            Text(
-                text = bottomBubbleText,
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.primary50,
-                textAlign = TextAlign.Center,
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 13.dp)
-            )
+                    .matchParentSize()
+                    .padding(bottom = 14.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = bottomBubbleText,
+                    style = ByeBooTheme.typography.body2,
+                    color = ByeBooTheme.colors.primary50,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }

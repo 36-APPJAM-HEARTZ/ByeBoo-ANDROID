@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleCombineClickable
@@ -71,10 +77,26 @@ private fun HomeOnboardingScreen(
         label = "fadeBlack"
     )
 
-    LaunchedEffect(Unit) {
-        showSpeechBubble = true
-        delay(2000)
-        showInstructionText = true
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.bori_onboarding)
+    )
+    val isLottieReady = composition != null
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        isPlaying = isLottieReady && !isTransitioning,
+        speed = 1.0f,
+        restartOnPlay = false
+    )
+
+
+    LaunchedEffect(isLottieReady) {
+        if (isLottieReady) {
+            showSpeechBubble = true
+            delay(2000)
+            showInstructionText = true
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -94,8 +116,7 @@ private fun HomeOnboardingScreen(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = screenHeightDp(67.dp)),
+                .padding(horizontal = screenWidthDp(48.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -114,9 +135,7 @@ private fun HomeOnboardingScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
                     SpeechBubbleWithText(
                         firstText = "바이부에 오신 걸 환영해요!",
                         secondText = "저는 보리라고 해요.",
@@ -124,33 +143,30 @@ private fun HomeOnboardingScreen(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-            Image(
-                painter = painterResource(id = R.drawable.home_onboarding),
-                contentDescription = "보리 캐릭터",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = screenHeightDp(bottomPadding + 83.dp))
-                    .then(
-                        if (showInstructionText) {
-                            Modifier.noRippleCombineClickable(
-                                onLongClick = {
-                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    isTransitioning = true
-                                    scope.launch {
-                                        delay(500)
-                                        navigateToHome()
+            if (isLottieReady) {
+                LottieAnimation(
+                    composition = composition,
+                    progress = { progress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
+                        .then(
+                            if (showInstructionText) {
+                                Modifier.noRippleCombineClickable(
+                                    onLongClick = {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        isTransitioning = true
+                                        scope.launch {
+                                            delay(500)
+                                            navigateToHome()
+                                        }
                                     }
-                                }
-                            )
-                        } else {
-                            Modifier
-                        }
-                    ),
-                contentScale = ContentScale.Crop
-            )
+                                )
+                            } else Modifier
+                        )
+                        .aspectRatio(1f)
+                )
+            }
         }
         if (isTransitioning) {
             Box(

@@ -31,7 +31,8 @@ fun QuestJourneyTitle(
     ) {
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_START_DAY,
-            text = dayCount.toString()
+            text = dayCount.toString(),
+            textStyle = ByeBooTheme.typography.cap2
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -53,7 +54,7 @@ fun QuestJourneyTitle(
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
-            text = "오늘도 한 걸음 나아가볼까요?",
+            text = "오늘도 한 걸음 나아가 볼까요?",
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body5
         )
