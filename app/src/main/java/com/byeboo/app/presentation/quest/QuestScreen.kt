@@ -30,6 +30,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.chip.QuestBox
+import com.byeboo.app.presentation.quest.component.modal.OffboardingModal
 import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
@@ -42,6 +43,7 @@ fun QuestRoute(
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingCompleteGuide: () -> Unit,
     navigateToHome: () -> Unit,
     bottomPadding: Dp,
     viewModel: QuestViewModel = hiltViewModel()
@@ -61,20 +63,12 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest {
             when (it) {
-                is QuestSideEffect.NavigateToQuestTip ->
-                    navigateToQuestTip(it.questId, it.questType)
-
-                is QuestSideEffect.NavigateToQuestRecording ->
-                    navigateToQuestRecording(it.questId)
-
-                is QuestSideEffect.NavigateToQuestBehavior ->
-                    navigateToQuestBehavior(it.questId)
-
-                is QuestSideEffect.NavigateToQuestReview ->
-                    navigateToQuestReview(it.questId)
-
-                is QuestSideEffect.NavigateToHome ->
-                    navigateToHome()
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(it.questId, it.questType)
+                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(it.questId)
+                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(it.questId)
+                is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
+                is QuestSideEffect.NavigateToHome -> navigateToHome()
+                is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
             }
         }
     }
@@ -82,9 +76,10 @@ fun QuestRoute(
     QuestScreen(
         uiState = uiState,
         listState = listState,
+        onOffboardingModalClick = viewModel::onOffboardingModalClicked,
         bottomPadding = bottomPadding,
         onQuestClick = viewModel::onQuestClick,
-        onDismissModal = viewModel::onDismissModal,
+        onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart
     )
@@ -94,6 +89,7 @@ fun QuestRoute(
 private fun QuestScreen(
     uiState: QuestUiState,
     listState: LazyListState,
+    onOffboardingModalClick: () -> Unit,
     bottomPadding: Dp,
     onQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
@@ -109,6 +105,14 @@ private fun QuestScreen(
             progressButton = onQuestStart,
             modifier = Modifier
                 .fillMaxWidth()
+        )
+    }
+
+    if (uiState.showOffboardingModal){
+        OffboardingModal(
+            journeyTitle = uiState.journeyTitle,
+            userName = uiState.userName,
+            onClick = onOffboardingModalClick
         )
     }
 

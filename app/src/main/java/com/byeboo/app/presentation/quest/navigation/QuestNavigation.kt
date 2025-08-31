@@ -45,6 +45,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingCompleteGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
@@ -68,6 +69,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
+                navigateToOffboardingCompleteGuide = navigateToOffboardingCompleteGuide,
                 navigateToHome = navigateToHome,
                 bottomPadding = padding
             )

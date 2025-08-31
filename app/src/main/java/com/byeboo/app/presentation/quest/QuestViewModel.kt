@@ -110,8 +110,15 @@ class QuestViewModel @Inject constructor(
         }
     }
 
-    fun onDismissModal() {
+    fun onQuitDismissModal() {
         _uiState.update { it.copy(showQuitModal = false) }
+    }
+
+    fun onOffboardingModalClicked(){
+        viewModelScope.launch {
+            _uiState.update { it.copy(showOffboardingModal = false) }
+            _sideEffect.emit(QuestSideEffect.NavigateToOffboardingCompletedGuide)
+        }
     }
 
     fun onTipClick() {

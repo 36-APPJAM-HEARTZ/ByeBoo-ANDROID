@@ -28,8 +28,8 @@ import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun OffboardingModal(
-    journeyName: String,
-    nickname: String,
+    journeyTitle: String,
+    userName: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties()
@@ -56,7 +56,7 @@ fun OffboardingModal(
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
             Text(
-                text = "${journeyName}을\n모두 마무리했어요",
+                text = "${journeyTitle}을\n모두 마무리했어요",
                 style = ByeBooTheme.typography.sub3,
                 color = ByeBooTheme.colors.gray50,
                 textAlign = TextAlign.Center
@@ -73,7 +73,7 @@ fun OffboardingModal(
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Text(
-                text = "보리가 ${nickname}님께\n하고 싶은 말이 있다고 해요",
+                text = "보리가 ${userName}님께\n하고 싶은 말이 있다고 해요",
                 style = ByeBooTheme.typography.body2,
                 color = ByeBooTheme.colors.gray400,
                 textAlign = TextAlign.Center
