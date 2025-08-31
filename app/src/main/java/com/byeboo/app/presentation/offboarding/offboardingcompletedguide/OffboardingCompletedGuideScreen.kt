@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
+package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
@@ -62,22 +62,22 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun OffboardingCompleteGuideRoute(
+fun OffboardingCompletedGuideRoute(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingCompleteGuideViewModel = hiltViewModel()
+    viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is OffboardingCompleteGuideSideEffect.NavigateToHome -> navigateToHome()
-                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
-                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is OffboardingCompletedGuideSideEffect.NavigateToHome -> navigateToHome()
+                is OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
+                is OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
             }
         }
 
@@ -95,7 +95,7 @@ fun OffboardingCompleteGuideRoute(
 
 @Composable
 private fun OffboardingCompleteGuideScreen(
-    uiState: OffboardingCompleteGuideState,
+    uiState: OffboardingCompletedGuideState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
     onNewJourneyClick: () -> Unit,

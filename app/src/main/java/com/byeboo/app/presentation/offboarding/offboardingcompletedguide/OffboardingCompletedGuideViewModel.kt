@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
+package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,14 +15,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingCompleteGuideViewModel @Inject constructor(
+class OffboardingCompletedGuideViewModel @Inject constructor(
     userRepository: UserRepository
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(OffboardingCompleteGuideState())
-    val uiState: StateFlow<OffboardingCompleteGuideState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(OffboardingCompletedGuideState())
+    val uiState: StateFlow<OffboardingCompletedGuideState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<OffboardingCompleteGuideSideEffect>()
-    val sideEffect: SharedFlow<OffboardingCompleteGuideSideEffect> = _sideEffect.asSharedFlow()
+    private val _sideEffect = MutableSharedFlow<OffboardingCompletedGuideSideEffect>()
+    val sideEffect: SharedFlow<OffboardingCompletedGuideSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -34,19 +34,19 @@ class OffboardingCompleteGuideViewModel @Inject constructor(
 
     fun onCloseClicked(){
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToHome)
+            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToHome)
         }
     }
 
     fun onNewJourneyClicked(){
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToOffboardingNewJourney)
+            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney)
         }
     }
 
     fun onCompletedJourneyClicked(){
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompletedJourney)
+            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney)
         }
     }
 }
