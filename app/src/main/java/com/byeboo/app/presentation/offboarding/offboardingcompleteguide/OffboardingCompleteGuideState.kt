@@ -8,5 +8,5 @@ data class OffboardingCompleteGuideState(
 sealed interface OffboardingCompleteGuideSideEffect {
     data object NavigateToHome : OffboardingCompleteGuideSideEffect
     data object NavigateToOffboardingNewJourney: OffboardingCompleteGuideSideEffect
-    data object NavigateToOffboardingCompleteJourney: OffboardingCompleteGuideSideEffect
+    data object NavigateToOffboardingCompletedJourney: OffboardingCompleteGuideSideEffect
 }

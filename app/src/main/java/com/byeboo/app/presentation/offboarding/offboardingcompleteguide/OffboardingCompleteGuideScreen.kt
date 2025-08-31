@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
 fun OffboardingCompleteGuideRoute(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
-    navigateToOffboardingCompleteJourney: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingCompleteGuideViewModel = hiltViewModel()
@@ -77,7 +77,7 @@ fun OffboardingCompleteGuideRoute(
             when (sideEffect) {
                 is OffboardingCompleteGuideSideEffect.NavigateToHome -> navigateToHome()
                 is OffboardingCompleteGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
-                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompleteJourney -> navigateToOffboardingCompleteJourney()
+                is OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
             }
         }
 

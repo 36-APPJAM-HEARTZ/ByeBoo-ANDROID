@@ -46,7 +46,7 @@ class OffboardingCompleteGuideViewModel @Inject constructor(
 
     fun onCompletedJourneyClicked(){
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompleteJourney)
+            _sideEffect.emit(OffboardingCompleteGuideSideEffect.NavigateToOffboardingCompletedJourney)
         }
     }
 }

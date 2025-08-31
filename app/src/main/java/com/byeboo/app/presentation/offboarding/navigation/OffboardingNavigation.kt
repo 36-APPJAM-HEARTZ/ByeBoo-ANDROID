@@ -11,7 +11,7 @@ import com.byeboo.app.presentation.offboarding.offboardingcompleteguide.Offboard
 import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneyRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateToOffboardingCompleteGuide(navOptions: NavOptions? = null) {
+fun NavController.navigateToOffboardingCompletedGuide(navOptions: NavOptions? = null) {
     navigate(OffboardingCompleteGuide, navOptions)
 }
 
@@ -26,7 +26,7 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 fun NavGraphBuilder.offboardingGraph(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
-    navigateToOffboardingCompleteJourney: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToQuestStart: () -> Unit,
     navigateToUp: () -> Unit,
     padding: Dp
@@ -35,7 +35,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingCompleteGuideRoute(
             navigateToHome = navigateToHome,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
-            navigateToOffboardingCompleteJourney = navigateToOffboardingCompleteJourney,
+            navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
             bottomPadding = padding
         )
     }
