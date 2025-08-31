@@ -5,7 +5,7 @@ import com.byeboo.app.domain.model.home.HomeStatus
 data class HomeUiState(
     val status: HomeStatus = HomeStatus.INITIAL_START,
     val journey: String = "",
-    val currentStep: Int = 0,
+    val currentStep: Long = 0L,
     val totalSteps: Int = 30,
     val nickname: String = "하츠핑",
     val hasSeenAboutHelp: Boolean = false

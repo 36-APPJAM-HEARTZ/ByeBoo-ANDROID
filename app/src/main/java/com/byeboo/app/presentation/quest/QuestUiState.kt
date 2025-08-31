@@ -13,6 +13,7 @@ data class QuestUiState(
     val userName: String = "",
     val selectedQuest: Quest? = null,
     val showQuitModal: Boolean = false,
+    val completedQuestCount: Long = 1L,
     val showOffboardingModal: Boolean = false,
     val error: String? = null
 )

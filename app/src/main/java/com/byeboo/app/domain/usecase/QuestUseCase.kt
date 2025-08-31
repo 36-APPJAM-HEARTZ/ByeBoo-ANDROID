@@ -16,10 +16,12 @@ class QuestUseCase @Inject constructor(
         val result = questInProgressRepository.getInProgressQuest().getOrThrow()
         val journey = questStateRepository.getUserJourney() ?: ""
         val nickname = userRepository.getNickname().firstOrNull() ?: ""
+        val questCompletedCount = questStateRepository.getQuestCount().getOrNull()?.count ?: 1L
         return QuestData(
             inProgressQuest = result,
             journeyTitle = journey,
-            userNickname = nickname
+            userNickname = nickname,
+            questCompletedCount = questCompletedCount
         )
     }
 }

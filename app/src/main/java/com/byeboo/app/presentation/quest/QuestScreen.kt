@@ -63,7 +63,11 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest {
             when (it) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(it.questId, it.questType)
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+                    it.questId,
+                    it.questType
+                )
+
                 is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(it.questId)
                 is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(it.questId)
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
@@ -108,7 +112,7 @@ private fun QuestScreen(
         )
     }
 
-    if (uiState.showOffboardingModal){
+    if (uiState.showOffboardingModal) {
         OffboardingModal(
             journeyTitle = uiState.journeyTitle,
             userName = uiState.userName,

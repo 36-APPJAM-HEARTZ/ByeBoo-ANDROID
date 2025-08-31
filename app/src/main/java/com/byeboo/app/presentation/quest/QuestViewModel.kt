@@ -54,8 +54,13 @@ class QuestViewModel @Inject constructor(
                             progressPeriod = output.progressPeriod,
                             journeyTitle = output.journeyTitle,
                             userName = output.userName,
+                            completedQuestCount = output.questCompletedCount,
                             error = null
                         )
+                    }
+
+                    if (output.questCompletedCount >= 30L && !_uiState.value.showOffboardingModal ){
+                        _uiState.update { it.copy(showOffboardingModal = true) }
                     }
 
                     countdownJob?.cancel()

@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
             val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
             var status = HomeStatus.INITIAL_START
-            var currentStep = 0
+            var currentStep = 0L
 
             questStateRepository.getQuestCount()
                 .onSuccess { model ->
