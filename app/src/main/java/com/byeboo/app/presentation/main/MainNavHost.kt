@@ -84,6 +84,7 @@ fun MainNavHost(
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
+            navigateToOffboardingCompleteGuide = { navigator.navigateToOffboardingCompletedGuide(clearStackNavOptions) },
             navigateToQuestRecordingComplete = { questId ->
                 navigator.navigateToQuestRecordingComplete(
                     questId,
@@ -118,7 +119,7 @@ fun MainNavHost(
         offboardingGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(keepStackNavOptions) },
-            navigateToOffboardingCompleteJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
+            navigateToOffboardingCompletedJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
             navigateToUp = navigator::navigateUp,
             padding = padding
