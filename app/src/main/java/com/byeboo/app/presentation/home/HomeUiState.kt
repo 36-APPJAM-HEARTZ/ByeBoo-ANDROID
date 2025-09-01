@@ -13,4 +13,7 @@ data class HomeUiState(
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
     data object NavigateToQuestStart : HomeSideEffect
+    data object NavigateToTutorial: HomeSideEffect
+    data object NavigateToOffboardingCompletedGuide: HomeSideEffect
+    data object NavigateToOffboardingNewJourney: HomeSideEffect
 }

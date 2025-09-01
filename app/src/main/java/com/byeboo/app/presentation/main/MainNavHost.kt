@@ -72,11 +72,14 @@ fun MainNavHost(
         )
 
         homeGraph(
-            bottomPadding = padding,
+            navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
+            navigateToQuestStart = { navigator.navigateToQuestStart(questNavOptions) },
+            navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
+            navigateToOffboardingCompletedGuide = { navigator.navigateToOffboardingCompletedGuide(clearStackNavOptions) },
+            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(keepStackNavOptions) },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
-            navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
-            navigateToQuestStart = { navigator.navigateToQuestStart(questNavOptions) }
+            padding = padding
 
         )
 

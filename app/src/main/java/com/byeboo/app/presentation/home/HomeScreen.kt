@@ -54,6 +54,9 @@ import kotlinx.coroutines.flow.collectLatest
 fun HomeRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestStart: () -> Unit,
+    navigateToTutorial: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToOffboardingNewJourney: () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp,
     viewModel: HomeViewModel = hiltViewModel()
@@ -65,6 +68,9 @@ fun HomeRoute(
             when (effect) {
                 is HomeSideEffect.NavigateToQuest -> navigateToQuest()
                 is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is HomeSideEffect.NavigateToTutorial -> navigateToTutorial()
+                is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
             }
         }
     }
@@ -75,6 +81,7 @@ fun HomeRoute(
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,
         bottomPadding = bottomPadding,
+        onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         modifier = modifier
     )
 }
@@ -86,6 +93,7 @@ private fun HomeScreen(
     onClickQuestStart: () -> Unit,
     onHelpIconClick: () -> Unit,
     bottomPadding: Dp,
+    onOffboardingNewJourneyClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_home))
@@ -188,8 +196,7 @@ private fun HomeScreen(
                     HomeQuestCard(
                         title = "새로운 이별 극복 여정 시작하기",
                         subtitle = "다음 여정도, 제가 곁에서 함께할게요.",
-                        /// TODO: 새로운 여정 화면 이동
-                        onClick = {}
+                        onClick = onOffboardingNewJourneyClick
                     )
                 }
             }

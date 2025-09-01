@@ -72,6 +72,13 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.setHasSeenAboutHelp(true)
             _uiState.update { it.copy(hasSeenAboutHelp = true) }
+            _sideEffect.emit(HomeSideEffect.NavigateToTutorial)
+        }
+    }
+
+    fun onOffboardingNewJourneyClicked(){
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToOffboardingNewJourney)
         }
     }
 }
