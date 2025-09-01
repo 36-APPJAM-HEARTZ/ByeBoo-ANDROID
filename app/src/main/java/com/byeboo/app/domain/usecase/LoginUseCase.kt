@@ -15,9 +15,7 @@ class LoginUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository
 ) {
-    suspend operator fun invoke(
-        token: String, platform: String
-    ): Result<AuthResult> {
+    suspend operator fun invoke(token: String, platform: String): Result<AuthResult> {
         return authRepository.loginWithKakao(
             token = token,
             platform = platform
