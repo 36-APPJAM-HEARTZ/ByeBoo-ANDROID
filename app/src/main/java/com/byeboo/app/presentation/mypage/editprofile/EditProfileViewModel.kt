@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,13 +35,13 @@ class EditProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepository.getNickname().collect { nickname ->
-                _uiState.update { it.copy(
-                    nickname = nickname,
-                    initialNickname = nickname,
+            val initialNickname = userRepository.getNickname().first()
+            _uiState.update {
+                it.copy(
+                    nickname = initialNickname,
+                    initialNickname = initialNickname,
                     isInitial = true
-                )
-              }
+              )
            }
         }
     }
@@ -65,13 +66,10 @@ class EditProfileViewModel @Inject constructor(
         }
     }
 
-    fun finishEditProfile() {
+    fun finishEditProfile(nickname: String) {
         viewModelScope.launch {
-            val nickname = uiState.value.nickname
-            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
-
+            if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
             val result = userRepository.updateUserNickname(nickname)
-
             if (result.isSuccess) {
                 _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
             }
