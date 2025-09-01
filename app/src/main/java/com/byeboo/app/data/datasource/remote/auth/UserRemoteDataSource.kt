@@ -9,5 +9,5 @@ import com.byeboo.app.data.dto.response.auth.UserNicknameChangeResponseDto
 interface UserRemoteDataSource {
     suspend fun updateUserInfo(request: UserInfoRequestDto): BaseResponse<UserInfoResponseDto>
     suspend fun getUserJourney(): BaseResponse<UserJourneyResponseDto>
-    suspend fun updateUserNickname(): BaseResponse<UserNicknameChangeResponseDto>
+    suspend fun updateUserNickname(nickname: String): BaseResponse<UserNicknameChangeResponseDto>
 }

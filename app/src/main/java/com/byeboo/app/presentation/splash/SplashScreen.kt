@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.splash
 
-import android.app.ProgressDialog.show
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
