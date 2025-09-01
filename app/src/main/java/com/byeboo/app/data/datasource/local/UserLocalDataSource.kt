@@ -18,4 +18,5 @@ interface UserLocalDataSource {
     suspend fun setHasSeenAboutHelp(seen: Boolean)
     suspend fun hasSeenAboutHelp(): Boolean
     suspend fun clear()
+    suspend fun saveJourneyStatus(journeyStatus: String)
 }

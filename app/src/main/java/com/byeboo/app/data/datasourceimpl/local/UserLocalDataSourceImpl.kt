@@ -103,6 +103,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveJourneyStatus(journeyStatus: String) {
+        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus }
+    }
+
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")
         private val NICKNAME = stringPreferencesKey("NICKNAME")
@@ -110,5 +114,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         private val IS_QUEST_STARTED = booleanPreferencesKey("IS_QUEST_STARTED")
         private val JOURNEY = stringPreferencesKey("JOURNEY")
         private val HAS_SEEN_ABOUT_HELP = booleanPreferencesKey("HAS_SEEN_ABOUT_HELP")
+        private val JOURNEY_STATUS = stringPreferencesKey("JOURNEY_STATUS")
     }
 }
