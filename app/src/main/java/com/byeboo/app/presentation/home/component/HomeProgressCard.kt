@@ -26,7 +26,7 @@ import com.byeboo.app.core.util.screenWidthDp
 fun HomeProgressCard(
     title: String,
     modifier: Modifier = Modifier,
-    currentStep: Int = 0,
+    currentStep: Long = 0L,
     totalSteps: Int = 30
 ) {
     Box(

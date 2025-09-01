@@ -5,12 +5,11 @@ import com.byeboo.app.data.datasource.local.UserLocalDataSource
 import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.mapper.auth.toData
 import com.byeboo.app.data.mapper.auth.toDomain
-import com.byeboo.app.data.mapper.quest.toDomain
 import com.byeboo.app.domain.model.auth.UserInfoModel
 import com.byeboo.app.domain.model.auth.UserJourney
 import com.byeboo.app.domain.repository.auth.UserRepository
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource,
