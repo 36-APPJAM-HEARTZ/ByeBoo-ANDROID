@@ -84,6 +84,14 @@ class UserLocalDataSourceImpl @Inject constructor(
         return dataStore.data.first()[JOURNEY]
     }
 
+    override suspend fun saveJourneyStatus(journeyStatus: String) {
+        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus }
+    }
+
+    override suspend fun getJourneyStatus(): String? {
+        return dataStore.data.first()[JOURNEY_STATUS]
+    }
+
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {
         dataStore.edit { preferences ->
             preferences[HAS_SEEN_ABOUT_HELP] = seen
@@ -103,6 +111,7 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")
         private val NICKNAME = stringPreferencesKey("NICKNAME")
@@ -110,5 +119,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         private val IS_QUEST_STARTED = booleanPreferencesKey("IS_QUEST_STARTED")
         private val JOURNEY = stringPreferencesKey("JOURNEY")
         private val HAS_SEEN_ABOUT_HELP = booleanPreferencesKey("HAS_SEEN_ABOUT_HELP")
+        private val JOURNEY_STATUS = stringPreferencesKey("JOURNEY_STATUS")
     }
 }

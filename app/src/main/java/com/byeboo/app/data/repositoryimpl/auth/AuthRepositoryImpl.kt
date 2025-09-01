@@ -1,6 +1,5 @@
 package com.byeboo.app.data.repositoryimpl.auth
 
-import android.util.Log
 import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.data.datasource.remote.auth.AuthRemoteDataSource
 import com.byeboo.app.data.mapper.auth.toDomain

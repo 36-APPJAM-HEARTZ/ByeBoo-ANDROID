@@ -4,11 +4,29 @@ import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.data.dto.response.auth.KakaoLoginResponseDto
 import com.byeboo.app.data.dto.response.auth.TokenReissueResponseDto
 import com.byeboo.app.domain.model.auth.AuthResult
+import com.byeboo.app.domain.model.auth.JourneyStatusType
+import com.byeboo.app.domain.model.auth.JourneyType
 
 fun KakaoLoginResponseDto.toDomain(): AuthResult = AuthResult(
     tokens = TokenEntity(accessToken = accessToken, refreshToken = refreshToken),
-    isRegistered = isRegistered
+    isRegistered = isRegistered,
+    name = name,
+    journey = journey.toJourneyType(),
+    journeyStatus = journeyStatus.toJourneyStatus()
 )
+
+internal fun String?.toJourneyType(): JourneyType = when(this) {
+    "FACE_EMOTION" -> JourneyType.FACE_EMOTION
+    "PROCESS_EMOTION" -> JourneyType.PROCESS_EMOTION
+    else -> JourneyType.UNKNOWN
+}
+
+internal fun String?.toJourneyStatus(): JourneyStatusType = when (this) {
+    "BEFORE_START" -> JourneyStatusType.BEFORE_START
+    "IN_PROGRESS"  -> JourneyStatusType.IN_PROGRESS
+    "COMPLETED"    -> JourneyStatusType.COMPLETED
+    else -> JourneyStatusType.UNKNOWN
+}
 
 fun TokenReissueResponseDto.toDomain(): TokenEntity = TokenEntity(
     accessToken = this.accessToken,
