@@ -11,4 +11,10 @@ data class KakaoLoginResponseDto(
     val refreshToken: String,
     @SerialName("isRegistered")
     val isRegistered: Boolean,
+    @SerialName("name")
+    val name: String?,
+    @SerialName("journey")
+    val journey: String?,
+    @SerialName("journeyStatus")
+    val journeyStatus: String?
 )
