@@ -44,8 +44,6 @@ import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.delay
-
 
 @Composable
 fun SplashRoute(

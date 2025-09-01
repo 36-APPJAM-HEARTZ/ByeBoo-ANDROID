@@ -10,6 +10,7 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,6 +37,8 @@ class SplashViewModel @Inject constructor(
 
     private suspend fun startAutoLogin() {
         val cachedToken = tokenRepository.getCachedAccessToken()
+
+        delay(1000)
 
         if (cachedToken.isNotBlank()) {
             _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
@@ -77,7 +80,6 @@ class SplashViewModel @Inject constructor(
                             SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                         )
                     }
-                return@launch
 
                 when (error) {
                     is ClientError -> {
