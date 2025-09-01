@@ -9,7 +9,7 @@ fun QuestCountResponseDto.toDomain(): QuestStateModel {
     return QuestStateModel(
         todayComplete = this.todayComplete,
         userCurrentStatus = this.userCurrentStatus,
-        count = this.count.toInt()
+        count = this.count.toLong()
     )
 }
 
