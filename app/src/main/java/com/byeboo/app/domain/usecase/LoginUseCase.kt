@@ -31,7 +31,6 @@ class LoginUseCase @Inject constructor(
 
             auth.name?.let { userRepository.updateUserNickname(it) }
             questStateRepository.updateUserJourney(auth.journey.toJourneyText())
-            questStateRepository.updateUserJourneyStatus(auth.journeyStatus.name)
 
             auth
         }
