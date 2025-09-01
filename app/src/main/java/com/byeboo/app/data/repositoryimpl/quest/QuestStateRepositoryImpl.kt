@@ -19,9 +19,12 @@ class QuestStateRepositoryImpl @Inject constructor(
         }
     }
 
-
     override suspend fun updateUserJourney(journey: String) {
         userLocalDataSource.saveJourney(journey)
+    }
+
+    override suspend fun updateUserJourneyStatus(journeyStatus: String) {
+        userLocalDataSource.saveJourneyStatus(journeyStatus)
     }
 
     override suspend fun getUserJourney(): String? {

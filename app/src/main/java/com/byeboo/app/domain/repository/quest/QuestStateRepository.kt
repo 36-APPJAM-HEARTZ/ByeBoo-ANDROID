@@ -6,6 +6,7 @@ import com.byeboo.app.domain.model.quest.QuestStateModel
 interface QuestStateRepository {
     suspend fun updateQuestState()
     suspend fun updateUserJourney(journey: String)
+    suspend fun updateUserJourneyStatus(journeyStatus: String)
     suspend fun getUserJourney(): String?
     suspend fun getQuestDialogue(): Result<QuestDialogue>
     suspend fun getQuestCount(): Result<QuestStateModel>
