@@ -31,6 +31,10 @@ class QuestStateRepositoryImpl @Inject constructor(
         return userLocalDataSource.getJourney()
     }
 
+    override suspend fun getUserJourneyStatus(): String? {
+        return userLocalDataSource.getJourneyStatus()
+    }
+
     override suspend fun getQuestDialogue(): Result<QuestDialogue> {
         return runCatching {
             val response = questStateDataSource.getQuestDialogue()

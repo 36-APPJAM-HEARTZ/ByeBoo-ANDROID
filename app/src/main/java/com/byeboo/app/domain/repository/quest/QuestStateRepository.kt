@@ -8,6 +8,7 @@ interface QuestStateRepository {
     suspend fun updateUserJourney(journey: String)
     suspend fun updateUserJourneyStatus(journeyStatus: String)
     suspend fun getUserJourney(): String?
+    suspend fun getUserJourneyStatus(): String?
     suspend fun getQuestDialogue(): Result<QuestDialogue>
     suspend fun getQuestCount(): Result<QuestStateModel>
     suspend fun isQuestStarted(): Boolean

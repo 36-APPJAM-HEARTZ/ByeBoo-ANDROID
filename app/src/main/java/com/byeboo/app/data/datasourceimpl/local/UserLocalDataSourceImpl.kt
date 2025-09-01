@@ -84,6 +84,14 @@ class UserLocalDataSourceImpl @Inject constructor(
         return dataStore.data.first()[JOURNEY]
     }
 
+    override suspend fun saveJourneyStatus(journeyStatus: String) {
+        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus }
+    }
+
+    override suspend fun getJourneyStatus(): String? {
+        return dataStore.data.first()[JOURNEY_STATUS]
+    }
+
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {
         dataStore.edit { preferences ->
             preferences[HAS_SEEN_ABOUT_HELP] = seen
@@ -103,9 +111,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveJourneyStatus(journeyStatus: String) {
-        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus }
-    }
 
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")
