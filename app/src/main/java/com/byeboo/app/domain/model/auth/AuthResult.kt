@@ -10,16 +10,16 @@ data class AuthResult(
     val journeyStatus: JourneyStatusType
 )
 
-enum class JourneyType(val journeyType: String){
-    FACE_EMOTION("감정 직면"),
-    PROCESS_EMOTION("감정 정리"),
-    UNKNOWN("알 수 없음");
+enum class JourneyType {
+    FACE_EMOTION,
+    PROCESS_EMOTION,
+    UNKNOWN;
 }
-enum class JourneyStatusType(val journeyStatusType: String){
-    BEFORE_START("진행 직전"),
-    IN_PROGRESS("진행 중"),
-    COMPLETED("진행 완료"),
-    UNKNOWN("알 수 없음");
+enum class JourneyStatusType {
+    BEFORE_START,
+    IN_PROGRESS,
+    COMPLETED,
+    UNKNOWN;
 }
 
 fun JourneyType.toJourneyText(): String {
@@ -27,15 +27,6 @@ fun JourneyType.toJourneyText(): String {
         JourneyType.FACE_EMOTION -> "감정 직면"
         JourneyType.PROCESS_EMOTION -> "감정 정리"
         JourneyType.UNKNOWN -> "알 수 없음"
-    }
-}
-
-fun JourneyStatusType.toJourneyStatusText(): String {
-    return when(this) {
-        JourneyStatusType.BEFORE_START -> "진행 직전"
-        JourneyStatusType.IN_PROGRESS -> "진행 중"
-        JourneyStatusType.COMPLETED -> "진행 완료"
-        JourneyStatusType.UNKNOWN -> "알 수 없음"
     }
 }
 

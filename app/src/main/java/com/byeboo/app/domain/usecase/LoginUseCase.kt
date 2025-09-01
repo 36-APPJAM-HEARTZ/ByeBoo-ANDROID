@@ -3,7 +3,6 @@ package com.byeboo.app.domain.usecase
 import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.domain.model.auth.AuthResult
 import com.byeboo.app.domain.model.auth.toJourneyText
-import com.byeboo.app.domain.model.auth.toJourneyStatusText
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -32,7 +31,7 @@ class LoginUseCase @Inject constructor(
 
             auth.name?.let { userRepository.updateUserNickname(it) }
             questStateRepository.updateUserJourney(auth.journey.toJourneyText())
-            questStateRepository.updateUserJourneyStatus(auth.journeyStatus.toJourneyStatusText())
+            questStateRepository.updateUserJourneyStatus(auth.journeyStatus.name)
 
             auth
         }
