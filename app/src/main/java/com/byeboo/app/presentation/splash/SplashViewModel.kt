@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
+import com.byeboo.app.domain.usecase.ReissueAccessTokenUseCase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -19,7 +19,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
@@ -29,7 +30,26 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             tokenRepository.initCachedAccessToken()
+            startAutoLogin()
         }
+    }
+
+    private suspend fun startAutoLogin() {
+        val cachedToken = tokenRepository.getCachedAccessToken()
+
+        if (cachedToken.isNotBlank()) {
+            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+            return
+        }
+
+        reissueAccessTokenUseCase()
+            .onSuccess {
+                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+            }
+            .onFailure {
+                _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
+            }
+
     }
 
     fun startKakaoLogin(isLoginAvailable: Boolean) {
