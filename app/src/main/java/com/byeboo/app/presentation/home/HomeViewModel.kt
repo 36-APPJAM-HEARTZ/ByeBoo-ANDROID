@@ -30,22 +30,30 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val nickname = userRepository.getNickname().firstOrNull() ?: "하츠핑"
+            userRepository.getNickname().collect { nickname ->
+                _uiState.update {
+                    it.copy(nickname = nickname.ifEmpty { "하츠핑" })
+                }
+            }
+        }
+        loadInitialData()
+    }
+
+    private fun loadInitialData() {
+        viewModelScope.launch {
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
             val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
             var status = HomeStatus.INITIAL_START
             var currentStep = 0
 
-            questStateRepository.getQuestCount()
-                .onSuccess { model ->
+            questStateRepository.getQuestCount().onSuccess { model ->
                     status = HomeStatus.from(model.userCurrentStatus)
                     currentStep = model.count
                 }
 
             _uiState.update {
                 it.copy(
-                    nickname = nickname,
                     journey = journey,
                     status = status,
                     currentStep = currentStep,
