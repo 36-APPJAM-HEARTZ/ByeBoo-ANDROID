@@ -150,7 +150,7 @@ private fun OffboardingCompleteGuideScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "🎉${uiState.journeyName}을 완료했어요!🎉",
+                        text = "🎉${uiState.journeyName} 여정을 완료했어요!🎉",
                         color = ByeBooTheme.colors.secondary300,
                         style = ByeBooTheme.typography.sub2
                     )
