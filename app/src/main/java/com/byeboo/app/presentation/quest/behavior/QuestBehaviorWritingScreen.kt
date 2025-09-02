@@ -79,20 +79,17 @@ fun QuestBehaviorWritingRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest {
-            when (it) {
-                is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+            if (it is QuestBehaviorSideEffect.NavigateToQuest) {
+                navigateToQuest()
+            } else if (it is QuestBehaviorSideEffect.NavigateToQuestTip) {
+                navigateToQuestTip(
                     it.questId, it.questType
                 )
-
-                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(
-                    it.questId
-                )
-
-                is QuestBehaviorSideEffect.CompleteAndClear -> {
-                    viewModel.clearQuestInput()
-                    navigateToQuestBehaviorComplete(it.questId)
-                }
+            } else if (it is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete) {
+                navigateToQuestBehaviorComplete(it.questId)
+            } else if (it is QuestBehaviorSideEffect.CompleteAndClear) {
+                viewModel.clearQuestInput()
+                navigateToQuestBehaviorComplete(it.questId)
             }
         }
     }

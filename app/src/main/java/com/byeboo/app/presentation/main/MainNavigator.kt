@@ -22,6 +22,7 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingC
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
+import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestStart
@@ -105,8 +106,8 @@ class MainNavigator(
         navController.navigateToQuestStart(navOptions)
     }
 
-    fun navigateToQuest(navOptions: NavOptions) {
-        navController.navigateToQuest(navOptions)
+    fun navigateToQuest(options: NavOptions) {
+        navController.navigate(Quest, options)
     }
 
     fun navigateToQuestTip(questId: Long, questType: QuestType, navOptions: NavOptions? = null) {

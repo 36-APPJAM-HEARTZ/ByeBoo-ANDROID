@@ -25,6 +25,7 @@ fun NavGraphBuilder.questRecordGraph(
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp
 ) {
     routeNavigation<QuestRecord, QuestRecording> {
@@ -48,6 +49,7 @@ fun NavGraphBuilder.questRecordGraph(
             QuestRecordingCompleteRoute(
                 questId = questId,
                 navigateToQuest = navigateToQuest,
+                navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
                 bottomPadding = bottomPadding
             )
         }

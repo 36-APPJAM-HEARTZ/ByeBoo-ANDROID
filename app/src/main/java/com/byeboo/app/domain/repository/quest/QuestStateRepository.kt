@@ -1,16 +1,17 @@
 package com.byeboo.app.domain.repository.quest
 
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.quest.QuestDialogue
 import com.byeboo.app.domain.model.quest.QuestStateModel
+import kotlinx.coroutines.flow.Flow
 
 interface QuestStateRepository {
-    suspend fun updateQuestState()
+    suspend fun updateQuestStartState()
     suspend fun updateUserJourney(journey: String)
-    suspend fun updateUserJourneyStatus(journeyStatus: String)
+    suspend fun updateUserJourneyStatus(journeyStatus: JourneyStatusType)
     suspend fun getUserJourney(): String?
-    suspend fun getUserJourneyStatus(): String?
+    fun getUserJourneyStatus(): Flow<JourneyStatusType>
     suspend fun getQuestDialogue(): Result<QuestDialogue>
     suspend fun getQuestCount(): Result<QuestStateModel>
-    suspend fun isQuestStarted(): Boolean
     suspend fun setQuestStarted(started: Boolean)
 }

@@ -30,7 +30,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.chip.QuestBox
-import com.byeboo.app.presentation.quest.component.modal.OffboardingModal
 import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
@@ -67,7 +66,6 @@ fun QuestRoute(
                     it.questId,
                     it.questType
                 )
-
                 is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(it.questId)
                 is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(it.questId)
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
@@ -80,7 +78,6 @@ fun QuestRoute(
     QuestScreen(
         uiState = uiState,
         listState = listState,
-        onOffboardingModalClick = viewModel::onOffboardingModalClicked,
         bottomPadding = bottomPadding,
         onQuestClick = viewModel::onQuestClick,
         onDismissModal = viewModel::onQuitDismissModal,
@@ -93,7 +90,6 @@ fun QuestRoute(
 private fun QuestScreen(
     uiState: QuestUiState,
     listState: LazyListState,
-    onOffboardingModalClick: () -> Unit,
     bottomPadding: Dp,
     onQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
@@ -109,14 +105,6 @@ private fun QuestScreen(
             progressButton = onQuestStart,
             modifier = Modifier
                 .fillMaxWidth()
-        )
-    }
-
-    if (uiState.showOffboardingModal) {
-        OffboardingModal(
-            journeyTitle = uiState.journeyTitle,
-            userName = uiState.userName,
-            onClick = onOffboardingModalClick
         )
     }
 

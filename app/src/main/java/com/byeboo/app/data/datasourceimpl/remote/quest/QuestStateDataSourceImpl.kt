@@ -12,8 +12,8 @@ class QuestStateDataSourceImpl @Inject constructor(
     private val questService: QuestService
 ) : QuestStateDataSource {
 
-    override suspend fun updateQuestState(): NullableBaseResponse<Unit> {
-        return questService.updateQuestState()
+    override suspend fun updateQuestStartState(): NullableBaseResponse<Unit> {
+        return questService.updateQuestStartState()
     }
 
     override suspend fun getQuestCount(): BaseResponse<QuestCountResponseDto> {

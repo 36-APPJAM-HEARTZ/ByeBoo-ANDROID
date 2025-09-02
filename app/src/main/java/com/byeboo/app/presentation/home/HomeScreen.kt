@@ -201,10 +201,7 @@ private fun HomeScreen(
                 }
             }
 
-
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-
         }
         Box(
             modifier = Modifier

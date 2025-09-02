@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest.start
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,9 +45,10 @@ class QuestStartViewModel @Inject constructor(
     fun onStartClicked() {
         viewModelScope.launch {
             runCatching {
-                questStateRepository.updateQuestState()
-                questStateRepository.setQuestStarted(true)
+                questStateRepository.updateQuestStartState()
             }.onSuccess {
+                questStateRepository.setQuestStarted(true)
+                questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                 _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
             }.onFailure { e ->
                 _sideEffect.emit(

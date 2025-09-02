@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.offboarding.offboardingnewjourney
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.offboarding.OffboardingNewJourneyRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.presentation.offboarding.model.JourneyType
@@ -36,6 +37,7 @@ class OffboardingNewJourneyViewModel @Inject constructor(
             offboardingNewJourneyRepository.postOffboardingNewJourney(journeyKey)
                 .onSuccess {
                     questStateRepository.updateUserJourney(journeyText)
+                    questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                     _sideEffect.emit(OffboardingNewJourneySideEffect.NavigateToQuestStart)
                 }
                 .onFailure { e ->

@@ -6,16 +6,16 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.usecase.QuestUseCase
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
-import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestViewModel @Inject constructor(
@@ -59,16 +60,23 @@ class QuestViewModel @Inject constructor(
                         )
                     }
 
-                    if (output.questCompletedCount >= 30L && !_uiState.value.showOffboardingModal ){
-                        _uiState.update { it.copy(showOffboardingModal = true) }
-                    }
-
                     countdownJob?.cancel()
-                    if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
-                        countdownJob = QuestCountdownTimer
-                            .countdownFlow(output.openAt, output.serverNow)
-                            .onEach { minutes ->
-                                updateTimerLockedMinutes(minutes)
+//                    if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
+//                        countdownJob = QuestCountdownTimer
+//                            .countdownFlow(output.openAt, output.serverNow)
+//                            .onEach { minutes ->
+//                                updateTimerLockedMinutes(minutes)
+//                            }
+//                            .onCompletion {
+//                                viewModelScope.launch { unlockTimerLocked() }
+//                            }
+//                            .launchIn(viewModelScope)
+//                    }
+                    if (true) { // 조건을 테스트용으로 강제로 true
+                        countdownJob = (3 downTo 1).asFlow() // 30, 29, 28 ...
+                            .onEach { seconds ->
+                                delay(1000) // 1초마다 방출
+                                updateTimerLockedMinutes(seconds.toLong())
                             }
                             .onCompletion {
                                 viewModelScope.launch { unlockTimerLocked() }
@@ -117,13 +125,6 @@ class QuestViewModel @Inject constructor(
 
     fun onQuitDismissModal() {
         _uiState.update { it.copy(showQuitModal = false) }
-    }
-
-    fun onOffboardingModalClicked(){
-        viewModelScope.launch {
-            _uiState.update { it.copy(showOffboardingModal = false) }
-            _sideEffect.emit(QuestSideEffect.NavigateToOffboardingCompletedGuide)
-        }
     }
 
     fun onTipClick() {

@@ -56,7 +56,7 @@ fun MainNavHost(
         splashGraph(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
-            navigateToTermsOfService = { navigator.navigateToTerms(clearStackNavOptions )},
+            navigateToTermsOfService = { navigator.navigateToTerms(clearStackNavOptions) },
             padding = padding
         )
 
@@ -75,8 +75,16 @@ fun MainNavHost(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
             navigateToQuestStart = { navigator.navigateToQuestStart(questNavOptions) },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
-            navigateToOffboardingCompletedGuide = { navigator.navigateToOffboardingCompletedGuide(clearStackNavOptions) },
-            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(keepStackNavOptions) },
+            navigateToOffboardingCompletedGuide = {
+                navigator.navigateToOffboardingCompletedGuide(
+                    clearStackNavOptions
+                )
+            },
+            navigateToOffboardingNewJourney = {
+                navigator.navigateToOffboardingNewJourney(
+                    keepStackNavOptions
+                )
+            },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
             padding = padding
@@ -89,7 +97,11 @@ fun MainNavHost(
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
-            navigateToOffboardingCompleteGuide = { navigator.navigateToOffboardingCompletedGuide(clearStackNavOptions) },
+            navigateToOffboardingCompleteGuide = {
+                navigator.navigateToOffboardingCompletedGuide(
+                    clearStackNavOptions
+                )
+            },
             navigateToQuestRecordingComplete = { questId ->
                 navigator.navigateToQuestRecordingComplete(
                     questId,
@@ -115,16 +127,28 @@ fun MainNavHost(
 
         myPageGraph(
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
-            navigateToOffboardingCompletedJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
+            navigateToOffboardingCompletedJourney = {
+                navigator.navigateToOffboardingCompletedJourney(
+                    keepStackNavOptions
+                )
+            },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             padding = padding,
         )
 
         offboardingGraph(
-            navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
-            navigateToOffboardingNewJourney = { navigator.navigateToOffboardingNewJourney(keepStackNavOptions) },
-            navigateToOffboardingCompletedJourney = { navigator.navigateToOffboardingCompletedJourney(keepStackNavOptions) },
+            navigateToHome = { navigator.navigateToHome(keepStackNavOptions) },
+            navigateToOffboardingNewJourney = {
+                navigator.navigateToOffboardingNewJourney(
+                    keepStackNavOptions
+                )
+            },
+            navigateToOffboardingCompletedJourney = {
+                navigator.navigateToOffboardingCompletedJourney(
+                    keepStackNavOptions
+                )
+            },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
             navigateToUp = navigator::navigateUp,
             padding = padding

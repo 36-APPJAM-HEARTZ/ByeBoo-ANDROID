@@ -43,6 +43,7 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 fun QuestRecordingCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
@@ -58,6 +59,7 @@ fun QuestRecordingCompleteRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
             }
         }
     }

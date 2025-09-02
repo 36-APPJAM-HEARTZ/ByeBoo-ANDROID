@@ -8,11 +8,12 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.byeboo.app.core.model.auth.UserEntity
 import com.byeboo.app.data.datasource.local.UserLocalDataSource
-import javax.inject.Inject
+import com.byeboo.app.domain.model.JourneyStatusType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class UserLocalDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -72,10 +73,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun isQuestStarted(): Boolean {
-        return dataStore.data.first()[IS_QUEST_STARTED] ?: false
-    }
-
     override suspend fun saveJourney(journey: String) {
         dataStore.edit { it[JOURNEY] = journey }
     }
@@ -84,12 +81,21 @@ class UserLocalDataSourceImpl @Inject constructor(
         return dataStore.data.first()[JOURNEY]
     }
 
-    override suspend fun saveJourneyStatus(journeyStatus: String) {
-        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus }
+    override suspend fun saveJourneyStatus(journeyStatus: JourneyStatusType) {
+        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus.toString() }
     }
 
-    override suspend fun getJourneyStatus(): String? {
-        return dataStore.data.first()[JOURNEY_STATUS]
+    override fun getJourneyStatus(): Flow<JourneyStatusType> {
+        return dataStore.data
+            .map { preferences ->
+                val journeyStatusString = preferences[JOURNEY_STATUS]
+                if (journeyStatusString.isNullOrBlank()) {
+                    JourneyStatusType.UNKNOWN
+                } else {
+                    JourneyStatusType.valueOf(journeyStatusString)
+                }
+            }
+            .catch { emit(JourneyStatusType.UNKNOWN) }
     }
 
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {

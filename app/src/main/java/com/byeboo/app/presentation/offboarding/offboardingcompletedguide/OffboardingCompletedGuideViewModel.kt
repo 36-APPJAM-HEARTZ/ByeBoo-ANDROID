@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class OffboardingCompletedGuideViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(OffboardingCompletedGuideState())
     val uiState: StateFlow<OffboardingCompletedGuideState> = _uiState.asStateFlow()
 
@@ -42,19 +43,17 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
         }
     }
 
-    fun onCloseClicked(){
-        viewModelScope.launch {
-            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToHome)
-        }
+    fun onCloseClicked() {
+        viewModelScope.launch { _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToHome) }
     }
 
-    fun onNewJourneyClicked(){
+    fun onNewJourneyClicked() {
         viewModelScope.launch {
             _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney)
         }
     }
 
-    fun onCompletedJourneyClicked(){
+    fun onCompletedJourneyClicked() {
         viewModelScope.launch {
             _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney)
         }

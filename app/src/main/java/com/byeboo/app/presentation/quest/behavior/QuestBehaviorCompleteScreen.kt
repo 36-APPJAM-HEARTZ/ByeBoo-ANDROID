@@ -54,6 +54,7 @@ import com.byeboo.app.presentation.quest.component.text.CreatedText
 fun QuestBehaviorCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel()
@@ -75,6 +76,8 @@ fun QuestBehaviorCompleteRoute(
         viewModel.sideEffect.collect {
             if (it is QuestBehaviorSideEffect.NavigateToQuest) {
                 navigateToQuest()
+            } else if (it is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide){
+                navigateToOffboardingCompletedGuide()
             }
         }
     }
