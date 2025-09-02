@@ -2,7 +2,9 @@ package com.byeboo.app.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.domain.model.auth.AuthResult
 import com.byeboo.app.domain.repository.auth.TokenRepository
+import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
 import com.byeboo.app.domain.usecase.ReissueAccessTokenUseCase
 import com.kakao.sdk.auth.model.OAuthToken
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
+    private val userRepository: UserRepository,
     private val loginUseCase: LoginUseCase,
     private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase
 ) : ViewModel() {
@@ -35,7 +38,7 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private suspend fun startAutoLogin() {
+    /*private suspend fun startAutoLogin() {
         val cachedToken = tokenRepository.getCachedAccessToken()
 
         delay(1000)
@@ -53,6 +56,36 @@ class SplashViewModel @Inject constructor(
                 _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
             }
 
+    }
+
+     */
+
+    private suspend fun startAutoLogin() {
+        val cachedToken = tokenRepository.getCachedAccessToken()
+
+        if (cachedToken.isNotBlank()) {
+            val isRegistered = userRepository.isUserRegistered()
+
+            if (isRegistered) {
+                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+            } else {
+                _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
+            }
+            return
+        }
+
+        reissueAccessTokenUseCase()
+            .onSuccess {
+                val isRegistered = userRepository.isUserRegistered()
+                if (isRegistered) {
+                    _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+                } else {
+                    _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
+                }
+            }
+            .onFailure {
+                _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
+            }
     }
 
     fun startKakaoLogin(isLoginAvailable: Boolean) {

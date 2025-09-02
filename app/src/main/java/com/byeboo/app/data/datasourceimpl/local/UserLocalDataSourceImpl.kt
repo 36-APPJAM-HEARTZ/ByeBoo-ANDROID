@@ -111,6 +111,16 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun isUserRegistered(): Boolean {
+        return dataStore.data.first()[IS_USER_REGISTERED] ?: false
+    }
+
+    override suspend fun setUserRegistered(isRegistered: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[IS_USER_REGISTERED] = isRegistered
+        }
+    }
+
 
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")
@@ -120,5 +130,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         private val JOURNEY = stringPreferencesKey("JOURNEY")
         private val HAS_SEEN_ABOUT_HELP = booleanPreferencesKey("HAS_SEEN_ABOUT_HELP")
         private val JOURNEY_STATUS = stringPreferencesKey("JOURNEY_STATUS")
+        private val IS_USER_REGISTERED = booleanPreferencesKey("IS_USER_REGISTERED")
     }
 }

@@ -5,7 +5,6 @@ import com.byeboo.app.data.datasource.local.UserLocalDataSource
 import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.mapper.auth.toData
 import com.byeboo.app.data.mapper.auth.toDomain
-import com.byeboo.app.data.mapper.quest.toDomain
 import com.byeboo.app.domain.model.auth.UserInfoModel
 import com.byeboo.app.domain.model.auth.UserJourney
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -65,6 +64,17 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateUserNickname(nickname: String): Result<Unit> {
-         return runCatching { userLocalDataSource.saveNickname(nickname) }
+         return runCatching {
+             userRemoteDataSource.updateUserNickname(nickname)
+             userLocalDataSource.saveNickname(nickname)
+         }
+    }
+
+    override suspend fun isUserRegistered(): Boolean {
+        return userLocalDataSource.isUserRegistered()
+    }
+
+    override suspend fun setUserRegistered(isRegistered: Boolean) {
+        userLocalDataSource.setUserRegistered(isRegistered)
     }
 }
