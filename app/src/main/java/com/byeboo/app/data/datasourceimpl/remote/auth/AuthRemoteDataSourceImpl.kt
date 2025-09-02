@@ -23,6 +23,14 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     override suspend fun reissueAccessToken(refreshToken: String): BaseResponse<TokenReissueResponseDto> =
        authService.reissueAccessToken("$BEARER $refreshToken")
 
+    override suspend fun logoutAccount(): BaseResponse<Unit> =
+        authService.logoutAccount()
+
+
+    override suspend fun withdrawAccount(): BaseResponse<Unit> =
+        authService.withdrawAccount()
+
+
     companion object {
         private const val BEARER = "Bearer"
     }
