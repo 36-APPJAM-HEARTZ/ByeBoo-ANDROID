@@ -85,9 +85,31 @@ fun NicknameTextField(
             BasicTextField(
                 value = textFieldValue,
                 onValueChange = { newValue ->
-                    textFieldValue = newValue
-                    if (newValue.text != value) {
-                        onValueChange(newValue.text)
+                    val max = 5
+
+                    if (newValue.composition != null) {
+                        textFieldValue = newValue
+                        return@BasicTextField
+                    }
+
+                    val clampedText = if (newValue.text.length > max) {
+                        newValue.text.take(max)
+                    } else {
+                        newValue.text
+                    }
+
+                    val selEnd = minOf(newValue.selection.end, clampedText.length)
+                    val selStart = minOf(newValue.selection.start, clampedText.length)
+                    val nextValue = newValue.copy(
+                        text = clampedText,
+                        selection = TextRange(selStart, selEnd),
+                        composition = null
+                    )
+
+                    textFieldValue = nextValue
+
+                    if (clampedText != value) {
+                        onValueChange(clampedText)
                     }
                 },
                 modifier = Modifier
