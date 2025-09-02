@@ -123,85 +123,85 @@ fun ByeBooTypography(): ByeBooTypography {
             fontFamily = pretendardMedium,
             fontSize = 24.sp,
             lineHeight = 31.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         head2 = ByeBooTextStyle(
             fontFamily = pretendardMedium,
             fontSize = 22.sp,
             lineHeight = 26.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         sub1 = ByeBooTextStyle(
             fontFamily = pretendardSemiBold,
             fontSize = 20.sp,
             lineHeight = 24.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         sub2 = ByeBooTextStyle(
             fontFamily = pretendardSemiBold,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         sub3 = ByeBooTextStyle(
             fontFamily = pretendardMedium,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         sub4 = ByeBooTextStyle(
             fontFamily = pretendardRegular,
             fontSize = 18.sp,
             lineHeight = 22.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body1 = ByeBooTextStyle(
             fontFamily = pretendardSemiBold,
             fontSize = 16.sp,
             lineHeight = 21.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body2 = ByeBooTextStyle(
             fontFamily = pretendardMedium,
             fontSize = 16.sp,
             lineHeight = 21.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body3 = ByeBooTextStyle(
             fontFamily = pretendardRegular,
             fontSize = 16.sp,
             lineHeight = 21.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body4 = ByeBooTextStyle(
             fontFamily = pretendardSemiBold,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body5 = ByeBooTextStyle(
             fontFamily = pretendardMedium,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         body6 = ByeBooTextStyle(
             fontFamily = pretendardRegular,
             fontSize = 14.sp,
             lineHeight = 18.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         cap1 = ByeBooTextStyle(
             fontFamily = pretendardMedium,
             fontSize = 12.sp,
             lineHeight = 16.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         ),
         cap2 = ByeBooTextStyle(
             fontFamily = pretendardRegular,
             fontSize = 12.sp,
             lineHeight = 16.sp,
-            letterSpacing = 0.em
+            letterSpacing = (-1).em
         )
     )
 }
