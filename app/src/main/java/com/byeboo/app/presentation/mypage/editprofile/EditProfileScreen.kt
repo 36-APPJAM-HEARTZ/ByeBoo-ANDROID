@@ -62,7 +62,7 @@ fun EditProfileRoute(
         onNicknameChange = viewModel::updateNickname,
         onClearClick = { viewModel.updateNickname("") },
         focusRequester = focusRequester,
-        onCompleteClick = viewModel::finishEditProfile
+        onCompleteClick = { viewModel.finishEditProfile(it) }
     )
 }
 
@@ -74,7 +74,7 @@ private fun EditProfileScreen(
     onNicknameChange: (String) -> Unit,
     onClearClick: () -> Unit,
     focusRequester: FocusRequester,
-    onCompleteClick: () -> Unit,
+    onCompleteClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
@@ -136,7 +136,7 @@ private fun EditProfileScreen(
             buttonText = "완료",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             isEnabled = isNicknameValid,
-            onClick = onCompleteClick
+            onClick = { onCompleteClick(uiState.nickname) }
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.splash
 
 sealed interface SplashStateSideEffect {
+    data object ShowLoginButton : SplashStateSideEffect
     data object NavigateToHome : SplashStateSideEffect
     data object NavigateToUserInfo : SplashStateSideEffect
     data object NavigateToTermsOfService : SplashStateSideEffect
