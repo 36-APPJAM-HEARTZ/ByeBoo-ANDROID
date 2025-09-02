@@ -86,6 +86,7 @@ class UserInfoViewModel @Inject constructor(
             if (result.isSuccess) {
                 _uiState.value.selectedQuest?.let {
                     questStateRepository.updateUserJourney(it.toJourneyText())
+                    userRepository.setUserRegistered(true)
                 }
                 _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
             } else {
