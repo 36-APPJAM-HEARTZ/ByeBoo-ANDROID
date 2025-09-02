@@ -69,4 +69,12 @@ class UserRepositoryImpl @Inject constructor(
              userLocalDataSource.saveNickname(nickname)
          }
     }
+
+    override suspend fun isUserRegistered(): Boolean {
+        return userLocalDataSource.isUserRegistered()
+    }
+
+    override suspend fun setUserRegistered(isRegistered: Boolean) {
+        userLocalDataSource.setUserRegistered(isRegistered)
+    }
 }
