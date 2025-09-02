@@ -23,12 +23,14 @@ fun NavController.navigateToEditProfile(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.myPageGraph(
     navigateToEditProfile: () -> Unit,
+    navigateToSplash: () -> Unit,
     navigateToMyPage: () -> Unit,
     bottomPadding: Dp,
 ) {
     composable<MyPage> {
         MyPageRoute(
             navigateToEditProfile = navigateToEditProfile,
+            navigateToSplash = navigateToSplash,
             bottomPadding = bottomPadding
         )
     }

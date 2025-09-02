@@ -98,6 +98,7 @@ fun MainNavHost(
         myPageGraph(
             bottomPadding = padding,
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
+            navigateToSplash = { navigator.navigateToHomeOnboarding(clearStackNavOptions)},
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) }
         )
 
