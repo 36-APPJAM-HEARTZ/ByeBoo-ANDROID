@@ -93,7 +93,7 @@ fun MainNavHost(
 
         questGraph(
             navigateToQuest = { navigator.navigateToQuest(clearStackNavOptions) },
-            navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
+            navigateToHome = { navigator.navigateToHome(keepStackNavOptions) },
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
