@@ -10,6 +10,5 @@ data class QuestOutput(
     val openAt: Instant?,
     val serverNow: Instant?,
     val progressPeriod: Long,
-    val journeyTitle: String,
-    val userName: String
+    val journeyTitle: String
 )
