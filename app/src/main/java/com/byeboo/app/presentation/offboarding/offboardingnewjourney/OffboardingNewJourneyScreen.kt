@@ -43,7 +43,7 @@ import com.byeboo.app.presentation.offboarding.model.JourneyType
 @Composable
 fun OffboardingNewJourneyRoute(
     navigateToQuestStart: () -> Unit,
-    navigateToUp: () -> Unit,
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
@@ -55,7 +55,7 @@ fun OffboardingNewJourneyRoute(
         offboardingNewJourneyViewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart()
-                is OffboardingNewJourneySideEffect.NavigateToUp -> navigateToUp()
+                is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
     }

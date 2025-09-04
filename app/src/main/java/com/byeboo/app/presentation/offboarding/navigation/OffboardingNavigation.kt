@@ -28,7 +28,7 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToQuestStart: () -> Unit,
-    navigateToUp: () -> Unit,
+    navigateUp: () -> Unit,
     padding: Dp
 ) {
     composable<OffboardingCompletedGuide> {
@@ -43,14 +43,14 @@ fun NavGraphBuilder.offboardingGraph(
     composable<OffboardingNewJourney> {
         OffboardingNewJourneyRoute(
             navigateToQuestStart = navigateToQuestStart,
-            navigateToUp = navigateToUp,
+            navigateUp = navigateUp,
             bottomPadding = padding
         )
     }
 
     composable<OffboardingCompletedJourney> {
         OffboardingCompletedJourneyRoute(
-            navigateToUp = navigateToUp,
+            navigateUp = navigateUp,
             bottomPadding = padding
         )
     }

@@ -82,7 +82,7 @@ class UserLocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun saveJourneyStatus(journeyStatus: JourneyStatusType) {
-        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus.toString() }
+        dataStore.edit { it[JOURNEY_STATUS] = journeyStatus.name }
     }
 
     override fun getJourneyStatus(): Flow<JourneyStatusType> {

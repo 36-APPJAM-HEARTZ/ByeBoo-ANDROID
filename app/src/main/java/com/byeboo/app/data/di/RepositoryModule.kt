@@ -99,7 +99,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bingOffboardingNewJourneyRepository(
+    abstract fun bindOffboardingNewJourneyRepository(
         offboardingNewJourneyRepositoryImpl: OffboardingNewJourneyRepositoryImpl
     ): OffboardingNewJourneyRepository
 }

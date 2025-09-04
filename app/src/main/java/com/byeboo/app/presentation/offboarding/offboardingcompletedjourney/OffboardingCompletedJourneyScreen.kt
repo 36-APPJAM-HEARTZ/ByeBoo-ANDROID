@@ -40,7 +40,7 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingCompletedJourneyRoute(
-    navigateToUp: () -> Unit,
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
@@ -50,7 +50,7 @@ fun OffboardingCompletedJourneyRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is OffboardingJourneySideEffect.NavigateToUp -> navigateToUp()
+                is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
     }

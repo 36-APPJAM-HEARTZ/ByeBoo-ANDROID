@@ -19,5 +19,5 @@ data class OffboardingJourneyState(
 }
 
 sealed interface OffboardingJourneySideEffect {
-    data object NavigateToUp : OffboardingJourneySideEffect
+    data object NavigateUp : OffboardingJourneySideEffect
 }

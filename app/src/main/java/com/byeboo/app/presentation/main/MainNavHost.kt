@@ -150,7 +150,7 @@ fun MainNavHost(
                 )
             },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
-            navigateToUp = navigator::navigateUp,
+            navigateUp = navigator::navigateUp,
             padding = padding
         )
 

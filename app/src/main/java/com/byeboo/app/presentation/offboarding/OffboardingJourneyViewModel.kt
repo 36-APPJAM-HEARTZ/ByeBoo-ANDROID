@@ -32,7 +32,7 @@ class OffboardingJourneyViewModel @Inject constructor(
 
     fun onBackClicked(){
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingJourneySideEffect.NavigateToUp)
+            _sideEffect.emit(OffboardingJourneySideEffect.NavigateUp)
         }
     }
 
