@@ -92,24 +92,24 @@ fun NicknameTextField(
                         return@BasicTextField
                     }
 
-                    val clampedText = if (newValue.text.length > max) {
+                    val limitedText = if (newValue.text.length > max) {
                         newValue.text.take(max)
                     } else {
                         newValue.text
                     }
 
-                    val selEnd = minOf(newValue.selection.end, clampedText.length)
-                    val selStart = minOf(newValue.selection.start, clampedText.length)
+                    val cursorStart = minOf(newValue.selection.start, limitedText.length)
+                    val cursorEnd = minOf(newValue.selection.end, limitedText.length)
                     val nextValue = newValue.copy(
-                        text = clampedText,
-                        selection = TextRange(selStart, selEnd),
+                        text = limitedText,
+                        selection = TextRange(cursorStart, cursorEnd),
                         composition = null
                     )
 
                     textFieldValue = nextValue
 
-                    if (clampedText != value) {
-                        onValueChange(clampedText)
+                    if (limitedText != value) {
+                        onValueChange(limitedText)
                     }
                 },
                 modifier = Modifier
@@ -162,7 +162,7 @@ fun NicknameTextField(
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .noRippleClickable{
+                        .noRippleClickable {
                             textFieldValue = TextFieldValue("", selection = TextRange(0))
                             onClearClick()
                         }
