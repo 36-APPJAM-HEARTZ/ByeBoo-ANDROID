@@ -1,6 +1,7 @@
 package com.byeboo.app.data.service.auth
 
 import com.byeboo.app.data.dto.base.BaseResponse
+import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.auth.KakaoLoginRequestDto
 import com.byeboo.app.data.dto.response.auth.KakaoLoginResponseDto
 import com.byeboo.app.data.dto.response.auth.TokenReissueResponseDto
@@ -22,8 +23,12 @@ interface AuthService {
     ): BaseResponse<TokenReissueResponseDto>
 
     @DELETE("/api/v1/auth/logout")
-    suspend fun logoutAccount(): BaseResponse<Unit>
+    suspend fun logoutAccount(
+        @Header("Authorization") authorization: String
+    ): NullableBaseResponse<Unit>
 
     @DELETE("/api/v1/auth/withdraw")
-    suspend fun withdrawAccount(): BaseResponse<Unit>
+    suspend fun withdrawAccount(
+        @Header("Authorization") authorization: String
+    ): NullableBaseResponse<Unit>
 }
