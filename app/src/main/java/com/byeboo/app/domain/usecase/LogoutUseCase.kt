@@ -10,11 +10,14 @@ class LogoutUseCase @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository
 ){
-    suspend operator fun invoke(): Result<Unit> {
+    private val accessToken: String
+        get() = tokenRepository.getCachedAccessToken()
 
-        val account = authRepository.logoutAccount()
+    suspend operator fun invoke(): Result<Unit> {
+        val account = authRepository.logoutAccount(accessToken)
         tokenRepository.clearTokens()
         userRepository.clear()
+        tokenRepository.setLoginSplash(true)
 
         return account
     }

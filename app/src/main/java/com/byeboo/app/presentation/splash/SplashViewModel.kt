@@ -34,31 +34,16 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             tokenRepository.initCachedAccessToken()
+
+            if (tokenRepository.restartSplash()) {
+                _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
+                return@launch
+            }
+
             startAutoLogin()
         }
     }
 
-    /*private suspend fun startAutoLogin() {
-        val cachedToken = tokenRepository.getCachedAccessToken()
-
-        delay(1000)
-
-        if (cachedToken.isNotBlank()) {
-            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
-            return
-        }
-
-        reissueAccessTokenUseCase()
-            .onSuccess {
-                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
-            }
-            .onFailure {
-                _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
-            }
-
-    }
-
-     */
 
     private suspend fun startAutoLogin() {
         val cachedToken = tokenRepository.getCachedAccessToken()

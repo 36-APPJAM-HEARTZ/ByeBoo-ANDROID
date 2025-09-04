@@ -69,6 +69,7 @@ class MyPageViewModel @Inject constructor(
     fun confirmLogout() {
         viewModelScope.launch {
             logoutUseCase().onSuccess {
+                _uiState.update { it.copy(showLogoutModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
                 //Todo
@@ -83,12 +84,6 @@ class MyPageViewModel @Inject constructor(
             }.onFailure {
                 //Todo:
             }
-        }
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            userRepository.clear()
         }
     }
 }

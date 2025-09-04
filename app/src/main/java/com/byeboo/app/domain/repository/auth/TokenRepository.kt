@@ -11,4 +11,6 @@ interface TokenRepository {
     suspend fun initCachedAccessToken()
     fun updateCachedAccessToken(token: String)
     fun getCachedAccessToken(): String
+    suspend fun setLoginSplash(show: Boolean)
+    suspend fun restartSplash(): Boolean
 }

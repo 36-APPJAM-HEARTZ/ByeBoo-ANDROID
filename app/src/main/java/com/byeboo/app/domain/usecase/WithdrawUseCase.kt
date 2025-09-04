@@ -10,12 +10,15 @@ class WithdrawUseCase @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository
 ) {
+    private val accessToken: String
+        get() = tokenRepository.getCachedAccessToken()
+
     suspend operator fun invoke(): Result<Unit> {
-        val account = authRepository.withdrawAccount()
+        val account = authRepository.withdrawAccount(accessToken)
         tokenRepository.clearTokens()
         userRepository.clear()
+        tokenRepository.setLoginSplash(true)
 
         return account
     }
-
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -50,6 +51,7 @@ fun MyPageRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -72,7 +74,7 @@ fun MyPageRoute(
         )
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(lifecycleOwner) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
