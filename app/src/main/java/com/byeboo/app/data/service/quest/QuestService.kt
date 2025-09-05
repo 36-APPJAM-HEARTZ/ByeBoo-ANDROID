@@ -2,11 +2,13 @@ package com.byeboo.app.data.service.quest
 
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
+import com.byeboo.app.data.dto.response.quest.QuestCompletedResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCountResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestDialogueResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestInProgressResponseDto
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.Query
 
 interface QuestService {
     // 최초 여정 상태 변경
@@ -24,4 +26,10 @@ interface QuestService {
     // 진행중인 전체 퀘스트 조회
     @GET("/api/v1/quests/all/progress")
     suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto>
+
+    // 완료된 여정 전체 퀘스트 조회x
+    @GET("/api/v1/quests/all/completed")
+    suspend fun getCompletedQuest(
+        @Query("journey") journey: String
+    ): BaseResponse<QuestCompletedResponseDto>
 }
