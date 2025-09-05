@@ -139,7 +139,7 @@ private fun QuestScreen(
 
         LazyColumn(
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
             contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp)),
             modifier = Modifier
                 .fillMaxWidth()
