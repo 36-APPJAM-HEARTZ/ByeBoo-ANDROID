@@ -36,7 +36,7 @@ class OffboardingJourneyViewModel @Inject constructor(
         }
     }
 
-    fun getJourneyLists() {
+    private fun getJourneyLists() {
         viewModelScope.launch {
             val result = offboardingJourneyRepository.getOffboardingJourney()
             result

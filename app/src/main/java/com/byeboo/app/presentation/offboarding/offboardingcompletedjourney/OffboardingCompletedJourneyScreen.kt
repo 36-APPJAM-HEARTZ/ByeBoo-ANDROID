@@ -43,7 +43,7 @@ fun OffboardingCompletedJourneyRoute(
     navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingJourneyViewModel = hiltViewModel(),
+    viewModel: OffboardingJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
