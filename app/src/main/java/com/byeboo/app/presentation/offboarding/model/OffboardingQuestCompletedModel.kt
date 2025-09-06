@@ -1,6 +1,7 @@
-package com.byeboo.app.presentation.quest.model
+package com.byeboo.app.presentation.offboarding.model
 
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.presentation.quest.model.QuestState
 import kotlinx.collections.immutable.ImmutableList
 
 data class QuestCompletedGroup(

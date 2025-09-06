@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.complete
+package com.byeboo.app.presentation.offboarding.offboardingquestcompleted
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,35 +30,37 @@ import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.chip.QuestBox
 import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 
 @Composable
-fun QuestCompletedRoute(
-    navigateToOffboardingCompletedJourney: () -> Unit,
+fun OffboardingQuestCompletedRoute(
+    journey: QuestType,
+    navigateUp: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: QuestCompletedViewModel = hiltViewModel()
+    viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadQuests(uiState.journeyTitle)
+    LaunchedEffect(journey) {
+        viewModel.setJourney(journey)
     }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
             when (it) {
-                is QuestCompletedSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is QuestCompletedSideEffect.NavigateUp -> navigateUp()
                 is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
             }
         }
     }
 
-    QuestCompletedScreen(
+    OffboardingQuestCompletedScreen(
         uiState = uiState,
         onCancelClick = viewModel::onCancelClicked,
         bottomPadding = bottomPadding,
@@ -68,7 +70,7 @@ fun QuestCompletedRoute(
 }
 
 @Composable
-private fun QuestCompletedScreen(
+private fun OffboardingQuestCompletedScreen(
     uiState: QuestCompletedState,
     onCancelClick: () -> Unit,
     bottomPadding: Dp,
@@ -95,7 +97,7 @@ private fun QuestCompletedScreen(
 
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_PERIOD,
-            text = uiState.progressPeriod.toString(),
+            text = uiState.progressPeriod,
             textStyle = ByeBooTheme.typography.cap2
         )
 
@@ -103,7 +105,7 @@ private fun QuestCompletedScreen(
 
         DescriptionText(
             nicknameText = "${uiState.userName}님의",
-            title = "${uiState.journeyTitle} 여정",
+            title = "${uiState.journeyType.journeyName} 여정",
             guideText = "이에요",
             contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
             bottom = 18.dp

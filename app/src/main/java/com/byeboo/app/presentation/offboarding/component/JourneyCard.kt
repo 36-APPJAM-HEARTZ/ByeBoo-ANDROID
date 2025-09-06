@@ -23,7 +23,7 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun JourneyCard(
     journeyType: QuestType,
-    onJourneyCardClick: () -> Unit,
+    onJourneyCardClick: (QuestType) -> Unit,
     chipBackgroundColor: Color,
     chipTextColor: Color,
     journeyTitleTextColor: Color,
@@ -37,15 +37,15 @@ fun JourneyCard(
     }
 
     val journeyTitle = when (journeyType) {
-        QuestType.RECORDING -> "감정 정리 여정"
-        QuestType.ACTIVE -> "감정 직면 여정"
+        QuestType.RECORDING -> "감정 직면 여정"
+        QuestType.ACTIVE -> "감정 정리 여정"
     }
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .noRippleClickable(onClick = onJourneyCardClick)
+            .noRippleClickable { onJourneyCardClick(journeyType) }
             .background(color = ByeBooTheme.colors.whiteAlpha10)
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
             .padding(horizontal = 24.dp, vertical = 18.dp)

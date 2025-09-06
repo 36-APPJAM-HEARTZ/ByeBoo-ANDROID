@@ -38,7 +38,7 @@ class QuestUiModelMapper @Inject constructor() {
                         questNumber = quest.questNumber,
                         questQuestion = quest.question,
                         state = state,
-                        type = QuestType.from(quest.questStyle)
+                        type = QuestType.fromQuestStyle(quest.questStyle)
                     )
                 }.toImmutableList()
             )
