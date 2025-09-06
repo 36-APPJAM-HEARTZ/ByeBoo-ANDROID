@@ -54,6 +54,7 @@ import com.byeboo.app.presentation.quest.component.text.CreatedText
 fun QuestBehaviorCompleteRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel()
@@ -73,8 +74,10 @@ fun QuestBehaviorCompleteRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
-            if (it is QuestBehaviorSideEffect.NavigateToQuest) {
-                navigateToQuest()
+            when (it) {
+                is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                else -> Unit
             }
         }
     }
@@ -142,7 +145,10 @@ private fun QuestBehaviorCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${uiState.stepNumber}", tagColor = ByeBooTheme.colors.gray500)
+                        SmallTag(
+                            tagText = "STEP ${uiState.stepNumber}",
+                            tagColor = ByeBooTheme.colors.gray500
+                        )
 
                         Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 

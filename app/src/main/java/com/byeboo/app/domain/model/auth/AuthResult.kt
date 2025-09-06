@@ -1,6 +1,7 @@
 package com.byeboo.app.domain.model.auth
 
 import com.byeboo.app.core.model.auth.TokenEntity
+import com.byeboo.app.domain.model.JourneyStatusType
 
 data class AuthResult(
     val tokens: TokenEntity,
@@ -13,12 +14,6 @@ data class AuthResult(
 enum class JourneyType {
     FACE_EMOTION,
     PROCESS_EMOTION,
-    UNKNOWN;
-}
-enum class JourneyStatusType {
-    BEFORE_START,
-    IN_PROGRESS,
-    COMPLETED,
     UNKNOWN;
 }
 

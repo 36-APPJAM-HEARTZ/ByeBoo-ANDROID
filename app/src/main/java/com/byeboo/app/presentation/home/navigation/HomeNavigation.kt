@@ -26,24 +26,30 @@ fun NavController.navigateToHomeAmulet(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeGraph(
-    navigateToHome: () -> Unit,
-    navigateToHomeOnboarding: () -> Unit,
     navigateToQuest: () -> Unit,
     navigateToQuestStart: () -> Unit,
-    bottomPadding: Dp
+    navigateToTutorial: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToOffboardingNewJourney: () -> Unit,
+    navigateToHome: () -> Unit,
+    navigateToHomeOnboarding: () -> Unit,
+    padding: Dp
 ) {
     composable<Home> {
         HomeRoute(
             navigateToQuest = navigateToQuest,
             navigateToQuestStart = navigateToQuestStart,
-            bottomPadding = bottomPadding
+            navigateToTutorial = navigateToTutorial,
+            navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
+            navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
+            bottomPadding = padding
         )
     }
     composable<HomeOnboarding> {
         ByeBooBackHandler()
         HomeOnboardingRoute(
             navigateToHome = navigateToHome,
-            bottomPadding = bottomPadding
+            bottomPadding = padding
         )
     }
     composable<HomeAmulet> {

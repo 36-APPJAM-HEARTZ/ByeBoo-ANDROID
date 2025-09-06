@@ -185,8 +185,14 @@ class QuestBehaviorViewModel @Inject constructor(
     }
 
     fun onCloseClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
+        if (uiState.value.questNumber == 30L){
+            viewModelScope.launch {
+                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide)
+            }
+        } else {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
+            }
         }
     }
 

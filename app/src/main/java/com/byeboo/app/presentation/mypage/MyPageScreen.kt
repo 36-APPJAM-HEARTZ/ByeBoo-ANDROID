@@ -44,6 +44,8 @@ import com.byeboo.app.presentation.mypage.component.MyPageModal
 @Composable
 fun MyPageRoute(
     navigateToEditProfile: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
+    navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
@@ -74,24 +76,25 @@ fun MyPageRoute(
         )
     }
 
-    LaunchedEffect(lifecycleOwner) {
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
+                is MyPageSideEffect.OpenUrl -> openUrl(context = context, sideEffect.url)
+                is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
+                is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
                 is MyPageSideEffect.ShowSnackBar -> effect.message
             }
         }
     }
 
-
-    // TODO: 클릭 시 화면 이동 관련 추후에 할 예정
     MyPageScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onNicknameChangeClick = navigateToEditProfile,
-        onCompletedJourneyClick = {},
-        onGoToByeBooUniverse = {},
+        onNicknameChangeClick = viewModel::onNicknameChangeClicked,
+        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
+        onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
@@ -100,7 +103,6 @@ fun MyPageRoute(
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -109,7 +111,7 @@ private fun MyPageScreen(
     bottomPadding: Dp,
     onNicknameChangeClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
-    onGoToByeBooUniverse: () -> Unit,
+    onGoToByeBooUniverseClick: () -> Unit,
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
@@ -256,7 +258,7 @@ private fun MyPageScreen(
                         color = ByeBooTheme.colors.primary300,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable(onClick = onGoToByeBooUniverse)
+                    .clickable(onClick = onGoToByeBooUniverseClick)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = 21.dp)
             ) {
                 Text(

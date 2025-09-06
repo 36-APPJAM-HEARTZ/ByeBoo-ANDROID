@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompletedjourney
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -31,21 +33,33 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingCompletedJourneyRoute(
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingCompletedJourneyViewModel = hiltViewModel()
+    viewModel: OffboardingJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
+            }
+        }
+    }
 
     // TODO: 클릭 시 이동 관련 추후에 구현할 예정
     OffboardingCompletedJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = {},
+        onBackClick = viewModel::onBackClicked,
         onJourneyCompletedCardClick = {},
         modifier = modifier
     )
@@ -53,7 +67,7 @@ fun OffboardingCompletedJourneyRoute(
 
 @Composable
 private fun OffboardingCompletedJourneyScreen(
-    uiState: OffboardingCompletedJourneyState,
+    uiState: OffboardingJourneyState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
     onJourneyCompletedCardClick: () -> Unit,
@@ -62,6 +76,7 @@ private fun OffboardingCompletedJourneyScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(top = 67.dp, bottom = bottomPadding)
             .verticalScroll(rememberScrollState())
@@ -112,7 +127,7 @@ private fun OffboardingCompletedJourneyScreen(
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
-                    text = "${uiState.completed}개",
+                    text = "${uiState.completedCount}개",
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body2
                 )
@@ -126,11 +141,12 @@ private fun OffboardingCompletedJourneyScreen(
                         chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                        journeyCardTextStyle = ByeBooTheme.typography.body3
                     )
                 }
             }
 
-            if (uiState.completed == 0) {
+            if (uiState.completedCount == 0) {
                 Spacer(modifier = Modifier.height(188.5.dp))
 
                 Text(

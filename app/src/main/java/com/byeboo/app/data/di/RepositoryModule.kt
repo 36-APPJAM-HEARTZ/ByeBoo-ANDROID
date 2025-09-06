@@ -3,6 +3,8 @@ package com.byeboo.app.data.di
 import com.byeboo.app.data.repositoryimpl.auth.AuthRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.TokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingNewJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestBehaviorAnswerRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
@@ -14,6 +16,8 @@ import com.byeboo.app.data.repositoryimpl.quest.recording.QuestRecordingReposito
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
+import com.byeboo.app.domain.repository.offboarding.OffboardingNewJourneyRepository
 import com.byeboo.app.domain.repository.quest.QuestBehaviorAnswerRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
@@ -31,6 +35,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
+
     @Binds
     @Singleton
     abstract fun bindsUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
@@ -85,5 +93,13 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
+    abstract fun bindOffboardingJourneyRepository(
+        offboardingJourneyRepositoryImpl: OffboardingJourneyRepositoryImpl
+    ): OffboardingJourneyRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOffboardingNewJourneyRepository(
+        offboardingNewJourneyRepositoryImpl: OffboardingNewJourneyRepositoryImpl
+    ): OffboardingNewJourneyRepository
 }

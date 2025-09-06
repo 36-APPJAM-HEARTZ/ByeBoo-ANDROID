@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.RenderMode
 import com.airbnb.lottie.compose.LottieAnimation
@@ -54,17 +58,36 @@ import kotlinx.coroutines.flow.collectLatest
 fun HomeRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestStart: () -> Unit,
+    navigateToTutorial: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToOffboardingNewJourney: () -> Unit,
     modifier: Modifier = Modifier,
     bottomPadding: Dp,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is HomeSideEffect.NavigateToQuest -> navigateToQuest()
                 is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is HomeSideEffect.NavigateToTutorial -> navigateToTutorial()
+                is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
             }
         }
     }
@@ -75,6 +98,7 @@ fun HomeRoute(
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,
         bottomPadding = bottomPadding,
+        onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         modifier = modifier
     )
 }
@@ -86,6 +110,7 @@ private fun HomeScreen(
     onClickQuestStart: () -> Unit,
     onHelpIconClick: () -> Unit,
     bottomPadding: Dp,
+    onOffboardingNewJourneyClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_home))
@@ -188,16 +213,12 @@ private fun HomeScreen(
                     HomeQuestCard(
                         title = "새로운 이별 극복 여정 시작하기",
                         subtitle = "다음 여정도, 제가 곁에서 함께할게요.",
-                        /// TODO: 새로운 여정 화면 이동
-                        onClick = {}
+                        onClick = onOffboardingNewJourneyClick
                     )
                 }
             }
 
-
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-
         }
         Box(
             modifier = Modifier

@@ -17,8 +17,12 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
+import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestStart
@@ -28,6 +32,7 @@ import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecord
 import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
+import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
 class MainNavigator(
     val navController: NavHostController
@@ -70,12 +75,20 @@ class MainNavigator(
             currentDestination?.hasRoute(it::class) == true
         }
 
-    fun navigateToHome(navOptions: NavOptions) {
-        navController.navigateToHome(navOptions)
+    fun navigateUp() {
+        navController.navigateUp()
     }
 
-    fun navigateToMyPage(navOptions: NavOptions? = null) {
-        navController.navigateToMyPage(navOptions)
+    fun navigateToTerms(navOptions: NavOptions) {
+        navController.navigateToTerms(navOptions)
+    }
+
+    fun navigateToHomeAmulet(navOptions: NavOptions) {
+        navController.navigateToHomeAmulet(navOptions)
+    }
+
+    fun navigateToHome(navOptions: NavOptions) {
+        navController.navigateToHome(navOptions)
     }
 
     fun navigateToLoading(navOptions: NavOptions) {
@@ -90,16 +103,12 @@ class MainNavigator(
         navController.navigateToUserInfo(navOptions)
     }
 
-    fun navigateUp() {
-        navController.navigateUp()
-    }
-
     fun navigateToQuestStart(navOptions: NavOptions) {
         navController.navigateToQuestStart(navOptions)
     }
 
-    fun navigateToQuest(navOptions: NavOptions) {
-        navController.navigateToQuest(navOptions)
+    fun navigateToQuest(options: NavOptions) {
+        navController.navigate(Quest, options)
     }
 
     fun navigateToQuestTip(questId: Long, questType: QuestType, navOptions: NavOptions? = null) {
@@ -126,16 +135,28 @@ class MainNavigator(
         navController.navigateToQuestReview(questId, navOptions)
     }
 
-    fun navigateToHomeAmulet(navOptions: NavOptions) {
-        navController.navigateToHomeAmulet(navOptions)
+    fun navigateToMyPage(navOptions: NavOptions? = null) {
+        navController.navigateToMyPage(navOptions)
     }
 
     fun navigateToEditProfile(navOptions: NavOptions) {
         navController.navigateToEditProfile(navOptions)
     }
 
-    fun navigateToTerms(navOptions: NavOptions) {
-        navController.navigateToTerms(navOptions)
+    fun navigateToTutorial(navOptions: NavOptions) {
+        navController.navigateToTutorial(navOptions)
+    }
+
+    fun navigateToOffboardingCompletedGuide(navOptions: NavOptions) {
+        navController.navigateToOffboardingCompletedGuide(navOptions)
+    }
+
+    fun navigateToOffboardingNewJourney(navOptions: NavOptions) {
+        navController.navigateToOffboardingNewJourney(navOptions)
+    }
+
+    fun navigateToOffboardingCompletedJourney(navOptions: NavOptions) {
+        navController.navigateToOffboardingCompletedJourney(navOptions)
     }
 
     fun navigateToSplash(navOptions: NavOptions) {

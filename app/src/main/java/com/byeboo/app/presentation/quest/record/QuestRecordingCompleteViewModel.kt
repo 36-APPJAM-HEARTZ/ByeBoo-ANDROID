@@ -45,8 +45,14 @@ class QuestRecordingCompleteViewModel @Inject constructor(
     }
 
     fun onCloseClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+        if (uiState.value.questNumber == 30L){
+            viewModelScope.launch {
+                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide)
+            }
+        } else {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+            }
         }
     }
 

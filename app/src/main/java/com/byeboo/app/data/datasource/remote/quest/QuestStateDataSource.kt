@@ -6,7 +6,7 @@ import com.byeboo.app.data.dto.response.quest.QuestCountResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestDialogueResponseDto
 
 interface QuestStateDataSource {
-    suspend fun updateQuestState(): NullableBaseResponse<Unit>
+    suspend fun updateQuestStartState(): NullableBaseResponse<Unit>
     suspend fun getQuestCount(): BaseResponse<QuestCountResponseDto>
     suspend fun getQuestDialogue(): BaseResponse<QuestDialogueResponseDto>
 }

@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.QuestUseCase
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
@@ -10,7 +11,6 @@ import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,11 +23,13 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestViewModel @Inject constructor(
     private val questUseCase: QuestUseCase,
-    private val mapper: QuestUiModelMapper
+    private val mapper: QuestUiModelMapper,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QuestUiState())
@@ -39,6 +41,13 @@ class QuestViewModel @Inject constructor(
     private var countdownJob: Job? = null
 
     init {
+        viewModelScope.launch {
+            userRepository.getNickname().collect { nickname ->
+                _uiState.update {
+                    it.copy(userName = nickname)
+                }
+            }
+        }
         loadQuests()
     }
 
@@ -53,7 +62,7 @@ class QuestViewModel @Inject constructor(
                             currentStepIndex = output.activeStepIndex,
                             progressPeriod = output.progressPeriod,
                             journeyTitle = output.journeyTitle,
-                            userName = output.userName,
+                            completedQuestCount = output.questCompletedCount,
                             error = null
                         )
                     }
@@ -110,7 +119,7 @@ class QuestViewModel @Inject constructor(
         }
     }
 
-    fun onDismissModal() {
+    fun onQuitDismissModal() {
         _uiState.update { it.copy(showQuitModal = false) }
     }
 

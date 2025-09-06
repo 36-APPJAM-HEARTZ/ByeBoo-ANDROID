@@ -37,6 +37,24 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun onNicknameChangeClicked(){
+        viewModelScope.launch {
+            _sideEffect.emit(MyPageSideEffect.NavigateToEditProfile)
+        }
+    }
+
+    fun onCompletedJourneyClicked(){
+        viewModelScope.launch {
+            _sideEffect.emit(MyPageSideEffect.NavigateToOffboardingCompletedJourney)
+        }
+    }
+
+    fun onGoToByeBooUniverseClicked(){
+        viewModelScope.launch {
+            _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
+        }
+    }
+
     private fun emitOpenUrl(url: String) {
         viewModelScope.launch {
             _sideEffect.emit(MyPageSideEffect.OpenUrl(url))

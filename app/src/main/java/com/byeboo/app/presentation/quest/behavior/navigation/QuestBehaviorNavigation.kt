@@ -27,6 +27,7 @@ fun NavGraphBuilder.questBehaviorGraph(
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp
 ) {
     routeNavigation<QuestBehavior, QuestBehaviorWriting> {
@@ -52,6 +53,7 @@ fun NavGraphBuilder.questBehaviorGraph(
                 viewModel = viewModel,
                 questId = questId,
                 navigateToQuest = navigateToQuest,
+                navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
                 bottomPadding = bottomPadding
             )
         }
