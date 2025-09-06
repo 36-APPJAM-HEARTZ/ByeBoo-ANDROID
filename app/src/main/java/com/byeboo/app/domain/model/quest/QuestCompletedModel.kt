@@ -2,7 +2,7 @@ package com.byeboo.app.domain.model.quest
 
 data class QuestCompletedModel(
     val progressPeriod: String,
-    val currentStep: Int,
+    val currentStep: Int?,
     val steps: List<QuestCompletedStepModel>
 )
 

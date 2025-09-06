@@ -8,7 +8,7 @@ data class QuestCompletedResponseDto(
     @SerialName("progressPeriod")
     val progressPeriod: String,
     @SerialName("currentStep")
-    val currentStep: Int,
+    val currentStep: Int?,
     @SerialName("steps")
     val steps: List<QuestCompletedStepResponseDto>,
 
