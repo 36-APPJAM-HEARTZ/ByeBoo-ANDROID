@@ -5,7 +5,7 @@ import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingJourneyDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingNewJourneyDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestBehaviorAnswerDataSource
-import com.byeboo.app.data.datasource.remote.quest.QuestCompletedDataSource
+import com.byeboo.app.data.datasource.remote.offboarding.OffboardingQuestCompletedDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestDetailRemoteDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestInProgressDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestRecordedDetailDataSource
@@ -17,7 +17,7 @@ import com.byeboo.app.data.datasourceimpl.remote.auth.UserRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingJourneyDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingNewJourneyDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestBehaviorAnswerDataSourceImpl
-import com.byeboo.app.data.datasourceimpl.remote.quest.QuestCompletedDataSourceImpl
+import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingQuestCompletedDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestDetailRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestInProgressDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestRecordedDetailDataSourceImpl
@@ -51,10 +51,6 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsQuestCompletedDataSource(impl: QuestCompletedDataSourceImpl): QuestCompletedDataSource
-
-    @Binds
-    @Singleton
     abstract fun bindQuestDetailRemoteDataSource(impl: QuestDetailRemoteDataSourceImpl): QuestDetailRemoteDataSource
 
     @Binds
@@ -80,4 +76,9 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindOffboardingNewJourneyDataSource(impl: OffboardingNewJourneyDataSourceImpl): OffboardingNewJourneyDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsOffboardingQuestCompletedDataSource(impl: OffboardingQuestCompletedDataSourceImpl): OffboardingQuestCompletedDataSource
+
 }
