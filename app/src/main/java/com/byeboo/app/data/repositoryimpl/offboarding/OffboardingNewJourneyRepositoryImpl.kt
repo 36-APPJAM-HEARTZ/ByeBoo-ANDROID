@@ -11,6 +11,8 @@ class OffboardingNewJourneyRepositoryImpl @Inject constructor(
         val response = offboardingNewJourneyDataSource.postOffboardingNewJourney(journey)
         if (response.success) {
             Unit
+        } else {
+            throw IllegalStateException(response.message)
         }
     }
 }
