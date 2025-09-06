@@ -28,10 +28,10 @@ class QuestCompletedViewModel @Inject constructor(
 
     fun loadQuests(journey: String){
         viewModelScope.launch {
-            val nickname = userRepository.getNickname().firstOrNull() ?: "하츠핑"
+            val userName = userRepository.getNickname().firstOrNull() ?: "하츠핑"
             val result = questCompletedRepository.getCompletedQuest(journey)
             result.onSuccess { detail ->
-                _uiState.value = detail.toUiState(journey = journey, nickname = nickname)
+                _uiState.value = detail.toUiState(journey = journey, nickname = userName)
             }.onFailure {
 
             }

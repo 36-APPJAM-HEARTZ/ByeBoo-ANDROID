@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class QuestCompletedState(
     val questGroups: ImmutableList<QuestCompletedGroup> = persistentListOf(),
     val progressPeriod: String = "",
-    val nickname: String = "하츠핑",
+    val userName: String = "하츠핑",
     val journeyTitle: String = "감정 직면",
     val selectedQuest: Quest? = null,
 )

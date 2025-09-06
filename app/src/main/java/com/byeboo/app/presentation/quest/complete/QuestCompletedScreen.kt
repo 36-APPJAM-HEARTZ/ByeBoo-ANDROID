@@ -107,7 +107,7 @@ private fun QuestCompletedScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 DescriptionText(
-                    nicknameText = "${uiState.nickname}님의",
+                    nicknameText = "${uiState.userName}님의",
                     title = "${uiState.journeyTitle} 여정",
                     guideText = "이에요",
                     contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
