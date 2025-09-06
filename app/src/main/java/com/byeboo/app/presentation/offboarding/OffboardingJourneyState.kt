@@ -1,8 +1,8 @@
 package com.byeboo.app.presentation.offboarding
 
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
-import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneySideEffect
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -20,4 +20,5 @@ data class OffboardingJourneyState(
 
 sealed interface OffboardingJourneySideEffect {
     data object NavigateUp : OffboardingJourneySideEffect
+    data class NavigateToOffboardingQuestCompleted(val journey : QuestType) : OffboardingJourneySideEffect
 }

@@ -159,7 +159,9 @@ fun MainNavHost(
                 )
             },
             navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
+            navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
             navigateUp = navigator::navigateUp,
+            navigateToOffboardingQuestCompleted = { journey -> navigator.navigateToOffboardingQuestCompleted(journey, keepStackNavOptions) },
             padding = padding
         )
 
