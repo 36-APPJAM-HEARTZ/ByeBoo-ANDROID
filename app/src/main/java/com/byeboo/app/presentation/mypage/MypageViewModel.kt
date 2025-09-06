@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.usecase.LogoutUseCase
+import com.byeboo.app.domain.usecase.WithdrawUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val logoutUseCase: LogoutUseCase,
+    private val withdrawUseCase: WithdrawUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageState())
@@ -62,9 +66,24 @@ class MyPageViewModel @Inject constructor(
         _uiState.update { it.copy(showDeleteAccountModal = true) }
     }
 
-    fun logout() {
+    fun confirmLogout() {
         viewModelScope.launch {
-            userRepository.clear()
+            logoutUseCase().onSuccess {
+                _uiState.update { it.copy(showLogoutModal = false) }
+                _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+            }.onFailure {
+                //Todo
+            }
+        }
+    }
+
+    fun confirmWithdraw() {
+        viewModelScope.launch {
+            withdrawUseCase().onSuccess {
+                _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+            }.onFailure {
+                //Todo:
+            }
         }
     }
 }

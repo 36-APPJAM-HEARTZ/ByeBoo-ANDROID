@@ -15,6 +15,7 @@ import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
+import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.navigation.splashGraph
 import com.byeboo.app.presentation.splash.termsofservice.navigation.termsGraph
 
@@ -37,7 +38,17 @@ fun MainNavHost(
         launchSingleTop = true
         restoreState = true
     }
+
     val questBehaviorViewModel: QuestBehaviorViewModel = hiltViewModel()
+
+    val splashNavOptions = navOptions {
+        popUpTo(0) {
+            saveState = true
+            inclusive = false
+        }
+        launchSingleTop = true
+        restoreState = false
+    }
 
     NavHost(
         modifier = modifier,
@@ -98,6 +109,7 @@ fun MainNavHost(
         myPageGraph(
             bottomPadding = padding,
             navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
+            navigateToSplash = { navigator.navigateToSplash(splashNavOptions)},
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) }
         )
 

@@ -26,6 +26,7 @@ import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
+import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
 
 class MainNavigator(
@@ -135,6 +136,10 @@ class MainNavigator(
 
     fun navigateToTerms(navOptions: NavOptions) {
         navController.navigateToTerms(navOptions)
+    }
+
+    fun navigateToSplash(navOptions: NavOptions) {
+        navController.navigateToSplash(navOptions)
     }
 }
 
