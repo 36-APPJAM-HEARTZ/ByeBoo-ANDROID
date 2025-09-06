@@ -1,6 +1,8 @@
 package com.byeboo.app.data.mapper.quest
 
+import com.byeboo.app.data.dto.response.quest.QuestCompletedQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCompletedResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestCompletedStepResponseDto
 import com.byeboo.app.domain.model.quest.QuestCompletedModel
 import com.byeboo.app.domain.model.quest.QuestCompletedQuestModel
 import com.byeboo.app.domain.model.quest.QuestCompletedStepModel
@@ -9,19 +11,23 @@ fun QuestCompletedResponseDto.toDomain(): QuestCompletedModel {
     return QuestCompletedModel(
         progressPeriod = progressPeriod,
         currentStep = currentStep,
-        steps = steps.map { stepDto ->
-            QuestCompletedStepModel(
-                stepNumber = stepDto.stepNumber,
-                step = stepDto.step,
-                quests = stepDto.quests.map { questDto ->
-                    QuestCompletedQuestModel(
-                        questId = questDto.questId,
-                        question = questDto.question,
-                        questStyle = questDto.questStyle,
-                        questNumber = questDto.questNumber
-                    )
-                }
-            )
-        }
+        steps = steps.orEmpty().map { it.toDomain() }
+    )
+}
+
+fun QuestCompletedStepResponseDto.toDomain(): QuestCompletedStepModel {
+    return QuestCompletedStepModel(
+        stepNumber = stepNumber,
+        step = step,
+        quests = quests.orEmpty().map { it.toDomain() }
+    )
+}
+
+fun QuestCompletedQuestResponseDto.toDomain(): QuestCompletedQuestModel {
+    return QuestCompletedQuestModel(
+        questId = questId,
+        question = question,
+        questStyle = questStyle,
+        questNumber = questNumber
     )
 }

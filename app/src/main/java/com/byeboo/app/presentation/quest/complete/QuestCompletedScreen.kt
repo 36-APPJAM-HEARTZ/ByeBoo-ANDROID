@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.complete
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,7 +38,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 @Composable
 fun QuestCompletedRoute(
     navigateToOffboardingCompletedJourney: () -> Unit,
-    navigateToQuestReview: () -> Unit,
+    navigateToQuestReview: (Long) -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestCompletedViewModel = hiltViewModel()
@@ -45,16 +46,21 @@ fun QuestCompletedRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.loadQuests(uiState.journeyTitle)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
             when (it) {
                 is QuestCompletedSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
-                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview()
+                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
             }
         }
     }
 
     QuestCompletedScreen(
         uiState = uiState,
+        onCancelClick = viewModel::onCancelClicked,
         bottomPadding = bottomPadding,
         onQuestClick = viewModel::onQuestClick,
         modifier = modifier
@@ -64,6 +70,7 @@ fun QuestCompletedRoute(
 @Composable
 private fun QuestCompletedScreen(
     uiState: QuestCompletedState,
+    onCancelClick: () -> Unit,
     bottomPadding: Dp,
     onQuestClick: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -79,7 +86,9 @@ private fun QuestCompletedScreen(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = "",
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable(onClick = onCancelClick)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +107,7 @@ private fun QuestCompletedScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 DescriptionText(
-                    nicknameText = "${uiState.userName}님의",
+                    nicknameText = "${uiState.nickname}님의",
                     title = "${uiState.journeyTitle} 여정",
                     guideText = "이에요",
                     contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
