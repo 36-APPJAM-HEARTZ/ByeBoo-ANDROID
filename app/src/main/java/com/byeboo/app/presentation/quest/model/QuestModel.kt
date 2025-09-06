@@ -4,7 +4,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import kotlinx.collections.immutable.ImmutableList
 
 data class QuestGroup(
-    val questNumber: Long,
+    val stepNumber: Long,
     val stepTitle: String,
     val quests: ImmutableList<Quest>
 )
