@@ -47,7 +47,7 @@ enum class MiddleTagType(
         titleResId = R.string.type_quest_period,
         backgroundColor = TagColorType.WHITE_ALPHA_10,
         textColor = TagColorType.GRAY_300,
-        dynamicContent = false
+        dynamicContent = true
     )
 }
 
