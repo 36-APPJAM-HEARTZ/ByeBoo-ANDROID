@@ -127,7 +127,10 @@ private fun QuestRecordingCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${uiState.stepNumber}")
+                        SmallTag(
+                            tagText = "STEP ${uiState.stepNumber}",
+                            tagColor = ByeBooTheme.colors.gray500
+                        )
 
                         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 

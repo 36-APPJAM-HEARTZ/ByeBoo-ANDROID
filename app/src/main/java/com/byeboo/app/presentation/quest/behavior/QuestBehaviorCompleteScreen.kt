@@ -76,7 +76,7 @@ fun QuestBehaviorCompleteRoute(
         viewModel.sideEffect.collect {
             if (it is QuestBehaviorSideEffect.NavigateToQuest) {
                 navigateToQuest()
-            } else if (it is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide){
+            } else if (it is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide) {
                 navigateToOffboardingCompletedGuide()
             }
         }
@@ -145,7 +145,10 @@ private fun QuestBehaviorCompleteScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        SmallTag(tagText = "STEP ${uiState.stepNumber}", tagColor = ByeBooTheme.colors.gray500)
+                        SmallTag(
+                            tagText = "STEP ${uiState.stepNumber}",
+                            tagColor = ByeBooTheme.colors.gray500
+                        )
 
                         Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 
