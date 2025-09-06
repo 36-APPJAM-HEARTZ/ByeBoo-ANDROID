@@ -9,18 +9,15 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class QuestUseCase @Inject constructor(
     private val questInProgressRepository: QuestInProgressRepository,
-    private val questStateRepository: QuestStateRepository,
-    private val userRepository: UserRepository
+    private val questStateRepository: QuestStateRepository
 ) {
     suspend operator fun invoke(): QuestData {
         val result = questInProgressRepository.getInProgressQuest().getOrThrow()
         val journey = questStateRepository.getUserJourney() ?: ""
-        val nickname = userRepository.getNickname().firstOrNull() ?: ""
         val questCompletedCount = questStateRepository.getQuestCount().getOrNull()?.count ?: 1L
         return QuestData(
             inProgressQuest = result,
             journeyTitle = journey,
-            userNickname = nickname,
             questCompletedCount = questCompletedCount
         )
     }
