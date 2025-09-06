@@ -56,7 +56,7 @@ class QuestUiModelMapper @Inject constructor() {
             serverNow = serverNow,
             progressPeriod = inProgress.progressPeriod,
             journeyTitle = data.journeyTitle,
-            userName = data.userNickname
+            questCompletedCount = data.questCompletedCount
         )
     }
 

@@ -33,4 +33,5 @@ sealed interface QuestBehaviorSideEffect {
     data class NavigateToQuestTip(val questId: Long, val questType: QuestType) : QuestBehaviorSideEffect
     data class NavigateToQuestBehaviorComplete(val questId: Long) : QuestBehaviorSideEffect
     data class CompleteAndClear(val questId: Long) : QuestBehaviorSideEffect
+    data object NavigateToOffboardingCompletedGuide : QuestBehaviorSideEffect
 }

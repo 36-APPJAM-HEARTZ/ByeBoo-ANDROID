@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.offboarding.offboardingcompleteguide
+package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
@@ -62,26 +62,40 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun OffboardingCompleteGuideRoute(
+fun OffboardingCompletedGuideRoute(
+    navigateToHome: () -> Unit,
+    navigateToOffboardingNewJourney: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingCompleteGuideViewModel = hiltViewModel()
+    viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingCompletedGuideSideEffect.NavigateToHome -> navigateToHome()
+                is OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
+                is OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+            }
+        }
+
+    }
 
     OffboardingCompleteGuideScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onCloseClick = {},
-        onNewJourneyClick = {},
-        onCompletedJourneyClick = {},
+        onCloseClick = viewModel::onCloseClicked,
+        onNewJourneyClick = viewModel::onNewJourneyClicked,
+        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
         modifier = modifier
     )
 }
 
 @Composable
 private fun OffboardingCompleteGuideScreen(
-    uiState: OffboardingCompleteGuideState,
+    uiState: OffboardingCompletedGuideState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
     onNewJourneyClick: () -> Unit,
@@ -136,7 +150,7 @@ private fun OffboardingCompleteGuideScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "🎉${uiState.journeyName}을 완료했어요!🎉",
+                        text = "🎉${uiState.journeyName} 여정을 완료했어요!🎉",
                         color = ByeBooTheme.colors.secondary300,
                         style = ByeBooTheme.typography.sub2
                     )

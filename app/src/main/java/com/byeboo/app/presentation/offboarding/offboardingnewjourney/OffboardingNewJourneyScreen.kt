@@ -18,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -32,34 +33,48 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
+import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingNewJourneyRoute(
+    navigateToQuestStart: () -> Unit,
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingNewJourneyViewModel = hiltViewModel()
+    viewModel: OffboardingJourneyViewModel = hiltViewModel(),
+    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // TODO: 클릭 시 이동 관련 추후에 구현할 예정
+    LaunchedEffect(Unit) {
+        offboardingNewJourneyViewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
+            }
+        }
+    }
+
     OffboardingNewJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onBackClick = {},
-        onJourneyUncompletedCardClick = {},
+        onBackClick = offboardingNewJourneyViewModel::onBackClicked,
+        onJourneyUncompletedCardClick = { type -> offboardingNewJourneyViewModel.postNewJourney(type) },
         modifier = modifier
     )
 }
 
 @Composable
 private fun OffboardingNewJourneyScreen(
-    uiState: OffboardingNewJourneyState,
+    uiState: OffboardingJourneyState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
-    onJourneyUncompletedCardClick: () -> Unit,
+    onJourneyUncompletedCardClick: (QuestType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -126,7 +141,7 @@ private fun OffboardingNewJourneyScreen(
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
-                    text = "${uiState.uncompleted}개",
+                    text = "${uiState.uncompletedCount}개",
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body2
                 )
@@ -136,10 +151,11 @@ private fun OffboardingNewJourneyScreen(
                 key(card) {
                     JourneyCard(
                         journeyType = card.journeyType,
-                        onJourneyCardClick = onJourneyUncompletedCardClick,
+                        onJourneyCardClick = { onJourneyUncompletedCardClick(card.journeyType) },
                         chipBackgroundColor = ByeBooTheme.colors.primary300,
                         chipTextColor = ByeBooTheme.colors.white,
                         journeyTitleTextColor = ByeBooTheme.colors.gray50,
+                        journeyCardTextStyle = ByeBooTheme.typography.body2
                     )
                 }
             }

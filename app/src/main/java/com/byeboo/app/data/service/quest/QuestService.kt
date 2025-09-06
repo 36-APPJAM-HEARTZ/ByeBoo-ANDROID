@@ -13,7 +13,7 @@ import retrofit2.http.Query
 interface QuestService {
     // 최초 여정 상태 변경
     @PATCH("/api/v1/users/journey/start")
-    suspend fun updateQuestState(): NullableBaseResponse<Unit>
+    suspend fun updateQuestStartState(): NullableBaseResponse<Unit>
 
     // 퀘스트 진행도
     @GET("/api/v1/users/count")

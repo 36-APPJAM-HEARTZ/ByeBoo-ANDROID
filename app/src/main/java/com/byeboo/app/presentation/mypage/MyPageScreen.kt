@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -43,19 +44,23 @@ import com.byeboo.app.presentation.mypage.component.MyPageModal
 @Composable
 fun MyPageRoute(
     navigateToEditProfile: () -> Unit,
+    navigateToOffboardingCompletedJourney: () -> Unit,
+    navigateToTutorial: () -> Unit,
+    navigateToSplash: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     if (uiState.showLogoutModal) {
         MyPageModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
             myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            onConfirmClick = {},
+            onConfirmClick = viewModel::confirmLogout,
             onConfirmText = "로그아웃"
         )
     }
@@ -65,7 +70,7 @@ fun MyPageRoute(
             onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
             myPageModalMainText = "정말 탈퇴하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            onConfirmClick = {},
+            onConfirmClick = viewModel::confirmWithdraw,
             onConfirmText = "탈퇴하기",
             myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다."
         )
@@ -74,19 +79,22 @@ fun MyPageRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
+                is MyPageSideEffect.OpenUrl -> openUrl(context = context, sideEffect.url)
+                is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
+                is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
+                is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
+                is MyPageSideEffect.ShowSnackBar -> effect.message
             }
         }
     }
 
-
-    // TODO: 클릭 시 화면 이동 관련 추후에 할 예정
     MyPageScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onNicknameChangeClick = navigateToEditProfile,
-        onCompletedJourneyClick = {},
-        onGoToByeBooUniverse = {},
+        onNicknameChangeClick = viewModel::onNicknameChangeClicked,
+        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
+        onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
@@ -95,7 +103,6 @@ fun MyPageRoute(
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
         modifier = modifier
     )
-
 }
 
 @Composable
@@ -104,7 +111,7 @@ private fun MyPageScreen(
     bottomPadding: Dp,
     onNicknameChangeClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
-    onGoToByeBooUniverse: () -> Unit,
+    onGoToByeBooUniverseClick: () -> Unit,
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
@@ -251,7 +258,7 @@ private fun MyPageScreen(
                         color = ByeBooTheme.colors.primary300,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable(onClick = onGoToByeBooUniverse)
+                    .clickable(onClick = onGoToByeBooUniverseClick)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = 21.dp)
             ) {
                 Text(

@@ -30,3 +30,7 @@ enum class TutorialContent(
                 "저 보리가 항상 함께할게요."
     )
 }
+
+sealed interface TutorialSideEffect {
+    data object NavigateToUp: TutorialSideEffect
+}

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.navOptions
 import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.snackbar.CustomSnackBar
@@ -24,6 +25,7 @@ import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.main.component.MainBottomBar
 import kotlinx.collections.immutable.toImmutableList
@@ -40,6 +42,7 @@ fun MainScreen(
     var isNavigating by remember { mutableStateOf(false) }
     val currentTab = navigator.currentTab
     val showBottomBar = navigator.showBottomBar()
+    val status by viewModel.journeyStatus.collectAsStateWithLifecycle()
 
     val onShowSnackBar: (String) -> Unit = { message ->
         scope.launch {
@@ -93,15 +96,14 @@ fun MainScreen(
                                     restoreState = true
                                 }
                                 if (selectedTab == MainNavTab.QUEST) {
-                                    val isStarted = viewModel.isQuestStarted()
-                                    if (isStarted) {
-                                        navigator.navigateToQuest(navOptions)
-                                    } else {
-                                        navigator.navigateToQuestStart(navOptions)
+                                    val journeyStatus = status ?: JourneyStatusType.BEFORE_START
+
+                                    when (journeyStatus) {
+                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> { navigator.navigateToQuestStart(navOptions) }
+                                        JourneyStatusType.COMPLETED -> { navigator.navigateToOffboardingCompletedGuide(navOptions) }
+                                        JourneyStatusType.IN_PROGRESS -> { navigator.navigateToQuest(navOptions) }
                                     }
-                                } else {
-                                    navigator.navigate(selectedTab)
-                                }
+                                } else { navigator.navigate(selectedTab) }
                             } finally {
                                 isNavigating = false
                             }

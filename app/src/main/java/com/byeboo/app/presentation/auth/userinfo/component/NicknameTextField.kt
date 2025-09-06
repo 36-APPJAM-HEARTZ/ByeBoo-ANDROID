@@ -85,9 +85,31 @@ fun NicknameTextField(
             BasicTextField(
                 value = textFieldValue,
                 onValueChange = { newValue ->
-                    textFieldValue = newValue
-                    if (newValue.text != value) {
-                        onValueChange(newValue.text)
+                    val max = 5
+
+                    if (newValue.composition != null) {
+                        textFieldValue = newValue
+                        return@BasicTextField
+                    }
+
+                    val limitedText = if (newValue.text.length > max) {
+                        newValue.text.take(max)
+                    } else {
+                        newValue.text
+                    }
+
+                    val cursorStart = minOf(newValue.selection.start, limitedText.length)
+                    val cursorEnd = minOf(newValue.selection.end, limitedText.length)
+                    val nextValue = newValue.copy(
+                        text = limitedText,
+                        selection = TextRange(cursorStart, cursorEnd),
+                        composition = null
+                    )
+
+                    textFieldValue = nextValue
+
+                    if (limitedText != value) {
+                        onValueChange(limitedText)
                     }
                 },
                 modifier = Modifier
@@ -140,7 +162,7 @@ fun NicknameTextField(
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .noRippleClickable{
+                        .noRippleClickable {
                             textFieldValue = TextFieldValue("", selection = TextRange(0))
                             onClearClick()
                         }

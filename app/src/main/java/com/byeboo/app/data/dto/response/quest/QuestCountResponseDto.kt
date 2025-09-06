@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestCountResponseDto(
     @SerialName("todayComplete")
-    val todayComplete: Boolean,
+    val todayComplete: Boolean?,
     @SerialName("userCurrentStatus")
     val userCurrentStatus: String,
     @SerialName("count")

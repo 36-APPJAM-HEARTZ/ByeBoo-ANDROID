@@ -2,19 +2,20 @@ package com.byeboo.app.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -39,17 +40,26 @@ class HomeViewModel @Inject constructor(
         loadInitialData()
     }
 
+    fun refresh() {
+        loadInitialData()
+    }
+
     private fun loadInitialData() {
         viewModelScope.launch {
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
             val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
             var status = HomeStatus.INITIAL_START
-            var currentStep = 0
+            var currentStep = 0L
 
             questStateRepository.getQuestCount().onSuccess { model ->
                     status = HomeStatus.from(model.userCurrentStatus)
                     currentStep = model.count
+                    val journeyStatus = status.toJourneyStatusType()
+                    updateJourneyStatus(journeyStatus)
+                }
+                .onFailure { e ->
+
                 }
 
             _uiState.update {
@@ -61,7 +71,26 @@ class HomeViewModel @Inject constructor(
                     hasSeenAboutHelp = hasSeenAboutHelp
                 )
             }
+
         }
+    }
+
+    private fun updateJourneyStatus(newStatus: JourneyStatusType) {
+        viewModelScope.launch {
+            runCatching {
+                val oldStatus = questStateRepository.getUserJourneyStatus().first()
+                if (oldStatus != newStatus) {
+                    questStateRepository.updateUserJourneyStatus(newStatus)
+                }
+            }.onFailure { e ->
+            }
+        }
+    }
+
+    private fun HomeStatus.toJourneyStatusType(): JourneyStatusType = when (this) {
+        HomeStatus.INITIAL_START -> JourneyStatusType.BEFORE_START
+        HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
+        HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
     }
 
     fun onClickQuest() {
@@ -80,6 +109,13 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.setHasSeenAboutHelp(true)
             _uiState.update { it.copy(hasSeenAboutHelp = true) }
+            _sideEffect.emit(HomeSideEffect.NavigateToTutorial)
+        }
+    }
+
+    fun onOffboardingNewJourneyClicked() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToOffboardingNewJourney)
         }
     }
 }

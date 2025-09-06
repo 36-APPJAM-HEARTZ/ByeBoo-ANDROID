@@ -3,8 +3,8 @@ package com.byeboo.app.data.mapper.auth
 import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.data.dto.response.auth.KakaoLoginResponseDto
 import com.byeboo.app.data.dto.response.auth.TokenReissueResponseDto
+import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.auth.AuthResult
-import com.byeboo.app.domain.model.auth.JourneyStatusType
 import com.byeboo.app.domain.model.auth.JourneyType
 
 fun KakaoLoginResponseDto.toDomain(): AuthResult = AuthResult(

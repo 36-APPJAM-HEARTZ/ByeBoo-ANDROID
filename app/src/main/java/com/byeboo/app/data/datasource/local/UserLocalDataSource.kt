@@ -1,6 +1,7 @@
 package com.byeboo.app.data.datasource.local
 
 import com.byeboo.app.core.model.auth.UserEntity
+import com.byeboo.app.domain.model.JourneyStatusType
 import kotlinx.coroutines.flow.Flow
 
 interface UserLocalDataSource {
@@ -12,11 +13,10 @@ interface UserLocalDataSource {
     suspend fun setLoggedIn(loggedIn: Boolean)
     suspend fun isLoggedIn(): Boolean
     suspend fun setQuestStarted(started: Boolean)
-    suspend fun isQuestStarted(): Boolean
     suspend fun saveJourney(journey: String)
     suspend fun getJourney(): String?
-    suspend fun saveJourneyStatus(journeyStatus: String)
-    suspend fun getJourneyStatus(): String?
+    suspend fun saveJourneyStatus(journeyStatus: JourneyStatusType)
+    fun getJourneyStatus(): Flow<JourneyStatusType>
     suspend fun setHasSeenAboutHelp(seen: Boolean)
     suspend fun hasSeenAboutHelp(): Boolean
     suspend fun clear()

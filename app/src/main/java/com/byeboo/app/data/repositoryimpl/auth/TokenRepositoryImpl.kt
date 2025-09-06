@@ -36,4 +36,13 @@ class TokenRepositoryImpl @Inject constructor(
     override fun updateCachedAccessToken(token: String) {
         cachedAccessToken = token
     }
+
+    override suspend fun setLoginSplash(show: Boolean) {
+        tokenDataSource.setLoginSplash(show)
+
+    }
+
+    override suspend fun restartSplash(): Boolean =
+        tokenDataSource.restartSplash()
+
 }

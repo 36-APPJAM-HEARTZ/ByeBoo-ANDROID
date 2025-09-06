@@ -45,6 +45,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingCompleteGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
@@ -55,7 +56,7 @@ fun NavGraphBuilder.questGraph(
         composable<QuestStart> {
             QuestStartRoute(
                 navigateToQuest = navigateToQuest,
-                navigateToHome = navigateUp,
+                navigateToHome = navigateToHome,
                 padding = padding
             )
         }
@@ -68,6 +69,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
+                navigateToOffboardingCompleteGuide = navigateToOffboardingCompleteGuide,
                 navigateToHome = navigateToHome,
                 bottomPadding = padding
             )
@@ -101,6 +103,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestRecordingComplete = navigateToQuestRecordingComplete,
+            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             bottomPadding = padding
         )
 
@@ -109,6 +112,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestBehaviorComplete = navigateToQuestBehaviorComplete,
+            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             bottomPadding = padding
         )
     }
