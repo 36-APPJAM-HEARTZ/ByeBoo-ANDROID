@@ -74,10 +74,10 @@ fun QuestBehaviorCompleteRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
-            if (it is QuestBehaviorSideEffect.NavigateToQuest) {
-                navigateToQuest()
-            } else if (it is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide) {
-                navigateToOffboardingCompletedGuide()
+            when (it) {
+                is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                else -> Unit
             }
         }
     }
