@@ -6,7 +6,7 @@ import com.byeboo.app.domain.model.quest.QuestStateModel
 import kotlinx.coroutines.flow.Flow
 
 interface QuestStateRepository {
-    suspend fun updateQuestStartState()
+    suspend fun updateQuestStartState(): Result<Unit>
     suspend fun updateUserJourney(journey: String)
     suspend fun updateUserJourneyStatus(journeyStatus: JourneyStatusType)
     suspend fun getUserJourney(): String?
