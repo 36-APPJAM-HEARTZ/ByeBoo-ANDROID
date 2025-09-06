@@ -14,4 +14,5 @@ enum class ModalType {
 sealed interface MyPageSideEffect {
     data class OpenUrl(val url: String): MyPageSideEffect
     data object NavigateToSplash: MyPageSideEffect
+    data class ShowSnackBar(val message: String) : MyPageSideEffect
 }

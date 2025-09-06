@@ -19,8 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    val logoutUseCase: LogoutUseCase,
-    val withdrawUseCase: WithdrawUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val withdrawUseCase: WithdrawUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageState())

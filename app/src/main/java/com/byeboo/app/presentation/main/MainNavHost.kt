@@ -42,7 +42,7 @@ fun MainNavHost(
     val questBehaviorViewModel: QuestBehaviorViewModel = hiltViewModel()
 
     val splashNavOptions = navOptions {
-        popUpTo(Splash) {
+        popUpTo(0) {
             saveState = true
             inclusive = false
         }
