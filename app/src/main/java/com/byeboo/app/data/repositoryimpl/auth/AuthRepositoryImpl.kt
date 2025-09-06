@@ -21,5 +21,16 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun reissueAccessToken(refreshToken: String): Result<TokenEntity> =
         runCatching {
             authRemoteDataSource.reissueAccessToken(refreshToken).data.toDomain()
-        }
+    }
+
+    override suspend fun logoutAccount(token: String): Result<Unit> =
+        runCatching {
+            authRemoteDataSource.logoutAccount(token)
+
+    }
+
+    override suspend fun withdrawAccount(token: String): Result<Unit> =
+        runCatching {
+            authRemoteDataSource.withdrawAccount(token)
+    }
 }

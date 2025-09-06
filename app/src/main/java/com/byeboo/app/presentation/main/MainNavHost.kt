@@ -43,6 +43,14 @@ fun MainNavHost(
         launchSingleTop = true
         restoreState = true
     }
+    val splashNavOptions = navOptions {
+        popUpTo(0) {
+            saveState = true
+            inclusive = false
+        }
+        launchSingleTop = true
+        restoreState = false
+    }
 
     NavHost(
         modifier = modifier,
@@ -134,6 +142,7 @@ fun MainNavHost(
             },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
+            navigateToSplash = { navigator.navigateToSplash(splashNavOptions) },
             padding = padding,
         )
 

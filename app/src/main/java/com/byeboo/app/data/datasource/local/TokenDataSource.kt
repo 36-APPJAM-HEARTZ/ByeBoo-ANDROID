@@ -7,4 +7,6 @@ interface TokenDataSource {
     fun getRefreshToken(): Flow<String>
     suspend fun updateTokens(accessToken: String, refreshToken: String)
     suspend fun clearTokens()
+    suspend fun setLoginSplash(show: Boolean)
+    suspend fun restartSplash(): Boolean
 }

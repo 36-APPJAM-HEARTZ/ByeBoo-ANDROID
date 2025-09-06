@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -45,19 +46,21 @@ fun MyPageRoute(
     navigateToEditProfile: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToTutorial: () -> Unit,
+    navigateToSplash: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     if (uiState.showLogoutModal) {
         MyPageModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
             myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            onConfirmClick = {},
+            onConfirmClick = viewModel::confirmLogout,
             onConfirmText = "로그아웃"
         )
     }
@@ -67,19 +70,21 @@ fun MyPageRoute(
             onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
             myPageModalMainText = "정말 탈퇴하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            onConfirmClick = {},
+            onConfirmClick = viewModel::confirmWithdraw,
             onConfirmText = "탈퇴하기",
             myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다."
         )
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is MyPageSideEffect.OpenUrl -> openUrl(context = context, sideEffect.url)
                 is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
+                is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
+                is MyPageSideEffect.ShowSnackBar -> effect.message
             }
         }
     }

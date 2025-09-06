@@ -30,6 +30,7 @@ import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
+import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
@@ -156,6 +157,10 @@ class MainNavigator(
 
     fun navigateToOffboardingCompletedJourney(navOptions: NavOptions) {
         navController.navigateToOffboardingCompletedJourney(navOptions)
+    }
+
+    fun navigateToSplash(navOptions: NavOptions) {
+        navController.navigateToSplash(navOptions)
     }
 }
 

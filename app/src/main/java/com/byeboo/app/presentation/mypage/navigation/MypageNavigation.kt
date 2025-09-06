@@ -24,6 +24,7 @@ fun NavGraphBuilder.myPageGraph(
     navigateToEditProfile: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToTutorial: () -> Unit,
+    navigateToSplash: () -> Unit,
     navigateToMyPage: () -> Unit,
     padding: Dp,
 ) {
@@ -32,6 +33,7 @@ fun NavGraphBuilder.myPageGraph(
             navigateToEditProfile = navigateToEditProfile,
             navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
             navigateToTutorial = navigateToTutorial,
+            navigateToSplash = navigateToSplash,
             bottomPadding = padding
         )
     }
