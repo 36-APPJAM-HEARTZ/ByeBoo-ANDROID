@@ -40,13 +40,13 @@
     </aapt:attr>
   </path>
   <path
-      android:pathData="M34.158,26.77a1.408,1.193 94.271,1 0,0.115 -2.812a1.408,1.193 94.271,1 0,-0.115 2.812z"
+      android:pathData="M34.157,26.77a1.408,1.193 94.271,1 0,0.115 -2.812a1.408,1.193 94.271,1 0,-0.115 2.812z"
       android:fillAlpha="0.5">
     <aapt:attr name="android:fillColor">
       <gradient 
           android:startX="33.022"
           android:startY="25.33"
-          android:endX="35.828"
+          android:endX="35.827"
           android:endY="25.273"
           android:type="linear">
         <item android:offset="0" android:color="#FF819C7B"/>
