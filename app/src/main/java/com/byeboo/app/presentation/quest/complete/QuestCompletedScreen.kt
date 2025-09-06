@@ -93,28 +93,28 @@ private fun QuestCompletedScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        MiddleTag(
+            middleTagType = MiddleTagType.QUEST_PERIOD,
+            text = uiState.progressPeriod.toString(),
+            textStyle = ByeBooTheme.typography.cap2
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        DescriptionText(
+            nicknameText = "${uiState.userName}님의",
+            title = "${uiState.journeyTitle} 여정",
+            guideText = "이에요",
+            contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
+            bottom = 18.dp
+        )
+
+        Spacer(modifier = Modifier.height(18.dp))
+
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            item {
-                MiddleTag(
-                    middleTagType = MiddleTagType.QUEST_PERIOD,
-                    text = uiState.progressPeriod.toString(),
-                    textStyle = ByeBooTheme.typography.cap2
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                DescriptionText(
-                    nicknameText = "${uiState.userName}님의",
-                    title = "${uiState.journeyTitle} 여정",
-                    guideText = "이에요",
-                    contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
-                    bottom = 18.dp
-                )
-            }
-
             uiState.questGroups.forEachIndexed { stepIndex, group ->
                 item("header_$stepIndex") {
                     HorizontalDivider(
