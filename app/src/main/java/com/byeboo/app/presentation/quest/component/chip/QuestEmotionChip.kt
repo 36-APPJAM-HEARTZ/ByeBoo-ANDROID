@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.component.chip
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -27,6 +29,7 @@ fun EmotionChip(
     emotionType: LargeTagType,
     isSelected: Boolean = false,
     enabled: Boolean = true,
+    isDimmed: Boolean = false,
     onChipClick: ((LargeTagType) -> Unit)? = null
 ) {
     val backgroundColor = if (isSelected) {
@@ -52,11 +55,12 @@ fun EmotionChip(
     val baseModifier = modifier
         .then(
             if (onChipClick != null && enabled) {
-            Modifier.noRippleClickable { onChipClick(emotionType) }
+                Modifier.noRippleClickable { onChipClick(emotionType) }
 
-        } else {
-            Modifier
-        })
+            } else {
+                Modifier
+            })
+        .clip(shape)
         .background(
             color = backgroundColor, shape = shape
         )
@@ -68,21 +72,36 @@ fun EmotionChip(
             }
         )
 
-    Column(
-        modifier = baseModifier.padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = baseModifier,
+        contentAlignment = Alignment.Center
     ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id = emotionType.titleIcon),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(horizontal = screenWidthDp(14.dp))
-        )
+        Column(
+            modifier = Modifier.padding(vertical = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = emotionType.titleIcon),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(horizontal = screenWidthDp(14.dp))
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = stringResource(emotionType.titleResId), color = textColor, style = textStyle
-        )
+            Text(
+                text = stringResource(emotionType.titleResId),
+                color = textColor,
+                style = textStyle
+            )
+        }
+
+        if (isDimmed) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(color = ByeBooTheme.colors.black.copy(alpha = 0.4f))
+            )
+        }
     }
 }

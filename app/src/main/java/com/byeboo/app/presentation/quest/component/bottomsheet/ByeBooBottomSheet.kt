@@ -107,7 +107,7 @@ fun ByeBooBottomSheet(
                             navigateButton()
                         }
                     },
-                    isEnabled = isSelected && !isUploading
+                    isEnabled = (selectedEmotion != null) && !isUploading
                 )
             }
         }
@@ -121,6 +121,8 @@ private fun EmotionChipList(
     isUploading: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val dimOthers = selectedEmotion != null
+
     Column(modifier = modifier.padding(horizontal = screenWidthDp(62.dp))) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -130,6 +132,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_NEUTRAL,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_NEUTRAL,
                 enabled = !isUploading,
+                isDimmed = dimOthers && selectedEmotion != LargeTagType.EMOTION_NEUTRAL,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_NEUTRAL) }
             )
 
@@ -139,6 +142,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_SELF_AWARE,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_SELF_AWARE,
                 enabled = !isUploading,
+                isDimmed = dimOthers && selectedEmotion != LargeTagType.EMOTION_SELF_AWARE,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SELF_AWARE) }
             )
         }
@@ -153,6 +157,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_SADNESS,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_SADNESS,
                 enabled = !isUploading,
+                isDimmed = dimOthers && selectedEmotion != LargeTagType.EMOTION_SADNESS,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SADNESS) }
             )
 
@@ -162,6 +167,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_RELIEF,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_RELIEF,
                 enabled = !isUploading,
+                isDimmed = dimOthers && selectedEmotion != LargeTagType.EMOTION_RELIEF,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_RELIEF) }
             )
         }
