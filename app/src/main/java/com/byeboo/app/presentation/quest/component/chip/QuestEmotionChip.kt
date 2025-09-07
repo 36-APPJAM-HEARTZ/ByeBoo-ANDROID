@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,14 +78,13 @@ fun EmotionChip(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = screenWidthDp(14.dp), vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = emotionType.titleIcon),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = screenWidthDp(14.dp))
+                modifier = Modifier.size(56.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
