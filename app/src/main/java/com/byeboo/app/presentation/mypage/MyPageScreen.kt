@@ -32,8 +32,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -53,7 +53,6 @@ fun MyPageRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -61,7 +60,11 @@ fun MyPageRoute(
             myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
             onConfirmClick = viewModel::confirmLogout,
-            onConfirmText = "로그아웃"
+            onConfirmText = "로그아웃",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 
@@ -72,7 +75,11 @@ fun MyPageRoute(
             onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
             onConfirmClick = viewModel::confirmWithdraw,
             onConfirmText = "탈퇴하기",
-            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다."
+            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 
