@@ -18,8 +18,11 @@ import com.byeboo.app.presentation.quest.review.QuestReviewRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
-fun NavController.navigateToQuestStart(navOptions: NavOptions? = null) {
-    navigate(QuestStart, navOptions)
+fun NavController.navigateToQuestStart(
+    journeyName: QuestType? = null,
+    navOptions: NavOptions? = null
+) {
+    navigate(QuestStart(journeyName), navOptions)
 }
 
 fun NavController.navigateToQuest(navOptions: NavOptions? = null) {
