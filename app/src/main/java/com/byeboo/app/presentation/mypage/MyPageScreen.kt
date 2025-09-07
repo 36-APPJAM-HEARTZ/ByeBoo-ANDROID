@@ -79,7 +79,7 @@ fun MyPageRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is MyPageSideEffect.OpenUrl -> openUrl(context = context, sideEffect.url)
+                is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
                 is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
