@@ -313,8 +313,8 @@ private fun ThreeLineAnimation(
     LaunchedEffect(Unit) {
         delay(2000)
         coroutineScope {
-            launch { shift1.animateTo(-20f, tween(1000, easing = FastOutSlowInEasing)) }
-            launch { alpha1.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { shift1.animateTo(-20f, tween(500, easing = FastOutSlowInEasing)) }
+            launch { alpha1.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
 
             launch { shift2.animateTo(-base2, tween(1000, easing = FastOutSlowInEasing)) }
             launch { scale2.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }
@@ -333,8 +333,8 @@ private fun ThreeLineAnimation(
         val anchorForThird = (base2 + shift2.value) + (height2 * scale2.value) + gapPx
 
         coroutineScope {
-            launch { shift2.animateTo(-base2 - 20f, tween(1000, easing = FastOutSlowInEasing)) }
-            launch { alpha2.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { shift2.animateTo(-base2 - 20f, tween(500, easing = FastOutSlowInEasing)) }
+            launch { alpha2.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
 
             launch { shift3.animateTo(-anchorForThird, tween(1000, easing = FastOutSlowInEasing)) }
             launch { scale3.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }
