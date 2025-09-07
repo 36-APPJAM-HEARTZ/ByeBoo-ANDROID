@@ -115,13 +115,7 @@ fun QuestRecordingRoute(
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::postQuestRecording,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
-        onEmotionSelected = { selectedEmotion ->
-            viewModel.isEmotionSelected(true)
-            viewModel.updateSelectedEmotion(selectedEmotion)
-        },
-        onSelectedChanged = { isSelected ->
-            viewModel.isEmotionSelected(isSelected)
-        },
+        onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
         modifier = modifier
     )
 }
@@ -137,8 +131,7 @@ private fun QuestRecordingScreen(
     onUpdateContent: (Boolean, String) -> Unit,
     navigateButton: () -> Unit,
     onBottomSheetDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType) -> Unit,
-    onSelectedChanged: (Boolean) -> Unit,
+    onEmotionSelected: (LargeTagType?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -300,11 +293,10 @@ private fun QuestRecordingScreen(
     }
 
     ByeBooBottomSheet(
+        selectedEmotion = uiState.selectedEmotion,
         navigateButton = navigateButton,
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
-        onEmotionSelected = onEmotionSelected,
-        onSelectedChanged = onSelectedChanged,
-        isSelected = uiState.isEmotionSelected
+        onEmotionSelected = onEmotionSelected
     )
 }

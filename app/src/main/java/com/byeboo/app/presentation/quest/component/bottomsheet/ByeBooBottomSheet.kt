@@ -15,10 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,16 +30,15 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ByeBooBottomSheet(
+    selectedEmotion: LargeTagType?,
     navigateButton: () -> Unit,
     onDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType) -> Unit,
-    onSelectedChanged: (Boolean) -> Unit,
+    onEmotionSelected: (LargeTagType?) -> Unit,
     modifier: Modifier = Modifier,
     showBottomSheet: Boolean = false,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     isBackgroundDimmed: Boolean = true,
     dragHandle: @Composable () -> Unit = {},
-    isSelected: Boolean = false,
     isUploading: Boolean = false
 ) {
     if (showBottomSheet) {
@@ -59,12 +54,9 @@ fun ByeBooBottomSheet(
             },
             dragHandle = dragHandle
         ) {
-            var selectedEmotion by remember { mutableStateOf<LargeTagType?>(null) }
-
             LaunchedEffect(showBottomSheet) {
                 if (showBottomSheet) {
-                    selectedEmotion = null
-                    onSelectedChanged(false)
+                    onEmotionSelected(null)
                 }
             }
 
@@ -89,8 +81,7 @@ fun ByeBooBottomSheet(
                     selectedEmotion = selectedEmotion,
                     onEmotionSelected = {
                         val newEmotion = if (selectedEmotion == it) null else it
-                        selectedEmotion = newEmotion
-                        onSelectedChanged(newEmotion != null)
+                        onEmotionSelected(newEmotion)
                     },
                     isUploading = isUploading
                 )
