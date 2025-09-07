@@ -38,7 +38,7 @@ fun EmotionChip(
     val textColor = if (isSelected) {
         ByeBooTheme.colors.primary200
     } else {
-        ByeBooTheme.colors.gray400
+        ByeBooTheme.colors.gray500
     }
 
     val textStyle = if (isSelected) {
@@ -86,4 +86,3 @@ fun EmotionChip(
         )
     }
 }
-
