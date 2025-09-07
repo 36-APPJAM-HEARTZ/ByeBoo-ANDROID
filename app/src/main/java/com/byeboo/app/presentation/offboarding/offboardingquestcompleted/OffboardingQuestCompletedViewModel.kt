@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestcompleted
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
@@ -45,11 +44,9 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
 
     private fun loadQuests(journey: QuestType) {
         viewModelScope.launch {
-            val key = journey.journeyType
-            Log.d("QuestRequest", "Request journeyType=$key")
-
             val userName = uiState.value.userName
             val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
+
             result.onSuccess { detail ->
                 _uiState.update { detail.toUiState(journey = journey, nickname = userName) }
             }.onFailure {
@@ -64,7 +61,7 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
         }
     }
 
-    fun onQuestClick(questId: Long) {
+    fun onQuestClicked(questId: Long) {
         viewModelScope.launch {
             _sideEffect.emit(QuestCompletedSideEffect.NavigateToQuestReview(questId))
         }

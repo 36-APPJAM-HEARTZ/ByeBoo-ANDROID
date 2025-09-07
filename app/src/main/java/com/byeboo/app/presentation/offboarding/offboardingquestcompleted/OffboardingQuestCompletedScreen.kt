@@ -64,7 +64,7 @@ fun OffboardingQuestCompletedRoute(
         uiState = uiState,
         onCancelClick = viewModel::onCancelClicked,
         bottomPadding = bottomPadding,
-        onQuestClick = viewModel::onQuestClick,
+        onQuestClick = viewModel::onQuestClicked,
         modifier = modifier
     )
 }
