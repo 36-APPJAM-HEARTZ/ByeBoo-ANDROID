@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
 
     fun onClickQuestStart() {
         viewModelScope.launch {
-            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart)
+            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart(null))
         }
     }
 

@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.home
 
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.home.HomeStatus
 
 data class HomeUiState(
@@ -12,7 +13,7 @@ data class HomeUiState(
 )
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
-    data object NavigateToQuestStart : HomeSideEffect
+    data class NavigateToQuestStart(val journey: QuestType?) : HomeSideEffect
     data object NavigateToTutorial: HomeSideEffect
     data object NavigateToOffboardingCompletedGuide: HomeSideEffect
     data object NavigateToOffboardingNewJourney: HomeSideEffect

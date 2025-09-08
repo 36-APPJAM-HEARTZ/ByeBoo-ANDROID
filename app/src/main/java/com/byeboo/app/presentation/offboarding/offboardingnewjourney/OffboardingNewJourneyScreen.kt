@@ -42,7 +42,7 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingNewJourneyRoute(
-    navigateToQuestStart: () -> Unit,
+    navigateToQuestStart: (QuestType?) -> Unit,
     navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
@@ -52,9 +52,9 @@ fun OffboardingNewJourneyRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        offboardingNewJourneyViewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart()
+        offboardingNewJourneyViewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart(effect.journey)
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }

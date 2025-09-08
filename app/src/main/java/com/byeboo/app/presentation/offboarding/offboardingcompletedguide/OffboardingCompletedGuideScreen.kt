@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -79,6 +80,10 @@ fun OffboardingCompletedGuideRoute(
             }
         }
 
+    }
+
+    BackHandler {
+        viewModel.onCloseClicked()
     }
 
     OffboardingCompleteGuideScreen(

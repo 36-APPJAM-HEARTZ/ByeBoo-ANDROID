@@ -26,6 +26,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -33,8 +34,9 @@ import com.byeboo.app.presentation.quest.component.modal.GuideContent
 
 @Composable
 fun QuestStartRoute(
+    journey: QuestType?,
     navigateToQuest: () -> Unit,
-    navigateToHome: () -> Unit,
+    navigateUp: () -> Unit,
     padding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
@@ -46,7 +48,7 @@ fun QuestStartRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestStartSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestStartSideEffect.NavigateToHome -> navigateToHome()
+                is QuestStartSideEffect.NavigateUp -> navigateUp()
                 is QuestStartSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -55,7 +57,7 @@ fun QuestStartRoute(
     QuestStartScreen(
         uiState = uiState,
         onBackClick = viewModel::onBackClicked,
-        onStartClick = viewModel::onStartClicked,
+        onStartClick = { viewModel.onStartClicked(journey) },
         padding = padding,
         modifier = modifier
     )
