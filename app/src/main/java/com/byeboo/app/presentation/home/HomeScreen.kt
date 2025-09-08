@@ -45,6 +45,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.domain.model.home.HomeStatus
@@ -57,7 +58,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun HomeRoute(
     navigateToQuest: () -> Unit,
-    navigateToQuestStart: () -> Unit,
+    navigateToQuestStart: (QuestType?) -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
@@ -84,7 +85,7 @@ fun HomeRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is HomeSideEffect.NavigateToQuest -> navigateToQuest()
-                is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart()
+                is HomeSideEffect.NavigateToQuestStart -> navigateToQuestStart(null)
                 is HomeSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
