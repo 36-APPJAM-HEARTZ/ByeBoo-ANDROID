@@ -99,7 +99,7 @@ fun MainScreen(
                                     val journeyStatus = status ?: JourneyStatusType.BEFORE_START
 
                                     when (journeyStatus) {
-                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> { navigator.navigateToQuestStart(navOptions) }
+                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> { navigator.navigateToQuestStart(null, navOptions) }
                                         JourneyStatusType.COMPLETED -> { navigator.navigateToOffboardingCompletedGuide(navOptions) }
                                         JourneyStatusType.IN_PROGRESS -> { navigator.navigateToQuest(navOptions) }
                                     }

@@ -13,11 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -79,8 +85,11 @@ private fun EditProfileScreen(
     onCompleteClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
     val showValidMessage = !uiState.isInitial
+    val isFocused = remember { mutableStateOf(false) }
+
 
     Column(
         modifier = modifier
@@ -128,7 +137,17 @@ private fun EditProfileScreen(
             onValueChange = onNicknameChange,
             onClearClick = onClearClick,
             showValidMessage = showValidMessage,
-            focusRequester = focusRequester
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                    if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                        focusManager.clearFocus(force = true)
+                        isFocused.value = false
+                        true
+                    } else {
+                        false
+                    }
+                }
         )
 
         Spacer(modifier = Modifier.weight(1f))

@@ -81,7 +81,7 @@ fun MainNavHost(
 
         homeGraph(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
-            navigateToQuestStart = { navigator.navigateToQuestStart(questNavOptions) },
+            navigateToQuestStart = { journey -> navigator.navigateToQuestStart(journey, questNavOptions) },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToOffboardingCompletedGuide = {
                 navigator.navigateToOffboardingCompletedGuide(
@@ -134,7 +134,7 @@ fun MainNavHost(
         )
 
         myPageGraph(
-            navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
+            navigateToEditProfile = { navigator.navigateToEditProfile(keepStackNavOptions) },
             navigateToOffboardingCompletedJourney = {
                 navigator.navigateToOffboardingCompletedJourney(
                     keepStackNavOptions
@@ -158,7 +158,7 @@ fun MainNavHost(
                     keepStackNavOptions
                 )
             },
-            navigateToQuestStart = { navigator.navigateToQuestStart(clearStackNavOptions) },
+            navigateToQuestStart = { journey -> navigator.navigateToQuestStart(journey, keepStackNavOptions) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey -> navigator.navigateToOffboardingQuestCompleted(journey, keepStackNavOptions) },
