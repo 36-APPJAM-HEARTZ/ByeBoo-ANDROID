@@ -12,12 +12,10 @@ import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -70,28 +68,17 @@ class QuestViewModel @Inject constructor(
                     }
 
                     countdownJob?.cancel()
-                    if (true) { // 조건을 테스트용으로 강제로 true
-                        countdownJob = (3 downTo 1).asFlow() // 30, 29, 28 ...
-                            .onEach { seconds ->
-                                delay(1000) // 1초마다 방출
-                                updateTimerLockedMinutes(seconds.toLong())
+                    if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
+                        countdownJob = QuestCountdownTimer
+                            .countdownFlow(output.openAt, output.serverNow)
+                            .onEach { minutes ->
+                                updateTimerLockedMinutes(minutes)
                             }
                             .onCompletion {
                                 viewModelScope.launch { unlockTimerLocked() }
                             }
                             .launchIn(viewModelScope)
                     }
-//                    if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
-//                        countdownJob = QuestCountdownTimer
-//                            .countdownFlow(output.openAt, output.serverNow)
-//                            .onEach { minutes ->
-//                                updateTimerLockedMinutes(minutes)
-//                            }
-//                            .onCompletion {
-//                                viewModelScope.launch { unlockTimerLocked() }
-//                            }
-//                            .launchIn(viewModelScope)
-//                    }
                 }
                 .onFailure { t ->
                     // TODO: 추후 수정 예정
