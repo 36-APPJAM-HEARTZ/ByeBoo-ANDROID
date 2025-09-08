@@ -51,9 +51,7 @@ class QuestStartViewModel @Inject constructor(
                 questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                 _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
             }.onFailure { e ->
-                _sideEffect.emit(
-                    QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
+                _sideEffect.emit(QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
             }
         }
     }

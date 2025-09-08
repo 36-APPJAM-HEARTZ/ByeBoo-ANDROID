@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
@@ -52,6 +53,7 @@ fun QuestTipRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val questUiState by questViewModel.uiState.collectAsStateWithLifecycle()
     val questGroups = questUiState.questGroups
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(questId, questGroups) {
         val quest = questGroups
@@ -64,9 +66,8 @@ fun QuestTipRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is QuestTipSideEffect.NavigateToQuest -> {
-                    navigateToQuest()
-                }
+                is QuestTipSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
             }
         }
     }

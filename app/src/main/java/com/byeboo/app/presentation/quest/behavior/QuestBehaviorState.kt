@@ -34,4 +34,5 @@ sealed interface QuestBehaviorSideEffect {
     data class NavigateToQuestBehaviorComplete(val questId: Long) : QuestBehaviorSideEffect
     data class CompleteAndClear(val questId: Long) : QuestBehaviorSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestBehaviorSideEffect
+    data class ShowSnackBar(val message: String) : QuestBehaviorSideEffect
 }

@@ -37,6 +37,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.ContentText
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
@@ -56,6 +57,7 @@ fun QuestReviewRoute(
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -65,7 +67,8 @@ fun QuestReviewRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                QuestReviewSideEffect.NavigateToQuest -> navigateToBack()
+                is QuestReviewSideEffect.NavigateToQuest -> navigateToBack()
+                is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }

@@ -23,4 +23,5 @@ data class QuestTipAnswers(
 
 sealed interface QuestTipSideEffect {
     data object NavigateToQuest : QuestTipSideEffect
+    data class ShowSnackBar(val message: String) : QuestTipSideEffect
 }

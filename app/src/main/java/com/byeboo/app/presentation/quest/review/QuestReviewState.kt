@@ -18,4 +18,5 @@ data class QuestReviewState(
 
 sealed interface QuestReviewSideEffect {
     data object NavigateToQuest : QuestReviewSideEffect
+    data class ShowSnackBar(val message: String) : QuestReviewSideEffect
 }
