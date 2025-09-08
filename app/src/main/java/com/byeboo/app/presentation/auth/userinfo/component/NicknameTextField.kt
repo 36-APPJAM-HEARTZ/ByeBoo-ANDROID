@@ -148,6 +148,9 @@ fun NicknameTextField(
                         .align(Alignment.CenterEnd)
                         .noRippleClickable { onClearClick() }
                 )
+            } else {
+                    Spacer(modifier = Modifier.size(25.dp))
+
             }
         }
 
