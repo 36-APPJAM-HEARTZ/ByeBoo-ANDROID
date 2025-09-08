@@ -6,6 +6,7 @@ import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingNewJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestBehaviorAnswerRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestStateRepositoryImpl
@@ -19,6 +20,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingNewJourneyRepository
 import com.byeboo.app.domain.repository.quest.QuestBehaviorAnswerRepository
+import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
 import com.byeboo.app.domain.repository.quest.QuestInProgressRepository
@@ -68,6 +70,10 @@ abstract class RepositoryModule {
     abstract fun bindsQuestInProgressRepository(
         questInProgressRepositoryImpl: QuestInProgressRepositoryImpl
     ): QuestInProgressRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsQuestCompletedRepository(offboardingQuestCompletedRepositoryImpl: OffboardingQuestCompletedRepositoryImpl): OffboardingQuestCompletedRepository
 
     @Binds
     @Singleton

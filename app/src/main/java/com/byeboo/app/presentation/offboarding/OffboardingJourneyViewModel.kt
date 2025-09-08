@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.offboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +34,12 @@ class OffboardingJourneyViewModel @Inject constructor(
     fun onBackClicked(){
         viewModelScope.launch {
             _sideEffect.emit(OffboardingJourneySideEffect.NavigateUp)
+        }
+    }
+
+    fun onJourneyCompletedCardClicked(journey : QuestType){
+        viewModelScope.launch {
+            _sideEffect.emit(OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey))
         }
     }
 

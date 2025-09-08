@@ -22,7 +22,7 @@ class QuestUiModelMapper @Inject constructor() {
 
         val groups = inProgress.steps.map { step ->
             QuestGroup(
-                questNumber = step.stepNumber,
+                stepNumber = step.stepNumber,
                 stepTitle = step.stepTitle,
                 quests = step.quests.map { quest ->
                     val state = when {
@@ -38,7 +38,7 @@ class QuestUiModelMapper @Inject constructor() {
                         questNumber = quest.questNumber,
                         questQuestion = quest.question,
                         state = state,
-                        type = QuestType.from(quest.questStyle)
+                        type = QuestType.fromQuestStyle(quest.questStyle)
                     )
                 }.toImmutableList()
             )

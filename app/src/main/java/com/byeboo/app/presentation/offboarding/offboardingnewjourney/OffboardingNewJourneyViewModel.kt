@@ -6,7 +6,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.offboarding.OffboardingNewJourneyRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
-import com.byeboo.app.presentation.offboarding.util.toOffboardingJourneyType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -29,14 +28,13 @@ class OffboardingNewJourneyViewModel @Inject constructor(
     }
 
     fun postNewJourney(journey: QuestType) {
-        val journeyType = journey.toOffboardingJourneyType()
-        val journeyKey = journeyType.serverKey
-        val journeyText = journeyType.displayName
+        val journeyType = journey.journeyType
+        val journeyName = journey.journeyName
 
         viewModelScope.launch {
-            offboardingNewJourneyRepository.postOffboardingNewJourney(journeyKey)
+            offboardingNewJourneyRepository.postOffboardingNewJourney(journeyType)
                 .onSuccess {
-                    questStateRepository.updateUserJourney(journeyText)
+                    questStateRepository.updateUserJourney(journeyName)
                     questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                     _sideEffect.emit(OffboardingNewJourneySideEffect.NavigateToQuestStart)
                 }

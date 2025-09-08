@@ -20,6 +20,7 @@ import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingNewJourney
+import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestCompleted
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.Quest
@@ -157,6 +158,10 @@ class MainNavigator(
 
     fun navigateToOffboardingCompletedJourney(navOptions: NavOptions) {
         navController.navigateToOffboardingCompletedJourney(navOptions)
+    }
+
+    fun navigateToOffboardingQuestCompleted(journey: QuestType, navOptions: NavOptions) {
+        navController.navigateToOffboardingQuestCompleted(journey, navOptions)
     }
 
     fun navigateToSplash(navOptions: NavOptions) {
