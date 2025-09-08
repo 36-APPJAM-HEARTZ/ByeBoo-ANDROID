@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -57,7 +58,8 @@ fun MyPageModal(
                 Text(
                     text = myPageModalSubText,
                     color = ByeBooTheme.colors.gray400,
-                    style = ByeBooTheme.typography.body3
+                    style = ByeBooTheme.typography.body3,
+                    textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
