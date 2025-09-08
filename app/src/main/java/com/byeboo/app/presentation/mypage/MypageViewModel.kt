@@ -90,7 +90,9 @@ class MyPageViewModel @Inject constructor(
                 _uiState.update { it.copy(showLogoutModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
-                //Todo
+                _sideEffect.emit(
+                    MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
@@ -98,9 +100,12 @@ class MyPageViewModel @Inject constructor(
     fun confirmWithdraw() {
         viewModelScope.launch {
             withdrawUseCase().onSuccess {
+                _uiState.update { it.copy(showLogoutModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
-                //Todo:
+                _sideEffect.emit(
+                    MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
