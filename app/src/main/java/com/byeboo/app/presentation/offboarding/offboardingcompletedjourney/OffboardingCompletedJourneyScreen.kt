@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
@@ -41,6 +42,7 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 @Composable
 fun OffboardingCompletedJourneyRoute(
     navigateUp: () -> Unit,
+    navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel()
@@ -48,19 +50,19 @@ fun OffboardingCompletedJourneyRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect {
+            when (it) {
                 is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
+                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(it.journey)
             }
         }
     }
 
-    // TODO: 클릭 시 이동 관련 추후에 구현할 예정
     OffboardingCompletedJourneyScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClicked,
-        onJourneyCompletedCardClick = {},
+        onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
         modifier = modifier
     )
 }
@@ -70,7 +72,7 @@ private fun OffboardingCompletedJourneyScreen(
     uiState: OffboardingJourneyState,
     bottomPadding: Dp,
     onBackClick: () -> Unit,
-    onJourneyCompletedCardClick: () -> Unit,
+    onJourneyCompletedCardClick: (QuestType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -137,7 +139,7 @@ private fun OffboardingCompletedJourneyScreen(
                 key(card) {
                     JourneyCard(
                         journeyType = card.journeyType,
-                        onJourneyCardClick = onJourneyCompletedCardClick,
+                        onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
                         chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,

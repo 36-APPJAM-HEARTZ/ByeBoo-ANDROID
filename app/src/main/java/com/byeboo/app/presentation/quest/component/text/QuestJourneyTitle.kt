@@ -42,7 +42,7 @@ fun QuestJourneyTitle(
                 append("${nickname}님, 지금\n")
 
                 withStyle(style = SpanStyle(color = ByeBooTheme.colors.primary300)) {
-                    append(questTitle.questName)
+                    append(questTitle.questStyle)
                 }
 
                 append(" 여정을 진행 중이에요.")

@@ -182,7 +182,7 @@ private fun QuestTipScreen(
             item {
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-                if (questType.questName == "RECORDING") {
+                if (questType.questStyle == "RECORDING") {
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이런 걸 생각해 보며 작성해 주세요.",

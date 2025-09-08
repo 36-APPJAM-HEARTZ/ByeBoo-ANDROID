@@ -5,6 +5,7 @@ import com.byeboo.app.data.service.auth.AuthService
 import com.byeboo.app.data.service.auth.UserService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingNewJourneyService
+import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
 import com.byeboo.app.data.service.quest.QuestDetailService
 import com.byeboo.app.data.service.quest.QuestRecordedDetailService
@@ -15,8 +16,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -83,5 +84,12 @@ object ServiceModule {
     fun providesOffboardingNewJourneyService(retrofit: Retrofit): OffboardingNewJourneyService =
         retrofit.create(
             OffboardingNewJourneyService::class.java
+        )
+
+    @Provides
+    @Singleton
+    fun providesOffboardingQuestCompletedService(retrofit: Retrofit): OffboardingQuestCompletedService =
+        retrofit.create(
+            OffboardingQuestCompletedService::class.java
         )
 }

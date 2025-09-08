@@ -37,7 +37,7 @@ class QuestTipViewModel @Inject constructor(
             result.onSuccess { tip ->
                 _uiState.update {
                     it.copy(
-                        step = QuestType.Companion.from(tip.step),
+                        step = QuestType.Companion.fromQuestStyle(tip.step),
                         stepNumber = tip.stepNumber,
                         questNumber = tip.questNumber,
                         question = tip.question,
