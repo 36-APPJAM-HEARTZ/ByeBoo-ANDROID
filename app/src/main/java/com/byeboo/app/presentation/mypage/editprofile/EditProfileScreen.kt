@@ -16,8 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -41,6 +41,7 @@ fun EditProfileRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -53,6 +54,7 @@ fun EditProfileRoute(
     LaunchedEffect(Unit) {
         delay(100)
         focusRequester.requestFocus()
+        keyboard?.show()
     }
 
     EditProfileScreen(
@@ -126,7 +128,7 @@ private fun EditProfileScreen(
             onValueChange = onNicknameChange,
             onClearClick = onClearClick,
             showValidMessage = showValidMessage,
-            modifier = Modifier.focusRequester(focusRequester)
+            focusRequester = focusRequester
         )
 
         Spacer(modifier = Modifier.weight(1f))
