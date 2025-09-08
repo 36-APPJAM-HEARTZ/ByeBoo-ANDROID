@@ -35,7 +35,7 @@ fun QuestEmotionDescriptionCard(
             .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            EmotionChip(emotionType = emotionType, isSelected = true)
+            EmotionChip(emotionType = emotionType, isSelected = false)
 
             Spacer(modifier = modifier.width(screenWidthDp(24.dp)))
 

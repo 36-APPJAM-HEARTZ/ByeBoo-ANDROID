@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
@@ -46,6 +47,7 @@ fun EditProfileRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -58,6 +60,7 @@ fun EditProfileRoute(
     LaunchedEffect(Unit) {
         delay(100)
         focusRequester.requestFocus()
+        keyboard?.show()
     }
 
     EditProfileScreen(
