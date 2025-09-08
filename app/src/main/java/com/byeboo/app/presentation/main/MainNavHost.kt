@@ -134,7 +134,7 @@ fun MainNavHost(
         )
 
         myPageGraph(
-            navigateToEditProfile = { navigator.navigateToEditProfile(clearStackNavOptions) },
+            navigateToEditProfile = { navigator.navigateToEditProfile(keepStackNavOptions) },
             navigateToOffboardingCompletedJourney = {
                 navigator.navigateToOffboardingCompletedJourney(
                     keepStackNavOptions
