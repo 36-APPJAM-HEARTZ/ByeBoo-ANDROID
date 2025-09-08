@@ -10,12 +10,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -146,7 +144,7 @@ private fun OffboardingCompleteGuideScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .requiredHeight(220.dp),
+                        .height(156.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -173,14 +171,14 @@ private fun OffboardingCompleteGuideScreen(
                         .fillMaxWidth()
                         .weight(1f)
                         .padding(horizontal = 16.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.BottomCenter
                 ) {
                     LottieAnimation(
                         composition = composition,
                         progress = progress,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f)
+                            .padding(bottom = 34.dp)
                     )
                 }
 
@@ -229,7 +227,7 @@ fun TextSequence(
 
     Spacer(modifier = Modifier.height(topGap))
 
-    ThreeLineAnimation(
+    Animation(
         firstSentence = firstSentence,
         secondSentence = secondSentence,
         thirdSentence = thirdSentence,
@@ -246,7 +244,7 @@ fun TextSequence(
 }
 
 @Composable
-private fun ThreeLineAnimation(
+private fun Animation(
     firstSentence: String,
     secondSentence: String,
     thirdSentence: String,
@@ -313,8 +311,8 @@ private fun ThreeLineAnimation(
     LaunchedEffect(Unit) {
         delay(2000)
         coroutineScope {
-            launch { shift1.animateTo(-20f, tween(1000, easing = FastOutSlowInEasing)) }
-            launch { alpha1.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { shift1.animateTo(-20f, tween(500, easing = FastOutSlowInEasing)) }
+            launch { alpha1.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
 
             launch { shift2.animateTo(-base2, tween(1000, easing = FastOutSlowInEasing)) }
             launch { scale2.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }
@@ -333,8 +331,8 @@ private fun ThreeLineAnimation(
         val anchorForThird = (base2 + shift2.value) + (height2 * scale2.value) + gapPx
 
         coroutineScope {
-            launch { shift2.animateTo(-base2 - 20f, tween(1000, easing = FastOutSlowInEasing)) }
-            launch { alpha2.animateTo(0f, tween(1000, easing = FastOutSlowInEasing)) }
+            launch { shift2.animateTo(-base2 - 20f, tween(500, easing = FastOutSlowInEasing)) }
+            launch { alpha2.animateTo(0f, tween(500, easing = FastOutSlowInEasing)) }
 
             launch { shift3.animateTo(-anchorForThird, tween(1000, easing = FastOutSlowInEasing)) }
             launch { scale3.animateTo(activeScale, tween(1000, easing = FastOutSlowInEasing)) }

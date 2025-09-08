@@ -238,10 +238,12 @@ private fun QuestBehaviorCompleteScreen(
 
                 Spacer(modifier = modifier.height(12.dp))
 
-                QuestEmotionDescriptionCard(
-                    questEmotionDescription = uiState.emotionDescription,
-                    emotionType = uiState.selectedEmotion
-                )
+                uiState.selectedEmotion?.let { emotion ->
+                    QuestEmotionDescriptionCard(
+                        questEmotionDescription = uiState.emotionDescription,
+                        emotionType = emotion
+                    )
+                }
 
                 Spacer(modifier = modifier.height(24.dp))
             }

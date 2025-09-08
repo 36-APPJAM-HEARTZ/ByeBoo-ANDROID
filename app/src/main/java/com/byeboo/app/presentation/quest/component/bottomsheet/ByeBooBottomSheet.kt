@@ -15,10 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,16 +30,15 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ByeBooBottomSheet(
+    selectedEmotion: LargeTagType?,
     navigateButton: () -> Unit,
     onDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType) -> Unit,
-    onSelectedChanged: (Boolean) -> Unit,
+    onEmotionSelected: (LargeTagType?) -> Unit,
     modifier: Modifier = Modifier,
     showBottomSheet: Boolean = false,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     isBackgroundDimmed: Boolean = true,
     dragHandle: @Composable () -> Unit = {},
-    isSelected: Boolean = false,
     isUploading: Boolean = false
 ) {
     if (showBottomSheet) {
@@ -59,12 +54,9 @@ fun ByeBooBottomSheet(
             },
             dragHandle = dragHandle
         ) {
-            var selectedEmotion by remember { mutableStateOf<LargeTagType?>(null) }
-
             LaunchedEffect(showBottomSheet) {
                 if (showBottomSheet) {
-                    selectedEmotion = null
-                    onSelectedChanged(false)
+                    onEmotionSelected(null)
                 }
             }
 
@@ -89,8 +81,7 @@ fun ByeBooBottomSheet(
                     selectedEmotion = selectedEmotion,
                     onEmotionSelected = {
                         val newEmotion = if (selectedEmotion == it) null else it
-                        selectedEmotion = newEmotion
-                        onSelectedChanged(newEmotion != null)
+                        onEmotionSelected(newEmotion)
                     },
                     isUploading = isUploading
                 )
@@ -107,7 +98,7 @@ fun ByeBooBottomSheet(
                             navigateButton()
                         }
                     },
-                    isEnabled = isSelected && !isUploading
+                    isEnabled = (selectedEmotion != null) && !isUploading
                 )
             }
         }
@@ -121,6 +112,8 @@ private fun EmotionChipList(
     isUploading: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val isOthersBackgroundDimmed = selectedEmotion != null
+
     Column(modifier = modifier.padding(horizontal = screenWidthDp(62.dp))) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -130,6 +123,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_NEUTRAL,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_NEUTRAL,
                 enabled = !isUploading,
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_NEUTRAL,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_NEUTRAL) }
             )
 
@@ -139,6 +133,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_SELF_AWARE,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_SELF_AWARE,
                 enabled = !isUploading,
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_SELF_AWARE,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SELF_AWARE) }
             )
         }
@@ -153,6 +148,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_SADNESS,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_SADNESS,
                 enabled = !isUploading,
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_SADNESS,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SADNESS) }
             )
 
@@ -162,6 +158,7 @@ private fun EmotionChipList(
                 emotionType = LargeTagType.EMOTION_RELIEF,
                 isSelected = selectedEmotion == LargeTagType.EMOTION_RELIEF,
                 enabled = !isUploading,
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_RELIEF,
                 onChipClick = { onEmotionSelected(LargeTagType.EMOTION_RELIEF) }
             )
         }
