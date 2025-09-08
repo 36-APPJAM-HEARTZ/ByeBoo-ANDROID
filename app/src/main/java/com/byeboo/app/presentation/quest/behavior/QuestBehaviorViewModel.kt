@@ -89,7 +89,7 @@ class QuestBehaviorViewModel @Inject constructor(
             val imageUrl = _uiState.value.selectedImageUri ?: return@launch
             val questId = _uiState.value.questId
             val answer = _uiState.value.contents
-            val emotion = _uiState.value.selectedEmotion.toData()
+            val emotion = _uiState.value.selectedEmotion?.toData().orEmpty()
 
             runCatching {
                 val inputStream = context.contentResolver.openInputStream(imageUrl)
@@ -182,11 +182,7 @@ class QuestBehaviorViewModel @Inject constructor(
         _uiState.update { it.copy(showBottomSheet = false) }
     }
 
-    fun isEmotionSelected(isSelected: Boolean) {
-        _uiState.update { it.copy(isEmotionSelected = isSelected) }
-    }
-
-    fun updateSelectedEmotion(emotion: LargeTagType) {
+    fun updateSelectedEmotion(emotion: LargeTagType?) {
         _uiState.update { it.copy(selectedEmotion = emotion) }
     }
 

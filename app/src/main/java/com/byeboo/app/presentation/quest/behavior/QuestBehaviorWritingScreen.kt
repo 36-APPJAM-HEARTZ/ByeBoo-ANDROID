@@ -39,6 +39,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
@@ -83,8 +84,15 @@ fun QuestBehaviorWritingRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
-                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(effect.questId)
+                is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+                    effect.questId,
+                    effect.questType
+                )
+
+                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(
+                    effect.questId
+                )
+
                 is QuestBehaviorSideEffect.CompleteAndClear -> viewModel.clearQuestInput()
                 is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
                 else -> Unit
@@ -99,7 +107,11 @@ fun QuestBehaviorWritingRoute(
             quitButton = {
                 viewModel.onDismissModal()
                 viewModel.onQuitClicked()
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 
@@ -116,13 +128,7 @@ fun QuestBehaviorWritingRoute(
         navigateButton = viewModel::uploadImage,
         onClickCompleteButton = viewModel::openBottomSheet,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
-        onEmotionSelected = { selectedEmotion ->
-            viewModel.isEmotionSelected(true)
-            viewModel.updateSelectedEmotion(selectedEmotion)
-        },
-        onSelectedChanged = { isSelected ->
-            viewModel.isEmotionSelected(isSelected)
-        },
+        onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
         modifier = modifier
     )
 }
@@ -139,8 +145,7 @@ private fun QuestBehaviorWritingScreen(
     onUpdateContent: (String) -> Unit,
     navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType) -> Unit,
-    onSelectedChanged: (Boolean) -> Unit,
+    onEmotionSelected: (LargeTagType?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -349,12 +354,11 @@ private fun QuestBehaviorWritingScreen(
     }
 
     ByeBooBottomSheet(
+        selectedEmotion = uiState.selectedEmotion,
         navigateButton = { navigateButton(context) },
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
-        onSelectedChanged = onSelectedChanged,
-        isSelected = uiState.isEmotionSelected,
         isUploading = uiState.isUploading
     )
 }

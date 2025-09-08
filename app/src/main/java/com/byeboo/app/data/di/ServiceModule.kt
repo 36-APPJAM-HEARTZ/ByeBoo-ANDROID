@@ -1,10 +1,10 @@
 package com.byeboo.app.data.di
 
 import com.byeboo.app.core.network.qualifier.Auth
+import com.byeboo.app.data.service.NewJourneyService
 import com.byeboo.app.data.service.auth.AuthService
 import com.byeboo.app.data.service.auth.UserService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
-import com.byeboo.app.data.service.offboarding.OffboardingNewJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
 import com.byeboo.app.data.service.quest.QuestDetailService
@@ -81,9 +81,9 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesOffboardingNewJourneyService(retrofit: Retrofit): OffboardingNewJourneyService =
+    fun providesOffboardingNewJourneyService(retrofit: Retrofit): NewJourneyService =
         retrofit.create(
-            OffboardingNewJourneyService::class.java
+            NewJourneyService::class.java
         )
 
     @Provides

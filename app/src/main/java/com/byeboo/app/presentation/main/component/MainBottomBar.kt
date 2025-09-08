@@ -81,6 +81,8 @@ fun RowScope.MainBottomBarItem(
     onClick: () -> Unit
 ) {
     val bottomItemColor = if (selected) primary300 else gray400
+    val bottomTextStyle = if (selected) ByeBooTheme.typography.body4 else ByeBooTheme.typography.body6
+
     Column(
         modifier = modifier
             .noRippleClickable(onClick = onClick)
@@ -96,6 +98,7 @@ fun RowScope.MainBottomBarItem(
         Text(
             text = stringResource(tab.contentDescription),
             fontSize = 14.sp,
+            style = bottomTextStyle,
             color = bottomItemColor
         )
     }

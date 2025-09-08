@@ -34,7 +34,7 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
-    navigateToQuestStart: () -> Unit,
+    navigateToQuestStart: (QuestType?) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,

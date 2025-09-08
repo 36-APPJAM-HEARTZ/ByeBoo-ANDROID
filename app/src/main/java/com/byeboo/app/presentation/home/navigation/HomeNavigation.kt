@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.navigation.MainTabRoute
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.home.HomeRoute
@@ -27,7 +28,7 @@ fun NavController.navigateToHomeAmulet(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeGraph(
     navigateToQuest: () -> Unit,
-    navigateToQuestStart: () -> Unit,
+    navigateToQuestStart: (QuestType?) -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,

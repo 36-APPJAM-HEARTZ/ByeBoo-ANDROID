@@ -104,8 +104,8 @@ class MainNavigator(
         navController.navigateToUserInfo(navOptions)
     }
 
-    fun navigateToQuestStart(navOptions: NavOptions) {
-        navController.navigateToQuestStart(navOptions)
+    fun navigateToQuestStart(journeyName: QuestType? = null, navOptions: NavOptions) {
+        navController.navigateToQuestStart(journeyName, navOptions)
     }
 
     fun navigateToQuest(options: NavOptions) {

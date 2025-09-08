@@ -58,7 +58,7 @@ class QuestRecordingViewModel @Inject constructor(
     fun postQuestRecording() {
         val questId = uiState.value.questId
         val answer = uiState.value.questAnswer
-        val emotion = uiState.value.selectedEmotion.title
+        val emotion = uiState.value.selectedEmotion?.title.orEmpty()
 
         viewModelScope.launch {
             val request = QuestRecording(
@@ -118,11 +118,7 @@ class QuestRecordingViewModel @Inject constructor(
         _uiState.update { it.copy(showBottomSheet = false) }
     }
 
-    fun isEmotionSelected(isSelected: Boolean) {
-        _uiState.update { it.copy(isEmotionSelected = isSelected) }
-    }
-
-    fun updateSelectedEmotion(emotion: LargeTagType) {
-        _uiState.value = _uiState.value.copy(selectedEmotion = emotion)
+    fun updateSelectedEmotion(emotion: LargeTagType?) {
+        _uiState.update { it.copy(selectedEmotion = emotion) }
     }
 }

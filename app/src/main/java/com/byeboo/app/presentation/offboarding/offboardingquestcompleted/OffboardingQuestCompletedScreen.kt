@@ -82,7 +82,7 @@ private fun OffboardingQuestCompletedScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp))
+            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
@@ -114,7 +114,7 @@ private fun OffboardingQuestCompletedScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(37.dp)),
             modifier = Modifier.fillMaxWidth()
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
