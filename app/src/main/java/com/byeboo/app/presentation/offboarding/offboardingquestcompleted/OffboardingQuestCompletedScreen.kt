@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -46,16 +47,18 @@ fun OffboardingQuestCompletedRoute(
     viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(journey) {
         viewModel.setJourney(journey)
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect {
-            when (it) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
+                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
@@ -48,12 +49,14 @@ fun OffboardingCompletedJourneyRoute(
     viewModel: OffboardingJourneyViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect {
-            when (it) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
-                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(it.journey)
+                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(effect.journey)
+                is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }

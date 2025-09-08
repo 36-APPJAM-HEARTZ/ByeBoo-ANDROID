@@ -81,8 +81,9 @@ class QuestViewModel @Inject constructor(
                     }
                 }
                 .onFailure { t ->
-                    // TODO: 추후 수정 예정
-                    _uiState.update { it.copy(error = t.message ?: "알 수 없는 오류가 발생했어요") }
+                    _sideEffect.emit(
+                        QuestSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
                 }
         }
     }
