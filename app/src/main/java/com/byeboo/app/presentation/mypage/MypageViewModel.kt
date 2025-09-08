@@ -100,7 +100,7 @@ class MyPageViewModel @Inject constructor(
     fun confirmWithdraw() {
         viewModelScope.launch {
             withdrawUseCase().onSuccess {
-                _uiState.update { it.copy(showLogoutModal = false) }
+                _uiState.update { it.copy(showDeleteAccountModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
                 _sideEffect.emit(
