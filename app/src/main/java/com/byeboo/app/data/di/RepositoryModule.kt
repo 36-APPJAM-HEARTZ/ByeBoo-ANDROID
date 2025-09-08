@@ -106,6 +106,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindNewJourneyRepository(
-        offboardingNewJourneyRepositoryImpl: NewJourneyRepositoryImpl
+        newJourneyRepositoryImpl: NewJourneyRepositoryImpl
     ): NewJourneyRepository
 }
