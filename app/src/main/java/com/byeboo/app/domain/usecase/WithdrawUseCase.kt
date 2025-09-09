@@ -20,8 +20,5 @@ class WithdrawUseCase @Inject constructor(
                 userRepository.clear()
                 tokenRepository.setLoginSplash(true)
             }
-            .onFailure {
-                //Todo: 스낵바
-            }
     }
 }

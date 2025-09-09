@@ -50,7 +50,9 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
             result.onSuccess { detail ->
                 _uiState.update { detail.toUiState(journey = journey, nickname = userName) }
             }.onFailure {
-
+                viewModelScope.launch {
+                    _sideEffect.emit(QuestCompletedSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                }
             }
         }
     }
