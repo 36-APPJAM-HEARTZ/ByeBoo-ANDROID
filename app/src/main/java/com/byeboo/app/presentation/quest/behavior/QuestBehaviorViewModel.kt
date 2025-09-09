@@ -54,6 +54,8 @@ class QuestBehaviorViewModel @Inject constructor(
                         question = detail.question
                     )
                 }
+            }.onFailure {
+                _sideEffect.emit(QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
             }
         }
     }
@@ -74,6 +76,8 @@ class QuestBehaviorViewModel @Inject constructor(
                         emotionDescription = detail.emotionDescription
                     )
                 }
+            }.onFailure {
+                _sideEffect.emit(QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
             }
         }
     }
@@ -105,6 +109,8 @@ class QuestBehaviorViewModel @Inject constructor(
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
                 _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
                 closeBottomSheet()
+            }.onFailure {
+                _sideEffect.emit(QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
             }
 
             _uiState.update { it.copy(isUploading = false) }
@@ -181,7 +187,7 @@ class QuestBehaviorViewModel @Inject constructor(
     }
 
     fun onCloseClicked() {
-        if (uiState.value.questNumber == 30L){
+        if (uiState.value.questNumber == 30L) {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide)
             }

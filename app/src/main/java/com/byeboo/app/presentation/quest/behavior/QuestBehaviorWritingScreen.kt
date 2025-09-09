@@ -46,6 +46,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -72,6 +73,7 @@ fun QuestBehaviorWritingRoute(
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -79,18 +81,20 @@ fun QuestBehaviorWritingRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collectLatest {
-            when (it) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
                 is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    it.questId, it.questType
+                    effect.questId,
+                    effect.questType
                 )
 
                 is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(
-                    it.questId
+                    effect.questId
                 )
 
                 is QuestBehaviorSideEffect.CompleteAndClear -> viewModel.clearQuestInput()
+                is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
                 else -> Unit
             }
         }

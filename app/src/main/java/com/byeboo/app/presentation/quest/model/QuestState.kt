@@ -16,4 +16,5 @@ sealed interface QuestSideEffect {
     data class NavigateToQuestReview(val questId: Long) : QuestSideEffect
     data object NavigateToHome : QuestSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestSideEffect
+    data class ShowSnackBar(val message: String) : QuestSideEffect
 }

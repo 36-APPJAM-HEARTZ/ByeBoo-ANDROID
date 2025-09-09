@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -50,6 +51,7 @@ fun QuestRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(uiState.currentStepIndex) {
         if (uiState.questGroups.isNotEmpty() && uiState.currentStepIndex >= 0) {
@@ -61,17 +63,15 @@ fun QuestRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collectLatest {
-            when (it) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    it.questId,
-                    it.questType
-                )
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(it.questId)
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(it.questId)
-                is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(it.questId)
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
+                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
+                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToHome -> navigateToHome()
                 is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
+                is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }
