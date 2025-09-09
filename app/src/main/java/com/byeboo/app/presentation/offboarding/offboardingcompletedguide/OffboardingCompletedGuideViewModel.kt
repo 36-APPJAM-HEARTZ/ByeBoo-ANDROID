@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,9 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<OffboardingCompletedGuideSideEffect>()
     val sideEffect: SharedFlow<OffboardingCompletedGuideSideEffect> = _sideEffect.asSharedFlow()
 
-    private val ANIMATION_PLAYED = "animation_played"
+    companion object {
+        private const val ANIMATION_PLAYED = "animation_played"
+    }
 
     val isInitialAnimation: StateFlow<Boolean> = savedStateHandle.getStateFlow(ANIMATION_PLAYED, false)
 
@@ -38,13 +41,23 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
 
     private fun loadInitialData() {
         viewModelScope.launch {
-            userRepository.getNickname().collect { name ->
-                _uiState.update { it.copy(nickname = name) }
+            userRepository.getNickname()
+                .catch { e ->
+                    _sideEffect.emit(
+                        OffboardingCompletedGuideSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
+                }
+                .collect { name ->
+                    _uiState.update { it.copy(nickname = name) }
             }
         }
         viewModelScope.launch {
-            val journey = questStateRepository.getUserJourney() ?: "감정 직면"
-            _uiState.update { it.copy(journeyName = journey) }
+            runCatching {
+                val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+                _uiState.update { it.copy(journeyName = journey) }
+            }.onFailure { e ->
+                _sideEffect.emit(OffboardingCompletedGuideSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+            }
         }
     }
 
