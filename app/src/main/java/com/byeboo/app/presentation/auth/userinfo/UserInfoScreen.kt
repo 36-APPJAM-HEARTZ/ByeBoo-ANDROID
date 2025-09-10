@@ -206,7 +206,7 @@ private fun UserInfoScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             ByeBooActivationButton(
-                modifier = Modifier.padding(bottom = padding),
+                modifier = Modifier.padding(bottom = padding + screenHeightDp(8.dp)),
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,
