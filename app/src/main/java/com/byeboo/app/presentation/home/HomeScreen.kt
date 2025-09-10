@@ -256,7 +256,7 @@ private fun HomeScreen(
                     ) {
                         Image(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_speech_bubble),
-                            contentDescription = "null",
+                            contentDescription = null,
                             modifier = Modifier.matchParentSize()
                         )
 
