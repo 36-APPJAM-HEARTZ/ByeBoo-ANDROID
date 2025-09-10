@@ -50,7 +50,7 @@ fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    padding: Dp,
+    bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
@@ -86,7 +86,7 @@ fun SplashRoute(
     }
 
     SplashScreen(
-        padding = padding,
+        bottomPadding = bottomPadding,
         showLoginButton = showLoginButton,
         onClick = {
             val availableButton = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
@@ -98,7 +98,7 @@ fun SplashRoute(
 
 @Composable
 private fun SplashScreen(
-    padding: Dp,
+    bottomPadding: Dp,
     showLoginButton: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -126,18 +126,18 @@ private fun SplashScreen(
         )
 
         Image(
-            painter = painterResource(R.drawable.img_splash_logo),
+            imageVector = ImageVector.vectorResource(id = R.drawable.img_splash_logo),
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = screenWidthDp(76.dp))
-                .padding(top = screenHeightDp(padding + 250.dp))
+                .padding(top = screenHeightDp(333.dp))
                 .offset(y = upAnimation)
         )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .padding(bottom = padding)
+                .padding(bottom = bottomPadding)
                 .offset(y = upAnimation),
         ) {
 
@@ -173,5 +173,3 @@ private fun SplashScreen(
         }
     }
 }
-
-

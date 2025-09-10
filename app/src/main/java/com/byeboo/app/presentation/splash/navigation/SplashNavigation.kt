@@ -24,7 +24,7 @@ fun NavGraphBuilder.splashGraph(
             navigateToHome = navigateToHome,
             navigateToUserInfo = navigateToUserInfo,
             navigateToTermsOfService = navigateToTermsOfService,
-            padding = padding
+            bottomPadding = padding
         )
     }
 }
