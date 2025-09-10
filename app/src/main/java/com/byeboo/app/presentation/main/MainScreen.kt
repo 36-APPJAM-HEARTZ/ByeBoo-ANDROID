@@ -55,6 +55,10 @@ fun MainScreen(
         }
     }
 
+    val snackBarBottomInset =
+        if (showBottomBar) screenHeightDp(8.dp)
+        else screenHeightDp(68.dp)
+
 
     if (showBottomBar) {
         if (currentTab == MainNavTab.HOME) {
@@ -72,7 +76,7 @@ fun MainScreen(
                     hostState = snackBarHostState,
                     modifier = Modifier
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = screenHeightDp(68.dp))
+                        .padding(bottom = snackBarBottomInset)
                 ) { snackBar ->
                     CustomSnackBar(message = snackBar.visuals.message)
                 }
