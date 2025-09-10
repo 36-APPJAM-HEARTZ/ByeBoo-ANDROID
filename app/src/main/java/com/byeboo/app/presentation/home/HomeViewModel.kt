@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepository.getNickname().collect { nickname ->
+            userRepository.getNickname().distinctUntilChanged().collect { nickname ->
                 _uiState.update {
                     it.copy(nickname = nickname.ifEmpty { "하츠핑" })
                 }
@@ -53,13 +54,23 @@ class HomeViewModel @Inject constructor(
             var currentStep = 0L
 
             questStateRepository.getQuestCount().onSuccess { model ->
-                    status = HomeStatus.from(model.userCurrentStatus)
-                    currentStep = model.count
-                    val journeyStatus = status.toJourneyStatusType()
-                    updateJourneyStatus(journeyStatus)
-                }
+                status = HomeStatus.from(model.userCurrentStatus)
+                currentStep = model.count
+                val journeyStatus = status.toJourneyStatusType()
+                updateJourneyStatus(journeyStatus)
+            }
                 .onFailure { e ->
-
+                    viewModelScope.launch {
+                        _sideEffect.emit(
+                            HomeSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                hasError = true
+                            )
+                        }
+                    }
                 }
 
             _uiState.update {
@@ -68,7 +79,9 @@ class HomeViewModel @Inject constructor(
                     status = status,
                     currentStep = currentStep,
                     totalSteps = 30,
-                    hasSeenAboutHelp = hasSeenAboutHelp
+                    hasSeenAboutHelp = hasSeenAboutHelp,
+                    isLoading = false,
+                    hasError = false
                 )
             }
 
