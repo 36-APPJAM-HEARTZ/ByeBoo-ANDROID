@@ -178,6 +178,7 @@ private fun UserInfoScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
             StepProgressBar(currentStep = pagerState.currentPage + 1)
 
             HorizontalPager(
