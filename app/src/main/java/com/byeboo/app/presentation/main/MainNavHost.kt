@@ -16,7 +16,6 @@ import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
-import com.byeboo.app.presentation.splash.termsofservice.navigation.termsGraph
 import com.byeboo.app.presentation.tutorial.navigation.tutorialGraph
 
 @Composable
@@ -65,11 +64,6 @@ fun MainNavHost(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             navigateToTermsOfService = { navigator.navigateToTerms(clearStackNavOptions) },
-            padding = padding
-        )
-
-        termsGraph(
-            navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             padding = padding
         )
 
