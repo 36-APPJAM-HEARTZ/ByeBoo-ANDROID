@@ -135,7 +135,8 @@ private fun OffboardingNewJourneyScreen(
             ) {
                 Text(
                     text = "미완료",
-                    color = ByeBooTheme.colors.gray300
+                    color = ByeBooTheme.colors.gray300,
+                    style = ByeBooTheme.typography.cap2
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
