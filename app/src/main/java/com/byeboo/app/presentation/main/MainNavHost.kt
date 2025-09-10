@@ -28,7 +28,7 @@ fun MainNavHost(
     val clearStackNavOptions = navOptions {
         popUpTo(0) { inclusive = true }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     }
     val questNavOptions = navOptions {
         popUpTo(Home) {
@@ -42,14 +42,6 @@ fun MainNavHost(
     val keepStackNavOptions = navOptions {
         launchSingleTop = true
         restoreState = true
-    }
-    val splashNavOptions = navOptions {
-        popUpTo(0) {
-            saveState = true
-            inclusive = false
-        }
-        launchSingleTop = true
-        restoreState = false
     }
 
     NavHost(
@@ -142,7 +134,7 @@ fun MainNavHost(
             },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
-            navigateToSplash = { navigator.navigateToSplash(splashNavOptions) },
+            navigateToSplash = { navigator.navigateToSplash(clearStackNavOptions) },
             padding = padding,
         )
 
@@ -161,7 +153,12 @@ fun MainNavHost(
             navigateToQuestStart = { journey -> navigator.navigateToQuestStart(journey, keepStackNavOptions) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
             navigateUp = navigator::navigateUp,
-            navigateToOffboardingQuestCompleted = { journey -> navigator.navigateToOffboardingQuestCompleted(journey, keepStackNavOptions) },
+            navigateToOffboardingQuestCompleted = { journey ->
+                navigator.navigateToOffboardingQuestCompleted(
+                    journey,
+                    keepStackNavOptions
+                )
+            },
             padding = padding
         )
 
