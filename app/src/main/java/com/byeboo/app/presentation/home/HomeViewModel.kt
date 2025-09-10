@@ -53,23 +53,19 @@ class HomeViewModel @Inject constructor(
             var status = HomeStatus.INITIAL_START
             var currentStep = 0L
 
-            questStateRepository.getQuestCount().onSuccess { model ->
-                status = HomeStatus.from(model.userCurrentStatus)
-                currentStep = model.count
-                val journeyStatus = status.toJourneyStatusType()
-                updateJourneyStatus(journeyStatus)
-            }
+            questStateRepository.getQuestCount()
+                .onSuccess { model ->
+                    status = HomeStatus.from(model.userCurrentStatus)
+                    currentStep = model.count
+                    val journeyStatus = status.toJourneyStatusType()
+                    updateJourneyStatus(journeyStatus)
+                }
                 .onFailure { e ->
-                    viewModelScope.launch {
+                    val errorMessage = e.message.orEmpty()
+                    if (!errorMessage.contains("HTTP 404")) {
                         _sideEffect.emit(
                             HomeSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                         )
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                hasError = true
-                            )
-                        }
                     }
                 }
 
@@ -84,7 +80,6 @@ class HomeViewModel @Inject constructor(
                     hasError = false
                 )
             }
-
         }
     }
 
