@@ -1,13 +1,12 @@
 package com.byeboo.app.presentation.splash.termsofservice.navigation
 
-import android.R.attr.padding
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.navigation.Route
-import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.splash.termsofservice.TermsOfServiceRoute
 import kotlinx.serialization.Serializable
 
@@ -20,6 +19,7 @@ fun NavGraphBuilder.termsGraph(
     padding: Dp
 ) {
     composable<Terms> {
+        ByeBooBackHandler()
         TermsOfServiceRoute(
             navigateToUserInfo = navigateToUserInfo,
             padding = padding
