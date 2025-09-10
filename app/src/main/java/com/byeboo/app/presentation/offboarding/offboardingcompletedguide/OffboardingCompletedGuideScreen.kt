@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -52,6 +53,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -70,16 +72,18 @@ fun OffboardingCompletedGuideRoute(
     viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isInitialAnimation by viewModel.isInitialAnimation.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is OffboardingCompletedGuideSideEffect.NavigateToHome -> navigateToHome()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is OffboardingCompletedGuideSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
-
     }
 
     BackHandler {
@@ -92,6 +96,7 @@ fun OffboardingCompletedGuideRoute(
         onCloseClick = viewModel::onCloseClicked,
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
+        isInitialAnimation = isInitialAnimation,
         modifier = modifier
     )
 }
@@ -103,6 +108,7 @@ private fun OffboardingCompleteGuideScreen(
     onCloseClick: () -> Unit,
     onNewJourneyClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
+    isInitialAnimation: Boolean,
     modifier: Modifier = Modifier
 ) {
     var index by remember { mutableIntStateOf(0) }
@@ -158,17 +164,28 @@ private fun OffboardingCompleteGuideScreen(
                         style = ByeBooTheme.typography.sub2
                     )
 
-                    TextSequence(
-                        paragraphs = listOf(
-                            "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
-                            "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
-                            "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
-                        ),
-                        index = index,
-                        gap = 16.dp,
-                        topGap = 32.dp,
-                        onAdvance = { nextIndex -> index = nextIndex }
-                    )
+                    if (!isInitialAnimation) {
+                        TextSequence(
+                            paragraphs = listOf(
+                                "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
+                                "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
+                                "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
+                            ),
+                            index = index,
+                            gap = 16.dp,
+                            topGap = 32.dp,
+                            onAdvance = { nextIndex -> index = nextIndex })
+                    } else {
+                        Spacer(Modifier.height(32.dp))
+
+                        Text(
+                            text = "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?",
+                            style = ByeBooTheme.typography.body3,
+                            color = ByeBooTheme.colors.secondary50,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
 
                 Box(
@@ -198,7 +215,6 @@ private fun OffboardingCompleteGuideScreen(
                     buttonTextColor = ByeBooTheme.colors.primary400,
                     buttonBackgroundColor = ByeBooTheme.colors.primary50,
                 )
-
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
         }

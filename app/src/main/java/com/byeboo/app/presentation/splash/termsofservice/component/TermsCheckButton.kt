@@ -32,7 +32,8 @@ fun TermsCheckButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .noRippleClickable{ onCheckClick(!isSelected) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -41,7 +42,6 @@ fun TermsCheckButton(
             tint = contentColor,
             modifier = Modifier
                 .size(12.dp)
-                .noRippleClickable{ onCheckClick(!isSelected) }
         )
 
         Spacer(modifier = modifier.padding(horizontal = 8.dp))
