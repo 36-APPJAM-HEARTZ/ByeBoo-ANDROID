@@ -38,7 +38,6 @@ import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
-import com.byeboo.app.presentation.mypage.MyPageSideEffect
 import kotlinx.coroutines.delay
 
 @Composable
