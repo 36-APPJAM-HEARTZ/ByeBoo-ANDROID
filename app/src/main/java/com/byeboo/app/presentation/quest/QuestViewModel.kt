@@ -10,6 +10,7 @@ import com.byeboo.app.presentation.quest.model.QuestState
 import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class QuestViewModel @Inject constructor(
@@ -94,9 +94,11 @@ class QuestViewModel @Inject constructor(
                 questGroups = state.questGroups.map { group ->
                     group.copy(
                         quests = group.quests.map { quest ->
-                            if (quest.state is QuestState.TimerLocked)
+                            if (quest.state is QuestState.TimerLocked) {
                                 quest.copy(state = quest.state.copy(remainTime = minutes))
-                            else quest
+                            } else {
+                                quest
+                            }
                         }.toImmutableList()
                     )
                 }.toImmutableList()
@@ -110,9 +112,11 @@ class QuestViewModel @Inject constructor(
                 questGroups = state.questGroups.map { group ->
                     group.copy(
                         quests = group.quests.map { quest ->
-                            if (quest.state is QuestState.TimerLocked)
+                            if (quest.state is QuestState.TimerLocked) {
                                 quest.copy(state = QuestState.Available)
-                            else quest
+                            } else {
+                                quest
+                            }
                         }.toImmutableList()
                     )
                 }.toImmutableList()

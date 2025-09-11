@@ -6,10 +6,10 @@ import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
 import com.byeboo.app.presentation.quest.model.QuestOutput
 import com.byeboo.app.presentation.quest.model.QuestState
-import kotlinx.collections.immutable.toImmutableList
 import java.time.Duration
 import java.time.Instant
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 
 class QuestUiModelMapper @Inject constructor() {
 

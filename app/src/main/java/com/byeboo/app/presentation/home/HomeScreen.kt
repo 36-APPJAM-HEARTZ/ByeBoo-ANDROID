@@ -57,7 +57,6 @@ import com.byeboo.app.presentation.home.component.HomeQuestCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
-
 @Composable
 fun HomeRoute(
     navigateToQuest: () -> Unit,
@@ -124,14 +123,15 @@ private fun HomeScreen(
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_home))
     val isReady = composition != null
 
-
     var showBubble by remember { mutableStateOf(false) }
 
     LaunchedEffect(isReady, uiState.status, uiState.hasSeenAboutHelp) {
         if (isReady && uiState.status == HomeStatus.INITIAL_START && !uiState.hasSeenAboutHelp) {
             delay(300)
             showBubble = true
-        } else showBubble = false
+        } else {
+            showBubble = false
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -152,13 +152,12 @@ private fun HomeScreen(
         AnimatedVisibility(
             visible = true,
             enter = fadeIn(tween(300, easing = FastOutSlowInEasing)) +
-                    scaleIn(
-                        initialScale = 0.98f,
-                        animationSpec = tween(400, easing = FastOutSlowInEasing)
-                    )
+                scaleIn(
+                    initialScale = 0.98f,
+                    animationSpec = tween(400, easing = FastOutSlowInEasing)
+                )
         ) {
             Box(Modifier.fillMaxSize()) {
-
                 Column(
                     modifier = modifier
                         .fillMaxSize()
@@ -174,7 +173,9 @@ private fun HomeScreen(
                             )
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
                             Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_question),
+                                imageVector = ImageVector.vectorResource(
+                                    id = R.drawable.ic_home_question
+                                ),
                                 contentDescription = null,
                                 tint = Color.Unspecified,
                                 modifier = Modifier
@@ -188,14 +189,16 @@ private fun HomeScreen(
                             AnimatedVisibility(
                                 visible = showBubble && !uiState.hasSeenAboutHelp,
                                 enter = fadeIn(tween(220)) +
-                                        scaleIn(
-                                            initialScale = 0.96f,
-                                            animationSpec = tween(300, easing = FastOutSlowInEasing)
-                                        ),
+                                    scaleIn(
+                                        initialScale = 0.96f,
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    ),
                                 modifier = Modifier.align(Alignment.End)
                             ) {
                                 Image(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_about_bori),
+                                    imageVector = ImageVector.vectorResource(
+                                        id = R.drawable.ic_home_about_bori
+                                    ),
                                     contentDescription = "보리 소개 말풍선"
                                 )
                             }
@@ -255,7 +258,9 @@ private fun HomeScreen(
                             .aspectRatio(312f / 62f)
                     ) {
                         Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_speech_bubble),
+                            imageVector = ImageVector.vectorResource(
+                                id = R.drawable.ic_home_speech_bubble
+                            ),
                             contentDescription = null,
                             modifier = Modifier.matchParentSize()
                         )
@@ -300,4 +305,3 @@ private fun HomeScreen(
         }
     }
 }
-

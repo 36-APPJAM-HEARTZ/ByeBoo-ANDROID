@@ -90,7 +90,6 @@ private fun HomeOnboardingScreen(
         restartOnPlay = false
     )
 
-
     LaunchedEffect(isLottieReady) {
         if (isLottieReady) {
             showSpeechBubble = true
@@ -169,7 +168,9 @@ private fun HomeOnboardingScreen(
                                         }
                                     }
                                 )
-                            } else Modifier
+                            } else {
+                                Modifier
+                            }
                         )
                         .aspectRatio(1f)
                 )

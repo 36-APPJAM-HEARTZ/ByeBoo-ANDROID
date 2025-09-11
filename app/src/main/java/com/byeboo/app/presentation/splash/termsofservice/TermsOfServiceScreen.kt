@@ -89,7 +89,7 @@ private fun TermsOfServiceScreen(
 
             TermsAllButton(
                 onTermsAllClick = onTermsAllClicked,
-                isChecked = uiState.isAllChecked,
+                isChecked = uiState.isAllChecked
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -142,4 +142,3 @@ private fun TermsHeader() {
         )
     }
 }
-

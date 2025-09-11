@@ -50,7 +50,6 @@ import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.CreatedText
 
-
 @Composable
 fun QuestBehaviorCompleteRoute(
     questId: Long,

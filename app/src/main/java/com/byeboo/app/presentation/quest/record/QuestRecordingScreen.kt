@@ -79,8 +79,13 @@ fun QuestRecordingRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestRecordingSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestRecordingSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
-                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete -> navigateToQuestRecordingComplete(effect.questId)
+                is QuestRecordingSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+                    effect.questId,
+                    effect.questType
+                )
+                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete -> navigateToQuestRecordingComplete(
+                    effect.questId
+                )
                 is QuestRecordingSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

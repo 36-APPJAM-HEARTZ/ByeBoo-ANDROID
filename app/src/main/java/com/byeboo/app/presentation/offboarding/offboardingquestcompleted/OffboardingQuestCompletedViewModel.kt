@@ -7,6 +7,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
 import com.byeboo.app.presentation.offboarding.util.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingQuestCompletedViewModel @Inject constructor(
@@ -51,7 +51,9 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
                 _uiState.update { detail.toUiState(journey = journey, nickname = userName) }
             }.onFailure {
                 viewModelScope.launch {
-                    _sideEffect.emit(QuestCompletedSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                    _sideEffect.emit(
+                        QuestCompletedSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
                 }
             }
         }

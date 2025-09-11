@@ -26,7 +26,10 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
     navigate(OffboardingCompletedJourney, navOptions)
 }
 
-fun NavController.navigateToOffboardingQuestCompleted(journey: QuestType, navOptions: NavOptions? = null) {
+fun NavController.navigateToOffboardingQuestCompleted(
+    journey: QuestType,
+    navOptions: NavOptions? = null
+) {
     navigate(OffboardingQuestCompleted(journey), navOptions)
 }
 

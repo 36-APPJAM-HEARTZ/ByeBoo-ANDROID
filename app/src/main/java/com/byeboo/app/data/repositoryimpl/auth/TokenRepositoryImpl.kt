@@ -3,9 +3,9 @@ package com.byeboo.app.data.repositoryimpl.auth
 import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.data.datasource.local.TokenDataSource
 import com.byeboo.app.domain.repository.auth.TokenRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
     private val tokenDataSource: TokenDataSource
@@ -39,10 +39,8 @@ class TokenRepositoryImpl @Inject constructor(
 
     override suspend fun setLoginSplash(show: Boolean) {
         tokenDataSource.setLoginSplash(show)
-
     }
 
     override suspend fun restartSplash(): Boolean =
         tokenDataSource.restartSplash()
-
 }

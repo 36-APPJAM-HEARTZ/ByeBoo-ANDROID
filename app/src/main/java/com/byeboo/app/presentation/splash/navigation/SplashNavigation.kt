@@ -47,4 +47,3 @@ data object Splash : Route
 
 @Serializable
 data object Terms : Route
-

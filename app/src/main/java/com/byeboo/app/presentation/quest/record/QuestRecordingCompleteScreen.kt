@@ -82,7 +82,7 @@ private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier

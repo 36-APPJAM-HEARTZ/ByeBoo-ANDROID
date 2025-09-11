@@ -2,7 +2,6 @@ package com.byeboo.app.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byeboo.app.domain.model.auth.AuthResult
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
@@ -12,12 +11,10 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
@@ -29,7 +26,6 @@ class SplashViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
-
 
     init {
         viewModelScope.launch {
@@ -43,7 +39,6 @@ class SplashViewModel @Inject constructor(
             startAutoLogin()
         }
     }
-
 
     private suspend fun startAutoLogin() {
         val cachedToken = tokenRepository.getCachedAccessToken()
@@ -101,7 +96,7 @@ class SplashViewModel @Inject constructor(
 
                 when (error) {
                     is ClientError -> {
-                        when(error.reason) {
+                        when (error.reason) {
                             ClientErrorCause.Cancelled -> {}
                             else -> {}
                         }

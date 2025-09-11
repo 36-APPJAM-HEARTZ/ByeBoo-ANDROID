@@ -115,7 +115,6 @@ fun QuestBehaviorWritingRoute(
         )
     }
 
-
     BackHandler { viewModel.onBackClicked() }
 
     QuestBehaviorWritingScreen(
@@ -185,10 +184,12 @@ private fun QuestBehaviorWritingScreen(
             tint = ByeBooTheme.colors.white,
             modifier = modifier
                 .padding(
-                    top = screenHeightDp((27.dp) + bottomPadding), bottom = screenHeightDp(16.dp)
+                    top = screenHeightDp((27.dp) + bottomPadding),
+                    bottom = screenHeightDp(16.dp)
                 )
                 .align(Alignment.Start)
-                .clickable { onBackClick() })
+                .clickable { onBackClick() }
+        )
 
         LazyColumn(
             modifier = modifier.fillMaxWidth()
@@ -249,7 +250,8 @@ private fun QuestBehaviorWritingScreen(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
                         textStyle = ByeBooTheme.typography.cap1,
-                        modifier = modifier.clickable { onTipClick() })
+                        modifier = modifier.clickable { onTipClick() }
+                    )
                 }
 
                 Spacer(modifier = modifier.height(screenHeightDp(16.dp)))

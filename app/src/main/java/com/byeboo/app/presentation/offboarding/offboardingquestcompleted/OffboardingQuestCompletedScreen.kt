@@ -57,7 +57,9 @@ fun OffboardingQuestCompletedRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(
+                    effect.questId
+                )
                 is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

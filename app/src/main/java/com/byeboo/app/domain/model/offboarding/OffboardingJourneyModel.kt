@@ -7,7 +7,7 @@ data class OffboardingJourneyModel(
     val completedCards: List<OffboardingJourneyCard>
 )
 
-data class OffboardingJourneyCard (
+data class OffboardingJourneyCard(
     val journey: String,
     val style: String
 )

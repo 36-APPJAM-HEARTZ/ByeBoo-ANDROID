@@ -7,8 +7,8 @@ import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.quest.QuestDialogue
 import com.byeboo.app.domain.model.quest.QuestStateModel
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class QuestStateRepositoryImpl @Inject constructor(
     private val questStateDataSource: QuestStateDataSource,

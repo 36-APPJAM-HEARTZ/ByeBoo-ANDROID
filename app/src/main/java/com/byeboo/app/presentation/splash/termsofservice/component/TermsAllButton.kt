@@ -44,11 +44,15 @@ fun TermsAllButton(
                     shape = RoundedCornerShape(12.dp)
                 )
                 .then(
-                    if (isChecked) Modifier.border(
-                        width = 1.dp,
-                        color = ByeBooTheme.colors.primary300,
-                        shape = RoundedCornerShape(12.dp)
-                    ) else Modifier
+                    if (isChecked) {
+                        Modifier.border(
+                            width = 1.dp,
+                            color = ByeBooTheme.colors.primary300,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                    } else {
+                        Modifier
+                    }
                 )
                 .padding(vertical = 18.dp, horizontal = 24.dp)
                 .noRippleClickable(onClick = onTermsAllClick),

@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -174,7 +173,8 @@ private fun OffboardingCompleteGuideScreen(
                             index = index,
                             gap = 16.dp,
                             topGap = 32.dp,
-                            onAdvance = { nextIndex -> index = nextIndex })
+                            onAdvance = { nextIndex -> index = nextIndex }
+                        )
                     } else {
                         Spacer(Modifier.height(32.dp))
 
@@ -213,7 +213,7 @@ private fun OffboardingCompleteGuideScreen(
                     buttonText = "완료한 여정 다시보기",
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonTextColor = ByeBooTheme.colors.primary400,
-                    buttonBackgroundColor = ByeBooTheme.colors.primary50,
+                    buttonBackgroundColor = ByeBooTheme.colors.primary50
                 )
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
@@ -281,7 +281,6 @@ private fun Animation(
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val availableWidth = with(density) { (screenWidth - 24.dp * 2).roundToPx() }
-
 
     val textStyle = ByeBooTheme.typography.cap2.copy(
         platformStyle = PlatformTextStyle(includeFontPadding = false),
