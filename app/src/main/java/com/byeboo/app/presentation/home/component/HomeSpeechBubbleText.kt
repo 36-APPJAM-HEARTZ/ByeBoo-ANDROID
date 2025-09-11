@@ -26,7 +26,7 @@ import kotlinx.coroutines.delay
 fun SpeechBubbleWithText(
     firstText: String,
     secondText: String,
-    thirdText: String,
+    thirdText: String
 ) {
     var showFirstText by remember { mutableStateOf(false) }
     var showSecondText by remember { mutableStateOf(false) }
