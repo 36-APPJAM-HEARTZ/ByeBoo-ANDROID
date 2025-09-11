@@ -9,7 +9,9 @@ data class HomeUiState(
     val currentStep: Long = 0L,
     val totalSteps: Int = 30,
     val nickname: String = "하츠핑",
-    val hasSeenAboutHelp: Boolean = false
+    val hasSeenAboutHelp: Boolean = false,
+    val isLoading: Boolean = true,
+    val hasError: Boolean = false,
 )
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
@@ -17,4 +19,5 @@ sealed interface HomeSideEffect {
     data object NavigateToTutorial: HomeSideEffect
     data object NavigateToOffboardingCompletedGuide: HomeSideEffect
     data object NavigateToOffboardingNewJourney: HomeSideEffect
+    data class ShowSnackBar(val message: String) : HomeSideEffect
 }
