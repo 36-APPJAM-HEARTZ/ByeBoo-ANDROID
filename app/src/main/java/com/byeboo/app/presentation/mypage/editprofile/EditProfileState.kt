@@ -10,5 +10,6 @@ data class EditProfileState(
 )
 
 sealed interface EditProfileSideEffect {
-    data class NavigateToMyPage(val nickname: String): EditProfileSideEffect
+    data class NavigateToMyPage(val nickname: String) : EditProfileSideEffect
+    data class ShowSnackBar(val message: String) : EditProfileSideEffect
 }

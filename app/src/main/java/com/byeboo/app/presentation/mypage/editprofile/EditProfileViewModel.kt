@@ -41,8 +41,8 @@ class EditProfileViewModel @Inject constructor(
                     nickname = initialNickname,
                     initialNickname = initialNickname,
                     isInitial = true
-              )
-           }
+                )
+            }
         }
     }
 
@@ -69,10 +69,17 @@ class EditProfileViewModel @Inject constructor(
     fun finishEditProfile(nickname: String) {
         viewModelScope.launch {
             if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
-            val result = userRepository.updateUserNickname(nickname)
-            if (result.isSuccess) {
-                _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
-            }
+
+            userRepository.updateUserNickname(nickname)
+                .onSuccess {
+                    _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
+                }
+                .onFailure {
+                    _sideEffect.emit(
+                        EditProfileSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
+                }
         }
     }
+
 }

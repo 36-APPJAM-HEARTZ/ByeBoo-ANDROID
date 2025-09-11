@@ -48,13 +48,12 @@ class QuestStartViewModel @Inject constructor(
     fun onStartClicked(journey: QuestType?) {
         if (journey == null) {
             viewModelScope.launch {
-                runCatching {
-                    questStateRepository.updateQuestStartState()
-                }.onSuccess {
+                val result = questStateRepository.updateQuestStartState()
+                if (result.isSuccess) {
                     questStateRepository.setQuestStarted(true)
                     questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                     _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
-                }.onFailure { e ->
+                } else {
                     _sideEffect.emit(
                         QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )
