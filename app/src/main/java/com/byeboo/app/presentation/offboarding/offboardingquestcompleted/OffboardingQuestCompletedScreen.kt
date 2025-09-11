@@ -159,11 +159,7 @@ private fun OffboardingQuestCompletedScreen(
                             }
                         }
 
-                        if (chunkIndex < questChunks.lastIndex) {
-                            Spacer(modifier = Modifier.height(20.dp))
-                        } else {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
