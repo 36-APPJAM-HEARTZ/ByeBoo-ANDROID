@@ -32,7 +32,7 @@ import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecord
 import com.byeboo.app.presentation.quest.record.navigation.navigateToQuestRecordingComplete
 import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.navigation.navigateToSplash
-import com.byeboo.app.presentation.splash.termsofservice.navigation.navigateToTerms
+import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
 class MainNavigator(
