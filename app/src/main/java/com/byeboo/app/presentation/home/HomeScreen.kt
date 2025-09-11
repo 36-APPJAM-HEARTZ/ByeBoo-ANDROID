@@ -288,7 +288,7 @@ private fun HomeScreen(
                         }
                     }
 
-                    Spacer(Modifier.height(screenHeightDp(30.dp)))
+                    Spacer(Modifier.height(screenHeightDp(34.dp)))
 
                     LottieAnimation(
                         composition = composition,

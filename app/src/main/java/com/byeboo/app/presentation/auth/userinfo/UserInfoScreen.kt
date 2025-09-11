@@ -152,7 +152,7 @@ private fun UserInfoScreen(
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
         ) {
-            Spacer(modifier = Modifier.padding(top = screenHeightDp(padding + 27.dp)))
+            Spacer(modifier = Modifier.padding(top = screenHeightDp(67.dp)))
 
             Box(
                 modifier = Modifier

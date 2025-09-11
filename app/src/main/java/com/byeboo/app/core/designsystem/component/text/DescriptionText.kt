@@ -2,6 +2,7 @@ package com.byeboo.app.core.designsystem.component.text
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +38,7 @@ fun DescriptionText(
             },
             style = ByeBooTheme.typography.head1
         )
-        Spacer(modifier = Modifier.padding(top = 8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = contentText,
             style = ByeBooTheme.typography.body5,

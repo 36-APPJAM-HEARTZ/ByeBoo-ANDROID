@@ -116,8 +116,6 @@ private fun OffboardingQuestCompletedScreen(
             bottom = 18.dp
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
-
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenHeightDp(37.dp)),
             modifier = Modifier.fillMaxWidth()
