@@ -52,6 +52,7 @@ class HomeViewModel @Inject constructor(
 
             var status = HomeStatus.INITIAL_START
             var currentStep = 0L
+            var hasError = false
 
             questStateRepository.getQuestCount()
                 .onSuccess { model ->
@@ -63,9 +64,11 @@ class HomeViewModel @Inject constructor(
                 .onFailure { e ->
                     val errorMessage = e.message.orEmpty()
                     if (!errorMessage.contains("HTTP 404")) {
+                        hasError = true
                         _sideEffect.emit(
                             HomeSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                         )
+
                     }
                 }
 
@@ -77,7 +80,7 @@ class HomeViewModel @Inject constructor(
                     totalSteps = 30,
                     hasSeenAboutHelp = hasSeenAboutHelp,
                     isLoading = false,
-                    hasError = false
+                    hasError = hasError
                 )
             }
         }
