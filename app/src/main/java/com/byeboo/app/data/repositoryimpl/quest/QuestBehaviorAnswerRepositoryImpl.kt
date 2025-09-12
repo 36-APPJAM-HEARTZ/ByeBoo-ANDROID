@@ -31,7 +31,10 @@ class QuestBehaviorAnswerRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun uploadQuestBehaviorAnswer(questId: Long, request: BehaviorAnswerRequestModel): Result<Unit> {
+    override suspend fun uploadQuestBehaviorAnswer(
+        questId: Long,
+        request: BehaviorAnswerRequestModel
+    ): Result<Unit> {
         return runCatching {
             questBehaviorAnswerDataSource.uploadQuestBehaviorAnswer(questId, request.toData())
         }

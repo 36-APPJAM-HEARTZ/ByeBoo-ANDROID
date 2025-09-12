@@ -10,7 +10,7 @@ data class QuestCompletedResponseDto(
     @SerialName("currentStep")
     val currentStep: Int?,
     @SerialName("steps")
-    val steps: List<QuestCompletedStepResponseDto>,
+    val steps: List<QuestCompletedStepResponseDto>
 
 )
 

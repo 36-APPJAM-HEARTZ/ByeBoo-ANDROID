@@ -37,7 +37,6 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import kotlinx.coroutines.flow.collectLatest
 
-
 @Composable
 fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
@@ -65,9 +64,16 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+                    effect.questId,
+                    effect.questType
+                )
+                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(
+                    effect.questId
+                )
+                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(
+                    effect.questId
+                )
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToHome -> navigateToHome()
                 is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()

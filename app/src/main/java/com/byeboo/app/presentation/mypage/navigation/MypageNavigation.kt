@@ -19,14 +19,13 @@ fun NavController.navigateToEditProfile(navOptions: NavOptions? = null) {
     navigate(EditProfile, navOptions)
 }
 
-
 fun NavGraphBuilder.myPageGraph(
     navigateToEditProfile: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
     navigateToMyPage: () -> Unit,
-    padding: Dp,
+    padding: Dp
 ) {
     composable<MyPage> {
         MyPageRoute(

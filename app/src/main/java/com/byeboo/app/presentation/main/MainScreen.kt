@@ -56,9 +56,11 @@ fun MainScreen(
     }
 
     val snackBarBottomInset =
-        if (showBottomBar) screenHeightDp(8.dp)
-        else screenHeightDp(68.dp)
-
+        if (showBottomBar) {
+            screenHeightDp(8.dp)
+        } else {
+            screenHeightDp(68.dp)
+        }
 
     if (showBottomBar) {
         if (currentTab == MainNavTab.HOME) {
@@ -103,9 +105,22 @@ fun MainScreen(
                                     val journeyStatus = status ?: JourneyStatusType.BEFORE_START
 
                                     when (journeyStatus) {
-                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> { navigator.navigateToQuestStart(null, navOptions) }
-                                        JourneyStatusType.COMPLETED -> { navigator.navigateToOffboardingCompletedGuide(navOptions) }
-                                        JourneyStatusType.IN_PROGRESS -> { navigator.navigateToQuest(navOptions) }
+                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> {
+                                            navigator.navigateToQuestStart(
+                                                null,
+                                                navOptions
+                                            )
+                                        }
+                                        JourneyStatusType.COMPLETED -> {
+                                            navigator.navigateToOffboardingCompletedGuide(
+                                                navOptions
+                                            )
+                                        }
+                                        JourneyStatusType.IN_PROGRESS -> {
+                                            navigator.navigateToQuest(
+                                                navOptions
+                                            )
+                                        }
                                     }
                                 } else { navigator.navigate(selectedTab) }
                             } finally {

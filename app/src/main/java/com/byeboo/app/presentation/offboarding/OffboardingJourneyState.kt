@@ -20,6 +20,6 @@ data class OffboardingJourneyState(
 
 sealed interface OffboardingJourneySideEffect {
     data object NavigateUp : OffboardingJourneySideEffect
-    data class NavigateToOffboardingQuestCompleted(val journey : QuestType) : OffboardingJourneySideEffect
+    data class NavigateToOffboardingQuestCompleted(val journey: QuestType) : OffboardingJourneySideEffect
     data class ShowSnackBar(val message: String) : OffboardingJourneySideEffect
 }

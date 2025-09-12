@@ -16,6 +16,6 @@ sealed interface MyPageSideEffect {
     data object NavigateToEditProfile : MyPageSideEffect
     data object NavigateToOffboardingCompletedJourney : MyPageSideEffect
     data object NavigateToTutorial : MyPageSideEffect
-    data object NavigateToSplash: MyPageSideEffect
+    data object NavigateToSplash : MyPageSideEffect
     data class ShowSnackBar(val message: String) : MyPageSideEffect
 }

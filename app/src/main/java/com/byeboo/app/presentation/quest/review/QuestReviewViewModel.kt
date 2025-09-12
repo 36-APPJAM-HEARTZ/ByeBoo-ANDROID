@@ -54,7 +54,9 @@ class QuestReviewViewModel @Inject constructor(
                     newState
                 }
             }.onFailure {
-                _sideEffect.emit(QuestReviewSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                _sideEffect.emit(
+                    QuestReviewSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }

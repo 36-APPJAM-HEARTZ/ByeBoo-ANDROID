@@ -152,7 +152,6 @@ private fun MyPageScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
@@ -179,7 +178,6 @@ private fun MyPageScreen(
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-
 
             HorizontalDivider(
                 modifier = Modifier

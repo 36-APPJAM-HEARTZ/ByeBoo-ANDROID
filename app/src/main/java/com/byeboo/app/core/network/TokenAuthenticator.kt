@@ -2,13 +2,13 @@ package com.byeboo.app.core.network
 
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val tokenRepository: TokenRepository,
@@ -48,7 +48,7 @@ class TokenAuthenticator @Inject constructor(
         return count
     }
 
-    companion object{
+    companion object {
         const val AUTHORIZATION = "Authorization"
         const val BEARER = "Bearer"
     }

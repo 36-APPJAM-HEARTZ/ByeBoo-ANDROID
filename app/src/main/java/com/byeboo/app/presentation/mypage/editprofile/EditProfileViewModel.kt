@@ -6,6 +6,7 @@ import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.repository.auth.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
@@ -32,7 +32,6 @@ class EditProfileViewModel @Inject constructor(
         private const val MAX_NICKNAME_LENGTH = 5
     }
 
-
     init {
         viewModelScope.launch {
             val initialNickname = userRepository.getNickname().first()
@@ -45,7 +44,6 @@ class EditProfileViewModel @Inject constructor(
             }
         }
     }
-
 
     fun updateNickname(input: String) {
         if (input.length <= MAX_NICKNAME_LENGTH) {
@@ -81,5 +79,4 @@ class EditProfileViewModel @Inject constructor(
                 }
         }
     }
-
 }

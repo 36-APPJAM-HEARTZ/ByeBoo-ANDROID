@@ -9,7 +9,7 @@ class LogoutUseCase @Inject constructor(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository
-){
+) {
     private val accessToken: String
         get() = tokenRepository.getCachedAccessToken()
 

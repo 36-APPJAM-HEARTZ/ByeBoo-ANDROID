@@ -11,13 +11,13 @@ data class HomeUiState(
     val nickname: String = "하츠핑",
     val hasSeenAboutHelp: Boolean = false,
     val isLoading: Boolean = true,
-    val hasError: Boolean = false,
+    val hasError: Boolean = false
 )
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
     data class NavigateToQuestStart(val journey: QuestType?) : HomeSideEffect
-    data object NavigateToTutorial: HomeSideEffect
-    data object NavigateToOffboardingCompletedGuide: HomeSideEffect
-    data object NavigateToOffboardingNewJourney: HomeSideEffect
+    data object NavigateToTutorial : HomeSideEffect
+    data object NavigateToOffboardingCompletedGuide : HomeSideEffect
+    data object NavigateToOffboardingNewJourney : HomeSideEffect
     data class ShowSnackBar(val message: String) : HomeSideEffect
 }

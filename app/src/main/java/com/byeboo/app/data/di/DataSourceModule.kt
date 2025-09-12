@@ -79,6 +79,7 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindsOffboardingQuestCompletedDataSource(impl: OffboardingQuestCompletedDataSourceImpl): OffboardingQuestCompletedDataSource
-
+    abstract fun bindsOffboardingQuestCompletedDataSource(
+        impl: OffboardingQuestCompletedDataSourceImpl
+    ): OffboardingQuestCompletedDataSource
 }

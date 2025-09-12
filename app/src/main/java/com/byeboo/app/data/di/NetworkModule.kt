@@ -1,12 +1,10 @@
 package com.byeboo.app.data.di
 
-
 import com.byeboo.app.BuildConfig
 import com.byeboo.app.core.network.AuthInterceptor
 import com.byeboo.app.core.network.TokenAuthenticator
 import com.byeboo.app.core.network.qualifier.Auth
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.kakao.sdk.auth.AuthApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,10 +42,9 @@ object NetworkModule {
         "application/json".toMediaType()
     )
 
-
     @Provides
     @Singleton
-    fun provideAuthInterceptor(authInterceptor: AuthInterceptor) : Interceptor = authInterceptor
+    fun provideAuthInterceptor(authInterceptor: AuthInterceptor): Interceptor = authInterceptor
 
     @Provides
     @Singleton
@@ -74,7 +71,6 @@ object NetworkModule {
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()
-
 
     @Provides
     @Singleton

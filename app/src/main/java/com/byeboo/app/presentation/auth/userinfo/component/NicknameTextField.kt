@@ -44,7 +44,6 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.auth.userinfo.model.UserInfoValidationState
 
-
 @Composable
 fun NicknameTextField(
     value: String,
@@ -100,16 +99,20 @@ fun NicknameTextField(
                 onValueChange = { newValue ->
                     cursorText = newValue
                     onValueChange(newValue.text)
-                },                modifier = Modifier
+                },
+                modifier = Modifier
                     .fillMaxWidth()
-                    .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
+                    .then(
+                        if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier
+                    )
                     .onFocusChanged { focus ->
                         focusState.value = focus.isFocused
                         if (focus.isFocused && cursorText.composition == null) {
                             val end = cursorText.text.length
                             if (cursorText.selection.end != end) {
                                 cursorText = cursorText.copy(selection = TextRange(end))
-                            }                        }
+                            }
+                        }
                     },
                 textStyle = ByeBooTheme.typography.body3.copy(color = ByeBooTheme.colors.white),
                 singleLine = true,
@@ -149,8 +152,7 @@ fun NicknameTextField(
                         .noRippleClickable { onClearClick() }
                 )
             } else {
-                    Spacer(modifier = Modifier.size(25.dp))
-
+                Spacer(modifier = Modifier.size(25.dp))
             }
         }
 

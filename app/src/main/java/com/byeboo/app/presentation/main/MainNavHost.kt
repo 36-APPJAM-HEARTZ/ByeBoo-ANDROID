@@ -67,7 +67,12 @@ fun MainNavHost(
 
         homeGraph(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
-            navigateToQuestStart = { journey -> navigator.navigateToQuestStart(journey, questNavOptions) },
+            navigateToQuestStart = { journey ->
+                navigator.navigateToQuestStart(
+                    journey,
+                    questNavOptions
+                )
+            },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToOffboardingCompletedGuide = {
                 navigator.navigateToOffboardingCompletedGuide(
@@ -129,7 +134,7 @@ fun MainNavHost(
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             navigateToSplash = { navigator.navigateToSplash(clearStackNavOptions) },
-            padding = padding,
+            padding = padding
         )
 
         offboardingGraph(
@@ -144,7 +149,12 @@ fun MainNavHost(
                     keepStackNavOptions
                 )
             },
-            navigateToQuestStart = { journey -> navigator.navigateToQuestStart(journey, keepStackNavOptions) },
+            navigateToQuestStart = { journey ->
+                navigator.navigateToQuestStart(
+                    journey,
+                    keepStackNavOptions
+                )
+            },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey ->

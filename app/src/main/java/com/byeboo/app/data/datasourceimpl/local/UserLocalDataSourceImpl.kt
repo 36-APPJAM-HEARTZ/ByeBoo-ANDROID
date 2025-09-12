@@ -9,11 +9,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.byeboo.app.core.model.auth.UserEntity
 import com.byeboo.app.data.datasource.local.UserLocalDataSource
 import com.byeboo.app.domain.model.JourneyStatusType
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class UserLocalDataSourceImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -104,7 +104,6 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-
     override suspend fun hasSeenAboutHelp(): Boolean {
         return dataStore.data.first()[HAS_SEEN_ABOUT_HELP] ?: false
     }
@@ -126,7 +125,6 @@ class UserLocalDataSourceImpl @Inject constructor(
             preferences[IS_USER_REGISTERED] = isRegistered
         }
     }
-
 
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")

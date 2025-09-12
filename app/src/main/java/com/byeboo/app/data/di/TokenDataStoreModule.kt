@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.byeboo.app.data.datasource.local.TokenDataSource
 import com.byeboo.app.data.datasourceimpl.local.TokenDataSourceImpl
-
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +14,9 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 private const val TOKEN_PREFERENCES = "token_preferences"
-private val Context.tokenDataStore: DataStore<Preferences> by preferencesDataStore(name = TOKEN_PREFERENCES)
+private val Context.tokenDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = TOKEN_PREFERENCES
+)
 
 @Module
 @InstallIn(SingletonComponent::class)
