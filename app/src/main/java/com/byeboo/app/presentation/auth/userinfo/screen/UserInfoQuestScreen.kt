@@ -30,7 +30,6 @@ fun UserInfoQuestScreen(
             title = "퀘스트 방식",
             guideText = "을 골라주세요",
             contentText = "나에게 맞는 방식으로 퀘스트를 받아볼 수 있어요.",
-            top = 20.dp,
             bottom = 20.dp
         )
         Row(

@@ -2,6 +2,7 @@ package com.byeboo.app.core.designsystem.component.text
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -26,7 +27,11 @@ fun DescriptionText(
     start: Dp = 0.dp,
     end: Dp = 0.dp
 ) {
-    Column(modifier = modifier.padding(top = top, bottom = bottom, start = start, end = end)) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = top, bottom = bottom, start = start, end = end)
+    ) {
         Text(
             buildAnnotatedString {
                 withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
