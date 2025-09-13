@@ -35,7 +35,8 @@ fun UserInfoQuestCard(
     modifier: Modifier = Modifier
 ) {
     val borderColor = if (isSelected) ByeBooTheme.colors.primary300 else Color.Transparent
-    val textColor = if (isSelected) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray300
+    val textColor = if (isSelected) ByeBooTheme.colors.primary200 else ByeBooTheme.colors.gray300
+    val textStyle = if (isSelected) ByeBooTheme.typography.body5 else ByeBooTheme.typography.body6
 
     Box(
         modifier = modifier
@@ -69,8 +70,8 @@ fun UserInfoQuestCard(
 
             Text(
                 text = content,
-                style = ByeBooTheme.typography.body5,
-                color = ByeBooTheme.colors.gray300,
+                style = textStyle,
+                color = textColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
