@@ -222,7 +222,8 @@ private fun HomeScreen(
                             HomeQuestCard(
                                 title = "오늘의 퀘스트 완료!",
                                 subtitle = "잘하셨어요! 내일 또 만나요.",
-                                onClick = onClickQuest
+                                onClick = onClickQuest,
+                                borderColor = Color.Unspecified
                             )
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
                             HomeProgressCard(

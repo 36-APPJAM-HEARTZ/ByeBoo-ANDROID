@@ -189,6 +189,15 @@ private fun QuestBehaviorCompleteScreen(
                             .aspectRatio(312 / 312f)
                             .clip(RoundedCornerShape(12.dp))
                     ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
+                            contentDescription = "title icon",
+                            modifier = modifier.padding(end = 8.dp),
+                            tint = Color.Unspecified
+                        )
+
+                        Spacer(modifier = modifier.height(12.dp))
+
                         if (imageUri != null) {
                             SubcomposeAsyncImage(
                                 model = ImageRequest

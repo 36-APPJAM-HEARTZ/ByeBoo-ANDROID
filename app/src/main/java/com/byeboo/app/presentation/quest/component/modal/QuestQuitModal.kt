@@ -81,7 +81,7 @@ fun QuestQuitModal(
                 ByeBooButton(
                     onClick = stayButton,
                     buttonText = "머무르기",
-                    buttonStyle = ByeBooTheme.typography.body3,
+                    buttonStyle = ByeBooTheme.typography.body2,
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
                     modifier = Modifier.weight(1f)

@@ -128,7 +128,7 @@ private fun QuestScreen(
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
                 text = uiState.progressPeriod.toString(),
-                textStyle = ByeBooTheme.typography.cap2
+                textStyle = ByeBooTheme.typography.cap1
             )
 
             Spacer(modifier = Modifier.height(8.dp))

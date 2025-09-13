@@ -41,7 +41,7 @@ fun QuestEmotionDescriptionCard(
 
             Text(
                 text = questEmotionDescription,
-                style = ByeBooTheme.typography.body5,
+                style = ByeBooTheme.typography.body6,
                 color = ByeBooTheme.colors.gray300
             )
         }

@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
@@ -212,7 +213,7 @@ private fun QuestRecordingScreen(
                     text = "${uiState.questNumber}번째 퀘스트",
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body5,
+                    style = ByeBooTheme.typography.body6,
                     textAlign = TextAlign.Center
                 )
             }
@@ -268,13 +269,26 @@ private fun QuestRecordingScreen(
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-                    Text(
-                        text = "*10글자 이상 작성해 주세요.",
-                        style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.gray400,
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Start
-                    )
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
+                            contentDescription = "",
+                            tint = Color.Unspecified
+                        )
+
+                        Spacer(modifier = Modifier.width(3.dp))
+
+                        Text(
+                            text = "10글자 이상 작성해 주세요.",
+                            style = ByeBooTheme.typography.cap2,
+                            color = ByeBooTheme.colors.gray400,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Start
+                        )
+                    }
                 }
             }
 

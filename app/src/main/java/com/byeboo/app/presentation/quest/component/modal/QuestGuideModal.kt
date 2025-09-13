@@ -45,7 +45,7 @@ fun GuideContent(
 
                 append("\n")
 
-                withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray400)) {
+                withStyle(style = SpanStyle(color = ByeBooTheme.colors.primary100)) {
                     append("START!")
                 }
             },

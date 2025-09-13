@@ -50,7 +50,7 @@ fun QuestCompleteCard(
 
         Text(
             text = "COMPLETE!",
-            color = ByeBooTheme.colors.primary50,
+            color = ByeBooTheme.colors.primary100,
             textAlign = TextAlign.Center,
             style = ByeBooTheme.typography.head1
         )

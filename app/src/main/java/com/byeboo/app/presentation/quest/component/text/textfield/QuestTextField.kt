@@ -134,7 +134,8 @@ fun QuestTextField(
                     if (value.isEmpty() && !(focusState.value)) {
                         Text(
                             text = placeholder,
-                            color = ByeBooTheme.colors.gray300
+                            color = ByeBooTheme.colors.gray300,
+                            style = ByeBooTheme.typography.body3
                         )
                     }
                     innerTextField()
@@ -157,7 +158,7 @@ fun QuestTextField(
 
                     append(text = ")")
                 },
-                style = ByeBooTheme.typography.body5,
+                style = ByeBooTheme.typography.body6,
                 color = textCountColor,
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
