@@ -10,10 +10,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ktlint)
 }
-val properties =
-    Properties().apply {
-        load(project.rootProject.file("local.properties").inputStream())
-    }
+
+val properties = Properties().apply {
+    val f = project.rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
 
 android {
     namespace = "com.byeboo.app"
@@ -39,18 +40,11 @@ android {
         )
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
+
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
-        buildConfigField(
-            "String",
-            "BYEBOO_PRIVACY_POLICY",
-            properties["byeboo.privacy.policy"].toString()
-        )
-        buildConfigField(
-            "String",
-            "BYEBOO_TERMS_OF_SERVICE",
-            properties["byeboo.terms.of.service"].toString()
-        )
+        buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
+        buildConfigField("String", "BYEBOO_TERMS_OF_SERVICE", properties["byeboo.terms.of.service"].toString())
         buildConfigField("String", "MASTER_KEY", properties["masterkey"].toString())
     }
 
