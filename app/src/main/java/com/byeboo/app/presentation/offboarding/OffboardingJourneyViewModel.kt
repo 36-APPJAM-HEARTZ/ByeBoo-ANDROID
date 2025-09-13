@@ -6,6 +6,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingJourneyViewModel @Inject constructor(
@@ -31,15 +31,17 @@ class OffboardingJourneyViewModel @Inject constructor(
         getJourneyLists()
     }
 
-    fun onBackClicked(){
+    fun onBackClicked() {
         viewModelScope.launch {
             _sideEffect.emit(OffboardingJourneySideEffect.NavigateUp)
         }
     }
 
-    fun onJourneyCompletedCardClicked(journey : QuestType){
+    fun onJourneyCompletedCardClicked(journey: QuestType) {
         viewModelScope.launch {
-            _sideEffect.emit(OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey))
+            _sideEffect.emit(
+                OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey)
+            )
         }
     }
 
@@ -56,7 +58,9 @@ class OffboardingJourneyViewModel @Inject constructor(
                     }
                 }
                 .onFailure { e ->
-                    _sideEffect.emit(OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                    _sideEffect.emit(
+                        OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
                 }
         }
     }

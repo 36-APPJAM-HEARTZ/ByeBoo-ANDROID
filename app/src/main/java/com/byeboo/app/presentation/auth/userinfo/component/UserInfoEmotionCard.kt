@@ -63,7 +63,9 @@ fun UserInfoEmotionCard(
                     .width(screenWidthDp(73.dp))
                     .height(screenHeightDp(100.dp))
             )
+
             Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
+
             Text(
                 text = content,
                 style = ByeBooTheme.typography.body5,

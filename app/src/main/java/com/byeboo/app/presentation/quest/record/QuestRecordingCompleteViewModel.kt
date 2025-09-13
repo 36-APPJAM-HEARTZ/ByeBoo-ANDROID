@@ -41,15 +41,19 @@ class QuestRecordingCompleteViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                _sideEffect.emit(
+                    QuestRecordingCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
 
     fun onCloseClicked() {
-        if (uiState.value.questNumber == 30L){
+        if (uiState.value.questNumber == 30L) {
             viewModelScope.launch {
-                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide)
+                _sideEffect.emit(
+                    QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide
+                )
             }
         } else {
             viewModelScope.launch {

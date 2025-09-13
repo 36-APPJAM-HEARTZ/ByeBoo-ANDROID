@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,7 +90,6 @@ private fun HomeOnboardingScreen(
         restartOnPlay = false
     )
 
-
     LaunchedEffect(isLottieReady) {
         if (isLottieReady) {
             showSpeechBubble = true
@@ -122,27 +121,34 @@ private fun HomeOnboardingScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             AnimatedVisibility(
-                visible = showSpeechBubble,
-                enter = fadeIn(animationSpec = tween(durationMillis = 1000))
+                visible = showInstructionText,
+                enter = slideInVertically(
+                    animationSpec = tween(1000),
+                    initialOffsetY = { it }
+                )
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    if (showInstructionText) {
-                        Text(
-                            text = "보리를 꾸욱 눌러주세요!",
-                            style = ByeBooTheme.typography.body3,
-                            color = ByeBooTheme.colors.whiteAlpha50,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-                    SpeechBubbleWithText(
-                        firstText = "바이부에 오신 걸 환영해요!",
-                        secondText = "저는 보리라고 해요.",
-                        thirdText = "여정을 시작하러 가볼까요?"
-                    )
-                }
+                Text(
+                    text = "보리를 꾸욱 눌러주세요!",
+                    style = ByeBooTheme.typography.body3,
+                    color = ByeBooTheme.colors.whiteAlpha50,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
             }
+
+            AnimatedVisibility(
+                visible = showSpeechBubble,
+                enter = fadeIn(animationSpec = tween(1000))
+            ) {
+                SpeechBubbleWithText(
+                    firstText = "바이부에 오신 걸 환영해요!",
+                    secondText = "저는 보리라고 해요.",
+                    thirdText = "여정을 시작하러 가볼까요?"
+                )
+            }
+
             if (isLottieReady) {
                 LottieAnimation(
                     composition = composition,
@@ -162,12 +168,15 @@ private fun HomeOnboardingScreen(
                                         }
                                     }
                                 )
-                            } else Modifier
+                            } else {
+                                Modifier
+                            }
                         )
                         .aspectRatio(1f)
                 )
             }
         }
+
         if (isTransitioning) {
             Box(
                 modifier = Modifier

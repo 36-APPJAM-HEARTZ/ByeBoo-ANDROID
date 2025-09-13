@@ -5,9 +5,8 @@ import com.byeboo.app.domain.model.offboarding.OffboardingJourneyModel
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
-import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
-
+import kotlinx.collections.immutable.toImmutableList
 
 class OffboardingJourneyMapper @Inject constructor() {
     fun toUiState(model: OffboardingJourneyModel): OffboardingJourneyState {

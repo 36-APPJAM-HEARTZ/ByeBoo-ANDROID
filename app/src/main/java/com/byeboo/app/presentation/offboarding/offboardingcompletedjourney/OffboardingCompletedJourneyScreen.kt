@@ -55,7 +55,9 @@ fun OffboardingCompletedJourneyRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
-                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(effect.journey)
+                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(
+                    effect.journey
+                )
                 is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -92,7 +94,7 @@ private fun OffboardingCompletedJourneyScreen(
             modifier = Modifier
                 .size(24.dp)
                 .noRippleClickable(onClick = onBackClick),
-            tint = ByeBooTheme.colors.gray50,
+            tint = ByeBooTheme.colors.gray50
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -100,7 +102,7 @@ private fun OffboardingCompletedJourneyScreen(
         Text(
             text = "내가 완료한 여정이에요.",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1,
+            style = ByeBooTheme.typography.head1
         )
 
         Spacer(modifier = Modifier.height(6.dp))

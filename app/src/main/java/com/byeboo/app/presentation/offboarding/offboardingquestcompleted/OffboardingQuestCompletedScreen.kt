@@ -57,7 +57,9 @@ fun OffboardingQuestCompletedRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(
+                    effect.questId
+                )
                 is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -114,8 +116,6 @@ private fun OffboardingQuestCompletedScreen(
             bottom = 18.dp
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
-
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenHeightDp(37.dp)),
             modifier = Modifier.fillMaxWidth()
@@ -159,11 +159,7 @@ private fun OffboardingQuestCompletedScreen(
                             }
                         }
 
-                        if (chunkIndex < questChunks.lastIndex) {
-                            Spacer(modifier = Modifier.height(20.dp))
-                        } else {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }

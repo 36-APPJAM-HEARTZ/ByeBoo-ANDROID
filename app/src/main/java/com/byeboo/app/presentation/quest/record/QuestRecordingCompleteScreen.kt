@@ -82,7 +82,7 @@ private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -139,7 +139,7 @@ private fun QuestRecordingCompleteScreen(
 
                         Text(
                             text = "${uiState.questNumber}번째 퀘스트",
-                            style = ByeBooTheme.typography.body2,
+                            style = ByeBooTheme.typography.body6,
                             color = ByeBooTheme.colors.gray500
                         )
                     }

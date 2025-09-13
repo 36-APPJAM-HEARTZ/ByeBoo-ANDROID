@@ -15,7 +15,7 @@ fun KakaoLoginResponseDto.toDomain(): AuthResult = AuthResult(
     journeyStatus = journeyStatus.toJourneyStatus()
 )
 
-internal fun String?.toJourneyType(): JourneyType = when(this) {
+internal fun String?.toJourneyType(): JourneyType = when (this) {
     "FACE_EMOTION" -> JourneyType.FACE_EMOTION
     "PROCESS_EMOTION" -> JourneyType.PROCESS_EMOTION
     else -> JourneyType.UNKNOWN
@@ -23,8 +23,8 @@ internal fun String?.toJourneyType(): JourneyType = when(this) {
 
 internal fun String?.toJourneyStatus(): JourneyStatusType = when (this) {
     "BEFORE_START" -> JourneyStatusType.BEFORE_START
-    "IN_PROGRESS"  -> JourneyStatusType.IN_PROGRESS
-    "COMPLETED"    -> JourneyStatusType.COMPLETED
+    "IN_PROGRESS" -> JourneyStatusType.IN_PROGRESS
+    "COMPLETED" -> JourneyStatusType.COMPLETED
     else -> JourneyStatusType.UNKNOWN
 }
 

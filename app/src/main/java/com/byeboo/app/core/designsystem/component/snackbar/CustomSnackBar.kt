@@ -37,7 +37,7 @@ fun CustomSnackBar(
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_alert),
             contentDescription = "알림",
-            tint = Color.Unspecified,
+            tint = Color.Unspecified
         )
 
         Spacer(modifier = Modifier.width(8.dp))

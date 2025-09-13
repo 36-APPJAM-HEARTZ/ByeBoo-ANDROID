@@ -18,10 +18,9 @@ enum class JourneyType {
 }
 
 fun JourneyType.toJourneyText(): String {
-    return when(this) {
+    return when (this) {
         JourneyType.FACE_EMOTION -> "감정 직면"
         JourneyType.PROCESS_EMOTION -> "감정 정리"
         JourneyType.UNKNOWN -> "알 수 없음"
     }
 }
-

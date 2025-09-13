@@ -14,7 +14,7 @@ fun QuestInProgressResponseDto.toDomain(): QuestInProgressModel {
         progressPeriod = progressPeriod,
         currentStep = currentStep,
         questOpenTime = parseServerTimeToInstant(questOpenTime),
-        currentTime =  parseServerTimeToInstant(currentTime),
+        currentTime = parseServerTimeToInstant(currentTime),
         steps = steps.map { stepDto ->
             QuestStepModel(
                 stepNumber = stepDto.stepNumber,

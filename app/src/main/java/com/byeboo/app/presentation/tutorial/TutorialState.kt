@@ -26,11 +26,11 @@ enum class TutorialContent(
     FIFTH_CONTENT(
         image = R.drawable.img_tutorial_5,
         content = "자, 이제 시간이 됐어요.\n\n당신에게 꼭 맞는 이별 극복 여정에 따라\n" +
-                "퀘스트를 하나하나씩 진행하면서\n감정을 정리하고 극복해 보아요.\n\n" +
-                "저 보리가 항상 함께할게요."
+            "퀘스트를 하나하나씩 진행하면서\n감정을 정리하고 극복해 보아요.\n\n" +
+            "저 보리가 항상 함께할게요."
     )
 }
 
 sealed interface TutorialSideEffect {
-    data object NavigateToUp: TutorialSideEffect
+    data object NavigateToUp : TutorialSideEffect
 }

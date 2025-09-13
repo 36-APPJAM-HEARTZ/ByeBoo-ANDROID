@@ -134,7 +134,10 @@ private fun QuestTipScreen(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SmallTag(tagText = "STEP ${uiState.stepNumber}")
+                    SmallTag(
+                        tagText = "STEP ${uiState.stepNumber}",
+                        tagColor = ByeBooTheme.colors.gray500
+                    )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 

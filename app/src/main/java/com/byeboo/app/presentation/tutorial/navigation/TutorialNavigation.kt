@@ -9,14 +9,14 @@ import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.tutorial.TutorialRoute
 import kotlinx.serialization.Serializable
 
-fun NavController.navigateToTutorial(navOptions: NavOptions? = null){
+fun NavController.navigateToTutorial(navOptions: NavOptions? = null) {
     navigate(Tutorial, navOptions)
 }
 
 fun NavGraphBuilder.tutorialGraph(
     navigateToUp: () -> Unit,
     padding: Dp
-){
+) {
     composable<Tutorial> {
         TutorialRoute(
             navigateToUp = navigateToUp,

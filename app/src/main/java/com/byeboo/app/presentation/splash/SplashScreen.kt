@@ -50,11 +50,10 @@ fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    padding: Dp,
+    bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
-
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
@@ -68,13 +67,13 @@ fun SplashRoute(
                 is SplashStateSideEffect.NavigateToHome -> navigateToHome()
                 is SplashStateSideEffect.NavigateToUserInfo -> navigateToUserInfo()
                 is SplashStateSideEffect.NavigateToTermsOfService -> navigateToTermsOfService()
-                is SplashStateSideEffect.StartKakaoTalkLogin ->  {
+                is SplashStateSideEffect.StartKakaoTalkLogin -> {
                     UserApiClient.instance.loginWithKakaoTalk(
                         context = context,
                         callback = viewModel::updateLoginResult
                     )
                 }
-                is SplashStateSideEffect.StartKakaoWebLogin ->  {
+                is SplashStateSideEffect.StartKakaoWebLogin -> {
                     UserApiClient.instance.loginWithKakaoAccount(
                         context = context,
                         callback = viewModel::updateLoginResult
@@ -86,7 +85,7 @@ fun SplashRoute(
     }
 
     SplashScreen(
-        padding = padding,
+        bottomPadding = bottomPadding,
         showLoginButton = showLoginButton,
         onClick = {
             val availableButton = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
@@ -98,7 +97,7 @@ fun SplashRoute(
 
 @Composable
 private fun SplashScreen(
-    padding: Dp,
+    bottomPadding: Dp,
     showLoginButton: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -111,7 +110,11 @@ private fun SplashScreen(
 
     val buttonAlpha by animateDpAsState(
         targetValue = if (showLoginButton) 1.dp else 0.dp,
-        animationSpec = tween(durationMillis = 450, delayMillis = 120, easing = LinearOutSlowInEasing),
+        animationSpec = tween(
+            durationMillis = 450,
+            delayMillis = 120,
+            easing = LinearOutSlowInEasing
+        ),
         label = "buttonAlpha"
     )
 
@@ -126,21 +129,20 @@ private fun SplashScreen(
         )
 
         Image(
-            painter = painterResource(R.drawable.img_splash_logo),
+            imageVector = ImageVector.vectorResource(id = R.drawable.img_splash_logo),
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = screenWidthDp(76.dp))
-                .padding(top = screenHeightDp(padding + 250.dp))
+                .padding(top = screenHeightDp(333.dp))
                 .offset(y = upAnimation)
         )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .padding(bottom = padding)
-                .offset(y = upAnimation),
+                .padding(bottom = bottomPadding)
+                .offset(y = upAnimation)
         ) {
-
             Spacer(modifier = Modifier.weight(1f))
 
             if (showLoginButton) {
@@ -149,10 +151,9 @@ private fun SplashScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(color = ByeBooTheme.colors.kakaoYellow)
-                        .graphicsLayer{ alpha = buttonAlpha.toPx() }
+                        .graphicsLayer { alpha = buttonAlpha.toPx() }
                         .noRippleClickable(onClick = onClick)
-                        .padding(vertical = 16.dp)
-                    ,
+                        .padding(vertical = 16.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -173,5 +174,3 @@ private fun SplashScreen(
         }
     }
 }
-
-

@@ -3,8 +3,8 @@ package com.byeboo.app.domain.usecase
 import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
-import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
+import kotlinx.coroutines.flow.firstOrNull
 
 class ReissueAccessTokenUseCase @Inject constructor(
     private val authRepository: AuthRepository,
@@ -19,5 +19,4 @@ class ReissueAccessTokenUseCase @Inject constructor(
         return authRepository.reissueAccessToken(refreshToken)
             .onSuccess { tokenRepository.saveTokens(it) }
     }
-
 }
