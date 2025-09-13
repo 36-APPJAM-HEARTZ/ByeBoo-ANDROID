@@ -90,7 +90,6 @@ fun UserInfoRoute(
     )
 }
 
-
 @Composable
 private fun UserInfoScreen(
     uiState: UserInfoState,
@@ -153,7 +152,7 @@ private fun UserInfoScreen(
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
         ) {
-            Spacer(modifier = Modifier.padding(top = screenHeightDp(padding + 27.dp)))
+            Spacer(modifier = Modifier.padding(top = screenHeightDp(67.dp)))
 
             Box(
                 modifier = Modifier
@@ -178,6 +177,7 @@ private fun UserInfoScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
             StepProgressBar(currentStep = pagerState.currentPage + 1)
 
             HorizontalPager(

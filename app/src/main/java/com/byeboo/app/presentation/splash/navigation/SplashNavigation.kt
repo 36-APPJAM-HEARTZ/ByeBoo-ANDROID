@@ -30,7 +30,7 @@ fun NavGraphBuilder.splashGraph(
             navigateToHome = navigateToHome,
             navigateToUserInfo = navigateToUserInfo,
             navigateToTermsOfService = navigateToTermsOfService,
-            padding = padding
+            bottomPadding = padding
         )
     }
     composable<Terms> {
@@ -47,4 +47,3 @@ data object Splash : Route
 
 @Serializable
 data object Terms : Route
-

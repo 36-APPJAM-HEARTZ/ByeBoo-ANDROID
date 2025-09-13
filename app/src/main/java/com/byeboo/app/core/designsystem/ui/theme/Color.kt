@@ -391,7 +391,7 @@ fun ByeBooDarkColors(
     Secondary300Alpha30: Color = secondary300Alpha30,
     Secondary300Alpha10: Color = secondary300Alpha10,
     Gray900Alpha80: Color = gray900Alpha80,
-    KakaoYellow: Color = kakaoYellow,
+    KakaoYellow: Color = kakaoYellow
 ) = ByeBooColors(
     Primary50,
     Primary100,

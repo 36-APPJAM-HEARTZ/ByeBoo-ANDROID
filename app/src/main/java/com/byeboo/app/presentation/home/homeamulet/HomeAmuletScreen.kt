@@ -78,7 +78,7 @@ private fun HomeAmuletScreen(
     isFlipped: Boolean,
     onFlip: () -> Unit,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Image(

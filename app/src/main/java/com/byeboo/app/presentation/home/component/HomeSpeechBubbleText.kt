@@ -23,7 +23,11 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun SpeechBubbleWithText(firstText: String, secondText: String, thirdText: String) {
+fun SpeechBubbleWithText(
+    firstText: String,
+    secondText: String,
+    thirdText: String
+) {
     var showFirstText by remember { mutableStateOf(false) }
     var showSecondText by remember { mutableStateOf(false) }
     var showThirdText by remember { mutableStateOf(false) }

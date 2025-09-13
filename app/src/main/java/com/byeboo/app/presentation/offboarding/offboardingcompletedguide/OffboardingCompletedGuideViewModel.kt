@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingCompletedGuideViewModel @Inject constructor(
@@ -33,7 +33,10 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
         private const val ANIMATION_PLAYED = "animation_played"
     }
 
-    val isInitialAnimation: StateFlow<Boolean> = savedStateHandle.getStateFlow(ANIMATION_PLAYED, false)
+    val isInitialAnimation: StateFlow<Boolean> = savedStateHandle.getStateFlow(
+        ANIMATION_PLAYED,
+        false
+    )
 
     init {
         loadInitialData()
@@ -44,19 +47,25 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
             userRepository.getNickname()
                 .catch { e ->
                     _sideEffect.emit(
-                        OffboardingCompletedGuideSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                        OffboardingCompletedGuideSideEffect.ShowSnackBar(
+                            "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                        )
                     )
                 }
                 .collect { name ->
                     _uiState.update { it.copy(nickname = name) }
-            }
+                }
         }
         viewModelScope.launch {
             runCatching {
                 val journey = questStateRepository.getUserJourney() ?: "감정 직면"
                 _uiState.update { it.copy(journeyName = journey) }
             }.onFailure { e ->
-                _sideEffect.emit(OffboardingCompletedGuideSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+                _sideEffect.emit(
+                    OffboardingCompletedGuideSideEffect.ShowSnackBar(
+                        "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                    )
+                )
             }
         }
     }
@@ -75,7 +84,9 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     fun onCompletedJourneyClicked() {
         viewModelScope.launch {
             savedStateHandle[ANIMATION_PLAYED] = true
-            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney)
+            _sideEffect.emit(
+                OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney
+            )
         }
     }
 }

@@ -33,7 +33,7 @@ fun TermsCheckButton(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .noRippleClickable{ onCheckClick(!isSelected) },
+            .noRippleClickable { onCheckClick(!isSelected) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -60,9 +60,8 @@ fun TermsCheckButton(
                 style = ByeBooTheme.typography.cap2,
                 color = contentColor,
                 textDecoration = TextDecoration.Underline,
-                modifier = modifier.noRippleClickable(onClick = onLinkClick )
+                modifier = modifier.noRippleClickable(onClick = onLinkClick)
             )
         }
     }
 }
-

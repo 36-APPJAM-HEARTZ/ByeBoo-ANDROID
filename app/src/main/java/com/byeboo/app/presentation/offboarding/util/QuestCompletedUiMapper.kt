@@ -13,7 +13,6 @@ fun QuestCompletedModel.toUiState(
     journey: QuestType,
     nickname: String = "하츠핑"
 ): QuestCompletedState {
-
     val groups: ImmutableList<QuestCompletedGroup> =
         steps.orEmpty().map { step ->
             val quests: ImmutableList<QuestCompleted> =

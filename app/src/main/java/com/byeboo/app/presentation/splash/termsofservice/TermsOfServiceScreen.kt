@@ -82,14 +82,14 @@ private fun TermsOfServiceScreen(
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .padding(top = 67.dp, bottom = padding)
+                .padding(top = 107.dp, bottom = padding)
                 .fillMaxSize()
         ) {
             TermsHeader()
 
             TermsAllButton(
                 onTermsAllClick = onTermsAllClicked,
-                isChecked = uiState.isAllChecked,
+                isChecked = uiState.isAllChecked
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -142,4 +142,3 @@ private fun TermsHeader() {
         )
     }
 }
-

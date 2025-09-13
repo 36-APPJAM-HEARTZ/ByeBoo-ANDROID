@@ -32,7 +32,7 @@ fun MyPageModal(
     onConfirmText: String,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties(),
-    myPageModalSubText: String? = null,
+    myPageModalSubText: String? = null
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,

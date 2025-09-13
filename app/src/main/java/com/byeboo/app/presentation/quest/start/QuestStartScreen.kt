@@ -69,7 +69,7 @@ private fun QuestStartScreen(
     onBackClick: () -> Unit,
     onStartClick: () -> Unit,
     padding: Dp,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier

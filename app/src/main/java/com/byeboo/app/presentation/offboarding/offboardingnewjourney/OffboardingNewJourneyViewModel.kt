@@ -6,15 +6,15 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingNewJourneyViewModel @Inject constructor(
-    private val questStateRepository: QuestStateRepository,
+    private val questStateRepository: QuestStateRepository
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<OffboardingNewJourneySideEffect>()
     val sideEffect: SharedFlow<OffboardingNewJourneySideEffect> = _sideEffect.asSharedFlow()
@@ -29,9 +29,9 @@ class OffboardingNewJourneyViewModel @Inject constructor(
         val journeyName = journey.journeyName
 
         viewModelScope.launch {
-                    questStateRepository.updateUserJourney(journeyName)
-                    questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
-                    _sideEffect.emit(OffboardingNewJourneySideEffect.NavigateToQuestStart(journey))
-                }
+            questStateRepository.updateUserJourney(journeyName)
+            questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
+            _sideEffect.emit(OffboardingNewJourneySideEffect.NavigateToQuestStart(journey))
         }
+    }
 }

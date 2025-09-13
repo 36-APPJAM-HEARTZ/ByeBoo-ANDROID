@@ -50,7 +50,6 @@ fun QuestTitle(
             )
         }
 
-
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         Text(

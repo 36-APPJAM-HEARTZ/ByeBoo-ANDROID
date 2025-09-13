@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class OffboardingQuestCompletedRepositoryImpl @Inject constructor(
     private val offboardingQuestCompletedDataSource: OffboardingQuestCompletedDataSource
-): OffboardingQuestCompletedRepository {
+) : OffboardingQuestCompletedRepository {
     override suspend fun getCompletedQuest(journey: QuestType): Result<QuestCompletedModel> {
         return runCatching {
             val response = offboardingQuestCompletedDataSource.getCompletedQuest(journey)

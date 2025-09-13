@@ -54,7 +54,9 @@ fun OffboardingNewJourneyRoute(
     LaunchedEffect(Unit) {
         offboardingNewJourneyViewModel.sideEffect.collect { effect ->
             when (effect) {
-                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart(effect.journey)
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart(
+                    effect.journey
+                )
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
@@ -64,7 +66,11 @@ fun OffboardingNewJourneyRoute(
         uiState = uiState,
         bottomPadding = bottomPadding,
         onBackClick = offboardingNewJourneyViewModel::onBackClicked,
-        onJourneyUncompletedCardClick = { type -> offboardingNewJourneyViewModel.postNewJourney(type) },
+        onJourneyUncompletedCardClick = { type ->
+            offboardingNewJourneyViewModel.postNewJourney(
+                type
+            )
+        },
         modifier = modifier
     )
 }
@@ -135,7 +141,8 @@ private fun OffboardingNewJourneyScreen(
             ) {
                 Text(
                     text = "미완료",
-                    color = ByeBooTheme.colors.gray300
+                    color = ByeBooTheme.colors.gray300,
+                    style = ByeBooTheme.typography.cap2
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -179,7 +186,7 @@ private fun PreparingCard() {
             color = ByeBooTheme.colors.gray600,
             style = ByeBooTheme.typography.body6,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

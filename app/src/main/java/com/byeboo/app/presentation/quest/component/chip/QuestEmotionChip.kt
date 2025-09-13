@@ -57,13 +57,14 @@ fun EmotionChip(
         .then(
             if (onChipClick != null && enabled) {
                 Modifier.noRippleClickable { onChipClick(emotionType) }
-
             } else {
                 Modifier
-            })
+            }
+        )
         .clip(shape)
         .background(
-            color = backgroundColor, shape = shape
+            color = backgroundColor,
+            shape = shape
         )
         .then(
             if (isSelected) {

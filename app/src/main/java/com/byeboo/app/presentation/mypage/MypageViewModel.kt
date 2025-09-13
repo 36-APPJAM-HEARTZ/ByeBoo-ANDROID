@@ -7,6 +7,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
 import com.byeboo.app.domain.usecase.WithdrawUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
@@ -37,19 +37,19 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun onNicknameChangeClicked(){
+    fun onNicknameChangeClicked() {
         viewModelScope.launch {
             _sideEffect.emit(MyPageSideEffect.NavigateToEditProfile)
         }
     }
 
-    fun onCompletedJourneyClicked(){
+    fun onCompletedJourneyClicked() {
         viewModelScope.launch {
             _sideEffect.emit(MyPageSideEffect.NavigateToOffboardingCompletedJourney)
         }
     }
 
-    fun onGoToByeBooUniverseClicked(){
+    fun onGoToByeBooUniverseClicked() {
         viewModelScope.launch {
             _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
         }
