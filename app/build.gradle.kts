@@ -40,23 +40,44 @@ android {
         )
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
-
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
         buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
         buildConfigField("String", "BYEBOO_TERMS_OF_SERVICE", properties["byeboo.terms.of.service"].toString())
-        buildConfigField("String", "MASTER_KEY", properties["masterkey"].toString())
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = properties.getProperty("debug.key.alias")
+            keyPassword = properties.getProperty("debug.key.password")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/byeboo-debug-key.jks")
+            storePassword = properties.getProperty("debug.store.password")
+        }
+        create("release") {
+            keyAlias = properties.getProperty("release.key.alias")
+            keyPassword = properties.getProperty("release.key.password")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/byeboo-release-key.jks")
+            storePassword = properties.getProperty("release.store.password")
+        }
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -71,7 +92,6 @@ android {
 }
 
 dependencies {
-
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -109,7 +129,7 @@ dependencies {
     // Kakao Login
     implementation(libs.bundles.kakao)
 
-    // Ui
+    // UI
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.lottie.compose)
