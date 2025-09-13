@@ -129,7 +129,7 @@ dependencies {
     // Kakao Login
     implementation(libs.bundles.kakao)
 
-    // Ui
+    // UI
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.lottie.compose)
