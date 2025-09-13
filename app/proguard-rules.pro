@@ -1,21 +1,95 @@
 # Add project specific ProGuard rules here.
 # You can control the set of applied configuration files using the
 # proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# --- Basic ---
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Debugging information
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes Exceptions
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# BuildConfig
+-keep class com.byeboo.app.BuildConfig { *; }
+
+# kotlinx.serialization (recommended/optional)
+-keep @kotlinx.serialization.Serializable class * { *; }
+-keepnames @kotlinx.serialization.Serializable class * { *; }
+# The following 3 lines are optional
+# -keep class kotlinx.serialization.** { *; }
+# -keep class **$$serializer { *; }
+# -keepclassmembers class * implements kotlinx.serialization.KSerializer { *; }
+
+# Retrofit interfaces
+-keep interface * {
+    @retrofit2.http.* <methods>;
+}
+
+# Hilt
+-keep class dagger.hilt.** { *; }
+-keep class * extends dagger.hilt.android.internal.managers.ApplicationComponentManager { *; }
+-keep @dagger.hilt.android.AndroidEntryPoint class * { public <init>(...); }
+
+# Crashlytics
+-keep public class * extends java.lang.Exception
+-keep class com.google.firebase.crashlytics.** { *; }
+
+# Kakao SDK
+-keep class com.kakao.sdk.** { *; }
+-dontwarn com.kakao.sdk.**
+
+# OkHttp & Retrofit
+-keep class okhttp3.** { *; }
+-keep class retrofit2.** { *; }
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**
+
+# Timber
+-keep class timber.log.Timber$Tree { *; }
+-keep class timber.log.Timber$DebugTree { *; }
+-assumenosideeffects class timber.log.Timber* {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+# Compose (if needed)
+-keep class androidx.compose.** { *; }
+-dontwarn androidx.compose.**
+
+# Enums
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Native methods
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# View constructors
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+# Remove Android Log calls
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
