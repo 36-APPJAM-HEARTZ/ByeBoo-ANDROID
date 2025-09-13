@@ -54,14 +54,7 @@ class MainNavigator(
     fun navigate(tab: MainNavTab) {
         val navOptions =
             navOptions {
-                navController.currentDestination?.route?.let {
-                    popUpTo(it) {
-                        inclusive = true
-                        saveState = true
-                    }
-                }
                 launchSingleTop = true
-                restoreState = true
             }
         when (tab) {
             MainNavTab.QUEST -> navController.navigateToQuest(navOptions)
