@@ -11,7 +11,8 @@ object NicknameValidator {
 
     fun validate(input: String): NicknameValidationResult {
         return when {
-            input.isBlank() -> NicknameValidationResult.Empty
+            input.isEmpty() -> NicknameValidationResult.Empty
+            input.isBlank() -> NicknameValidationResult.Invalid
             regex.matches(input) -> NicknameValidationResult.Valid
             else -> NicknameValidationResult.Invalid
         }
