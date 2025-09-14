@@ -235,11 +235,9 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = modifier.height(8.dp))
+                        Spacer(modifier = modifier.height(12.dp))
 
                         ContentText(uiState.answer)
-
-                        Spacer(modifier = modifier.height(21.dp))
                     }
 
                     Spacer(modifier = modifier.height(24.dp))

@@ -36,7 +36,7 @@ import com.byeboo.app.presentation.quest.component.modal.GuideContent
 fun QuestStartRoute(
     journey: QuestType?,
     navigateToQuest: () -> Unit,
-    navigateUp: () -> Unit,
+    navigateToHome: () -> Unit,
     padding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
@@ -48,7 +48,7 @@ fun QuestStartRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestStartSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestStartSideEffect.NavigateUp -> navigateUp()
+                is QuestStartSideEffect.NavigateToHome -> navigateToHome()
                 is QuestStartSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

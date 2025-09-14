@@ -44,7 +44,6 @@ fun QuestRoute(
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompleteGuide: () -> Unit,
-    navigateToHome: () -> Unit,
     bottomPadding: Dp,
     viewModel: QuestViewModel = hiltViewModel()
 ) {
@@ -75,7 +74,6 @@ fun QuestRoute(
                     effect.questId
                 )
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
-                is QuestSideEffect.NavigateToHome -> navigateToHome()
                 is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }

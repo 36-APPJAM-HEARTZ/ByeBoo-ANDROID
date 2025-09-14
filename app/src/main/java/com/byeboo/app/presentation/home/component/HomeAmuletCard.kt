@@ -74,7 +74,7 @@ fun HomeAmuletCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = screenWidthDp(37.dp))
-                        .padding(top = screenHeightDp(150.dp))
+                        .padding(top = screenHeightDp(131.dp))
                 )
             }
         } else {
