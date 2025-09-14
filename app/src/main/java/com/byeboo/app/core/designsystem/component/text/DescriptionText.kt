@@ -46,7 +46,7 @@ fun DescriptionText(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = contentText,
-            style = ByeBooTheme.typography.body5,
+            style = ByeBooTheme.typography.body6,
             color = ByeBooTheme.colors.gray400
         )
     }
