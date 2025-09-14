@@ -138,7 +138,7 @@ fun MainNavHost(
         )
 
         offboardingGraph(
-            navigateToHome = { navigator.navigateToHome(questNavOptions) },
+            navigateToHome = { navigator.navigate(MainNavTab.HOME) },
             navigateToOffboardingNewJourney = {
                 navigator.navigateToOffboardingNewJourney(
                     keepStackNavOptions
