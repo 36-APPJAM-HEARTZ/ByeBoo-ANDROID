@@ -15,7 +15,7 @@ fun SmallTag(
 ) {
     Text(
         text = tagText,
-        style = ByeBooTheme.typography.cap2.copy(color = tagColor),
+        style = ByeBooTheme.typography.cap1.copy(color = tagColor),
         modifier = modifier
     )
 }

@@ -143,7 +143,7 @@ private fun QuestTipScreen(
 
                     Text(
                         text = "${uiState.questNumber}번째 퀘스트",
-                        style = ByeBooTheme.typography.body2,
+                        style = ByeBooTheme.typography.body6,
                         color = ByeBooTheme.colors.gray500
                     )
                 }
@@ -194,7 +194,7 @@ private fun QuestTipScreen(
                     )
                 } else {
                     QuestContent(
-                        titleIcon = QuestContentType.THINKING,
+                        titleIcon = QuestContentType.BEHAVIOR,
                         titleText = "이렇게 해보면 좋아요.",
                         contentText = uiState.tipAnswer.suggestion
                     )

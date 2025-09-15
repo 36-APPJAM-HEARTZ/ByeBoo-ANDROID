@@ -32,13 +32,14 @@ fun HomeQuestCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = ByeBooTheme.colors.whiteAlpha10,
-    shape: Shape = RoundedCornerShape(12.dp)
+    shape: Shape = RoundedCornerShape(12.dp),
+    borderColor: Color =  ByeBooTheme.colors.primary300
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor, shape)
-            .border(1.dp, ByeBooTheme.colors.primary300, shape)
+            .border(1.dp, color = borderColor, shape)
             .noRippleClickable { onClick() }
             .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
     ) {

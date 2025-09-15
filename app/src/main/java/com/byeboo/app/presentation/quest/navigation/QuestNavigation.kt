@@ -63,7 +63,7 @@ fun NavGraphBuilder.questGraph(
             QuestStartRoute(
                 journey = journey,
                 navigateToQuest = navigateToQuest,
-                navigateUp = navigateUp,
+                navigateToHome = navigateToHome,
                 padding = padding
             )
         }
@@ -77,7 +77,6 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToOffboardingCompleteGuide = navigateToOffboardingCompleteGuide,
-                navigateToHome = navigateToHome,
                 bottomPadding = padding
             )
         }

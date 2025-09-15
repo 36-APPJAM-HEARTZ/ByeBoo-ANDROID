@@ -66,7 +66,7 @@ class QuestStartViewModel @Inject constructor(
 
     fun onBackClicked() {
         viewModelScope.launch {
-            _sideEffect.emit(QuestStartSideEffect.NavigateUp)
+            _sideEffect.emit(QuestStartSideEffect.NavigateToHome)
         }
     }
 

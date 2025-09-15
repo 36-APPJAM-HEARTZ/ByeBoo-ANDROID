@@ -44,7 +44,6 @@ fun QuestRoute(
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompleteGuide: () -> Unit,
-    navigateToHome: () -> Unit,
     bottomPadding: Dp,
     viewModel: QuestViewModel = hiltViewModel()
 ) {
@@ -75,7 +74,6 @@ fun QuestRoute(
                     effect.questId
                 )
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
-                is QuestSideEffect.NavigateToHome -> navigateToHome()
                 is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -128,7 +126,7 @@ private fun QuestScreen(
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
                 text = uiState.progressPeriod.toString(),
-                textStyle = ByeBooTheme.typography.cap2
+                textStyle = ByeBooTheme.typography.cap1
             )
 
             Spacer(modifier = Modifier.height(8.dp))

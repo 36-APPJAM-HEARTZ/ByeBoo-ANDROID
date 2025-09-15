@@ -180,6 +180,28 @@ private fun QuestBehaviorCompleteScreen(
             }
 
             item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
+                        contentDescription = "title icon",
+                        tint = Color.Unspecified
+                    )
+
+                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+                    Text(
+                        text = "이렇게 완료했어요",
+                        color = ByeBooTheme.colors.gray200,
+                        style = ByeBooTheme.typography.body2
+                    )
+
+                }
+
+                Spacer(modifier = modifier.height(12.dp))
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -213,10 +235,12 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = modifier.height(8.dp))
+                        Spacer(modifier = modifier.height(12.dp))
+
                         ContentText(uiState.answer)
                     }
-                    Spacer(modifier = modifier.height(21.dp))
+
+                    Spacer(modifier = modifier.height(24.dp))
                 }
             }
 
@@ -227,9 +251,10 @@ private fun QuestBehaviorCompleteScreen(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_change),
                         contentDescription = "title icon",
-                        modifier = modifier.padding(end = 8.dp),
                         tint = Color.Unspecified
                     )
+
+                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                     Text(
                         text = "퀘스트 완료 후, 이런 감정을 느꼈어요",

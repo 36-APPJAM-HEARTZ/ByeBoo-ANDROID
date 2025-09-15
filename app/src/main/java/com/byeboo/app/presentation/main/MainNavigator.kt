@@ -54,12 +54,31 @@ class MainNavigator(
     fun navigate(tab: MainNavTab) {
         val navOptions =
             navOptions {
+                navController.currentDestination?.route?.let {
+                    popUpTo(it) {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
                 launchSingleTop = true
+                restoreState = true
             }
+        val myPageOptions =
+            navOptions {
+                navController.currentDestination?.route?.let {
+                    popUpTo(it) {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
+                launchSingleTop = true
+                restoreState = false
+            }
+
         when (tab) {
             MainNavTab.QUEST -> navController.navigateToQuest(navOptions)
             MainNavTab.HOME -> navController.navigateToHome(navOptions)
-            MainNavTab.MYPAGE -> navController.navigateToMyPage(navOptions)
+            MainNavTab.MYPAGE -> navController.navigateToMyPage(myPageOptions)
         }
     }
 
