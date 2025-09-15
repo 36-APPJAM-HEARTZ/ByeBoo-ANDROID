@@ -139,7 +139,7 @@ private fun QuestReviewScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_think),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
                             contentDescription = "title icon",
                             tint = Color.Unspecified
                         )

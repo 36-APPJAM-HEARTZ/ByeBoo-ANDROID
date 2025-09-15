@@ -160,9 +160,10 @@ private fun OffboardingNewJourneyScreen(
                         journeyType = card.journeyType,
                         onJourneyCardClick = { onJourneyUncompletedCardClick(card.journeyType) },
                         chipBackgroundColor = ByeBooTheme.colors.primary300,
-                        chipTextColor = ByeBooTheme.colors.primary50,
+                        chipTextColor = ByeBooTheme.colors.white,
                         journeyTitleTextColor = ByeBooTheme.colors.white,
-                        journeyCardTextStyle = ByeBooTheme.typography.body2
+                        journeyCardTextStyle = ByeBooTheme.typography.body2,
+                        borderColor = ByeBooTheme.colors.primary300
                     )
                 }
             }

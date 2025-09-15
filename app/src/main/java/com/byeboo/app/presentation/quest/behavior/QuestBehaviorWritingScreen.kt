@@ -222,7 +222,7 @@ private fun QuestBehaviorWritingScreen(
                     text = "${uiState.questNumber}번째 퀘스트",
                     color = ByeBooTheme.colors.gray500,
                     textAlign = TextAlign.Center,
-                    style = ByeBooTheme.typography.body5,
+                    style = ByeBooTheme.typography.body6,
                     modifier = modifier.fillMaxWidth()
                 )
 

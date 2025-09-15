@@ -100,7 +100,7 @@ private fun OffboardingCompletedJourneyScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "내가 완료한 여정이에요.",
+            text = "내가 완료한 여정이에요",
             color = ByeBooTheme.colors.gray50,
             style = ByeBooTheme.typography.head1
         )
