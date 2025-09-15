@@ -41,7 +41,7 @@ fun UserInfoQuestCard(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(ByeBooTheme.colors.whiteAlpha10)
+            .background(ByeBooTheme.colors.primary300Alpha20)
             .border(2.dp, borderColor, RoundedCornerShape(12.dp))
             .noRippleClickable(onCardClick)
             .padding(vertical = screenHeightDp(24.dp))
