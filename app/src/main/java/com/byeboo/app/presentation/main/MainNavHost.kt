@@ -92,7 +92,7 @@ fun MainNavHost(
 
         questGraph(
             navigateToQuest = { navigator.navigateToQuest(clearStackNavOptions) },
-            navigateToHome = { navigator.navigate(MainNavTab.HOME) },
+            navigateToHome = { navigator.navigateToHome(questNavOptions) },
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
@@ -138,7 +138,7 @@ fun MainNavHost(
         )
 
         offboardingGraph(
-            navigateToHome = { navigator.navigate(MainNavTab.HOME) },
+            navigateToHome = { navigator.navigateToHome(questNavOptions) },
             navigateToOffboardingNewJourney = {
                 navigator.navigateToOffboardingNewJourney(
                     keepStackNavOptions
