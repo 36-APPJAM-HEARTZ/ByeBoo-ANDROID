@@ -83,7 +83,7 @@ val gray900Alpha80 = gray900.copy(alpha = 0.8f)
 val kakaoYellow = Color(0xFFFEE500)
 
 // tutorial
-val tutorialPurple = Color(0xFFF2EBFF)
+val tutorialPurple = Color(0xFFF6F0FF)
 
 @Stable
 class ByeBooColors(
