@@ -343,7 +343,7 @@ private fun QuestBehaviorWritingScreen(
 
                 ByeBooActivationButton(
                     buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
-                    buttonText = "완료",
+                    buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = {
                         onClickCompleteButton()
@@ -351,6 +351,8 @@ private fun QuestBehaviorWritingScreen(
                     },
                     isEnabled = QuestValidator.validButton(uiState.imageCount)
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

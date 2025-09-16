@@ -94,7 +94,7 @@ private fun QuestStartScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(screenHeightDp(42.dp)))
 
         Column(
             modifier = Modifier
@@ -106,7 +106,7 @@ private fun QuestStartScreen(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(screenHeightDp(57.dp)))
 
         ByeBooButton(
             onClick = onStartClick,
@@ -119,6 +119,6 @@ private fun QuestStartScreen(
                 .padding(bottom = padding)
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
     }
 }

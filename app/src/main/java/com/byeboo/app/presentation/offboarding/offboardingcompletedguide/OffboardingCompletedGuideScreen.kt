@@ -215,7 +215,7 @@ private fun OffboardingCompleteGuideScreen(
                     buttonTextColor = ByeBooTheme.colors.primary400,
                     buttonBackgroundColor = ByeBooTheme.colors.primary50
                 )
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

@@ -63,10 +63,12 @@ fun ByeBooBottomSheet(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(8.dp)),
+                    .padding(horizontal = screenWidthDp(24.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ByeBooDragHandle()
+
+                Spacer(modifier = Modifier.height(screenHeightDp(17.dp)))
 
                 Text(
                     text = "퀘스트를 완료한 후,\n어떤 감정이 느껴지시나요?",
@@ -100,6 +102,8 @@ fun ByeBooBottomSheet(
                     },
                     isEnabled = (selectedEmotion != null) && !isUploading
                 )
+
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

@@ -140,7 +140,7 @@ private fun SplashScreen(
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .padding(bottom = bottomPadding)
+                .padding(bottom = bottomPadding + 10.dp)
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))

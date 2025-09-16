@@ -303,7 +303,7 @@ private fun QuestRecordingScreen(
                     isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

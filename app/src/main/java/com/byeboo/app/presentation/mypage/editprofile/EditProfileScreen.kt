@@ -161,5 +161,7 @@ private fun EditProfileScreen(
             isEnabled = isNicknameValid,
             onClick = { onCompleteClick(uiState.nickname) }
         )
+
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }

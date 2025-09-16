@@ -23,14 +23,14 @@ fun ByeBooDragHandle(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(top = screenHeightDp(24.dp), bottom = screenHeightDp(33.dp))
+            .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
             .clip(shape = RoundedCornerShape(12.dp))
     ) {
         Box(
             modifier = Modifier
-                .width(screenWidthDp(70.dp))
-                .height(screenHeightDp(4.dp))
-                .background(ByeBooTheme.colors.white)
+                .width(screenWidthDp(35.dp))
+                .height(screenHeightDp(5.dp))
+                .background(ByeBooTheme.colors.whiteAlpha10)
         )
         content()
     }

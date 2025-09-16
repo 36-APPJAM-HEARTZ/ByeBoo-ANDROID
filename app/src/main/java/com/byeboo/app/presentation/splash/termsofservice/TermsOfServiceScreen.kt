@@ -117,6 +117,8 @@ private fun TermsOfServiceScreen(
                 isEnabled = uiState.isAllChecked,
                 onClick = onNextButton
             )
+
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
