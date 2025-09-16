@@ -24,7 +24,6 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
-import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsCheckButton
 
