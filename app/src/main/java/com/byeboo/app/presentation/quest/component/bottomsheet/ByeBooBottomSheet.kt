@@ -63,7 +63,8 @@ fun ByeBooBottomSheet(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ByeBooDragHandle()
@@ -102,8 +103,6 @@ fun ByeBooBottomSheet(
                     },
                     isEnabled = (selectedEmotion != null) && !isUploading
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

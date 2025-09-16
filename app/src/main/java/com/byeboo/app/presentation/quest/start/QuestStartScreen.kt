@@ -106,7 +106,7 @@ private fun QuestStartScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(57.dp)))
+        Spacer(modifier = Modifier.weight(1f))
 
         ByeBooButton(
             onClick = onStartClick,
@@ -116,9 +116,7 @@ private fun QuestStartScreen(
             buttonBackgroundColor = ByeBooTheme.colors.primary300,
             modifier = Modifier
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = padding)
+                .padding(bottom = padding + 10.dp)
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
     }
 }

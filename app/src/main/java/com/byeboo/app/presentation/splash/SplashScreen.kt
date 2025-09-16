@@ -139,6 +139,7 @@ private fun SplashScreen(
 
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(horizontal = 24.dp)
                 .padding(bottom = bottomPadding + 10.dp)
                 .offset(y = upAnimation)
