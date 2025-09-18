@@ -8,7 +8,8 @@ data class AuthResult(
     val isRegistered: Boolean,
     val name: String?,
     val journey: JourneyType,
-    val journeyStatus: JourneyStatusType
+    val journeyStatus: JourneyStatusType,
+    val userId: Long
 )
 
 enum class JourneyType {
