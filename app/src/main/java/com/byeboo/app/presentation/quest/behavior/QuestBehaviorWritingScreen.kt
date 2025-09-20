@@ -222,7 +222,7 @@ private fun QuestBehaviorWritingScreen(
                     text = "${uiState.questNumber}번째 퀘스트",
                     color = ByeBooTheme.colors.gray500,
                     textAlign = TextAlign.Center,
-                    style = ByeBooTheme.typography.body5,
+                    style = ByeBooTheme.typography.body6,
                     modifier = modifier.fillMaxWidth()
                 )
 
@@ -343,7 +343,7 @@ private fun QuestBehaviorWritingScreen(
 
                 ByeBooActivationButton(
                     buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
-                    buttonText = "완료",
+                    buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = {
                         onClickCompleteButton()
@@ -351,6 +351,8 @@ private fun QuestBehaviorWritingScreen(
                     },
                     isEnabled = QuestValidator.validButton(uiState.imageCount)
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

@@ -98,8 +98,7 @@ private fun EditProfileScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = 24.dp)
-            .padding(top = 67.dp, bottom = bottomPadding)
-
+            .padding(top = 67.dp, bottom = bottomPadding + 10.dp)
     ) {
         Row(
             modifier = Modifier

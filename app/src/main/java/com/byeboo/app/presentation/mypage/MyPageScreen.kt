@@ -204,8 +204,8 @@ private fun MyPageScreen(
 
                 Text(
                     text = "나의 기록",
-                    style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.gray200
+                    style = ByeBooTheme.typography.body1,
+                    color = ByeBooTheme.colors.gray300
                 )
             }
 
@@ -222,11 +222,11 @@ private fun MyPageScreen(
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable(onClick = onCompletedJourneyClick)
-                    .padding(horizontal = screenWidthDp(24.dp), vertical = 21.dp)
+                    .padding(horizontal = screenWidthDp(24.dp), vertical = 20.dp)
             ) {
                 Text(
                     text = "완료한 여정 돌아보기",
-                    style = ByeBooTheme.typography.body6,
+                    style = ByeBooTheme.typography.body2,
                     color = ByeBooTheme.colors.gray50
                 )
             }
@@ -248,8 +248,8 @@ private fun MyPageScreen(
 
                 Text(
                     text = "보리가 궁금하다면?",
-                    style = ByeBooTheme.typography.body2,
-                    color = ByeBooTheme.colors.gray200
+                    style = ByeBooTheme.typography.body1,
+                    color = ByeBooTheme.colors.gray300
                 )
             }
 
@@ -266,11 +266,11 @@ private fun MyPageScreen(
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable(onClick = onGoToByeBooUniverseClick)
-                    .padding(horizontal = screenWidthDp(24.dp), vertical = 21.dp)
+                    .padding(horizontal = screenWidthDp(24.dp), vertical = 20.dp)
             ) {
                 Text(
                     text = "Bye Boo 세계관 보러 가기",
-                    style = ByeBooTheme.typography.body6,
+                    style = ByeBooTheme.typography.body2,
                     color = ByeBooTheme.colors.gray50
                 )
             }

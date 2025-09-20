@@ -12,7 +12,8 @@ fun KakaoLoginResponseDto.toDomain(): AuthResult = AuthResult(
     isRegistered = isRegistered,
     name = name,
     journey = journey.toJourneyType(),
-    journeyStatus = journeyStatus.toJourneyStatus()
+    journeyStatus = journeyStatus.toJourneyStatus(),
+    userId = userId
 )
 
 internal fun String?.toJourneyType(): JourneyType = when (this) {

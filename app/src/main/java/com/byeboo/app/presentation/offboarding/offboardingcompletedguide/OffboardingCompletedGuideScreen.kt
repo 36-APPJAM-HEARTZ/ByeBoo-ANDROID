@@ -136,7 +136,7 @@ private fun OffboardingCompleteGuideScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
-                    .padding(top = 67.dp, bottom = bottomPadding),
+                    .padding(top = 67.dp, bottom = bottomPadding + 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
@@ -215,7 +215,6 @@ private fun OffboardingCompleteGuideScreen(
                     buttonTextColor = ByeBooTheme.colors.primary400,
                     buttonBackgroundColor = ByeBooTheme.colors.primary50
                 )
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
         }
     }

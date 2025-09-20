@@ -16,5 +16,7 @@ data class KakaoLoginResponseDto(
     @SerialName("journey")
     val journey: String?,
     @SerialName("journeyStatus")
-    val journeyStatus: String?
+    val journeyStatus: String?,
+    @SerialName("userId")
+    val userId: Long
 )

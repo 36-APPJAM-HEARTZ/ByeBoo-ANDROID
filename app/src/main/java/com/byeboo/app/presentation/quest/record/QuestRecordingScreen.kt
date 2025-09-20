@@ -163,7 +163,7 @@ private fun QuestRecordingScreen(
             }
             .addFocusCleaner(focusManager)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp(bottomPadding))
+            .padding(bottom = bottomPadding)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
@@ -171,14 +171,12 @@ private fun QuestRecordingScreen(
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
                 .padding(
-                    top = screenHeightDp((27.dp) + bottomPadding),
+                    top = screenHeightDp((67.dp)),
                     bottom = screenHeightDp(16.dp)
                 )
                 .align(Alignment.Start)
                 .clickable { onBackClick() }
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
@@ -303,7 +301,7 @@ private fun QuestRecordingScreen(
                     isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

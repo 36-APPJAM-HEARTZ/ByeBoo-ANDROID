@@ -50,7 +50,7 @@ fun MiddleTag(
 fun middleTagColor(colorType: TagColorType): Color {
     return when (colorType) {
         TagColorType.WHITE_ALPHA_10 -> ByeBooTheme.colors.whiteAlpha10
-        TagColorType.SECONDARY_ALPHA_30 -> ByeBooTheme.colors.secondary300Alpha30
+        TagColorType.SECONDARY_300_ALPHA_10 -> ByeBooTheme.colors.secondary300Alpha10
         TagColorType.GRAY_300 -> ByeBooTheme.colors.gray300
         TagColorType.SECONDARY_300 -> ByeBooTheme.colors.secondary300
         TagColorType.PRIMARY_50 -> ByeBooTheme.colors.primary50

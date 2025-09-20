@@ -7,16 +7,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
 // primary
-val primary50 = Color(0xFFF5F2FC)
-val primary100 = Color(0xFFF0EBFA)
-val primary200 = Color(0xFFE0D5F5)
-val primary300 = Color(0xFFAA7CFF)
-val primary400 = Color(0xFF8C6DC8)
-val primary500 = Color(0xFF7D61B2)
-val primary600 = Color(0xFF755BA7)
-val primary700 = Color(0xFF5E4985)
-val primary800 = Color(0xFF463664)
-val primary900 = Color(0xFF372A4E)
+val primary50 = Color(0xFFF6F0FF)
+val primary100 = Color(0xFFF1E9FF)
+val primary200 = Color(0xFFE2D2FF)
+val primary300 = Color(0xFFA16DFF)
+val primary400 = Color(0xFF9162E6)
+val primary500 = Color(0xFF8157CC)
+val primary600 = Color(0xFF7952BF)
+val primary700 = Color(0xFF614199)
+val primary800 = Color(0xFF483173)
+val primary900 = Color(0xFF382659)
 
 // secondary
 val secondary50 = Color(0xFFFFFAEE)
@@ -44,8 +44,8 @@ val warning300 = Color(0xFFFFA01A)
 val success50 = Color(0xFFE8F4FC)
 val success300 = Color(0xFF2C9CE3)
 
-val error50 = Color(0xFFFCEAEA)
-val error300 = Color(0xFFF15655)
+val error50 = Color(0xFFFFEBEC)
+val error300 = Color(0xFFFF3B3E)
 
 // grayscale
 val gray50 = Color(0xFFFEFEFE)
@@ -81,9 +81,6 @@ val gray900Alpha80 = gray900.copy(alpha = 0.8f)
 
 // kakao
 val kakaoYellow = Color(0xFFFEE500)
-
-// tutorial
-val tutorialPurple = Color(0xFFF2EBFF)
 
 @Stable
 class ByeBooColors(
@@ -136,7 +133,6 @@ class ByeBooColors(
     secondary300Alpha10: Color,
     gray900Alpha80: Color,
     kakaoYellow: Color,
-    tutorialPurple: Color,
     isLight: Boolean
 ) {
     var primary50 by mutableStateOf(primary50)
@@ -237,8 +233,6 @@ class ByeBooColors(
         private set
     var kakaoYellow by mutableStateOf(kakaoYellow)
         private set
-    var tutorialPurple by mutableStateOf(tutorialPurple)
-        private set
     var isLight by mutableStateOf(isLight)
 
     fun copy(): ByeBooColors = ByeBooColors(
@@ -291,7 +285,6 @@ class ByeBooColors(
         secondary300Alpha10,
         gray900Alpha80,
         kakaoYellow,
-        tutorialPurple,
         isLight
     )
 
@@ -345,7 +338,6 @@ class ByeBooColors(
         secondary300Alpha10 = colors.secondary300Alpha10
         gray900Alpha80 = colors.gray900Alpha80
         kakaoYellow = colors.kakaoYellow
-        tutorialPurple = colors.tutorialPurple
         isLight = colors.isLight
     }
 }
@@ -400,7 +392,6 @@ fun ByeBooDarkColors(
     Secondary300Alpha10: Color = secondary300Alpha10,
     Gray900Alpha80: Color = gray900Alpha80,
     KakaoYellow: Color = kakaoYellow,
-    TutorialPurple: Color = tutorialPurple
 ) = ByeBooColors(
     Primary50,
     Primary100,
@@ -451,6 +442,5 @@ fun ByeBooDarkColors(
     Secondary300Alpha10,
     Gray900Alpha80,
     KakaoYellow,
-    TutorialPurple,
     isLight = true
 )

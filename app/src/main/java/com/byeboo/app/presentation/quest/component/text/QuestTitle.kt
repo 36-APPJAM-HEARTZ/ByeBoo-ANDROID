@@ -45,8 +45,8 @@ fun QuestTitle(
 
             Text(
                 text = "${questNumber}번째 퀘스트",
-                color = ByeBooTheme.colors.gray400,
-                style = ByeBooTheme.typography.body5
+                color = ByeBooTheme.colors.gray500,
+                style = ByeBooTheme.typography.body6
             )
         }
 
@@ -54,8 +54,8 @@ fun QuestTitle(
 
         Text(
             text = "$date",
-            color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body5
+            color = ByeBooTheme.colors.gray500,
+            style = ByeBooTheme.typography.body6
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))

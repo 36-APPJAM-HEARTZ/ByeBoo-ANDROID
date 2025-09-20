@@ -96,7 +96,7 @@ private fun TutorialScreen(
                     Text(
                         text = contents.content,
                         style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.tutorialPurple,
+                        color = ByeBooTheme.colors.primary50,
                         textAlign = TextAlign.Center
                     )
 

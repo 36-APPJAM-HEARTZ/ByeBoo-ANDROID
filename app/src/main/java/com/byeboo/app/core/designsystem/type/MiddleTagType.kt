@@ -31,7 +31,7 @@ enum class MiddleTagType(
 
     QUEST_ESSENTIAL(
         titleResId = R.string.type_quest_essential,
-        backgroundColor = TagColorType.SECONDARY_ALPHA_30,
+        backgroundColor = TagColorType.SECONDARY_300_ALPHA_10,
         textColor = TagColorType.SECONDARY_300,
         dynamicContent = false
     ),
@@ -53,7 +53,7 @@ enum class MiddleTagType(
 
 enum class TagColorType {
     WHITE_ALPHA_10,
-    SECONDARY_ALPHA_30,
+    SECONDARY_300_ALPHA_10,
     GRAY_300,
     SECONDARY_300,
     PRIMARY_50,

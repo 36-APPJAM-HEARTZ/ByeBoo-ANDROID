@@ -170,7 +170,7 @@ fun NicknameTextField(
                     Text(
                         text = "${value.length}/5",
                         style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.gray400
+                        color = guideColor
                     )
                 }
             }
@@ -188,7 +188,7 @@ fun NicknameTextField(
                     Text(
                         text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.error300,
+                        color = guideColor,
                         modifier = Modifier
                             .padding(start = 3.dp)
                             .weight(1f)
@@ -196,7 +196,7 @@ fun NicknameTextField(
                     Text(
                         text = "${value.length}/5",
                         style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.error300
+                        color = guideColor
                     )
                 }
             }
@@ -214,7 +214,7 @@ fun NicknameTextField(
                     Text(
                         text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.gray400,
+                        color = guideColor,
                         modifier = Modifier
                             .padding(start = 3.dp)
                             .weight(1f)
@@ -222,7 +222,7 @@ fun NicknameTextField(
                     Text(
                         text = "${value.length}/5",
                         style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.gray400
+                        color = guideColor
                     )
                 }
             }

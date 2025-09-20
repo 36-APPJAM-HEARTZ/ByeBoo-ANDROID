@@ -14,7 +14,7 @@ enum class LargeTagType(
     val roundedCorner: Dp = 12.dp
 ) {
     EMOTION_NEUTRAL(
-        titleIcon = R.drawable.img_neutral,
+        titleIcon = R.drawable.img_natural,
         titleResId = R.string.type_emotion_neutral,
         title = "NEUTRAL"
     ),
