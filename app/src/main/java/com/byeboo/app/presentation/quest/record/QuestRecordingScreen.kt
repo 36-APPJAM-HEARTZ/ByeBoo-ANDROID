@@ -289,21 +289,19 @@ private fun QuestRecordingScreen(
                     }
                 }
             }
-
-            item {
-                Spacer(modifier = Modifier.height(screenHeightDp(54.dp)))
-
-                ByeBooActivationButton(
-                    buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
-                    buttonText = "완료하기",
-                    buttonDisableTextColor = ByeBooTheme.colors.gray300,
-                    onClick = onClickCompleteButton,
-                    isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
-            }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        ByeBooActivationButton(
+            buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
+            buttonText = "완료하기",
+            buttonDisableTextColor = ByeBooTheme.colors.gray300,
+            onClick = onClickCompleteButton,
+            isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
     }
 
     ByeBooBottomSheet(
