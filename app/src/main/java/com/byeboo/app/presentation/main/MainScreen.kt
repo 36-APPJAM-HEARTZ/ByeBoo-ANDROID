@@ -106,10 +106,12 @@ fun MainScreen(
 
                                     when (journeyStatus) {
                                         JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> {
+                                            viewModel.trackJourneyStart()
                                             navigator.navigateToQuestStart(
                                                 null,
                                                 navOptions
                                             )
+
                                         }
                                         JourneyStatusType.COMPLETED -> {
                                             navigator.navigateToOffboardingCompletedGuide(
