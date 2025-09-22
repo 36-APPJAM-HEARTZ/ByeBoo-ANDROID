@@ -43,7 +43,6 @@ class HomeAmuletViewModel @Inject constructor(
         }
     }
 
-
     fun fetchJourneyFromServer() {
         viewModelScope.launch {
             userRepository.getUserJourney()
