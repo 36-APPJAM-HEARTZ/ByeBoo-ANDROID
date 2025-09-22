@@ -73,7 +73,6 @@ class HomeAmuletViewModel @Inject constructor(
         }
     }
 
-
     fun navigateToHomeOnboarding() {
         viewModelScope.launch {
             _sideEffect.emit(HomeAmuletSideEffect.NavigateToHomeOnboarding)
