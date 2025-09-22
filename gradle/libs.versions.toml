@@ -63,6 +63,9 @@ lottie = "6.4.0"
 
 ktlint = "11.6.1"
 
+# Mixpanel
+mixpanel = "7.3.3"
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -125,6 +128,9 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 # Kakao
 kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+
+# mixpanel
+mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 
 
 
