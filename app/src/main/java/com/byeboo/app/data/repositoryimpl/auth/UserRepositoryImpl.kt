@@ -47,6 +47,10 @@ class UserRepositoryImpl @Inject constructor(
         return userLocalDataSource.getNickname()
     }
 
+    override suspend fun saveUserId(userId: Long) {
+        userLocalDataSource.saveId(userId)
+    }
+
     override suspend fun getUserId(): Long? {
         return userLocalDataSource.getUserId()
     }
