@@ -64,6 +64,7 @@ fun SplashRoute(
                 is SplashStateSideEffect.ShowLoginButton -> {
                     showLoginButton = true
                 }
+
                 is SplashStateSideEffect.NavigateToHome -> navigateToHome()
                 is SplashStateSideEffect.NavigateToUserInfo -> navigateToUserInfo()
                 is SplashStateSideEffect.NavigateToTermsOfService -> navigateToTermsOfService()
@@ -73,12 +74,14 @@ fun SplashRoute(
                         callback = viewModel::updateLoginResult
                     )
                 }
+
                 is SplashStateSideEffect.StartKakaoWebLogin -> {
                     UserApiClient.instance.loginWithKakaoAccount(
                         context = context,
                         callback = viewModel::updateLoginResult
                     )
                 }
+
                 is SplashStateSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
             }
         }

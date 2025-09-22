@@ -2,6 +2,8 @@ package com.byeboo.app.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.util.LoginType
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository,
+    private val mixpanelUtil: MixpanelUtil,
     private val loginUseCase: LoginUseCase,
     private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase
 ) : ViewModel() {
@@ -44,8 +47,12 @@ class SplashViewModel @Inject constructor(
         val cachedToken = tokenRepository.getCachedAccessToken()
 
         if (cachedToken.isNotBlank()) {
-            val isRegistered = userRepository.isUserRegistered()
+            if (!mixpanelUtil.hasUserDistinctId()) {
+                val userId = userRepository.getUserId()
+                userId?.let { id -> mixpanelUtil.setDistinctId(id.toString()) }
+            }
 
+            val isRegistered = userRepository.isUserRegistered()
             if (isRegistered) {
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
             } else {
@@ -56,6 +63,11 @@ class SplashViewModel @Inject constructor(
 
         reissueAccessTokenUseCase()
             .onSuccess {
+                if (!mixpanelUtil.hasUserDistinctId()) {
+                    val userId = userRepository.getUserId()
+                    userId?.let { id -> mixpanelUtil.setDistinctId(id.toString()) }
+                }
+
                 val isRegistered = userRepository.isUserRegistered()
                 if (isRegistered) {
                     _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
@@ -80,33 +92,41 @@ class SplashViewModel @Inject constructor(
 
     fun updateLoginResult(token: OAuthToken?, error: Throwable?) {
         viewModelScope.launch {
-            if (token != null) {
-                loginUseCase(token.accessToken, platform = KAKAO)
-                    .onSuccess { auth ->
-                        if (auth.isRegistered) {
-                            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
-                        } else {
-                            _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
+            when {
+                token != null -> {
+                    loginUseCase(token.accessToken, platform = KAKAO)
+                        .onSuccess { auth ->
+                            mixpanelUtil.setDistinctId(auth.userId.toString())
+                            mixpanelUtil.trackLogin(LoginType.KAKAO, true)
+
+                            if (auth.isRegistered) {
+                                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+                            } else {
+                                _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
+                            }
                         }
-                    }.onFailure {
-                        _sideEffect.emit(
-                            SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                        )
-                    }
+                        .onFailure {
+                            mixpanelUtil.trackLogin(LoginType.KAKAO, false)
+                            _sideEffect.emit(
+                                SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                            )
+                        }
+                }
 
-                when (error) {
-                    is ClientError -> {
-                        when (error.reason) {
-                            ClientErrorCause.Cancelled -> {}
-                            else -> {}
+                error != null -> {
+                    when (error) {
+                        is ClientError -> {
+                            if (error.reason != ClientErrorCause.Cancelled) {
+                                mixpanelUtil.trackLogin(LoginType.KAKAO, false)
+                            }
+                        }
+                        is AuthError -> {
+                            _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
+                        }
+                        else -> {
+                            mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                         }
                     }
-
-                    is AuthError -> {
-                        _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
-                    }
-
-                    else -> {}
                 }
             }
         }
