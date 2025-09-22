@@ -18,10 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -31,6 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -42,63 +40,65 @@ import com.byeboo.app.core.util.noRippleCombineClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.home.component.SpeechBubbleWithText
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeOnboardingRoute(
     navigateToHome: () -> Unit,
-    modifier: Modifier = Modifier,
-    bottomPadding: Dp
+    bottomPadding: Dp,
+    viewModel: HomeOnboardingViewModel = hiltViewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.startOnboardingAnimation()
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is HomeOnboardingSideEffect.NavigateToHome -> navigateToHome()
+            }
+        }
+    }
+
     HomeOnboardingScreen(
-        navigateToHome = navigateToHome,
-        modifier = modifier,
+        uiState = uiState,
+        onHomeClick = viewModel::onHomeLongClick,
         bottomPadding = bottomPadding
     )
 }
 
 @Composable
 private fun HomeOnboardingScreen(
-    navigateToHome: () -> Unit,
-    modifier: Modifier = Modifier,
-    bottomPadding: Dp
+    uiState: HomeOnboardingUiState,
+    onHomeClick: () -> Unit,
+    bottomPadding: Dp,
+    modifier: Modifier = Modifier
 ) {
-    var showSpeechBubble by remember { mutableStateOf(false) }
-    var showInstructionText by remember { mutableStateOf(false) }
-    var isTransitioning by remember { mutableStateOf(false) }
-
-    val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
 
     val transitionAlpha by animateFloatAsState(
-        targetValue = if (isTransitioning) 0.85f else 0f,
-        animationSpec = tween(durationMillis = 500),
+        targetValue = if (uiState.isTransitioning) 0.85f else 0f,
+        animationSpec = tween(500),
         label = "fadeBlack"
     )
 
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.bori_onboarding)
-    )
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_onboarding))
     val isLottieReady = composition != null
-
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
-        isPlaying = isLottieReady && !isTransitioning,
-        speed = 1.0f,
-        restartOnPlay = false
+        isPlaying = isLottieReady && !uiState.isTransitioning,
+        speed = 1f
     )
 
-    LaunchedEffect(isLottieReady) {
-        if (isLottieReady) {
-            showSpeechBubble = true
-            delay(2000)
-            showInstructionText = true
-        }
-    }
+    val clickableModifier = if (uiState.showInstructionText) {
+        Modifier.noRippleCombineClickable(
+            onLongClick = {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                onHomeClick()
+            }
+        )
+    } else Modifier
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
@@ -113,7 +113,7 @@ private fun HomeOnboardingScreen(
         )
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(48.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -121,11 +121,8 @@ private fun HomeOnboardingScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             AnimatedVisibility(
-                visible = showInstructionText,
-                enter = slideInVertically(
-                    animationSpec = tween(1000),
-                    initialOffsetY = { it }
-                )
+                visible = uiState.showInstructionText,
+                enter = slideInVertically(animationSpec = tween(1000)) { it }
             ) {
                 Text(
                     text = "보리를 꾸욱 눌러주세요!",
@@ -139,7 +136,7 @@ private fun HomeOnboardingScreen(
             }
 
             AnimatedVisibility(
-                visible = showSpeechBubble,
+                visible = uiState.showSpeechBubble,
                 enter = fadeIn(animationSpec = tween(1000))
             ) {
                 SpeechBubbleWithText(
@@ -156,28 +153,13 @@ private fun HomeOnboardingScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
-                        .then(
-                            if (showInstructionText) {
-                                Modifier.noRippleCombineClickable(
-                                    onLongClick = {
-                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        isTransitioning = true
-                                        scope.launch {
-                                            delay(500)
-                                            navigateToHome()
-                                        }
-                                    }
-                                )
-                            } else {
-                                Modifier
-                            }
-                        )
+                        .then(clickableModifier)
                         .aspectRatio(1f)
                 )
             }
         }
 
-        if (isTransitioning) {
+        if (uiState.isTransitioning) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
