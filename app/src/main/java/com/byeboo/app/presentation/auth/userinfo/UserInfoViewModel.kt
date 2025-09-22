@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.auth.userinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
@@ -24,7 +25,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class UserInfoViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val questStateRepository: QuestStateRepository
+    private val questStateRepository: QuestStateRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UserInfoState())
     val uiState: StateFlow<UserInfoState> = _uiState.asStateFlow()
@@ -46,11 +48,18 @@ class UserInfoViewModel @Inject constructor(
             }
         }
     }
+    fun onNicknameComplete() {
+        mixpanelUtil.trackEvent("nickname_complete")
+    }
 
     fun updateEmotion(emotion: Feeling) {
         _uiState.update {
             it.copy(selectedEmotion = emotion)
         }
+    }
+
+    fun onCurrentEmotionComplete() {
+        mixpanelUtil.trackEvent("current_emotion_complete")
     }
 
     fun updateQuest(quest: QuestStyle) {
@@ -71,6 +80,19 @@ class UserInfoViewModel @Inject constructor(
         }
     }
 
+    private fun trackQuestSelected(questStyle: QuestStyle) {
+        mixpanelUtil.trackEvent(
+            eventName = "quest_type_complete",
+            properties = mapOf(
+                "quest_type" to when (questStyle) {
+                    QuestStyle.RECORDING -> "질문형"
+                    QuestStyle.ACTIVE -> "행동형"
+                }
+            )
+        )
+    }
+
+
     fun finishUserInfo() {
         viewModelScope.launch {
             if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
@@ -84,8 +106,9 @@ class UserInfoViewModel @Inject constructor(
             val result = userRepository.updateUserInfo(userInfo)
 
             if (result.isSuccess) {
-                _uiState.value.selectedQuest?.let {
-                    questStateRepository.updateUserJourney(it.toJourneyText())
+                _uiState.value.selectedQuest?.let { selectedQuest ->
+                    trackQuestSelected(selectedQuest)
+                    questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
                     userRepository.setUserRegistered(true)
                 }
                 _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
