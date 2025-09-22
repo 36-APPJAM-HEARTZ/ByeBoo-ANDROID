@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
 import com.byeboo.app.domain.usecase.WithdrawUseCase
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val logoutUseCase: LogoutUseCase,
-    private val withdrawUseCase: WithdrawUseCase
+    private val withdrawUseCase: WithdrawUseCase,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageState())
@@ -45,12 +47,15 @@ class MyPageViewModel @Inject constructor(
 
     fun onCompletedJourneyClicked() {
         viewModelScope.launch {
+            mixpanelUtil.trackEvent("mypage_journey_review_click")
             _sideEffect.emit(MyPageSideEffect.NavigateToOffboardingCompletedJourney)
         }
     }
 
     fun onGoToByeBooUniverseClicked() {
         viewModelScope.launch {
+            mixpanelUtil.trackEvent("tutorial_button_click")
+            mixpanelUtil.trackEvent("tutorial_pageview")
             _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
         }
     }
@@ -87,6 +92,7 @@ class MyPageViewModel @Inject constructor(
     fun confirmLogout() {
         viewModelScope.launch {
             logoutUseCase().onSuccess {
+                mixpanelUtil.trackEvent("logout_confirm_click")
                 _uiState.update { it.copy(showLogoutModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
@@ -100,6 +106,8 @@ class MyPageViewModel @Inject constructor(
     fun confirmWithdraw() {
         viewModelScope.launch {
             withdrawUseCase().onSuccess {
+                mixpanelUtil.trackEvent("withdraw_confirm_click")
+                mixpanelUtil.reset()
                 _uiState.update { it.copy(showDeleteAccountModal = false) }
                 _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
             }.onFailure {
