@@ -3,6 +3,8 @@ package com.byeboo.app.presentation.quest.record
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class QuestRecordingCompleteViewModel @Inject constructor(
-    private val questRecordedDetailRepository: QuestRecordedDetailRepository
+    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(QuestRecordingCompleteState())
     val uiState: StateFlow<QuestRecordingCompleteState>
@@ -51,6 +54,13 @@ class QuestRecordingCompleteViewModel @Inject constructor(
     fun onCloseClicked() {
         if (uiState.value.questNumber == 30L) {
             viewModelScope.launch {
+                mixpanelUtil.trackEvent(
+                    eventName = "journey_complete_pageview",
+                    properties = mapOf(
+                        "journey_end_at" to getFormattedDate(),
+                        "journey_type" to "감정 직면",
+                    )
+                )
                 _sideEffect.emit(
                     QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide
                 )
