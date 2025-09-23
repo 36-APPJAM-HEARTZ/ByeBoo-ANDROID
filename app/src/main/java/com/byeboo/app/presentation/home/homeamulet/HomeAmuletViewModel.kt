@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.home.homeamulet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class HomeAmuletViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val questStateRepository: QuestStateRepository
+    private val questStateRepository: QuestStateRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeAmuletState())
@@ -45,15 +47,24 @@ class HomeAmuletViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.getUserJourney()
                 .onSuccess { data ->
+                    val amuletType = AmuletType.from(data.journey)
+
                     _uiState.update {
                         it.copy(
-                            journey = AmuletType.from(data.journey),
+                            journey = amuletType,
                             journeyDescription = data.description,
                             canFlip = true
                         )
                     }
+
+                    mixpanelUtil.trackEvent(
+                        eventName = "journey_card_complete",
+                        properties = mapOf(
+                            "journey_type" to amuletType.journeyName
+                        )
+                    )
                 }
-                .onFailure { e ->
+                .onFailure {
                     _sideEffect.emit(
                         HomeAmuletSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )

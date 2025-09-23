@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.domain.model.quest.QuestRecording
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
@@ -21,7 +23,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class QuestRecordingViewModel @Inject constructor(
     val questDetailRecordingRepository: QuestDetailRecordingRepository,
-    val questRecordingRepository: QuestRecordingRepository
+    val questRecordingRepository: QuestRecordingRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(QuestRecordingState())
     val uiState: StateFlow<QuestRecordingState>
@@ -59,6 +62,7 @@ class QuestRecordingViewModel @Inject constructor(
 
     fun postQuestRecording() {
         val questId = uiState.value.questId
+        val questNumber = uiState.value.questNumber
         val answer = uiState.value.questAnswer
         val emotion = uiState.value.selectedEmotion?.title.orEmpty()
 
@@ -70,6 +74,15 @@ class QuestRecordingViewModel @Inject constructor(
             val result = questRecordingRepository.postRecording(questId, request)
 
             if (result.isSuccess) {
+                mixpanelUtil.trackEvent(
+                    eventName = "quest_success",
+                    properties = mapOf(
+                        "quest_end_at" to getFormattedDate(),
+                        "quest_number" to questNumber,
+                        "quest_type" to "질문형",
+                        "after_emotion_type" to emotion
+                    )
+                )
                 _uiState.update { it.copy(showBottomSheet = false) }
                 _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId))
             }
@@ -102,7 +115,14 @@ class QuestRecordingViewModel @Inject constructor(
 
     fun onTipClicked() {
         val questId = uiState.value.questId
+        val questNumber = uiState.value.questNumber
         viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                eventName = "quest_tip_pageview",
+                properties = mapOf(
+                    "quest_number" to questNumber
+                )
+            )
             _sideEffect.emit(
                 QuestRecordingSideEffect.NavigateToQuestTip(
                     questId,
@@ -113,6 +133,16 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun openBottomSheet() {
+        val questNumber = uiState.value.questNumber
+        val answer = uiState.value.questAnswer
+        mixpanelUtil.trackEvent(
+            eventName = "quest_complete",
+            properties = mapOf(
+                "quest_length" to answer.length,
+                "quest_number" to questNumber,
+                "quest_type" to "질문형"
+            )
+        )
         _uiState.update { it.copy(showBottomSheet = true) }
     }
 

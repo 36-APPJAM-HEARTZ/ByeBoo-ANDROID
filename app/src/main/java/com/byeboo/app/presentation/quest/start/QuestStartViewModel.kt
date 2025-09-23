@@ -3,6 +3,8 @@ package com.byeboo.app.presentation.quest.start
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.NewJourneyRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -21,7 +23,8 @@ import kotlinx.coroutines.launch
 class QuestStartViewModel @Inject constructor(
     private val questStateRepository: QuestStateRepository,
     private val userRepository: UserRepository,
-    private val newJourneyRepository: NewJourneyRepository
+    private val newJourneyRepository: NewJourneyRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(QuestStartState())
     val uiState: StateFlow<QuestStartState> = _uiState.asStateFlow()
@@ -49,9 +52,25 @@ class QuestStartViewModel @Inject constructor(
         if (journey == null) {
             viewModelScope.launch {
                 val result = questStateRepository.updateQuestStartState()
+                val journeyType = questStateRepository.getUserJourney() ?: "추적 실패"
                 if (result.isSuccess) {
                     questStateRepository.setQuestStarted(true)
                     questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
+                    mixpanelUtil.trackEvent(
+                        "journey_start_click",
+                        mapOf(
+                            "journey_start_at" to getFormattedDate(),
+                            "journey_type" to journeyType,
+                            "is_first_journey" to true
+                        )
+                    )
+                    mixpanelUtil.trackEvent(
+                        "quest_pageview",
+                        mapOf(
+                            "journey_type" to journeyType,
+                            "is_first_pageview" to true
+                        )
+                    )
                     _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
                 } else {
                     _sideEffect.emit(
@@ -70,13 +89,21 @@ class QuestStartViewModel @Inject constructor(
         }
     }
 
-    fun postNewJourney(journey: QuestType) {
+    private fun postNewJourney(journey: QuestType) {
         val journeyType = journey.journeyType
         val journeyName = journey.journeyName
 
         viewModelScope.launch {
             newJourneyRepository.postNewJourney(journeyType)
                 .onSuccess {
+                    mixpanelUtil.trackEvent(
+                        "journey_start_click",
+                        mapOf(
+                            "journey_start_at" to getFormattedDate(),
+                            "journey_type" to journeyName,
+                            "is_first_journey" to false
+                        )
+                    )
                     questStateRepository.setQuestStarted(true)
                     questStateRepository.updateUserJourney(journeyName)
                     questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)

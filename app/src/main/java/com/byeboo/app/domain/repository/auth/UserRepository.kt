@@ -11,6 +11,7 @@ interface UserRepository {
     suspend fun getUserJourney(): Result<UserJourney>
     suspend fun isLoggedIn(): Boolean
     fun getNickname(): Flow<String>
+    suspend fun saveUserId(userId: Long)
     suspend fun getUserId(): Long?
     suspend fun setHasSeenAboutHelp(seen: Boolean)
     suspend fun hasSeenAboutHelp(): Boolean

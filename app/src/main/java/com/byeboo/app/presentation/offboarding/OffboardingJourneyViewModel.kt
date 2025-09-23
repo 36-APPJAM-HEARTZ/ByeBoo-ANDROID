@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class OffboardingJourneyViewModel @Inject constructor(
     private val offboardingJourneyRepository: OffboardingJourneyRepository,
-    private val mapper: OffboardingJourneyMapper
+    private val mapper: OffboardingJourneyMapper,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OffboardingJourneyState())
     val uiState: StateFlow<OffboardingJourneyState> = _uiState.asStateFlow()
@@ -39,6 +41,10 @@ class OffboardingJourneyViewModel @Inject constructor(
 
     fun onJourneyCompletedCardClicked(journey: QuestType) {
         viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                "journey_review_all_pageview",
+                mapOf("review_journey_type" to journey.journeyName)
+            )
             _sideEffect.emit(
                 OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey)
             )

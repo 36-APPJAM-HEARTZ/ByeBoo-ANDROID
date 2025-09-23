@@ -40,6 +40,7 @@ android {
         )
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
+        buildConfigField("String", "MIXPANEL_TOKEN", "\"${properties["mixpanel.token"]}\"")
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
         buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
@@ -134,6 +135,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.lottie.compose)
     debugImplementation(libs.androidx.ui.tooling)
+
+    //mixpanel
+    implementation(libs.mixpanel)
 }
 
 ktlint {

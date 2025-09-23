@@ -80,7 +80,9 @@ fun UserInfoRoute(
         previousPage = previousPage,
         onUpdatePreviousPage = { previousPage = it },
         onNicknameChange = viewModel::updateNickname,
+        onNicknameComplete = viewModel::onNicknameComplete,
         onEmotionSelect = viewModel::updateEmotion,
+        onEmotionComplete = viewModel::onCurrentEmotionComplete,
         onQuestSelect = viewModel::updateQuest,
         onResetEmotion = viewModel::resetEmotion,
         onResetQuest = viewModel::resetQuest,
@@ -97,7 +99,9 @@ private fun UserInfoScreen(
     previousPage: Int,
     onUpdatePreviousPage: (Int) -> Unit,
     onNicknameChange: (String) -> Unit,
+    onNicknameComplete: () -> Unit,
     onEmotionSelect: (Feeling) -> Unit,
+    onEmotionComplete: () -> Unit,
     onQuestSelect: (QuestStyle) -> Unit,
     onResetEmotion: () -> Unit,
     onResetQuest: () -> Unit,
@@ -217,13 +221,20 @@ private fun UserInfoScreen(
                         val nextPage = pagerState.currentPage + 1
 
                         when (pagerState.currentPage) {
-                            0 -> if (previousPage > 0) {
-                                onResetEmotion()
-                                onResetQuest()
+                            0 -> {
+                                onNicknameComplete()
+                                if (previousPage > 0) {
+                                    onResetEmotion()
+                                    onResetQuest()
+                                }
                             }
 
-                            1 -> if (previousPage > 1) {
-                                onResetQuest()
+                            1 -> {
+                                onEmotionComplete()
+                                if (previousPage > 1) {
+                                    onResetQuest()
+
+                                }
                             }
                         }
 

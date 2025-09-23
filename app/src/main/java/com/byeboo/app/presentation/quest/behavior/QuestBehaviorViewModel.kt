@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.data.mapper.quest.toData
 import com.byeboo.app.domain.model.quest.QuestWritingState
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
@@ -27,7 +29,8 @@ import kotlinx.coroutines.launch
 class QuestBehaviorViewModel @Inject constructor(
     private val questDetailBehaviorRepository: QuestDetailBehaviorRepository,
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
-    private val uploadImageUseCase: UploadImageUseCase
+    private val uploadImageUseCase: UploadImageUseCase,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QuestBehaviorState())
@@ -110,6 +113,15 @@ class QuestBehaviorViewModel @Inject constructor(
                     emotion = emotion
                 ).getOrThrow()
             }.onSuccess {
+                mixpanelUtil.trackEvent(
+                    eventName = "quest_success",
+                    properties = mapOf(
+                        "quest_end_at" to getFormattedDate(),
+                        "quest_number" to questId,
+                        "quest_type" to "행동형",
+                        "after_emotion_type" to emotion
+                    )
+                )
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
                 _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
                 closeBottomSheet()
@@ -175,12 +187,29 @@ class QuestBehaviorViewModel @Inject constructor(
 
     fun onTipClicked() {
         val questId = uiState.value.questId
+        val questNumber = uiState.value.questNumber
         viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                eventName = "quest_tip_pageview",
+                properties = mapOf(
+                    "quest_number" to questNumber
+                )
+            )
             _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestTip(questId, QuestType.ACTIVE))
         }
     }
 
     fun openBottomSheet() {
+        val questNumber = uiState.value.questNumber
+        val answer = uiState.value.contents
+        mixpanelUtil.trackEvent(
+            eventName = "quest_write_success",
+            properties = mapOf(
+                "quest_length" to answer.length,
+                "quest_number" to questNumber,
+                "quest_type" to "행동형"
+            )
+        )
         _uiState.update { it.copy(showBottomSheet = true) }
     }
 
@@ -195,6 +224,13 @@ class QuestBehaviorViewModel @Inject constructor(
     fun onCloseClicked() {
         if (uiState.value.questNumber == 30L) {
             viewModelScope.launch {
+                mixpanelUtil.trackEvent(
+                    eventName = "journey_complete_pageview",
+                    properties = mapOf(
+                        "journey_end_at" to getFormattedDate(),
+                        "journey_type" to "감정 정리",
+                    )
+                )
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide)
             }
         } else {

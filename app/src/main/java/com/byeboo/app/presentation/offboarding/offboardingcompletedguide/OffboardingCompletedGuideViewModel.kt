@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 class OffboardingCompletedGuideViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(OffboardingCompletedGuideState())
     val uiState: StateFlow<OffboardingCompletedGuideState> = _uiState.asStateFlow()
@@ -77,6 +79,7 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     fun onNewJourneyClicked() {
         viewModelScope.launch {
             savedStateHandle[ANIMATION_PLAYED] = true
+            mixpanelUtil.trackEvent("journey_new_pageview")
             _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney)
         }
     }
@@ -84,6 +87,7 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     fun onCompletedJourneyClicked() {
         viewModelScope.launch {
             savedStateHandle[ANIMATION_PLAYED] = true
+            mixpanelUtil.trackEvent("journey_review_pageview")
             _sideEffect.emit(
                 OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney
             )

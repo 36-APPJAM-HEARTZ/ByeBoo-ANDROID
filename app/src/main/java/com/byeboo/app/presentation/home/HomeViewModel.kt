@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val questStateRepository: QuestStateRepository
+    private val questStateRepository: QuestStateRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -60,6 +62,13 @@ class HomeViewModel @Inject constructor(
                     currentStep = model.count
                     val journeyStatus = status.toJourneyStatusType()
                     updateJourneyStatus(journeyStatus)
+                    mixpanelUtil.trackEvent(
+                        eventName = "home_pageview",
+                        properties = mapOf(
+                            "is_first_pageview" to false,
+                            "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패")
+                        )
+                    )
                 }
                 .onFailure { e ->
                     val errorMessage = e.message.orEmpty()
@@ -111,12 +120,20 @@ class HomeViewModel @Inject constructor(
 
     fun onClickQuestStart() {
         viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                eventName = "journey_start_pageview",
+                properties = mapOf(
+                    "journey_type" to _uiState.value.journey
+                )
+            )
             _sideEffect.emit(HomeSideEffect.NavigateToQuestStart(null))
         }
     }
 
     fun onHelpIconClicked() {
         viewModelScope.launch {
+            mixpanelUtil.trackEvent("tutorial_icon_click")
+            mixpanelUtil.trackEvent("tutorial_pageview")
             userRepository.setHasSeenAboutHelp(true)
             _uiState.update { it.copy(hasSeenAboutHelp = true) }
             _sideEffect.emit(HomeSideEffect.NavigateToTutorial)

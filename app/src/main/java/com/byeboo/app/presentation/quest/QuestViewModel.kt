@@ -3,8 +3,11 @@ package com.byeboo.app.presentation.quest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.usecase.QuestUseCase
+import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
 import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
@@ -29,7 +32,8 @@ import kotlinx.coroutines.launch
 class QuestViewModel @Inject constructor(
     private val questUseCase: QuestUseCase,
     private val mapper: QuestUiModelMapper,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QuestUiState())
@@ -56,6 +60,13 @@ class QuestViewModel @Inject constructor(
             runCatching { questUseCase() }
                 .mapCatching { data -> mapper.mapToPresentationModel(data) }
                 .onSuccess { output ->
+                    mixpanelUtil.trackEvent(
+                        "quest_pageview",
+                        mapOf(
+                            "journey_type" to output.journeyTitle,
+                            "is_first_pageview" to false
+                        )
+                    )
                     _uiState.update {
                         it.copy(
                             questGroups = output.questGroups,
@@ -131,12 +142,19 @@ class QuestViewModel @Inject constructor(
     fun onTipClick() {
         val quest = uiState.value.selectedQuest ?: return
         viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                eventName = "quest_tip_pageview",
+                properties = mapOf(
+                    "quest_number" to quest.questNumber
+                )
+            )
             _sideEffect.emit(QuestSideEffect.NavigateToQuestTip(quest.questId, quest.type))
         }
     }
 
     fun onQuestStart() {
         val quest = uiState.value.selectedQuest ?: return
+        trackQuest(quest)
         viewModelScope.launch {
             _uiState.update { it.copy(showQuitModal = false) }
             when (quest.type) {
@@ -160,10 +178,34 @@ class QuestViewModel @Inject constructor(
                     _uiState.update { it.copy(selectedQuest = quest, showQuitModal = true) }
 
                 is QuestState.Complete ->
-                    _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
+                    handleCompletedQuestClick(quest)
 
                 else -> Unit
             }
         }
+    }
+
+    private suspend fun handleCompletedQuestClick(quest: Quest) {
+        mixpanelUtil.trackEvent(
+            "quest_box_click",
+            mapOf("quest_number" to quest.questNumber)
+        )
+        _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
+    }
+
+    private fun trackQuest(quest: Quest) {
+        val questType = when (quest.type) {
+            QuestType.RECORDING -> "질문형"
+            QuestType.ACTIVE -> "행동형"
+        }
+
+        mixpanelUtil.trackEvent(
+            eventName = "quest_write_pageview",
+            properties = mapOf(
+                "quest_start_at" to getFormattedDate(),
+                "quest_number" to quest.questNumber,
+                "quest_type" to questType
+            )
+        )
     }
 }
