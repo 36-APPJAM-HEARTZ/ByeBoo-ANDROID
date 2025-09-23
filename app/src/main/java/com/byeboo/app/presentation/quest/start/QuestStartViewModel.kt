@@ -99,7 +99,7 @@ class QuestStartViewModel @Inject constructor(
                     mixpanelUtil.trackEvent(
                         "journey_start_click",
                         mapOf(
-                            "journey_start_at" to System.currentTimeMillis(),
+                            "journey_start_at" to getFormattedDate(),
                             "journey_type" to journeyName,
                             "is_first_journey" to false
                         )
