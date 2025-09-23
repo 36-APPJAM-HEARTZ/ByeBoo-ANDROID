@@ -111,7 +111,6 @@ fun MainScreen(
                                                 null,
                                                 navOptions
                                             )
-
                                         }
                                         JourneyStatusType.COMPLETED -> {
                                             navigator.navigateToOffboardingCompletedGuide(

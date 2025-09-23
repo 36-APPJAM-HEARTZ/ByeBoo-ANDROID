@@ -228,7 +228,7 @@ class QuestBehaviorViewModel @Inject constructor(
                     eventName = "journey_complete_pageview",
                     properties = mapOf(
                         "journey_end_at" to getFormattedDate(),
-                        "journey_type" to "감정 정리",
+                        "journey_type" to "감정 정리"
                     )
                 )
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide)

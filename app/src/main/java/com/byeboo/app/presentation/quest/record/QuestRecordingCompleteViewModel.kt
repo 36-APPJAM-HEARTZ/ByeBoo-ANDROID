@@ -58,7 +58,7 @@ class QuestRecordingCompleteViewModel @Inject constructor(
                     eventName = "journey_complete_pageview",
                     properties = mapOf(
                         "journey_end_at" to getFormattedDate(),
-                        "journey_type" to "감정 직면",
+                        "journey_type" to "감정 직면"
                     )
                 )
                 _sideEffect.emit(

@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.byeboo.app.core.util.MixpanelUtil
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 @HiltAndroidApp
 class ByeBoo : Application() {
