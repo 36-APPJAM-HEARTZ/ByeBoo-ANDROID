@@ -1,6 +1,8 @@
 package com.byeboo.app.core.util
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import org.json.JSONObject
 import javax.inject.Inject
@@ -10,6 +12,7 @@ import javax.inject.Singleton
 class MixpanelUtil @Inject constructor() {
 
     private var mixpanel: MixpanelAPI? = null
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     fun initialize(context: Context, token: String) {
         mixpanel = MixpanelAPI.getInstance(context, token, false)
@@ -17,11 +20,13 @@ class MixpanelUtil @Inject constructor() {
     }
 
     private fun restoreDistinctId() {
-        mixpanel?.let { mp ->
-            val storedDistinctId = mp.distinctId
-            if (storedDistinctId != null && !isDefaultDistinctId(storedDistinctId)) {
-                mp.identify(storedDistinctId)
-                mp.people?.identify(storedDistinctId)
+        mainHandler.post {
+            mixpanel?.let { mp ->
+                val storedDistinctId = mp.distinctId
+                if (storedDistinctId != null && !isDefaultDistinctId(storedDistinctId)) {
+                    mp.identify(storedDistinctId)
+                    mp.people?.identify(storedDistinctId)
+                }
             }
         }
     }
@@ -31,14 +36,18 @@ class MixpanelUtil @Inject constructor() {
     }
 
     fun setDistinctId(userId: String) {
-        mixpanel?.let { mp ->
-            mp.identify(userId)
-            mp.people?.identify(userId)
-            mp.people?.set("user_id", userId)
+        mainHandler.post {
+            mixpanel?.let { mp ->
+                mp.identify(userId)
+                mp.people?.identify(userId)
+                mp.people?.set("user_id", userId)
+            }
         }
     }
 
-    fun getCurrentDistinctId(): String? = mixpanel?.distinctId
+    private fun getCurrentDistinctId(): String? {
+        return mixpanel?.distinctId
+    }
 
     fun hasUserDistinctId(): Boolean {
         val currentId = getCurrentDistinctId()
@@ -46,27 +55,33 @@ class MixpanelUtil @Inject constructor() {
     }
 
     fun trackLogin(loginType: String, isSuccess: Boolean) {
-        mixpanel?.let { mp ->
-            val props = JSONObject().apply {
-                put("login_type", loginType)
-                put("is_login_complete", isSuccess)
+        mainHandler.post {
+            mixpanel?.let { mp ->
+                val props = JSONObject().apply {
+                    put("login_type", loginType)
+                    put("is_login_complete", isSuccess)
+                }
+                mp.track("login", props)
             }
-            mp.track("login", props)
         }
     }
 
     fun trackEvent(eventName: String, properties: Map<String, Any> = emptyMap()) {
-        mixpanel?.let { mp ->
-            val props = JSONObject()
-            properties.forEach { (key, value) -> props.put(key, value) }
-            mp.track(eventName, props)
+        mainHandler.post {
+            mixpanel?.let { mp ->
+                val props = JSONObject()
+                properties.forEach { (key, value) -> props.put(key, value) }
+                mp.track(eventName, props)
+            }
         }
     }
 
     fun reset() {
-        mixpanel?.let { mp ->
-            mp.reset()
-            mp.flush()
+        mainHandler.post {
+            mixpanel?.let { mp ->
+                mp.reset()
+                mp.flush()
+            }
         }
     }
 }
