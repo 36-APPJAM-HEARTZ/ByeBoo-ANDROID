@@ -197,7 +197,6 @@ private fun QuestBehaviorCompleteScreen(
                         color = ByeBooTheme.colors.gray200,
                         style = ByeBooTheme.typography.body2
                     )
-
                 }
 
                 Spacer(modifier = modifier.height(12.dp))

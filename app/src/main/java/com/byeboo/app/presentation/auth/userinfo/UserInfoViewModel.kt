@@ -92,7 +92,6 @@ class UserInfoViewModel @Inject constructor(
         )
     }
 
-
     fun finishUserInfo() {
         viewModelScope.launch {
             if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch

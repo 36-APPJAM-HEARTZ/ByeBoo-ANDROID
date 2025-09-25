@@ -43,8 +43,16 @@ android {
         buildConfigField("String", "MIXPANEL_TOKEN", "\"${properties["mixpanel.token"]}\"")
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
-        buildConfigField("String", "BYEBOO_PRIVACY_POLICY", properties["byeboo.privacy.policy"].toString())
-        buildConfigField("String", "BYEBOO_TERMS_OF_SERVICE", properties["byeboo.terms.of.service"].toString())
+        buildConfigField(
+            "String",
+            "BYEBOO_PRIVACY_POLICY",
+            properties["byeboo.privacy.policy"].toString()
+        )
+        buildConfigField(
+            "String",
+            "BYEBOO_TERMS_OF_SERVICE",
+            properties["byeboo.terms.of.service"].toString()
+        )
     }
 
     signingConfigs {
@@ -136,7 +144,7 @@ dependencies {
     implementation(libs.lottie.compose)
     debugImplementation(libs.androidx.ui.tooling)
 
-    //mixpanel
+    // mixpanel
     implementation(libs.mixpanel)
 }
 

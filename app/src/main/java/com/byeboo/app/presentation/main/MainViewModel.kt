@@ -22,7 +22,6 @@ class MainViewModel @Inject constructor(
 
     fun trackJourneyStart() {
         viewModelScope.launch {
-
             val journey = questStateRepository.getUserJourney() ?: "추적 실패"
 
             mixpanelUtil.trackEvent(

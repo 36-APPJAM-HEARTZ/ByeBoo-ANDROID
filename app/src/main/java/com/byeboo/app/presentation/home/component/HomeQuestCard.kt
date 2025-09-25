@@ -33,7 +33,7 @@ fun HomeQuestCard(
     modifier: Modifier = Modifier,
     backgroundColor: Color = ByeBooTheme.colors.whiteAlpha10,
     shape: Shape = RoundedCornerShape(12.dp),
-    borderColor: Color =  ByeBooTheme.colors.primary300
+    borderColor: Color = ByeBooTheme.colors.primary300
 ) {
     Box(
         modifier = modifier

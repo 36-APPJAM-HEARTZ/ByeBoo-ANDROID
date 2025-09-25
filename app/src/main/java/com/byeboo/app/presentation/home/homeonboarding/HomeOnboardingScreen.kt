@@ -45,7 +45,7 @@ import com.byeboo.app.presentation.home.component.SpeechBubbleWithText
 fun HomeOnboardingRoute(
     navigateToHome: () -> Unit,
     bottomPadding: Dp,
-    viewModel: HomeOnboardingViewModel = hiltViewModel(),
+    viewModel: HomeOnboardingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -80,7 +80,9 @@ private fun HomeOnboardingScreen(
         label = "fadeBlack"
     )
 
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_onboarding))
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.bori_onboarding)
+    )
     val isLottieReady = composition != null
     val progress by animateLottieCompositionAsState(
         composition = composition,
@@ -96,7 +98,9 @@ private fun HomeOnboardingScreen(
                 onHomeClick()
             }
         )
-    } else Modifier
+    } else {
+        Modifier
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(

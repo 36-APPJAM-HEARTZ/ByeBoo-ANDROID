@@ -233,7 +233,6 @@ private fun UserInfoScreen(
                                 onEmotionComplete()
                                 if (previousPage > 1) {
                                     onResetQuest()
-
                                 }
                             }
                         }
