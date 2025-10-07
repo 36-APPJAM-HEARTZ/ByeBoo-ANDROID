@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,52 +72,53 @@ private fun QuestStartScreen(
     padding: Dp,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(top = screenHeightDp(67.dp))
-                .padding(horizontal = screenWidthDp(24.dp)),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-                contentDescription = "뒤로가기",
-                tint = ByeBooTheme.colors.white,
+        item {
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = screenHeightDp(67.dp))
+                    .padding(horizontal = screenWidthDp(24.dp)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
+                    contentDescription = "뒤로가기",
+                    tint = ByeBooTheme.colors.white,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .noRippleClickable { onBackClick() })
+            }
+            Spacer(modifier = Modifier.height(screenHeightDp(42.dp)))
+        }
+
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                GuideContent(
+                    userName = uiState.nickname,
+                    guideText = "님의 상황에 꼭 맞춘\n${uiState.journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해 나가요!"
+                )
+            }
+
+            Spacer(modifier = Modifier.height(screenHeightDp(72.dp)))
+
+            ByeBooButton(
+                onClick = onStartClick,
+                buttonText = "시작하기",
+                buttonStyle = ByeBooTheme.typography.body2,
+                buttonTextColor = ByeBooTheme.colors.white,
+                buttonBackgroundColor = ByeBooTheme.colors.primary300,
                 modifier = Modifier
-                    .size(24.dp)
-                    .noRippleClickable { onBackClick() }
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = padding + 10.dp)
             )
         }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(42.dp)))
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            GuideContent(
-                userName = uiState.nickname,
-                guideText = "님의 상황에 꼭 맞춘\n${uiState.journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해 나가요!"
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        ByeBooButton(
-            onClick = onStartClick,
-            buttonText = "시작하기",
-            buttonStyle = ByeBooTheme.typography.body2,
-            buttonTextColor = ByeBooTheme.colors.white,
-            buttonBackgroundColor = ByeBooTheme.colors.primary300,
-            modifier = Modifier
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = padding + 10.dp)
-        )
     }
 }
