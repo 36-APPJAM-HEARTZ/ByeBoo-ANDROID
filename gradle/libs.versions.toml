@@ -8,13 +8,13 @@ versionCode = "2"
 versionName = "1.0.1"
 
 # Kotlin
-agp = "8.13.0"
-kotlin = "2.2.21"
-kotlinParcelize = "2.2.21"
-kotlinxCollectionsImmutable = "0.4.0"
+agp = "8.9.2"
+kotlin = "2.0.21"
+kotlinParcelize = "1.8.20"
+kotlinxCollectionsImmutable = "0.3.5"
 
 # AndroidX
-coreKtx = "1.17.0"
+coreKtx = "1.16.0"
 appcompat = "1.7.1"
 material = "1.13.0"
 material3 = "1.4.0"
@@ -31,13 +31,13 @@ espressoCore = "3.7.0"
 uiTest = "1.9.4"
 
 # Firebase
-firebaseBom = "34.5.0"
-crashlytics = "20.0.3"
+firebaseBom = "32.7.4"
+crashlytics = "18.6.2"
 
 # Network
-okhttpBom = "5.2.1"
-retrofit = "3.0.0"
-serialization = "1.9.0"
+okhttpBom = "4.12.0"
+retrofit = "2.11.0"
+serialization = "1.6.3"
 
 # Hilt
 hilt = "2.57.2"
@@ -111,7 +111,7 @@ okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
+retrofit-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 
 # Hilt
