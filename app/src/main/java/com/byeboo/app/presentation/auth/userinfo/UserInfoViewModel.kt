@@ -34,6 +34,8 @@ class UserInfoViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<UserInfoSideEffect>()
     val sideEffect: SharedFlow<UserInfoSideEffect> = _sideEffect.asSharedFlow()
 
+    private var hasSubmitted = false
+
     companion object {
         private const val MAX_NICKNAME_LENGTH = 5
     }
@@ -93,8 +95,14 @@ class UserInfoViewModel @Inject constructor(
     }
 
     fun finishUserInfo() {
+        if (hasSubmitted) return
+        hasSubmitted = true
+
         viewModelScope.launch {
-            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) return@launch
+            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
+                hasSubmitted = false
+                return@launch
+            }
 
             val userInfo = UserInfoModel(
                 name = _uiState.value.nickname,
@@ -112,6 +120,7 @@ class UserInfoViewModel @Inject constructor(
                 }
                 _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
             } else {
+                hasSubmitted = false
                 _sideEffect.emit(UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
             }
         }
