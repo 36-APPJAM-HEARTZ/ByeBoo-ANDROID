@@ -65,7 +65,7 @@ android {
         create("release") {
             keyAlias = properties.getProperty("release.key.alias")
             keyPassword = properties.getProperty("release.key.password")
-            storeFile = File("${project.rootDir.absolutePath}/keystore/byeboo-release-key.jks")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/upload-key.jks")
             storePassword = properties.getProperty("release.store.password")
         }
     }

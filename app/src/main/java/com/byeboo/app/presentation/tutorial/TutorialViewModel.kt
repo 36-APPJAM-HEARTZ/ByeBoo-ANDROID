@@ -15,7 +15,7 @@ class TutorialViewModel @Inject constructor() : ViewModel() {
     private val _sideEffect = MutableSharedFlow<TutorialSideEffect>()
     val sideEffect: SharedFlow<TutorialSideEffect> = _sideEffect.asSharedFlow()
 
-    fun onCancelClicked() {
+    fun onBackClicked() {
         viewModelScope.launch {
             _sideEffect.emit(TutorialSideEffect.NavigateToUp)
         }

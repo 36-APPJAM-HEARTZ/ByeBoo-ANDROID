@@ -46,7 +46,7 @@ fun TutorialRoute(
 
     TutorialScreen(
         bottomPadding = bottomPadding,
-        onCancelClick = viewModel::onCancelClicked,
+        onBackClick = viewModel::onBackClicked,
         modifier = modifier
     )
 }
@@ -54,7 +54,7 @@ fun TutorialRoute(
 @Composable
 private fun TutorialScreen(
     bottomPadding: Dp,
-    onCancelClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -65,12 +65,12 @@ private fun TutorialScreen(
             .padding(top = 67.dp, bottom = bottomPadding)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "",
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
-                .align(Alignment.End)
-                .clickable(onClick = onCancelClick)
+                .align(Alignment.Start)
+                .clickable(onClick = onBackClick)
         )
 
         Column(
