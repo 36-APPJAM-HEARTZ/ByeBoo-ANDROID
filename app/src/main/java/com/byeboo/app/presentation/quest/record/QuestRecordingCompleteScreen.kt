@@ -72,6 +72,7 @@ fun QuestRecordingCompleteRoute(
     QuestRecordingCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
+        navigateToQuest = {},
         onCloseClick = viewModel::onCloseClicked,
         modifier = modifier
     )
@@ -81,6 +82,7 @@ fun QuestRecordingCompleteRoute(
 private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
+    navigateToQuest: () -> Unit,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -93,14 +95,23 @@ private fun QuestRecordingCompleteScreen(
     ) {
         Spacer(modifier = Modifier.height(67.dp))
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = "back button",
-            tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { onCloseClick() }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                contentDescription = "edit content",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = navigateToQuest) // TODO: 분기 처리할 예정
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+                contentDescription = "back button",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onCloseClick)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

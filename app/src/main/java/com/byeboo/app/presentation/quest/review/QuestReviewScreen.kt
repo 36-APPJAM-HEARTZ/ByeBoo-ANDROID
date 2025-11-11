@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest.review
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,6 +77,7 @@ fun QuestReviewRoute(
     QuestReviewScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
+        navigateToQuest = {},
         navigateToBack = navigateToBack,
         modifier = modifier
     )
@@ -85,6 +87,7 @@ fun QuestReviewRoute(
 private fun QuestReviewScreen(
     uiState: QuestReviewState,
     bottomPadding: Dp,
+    navigateToQuest: () -> Unit,
     navigateToBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -97,14 +100,24 @@ private fun QuestReviewScreen(
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = "back button",
-            tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { navigateToBack() }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                contentDescription = "edit content",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = navigateToQuest) // TODO: 분기 처리할 예정
+            )
+
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+                contentDescription = "cancel button",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = navigateToBack)
+            )
+        }
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
