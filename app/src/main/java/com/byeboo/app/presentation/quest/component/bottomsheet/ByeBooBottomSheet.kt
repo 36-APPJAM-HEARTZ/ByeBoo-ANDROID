@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.component.bottomsheet
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -17,9 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -78,7 +85,29 @@ fun ByeBooBottomSheet(
                     style = ByeBooTheme.typography.head1
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_caution),
+                        contentDescription = "caution icon",
+                        modifier = Modifier
+                            .size(16.dp)
+                            .padding(end = 3.dp),
+                        tint = Color.Unspecified
+                    )
+
+                    Text(
+                        text = "퀘스트 완료 후에는 감정을 수정할 수 없어요",
+                        color = ByeBooTheme.colors.gray400,
+                        textAlign = TextAlign.Center,
+                        style = ByeBooTheme.typography.cap2
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 EmotionChipList(
                     selectedEmotion = selectedEmotion,
