@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -88,14 +87,14 @@ fun ByeBooBottomSheet(
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 Row(
+                    horizontalArrangement = Arrangement.spacedBy(3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_caution),
                         contentDescription = "caution icon",
                         modifier = Modifier
-                            .size(16.dp)
-                            .padding(end = 3.dp),
+                            .size(16.dp),
                         tint = Color.Unspecified
                     )
 
