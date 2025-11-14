@@ -391,24 +391,3 @@ private fun MyPageScreen(
         }
     }
 }
-
-@Preview
-@Composable
-private fun MyPageScreenPreview() {
-    ByeBooTheme {
-        MyPageScreen(
-            uiState = MyPageState(),
-            bottomPadding = 0.dp,
-            onNicknameChangeClick = {},
-            onCompletedJourneyClick = {},
-            onGoToByeBooUniverseClick = {},
-            onAskingByeBooClick = {},
-            onServiceWithByeBooClick = {},
-            onPrivacyPolicyClick = {},
-            onTermsOfServiceClick = {},
-            onLogoutClick = {},
-            onDeleteAccountClick = {},
-
-            )
-    }
-}
