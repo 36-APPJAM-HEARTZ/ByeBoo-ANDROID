@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.quest.component.bottomsheet
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -87,12 +87,15 @@ fun ByeBooBottomSheet(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(3.dp)
+                    horizontalArrangement = Arrangement.spacedBy(3.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_caution),
+                        contentDescription = "caution icon",
+                        modifier = Modifier
+                            .size(16.dp),
+                        tint = Color.Unspecified
                     )
 
                     Text(
