@@ -22,6 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +33,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -41,6 +45,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.MyPageModal
+import com.byeboo.app.presentation.mypage.component.MyPageNotification
 
 @Composable
 fun MyPageRoute(
@@ -129,6 +134,8 @@ private fun MyPageScreen(
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isChecked by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -309,6 +316,23 @@ private fun MyPageScreen(
                 style = ByeBooTheme.typography.body3,
                 color = ByeBooTheme.colors.gray50,
                 modifier = Modifier.clickable(onClick = onServiceWithByeBooClick)
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Text(
+                text = "알림",
+                style = ByeBooTheme.typography.body1,
+                color = ByeBooTheme.colors.gray400
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            MyPageNotification(
+                isEnabledAlarm = isChecked,
+                onCheckedClick = {
+                    isChecked = !isChecked
+                }
             )
 
             Spacer(modifier = Modifier.height(48.dp))
