@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.quest.component.bottomsheet
 
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -101,7 +101,6 @@ fun ByeBooBottomSheet(
                     Text(
                         text = "퀘스트 완료 후에는 감정을 수정할 수 없어요",
                         color = ByeBooTheme.colors.gray400,
-                        textAlign = TextAlign.Center,
                         style = ByeBooTheme.typography.cap2
                     )
                 }
