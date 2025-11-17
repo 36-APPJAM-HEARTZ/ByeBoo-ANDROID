@@ -119,6 +119,7 @@ dependencies {
     // Google
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.crashlytics)
+    implementation(libs.google.firebase.messaging)
 
     // Network
     implementation(platform(libs.okhttp.bom))
