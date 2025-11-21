@@ -86,7 +86,6 @@ fun ByeBooBottomSheet(
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
