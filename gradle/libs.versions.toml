@@ -69,7 +69,6 @@ mixpanel = "8.2.4"
 #Google
 googleGms = "4.4.4"
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -109,7 +108,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 # Firebase
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "crashlytics" }
-google-firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
+google-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Network
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttpBom" }
@@ -136,8 +135,6 @@ kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kaka
 
 # mixpanel
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
-
-
 
 [bundles]
 androidx = [
@@ -176,7 +173,6 @@ hilt = [
     "hilt-android",
     "androidx-hilt-navigation-compose"
 ]
-
 
 kakao = [
     "kakao-v2-user"
