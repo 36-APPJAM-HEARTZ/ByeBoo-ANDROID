@@ -1,0 +1,104 @@
+package com.byeboo.app.fcm
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.byeboo.app.R
+import com.byeboo.app.domain.usecase.UpdateFcmTokenUseCase
+import com.byeboo.app.presentation.main.MainActivity
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class ByebooMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var updateFcmTokenUseCase: UpdateFcmTokenUseCase
+
+    private val fcmServiceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+
+        fcmServiceScope.launch {
+            try {
+                updateFcmTokenUseCase(token)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        super.onMessageReceived(message)
+
+        val title = message.notification?.title
+        val body = message.notification?.body
+        val questId = message.data["questId"] ?: return
+
+        message.notification?.let {
+            showNotification(title, body, questId)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fcmServiceScope.cancel()
+    }
+
+    private fun showNotification(
+        title: String?,
+        message: String?,
+        questId: String
+    ) {
+        val notifyId = System.currentTimeMillis().toInt()
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("questId", questId)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(notifyId, builder.build())
+    }
+
+
+    companion object {
+        const val CHANNEL_ID = "BYEBOO"
+        const val CHANNEL_NAME = "Byeboo 알림 채널"
+    }
+}
