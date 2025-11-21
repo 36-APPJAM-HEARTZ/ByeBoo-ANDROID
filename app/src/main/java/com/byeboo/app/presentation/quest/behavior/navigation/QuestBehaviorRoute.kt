@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class QuestBehavior : Route {
     @Serializable
-    data class QuestBehaviorWriting(val questId: Long) : QuestBehavior()
+    data class QuestBehaviorWriting(val questId: Long, val isEditMode: Boolean) : QuestBehavior()
 
     @Serializable
     data class QuestBehaviorComplete(val questId: Long) : QuestBehavior()

@@ -42,7 +42,6 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
 fun QuestRecordingCompleteRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
@@ -51,11 +50,6 @@ fun QuestRecordingCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
-
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestRecordedDetail(questId)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->

@@ -6,7 +6,7 @@ import com.byeboo.app.domain.model.quest.QuestRecordedDetailModel
 fun QuestRecordedDetailResponseDto.toDomain(): QuestRecordedDetailModel {
     return QuestRecordedDetailModel(
         question = this.question,
-        answer = this.answer,
+        questAnswer = this.answer,
         imageUrl = this.imageUrl,
         stepNumber = this.stepNumber,
         questNumber = this.questNumber,

@@ -52,12 +52,11 @@ import com.byeboo.app.presentation.quest.component.text.CreatedText
 
 @Composable
 fun QuestBehaviorCompleteRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    viewModel: QuestBehaviorViewModel = hiltViewModel()
+    viewModel: QuestBehaviorCompleteViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -68,18 +67,12 @@ fun QuestBehaviorCompleteRoute(
         else -> null
     }
 
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestRecordedDetail(questId)
-    }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
-                is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
-                else -> Unit
+                is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }
@@ -98,7 +91,7 @@ fun QuestBehaviorCompleteRoute(
 
 @Composable
 private fun QuestBehaviorCompleteScreen(
-    uiState: QuestBehaviorState,
+    uiState: QuestBehaviorCompleteState,
     bottomPadding: Dp,
     navigateToQuest: () -> Unit,
     onCloseClick: () -> Unit,
@@ -245,10 +238,10 @@ private fun QuestBehaviorCompleteScreen(
                         }
                     }
 
-                    if (uiState.answer.isNotBlank()) {
+                    if (uiState.questAnswer.isNotBlank()) {
                         Spacer(modifier = modifier.height(12.dp))
 
-                        ContentText(uiState.answer)
+                        ContentText(uiState.questAnswer)
                     }
 
                     Spacer(modifier = modifier.height(24.dp))

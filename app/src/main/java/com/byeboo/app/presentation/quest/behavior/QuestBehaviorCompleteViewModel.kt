@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.behavior
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -18,19 +18,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestRecordingCompleteViewModel @Inject constructor(
-    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+class QuestBehaviorCompleteViewModel @Inject constructor(
+    val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
+): ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
 
-    private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
-    val uiState: StateFlow<QuestRecordingCompleteState>
-        get() = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(QuestBehaviorCompleteState(questId = questIdArg))
+    val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestRecordingCompleteSideEffect>()
-    val sideEffect: SharedFlow<QuestRecordingCompleteSideEffect> = _sideEffect
+    private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
+    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect
 
     init {
         loadQuestRecordedDetail()
@@ -46,14 +45,15 @@ class QuestRecordingCompleteViewModel @Inject constructor(
                         questNumber = detail.questNumber,
                         createdAt = detail.createdAt,
                         question = detail.question,
-                        answer = detail.questAnswer,
+                        questAnswer = detail.questAnswer,
+                        imageUrl = detail.imageUrl.toString(),
                         selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
                         emotionDescription = detail.emotionDescription
                     )
                 }
             }.onFailure {
                 _sideEffect.emit(
-                    QuestRecordingCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    QuestBehaviorCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                 )
             }
         }
@@ -66,16 +66,14 @@ class QuestRecordingCompleteViewModel @Inject constructor(
                     eventName = "journey_complete_pageview",
                     properties = mapOf(
                         "journey_end_at" to getFormattedDate(),
-                        "journey_type" to "감정 직면"
+                        "journey_type" to "감정 정리"
                     )
                 )
-                _sideEffect.emit(
-                    QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide
-                )
+                _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide)
             }
         } else {
             viewModelScope.launch {
-                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+                _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
             }
         }
     }

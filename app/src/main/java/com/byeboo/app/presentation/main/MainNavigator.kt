@@ -117,35 +117,47 @@ class MainNavigator(
     }
 
     fun navigateToQuestStart(journeyName: QuestType? = null, navOptions: NavOptions) {
-        navController.navigateToQuestStart(journeyName, navOptions)
+        navController.navigateToQuestStart(journey = journeyName, navOptions = navOptions)
     }
 
     fun navigateToQuest(options: NavOptions) {
-        navController.navigate(Quest, options)
+        navController.navigate(route = Quest, navOptions = options)
     }
 
     fun navigateToQuestTip(questId: Long, questType: QuestType, navOptions: NavOptions? = null) {
-        navController.navigateToQuestTip(questId, questType, navOptions)
+        navController.navigateToQuestTip(
+            questId = questId,
+            questType = questType,
+            navOptions = navOptions
+        )
     }
 
-    fun navigateToQuestRecording(questId: Long, navOptions: NavOptions? = null) {
-        navController.navigateToQuestRecording(questId, navOptions)
+    fun navigateToQuestRecording(
+        questId: Long,
+        isEditMode: Boolean = false,
+        navOptions: NavOptions? = null
+    ) {
+        navController.navigateToQuestRecording(
+            questId = questId,
+            isEditMode = isEditMode,
+            navOptions = navOptions
+        )
     }
 
-    fun navigateToQuestBehavior(questId: Long, navOptions: NavOptions? = null) {
-        navController.navigateToQuestBehavior(questId, navOptions)
+    fun navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, navOptions: NavOptions? = null) {
+        navController.navigateToQuestBehavior(questId = questId, isEditMode = isEditMode, navOptions = navOptions)
     }
 
     fun navigateToQuestRecordingComplete(questId: Long, navOptions: NavOptions? = null) {
-        navController.navigateToQuestRecordingComplete(questId, navOptions)
+        navController.navigateToQuestRecordingComplete(questId = questId, navOptions = navOptions)
     }
 
     fun navigateToQuestBehaviorComplete(questId: Long, navOptions: NavOptions? = null) {
-        navController.navigateToQuestBehaviorComplete(questId, navOptions)
+        navController.navigateToQuestBehaviorComplete(questId = questId, navOptions = navOptions)
     }
 
     fun navigateToQuestReview(questId: Long, navOptions: NavOptions? = null) {
-        navController.navigateToQuestReview(questId, navOptions)
+        navController.navigateToQuestReview(questId = questId, navOptions = navOptions)
     }
 
     fun navigateToMyPage(navOptions: NavOptions? = null) {
@@ -173,7 +185,7 @@ class MainNavigator(
     }
 
     fun navigateToOffboardingQuestCompleted(journey: QuestType, navOptions: NavOptions) {
-        navController.navigateToOffboardingQuestCompleted(journey, navOptions)
+        navController.navigateToOffboardingQuestCompleted(journey = journey, navOptions = navOptions)
     }
 
     fun navigateToSplash(navOptions: NavOptions) {
