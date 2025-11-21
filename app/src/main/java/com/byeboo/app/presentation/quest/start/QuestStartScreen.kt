@@ -76,6 +76,7 @@ private fun QuestStartScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
+            .padding(bottom = padding)
     ) {
         item {
             Row(
@@ -94,7 +95,7 @@ private fun QuestStartScreen(
                         .size(24.dp)
                         .noRippleClickable { onBackClick() })
             }
-            Spacer(modifier = Modifier.height(screenHeightDp(42.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
         }
 
         item {
@@ -107,7 +108,7 @@ private fun QuestStartScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(screenHeightDp(72.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(56.dp)))
 
             ByeBooButton(
                 onClick = onStartClick,
@@ -117,7 +118,7 @@ private fun QuestStartScreen(
                 buttonBackgroundColor = ByeBooTheme.colors.primary300,
                 modifier = Modifier
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(bottom = padding + 10.dp)
+                    .padding(bottom = 10.dp)
             )
         }
     }
