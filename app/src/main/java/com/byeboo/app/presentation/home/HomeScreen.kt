@@ -136,7 +136,7 @@ private fun HomeScreen(
         }
     } else {
         when (uiState.status) {
-            HomeStatus.INITIAL_START -> "저는 ${uiState.nickname}님을 도와드릴 보리예요."
+            HomeStatus.INITIAL_START -> "저는 ${uiState.nickname}님을 도와드릴 보리예요"
             HomeStatus.TODAY_INCOMPLETE -> "앗! 저를 부르셨나요?"
             HomeStatus.TODAY_COMPLETE -> "저는 항상 ${uiState.nickname}님을 응원하고 있어요!"
             HomeStatus.JOURNEY_COMPLETE -> "힘들 때 언제나 저를 찾아주세요"
