@@ -8,6 +8,7 @@ import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -143,6 +144,16 @@ class HomeViewModel @Inject constructor(
     fun onOffboardingNewJourneyClicked() {
         viewModelScope.launch {
             _sideEffect.emit(HomeSideEffect.NavigateToOffboardingNewJourney)
+        }
+    }
+
+    fun onLottieClicked(){
+        viewModelScope.launch {
+            _uiState.update { it.copy(isBubbleClicked = true) }
+
+            delay(3000)
+
+            _uiState.update { it.copy(isBubbleClicked = false) }
         }
     }
 }
