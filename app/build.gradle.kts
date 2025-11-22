@@ -146,6 +146,9 @@ dependencies {
 
     // mixpanel
     implementation(libs.mixpanel)
+
+    // in-app
+    implementation(libs.google.play.inapp.review)
 }
 
 ktlint {

@@ -60,12 +60,13 @@ ksp = "2.0.21-1.0.25"
 # Lottie
 lottie = "6.7.0"
 
-
 ktlint = "13.1.0"
 
 # Mixpanel
 mixpanel = "8.2.4"
 
+# in-app
+googlePlayInappReview = "1.10.3"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -132,7 +133,8 @@ kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kaka
 # mixpanel
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 
-
+# in-app
+google-play-inapp-review = { group = "com.google.android.play", name = "core-ktx", version.ref = "googlePlayInappReview"}
 
 [bundles]
 androidx = [
