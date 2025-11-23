@@ -37,7 +37,6 @@ class ByebooMessagingService : FirebaseMessagingService() {
                 e.printStackTrace()
             }
         }
-
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -45,7 +44,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
 
         val title = message.notification?.title
         val body = message.notification?.body
-        val questId = message.data["questId"] ?: return
+        val questId = message.data["questId"] ?: "1"
 
         message.notification?.let {
             showNotification(title, body, questId)
@@ -66,12 +65,14 @@ class ByebooMessagingService : FirebaseMessagingService() {
 
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("questId", questId)
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            this,
+            notifyId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -79,6 +80,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
@@ -88,7 +90,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
