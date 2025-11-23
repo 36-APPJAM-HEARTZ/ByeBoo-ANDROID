@@ -148,6 +148,10 @@ dependencies {
 
     // mixpanel
     implementation(libs.mixpanel)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
 }
 
 ktlint {
