@@ -9,6 +9,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +36,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    notificationQuestId: String? = null,
+    onClearQuestId: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -62,6 +65,41 @@ fun MainScreen(
             screenHeightDp(68.dp)
         }
 
+    val navOptions = navOptions {
+        popUpTo(Home) {
+            saveState = true
+            inclusive = false
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+
+    val moveToQuestNavigation: () -> Unit = {
+        scope.launch {
+            isNavigating = true
+            try {
+                val journeyStatus = status ?: JourneyStatusType.BEFORE_START
+
+                when (journeyStatus) {
+                    JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> {
+                        viewModel.trackJourneyStart()
+                        navigator.navigateToQuestStart(null, navOptions)
+                    }
+
+                    JourneyStatusType.COMPLETED -> {
+                        navigator.navigateToOffboardingCompletedGuide(navOptions)
+                    }
+
+                    JourneyStatusType.IN_PROGRESS -> {
+                        navigator.navigateToQuest(navOptions)
+                    }
+                }
+            } finally {
+                isNavigating = false
+            }
+        }
+    }
+
     if (showBottomBar) {
         if (currentTab == MainNavTab.HOME) {
             ByeBooBackHandler("뒤로가기를 한 번 더 누르면 앱이 종료됩니다")
@@ -69,6 +107,14 @@ fun MainScreen(
             BackHandler { navigator.navigate(MainNavTab.HOME) }
         }
     }
+
+    LaunchedEffect(notificationQuestId, status) {
+        if (notificationQuestId != null && status!= null && !isNavigating) {
+            moveToQuestNavigation()
+            onClearQuestId()
+        }
+    }
+
     CompositionLocalProvider(
         LocalSnackBarTrigger provides onShowSnackBar
     ) {
@@ -90,42 +136,18 @@ fun MainScreen(
                     currentTab = currentTab,
                     onTabSelected = { selectedTab ->
                         if (isNavigating || selectedTab == currentTab) return@MainBottomBar
-                        scope.launch {
-                            isNavigating = true
-                            try {
-                                val navOptions = navOptions {
-                                    popUpTo(Home) {
-                                        saveState = true
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                                if (selectedTab == MainNavTab.QUEST) {
-                                    val journeyStatus = status ?: JourneyStatusType.BEFORE_START
 
-                                    when (journeyStatus) {
-                                        JourneyStatusType.BEFORE_START, JourneyStatusType.UNKNOWN -> {
-                                            viewModel.trackJourneyStart()
-                                            navigator.navigateToQuestStart(
-                                                null,
-                                                navOptions
-                                            )
-                                        }
-                                        JourneyStatusType.COMPLETED -> {
-                                            navigator.navigateToOffboardingCompletedGuide(
-                                                navOptions
-                                            )
-                                        }
-                                        JourneyStatusType.IN_PROGRESS -> {
-                                            navigator.navigateToQuest(
-                                                navOptions
-                                            )
-                                        }
-                                    }
-                                } else { navigator.navigate(selectedTab) }
-                            } finally {
-                                isNavigating = false
+                        if (selectedTab == MainNavTab.QUEST) {
+                            moveToQuestNavigation()
+
+                        } else {
+                            scope.launch {
+                                isNavigating = true
+                                try {
+                                    navigator.navigate(selectedTab)
+                                } finally {
+                                    isNavigating = false
+                                }
                             }
                         }
                     }

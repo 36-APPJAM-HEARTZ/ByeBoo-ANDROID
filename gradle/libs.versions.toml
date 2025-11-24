@@ -31,8 +31,8 @@ espressoCore = "3.7.0"
 uiTest = "1.9.4"
 
 # Firebase
-firebaseBom = "32.7.4"
-crashlytics = "18.6.2"
+firebaseBom = "34.5.0"
+crashlytics = "2.9.9"
 
 # Network
 okhttpBom = "4.12.0"
@@ -66,6 +66,11 @@ ktlint = "13.1.0"
 # Mixpanel
 mixpanel = "8.2.4"
 
+# Google
+googleGms = "4.4.4"
+
+# DataStore
+datastore = "1.1.7"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -76,6 +81,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinParcelize" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+googleGmsServices = { id = "com.google.gms.google-services", version.ref = "googleGms" }
 
 [libraries]
 # AndroidX
@@ -105,6 +112,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 # Firebase
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "crashlytics" }
+google-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Network
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttpBom" }
@@ -119,7 +127,6 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltCompiler" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-
 # Coil
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
@@ -132,7 +139,9 @@ kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kaka
 # mixpanel
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 
-
+# DataStore
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
 
 [bundles]
 androidx = [
@@ -171,7 +180,6 @@ hilt = [
     "hilt-android",
     "androidx-hilt-navigation-compose"
 ]
-
 
 kakao = [
     "kakao-v2-user"
