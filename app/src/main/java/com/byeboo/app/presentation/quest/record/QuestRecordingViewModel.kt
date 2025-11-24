@@ -85,7 +85,9 @@ class QuestRecordingViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                _sideEffect.emit(
+                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
@@ -121,7 +123,9 @@ class QuestRecordingViewModel @Inject constructor(
                     QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId)
                 )
             }.onFailure {
-                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                _sideEffect.emit(
+                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
@@ -139,7 +143,7 @@ class QuestRecordingViewModel @Inject constructor(
                 request = request
             )
 
-            result.onSuccess{
+            result.onSuccess {
                 mixpanelUtil.trackEvent(
                     eventName = "quest_success",
                     properties = mapOf(
@@ -157,7 +161,9 @@ class QuestRecordingViewModel @Inject constructor(
                     QuestRecordingSideEffect.NavigateToQuestReview(questId)
                 )
             }.onFailure {
-                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                _sideEffect.emit(
+                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
@@ -206,10 +212,7 @@ class QuestRecordingViewModel @Inject constructor(
                 )
             )
             _sideEffect.emit(
-                QuestRecordingSideEffect.NavigateToQuestTip(
-                    questId,
-                    QuestType.RECORDING
-                )
+                QuestRecordingSideEffect.NavigateToQuestTip(questId = questId, questType = QuestType.RECORDING)
             )
         }
     }
