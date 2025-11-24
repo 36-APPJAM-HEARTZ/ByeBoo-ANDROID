@@ -13,10 +13,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,7 +28,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val notificationQuestId = mutableStateOf<String?>(null)
+    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,7 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
         )
 
-        handleIntent(intent)
+        viewModel.handleIntent(intent)
 
         // 알림 로컬 테스트를 위한 토큰
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
@@ -47,6 +50,9 @@ class MainActivity : ComponentActivity() {
             Log.d("FCM_TOKEN", "Current Token: $token")
         })
         setContent {
+
+            val notificationQuestId by viewModel.notificationQuestId.collectAsStateWithLifecycle()
+
             ByeBooTheme {
                 val context = LocalContext.current
 
@@ -71,8 +77,8 @@ class MainActivity : ComponentActivity() {
                 }
 
                 MainScreen(
-                    notificationQuestId = notificationQuestId.value,
-                    onClearQuestId = { notificationQuestId.value = null }
+                    notificationQuestId = notificationQuestId,
+                    onClearQuestId = { viewModel.clearNotificationQuestId() }
                 )
             }
         }
@@ -81,13 +87,6 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        handleIntent(intent)
-    }
-
-    private fun handleIntent(intent: Intent) {
-        val questId = intent.getStringExtra("questId")
-        if (questId != null) {
-            notificationQuestId.value = questId
-        }
+        viewModel.handleIntent(intent)
     }
 }
