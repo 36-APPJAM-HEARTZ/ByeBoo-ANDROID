@@ -66,7 +66,6 @@ fun QuestRecordingCompleteRoute(
     QuestRecordingCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        onEditClick = viewModel::onEditClicked,
         onCloseClick = viewModel::onCloseClicked,
         modifier = modifier
     )
@@ -76,7 +75,6 @@ fun QuestRecordingCompleteRoute(
 private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
-    onEditClick: () -> Unit,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
