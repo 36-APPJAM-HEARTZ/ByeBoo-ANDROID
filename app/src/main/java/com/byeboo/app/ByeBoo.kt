@@ -1,8 +1,12 @@
 package com.byeboo.app
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.fcm.ByebooMessagingService
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -21,6 +25,7 @@ class ByeBoo : Application() {
         setNightMode()
         initKakaoSdk()
         initMixpanel()
+        initNotificationChannel()
     }
 
     private fun initTimber() {
@@ -37,5 +42,17 @@ class ByeBoo : Application() {
 
     private fun initMixpanel() {
         mixpanelUtil.initialize(this, BuildConfig.MIXPANEL_TOKEN)
+    }
+
+    private fun initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                ByebooMessagingService.CHANNEL_ID,
+                ByebooMessagingService.CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

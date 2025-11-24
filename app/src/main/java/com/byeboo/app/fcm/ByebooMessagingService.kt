@@ -1,10 +1,8 @@
 package com.byeboo.app.fcm
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.byeboo.app.R
@@ -18,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,10 +30,10 @@ class ByebooMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
 
         fcmServiceScope.launch {
-            try {
+            runCatching {
                 updateFcmTokenUseCase(token)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }.onFailure { e ->
+                Timber.e(e, "FCM 토큰 갱신 실패: $token")
             }
         }
     }
@@ -85,16 +84,6 @@ class ByebooMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
         notificationManager.notify(notifyId, builder.build())
     }
 
