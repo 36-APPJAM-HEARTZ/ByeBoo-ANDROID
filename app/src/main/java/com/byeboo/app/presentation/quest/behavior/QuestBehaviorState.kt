@@ -15,7 +15,7 @@ data class QuestBehaviorState(
     val createdAt: String = java.time.LocalDate.now().toString(),
     val questAnswer: String = "",
     val imageUrl: String = "",
-    val imageKey: String? = null,
+    val imageKey: String? = "",
     val questEmotionState: String = "",
     val emotionDescription: String = "",
     val isContentAvailable: Boolean = false,

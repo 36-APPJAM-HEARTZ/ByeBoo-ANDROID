@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.review
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.LargeTagType
@@ -17,9 +18,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestReviewViewModel @Inject constructor(
-    val questRecordedDetailRepository: QuestRecordedDetailRepository
+    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(QuestReviewState())
+    val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
+
+    private val _uiState = MutableStateFlow(QuestReviewState(
+        questId = questIdArg
+    ))
     val uiState: StateFlow<QuestReviewState>
         get() = _uiState.asStateFlow()
 
@@ -27,19 +33,21 @@ class QuestReviewViewModel @Inject constructor(
     val sideEffect: SharedFlow<QuestReviewSideEffect>
         get() = _sideEffect
 
-    fun setQuestId(questId: Long) {
-        _uiState.update {
-            it.copy(questId = questId)
-        }
+    init {
+        loadQuestRecordedDetail()
     }
 
     fun onEditClicked(questType: QuestType) {
         viewModelScope.launch {
             _sideEffect.emit(
                 if (questType == QuestType.RECORDING) {
-                    QuestReviewSideEffect.NavigateToQuestRecording(questId = uiState.value.questId, isEditMode = true)
+                    QuestReviewSideEffect.NavigateToQuestRecordingEdit(questId = uiState.value.questId, isEditMode = true)
                 } else {
-                    QuestReviewSideEffect.NavigateToQuestBehavior(questId = uiState.value.questId, isEditMode = true)
+                    val imageKey = requireNotNull(uiState.value.imageKey) {
+                        "Behavior edit must have imageKey"
+                    }
+
+                    QuestReviewSideEffect.NavigateToQuestBehaviorEdit(questId = uiState.value.questId, isEditMode = true, imageKey = imageKey)
                 }
             )
         }
@@ -53,22 +61,22 @@ class QuestReviewViewModel @Inject constructor(
         }
     }
 
-    fun getQuestRecordedDetail(questId: Long) {
+    private fun loadQuestRecordedDetail() {
         viewModelScope.launch {
-            val result = questRecordedDetailRepository.getQuestRecordedDetail(questId)
+            val result = questRecordedDetailRepository.getQuestRecordedDetail(uiState.value.questId)
             result.onSuccess { detail ->
                 _uiState.update {
-                    val imageURL = detail.imageUrl?.takeIf { it.toString() != "null" }?.toString()
                     val newState = it.copy(
                         stepNumber = detail.stepNumber,
                         questNumber = detail.questNumber,
                         createdAt = detail.createdAt,
                         question = detail.question,
                         answer = detail.questAnswer,
-                        imageUrl = imageURL,
+                        imageKey = detail.imageKey ?: "",
+                        imageUrl = detail.imageUrl ?: "",
                         selectedEmotion = LargeTagType.Companion.fromKorean(detail.questEmotionState),
                         emotionDescription = detail.emotionDescription,
-                        questType = if (imageURL == null) QuestType.RECORDING else QuestType.ACTIVE
+                        questType = if (detail.imageUrl == null) QuestType.RECORDING else QuestType.ACTIVE
                     )
                     newState
                 }

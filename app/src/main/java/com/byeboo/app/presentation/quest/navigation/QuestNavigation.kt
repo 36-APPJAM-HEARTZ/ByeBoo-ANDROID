@@ -50,7 +50,7 @@ fun NavGraphBuilder.questGraph(
     navigateToOffboardingCompleteGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
-    navigateToQuestBehaviorEdit: (Long, Boolean) -> Unit,
+    navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     padding: Dp
@@ -95,14 +95,10 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<QuestReview> { backStackEntry ->
-            val questReview = backStackEntry.toRoute<QuestReview>()
-            val questId = questReview.questId
-
             QuestReviewRoute(
-                questId = questId,
                 navigateToQuest = navigateToQuest,
-                navigateToQuestRecording = navigateToQuestRecordingEdit,
-                navigateToQuestBehavior = navigateToQuestBehaviorEdit,
+                navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
+                navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
                 bottomPadding = padding
             )
         }

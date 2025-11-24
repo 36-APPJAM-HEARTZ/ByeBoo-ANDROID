@@ -11,6 +11,7 @@ data class QuestReviewState(
     val createdAt: String = LocalDate.now().toString(),
     val question: String = "",
     val answer: String = "",
+    val imageKey: String? = null,
     val imageUrl: String? = null,
     val questEmotionState: String = "",
     val emotionDescription: String = "",
@@ -20,7 +21,7 @@ data class QuestReviewState(
 
 sealed interface QuestReviewSideEffect {
     data object NavigateToQuest : QuestReviewSideEffect
-    data class NavigateToQuestRecording(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
-    data class NavigateToQuestBehavior(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
+    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
+    data class NavigateToQuestBehaviorEdit(val questId: Long, val isEditMode: Boolean, val imageKey: String) : QuestReviewSideEffect
     data class ShowSnackBar(val message: String) : QuestReviewSideEffect
 }

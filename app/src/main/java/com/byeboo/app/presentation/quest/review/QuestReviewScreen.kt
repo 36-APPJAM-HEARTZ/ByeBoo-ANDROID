@@ -38,7 +38,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.LargeTagType
@@ -53,28 +52,22 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestReviewRoute(
-    questId: Long,
     bottomPadding: Dp,
     navigateToQuest: () -> Unit,
-    navigateToQuestRecording: (Long, Boolean) -> Unit,
-    navigateToQuestBehavior: (Long, Boolean) -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
+    navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
 
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestRecordedDetail(questId)
-    }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestReviewSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestReviewSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId, true)
-                is QuestReviewSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId, true)
+                is QuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, true)
+                is QuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(effect.questId, true, effect.imageKey)
                 is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

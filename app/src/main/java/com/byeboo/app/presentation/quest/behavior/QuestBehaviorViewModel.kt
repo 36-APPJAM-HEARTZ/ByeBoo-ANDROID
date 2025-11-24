@@ -10,7 +10,9 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.data.mapper.quest.toData
+import com.byeboo.app.domain.model.quest.QuestBehaviorEditModel
 import com.byeboo.app.domain.model.quest.QuestWritingState
+import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.domain.usecase.UploadImageUseCase
@@ -31,17 +33,19 @@ class QuestBehaviorViewModel @Inject constructor(
     private val questDetailBehaviorRepository: QuestDetailBehaviorRepository,
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     private val uploadImageUseCase: UploadImageUseCase,
+    private val questBehaviorRepository: QuestBehaviorRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
     private val isEditModeArg: Boolean = checkNotNull(savedStateHandle["isEditMode"])
-
+    private val imageKeyArg: String? = savedStateHandle["imageKey"]
 
     private val _uiState = MutableStateFlow(
         QuestBehaviorState(
             questId = questIdArg,
-            isEditMode = isEditModeArg
+            isEditMode = isEditModeArg,
+            imageKey = imageKeyArg ?: ""
         )
     )
     val uiState: StateFlow<QuestBehaviorState> = _uiState.asStateFlow()
@@ -141,7 +145,7 @@ class QuestBehaviorViewModel @Inject constructor(
                 )
                 _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
                 closeBottomSheet()
-            }.onFailure {
+            }.onFailure { e ->
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                 )
@@ -226,13 +230,36 @@ class QuestBehaviorViewModel @Inject constructor(
 
     fun onClickCompleteButton(context: Context) {
         if (uiState.value.isEditMode) {
-            if(uiState.value.selectedImageUri == null){
-              //  saveEditWithoutImageUpload()
+            if (uiState.value.selectedImageUri == null){
+                uploadWithoutImageChange()
             } else {
                 uploadImage(context)
             }
         } else {
             openBottomSheet()
+        }
+    }
+
+    private fun uploadWithoutImageChange(){
+        viewModelScope.launch {
+            val state = uiState.value
+            val questId = state.questId
+            val imageKey = requireNotNull(state.imageKey){
+                "It must have imageKey"
+            }
+            val result = questBehaviorRepository.updateQuestBehavior(
+                questId = questId,
+                request = QuestBehaviorEditModel(
+                    answer = state.questAnswer,
+                    imageKey = imageKey
+                )
+            )
+
+            result.onSuccess {
+                _sideEffect.emit(
+                    QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                )
+            }
         }
     }
 

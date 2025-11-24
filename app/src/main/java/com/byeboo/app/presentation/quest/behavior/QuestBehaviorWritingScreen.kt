@@ -182,7 +182,7 @@ private fun QuestBehaviorWritingScreen(
                     bottom = screenHeightDp(16.dp)
                 )
                 .align(Alignment.Start)
-                .clickable { onBackClick() }
+                .clickable(onClick = onBackClick)
         )
 
         LazyColumn(

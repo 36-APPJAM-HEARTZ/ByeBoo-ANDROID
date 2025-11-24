@@ -111,10 +111,11 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions
                 )
             },
-            navigateToQuestBehaviorEdit = { questId, isEditMode ->
+            navigateToQuestBehaviorEdit = { questId, isEditMode, imageKey ->
                 navigator.navigateToQuestBehavior(
                     questId = questId,
                     isEditMode = isEditMode,
+                    imageKey = imageKey,
                     navOptions = keepStackNavOptions
                 )
             },

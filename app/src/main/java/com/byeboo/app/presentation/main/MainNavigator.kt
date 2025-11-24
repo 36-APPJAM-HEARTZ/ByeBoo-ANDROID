@@ -144,8 +144,8 @@ class MainNavigator(
         )
     }
 
-    fun navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, navOptions: NavOptions? = null) {
-        navController.navigateToQuestBehavior(questId = questId, isEditMode = isEditMode, navOptions = navOptions)
+    fun navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, imageKey: String? = null, navOptions: NavOptions? = null) {
+        navController.navigateToQuestBehavior(questId = questId, isEditMode = isEditMode, imageKey = imageKey, navOptions = navOptions)
     }
 
     fun navigateToQuestRecordingComplete(questId: Long, navOptions: NavOptions? = null) {
