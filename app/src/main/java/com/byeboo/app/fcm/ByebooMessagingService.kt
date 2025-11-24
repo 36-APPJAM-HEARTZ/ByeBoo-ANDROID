@@ -24,6 +24,9 @@ class ByebooMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var updateFcmTokenUseCase: UpdateFcmTokenUseCase
 
+    @Inject
+    lateinit var notificationHandler: ByebooNotificationHandler
+
     private val fcmServiceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     override fun onNewToken(token: String) {
@@ -46,7 +49,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
         val questId = message.data["questId"] ?: "1"
 
         message.notification?.let {
-            showNotification(title, body, questId)
+            notificationHandler.showNotification(title, body, questId)
         }
     }
 
@@ -55,41 +58,4 @@ class ByebooMessagingService : FirebaseMessagingService() {
         fcmServiceScope.cancel()
     }
 
-    private fun showNotification(
-        title: String?,
-        message: String?,
-        questId: String
-    ) {
-        val notifyId = System.currentTimeMillis().toInt()
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("questId", questId)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        }
-
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            notifyId,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notifyId, builder.build())
-    }
-
-
-    companion object {
-        const val CHANNEL_ID = "BYEBOO"
-        const val CHANNEL_NAME = "Byeboo 알림 채널"
-    }
 }
