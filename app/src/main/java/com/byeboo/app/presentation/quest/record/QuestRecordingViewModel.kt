@@ -84,6 +84,8 @@ class QuestRecordingViewModel @Inject constructor(
                         questAnswer = detail.questAnswer
                     )
                 }
+            }.onFailure {
+                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
             }
         }
     }
@@ -102,7 +104,7 @@ class QuestRecordingViewModel @Inject constructor(
             )
             val result = questRecordingRepository.postRecording(questId, request)
 
-            if (result.isSuccess) {
+            result.onSuccess {
                 mixpanelUtil.trackEvent(
                     eventName = "quest_success",
                     properties = mapOf(
@@ -118,6 +120,8 @@ class QuestRecordingViewModel @Inject constructor(
                 _sideEffect.emit(
                     QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId)
                 )
+            }.onFailure {
+                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
             }
         }
     }
@@ -135,7 +139,7 @@ class QuestRecordingViewModel @Inject constructor(
                 request = request
             )
 
-            if (result.isSuccess) {
+            result.onSuccess{
                 mixpanelUtil.trackEvent(
                     eventName = "quest_success",
                     properties = mapOf(
@@ -152,6 +156,8 @@ class QuestRecordingViewModel @Inject constructor(
                 _sideEffect.emit(
                     QuestRecordingSideEffect.NavigateToQuestReview(questId)
                 )
+            }.onFailure {
+                QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
             }
         }
     }

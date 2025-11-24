@@ -38,7 +38,7 @@ class UploadImageUseCase @Inject constructor(
         if (isEditMode) {
             questBehaviorRepository.updateQuestBehavior(questId = questId, request = editRequest)
         } else {
-            questBehaviorRepository.uploadQuestBehaviorAnswer(questId, request)
+            questBehaviorRepository.uploadQuestBehaviorAnswer(questId = questId, request = request)
         }
     }
 }

@@ -93,7 +93,7 @@ private fun QuestRecordingCompleteScreen(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = "back button",
+                contentDescription = null,
                 tint = ByeBooTheme.colors.white,
                 modifier = Modifier.clickable(onClick = onCloseClick)
             )

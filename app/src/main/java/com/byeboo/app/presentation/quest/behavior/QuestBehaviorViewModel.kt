@@ -88,8 +88,8 @@ class QuestBehaviorViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         questAnswer = detail.questAnswer,
-                        imageUrl = detail.imageUrl.toString(),
-                        imageCount = if (!detail.imageUrl.isNullOrBlank()) 1 else 0
+                        imageUrl = detail.imageUrl ?: "",
+                        imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0
                     )
                 }
             }.onFailure {
@@ -279,6 +279,8 @@ class QuestBehaviorViewModel @Inject constructor(
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.NavigateToQuestReview(questId)
                 )
+            }.onFailure {
+                QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
             }
         }
     }

@@ -7,7 +7,7 @@ data class QuestRecordedDetailModel(
     val question: String,
     val questAnswer: String,
     val questEmotionState: String,
-    val imageKey: String? = "",
-    val imageUrl: String? = "",
+    val imageKey: String? = null,
+    val imageUrl: String? = null,
     val emotionDescription: String
 )
