@@ -17,6 +17,7 @@ data class QuestRecordingCompleteState(
 
 sealed interface QuestRecordingCompleteSideEffect {
     data object NavigateToQuest : QuestRecordingCompleteSideEffect
+    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean) : QuestRecordingCompleteSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestRecordingCompleteSideEffect
     data class ShowSnackBar(val message: String) : QuestRecordingCompleteSideEffect
 }

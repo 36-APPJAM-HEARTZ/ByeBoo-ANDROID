@@ -59,6 +59,15 @@ class QuestRecordingCompleteViewModel @Inject constructor(
         }
     }
 
+    fun onEditClicked(){
+        val state = uiState.value
+        viewModelScope.launch {
+            _sideEffect.emit(
+                QuestRecordingCompleteSideEffect.NavigateToQuestRecordingEdit(questId = state.questId, isEditMode = true)
+            )
+        }
+    }
+
     fun onCloseClicked() {
         if (uiState.value.questNumber == 30L) {
             viewModelScope.launch {

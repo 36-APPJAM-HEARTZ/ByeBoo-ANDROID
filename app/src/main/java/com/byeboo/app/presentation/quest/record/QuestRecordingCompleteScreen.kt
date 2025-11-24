@@ -43,6 +43,7 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 @Composable
 fun QuestRecordingCompleteRoute(
     navigateToQuest: () -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
@@ -55,6 +56,7 @@ fun QuestRecordingCompleteRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestRecordingCompleteSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, effect.isEditMode)
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -66,7 +68,7 @@ fun QuestRecordingCompleteRoute(
     QuestRecordingCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        navigateToQuest = {},
+        onEditClick = viewModel::onEditClicked,
         onCloseClick = viewModel::onCloseClicked,
         modifier = modifier
     )
@@ -76,7 +78,7 @@ fun QuestRecordingCompleteRoute(
 private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     bottomPadding: Dp,
-    navigateToQuest: () -> Unit,
+    onEditClick: () -> Unit,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -97,7 +99,7 @@ private fun QuestRecordingCompleteScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                 contentDescription = "edit content",
                 tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = navigateToQuest) // TODO: 분기 처리할 예정
+                modifier = Modifier.clickable(onClick = onEditClick)
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),

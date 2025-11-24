@@ -24,8 +24,9 @@ fun NavGraphBuilder.questRecordGraph(
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
-    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
     bottomPadding: Dp
 ) {
@@ -44,6 +45,7 @@ fun NavGraphBuilder.questRecordGraph(
         composable<QuestRecordingComplete> {
             QuestRecordingCompleteRoute(
                 navigateToQuest = navigateToQuest,
+                navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
                 bottomPadding = bottomPadding
             )

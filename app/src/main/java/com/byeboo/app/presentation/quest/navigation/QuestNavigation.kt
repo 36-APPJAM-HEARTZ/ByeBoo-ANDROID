@@ -107,8 +107,9 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestRecordingComplete = navigateToQuestRecordingComplete,
-            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             navigateToQuestReview = navigateToQuestReview,
+            navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
+            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             navigateUp = navigateUp,
             bottomPadding = padding
         )
@@ -117,8 +118,9 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestBehaviorComplete = navigateToQuestBehaviorComplete,
-            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             navigateToQuestReview = navigateToQuestReview,
+            navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
+            navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
             navigateUp = navigateUp,
             bottomPadding = padding
         )
