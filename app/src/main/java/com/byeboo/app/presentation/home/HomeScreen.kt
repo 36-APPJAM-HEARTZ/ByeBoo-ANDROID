@@ -65,7 +65,6 @@ fun HomeRoute(
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
-    modifier: Modifier = Modifier,
     bottomPadding: Dp,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
