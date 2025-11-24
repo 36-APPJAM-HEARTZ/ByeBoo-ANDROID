@@ -46,7 +46,7 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
                         createdAt = detail.createdAt,
                         question = detail.question,
                         questAnswer = detail.questAnswer,
-                        imageUrl = detail.imageUrl.toString(),
+                        imageUrl = detail.imageUrl ?: "",
                         selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
                         emotionDescription = detail.emotionDescription
                     )

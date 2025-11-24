@@ -127,15 +127,26 @@ class QuestBehaviorViewModel @Inject constructor(
                     isEditMode = isEditMode
                 ).getOrThrow()
             }.onSuccess {
-                mixpanelUtil.trackEvent(
-                    eventName = "quest_success",
-                    properties = mapOf(
-                        "quest_end_at" to getFormattedDate(),
-                        "quest_number" to questId,
-                        "quest_type" to "행동형",
-                        "after_emotion_type" to emotion
+                if (isEditMode) {
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_edit",
+                        properties = mapOf(
+                            "quest_end_at" to getFormattedDate(),
+                            "quest_number" to questId,
+                            "quest_type" to "행동형",
+                        )
                     )
-                )
+                } else {
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_success",
+                        properties = mapOf(
+                            "quest_end_at" to getFormattedDate(),
+                            "quest_number" to questId,
+                            "quest_type" to "행동형",
+                            "after_emotion_type" to emotion
+                        )
+                    )
+                }
                 _sideEffect.emit(
                     if (isEditMode) {
                         QuestBehaviorSideEffect.NavigateToQuestReview(questId)
@@ -256,6 +267,15 @@ class QuestBehaviorViewModel @Inject constructor(
             )
 
             result.onSuccess {
+                mixpanelUtil.trackEvent(
+                    eventName = "quest_edit",
+                    properties = mapOf(
+                        "quest_end_at" to getFormattedDate(),
+                        "quest_number" to questId,
+                        "quest_type" to "행동형",
+                    )
+                )
+
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.NavigateToQuestReview(questId)
                 )

@@ -82,7 +82,6 @@ fun QuestBehaviorCompleteRoute(
     QuestBehaviorCompleteScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        navigateToQuest = {},
         onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
         modifier = modifier
@@ -93,7 +92,6 @@ fun QuestBehaviorCompleteRoute(
 private fun QuestBehaviorCompleteScreen(
     uiState: QuestBehaviorCompleteState,
     bottomPadding: Dp,
-    navigateToQuest: () -> Unit,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
     modifier: Modifier = Modifier
@@ -109,15 +107,8 @@ private fun QuestBehaviorCompleteScreen(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.End
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
-                contentDescription = "edit content",
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = navigateToQuest) // TODO: 분기 처리할 예정
-            )
-
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                 contentDescription = "back button",

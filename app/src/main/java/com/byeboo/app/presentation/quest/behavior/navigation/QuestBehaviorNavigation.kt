@@ -24,8 +24,8 @@ fun NavGraphBuilder.questBehaviorGraph(
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
-    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
     bottomPadding: Dp
 ) {
