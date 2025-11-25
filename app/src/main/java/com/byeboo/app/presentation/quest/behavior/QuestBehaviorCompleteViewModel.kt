@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestBehaviorCompleteViewModel @Inject constructor(
-    val questRecordedDetailRepository: QuestRecordedDetailRepository,
+    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ): ViewModel() {

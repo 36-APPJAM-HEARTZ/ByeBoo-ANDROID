@@ -241,7 +241,7 @@ class QuestBehaviorViewModel @Inject constructor(
 
     fun onClickCompleteButton(context: Context) {
         if (uiState.value.isEditMode) {
-            if (uiState.value.selectedImageUri == null){
+            if (uiState.value.selectedImageUri == null) {
                 uploadWithoutImageChange()
             } else {
                 uploadImage(context)
@@ -251,11 +251,11 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    private fun uploadWithoutImageChange(){
+    private fun uploadWithoutImageChange() {
         viewModelScope.launch {
             val state = uiState.value
             val questId = state.questId
-            val imageKey = requireNotNull(state.imageKey){
+            val imageKey = requireNotNull(state.imageKey) {
                 "It must have imageKey"
             }
             val result = questBehaviorRepository.updateQuestBehavior(
@@ -280,7 +280,9 @@ class QuestBehaviorViewModel @Inject constructor(
                     QuestBehaviorSideEffect.NavigateToQuestReview(questId)
                 )
             }.onFailure {
-                QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                _sideEffect.emit(
+                    QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }
