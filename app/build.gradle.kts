@@ -149,6 +149,7 @@ dependencies {
 
     // in-app
     implementation(libs.google.play.inapp.review)
+    implementation(libs.google.play.inapp.review.ktx)
 }
 
 ktlint {
