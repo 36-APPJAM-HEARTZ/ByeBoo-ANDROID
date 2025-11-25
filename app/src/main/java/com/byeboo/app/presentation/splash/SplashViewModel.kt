@@ -62,6 +62,7 @@ class SplashViewModel @Inject constructor(
             val isRegistered = userRepository.isUserRegistered()
             if (isRegistered) {
                 saveFcmToken()
+                userRepository.setLoggedIn(true)
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
             } else {
                 _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
@@ -79,6 +80,7 @@ class SplashViewModel @Inject constructor(
                 val isRegistered = userRepository.isUserRegistered()
                 if (isRegistered) {
                     saveFcmToken()
+                    userRepository.setLoggedIn(true)
                     _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
                 } else {
                     _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
@@ -107,6 +109,7 @@ class SplashViewModel @Inject constructor(
                         .onSuccess { auth ->
                             mixpanelUtil.setDistinctId(auth.userId.toString())
                             mixpanelUtil.trackLogin(LoginType.KAKAO, true)
+                            userRepository.setLoggedIn(true)
 
                             if (auth.isRegistered) {
                                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
