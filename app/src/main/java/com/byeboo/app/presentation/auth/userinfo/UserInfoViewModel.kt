@@ -9,9 +9,13 @@ import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.model.auth.QuestStyle
 import com.byeboo.app.domain.model.auth.UserInfoModel
 import com.byeboo.app.domain.model.auth.toJourneyText
+import com.byeboo.app.domain.model.notification.FcmTokenModel
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.NonCancellable
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +25,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 @HiltViewModel
 class UserInfoViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
+    private val fcmTokenRepository: FcmTokenRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UserInfoState())
@@ -118,10 +125,28 @@ class UserInfoViewModel @Inject constructor(
                     questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
                     userRepository.setUserRegistered(true)
                 }
+                saveFcmToken()
                 _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
             } else {
                 hasSubmitted = false
                 _sideEffect.emit(UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
+            }
+        }
+    }
+
+    private fun saveFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful){
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            viewModelScope.launch {
+                withContext(NonCancellable) {
+                    fcmTokenRepository.saveFcmToken(FcmTokenModel(token))
+                        .onSuccess { Timber.d("Fcm 토큰 성공: $token") }
+                        .onFailure { Timber.e(it, "Fcm 토큰 실패") }
+                }
             }
         }
     }

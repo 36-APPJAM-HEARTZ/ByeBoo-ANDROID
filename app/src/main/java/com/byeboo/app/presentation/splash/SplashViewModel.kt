@@ -4,24 +4,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.LoginType
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.domain.model.notification.FcmTokenModel
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
 import com.byeboo.app.domain.usecase.ReissueAccessTokenUseCase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository,
+    private val fcmTokenRepository: FcmTokenRepository,
     private val mixpanelUtil: MixpanelUtil,
     private val loginUseCase: LoginUseCase,
     private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase
@@ -54,6 +61,7 @@ class SplashViewModel @Inject constructor(
 
             val isRegistered = userRepository.isUserRegistered()
             if (isRegistered) {
+                saveFcmToken()
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
             } else {
                 _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
@@ -70,6 +78,7 @@ class SplashViewModel @Inject constructor(
 
                 val isRegistered = userRepository.isUserRegistered()
                 if (isRegistered) {
+                    saveFcmToken()
                     _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
                 } else {
                     _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
@@ -120,13 +129,33 @@ class SplashViewModel @Inject constructor(
                                 mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                             }
                         }
+
                         is AuthError -> {
                             _sideEffect.emit(SplashStateSideEffect.StartKakaoWebLogin)
                         }
+
                         else -> {
                             mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private fun saveFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            viewModelScope.launch {
+                withContext(NonCancellable) {
+                    fcmTokenRepository.saveFcmToken(FcmTokenModel(token))
+                        .onSuccess { Timber.d("Fcm 토큰 성공: $token") }
+                        .onFailure { Timber.e(it, "Fcm 토큰 실패") }
+
                 }
             }
         }
