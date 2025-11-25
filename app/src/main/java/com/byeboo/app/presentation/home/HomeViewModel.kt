@@ -151,8 +151,17 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
+                    showBubble = false
+                )
+            }
+
+            delay(600)
+
+            _uiState.update {
+                it.copy(
                     isBubbleClicked = true,
-                    isBubbleEnabled = false
+                    isBubbleEnabled = false,
+                    showBubble = true
                 )
             }
 
@@ -160,8 +169,17 @@ class HomeViewModel @Inject constructor(
 
             _uiState.update {
                 it.copy(
+                    showBubble = false
+                )
+            }
+
+            delay(600)
+
+            _uiState.update {
+                it.copy(
                     isBubbleClicked = false,
-                    isBubbleEnabled = true
+                    isBubbleEnabled = true,
+                    showBubble = true
                 )
             }
         }

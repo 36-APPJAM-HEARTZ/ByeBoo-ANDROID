@@ -1,12 +1,14 @@
 package com.byeboo.app.presentation.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -289,13 +291,21 @@ private fun HomeScreen(
                                 .padding(bottom = 14.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = bottomBubbleText,
-                                style = ByeBooTheme.typography.body2,
-                                color = ByeBooTheme.colors.primary50,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                            Column {
+                                AnimatedVisibility(
+                                    visible = uiState.showBubble,
+                                    enter = fadeIn(tween (durationMillis = 500, easing = LinearOutSlowInEasing)),
+                                    exit = fadeOut(tween (500, easing = FastOutLinearInEasing))
+                                ) {
+                                    Text(
+                                        text = bottomBubbleText,
+                                        style = ByeBooTheme.typography.body2,
+                                        color = ByeBooTheme.colors.primary50,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
                         }
                     }
 
@@ -310,7 +320,7 @@ private fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f)
-                            .clickable(onClick = {
+                            .noRippleClickable(onClick = {
                                 if (uiState.isBubbleEnabled) {
                                     onLottieClick()
                                 }

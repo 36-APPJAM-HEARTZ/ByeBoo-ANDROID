@@ -13,6 +13,7 @@ data class HomeUiState(
     val isLoading: Boolean = true,
     val hasError: Boolean = false,
     val isBubbleClicked: Boolean = false,
+    val showBubble: Boolean = true,
     val isBubbleEnabled: Boolean = true,
 )
 
