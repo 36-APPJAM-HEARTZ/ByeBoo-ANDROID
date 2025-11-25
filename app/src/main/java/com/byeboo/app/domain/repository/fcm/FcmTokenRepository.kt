@@ -9,4 +9,6 @@ interface FcmTokenRepository {
     suspend fun deleteFcmToken(fcmToken: FcmTokenModel): Result<Unit>
     suspend fun allowQuestAlarm(): Result<NotificationSetting>
     suspend fun getFcmToken(): String?
+    suspend fun saveAlarmEnabled(isAlarmEnabled: Boolean): Result<Unit>
+    suspend fun isAlarmEnabled(): Boolean
 }

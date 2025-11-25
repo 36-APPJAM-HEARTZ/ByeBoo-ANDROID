@@ -46,4 +46,14 @@ class FcmTokenRepositoryImpl @Inject constructor(
     override suspend fun getFcmToken(): String? {
         return fcmLocalDataSource.getFcmToken()
     }
+
+    override suspend fun saveAlarmEnabled(isAlarmEnabled: Boolean): Result<Unit> {
+        return runCatching {
+            fcmLocalDataSource.saveAlarmEnabled(isAlarmEnabled)
+        }
+    }
+
+    override suspend fun isAlarmEnabled(): Boolean {
+        return fcmLocalDataSource.isAlarmEnabled()
+    }
 }
