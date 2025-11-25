@@ -74,10 +74,8 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
-            }
 
-            if (uiState.value.questId == 1L) {
-                viewModelScope.launch {
+                if (uiState.value.questId == 1L) {
                     _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
                 }
             }
