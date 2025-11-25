@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.record
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -33,6 +35,7 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
@@ -51,6 +54,8 @@ fun QuestRecordingCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
+    val context = LocalContext.current
+    val activity = context as? Activity
 
     LaunchedEffect(questId) {
         viewModel.setQuestId(questId)
@@ -62,6 +67,12 @@ fun QuestRecordingCompleteRoute(
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestRecordingCompleteSideEffect.ShowInAppReview -> {
+                    navigateToQuest()
+                    activity?.let { activity ->
+                        inAppReview(activity)
+                    }
+                }
                 is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
