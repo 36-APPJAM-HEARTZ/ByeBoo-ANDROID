@@ -134,7 +134,8 @@ kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kaka
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 
 # in-app
-google-play-inapp-review = { group = "com.google.android.play", name = "review-ktx", version.ref = "googlePlayInappReview"}
+google-play-inapp-review = { group = "com.google.android.play", name = "review", version.ref = "googlePlayInappReview"}
+google-play-inapp-review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "googlePlayInappReview"}
 
 [bundles]
 androidx = [
