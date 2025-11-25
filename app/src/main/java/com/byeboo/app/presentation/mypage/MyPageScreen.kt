@@ -1,7 +1,10 @@
 package com.byeboo.app.presentation.mypage
 
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -67,27 +70,39 @@ fun MyPageRoute(
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = context as? Activity
 
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
-            if (isGranted) {
-                viewModel.onAlarmToggledClicked()
-            } else {
-                viewModel.loadAlarmStatus()
-            }
+            viewModel.onPermissionResult(isGranted)
         }
     )
 
     val onAlarmToggleClick = {
-        if (!uiState.isAlarmEnabled && !context.hasNotificationPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                permissionLauncher.launch(POST_NOTIFICATIONS)
-            }
+        val hasPermission = context.hasNotificationPermission()
+        val isPermissionNeeded = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
         } else {
-            viewModel.onAlarmToggledClicked()
+            false
         }
+        viewModel.onAlarmToggledClicked(hasPermission, isPermissionNeeded)
+    }
+
+    if (uiState.showPermissionModal) {
+        MyPageModal(
+            onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
+            myPageModalMainText = "알림 권한 필요",
+            myPageModalSubText = "알림을 받으려면 설정에서 권한을 허용해야 합니다.",
+            onCancelClick = { viewModel.onDismissModal(ModalType.PERMISSION) },
+            onConfirmClick = viewModel::onGoToSettingClicked,
+            onConfirmText = "허용하기",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+        )
     }
 
 
@@ -123,6 +138,17 @@ fun MyPageRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
+                is MyPageSideEffect.RequestNotificationPermission -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    }
+                }
+                is MyPageSideEffect.NavigateToSetting -> {
+                    val intent = Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    context.startActivity(intent)
+                }
                 is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
                 is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
@@ -136,7 +162,7 @@ fun MyPageRoute(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.loadAlarmStatus()
+                viewModel.syncAlarmState(context.hasNotificationPermission())
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
