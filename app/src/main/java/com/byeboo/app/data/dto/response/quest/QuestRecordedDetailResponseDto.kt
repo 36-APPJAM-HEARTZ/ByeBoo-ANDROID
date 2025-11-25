@@ -9,6 +9,8 @@ data class QuestRecordedDetailResponseDto(
     val question: String,
     @SerialName("answer")
     val answer: String,
+    @SerialName("imageKey")
+    val imageKey: String? = null,
     @SerialName("imageUrl")
     val imageUrl: String? = null,
     @SerialName("stepNumber")

@@ -4,9 +4,10 @@ import com.byeboo.app.data.repositoryimpl.NewJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.AuthRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.TokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
-import com.byeboo.app.data.repositoryimpl.quest.QuestBehaviorAnswerRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestStateRepositoryImpl
@@ -18,9 +19,10 @@ import com.byeboo.app.domain.repository.NewJourneyRepository
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
-import com.byeboo.app.domain.repository.quest.QuestBehaviorAnswerRepository
+import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
 import com.byeboo.app.domain.repository.quest.QuestInProgressRepository
@@ -80,8 +82,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindQuestBehaviorAnswerRepository(
-        questBehaviorAnswerRepositoryImpl: QuestBehaviorAnswerRepositoryImpl
-    ): QuestBehaviorAnswerRepository
+        questBehaviorAnswerRepositoryImpl: QuestBehaviorRepositoryImpl
+    ): QuestBehaviorRepository
 
     @Binds
     @Singleton
@@ -110,4 +112,10 @@ abstract class RepositoryModule {
     abstract fun bindNewJourneyRepository(
         newJourneyRepositoryImpl: NewJourneyRepositoryImpl
     ): NewJourneyRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFcmTokenRepository(
+        fcmTokenRepositoryImpl: FcmTokenRepositoryImpl
+    ): FcmTokenRepository
 }

@@ -105,7 +105,7 @@ private fun QuestScreen(
         QuestModal(
             onDismissRequest = onDismissModal,
             questNumber = uiState.selectedQuest?.questNumber ?: 0L,
-            questQuestion = uiState.selectedQuest?.questQuestion ?: "",
+            questQuestion = uiState.selectedQuest?.questQuestion.orEmpty(),
             navigateToTip = onTipClick,
             progressButton = onQuestStart,
             modifier = Modifier

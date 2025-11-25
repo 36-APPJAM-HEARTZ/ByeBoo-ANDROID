@@ -60,21 +60,17 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestRecordingRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
+    navigateToQuestReview: (Long) -> Unit,
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
-
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestDetailInfo(questId)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -84,9 +80,9 @@ fun QuestRecordingRoute(
                     effect.questId,
                     effect.questType
                 )
-                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete -> navigateToQuestRecordingComplete(
-                    effect.questId
-                )
+                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete -> navigateToQuestRecordingComplete(effect.questId)
+                is QuestRecordingSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestRecordingSideEffect.NavigateUp -> navigateUp()
                 is QuestRecordingSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -114,9 +110,9 @@ fun QuestRecordingRoute(
         bottomPadding = bottomPadding,
         onBackClick = viewModel::onBackClicked,
         onTipClick = viewModel::onTipClicked,
-        onClickCompleteButton = viewModel::openBottomSheet,
+        onClickCompleteButton = viewModel::onClickCompleteButton,
         onUpdateContent = viewModel::updateContent,
-        navigateButton = viewModel::postQuestRecording,
+        onSaveClick = viewModel::onSaveClicked,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
         modifier = modifier
@@ -132,7 +128,7 @@ private fun QuestRecordingScreen(
     onTipClick: () -> Unit,
     onClickCompleteButton: () -> Unit,
     onUpdateContent: (Boolean, String) -> Unit,
-    navigateButton: () -> Unit,
+    onSaveClick: () -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType?) -> Unit,
     modifier: Modifier = Modifier
@@ -220,7 +216,7 @@ private fun QuestRecordingScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Text(
-                    text = uiState.questQuestion,
+                    text = uiState.question,
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray100,
                     style = ByeBooTheme.typography.head1,
@@ -306,7 +302,7 @@ private fun QuestRecordingScreen(
 
     ByeBooBottomSheet(
         selectedEmotion = uiState.selectedEmotion,
-        navigateButton = navigateButton,
+        navigateButton = onSaveClick,
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected

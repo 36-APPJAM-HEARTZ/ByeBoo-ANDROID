@@ -1,7 +1,9 @@
 package com.byeboo.app.presentation.quest.review
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,33 +52,36 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestReviewRoute(
-    questId: Long,
     bottomPadding: Dp,
-    navigateToBack: () -> Unit,
+    navigateToQuest: () -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
+    navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: QuestReviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
 
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestRecordedDetail(questId)
-    }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is QuestReviewSideEffect.NavigateToQuest -> navigateToBack()
+                is QuestReviewSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, true)
+                is QuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(effect.questId, true, effect.imageKey)
                 is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }
 
+    BackHandler {
+        navigateToQuest()
+    }
+
     QuestReviewScreen(
         uiState = uiState,
         bottomPadding = bottomPadding,
-        navigateToBack = navigateToBack,
+        onEditClick = { viewModel.onEditClicked(uiState.questType) },
+        onCancelClick = viewModel::onCancelClicked,
         modifier = modifier
     )
 }
@@ -85,7 +90,8 @@ fun QuestReviewRoute(
 private fun QuestReviewScreen(
     uiState: QuestReviewState,
     bottomPadding: Dp,
-    navigateToBack: () -> Unit,
+    onEditClick: () -> Unit,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -97,14 +103,24 @@ private fun QuestReviewScreen(
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = "back button",
-            tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { navigateToBack() }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
+                contentDescription = "edit content",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onEditClick)
+            )
+
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+                contentDescription = "cancel button",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onCancelClick)
+            )
+        }
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 

@@ -1,14 +1,17 @@
 package com.byeboo.app.presentation.main
 
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -19,6 +22,9 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()
         .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
+
+    private val _notificationQuestId = MutableStateFlow<String?>(null)
+    val notificationQuestId: StateFlow<String?> = _notificationQuestId.asStateFlow()
 
     fun trackJourneyStart() {
         viewModelScope.launch {
@@ -31,5 +37,20 @@ class MainViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun handleIntent(intent: Intent) {
+        val questId = intent.getStringExtra("questId")
+        if (questId != null) {
+            updateNotificationQuestId(questId)
+        }
+    }
+    
+    fun updateNotificationQuestId(questId: String?) {
+        _notificationQuestId.value = questId
+    }
+
+    fun clearNotificationQuestId() {
+        _notificationQuestId.value = null
     }
 }
