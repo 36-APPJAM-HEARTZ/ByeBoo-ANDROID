@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,20 +39,20 @@ class QuestBehaviorViewModel @Inject constructor(
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
-    private val isEditModeArg: Boolean = checkNotNull(savedStateHandle["isEditMode"])
+    private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
     private val imageKeyArg: String? = savedStateHandle["imageKey"]
 
     private val _uiState = MutableStateFlow(
         QuestBehaviorState(
             questId = questIdArg,
             isEditMode = isEditModeArg,
-            imageKey = imageKeyArg ?: ""
+            imageKey = imageKeyArg.orEmpty()
         )
     )
     val uiState: StateFlow<QuestBehaviorState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestBehaviorSideEffect>()
-    val sideEffect: SharedFlow<QuestBehaviorSideEffect> = _sideEffect
+    val sideEffect: SharedFlow<QuestBehaviorSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         loadQuestInfo()
@@ -88,7 +89,7 @@ class QuestBehaviorViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         questAnswer = detail.questAnswer,
-                        imageUrl = detail.imageUrl ?: "",
+                        imageUrl = detail.imageUrl.orEmpty(),
                         imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0
                     )
                 }
@@ -241,7 +242,7 @@ class QuestBehaviorViewModel @Inject constructor(
 
     fun onClickCompleteButton(context: Context) {
         if (uiState.value.isEditMode) {
-            if (uiState.value.selectedImageUri == null){
+            if (uiState.value.selectedImageUri == null) {
                 uploadWithoutImageChange()
             } else {
                 uploadImage(context)
@@ -251,11 +252,11 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    private fun uploadWithoutImageChange(){
+    private fun uploadWithoutImageChange() {
         viewModelScope.launch {
             val state = uiState.value
             val questId = state.questId
-            val imageKey = requireNotNull(state.imageKey){
+            val imageKey = requireNotNull(state.imageKey) {
                 "It must have imageKey"
             }
             val result = questBehaviorRepository.updateQuestBehavior(
@@ -280,7 +281,9 @@ class QuestBehaviorViewModel @Inject constructor(
                     QuestBehaviorSideEffect.NavigateToQuestReview(questId)
                 )
             }.onFailure {
-                QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                _sideEffect.emit(
+                    QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                )
             }
         }
     }

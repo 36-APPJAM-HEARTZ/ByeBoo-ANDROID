@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.googleGmsServices)
 }
 
 val properties = Properties().apply {
@@ -118,6 +120,7 @@ dependencies {
     // Google
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.crashlytics)
+    implementation(libs.google.firebase.messaging)
 
     // Network
     implementation(platform(libs.okhttp.bom))
@@ -150,6 +153,10 @@ dependencies {
     // in-app
     implementation(libs.google.play.inapp.review)
     implementation(libs.google.play.inapp.review.ktx)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.core)
 }
 
 ktlint {

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestBehaviorCompleteViewModel @Inject constructor(
-    val questRecordedDetailRepository: QuestRecordedDetailRepository,
+    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
@@ -29,7 +30,7 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
     val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
-    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect
+    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         loadQuestRecordedDetail()
@@ -46,7 +47,7 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
                         createdAt = detail.createdAt,
                         question = detail.question,
                         questAnswer = detail.questAnswer,
-                        imageUrl = detail.imageUrl ?: "",
+                        imageUrl = detail.imageUrl.orEmpty(),
                         selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
                         emotionDescription = detail.emotionDescription
                     )
