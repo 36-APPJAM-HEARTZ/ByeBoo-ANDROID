@@ -61,11 +61,11 @@ class MainViewModel @Inject constructor(
         _notificationQuestId.value = null
     }
 
-
     fun hasNotificationPermission() {
         viewModelScope.launch {
             if (isLoginCompleted.value) {
                 fcmTokenRepository.saveAlarmEnabled(true)
+                fcmTokenRepository.allowQuestAlarm()
             }
         }
     }
