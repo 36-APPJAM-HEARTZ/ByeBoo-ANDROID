@@ -1,5 +1,9 @@
 package com.byeboo.app.presentation.mypage
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,9 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +34,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
@@ -42,10 +42,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
+
 
 @Composable
 fun MyPageRoute(
@@ -60,6 +62,29 @@ fun MyPageRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
+
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                viewModel.onAlarmToggledClicked()
+            } else {
+                viewModel.loadAlarmStatus()
+            }
+        }
+    )
+
+    val onAlarmToggleClick = {
+        if (!uiState.isAlarmEnabled && !context.hasNotificationPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                permissionLauncher.launch(POST_NOTIFICATIONS)
+            }
+        } else {
+            viewModel.onAlarmToggledClicked()
+        }
+    }
+
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -111,6 +136,7 @@ fun MyPageRoute(
         onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
+        onAlarmToggleClick = onAlarmToggleClick,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
@@ -128,14 +154,13 @@ private fun MyPageScreen(
     onGoToByeBooUniverseClick: () -> Unit,
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
+    onAlarmToggleClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isChecked by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -329,10 +354,8 @@ private fun MyPageScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MyPageNotification(
-                isEnabledAlarm = isChecked,
-                onCheckedClick = {
-                    isChecked = !isChecked
-                }
+                isEnabledAlarm = uiState.isAlarmEnabled,
+                onCheckedClick = { onAlarmToggleClick() }
             )
 
             Spacer(modifier = Modifier.height(48.dp))

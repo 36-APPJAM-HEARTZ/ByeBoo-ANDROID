@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
 import com.byeboo.app.domain.usecase.WithdrawUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val fcmTokenRepository: FcmTokenRepository,
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
     private val mixpanelUtil: MixpanelUtil
@@ -36,6 +38,14 @@ class MyPageViewModel @Inject constructor(
             userRepository.getNickname().collect { nickname ->
                 _uiState.update { it.copy(nickname = nickname) }
             }
+            loadAlarmStatus()
+        }
+    }
+
+    fun loadAlarmStatus() {
+        viewModelScope.launch {
+            val isAlarmEnabled = fcmTokenRepository.isAlarmEnabled()
+            _uiState.update { it.copy(isAlarmEnabled = isAlarmEnabled) }
         }
     }
 
@@ -57,6 +67,21 @@ class MyPageViewModel @Inject constructor(
             mixpanelUtil.trackEvent("tutorial_button_click")
             mixpanelUtil.trackEvent("tutorial_pageview")
             _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
+        }
+    }
+
+    fun onAlarmToggledClicked() {
+        viewModelScope.launch {
+            fcmTokenRepository.allowQuestAlarm()
+                .onSuccess { notificationSetting ->
+                    _uiState.update {
+                        it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
+                    }
+                    fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
+                }
+                .onFailure {
+                    MyPageSideEffect.ShowSnackBar("다시 시도해 주세요.")
+                }
         }
     }
 
