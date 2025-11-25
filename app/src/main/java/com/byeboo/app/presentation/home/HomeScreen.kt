@@ -310,7 +310,12 @@ private fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f)
-                            .clickable(onClick = onLottieClick)
+                            .clickable(onClick = {
+                                if (uiState.isBubbleEnabled) {
+                                    onLottieClick()
+                                }
+                            }
+                            )
                     )
                 }
             }

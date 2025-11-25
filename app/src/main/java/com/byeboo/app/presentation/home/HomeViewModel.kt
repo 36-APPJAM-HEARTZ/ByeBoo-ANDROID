@@ -9,7 +9,6 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -147,13 +147,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onLottieClicked(){
+    fun onLottieClicked() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isBubbleClicked = true) }
+            _uiState.update {
+                it.copy(
+                    isBubbleClicked = true,
+                    isBubbleEnabled = false
+                )
+            }
 
             delay(3000)
 
-            _uiState.update { it.copy(isBubbleClicked = false) }
+            _uiState.update {
+                it.copy(
+                    isBubbleClicked = false,
+                    isBubbleEnabled = true
+                )
+            }
         }
     }
 }
