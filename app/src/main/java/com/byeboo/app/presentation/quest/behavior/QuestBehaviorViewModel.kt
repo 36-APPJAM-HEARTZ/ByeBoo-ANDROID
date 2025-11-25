@@ -39,7 +39,7 @@ class QuestBehaviorViewModel @Inject constructor(
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
-    private val isEditModeArg: Boolean = checkNotNull(savedStateHandle["isEditMode"])
+    private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
     private val imageKeyArg: String? = savedStateHandle["imageKey"]
 
     private val _uiState = MutableStateFlow(
