@@ -5,9 +5,9 @@ import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.notification.NotificationRequestDto
 import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface NotificationService {
     @POST("/api/v1/notification-tokens")
@@ -20,7 +20,7 @@ interface NotificationService {
         @Body request: NotificationRequestDto
     ): NullableBaseResponse<Unit>
 
-    @DELETE("/api/v1/notification-tokens")
+    @PUT("/api/v1/notification-tokens")
     suspend fun deleteFcmToken(
         @Body request: NotificationRequestDto
     ): NullableBaseResponse<Unit>
