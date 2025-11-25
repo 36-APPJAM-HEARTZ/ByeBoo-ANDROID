@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.quest.behavior
 
-import android.app.Activity
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -45,6 +44,7 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.findActivity
 import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -63,7 +63,7 @@ fun QuestBehaviorCompleteRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
     val context = LocalContext.current
-    val activity = context as? Activity
+    val activity = context.findActivity()
 
     val imageUri = when {
         uiState.selectedImageUri != null -> uiState.selectedImageUri

@@ -15,6 +15,7 @@ fun inAppReview(
         if (task.isSuccessful) {
             val reviewInfo = task.result
             manager.launchReviewFlow(activity, reviewInfo).addOnCompleteListener {
+
             }
         } else {
             @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
