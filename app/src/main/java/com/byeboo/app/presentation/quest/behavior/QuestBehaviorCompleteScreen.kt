@@ -77,7 +77,6 @@ fun QuestBehaviorCompleteRoute(
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
-                    navigateToQuest()
                     activity?.let { activity ->
                         inAppReview(activity)
                     }

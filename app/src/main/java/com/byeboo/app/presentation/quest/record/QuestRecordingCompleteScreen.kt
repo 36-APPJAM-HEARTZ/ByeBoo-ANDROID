@@ -62,7 +62,6 @@ fun QuestRecordingCompleteRoute(
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is QuestRecordingCompleteSideEffect.ShowInAppReview -> {
-                    navigateToQuest()
                     activity?.let { activity ->
                         inAppReview(activity)
                     }
