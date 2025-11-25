@@ -19,4 +19,6 @@ interface UserRepository {
     suspend fun updateUserNickname(nickname: String): Result<Unit>
     suspend fun isUserRegistered(): Boolean
     suspend fun setUserRegistered(isRegistered: Boolean)
+    fun getLoggedIn(): Flow<Boolean>
+    suspend fun setLoggedIn(isLoggedIn: Boolean)
 }
