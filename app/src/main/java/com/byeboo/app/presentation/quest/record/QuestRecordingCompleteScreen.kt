@@ -53,8 +53,8 @@ fun QuestRecordingCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
-    val cotext = LocalContext.current
-    val activity = cotext.findActivity()
+    val context = LocalContext.current
+    val activity = context.findActivity()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
