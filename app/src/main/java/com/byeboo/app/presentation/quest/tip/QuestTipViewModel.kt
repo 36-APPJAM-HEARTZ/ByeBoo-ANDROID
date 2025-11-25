@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class QuestTipViewModel @Inject constructor(
     val uiState: StateFlow<QuestTipState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestTipSideEffect>()
-    val sideEffect: SharedFlow<QuestTipSideEffect> = _sideEffect
+    val sideEffect: SharedFlow<QuestTipSideEffect> = _sideEffect.asSharedFlow()
 
     fun onCloseClicked() {
         viewModelScope.launch {
@@ -42,9 +43,9 @@ class QuestTipViewModel @Inject constructor(
                         questNumber = tip.questNumber,
                         question = tip.question,
                         tipAnswer = QuestTipAnswers(
-                            reason = tip.tips.getOrNull(0)?.tipAnswer ?: "",
-                            suggestion = tip.tips.getOrNull(1)?.tipAnswer ?: "",
-                            change = tip.tips.getOrNull(2)?.tipAnswer ?: ""
+                            reason = tip.tips.getOrNull(0)?.tipAnswer.orEmpty(),
+                            suggestion = tip.tips.getOrNull(1)?.tipAnswer.orEmpty(),
+                            change = tip.tips.getOrNull(2)?.tipAnswer.orEmpty()
 
                         )
                     )

@@ -6,16 +6,16 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestWritingState
 
 data class QuestBehaviorState(
-    val stepNumber: Long = 1,
-    val stepMissionTitle: String? = null,
-    val questId: Long = 1,
-    val questNumber: Long = 1,
+    val stepNumber: Long = 0,
+    val step: String = "",
+    val questId: Long = 0,
+    val questNumber: Long = 0,
     val question: String = "",
     val imageCount: Int = 0,
     val createdAt: String = java.time.LocalDate.now().toString(),
-    val contents: String = "",
-    val answer: String = "",
+    val questAnswer: String = "",
     val imageUrl: String = "",
+    val imageKey: String? = "",
     val questEmotionState: String = "",
     val emotionDescription: String = "",
     val isContentAvailable: Boolean = false,
@@ -24,14 +24,16 @@ data class QuestBehaviorState(
     val showBottomSheet: Boolean = false,
     val selectedImageUri: Uri? = null,
     val showQuitModal: Boolean = false,
-    val isUploading: Boolean = false
+    val isUploading: Boolean = false,
+    val isEditMode: Boolean = false
 )
 
 sealed interface QuestBehaviorSideEffect {
     data object NavigateToQuest : QuestBehaviorSideEffect
     data class NavigateToQuestTip(val questId: Long, val questType: QuestType) : QuestBehaviorSideEffect
     data class NavigateToQuestBehaviorComplete(val questId: Long) : QuestBehaviorSideEffect
+    data class NavigateToQuestReview(val questId: Long) : QuestBehaviorSideEffect
     data class CompleteAndClear(val questId: Long) : QuestBehaviorSideEffect
-    data object NavigateToOffboardingCompletedGuide : QuestBehaviorSideEffect
+    data object NavigateUp: QuestBehaviorSideEffect
     data class ShowSnackBar(val message: String) : QuestBehaviorSideEffect
 }

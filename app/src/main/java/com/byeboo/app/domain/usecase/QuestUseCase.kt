@@ -11,7 +11,7 @@ class QuestUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): QuestData {
         val result = questInProgressRepository.getInProgressQuest().getOrThrow()
-        val journey = questStateRepository.getUserJourney() ?: ""
+        val journey = questStateRepository.getUserJourney().orEmpty()
         val questCompletedCount = questStateRepository.getQuestCount().getOrNull()?.count ?: 0L
         return QuestData(
             inProgressQuest = result,

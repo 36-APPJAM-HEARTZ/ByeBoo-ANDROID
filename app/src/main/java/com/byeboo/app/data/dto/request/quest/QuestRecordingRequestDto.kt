@@ -10,3 +10,9 @@ data class QuestRecordingRequestDto(
     @SerialName("questEmotionState")
     val questEmotionState: String
 )
+
+@Serializable
+data class QuestRecordingEditRequestDto(
+    @SerialName("answer")
+    val answer: String,
+)
