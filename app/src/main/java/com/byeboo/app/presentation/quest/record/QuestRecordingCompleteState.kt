@@ -11,7 +11,6 @@ data class QuestRecordingCompleteState(
     val createdAt: String = java.time.LocalDate.now().toString(),
     val question: String = "",
     val answer: String = "",
-    val questEmotionState: String = "",
     val emotionDescription: String = "",
     val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL
 )

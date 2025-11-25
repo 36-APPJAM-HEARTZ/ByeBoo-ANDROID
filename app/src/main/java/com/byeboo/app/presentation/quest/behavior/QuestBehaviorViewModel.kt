@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest.behavior
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.LargeTagType
@@ -9,13 +10,13 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.data.mapper.quest.toData
+import com.byeboo.app.domain.model.quest.QuestBehaviorEditModel
 import com.byeboo.app.domain.model.quest.QuestWritingState
+import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.domain.usecase.UploadImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.UUID
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,37 +25,52 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestBehaviorViewModel @Inject constructor(
     private val questDetailBehaviorRepository: QuestDetailBehaviorRepository,
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     private val uploadImageUseCase: UploadImageUseCase,
+    private val questBehaviorRepository: QuestBehaviorRepository,
+    savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
+    private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
+    private val isEditModeArg: Boolean = checkNotNull(savedStateHandle["isEditMode"])
+    private val imageKeyArg: String? = savedStateHandle["imageKey"]
 
-    private val _uiState = MutableStateFlow(QuestBehaviorState())
+    private val _uiState = MutableStateFlow(
+        QuestBehaviorState(
+            questId = questIdArg,
+            isEditMode = isEditModeArg,
+            imageKey = imageKeyArg ?: ""
+        )
+    )
     val uiState: StateFlow<QuestBehaviorState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestBehaviorSideEffect>()
     val sideEffect: SharedFlow<QuestBehaviorSideEffect> = _sideEffect
 
-    fun setQuestId(questId: Long) {
-        _uiState.update {
-            it.copy(questId = questId)
+    init {
+        loadQuestInfo()
+
+        if (isEditModeArg) {
+            loadQuestRecordedDetail()
         }
     }
 
-    fun getQuestDetailInfo(questId: Long) {
+    private fun loadQuestInfo() {
         viewModelScope.launch {
-            val result = questDetailBehaviorRepository.getQuestBehaviorDetail(questId)
+            val result = questDetailBehaviorRepository.getQuestBehaviorDetail(questIdArg)
             result.onSuccess { detail ->
                 _uiState.update {
                     it.copy(
-                        stepMissionTitle = detail.step,
+                        step = detail.step,
                         stepNumber = detail.stepNumber,
                         questNumber = detail.questNumber,
-                        question = detail.question
+                        question = detail.question,
                     )
                 }
             }.onFailure {
@@ -65,20 +81,15 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    fun getQuestRecordedDetail(questId: Long) {
+    private fun loadQuestRecordedDetail() {
         viewModelScope.launch {
-            val result = questRecordedDetailRepository.getQuestRecordedDetail(questId)
+            val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
             result.onSuccess { detail ->
                 _uiState.update {
                     it.copy(
-                        stepNumber = detail.stepNumber,
-                        questNumber = detail.questNumber,
-                        createdAt = detail.createdAt,
-                        question = detail.question,
-                        answer = detail.answer,
-                        imageUrl = detail.imageUrl.toString(),
-                        selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
-                        emotionDescription = detail.emotionDescription
+                        questAnswer = detail.questAnswer,
+                        imageUrl = detail.imageUrl ?: "",
+                        imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0
                     )
                 }
             }.onFailure {
@@ -93,10 +104,12 @@ class QuestBehaviorViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isUploading = true) }
 
-            val imageUrl = _uiState.value.selectedImageUri ?: return@launch
-            val questId = _uiState.value.questId
-            val answer = _uiState.value.contents
-            val emotion = _uiState.value.selectedEmotion?.toData().orEmpty()
+            val state = _uiState.value
+            val imageUrl = state.selectedImageUri ?: return@launch
+            val questId = state.questId
+            val answer = state.questAnswer
+            val emotion = state.selectedEmotion?.toData().orEmpty()
+            val isEditMode = state.isEditMode
 
             runCatching {
                 val inputStream = context.contentResolver.openInputStream(imageUrl)
@@ -110,22 +123,40 @@ class QuestBehaviorViewModel @Inject constructor(
                     imageKey = imageKey,
                     questId = questId,
                     answer = answer,
-                    emotion = emotion
+                    emotion = emotion,
+                    isEditMode = isEditMode
                 ).getOrThrow()
             }.onSuccess {
-                mixpanelUtil.trackEvent(
-                    eventName = "quest_success",
-                    properties = mapOf(
-                        "quest_end_at" to getFormattedDate(),
-                        "quest_number" to questId,
-                        "quest_type" to "행동형",
-                        "after_emotion_type" to emotion
+                if (isEditMode) {
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_edit",
+                        properties = mapOf(
+                            "quest_end_at" to getFormattedDate(),
+                            "quest_number" to questId,
+                            "quest_type" to "행동형",
+                        )
                     )
+                } else {
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_success",
+                        properties = mapOf(
+                            "quest_end_at" to getFormattedDate(),
+                            "quest_number" to questId,
+                            "quest_type" to "행동형",
+                            "after_emotion_type" to emotion
+                        )
+                    )
+                }
+                _sideEffect.emit(
+                    if (isEditMode) {
+                        QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                    } else {
+                        QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId)
+                    }
                 )
-                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
                 _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
                 closeBottomSheet()
-            }.onFailure {
+            }.onFailure { e ->
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                 )
@@ -153,7 +184,7 @@ class QuestBehaviorViewModel @Inject constructor(
 
         _uiState.update {
             it.copy(
-                contents = text,
+                questAnswer = text,
                 contentState = contentState
             )
         }
@@ -164,13 +195,22 @@ class QuestBehaviorViewModel @Inject constructor(
             it.copy(
                 selectedImageUri = null,
                 imageCount = 0,
-                contents = ""
+                questAnswer = ""
             )
         }
     }
 
     fun onBackClicked() {
-        _uiState.update { it.copy(showQuitModal = true) }
+        if (uiState.value.isEditMode) {
+            _uiState.update { it.copy(isEditMode = false) }
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestBehaviorSideEffect.NavigateUp
+                )
+            }
+        } else {
+            _uiState.update { it.copy(showQuitModal = true) }
+        }
     }
 
     fun onDismissModal() {
@@ -199,9 +239,55 @@ class QuestBehaviorViewModel @Inject constructor(
         }
     }
 
-    fun openBottomSheet() {
+    fun onClickCompleteButton(context: Context) {
+        if (uiState.value.isEditMode) {
+            if (uiState.value.selectedImageUri == null){
+                uploadWithoutImageChange()
+            } else {
+                uploadImage(context)
+            }
+        } else {
+            openBottomSheet()
+        }
+    }
+
+    private fun uploadWithoutImageChange(){
+        viewModelScope.launch {
+            val state = uiState.value
+            val questId = state.questId
+            val imageKey = requireNotNull(state.imageKey){
+                "It must have imageKey"
+            }
+            val result = questBehaviorRepository.updateQuestBehavior(
+                questId = questId,
+                request = QuestBehaviorEditModel(
+                    answer = state.questAnswer,
+                    imageKey = imageKey
+                )
+            )
+
+            result.onSuccess {
+                mixpanelUtil.trackEvent(
+                    eventName = "quest_edit",
+                    properties = mapOf(
+                        "quest_end_at" to getFormattedDate(),
+                        "quest_number" to questId,
+                        "quest_type" to "행동형",
+                    )
+                )
+
+                _sideEffect.emit(
+                    QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                )
+            }.onFailure {
+                QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+            }
+        }
+    }
+
+    private fun openBottomSheet() {
         val questNumber = uiState.value.questNumber
-        val answer = uiState.value.contents
+        val answer = uiState.value.questAnswer
         mixpanelUtil.trackEvent(
             eventName = "quest_write_success",
             properties = mapOf(
@@ -219,25 +305,6 @@ class QuestBehaviorViewModel @Inject constructor(
 
     fun updateSelectedEmotion(emotion: LargeTagType?) {
         _uiState.update { it.copy(selectedEmotion = emotion) }
-    }
-
-    fun onCloseClicked() {
-        if (uiState.value.questNumber == 30L) {
-            viewModelScope.launch {
-                mixpanelUtil.trackEvent(
-                    eventName = "journey_complete_pageview",
-                    properties = mapOf(
-                        "journey_end_at" to getFormattedDate(),
-                        "journey_type" to "감정 정리"
-                    )
-                )
-                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToOffboardingCompletedGuide)
-            }
-        } else {
-            viewModelScope.launch {
-                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
-            }
-        }
     }
 
     companion object {

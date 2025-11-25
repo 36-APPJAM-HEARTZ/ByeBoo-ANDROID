@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.review
 
 import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
 
 data class QuestReviewState(
@@ -10,13 +11,17 @@ data class QuestReviewState(
     val createdAt: String = LocalDate.now().toString(),
     val question: String = "",
     val answer: String = "",
+    val imageKey: String? = null,
     val imageUrl: String? = null,
     val questEmotionState: String = "",
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL
+    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
+    val questType: QuestType = QuestType.RECORDING,
 )
 
 sealed interface QuestReviewSideEffect {
     data object NavigateToQuest : QuestReviewSideEffect
+    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
+    data class NavigateToQuestBehaviorEdit(val questId: Long, val isEditMode: Boolean, val imageKey: String) : QuestReviewSideEffect
     data class ShowSnackBar(val message: String) : QuestReviewSideEffect
 }

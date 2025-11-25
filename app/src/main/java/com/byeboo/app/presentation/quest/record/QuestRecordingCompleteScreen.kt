@@ -45,7 +45,6 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
 fun QuestRecordingCompleteRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     bottomPadding: Dp,
@@ -56,11 +55,6 @@ fun QuestRecordingCompleteRoute(
     val showSnackBar = LocalSnackBarTrigger.current
     val context = LocalContext.current
     val activity = context as? Activity
-
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestRecordedDetail(questId)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -104,14 +98,17 @@ private fun QuestRecordingCompleteScreen(
     ) {
         Spacer(modifier = Modifier.height(67.dp))
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = "back button",
-            tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { onCloseClick() }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
+                contentDescription = null,
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onCloseClick)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

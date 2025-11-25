@@ -49,14 +49,14 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesQuestBehaviorService(retrofit: Retrofit): QuestBehaviorService = retrofit.create(
-        QuestBehaviorService::class.java
+    fun providesQuestTipService(retrofit: Retrofit): QuestTipService = retrofit.create(
+        QuestTipService::class.java
     )
 
     @Provides
     @Singleton
-    fun providesQuestTipService(retrofit: Retrofit): QuestTipService = retrofit.create(
-        QuestTipService::class.java
+    fun providesQuestBehaviorService(retrofit: Retrofit): QuestBehaviorService = retrofit.create(
+        QuestBehaviorService::class.java
     )
 
     @Provides

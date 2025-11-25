@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
@@ -64,21 +65,17 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestBehaviorWritingRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
+    navigateToQuestReview: (Long) -> Unit,
+    navigateUp: () -> Unit,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
-
-    LaunchedEffect(questId) {
-        viewModel.setQuestId(questId)
-        viewModel.getQuestDetailInfo(questId)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -88,14 +85,11 @@ fun QuestBehaviorWritingRoute(
                     effect.questId,
                     effect.questType
                 )
-
-                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(
-                    effect.questId
-                )
-
+                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(effect.questId)
                 is QuestBehaviorSideEffect.CompleteAndClear -> viewModel.clearQuestInput()
+                is QuestBehaviorSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestBehaviorSideEffect.NavigateUp -> navigateUp()
                 is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
-                else -> Unit
             }
         }
     }
@@ -125,7 +119,7 @@ fun QuestBehaviorWritingRoute(
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
         navigateButton = viewModel::uploadImage,
-        onClickCompleteButton = viewModel::openBottomSheet,
+        onClickCompleteButton = viewModel::onClickCompleteButton,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
         modifier = modifier
@@ -140,7 +134,7 @@ private fun QuestBehaviorWritingScreen(
     onBackClick: () -> Unit,
     onTipClick: () -> Unit,
     onUpdateSelectedImage: (Uri?) -> Unit,
-    onClickCompleteButton: () -> Unit,
+    onClickCompleteButton: (Context) -> Unit,
     onUpdateContent: (String) -> Unit,
     navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
@@ -148,11 +142,11 @@ private fun QuestBehaviorWritingScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-
     val focusManager = LocalFocusManager.current
-
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
+    val displayImageUri: Uri? = uiState.selectedImageUri
+        ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
 
     LaunchedEffect(isFocused.value) {
         if (isFocused.value) {
@@ -188,7 +182,7 @@ private fun QuestBehaviorWritingScreen(
                     bottom = screenHeightDp(16.dp)
                 )
                 .align(Alignment.Start)
-                .clickable { onBackClick() }
+                .clickable(onClick = onBackClick)
         )
 
         LazyColumn(
@@ -208,7 +202,7 @@ private fun QuestBehaviorWritingScreen(
                     Spacer(modifier = modifier.width(screenWidthDp(12.dp)))
 
                     Text(
-                        text = "${uiState.stepMissionTitle}",
+                        text = uiState.step,
                         color = ByeBooTheme.colors.gray500,
                         style = ByeBooTheme.typography.body2
                     )
@@ -287,7 +281,7 @@ private fun QuestBehaviorWritingScreen(
 
             item {
                 QuestPhotoPicker(
-                    imageUrl = uiState.selectedImageUri,
+                    imageUrl = displayImageUri,
                     onImageClick = { url ->
                         onUpdateSelectedImage(url)
                     }
@@ -320,7 +314,7 @@ private fun QuestBehaviorWritingScreen(
                 Column {
                     QuestTextField(
                         questWritingState = uiState.contentState,
-                        value = uiState.contents,
+                        value = uiState.questAnswer,
                         onValueChange = {
                             if (it.length <= 200) {
                                 onUpdateContent(it)
@@ -346,7 +340,7 @@ private fun QuestBehaviorWritingScreen(
                     buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = {
-                        onClickCompleteButton()
+                        onClickCompleteButton(context)
                         onUpdateSelectedImage(uiState.selectedImageUri)
                     },
                     isEnabled = QuestValidator.validButton(uiState.imageCount)

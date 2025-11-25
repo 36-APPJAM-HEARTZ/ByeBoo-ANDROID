@@ -2,12 +2,14 @@ package com.byeboo.app.data.service.quest
 
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
-import com.byeboo.app.data.dto.request.quest.QuestBehaviorAnswerRequestDto
+import com.byeboo.app.data.dto.request.quest.QuestBehaviorEditRequestDto
+import com.byeboo.app.data.dto.request.quest.QuestBehaviorRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestSignedUrlRequestDto
 import com.byeboo.app.data.dto.response.quest.QuestSingedUrlResponseDto
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -29,6 +31,12 @@ interface QuestBehaviorService {
     @POST("/api/v1/quests/{questId}/active")
     suspend fun uploadQuestAnswer(
         @Path("questId") questId: Long,
-        @Body request: QuestBehaviorAnswerRequestDto
+        @Body request: QuestBehaviorRequestDto
+    ): NullableBaseResponse<Unit>
+
+    @PATCH("/api/v1/quests/{questId}/active")
+    suspend fun patchQuestBehavior(
+        @Path("questId") questId: Long,
+        @Body request: QuestBehaviorEditRequestDto
     ): NullableBaseResponse<Unit>
 }

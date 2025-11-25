@@ -5,7 +5,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.byeboo.app.presentation.auth.navigation.authGraph
@@ -13,7 +12,6 @@ import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
 import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
-import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
 import com.byeboo.app.presentation.tutorial.navigation.tutorialGraph
@@ -37,7 +35,6 @@ fun MainNavHost(
         launchSingleTop = true
         restoreState = true
     }
-    val questBehaviorViewModel: QuestBehaviorViewModel = hiltViewModel()
     val keepStackNavOptions = navOptions {
         launchSingleTop = true
         restoreState = true
@@ -107,6 +104,21 @@ fun MainNavHost(
                     clearStackNavOptions
                 )
             },
+            navigateToQuestRecordingEdit = { questId, isEditMode ->
+                navigator.navigateToQuestRecording(
+                    questId = questId,
+                    isEditMode = isEditMode,
+                    navOptions = keepStackNavOptions
+                )
+            },
+            navigateToQuestBehaviorEdit = { questId, isEditMode, imageKey ->
+                navigator.navigateToQuestBehavior(
+                    questId = questId,
+                    isEditMode = isEditMode,
+                    imageKey = imageKey,
+                    navOptions = keepStackNavOptions
+                )
+            },
             navigateToQuestTip = { questId, questType ->
                 navigator.navigateToQuestTip(
                     questId,
@@ -120,7 +132,6 @@ fun MainNavHost(
                 )
             },
             navigateUp = navigator::navigateUp,
-            viewModel = questBehaviorViewModel,
             padding = padding
         )
 
