@@ -45,7 +45,7 @@ class QuestBehaviorViewModel @Inject constructor(
         QuestBehaviorState(
             questId = questIdArg,
             isEditMode = isEditModeArg,
-            imageKey = imageKeyArg ?: ""
+            imageKey = imageKeyArg.orEmpty()
         )
     )
     val uiState: StateFlow<QuestBehaviorState> = _uiState.asStateFlow()
@@ -88,7 +88,7 @@ class QuestBehaviorViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         questAnswer = detail.questAnswer,
-                        imageUrl = detail.imageUrl ?: "",
+                        imageUrl = detail.imageUrl.orEmpty(),
                         imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0
                     )
                 }

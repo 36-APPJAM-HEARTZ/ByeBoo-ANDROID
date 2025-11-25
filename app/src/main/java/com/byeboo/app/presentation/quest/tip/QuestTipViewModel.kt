@@ -42,9 +42,9 @@ class QuestTipViewModel @Inject constructor(
                         questNumber = tip.questNumber,
                         question = tip.question,
                         tipAnswer = QuestTipAnswers(
-                            reason = tip.tips.getOrNull(0)?.tipAnswer ?: "",
-                            suggestion = tip.tips.getOrNull(1)?.tipAnswer ?: "",
-                            change = tip.tips.getOrNull(2)?.tipAnswer ?: ""
+                            reason = tip.tips.getOrNull(0)?.tipAnswer.orEmpty(),
+                            suggestion = tip.tips.getOrNull(1)?.tipAnswer.orEmpty(),
+                            change = tip.tips.getOrNull(2)?.tipAnswer.orEmpty()
 
                         )
                     )

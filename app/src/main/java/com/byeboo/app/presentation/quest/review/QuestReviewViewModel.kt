@@ -72,8 +72,8 @@ class QuestReviewViewModel @Inject constructor(
                         createdAt = detail.createdAt,
                         question = detail.question,
                         answer = detail.questAnswer,
-                        imageKey = detail.imageKey ?: "",
-                        imageUrl = detail.imageUrl ?: "",
+                        imageKey = detail.imageKey.orEmpty(),
+                        imageUrl = detail.imageUrl.orEmpty(),
                         selectedEmotion = LargeTagType.Companion.fromKorean(detail.questEmotionState),
                         emotionDescription = detail.emotionDescription,
                         questType = if (detail.imageUrl == null) QuestType.RECORDING else QuestType.ACTIVE
