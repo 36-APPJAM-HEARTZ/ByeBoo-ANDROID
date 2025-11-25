@@ -19,5 +19,6 @@ data class QuestBehaviorCompleteState(
 sealed interface QuestBehaviorCompleteSideEffect{
     data object NavigateToQuest : QuestBehaviorCompleteSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestBehaviorCompleteSideEffect
+    data object ShowInAppReview : QuestBehaviorCompleteSideEffect
     data class ShowSnackBar(val message: String) : QuestBehaviorCompleteSideEffect
 }

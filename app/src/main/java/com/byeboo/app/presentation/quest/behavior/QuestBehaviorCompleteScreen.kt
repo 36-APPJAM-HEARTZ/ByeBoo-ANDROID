@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.behavior
 
+import android.app.Activity
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -44,6 +45,7 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
@@ -60,6 +62,8 @@ fun QuestBehaviorCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
+    val context = LocalContext.current
+    val activity = context as? Activity
 
     val imageUri = when {
         uiState.selectedImageUri != null -> uiState.selectedImageUri
@@ -72,6 +76,12 @@ fun QuestBehaviorCompleteRoute(
             when (effect) {
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
+                    navigateToQuest()
+                    activity?.let { activity ->
+                        inAppReview(activity)
+                    }
+                }
                 is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
