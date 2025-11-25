@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
     val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
-    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect
+    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         loadQuestRecordedDetail()

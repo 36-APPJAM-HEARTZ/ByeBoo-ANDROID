@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class QuestReviewViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<QuestReviewSideEffect>()
     val sideEffect: SharedFlow<QuestReviewSideEffect>
-        get() = _sideEffect
+        get() = _sideEffect.asSharedFlow()
 
     init {
         loadQuestRecordedDetail()
