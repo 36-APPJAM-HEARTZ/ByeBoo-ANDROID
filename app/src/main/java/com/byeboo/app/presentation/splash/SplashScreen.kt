@@ -1,5 +1,9 @@
 package com.byeboo.app.presentation.splash
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -58,6 +62,13 @@ fun SplashRoute(
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onPermissionResult(isGranted)
+        }
+    )
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
@@ -80,6 +91,14 @@ fun SplashRoute(
                         context = context,
                         callback = viewModel::updateLoginResult
                     )
+                }
+
+                is SplashStateSideEffect.RequestNotificationPermission -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    } else {
+                        viewModel.onPermissionResult(true)
+                    }
                 }
 
                 is SplashStateSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)

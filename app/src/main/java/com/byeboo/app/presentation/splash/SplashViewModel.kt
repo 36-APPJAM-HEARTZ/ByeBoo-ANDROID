@@ -112,7 +112,7 @@ class SplashViewModel @Inject constructor(
                             userRepository.setLoggedIn(true)
 
                             if (auth.isRegistered) {
-                                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+                                _sideEffect.emit(SplashStateSideEffect.RequestNotificationPermission)
                             } else {
                                 _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
                             }
@@ -161,6 +161,16 @@ class SplashViewModel @Inject constructor(
 
                 }
             }
+        }
+    }
+
+    fun onPermissionResult(isGranted: Boolean) {
+        viewModelScope.launch {
+            if (isGranted) {
+                fcmTokenRepository.saveAlarmEnabled(true)
+                fcmTokenRepository.allowQuestAlarm()
+            }
+            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
         }
     }
 

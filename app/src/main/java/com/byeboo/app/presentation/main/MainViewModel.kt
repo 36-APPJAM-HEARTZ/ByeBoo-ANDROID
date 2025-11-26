@@ -30,9 +30,6 @@ class MainViewModel @Inject constructor(
     private val _notificationQuestId = MutableStateFlow<String?>(null)
     val notificationQuestId: StateFlow<String?> = _notificationQuestId.asStateFlow()
 
-    val isLoginCompleted: StateFlow<Boolean> = userRepository.getLoggedIn()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-
     fun trackJourneyStart() {
         viewModelScope.launch {
             val journey = questStateRepository.getUserJourney() ?: "추적 실패"
@@ -59,14 +56,5 @@ class MainViewModel @Inject constructor(
 
     fun clearNotificationQuestId() {
         _notificationQuestId.value = null
-    }
-
-    fun hasNotificationPermission() {
-        viewModelScope.launch {
-            if (isLoginCompleted.value) {
-                fcmTokenRepository.saveAlarmEnabled(true)
-                fcmTokenRepository.allowQuestAlarm()
-            }
-        }
     }
 }
