@@ -31,7 +31,6 @@ import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.chip.QuestBox
@@ -39,7 +38,6 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 
 @Composable
 fun OffboardingQuestCompletedRoute(
-    journey: QuestType,
     navigateUp: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     bottomPadding: Dp,
@@ -48,10 +46,6 @@ fun OffboardingQuestCompletedRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
-
-    LaunchedEffect(journey) {
-        viewModel.setJourney(journey)
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -110,7 +104,7 @@ private fun OffboardingQuestCompletedScreen(
 
         DescriptionText(
             nicknameText = "${uiState.userName}님의",
-            title = "${uiState.journeyType.journeyName} 여정",
+            title = "${uiState.questType.journeyName} 여정",
             guideText = "이에요",
             contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
             bottom = 18.dp

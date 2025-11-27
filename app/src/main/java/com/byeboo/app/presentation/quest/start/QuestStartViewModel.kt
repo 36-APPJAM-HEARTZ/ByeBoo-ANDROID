@@ -1,7 +1,9 @@
 package com.byeboo.app.presentation.quest.start
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
@@ -9,8 +11,8 @@ import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.NewJourneyRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
+import com.byeboo.app.presentation.quest.navigation.QuestStart
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,14 +21,18 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestStartViewModel @Inject constructor(
     private val questStateRepository: QuestStateRepository,
     private val userRepository: UserRepository,
     private val newJourneyRepository: NewJourneyRepository,
+    savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
+    private val questTypeArg = savedStateHandle.toRoute<QuestStart>().questType
+
     private val _uiState = MutableStateFlow(QuestStartState())
     val uiState: StateFlow<QuestStartState> = _uiState.asStateFlow()
 
@@ -47,10 +53,14 @@ class QuestStartViewModel @Inject constructor(
             val journey = questStateRepository.getUserJourney() ?: "감정 직면"
             _uiState.update { it.copy(journeyName = journey) }
         }
+        _uiState.update {
+            it.copy(questType = questTypeArg ?: QuestType.RECORDING)
+        }
     }
 
-    fun onStartClicked(journey: QuestType?) {
-        if (journey == null) {
+    fun onStartClicked() {
+        val journey = uiState.value.questType
+        if (uiState.value.questType == null) {
             viewModelScope.launch {
                 val result = questStateRepository.updateQuestStartState()
                 val journeyType = questStateRepository.getUserJourney() ?: "추적 실패"

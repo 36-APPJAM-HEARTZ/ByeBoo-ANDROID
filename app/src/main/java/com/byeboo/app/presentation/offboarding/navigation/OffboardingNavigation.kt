@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.offboarding.offboardingcompletedguide.OffboardingCompletedGuideRoute
@@ -27,10 +26,10 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 }
 
 fun NavController.navigateToOffboardingQuestCompleted(
-    journey: QuestType,
+    questType: QuestType,
     navOptions: NavOptions? = null
 ) {
-    navigate(OffboardingQuestCompleted(journey), navOptions)
+    navigate(OffboardingQuestCompleted(questType), navOptions)
 }
 
 fun NavGraphBuilder.offboardingGraph(
@@ -68,12 +67,8 @@ fun NavGraphBuilder.offboardingGraph(
         )
     }
 
-    composable<OffboardingQuestCompleted> { backStackEntry ->
-        val offboardingQuestCompleted = backStackEntry.toRoute<OffboardingQuestCompleted>()
-        val journey = offboardingQuestCompleted.journey
-
+    composable<OffboardingQuestCompleted> {
         OffboardingQuestCompletedRoute(
-            journey = journey,
             navigateUp = navigateUp,
             navigateToQuestReview = navigateToQuestReview,
             bottomPadding = padding
@@ -91,4 +86,4 @@ data object OffboardingNewJourney : Route
 data object OffboardingCompletedJourney : Route
 
 @Serializable
-data class OffboardingQuestCompleted(val journey: QuestType) : Route
+data class OffboardingQuestCompleted(val questType: QuestType) : Route

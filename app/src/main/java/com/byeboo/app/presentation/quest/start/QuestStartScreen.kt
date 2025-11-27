@@ -35,7 +35,6 @@ import com.byeboo.app.presentation.quest.component.modal.GuideContent
 
 @Composable
 fun QuestStartRoute(
-    journey: QuestType?,
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
     padding: Dp,
@@ -58,7 +57,7 @@ fun QuestStartRoute(
     QuestStartScreen(
         uiState = uiState,
         onBackClick = viewModel::onBackClicked,
-        onStartClick = { viewModel.onStartClicked(journey) },
+        onStartClick = viewModel::onStartClicked,
         padding = padding,
         modifier = modifier
     )

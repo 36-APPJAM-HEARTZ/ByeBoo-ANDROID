@@ -32,7 +32,6 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -42,9 +41,7 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
 fun QuestTipRoute(
-    questId: Long,
     navigateToQuest: () -> Unit,
-    questType: QuestType,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     viewModel: QuestTipViewModel = hiltViewModel(),
@@ -52,7 +49,10 @@ fun QuestTipRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val questUiState by questViewModel.uiState.collectAsStateWithLifecycle()
+
+    val questId = uiState.questId
     val questGroups = questUiState.questGroups
+
     val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(questId, questGroups) {
@@ -75,7 +75,6 @@ fun QuestTipRoute(
     QuestTipScreen(
         uiState = uiState,
         onCloseClick = viewModel::onCloseClicked,
-        questType = questType,
         bottomPadding = bottomPadding,
         modifier = modifier
     )
@@ -85,7 +84,6 @@ fun QuestTipRoute(
 private fun QuestTipScreen(
     uiState: QuestTipState,
     onCloseClick: () -> Unit,
-    questType: QuestType,
     bottomPadding: Dp,
     modifier: Modifier = Modifier
 ) {
@@ -186,7 +184,7 @@ private fun QuestTipScreen(
             item {
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-                if (questType.questStyle == "RECORDING") {
+                if (uiState.questType.questStyle == "RECORDING") {
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이런 걸 생각해 보며 작성해 주세요.",

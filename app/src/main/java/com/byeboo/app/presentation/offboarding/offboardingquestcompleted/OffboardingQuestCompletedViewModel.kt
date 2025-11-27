@@ -1,13 +1,15 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestcompleted
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
+import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
 import com.byeboo.app.presentation.offboarding.util.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,12 +17,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class OffboardingQuestCompletedViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository
+    private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestCompleted>().questType
+
     private val _uiState = MutableStateFlow(QuestCompletedState())
     val uiState: StateFlow<QuestCompletedState> = _uiState.asStateFlow()
 
@@ -35,11 +41,8 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
                 }
             }
         }
-    }
 
-    fun setJourney(journey: QuestType) {
-        _uiState.update { it.copy(journeyType = journey) }
-        loadQuests(journey)
+        loadQuests(questTypeArg)
     }
 
     private fun loadQuests(journey: QuestType) {

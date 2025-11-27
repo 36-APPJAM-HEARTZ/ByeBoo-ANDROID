@@ -37,6 +37,6 @@ fun QuestCompletedModel.toUiState(
         questGroups = groups,
         progressPeriod = progressPeriod.orEmpty(),
         userName = nickname,
-        journeyType = journey
+        questType = journey
     )
 }

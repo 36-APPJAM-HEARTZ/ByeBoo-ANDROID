@@ -1,12 +1,14 @@
 package com.byeboo.app.presentation.quest.tip
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import com.byeboo.app.presentation.quest.model.Quest
+import com.byeboo.app.presentation.quest.navigation.QuestTip
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,16 +17,30 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class QuestTipViewModel @Inject constructor(
-    private val questTipRepository: QuestTipRepository
+    private val questTipRepository: QuestTipRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val questIdArg = savedStateHandle.toRoute<QuestTip>().questId
+    private val questTypeArg = savedStateHandle.toRoute<QuestTip>().questType
+
     private val _uiState = MutableStateFlow(QuestTipState())
     val uiState: StateFlow<QuestTipState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestTipSideEffect>()
     val sideEffect: SharedFlow<QuestTipSideEffect> = _sideEffect.asSharedFlow()
+
+    init {
+        _uiState.update {
+            it.copy(
+                questId = questIdArg,
+                questType = questTypeArg
+            )
+        }
+    }
 
     fun onCloseClicked() {
         viewModelScope.launch {
@@ -38,7 +54,7 @@ class QuestTipViewModel @Inject constructor(
             result.onSuccess { tip ->
                 _uiState.update {
                     it.copy(
-                        step = QuestType.Companion.fromQuestStyle(tip.step),
+                        questType = QuestType.Companion.fromQuestStyle(tip.step),
                         stepNumber = tip.stepNumber,
                         questNumber = tip.questNumber,
                         question = tip.question,
