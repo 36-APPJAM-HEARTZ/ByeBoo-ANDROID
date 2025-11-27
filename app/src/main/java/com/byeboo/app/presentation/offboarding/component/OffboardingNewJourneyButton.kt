@@ -41,7 +41,7 @@ fun OffboardingNewJourneyButton(
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_reset),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.size(24.dp)
         )
 

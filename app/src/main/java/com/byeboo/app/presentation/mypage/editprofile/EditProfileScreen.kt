@@ -35,6 +35,8 @@ import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.presentation.auth.userinfo.component.NicknameTextField
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
@@ -97,17 +99,17 @@ private fun EditProfileScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = 24.dp)
-            .padding(top = 67.dp, bottom = bottomPadding + 10.dp)
+            .padding(horizontal = screenWidthDp(24.dp))
+            .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp(bottomPadding + 10.dp))
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = screenHeightDp(16.dp))
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-                contentDescription = "",
+                contentDescription = null,
                 tint = ByeBooTheme.colors.gray50,
                 modifier = Modifier
                     .noRippleClickable(onClick = onBackClick)
@@ -122,7 +124,7 @@ private fun EditProfileScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = "닉네임",
@@ -130,7 +132,7 @@ private fun EditProfileScreen(
             color = ByeBooTheme.colors.gray300
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         NicknameTextField(
             value = uiState.nickname,

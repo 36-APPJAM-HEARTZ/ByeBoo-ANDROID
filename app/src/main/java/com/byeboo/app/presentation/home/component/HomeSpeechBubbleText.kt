@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
 import kotlinx.coroutines.delay
 
 @Composable
@@ -51,7 +52,7 @@ fun SpeechBubbleWithText(
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_speech_bubble),
-            contentDescription = "null",
+            contentDescription = null,
             modifier = Modifier.matchParentSize()
         )
         val textToShow = when {
@@ -64,7 +65,7 @@ fun SpeechBubbleWithText(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .padding(bottom = 14.dp),
+                    .padding(bottom = screenHeightDp(14.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

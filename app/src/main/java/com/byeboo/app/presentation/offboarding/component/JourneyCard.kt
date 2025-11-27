@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
@@ -48,13 +49,13 @@ fun JourneyCard(
             .noRippleClickable { onJourneyCardClick(journeyType) }
             .background(color = ByeBooTheme.colors.whiteAlpha10)
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
-            .padding(horizontal = 24.dp, vertical = 18.dp)
+            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
     ) {
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = chipBackgroundColor)
-                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .padding(horizontal = screenWidthDp(12.dp), vertical = screenHeightDp(4.dp))
         ) {
             Text(
                 text = journeyTypeText,

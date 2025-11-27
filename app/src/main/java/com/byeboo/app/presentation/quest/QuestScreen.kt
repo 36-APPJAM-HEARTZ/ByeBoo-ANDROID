@@ -129,7 +129,7 @@ private fun QuestScreen(
                 textStyle = ByeBooTheme.typography.cap1
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
             DescriptionText(
                 nicknameText = "${uiState.userName}님, 지금",
@@ -154,14 +154,17 @@ private fun QuestScreen(
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = ByeBooTheme.colors.whiteAlpha10,
-                            modifier = Modifier.padding(vertical = 8.dp)
+                            modifier = Modifier.padding(vertical = screenHeightDp(8.dp))
                         )
-                        Spacer(modifier = Modifier.padding(top = 24.dp))
+
+                        Spacer(modifier = Modifier.padding(top = screenHeightDp(24.dp)))
+
                         QuestStepTitle(
                             stepNumber = (stepIndex + 1).toLong(),
                             stepTitle = group.stepTitle
                         )
-                        Spacer(modifier = Modifier.padding(top = 8.dp))
+
+                        Spacer(modifier = Modifier.padding(top = screenHeightDp(8.dp)))
                     }
                 }
 
@@ -181,6 +184,7 @@ private fun QuestScreen(
                                     onQuestClick = { onQuestClick(quest.questId) }
                                 )
                             }
+
                             repeat(3 - questChunk.size) {
                                 Spacer(modifier = Modifier.weight(1f))
                             }

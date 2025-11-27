@@ -161,7 +161,7 @@ private fun UserInfoScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp)
+                    .height(screenHeightDp(24.dp))
             ) {
                 if (pagerState.currentPage != 0) {
                     Icon(
@@ -180,7 +180,7 @@ private fun UserInfoScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             StepProgressBar(currentStep = pagerState.currentPage + 1)
 

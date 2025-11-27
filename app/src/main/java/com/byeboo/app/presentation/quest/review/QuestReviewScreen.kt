@@ -99,7 +99,7 @@ private fun QuestReviewScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = bottomPadding)
+            .padding(bottom = screenHeightDp(bottomPadding))
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
 
@@ -169,7 +169,7 @@ private fun QuestReviewScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     Column(
                         modifier = Modifier
@@ -200,7 +200,7 @@ private fun QuestReviewScreen(
                         )
                     }
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
                         ContentText(uiState.answer)
                     }
                 }

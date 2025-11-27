@@ -27,6 +27,7 @@ fun CompleteContent(
         backgroundColor = ByeBooTheme.colors.whiteAlpha10
     ) {
         BackgroundImageLayer(imageResId)
+
         QuestNumberLabel(
             questNumber = questNumber,
             color = ByeBooTheme.colors.whiteAlpha50,
@@ -48,6 +49,7 @@ fun AvailableContent(
         borderColor = ByeBooTheme.colors.primary300
     ) {
         BackgroundImageLayer(imageResId)
+
         QuestNumberLabel(
             questNumber = questNumber,
             color = ByeBooTheme.colors.primary300,

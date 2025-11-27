@@ -112,7 +112,7 @@ private fun QuestBehaviorCompleteScreen(
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(bottomPadding))
     ) {
-        Spacer(modifier = modifier.height(67.dp))
+        Spacer(modifier = modifier.height(screenHeightDp(67.dp)))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -126,19 +126,19 @@ private fun QuestBehaviorCompleteScreen(
             )
         }
 
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
             modifier = modifier.fillMaxWidth()
         ) {
             item {
-                Spacer(modifier = modifier.height(8.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(8.dp)))
 
                 QuestCompleteCard(
                     modifier = modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = modifier.height(32.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(32.dp)))
             }
 
             item {
@@ -166,11 +166,11 @@ private fun QuestBehaviorCompleteScreen(
                         )
                     }
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     CreatedText(uiState.createdAt)
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     Text(
                         text = uiState.question,
@@ -180,7 +180,7 @@ private fun QuestBehaviorCompleteScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -204,7 +204,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -239,12 +239,12 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.questAnswer.isNotBlank()) {
-                        Spacer(modifier = modifier.height(12.dp))
+                        Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                         ContentText(uiState.questAnswer)
                     }
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -267,7 +267,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 uiState.selectedEmotion?.let { emotion ->
                     QuestEmotionDescriptionCard(
@@ -276,7 +276,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(24.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
             }
         }
     }

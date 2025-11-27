@@ -53,7 +53,9 @@ fun HomeQuestCard(
                     style = ByeBooTheme.typography.sub2,
                     color = ByeBooTheme.colors.gray50
                 )
+
                 Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
+
                 Text(
                     text = subtitle,
                     style = ByeBooTheme.typography.body5,

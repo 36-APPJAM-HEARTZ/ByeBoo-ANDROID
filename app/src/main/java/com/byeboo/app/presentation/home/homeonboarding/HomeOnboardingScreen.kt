@@ -135,7 +135,7 @@ private fun HomeOnboardingScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
+                        .padding(bottom = screenHeightDp(16.dp))
                 )
             }
 
@@ -156,7 +156,7 @@ private fun HomeOnboardingScreen(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
+                        .padding(bottom = screenHeightDp(89.dp + bottomPadding))
                         .then(clickableModifier)
                         .aspectRatio(1f)
                 )

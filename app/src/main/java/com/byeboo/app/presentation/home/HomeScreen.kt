@@ -229,7 +229,9 @@ private fun HomeScreen(
                                 subtitle = "퀘스트를 하고나면 한층 더 성장할 거에요.",
                                 onClick = onClickQuest
                             )
+
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
+
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
@@ -244,7 +246,9 @@ private fun HomeScreen(
                                 onClick = onClickQuest,
                                 borderColor = Color.Unspecified
                             )
+
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
+
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
@@ -269,7 +273,7 @@ private fun HomeScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = maxOf(bottomPadding - screenHeightDp(20.dp), 0.dp))
+                        .padding(bottom = maxOf(screenHeightDp(bottomPadding - 20.dp), 0.dp))
                 ) {
                     // 하단 말풍선
                     Box(
@@ -288,7 +292,7 @@ private fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .matchParentSize()
-                                .padding(bottom = 14.dp),
+                                .padding(bottom = screenHeightDp(14.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Column {
