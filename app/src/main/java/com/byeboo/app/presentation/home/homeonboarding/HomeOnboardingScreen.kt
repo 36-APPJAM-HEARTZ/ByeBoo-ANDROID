@@ -139,18 +139,17 @@ private fun HomeOnboardingScreen(
                 )
             }
 
-            AnimatedVisibility(
-                visible = uiState.showSpeechBubble,
-                enter = fadeIn(animationSpec = tween(1000))
-            ) {
-                SpeechBubbleWithText(
-                    firstText = "바이부에 오신 걸 환영해요!",
-                    secondText = "저는 보리라고 해요.",
-                    thirdText = "여정을 시작하러 가볼까요?"
-                )
-            }
-
             if (isLottieReady) {
+                AnimatedVisibility(
+                    visible = uiState.showSpeechBubble,
+                    enter = fadeIn(animationSpec = tween(1000))
+                ) {
+                    SpeechBubbleWithText(
+                        firstText = "바이부에 오신 걸 환영해요!",
+                        secondText = "저는 보리라고 해요.",
+                        thirdText = "여정을 시작하러 가볼까요?"
+                    )
+                }
                 LottieAnimation(
                     composition = composition,
                     progress = { progress },
