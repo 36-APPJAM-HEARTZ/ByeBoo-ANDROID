@@ -137,7 +137,7 @@ private fun OffboardingCompleteGuideScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp(bottomPadding + 10.dp)),
+                    .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp( 10.dp) + bottomPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(

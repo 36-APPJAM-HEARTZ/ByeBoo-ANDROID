@@ -94,7 +94,7 @@ private fun QuestRecordingCompleteScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp( bottomPadding))
+            .padding(bottom =  bottomPadding)
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
 

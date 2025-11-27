@@ -87,7 +87,7 @@ private fun OffboardingQuestCompletedScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp(bottomPadding))
+            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),

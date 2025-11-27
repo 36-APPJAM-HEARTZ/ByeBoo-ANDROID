@@ -155,7 +155,7 @@ private fun HomeOnboardingScreen(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(89.dp + bottomPadding))
+                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
                         .then(clickableModifier)
                         .aspectRatio(1f)
                 )

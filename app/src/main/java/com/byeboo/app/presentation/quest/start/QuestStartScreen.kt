@@ -77,7 +77,7 @@ private fun QuestStartScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(bottom = screenHeightDp(padding)),
+            .padding(bottom = padding),
         contentPadding = PaddingValues(bottom = screenHeightDp(10.dp))
     ) {
         item {

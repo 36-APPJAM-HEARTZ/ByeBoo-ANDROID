@@ -144,7 +144,7 @@ private fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = screenHeightDp(bottomPadding + 10.dp))
+                .padding(bottom = screenHeightDp( 10.dp) + bottomPadding)
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))

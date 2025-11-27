@@ -273,7 +273,7 @@ private fun HomeScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = maxOf(screenHeightDp(bottomPadding - 20.dp), 0.dp))
+                        .padding(bottom = maxOf(bottomPadding - screenHeightDp(20.dp), 0.dp))
                 ) {
                     // 하단 말풍선
                     Box(

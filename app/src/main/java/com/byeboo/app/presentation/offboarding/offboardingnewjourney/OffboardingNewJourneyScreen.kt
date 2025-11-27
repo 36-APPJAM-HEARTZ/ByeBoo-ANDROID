@@ -89,7 +89,7 @@ private fun OffboardingNewJourneyScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp(bottomPadding))
+            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
             .verticalScroll(rememberScrollState())
     ) {
         Icon(

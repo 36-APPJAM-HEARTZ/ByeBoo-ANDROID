@@ -159,7 +159,7 @@ private fun QuestRecordingScreen(
             }
             .addFocusCleaner(focusManager)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp(bottomPadding))
+            .padding(bottom = bottomPadding)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
