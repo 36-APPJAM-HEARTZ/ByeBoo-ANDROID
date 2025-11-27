@@ -1,5 +1,12 @@
 package com.byeboo.app.presentation.mypage
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,11 +27,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,19 +38,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
+
 
 @Composable
 fun MyPageRoute(
@@ -60,6 +69,42 @@ fun MyPageRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val activity = context as? Activity
+
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onPermissionResult(isGranted)
+        }
+    )
+
+    val onAlarmToggleClick = {
+        val hasPermission = context.hasNotificationPermission()
+        val isPermissionNeeded = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+        } else {
+            false
+        }
+        viewModel.onAlarmToggledClicked(hasPermission, isPermissionNeeded)
+    }
+
+    if (uiState.showPermissionModal) {
+        MyPageModal(
+            onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
+            myPageModalMainText = "알림 권한 필요",
+            myPageModalSubText = "알림을 받으려면 설정에서 권한을 허용해야 합니다.",
+            onCancelClick = { viewModel.onDismissModal(ModalType.PERMISSION) },
+            onConfirmClick = viewModel::onGoToSettingClicked,
+            onConfirmText = "허용하기",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+        )
+    }
+
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -93,6 +138,17 @@ fun MyPageRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
+                is MyPageSideEffect.RequestNotificationPermission -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    }
+                }
+                is MyPageSideEffect.NavigateToSetting -> {
+                    val intent = Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    context.startActivity(intent)
+                }
                 is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
                 is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
@@ -100,6 +156,18 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
                 is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.syncAlarmState(context.hasNotificationPermission())
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -111,6 +179,7 @@ fun MyPageRoute(
         onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
+        onAlarmToggleClick = onAlarmToggleClick,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
@@ -128,14 +197,13 @@ private fun MyPageScreen(
     onGoToByeBooUniverseClick: () -> Unit,
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
+    onAlarmToggleClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isChecked by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -329,10 +397,8 @@ private fun MyPageScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MyPageNotification(
-                isEnabledAlarm = isChecked,
-                onCheckedClick = {
-                    isChecked = !isChecked
-                }
+                isEnabledAlarm = uiState.isAlarmEnabled,
+                onCheckedClick = { onAlarmToggleClick() }
             )
 
             Spacer(modifier = Modifier.height(48.dp))

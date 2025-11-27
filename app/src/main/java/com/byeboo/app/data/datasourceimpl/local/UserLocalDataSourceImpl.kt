@@ -126,6 +126,12 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override fun getLoggedIn(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[IS_LOGGED_IN] ?: false
+        }
+    }
+
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")
         private val NICKNAME = stringPreferencesKey("NICKNAME")

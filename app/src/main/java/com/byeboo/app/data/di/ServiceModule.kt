@@ -4,6 +4,7 @@ import com.byeboo.app.core.network.qualifier.Auth
 import com.byeboo.app.data.service.NewJourneyService
 import com.byeboo.app.data.service.auth.AuthService
 import com.byeboo.app.data.service.auth.UserService
+import com.byeboo.app.data.service.notification.NotificationService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
@@ -70,26 +71,33 @@ object ServiceModule {
     fun providesQuestRecordedDetailService(retrofit: Retrofit): QuestRecordedDetailService =
         retrofit.create(
             QuestRecordedDetailService::class.java
-        )
+    )
 
     @Provides
     @Singleton
     fun providesOffboardingJourneyService(retrofit: Retrofit): OffboardingJourneyService =
         retrofit.create(
             OffboardingJourneyService::class.java
-        )
+    )
 
     @Provides
     @Singleton
     fun providesOffboardingNewJourneyService(retrofit: Retrofit): NewJourneyService =
         retrofit.create(
             NewJourneyService::class.java
-        )
+    )
 
     @Provides
     @Singleton
     fun providesOffboardingQuestCompletedService(retrofit: Retrofit): OffboardingQuestCompletedService =
         retrofit.create(
             OffboardingQuestCompletedService::class.java
-        )
+    )
+
+    @Provides
+    @Singleton
+    fun providesNotificationService(retrofit: Retrofit): NotificationService =
+        retrofit.create(
+            NotificationService::class.java
+    )
 }
