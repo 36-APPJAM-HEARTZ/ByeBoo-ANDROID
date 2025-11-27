@@ -126,6 +126,11 @@ class UserInfoViewModel @Inject constructor(
                     userRepository.setUserRegistered(true)
                 }
                 saveFcmToken()
+
+                val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
+                if (isRegisteredUser) {
+                    fcmTokenRepository.allowQuestAlarm()
+                }
                 _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
             } else {
                 hasSubmitted = false

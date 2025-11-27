@@ -37,6 +37,8 @@ class SplashViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
+    private var isRegisteredUser: Boolean = false
+
     init {
         viewModelScope.launch {
             tokenRepository.initCachedAccessToken()
@@ -111,11 +113,9 @@ class SplashViewModel @Inject constructor(
                             mixpanelUtil.trackLogin(LoginType.KAKAO, true)
                             userRepository.setLoggedIn(true)
 
-                            if (auth.isRegistered) {
-                                _sideEffect.emit(SplashStateSideEffect.RequestNotificationPermission)
-                            } else {
-                                _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
-                            }
+                            isRegisteredUser = auth.isRegistered
+                            _sideEffect.emit(SplashStateSideEffect.RequestNotificationPermission)
+
                         }
                         .onFailure {
                             mixpanelUtil.trackLogin(LoginType.KAKAO, false)
@@ -166,11 +166,19 @@ class SplashViewModel @Inject constructor(
 
     fun onPermissionResult(isGranted: Boolean) {
         viewModelScope.launch {
-            if (isGranted) {
-                fcmTokenRepository.saveAlarmEnabled(true)
-                fcmTokenRepository.allowQuestAlarm()
+            if (isRegisteredUser) {
+                if (isGranted) {
+                    fcmTokenRepository.saveAlarmEnabled(true)
+                    fcmTokenRepository.allowQuestAlarm()
+                }
+                _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
+
+            } else {
+                if (isGranted) {
+                    fcmTokenRepository.saveAlarmEnabled(true)
+                }
+                _sideEffect.emit(SplashStateSideEffect.NavigateToTermsOfService)
             }
-            _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
         }
     }
 
