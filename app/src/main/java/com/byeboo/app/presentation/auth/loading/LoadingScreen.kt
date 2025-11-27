@@ -25,6 +25,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 
@@ -35,6 +36,8 @@ fun LoadingRoute(
     viewModel: LoadingViewModel = hiltViewModel()
 ) {
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
+
+    ByeBooBackHandler()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
