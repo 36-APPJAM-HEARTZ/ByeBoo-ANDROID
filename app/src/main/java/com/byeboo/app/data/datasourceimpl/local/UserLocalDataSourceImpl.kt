@@ -45,7 +45,7 @@ class UserLocalDataSourceImpl @Inject constructor(
 
     override fun getNickname(): Flow<String> {
         return dataStore.data
-            .map { preferences -> preferences[NICKNAME] ?: "" }
+            .map { preferences -> preferences[NICKNAME].orEmpty() }
             .catch { emit("") }
     }
 

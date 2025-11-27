@@ -11,8 +11,12 @@ data class HomeUiState(
     val nickname: String = "하츠핑",
     val hasSeenAboutHelp: Boolean = false,
     val isLoading: Boolean = true,
-    val hasError: Boolean = false
+    val hasError: Boolean = false,
+    val isBubbleClicked: Boolean = false,
+    val showBubble: Boolean = true,
+    val isBubbleEnabled: Boolean = true,
 )
+
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
     data class NavigateToQuestStart(val journey: QuestType?) : HomeSideEffect

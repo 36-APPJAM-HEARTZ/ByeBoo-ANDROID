@@ -11,7 +11,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.QuestViewModel
-import com.byeboo.app.presentation.quest.behavior.QuestBehaviorViewModel
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
 import com.byeboo.app.presentation.quest.review.QuestReviewRoute
@@ -50,9 +49,10 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompleteGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
+    navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
-    viewModel: QuestBehaviorViewModel,
     padding: Dp
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -95,12 +95,10 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<QuestReview> { backStackEntry ->
-            val questReview = backStackEntry.toRoute<QuestReview>()
-            val questId = questReview.questId
-
             QuestReviewRoute(
-                questId = questId,
-                navigateToBack = navigateUp,
+                navigateToQuest = navigateToQuest,
+                navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
+                navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
                 bottomPadding = padding
             )
         }
@@ -109,16 +107,19 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestRecordingComplete = navigateToQuestRecordingComplete,
+            navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
+            navigateUp = navigateUp,
             bottomPadding = padding
         )
 
         questBehaviorGraph(
-            viewModel = viewModel,
             navigateToQuest = navigateToQuest,
             navigateToQuestTip = navigateToQuestTip,
             navigateToQuestBehaviorComplete = navigateToQuestBehaviorComplete,
+            navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
+            navigateUp = navigateUp,
             bottomPadding = padding
         )
     }

@@ -10,3 +10,8 @@ data class BehaviorAnswerRequestModel(
     val questEmotionState: String,
     val imageKey: String
 )
+
+data class QuestBehaviorEditModel(
+    val answer: String,
+    val imageKey: String
+)

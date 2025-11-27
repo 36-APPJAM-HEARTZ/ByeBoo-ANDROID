@@ -35,7 +35,7 @@ fun DescriptionText(
         Text(
             buildAnnotatedString {
                 withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
-                    append(nicknameText ?: "")
+                    append(nicknameText.orEmpty())
                     append("\n")
                     append(title)
                     append(guideText)

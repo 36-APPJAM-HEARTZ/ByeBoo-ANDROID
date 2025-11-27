@@ -6,7 +6,7 @@ import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.datasource.remote.fcm.FcmRemoteDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingJourneyDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingQuestCompletedDataSource
-import com.byeboo.app.data.datasource.remote.quest.QuestBehaviorAnswerDataSource
+import com.byeboo.app.data.datasource.remote.quest.QuestBehaviorDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestDetailRemoteDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestInProgressDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestRecordedDetailDataSource
@@ -19,7 +19,7 @@ import com.byeboo.app.data.datasourceimpl.remote.auth.UserRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.fcm.FcmRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingJourneyDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingQuestCompletedDataSourceImpl
-import com.byeboo.app.data.datasourceimpl.remote.quest.QuestBehaviorAnswerDataSourceImpl
+import com.byeboo.app.data.datasourceimpl.remote.quest.QuestBehaviorDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestDetailRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestInProgressDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestRecordedDetailDataSourceImpl
@@ -61,7 +61,7 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindQuestBehaviorAnswerDataSource(impl: QuestBehaviorAnswerDataSourceImpl): QuestBehaviorAnswerDataSource
+    abstract fun bindQuestBehaviorAnswerDataSource(impl: QuestBehaviorDataSourceImpl): QuestBehaviorDataSource
 
     @Binds
     @Singleton

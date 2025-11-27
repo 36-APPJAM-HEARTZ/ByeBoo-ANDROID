@@ -16,12 +16,12 @@ class TokenDataSourceImpl @Inject constructor(
 
     override fun getAccessToken(): Flow<String> = datastore.data.map {
             preferences ->
-        preferences[ACCESS_TOKEN] ?: ""
+        preferences[ACCESS_TOKEN].orEmpty()
     }
 
     override fun getRefreshToken(): Flow<String> = datastore.data.map {
             preferences ->
-        preferences[REFRESH_TOKEN] ?: ""
+        preferences[REFRESH_TOKEN].orEmpty()
     }
 
     override suspend fun updateTokens(accessToken: String, refreshToken: String) {
