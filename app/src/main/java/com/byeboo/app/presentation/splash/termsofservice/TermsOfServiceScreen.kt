@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
@@ -36,6 +37,8 @@ fun TermsOfServiceRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    ByeBooBackHandler()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
