@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun TutorialRoute(
@@ -62,8 +64,8 @@ private fun TutorialScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = 24.dp)
-            .padding(top = 67.dp, bottom = bottomPadding)
+            .padding(horizontal = screenWidthDp(24.dp))
+            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
@@ -78,22 +80,22 @@ private fun TutorialScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = (14.5).dp)
+                .padding(horizontal = screenWidthDp((14.5).dp))
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
             for (contents in TutorialContent.entries) {
                 key(contents) {
                     Image(
                         painter = painterResource(id = contents.image),
-                        contentDescription = "",
+                        contentDescription = null,
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                     Text(
                         text = contents.content,
@@ -102,11 +104,11 @@ private fun TutorialScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
         }
     }
 }

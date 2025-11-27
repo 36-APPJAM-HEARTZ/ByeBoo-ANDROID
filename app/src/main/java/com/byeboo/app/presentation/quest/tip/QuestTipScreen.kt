@@ -207,7 +207,7 @@ private fun QuestTipScreen(
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.whiteAlpha10
                 )

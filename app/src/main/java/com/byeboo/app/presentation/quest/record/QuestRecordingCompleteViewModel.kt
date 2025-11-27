@@ -77,6 +77,9 @@ class QuestRecordingCompleteViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+                if (uiState.value.questNumber == 1L) {
+                    _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
+                }
             }
         }
     }

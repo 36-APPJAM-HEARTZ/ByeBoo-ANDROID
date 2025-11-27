@@ -150,6 +150,10 @@ dependencies {
     // mixpanel
     implementation(libs.mixpanel)
 
+    // in-app
+    implementation(libs.google.play.inapp.review)
+    implementation(libs.google.play.inapp.review.ktx)
+
     // DataStore
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore.core)

@@ -21,6 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
@@ -43,7 +44,7 @@ fun MyPageModal(
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.gray900)
-                .padding(24.dp),
+                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -52,7 +53,7 @@ fun MyPageModal(
                 style = ByeBooTheme.typography.sub3
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             if (myPageModalSubText != null) {
                 Text(
@@ -62,7 +63,7 @@ fun MyPageModal(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
             }
 
             Row(

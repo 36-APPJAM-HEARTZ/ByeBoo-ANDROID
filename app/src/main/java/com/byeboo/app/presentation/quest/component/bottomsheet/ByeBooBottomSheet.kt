@@ -69,7 +69,7 @@ fun ByeBooBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(bottom = 10.dp),
+                    .padding(bottom = screenHeightDp(10.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ByeBooDragHandle()
@@ -86,7 +86,7 @@ fun ByeBooBottomSheet(
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(3.dp),
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(3.dp)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(

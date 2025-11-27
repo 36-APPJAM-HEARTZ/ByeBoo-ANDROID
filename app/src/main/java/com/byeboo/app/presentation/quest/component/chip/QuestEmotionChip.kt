@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
@@ -79,7 +80,7 @@ fun EmotionChip(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = screenWidthDp(14.dp), vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = screenWidthDp(14.dp), vertical = screenHeightDp(8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -88,7 +89,7 @@ fun EmotionChip(
                 modifier = Modifier.size(56.dp)
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
             Text(
                 text = stringResource(emotionType.titleResId),

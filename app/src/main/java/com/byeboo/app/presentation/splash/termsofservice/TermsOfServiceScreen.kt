@@ -24,6 +24,8 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsCheckButton
 
@@ -80,8 +82,8 @@ private fun TermsOfServiceScreen(
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .padding(top = 107.dp, bottom = padding)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = screenHeightDp(107.dp), bottom = screenHeightDp(padding))
                 .fillMaxSize()
         ) {
             TermsHeader()
@@ -91,10 +93,10 @@ private fun TermsOfServiceScreen(
                 isChecked = uiState.isAllChecked
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Column(
-                modifier = Modifier.padding(horizontal = 15.dp)
+                modifier = Modifier.padding(horizontal = screenWidthDp(15.dp))
             ) {
                 TermType.entries.forEach { term ->
                     TermsCheckButton(
@@ -117,7 +119,7 @@ private fun TermsOfServiceScreen(
                 onClick = onNextButton
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
         }
     }
 }
@@ -125,7 +127,7 @@ private fun TermsOfServiceScreen(
 @Composable
 private fun TermsHeader() {
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
+        modifier = Modifier.padding(vertical = screenHeightDp(20.dp)),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -134,7 +136,7 @@ private fun TermsHeader() {
             color = ByeBooTheme.colors.gray50
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = "Bye Boo 이용을 위해 필요해요",

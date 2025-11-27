@@ -346,7 +346,7 @@ private fun QuestBehaviorWritingScreen(
                     isEnabled = QuestValidator.validButton(uiState.imageCount)
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

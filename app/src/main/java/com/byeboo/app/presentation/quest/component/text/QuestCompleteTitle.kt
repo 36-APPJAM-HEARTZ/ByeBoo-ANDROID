@@ -28,7 +28,7 @@ fun QuestCompleteTitle(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .padding(vertical = screenHeightDp(10.dp)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(

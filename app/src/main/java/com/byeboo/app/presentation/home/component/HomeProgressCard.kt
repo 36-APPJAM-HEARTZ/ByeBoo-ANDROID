@@ -57,7 +57,7 @@ fun HomeProgressCard(
                         .height(screenHeightDp(6.dp))
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
                     text = "($currentStep/$totalSteps)",

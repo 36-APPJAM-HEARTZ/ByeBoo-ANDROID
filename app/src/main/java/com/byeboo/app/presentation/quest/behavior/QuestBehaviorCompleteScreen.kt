@@ -44,6 +44,8 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.findActivity
+import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
@@ -60,6 +62,8 @@ fun QuestBehaviorCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
+    val context = LocalContext.current
+    val activity = context.findActivity()
 
     val imageUri = when {
         uiState.selectedImageUri != null -> uiState.selectedImageUri
@@ -72,6 +76,11 @@ fun QuestBehaviorCompleteRoute(
             when (effect) {
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
+                    activity?.let { activity ->
+                        inAppReview(activity)
+                    }
+                }
                 is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -103,7 +112,7 @@ private fun QuestBehaviorCompleteScreen(
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(bottomPadding))
     ) {
-        Spacer(modifier = modifier.height(67.dp))
+        Spacer(modifier = modifier.height(screenHeightDp(67.dp)))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -117,19 +126,19 @@ private fun QuestBehaviorCompleteScreen(
             )
         }
 
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
             modifier = modifier.fillMaxWidth()
         ) {
             item {
-                Spacer(modifier = modifier.height(8.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(8.dp)))
 
                 QuestCompleteCard(
                     modifier = modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = modifier.height(32.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(32.dp)))
             }
 
             item {
@@ -157,11 +166,11 @@ private fun QuestBehaviorCompleteScreen(
                         )
                     }
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     CreatedText(uiState.createdAt)
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     Text(
                         text = uiState.question,
@@ -171,7 +180,7 @@ private fun QuestBehaviorCompleteScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -195,7 +204,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -230,12 +239,12 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.questAnswer.isNotBlank()) {
-                        Spacer(modifier = modifier.height(12.dp))
+                        Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                         ContentText(uiState.questAnswer)
                     }
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -258,7 +267,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 uiState.selectedEmotion?.let { emotion ->
                     QuestEmotionDescriptionCard(
@@ -267,7 +276,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(24.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
             }
         }
     }

@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.start
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -76,7 +77,8 @@ private fun QuestStartScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(bottom = padding)
+            .padding(bottom = padding),
+        contentPadding = PaddingValues(bottom = screenHeightDp(10.dp))
     ) {
         item {
             Row(
@@ -118,7 +120,6 @@ private fun QuestStartScreen(
                 buttonBackgroundColor = ByeBooTheme.colors.primary300,
                 modifier = Modifier
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(bottom = 10.dp)
             )
         }
     }

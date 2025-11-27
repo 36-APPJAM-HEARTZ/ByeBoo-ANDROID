@@ -269,11 +269,11 @@ private fun QuestRecordingScreen(
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
-                            contentDescription = "",
+                            contentDescription = null,
                             tint = Color.Unspecified
                         )
 
-                        Spacer(modifier = Modifier.width(3.dp))
+                        Spacer(modifier = Modifier.width(screenWidthDp(3.dp)))
 
                         Text(
                             text = "10글자 이상 작성해 주세요.",

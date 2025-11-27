@@ -162,8 +162,8 @@ private fun SplashScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = bottomPadding + 10.dp)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(bottom = screenHeightDp( 10.dp) + bottomPadding)
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -176,7 +176,7 @@ private fun SplashScreen(
                         .background(color = ByeBooTheme.colors.kakaoYellow)
                         .graphicsLayer { alpha = buttonAlpha.toPx() }
                         .noRippleClickable(onClick = onClick)
-                        .padding(vertical = 16.dp),
+                        .padding(vertical = screenHeightDp(16.dp)),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -185,7 +185,7 @@ private fun SplashScreen(
                         contentDescription = "kakao logo"
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
 
                     Text(
                         text = "Kakao로 시작하기",

@@ -34,6 +34,7 @@ import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
@@ -85,19 +86,19 @@ private fun OffboardingCompletedJourneyScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = 67.dp, bottom = bottomPadding)
+            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
             .verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier
                 .size(24.dp)
                 .noRippleClickable(onClick = onBackClick),
             tint = ByeBooTheme.colors.gray50
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
         Text(
             text = "내가 완료한 여정이에요",
@@ -105,12 +106,12 @@ private fun OffboardingCompletedJourneyScreen(
             style = ByeBooTheme.typography.head1
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
 
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
             color = ByeBooTheme.colors.whiteAlpha10
         )
@@ -118,8 +119,8 @@ private fun OffboardingCompletedJourneyScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(vertical = screenHeightDp(16.dp)),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -154,7 +155,7 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             if (uiState.completedCount == 0) {
-                Spacer(modifier = Modifier.height(188.5.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(188.5.dp)))
 
                 Text(
                     text = "아직 완료된 여정이 없어요!",

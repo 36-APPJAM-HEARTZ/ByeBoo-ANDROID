@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -33,6 +34,9 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.findActivity
+import com.byeboo.app.core.util.inAppReview
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
@@ -50,12 +54,19 @@ fun QuestRecordingCompleteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
+    val context = LocalContext.current
+    val activity = context.findActivity()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestRecordingCompleteSideEffect.ShowInAppReview -> {
+                    activity?.let { activity ->
+                        inAppReview(activity)
+                    }
+                }
                 is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -83,9 +94,9 @@ private fun QuestRecordingCompleteScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = bottomPadding)
+            .padding(bottom =  bottomPadding)
     ) {
-        Spacer(modifier = Modifier.height(67.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -99,7 +110,7 @@ private fun QuestRecordingCompleteScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
             modifier = Modifier
@@ -107,7 +118,7 @@ private fun QuestRecordingCompleteScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
                 QuestCompleteCard(
                     modifier = Modifier.fillMaxWidth()
@@ -115,7 +126,7 @@ private fun QuestRecordingCompleteScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -141,11 +152,11 @@ private fun QuestRecordingCompleteScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     CreatedText(uiState.createdAt)
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     Text(
                         text = uiState.question,
@@ -155,7 +166,7 @@ private fun QuestRecordingCompleteScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
@@ -163,14 +174,14 @@ private fun QuestRecordingCompleteScreen(
                         contentText = uiState.answer
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestEmotionDescriptionContent(
                         questEmotionDescription = uiState.emotionDescription,
                         emotionType = uiState.selectedEmotion
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
                 }
             }
         }
@@ -195,7 +206,7 @@ private fun QuestEmotionDescriptionContent(
                 tint = Color.Unspecified
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
             Text(
                 text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
@@ -204,7 +215,7 @@ private fun QuestEmotionDescriptionContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
