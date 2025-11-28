@@ -81,7 +81,7 @@ private fun QuestStartScreen(
                 top = paddingValues.calculateTopPadding(),
                 bottom = paddingValues.calculateBottomPadding()
             ),
-        contentPadding = PaddingValues(top = screenHeightDp(27.dp), bottom = screenHeightDp(10.dp))
+        contentPadding = PaddingValues(top = screenHeightDp(43.dp), bottom = screenHeightDp(10.dp))
     ) {
         item {
             Row(

@@ -102,7 +102,7 @@ private fun EditProfileScreen(
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = screenHeightDp(paddingValues.calculateBottomPadding() + 10.dp)
             )
     ) {

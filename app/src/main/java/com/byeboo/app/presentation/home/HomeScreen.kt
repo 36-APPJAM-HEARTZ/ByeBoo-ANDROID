@@ -181,7 +181,7 @@ private fun HomeScreen(
                     modifier = modifier
                         .fillMaxSize()
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp))
+                        .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp))
                 ) {
                     when (uiState.status) {
                         HomeStatus.INITIAL_START -> {

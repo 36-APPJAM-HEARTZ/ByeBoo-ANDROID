@@ -170,7 +170,7 @@ private fun QuestBehaviorWritingScreen(
             }
             .addFocusCleaner(focusManager)
             .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {

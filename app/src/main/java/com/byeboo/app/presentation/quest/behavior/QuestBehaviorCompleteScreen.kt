@@ -110,7 +110,7 @@ private fun QuestBehaviorCompleteScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {
