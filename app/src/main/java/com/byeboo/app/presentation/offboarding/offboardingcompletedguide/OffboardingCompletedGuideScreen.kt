@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,7 +68,7 @@ fun OffboardingCompletedGuideRoute(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
 ) {
@@ -92,7 +93,7 @@ fun OffboardingCompletedGuideRoute(
 
     OffboardingCompleteGuideScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
@@ -104,7 +105,7 @@ fun OffboardingCompletedGuideRoute(
 @Composable
 private fun OffboardingCompleteGuideScreen(
     uiState: OffboardingCompletedGuideState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     onNewJourneyClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
@@ -137,7 +138,10 @@ private fun OffboardingCompleteGuideScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp( 10.dp) + bottomPadding),
+                    .padding(
+                        top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                        bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(

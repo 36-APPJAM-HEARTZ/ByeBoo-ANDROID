@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,7 +45,7 @@ fun QuestTipRoute(
     questId: Long,
     navigateToQuest: () -> Unit,
     questType: QuestType,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestTipViewModel = hiltViewModel(),
     questViewModel: QuestViewModel = hiltViewModel()
@@ -76,7 +76,7 @@ fun QuestTipRoute(
         uiState = uiState,
         onCloseClick = viewModel::onCloseClicked,
         questType = questType,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         modifier = modifier
     )
 }
@@ -86,21 +86,22 @@ private fun QuestTipScreen(
     uiState: QuestTipState,
     onCloseClick: () -> Unit,
     questType: QuestType,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
-        Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(bottom = screenHeightDp(16.dp))
         ) {
             Icon(
@@ -123,12 +124,15 @@ private fun QuestTipScreen(
         }
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(
+                start = screenWidthDp(24.dp),
+                top = screenHeightDp(10.dp),
+                end = screenWidthDp(24.dp),
+                bottom = screenHeightDp(24.dp)
+            )
         ) {
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -221,8 +225,6 @@ private fun QuestTipScreen(
                     titleText = "이 퀘스트가 끝나면 어떤 변화가 생길까요?",
                     contentText = uiState.tipAnswer.change
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
             }
         }
     }

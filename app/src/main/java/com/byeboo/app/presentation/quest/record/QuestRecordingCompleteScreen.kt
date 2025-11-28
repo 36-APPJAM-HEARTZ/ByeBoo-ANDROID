@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,7 +48,7 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 fun QuestRecordingCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
 ) {
@@ -76,7 +76,7 @@ fun QuestRecordingCompleteRoute(
 
     QuestRecordingCompleteScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         modifier = modifier
     )
@@ -85,7 +85,7 @@ fun QuestRecordingCompleteRoute(
 @Composable
 private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -93,13 +93,15 @@ private fun QuestRecordingCompleteScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom =  bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
-        Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenHeightDp(24.dp)),
             horizontalArrangement = Arrangement.End
         ) {
             Icon(
@@ -113,13 +115,16 @@ private fun QuestRecordingCompleteScreen(
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(
+                start = screenWidthDp(24.dp),
+                top = screenHeightDp(8.dp),
+                end = screenWidthDp(24.dp),
+                bottom = screenHeightDp(24.dp)
+            )
         ) {
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
-
                 QuestCompleteCard(
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -180,8 +185,6 @@ private fun QuestRecordingCompleteScreen(
                         questEmotionDescription = uiState.emotionDescription,
                         emotionType = uiState.selectedEmotion
                     )
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
                 }
             }
         }

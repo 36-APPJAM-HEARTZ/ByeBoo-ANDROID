@@ -42,7 +42,7 @@ fun OffboardingQuestCompletedRoute(
     journey: QuestType,
     navigateUp: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
 ) {
@@ -68,7 +68,7 @@ fun OffboardingQuestCompletedRoute(
     OffboardingQuestCompletedScreen(
         uiState = uiState,
         onCancelClick = viewModel::onCancelClicked,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         modifier = modifier
     )
@@ -78,7 +78,7 @@ fun OffboardingQuestCompletedRoute(
 private fun OffboardingQuestCompletedScreen(
     uiState: QuestCompletedState,
     onCancelClick: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -87,7 +87,10 @@ private fun OffboardingQuestCompletedScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
@@ -117,7 +120,7 @@ private fun OffboardingQuestCompletedScreen(
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = screenHeightDp(37.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(21.dp)),
             modifier = Modifier.fillMaxWidth()
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->

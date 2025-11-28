@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.offboarding.navigation
 
-import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -41,14 +41,14 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
-    padding: Dp
+    paddingValues: PaddingValues
 ) {
     composable<OffboardingCompletedGuide> {
         OffboardingCompletedGuideRoute(
             navigateToHome = navigateToHome,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
             navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
 
@@ -56,7 +56,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingNewJourneyRoute(
             navigateToQuestStart = navigateToQuestStart,
             navigateUp = navigateUp,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
 
@@ -64,7 +64,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingCompletedJourneyRoute(
             navigateUp = navigateUp,
             navigateToOffboardingQuestCompleted = navigateToOffboardingQuestCompleted,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
 
@@ -76,7 +76,7 @@ fun NavGraphBuilder.offboardingGraph(
             journey = journey,
             navigateUp = navigateUp,
             navigateToQuestReview = navigateToQuestReview,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
 }

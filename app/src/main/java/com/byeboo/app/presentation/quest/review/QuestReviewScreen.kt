@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -30,7 +31,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestReviewRoute(
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     navigateToQuest: () -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
@@ -79,7 +79,7 @@ fun QuestReviewRoute(
 
     QuestReviewScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onEditClick = { viewModel.onEditClicked(uiState.questType) },
         onCancelClick = viewModel::onCancelClicked,
         modifier = modifier
@@ -89,7 +89,7 @@ fun QuestReviewRoute(
 @Composable
 private fun QuestReviewScreen(
     uiState: QuestReviewState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onEditClick: () -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -98,13 +98,15 @@ private fun QuestReviewScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
-        Spacer(modifier = Modifier.height(screenHeightDp(67.dp)))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
@@ -125,11 +127,15 @@ private fun QuestReviewScreen(
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(
+                start = screenWidthDp(24.dp),
+                top = screenHeightDp(10.dp),
+                end = screenWidthDp(24.dp),
+                bottom = screenHeightDp(28.dp)
+            )
         ) {
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
-
                 QuestTitle(
                     stepNumber = uiState.stepNumber,
                     questNumber = uiState.questNumber,
@@ -213,8 +219,6 @@ private fun QuestReviewScreen(
                     questEmotionDescription = uiState.emotionDescription,
                     emotionType = uiState.selectedEmotion
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(28.dp)))
             }
         }
     }

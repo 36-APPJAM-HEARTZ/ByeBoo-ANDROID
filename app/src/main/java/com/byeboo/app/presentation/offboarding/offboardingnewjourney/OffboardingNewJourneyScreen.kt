@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingnewjourney
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,7 +45,7 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 fun OffboardingNewJourneyRoute(
     navigateToQuestStart: (QuestType?) -> Unit,
     navigateUp: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
     offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
@@ -65,7 +65,7 @@ fun OffboardingNewJourneyRoute(
 
     OffboardingNewJourneyScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = offboardingNewJourneyViewModel::onBackClicked,
         onJourneyUncompletedCardClick = { type ->
             offboardingNewJourneyViewModel.postNewJourney(
@@ -79,7 +79,7 @@ fun OffboardingNewJourneyRoute(
 @Composable
 private fun OffboardingNewJourneyScreen(
     uiState: OffboardingJourneyState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: (QuestType) -> Unit,
     modifier: Modifier = Modifier
@@ -89,7 +89,10 @@ private fun OffboardingNewJourneyScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
             .verticalScroll(rememberScrollState())
     ) {
         Icon(
