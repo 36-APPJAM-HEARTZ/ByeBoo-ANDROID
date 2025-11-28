@@ -211,7 +211,7 @@ private fun MyPageScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(27.dp),
+                top = paddingValues.calculateTopPadding(),
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {
@@ -223,7 +223,8 @@ private fun MyPageScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(ByeBooTheme.colors.black)
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = screenHeightDp(27.dp), bottom = screenHeightDp(16.dp))
         )
 
         LazyColumn(
