@@ -101,7 +101,7 @@ private fun QuestRecordingCompleteScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = screenHeightDp(24.dp)),
+                .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.End
         ) {
             Icon(

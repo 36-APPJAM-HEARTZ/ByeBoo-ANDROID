@@ -83,7 +83,7 @@ private fun TermsOfServiceScreen(
         Column(
             modifier = Modifier
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp), bottom = screenHeightDp(paddingValues.calculateBottomPadding()))
+                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp), bottom = paddingValues.calculateBottomPadding())
                 .fillMaxSize()
         ) {
             TermsHeader()

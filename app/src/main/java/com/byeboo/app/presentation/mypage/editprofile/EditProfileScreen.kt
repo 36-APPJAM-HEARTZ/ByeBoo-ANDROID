@@ -103,7 +103,7 @@ private fun EditProfileScreen(
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = screenHeightDp(paddingValues.calculateBottomPadding() + 10.dp)
+                bottom = screenHeightDp(paddingValues.calculateBottomPadding() + screenHeightDp(10.dp))
             )
     ) {
         Row(
