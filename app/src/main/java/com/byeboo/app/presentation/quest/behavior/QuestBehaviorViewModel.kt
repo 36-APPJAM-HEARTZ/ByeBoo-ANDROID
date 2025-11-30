@@ -168,10 +168,14 @@ class QuestBehaviorViewModel @Inject constructor(
     }
 
     fun updateSelectedImage(uri: Uri?) {
-        _uiState.update {
-            it.copy(
+        _uiState.update { prev ->
+            val updated = prev.copy(
                 selectedImageUri = uri,
                 imageCount = if (uri != null) 1 else 0
+            )
+
+            updated.copy(
+                isCompleteButtonEnabled = completeButtonEnabled(updated)
             )
         }
     }
@@ -183,10 +187,17 @@ class QuestBehaviorViewModel @Inject constructor(
             QuestWritingState.Writing
         }
 
-        _uiState.update {
-            it.copy(
+        _uiState.update { prev ->
+            val hasChangedNow = text != prev.originalAnswer
+            val newHasAnswerChanged = prev.hasAnswerChanged || hasChangedNow
+            val updated = prev.copy(
                 questAnswer = text,
-                contentState = contentState
+                contentState = contentState,
+                hasAnswerChanged = newHasAnswerChanged
+            )
+
+            updated.copy(
+                isCompleteButtonEnabled = completeButtonEnabled(updated)
             )
         }
     }
@@ -250,6 +261,21 @@ class QuestBehaviorViewModel @Inject constructor(
         } else {
             openBottomSheet()
         }
+    }
+
+    private fun completeButtonEnabled(
+        state: QuestBehaviorState
+    ): Boolean {
+        val hasImage = state.imageCount > 0
+        if (!hasImage) return false
+
+        if (!state.isEditMode) {
+            return true
+        }
+
+        val imageChanged = state.selectedImageUri != null
+
+        return state.hasAnswerChanged || imageChanged
     }
 
     private fun uploadWithoutImageChange() {

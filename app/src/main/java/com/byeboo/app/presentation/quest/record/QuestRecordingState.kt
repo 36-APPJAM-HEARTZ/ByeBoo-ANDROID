@@ -17,7 +17,10 @@ data class QuestRecordingState(
     val showQuitModal: Boolean = false,
     val showBottomSheet: Boolean = false,
     val selectedEmotion: LargeTagType? = null,
-    val isEditMode: Boolean = false
+    val isEditMode: Boolean = false,
+    val originalAnswer: String = "",
+    val isCompleteButtonEnabled: Boolean = false,
+    val hasAnswerChanged: Boolean = false
 )
 
 sealed interface QuestRecordingSideEffect {

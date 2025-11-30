@@ -41,12 +41,10 @@ class QuestRecordingViewModel @Inject constructor(
             isEditMode = isEditModeArg
         )
     )
-    val uiState: StateFlow<QuestRecordingState>
-        get() = _uiState.asStateFlow()
+    val uiState: StateFlow<QuestRecordingState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestRecordingSideEffect>()
-    val sideEffect: SharedFlow<QuestRecordingSideEffect>
-        get() = _sideEffect.asSharedFlow()
+    val sideEffect: SharedFlow<QuestRecordingSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         loadQuestInfo()
@@ -82,7 +80,9 @@ class QuestRecordingViewModel @Inject constructor(
             result.onSuccess { detail ->
                 _uiState.update {
                     it.copy(
-                        questAnswer = detail.questAnswer
+                        questAnswer = detail.questAnswer,
+                        originalAnswer = detail.questAnswer,
+                        isCompleteButtonEnabled = false
                     )
                 }
             }.onFailure {
@@ -171,10 +171,22 @@ class QuestRecordingViewModel @Inject constructor(
 
     fun updateContent(isFocused: Boolean, questAnswer: String) {
         val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
-        _uiState.update {
-            it.copy(
+        _uiState.update { prev ->
+            val hasChanged = questAnswer != prev.originalAnswer
+            val newHasAnswerChanged = prev.hasAnswerChanged || hasChanged
+            val next = prev.copy(
                 questAnswer = questAnswer,
-                contentsState = contentState
+                contentsState = contentState,
+                hasAnswerChanged = newHasAnswerChanged
+            )
+            val isButtonEnabled = completeButtonEnabled(
+                state = next,
+            )
+
+            next.copy(
+                questAnswer = questAnswer,
+                contentsState = contentState,
+                isCompleteButtonEnabled = isButtonEnabled
             )
         }
     }
@@ -213,7 +225,10 @@ class QuestRecordingViewModel @Inject constructor(
                 )
             )
             _sideEffect.emit(
-                QuestRecordingSideEffect.NavigateToQuestTip(questId = questId, questType = QuestType.RECORDING)
+                QuestRecordingSideEffect.NavigateToQuestTip(
+                    questId = questId,
+                    questType = QuestType.RECORDING
+                )
             )
         }
     }
@@ -223,6 +238,18 @@ class QuestRecordingViewModel @Inject constructor(
             onSaveEditClicked()
         } else {
             openBottomSheet()
+        }
+    }
+
+    private fun completeButtonEnabled(
+        state: QuestRecordingState,
+    ): Boolean {
+        val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
+
+        return if (state.isEditMode) {
+            isValid && state.hasAnswerChanged
+        } else {
+            isValid
         }
     }
 
