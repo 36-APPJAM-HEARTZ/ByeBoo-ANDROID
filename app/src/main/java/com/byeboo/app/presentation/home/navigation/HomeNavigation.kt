@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.home.navigation
 
-import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -34,7 +34,7 @@ fun NavGraphBuilder.homeGraph(
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToHome: () -> Unit,
     navigateToHomeOnboarding: () -> Unit,
-    padding: Dp
+    paddingValues: PaddingValues
 ) {
     composable<Home> {
         HomeRoute(
@@ -43,14 +43,14 @@ fun NavGraphBuilder.homeGraph(
             navigateToTutorial = navigateToTutorial,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
     composable<HomeOnboarding> {
         ByeBooBackHandler()
         HomeOnboardingRoute(
             navigateToHome = navigateToHome,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
     composable<HomeAmulet> {

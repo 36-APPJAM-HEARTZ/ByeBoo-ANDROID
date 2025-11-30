@@ -39,7 +39,7 @@ fun QuestStartRoute(
     journey: QuestType?,
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
 ) {
@@ -60,7 +60,7 @@ fun QuestStartRoute(
         uiState = uiState,
         onBackClick = viewModel::onBackClicked,
         onStartClick = { viewModel.onStartClicked(journey) },
-        padding = padding,
+        paddingValues = paddingValues,
         modifier = modifier
     )
 }
@@ -70,21 +70,23 @@ private fun QuestStartScreen(
     uiState: QuestStartState,
     onBackClick: () -> Unit,
     onStartClick: () -> Unit,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(bottom = padding),
-        contentPadding = PaddingValues(bottom = screenHeightDp(10.dp))
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding()
+            ),
+        contentPadding = PaddingValues(top = screenHeightDp(43.dp), bottom = screenHeightDp(10.dp))
     ) {
         item {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(top = screenHeightDp(67.dp))
                     .padding(horizontal = screenWidthDp(24.dp)),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -118,8 +120,7 @@ private fun QuestStartScreen(
                 buttonStyle = ByeBooTheme.typography.body2,
                 buttonTextColor = ByeBooTheme.colors.white,
                 buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                modifier = Modifier
-                    .padding(horizontal = screenWidthDp(24.dp))
+                modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
             )
         }
     }

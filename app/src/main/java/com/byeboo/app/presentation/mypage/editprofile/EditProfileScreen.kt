@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,7 +46,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun EditProfileRoute(
     navigateToMyPage: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,7 +71,7 @@ fun EditProfileRoute(
 
     EditProfileScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onNicknameChange = viewModel::updateNickname,
         onClearClick = { viewModel.updateNickname("") },
@@ -82,7 +83,7 @@ fun EditProfileRoute(
 @Composable
 private fun EditProfileScreen(
     uiState: EditProfileState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onNicknameChange: (String) -> Unit,
     onClearClick: () -> Unit,
@@ -100,7 +101,10 @@ private fun EditProfileScreen(
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = screenHeightDp(bottomPadding + 10.dp))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = screenHeightDp(paddingValues.calculateBottomPadding() + screenHeightDp(10.dp))
+            )
     ) {
         Row(
             modifier = Modifier

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,6 @@ import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,7 +65,7 @@ fun QuestRecordingRoute(
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestRecordingViewModel = hiltViewModel()
 ) {
@@ -107,7 +107,7 @@ fun QuestRecordingRoute(
 
     QuestRecordingScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onTipClick = viewModel::onTipClicked,
         onClickCompleteButton = viewModel::onClickCompleteButton,
@@ -123,7 +123,7 @@ fun QuestRecordingRoute(
 @Composable
 private fun QuestRecordingScreen(
     uiState: QuestRecordingState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onTipClick: () -> Unit,
     onClickCompleteButton: () -> Unit,
@@ -158,24 +158,27 @@ private fun QuestRecordingScreen(
                 }
             }
             .addFocusCleaner(focusManager)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
-                .padding(
-                    top = screenHeightDp((67.dp)),
-                    bottom = screenHeightDp(16.dp)
-                )
+                .padding(start = screenWidthDp(24.dp))
                 .align(Alignment.Start)
                 .clickable { onBackClick() }
         )
 
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(screenWidthDp(24.dp))
         ) {
             item {
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -294,7 +297,8 @@ private fun QuestRecordingScreen(
             buttonText = "완료하기",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             onClick = onClickCompleteButton,
-            isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer)
+            isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer),
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
