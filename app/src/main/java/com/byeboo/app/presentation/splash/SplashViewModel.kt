@@ -10,6 +10,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
 import com.byeboo.app.domain.usecase.ReissueAccessTokenUseCase
+import com.byeboo.app.domain.usecase.UpdateFcmTokenUseCase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
@@ -31,7 +32,8 @@ class SplashViewModel @Inject constructor(
     private val fcmTokenRepository: FcmTokenRepository,
     private val mixpanelUtil: MixpanelUtil,
     private val loginUseCase: LoginUseCase,
-    private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase
+    private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase,
+    private val updateFcmTokenUseCase: UpdateFcmTokenUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
@@ -63,7 +65,7 @@ class SplashViewModel @Inject constructor(
 
             val isRegistered = userRepository.isUserRegistered()
             if (isRegistered) {
-                saveFcmToken()
+                updateFcmToken()
                 userRepository.setLoggedIn(true)
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
             } else {
@@ -81,7 +83,8 @@ class SplashViewModel @Inject constructor(
 
                 val isRegistered = userRepository.isUserRegistered()
                 if (isRegistered) {
-                    saveFcmToken()
+                    updateFcmToken()
+
                     userRepository.setLoggedIn(true)
                     _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
                 } else {
@@ -112,6 +115,8 @@ class SplashViewModel @Inject constructor(
                             mixpanelUtil.setDistinctId(auth.userId.toString())
                             mixpanelUtil.trackLogin(LoginType.KAKAO, true)
                             userRepository.setLoggedIn(true)
+
+                            saveFcmToken()
 
                             isRegisteredUser = auth.isRegistered
                             _sideEffect.emit(SplashStateSideEffect.RequestNotificationPermission)
@@ -164,12 +169,29 @@ class SplashViewModel @Inject constructor(
         }
     }
 
+    private fun updateFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            viewModelScope.launch {
+                withContext(NonCancellable) {
+                    updateFcmTokenUseCase(token)
+                }
+            }
+        }
+    }
+
     fun onPermissionResult(isGranted: Boolean) {
         viewModelScope.launch {
             if (isRegisteredUser) {
                 if (isGranted) {
                     fcmTokenRepository.saveAlarmEnabled(true)
                     fcmTokenRepository.allowQuestAlarm()
+                } else {
+                    fcmTokenRepository.saveAlarmEnabled(false)
                 }
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
 

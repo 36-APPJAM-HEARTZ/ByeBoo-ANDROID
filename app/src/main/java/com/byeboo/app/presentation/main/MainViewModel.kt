@@ -20,8 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val questStateRepository: QuestStateRepository,
-    private val fcmTokenRepository: FcmTokenRepository,
-    private val userRepository: UserRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()

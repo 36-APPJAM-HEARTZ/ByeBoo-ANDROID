@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.splash.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -23,21 +24,21 @@ fun NavGraphBuilder.splashGraph(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    padding: Dp
+    paddingValues: PaddingValues
 ) {
     composable<Splash> {
         SplashRoute(
             navigateToHome = navigateToHome,
             navigateToUserInfo = navigateToUserInfo,
             navigateToTermsOfService = navigateToTermsOfService,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
     composable<Terms> {
         ByeBooBackHandler()
         TermsOfServiceRoute(
             navigateToUserInfo = navigateToUserInfo,
-            padding = padding
+            paddingValues = paddingValues
         )
     }
 }
