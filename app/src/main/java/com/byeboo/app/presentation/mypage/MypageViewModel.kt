@@ -38,14 +38,6 @@ class MyPageViewModel @Inject constructor(
             userRepository.getNickname().collect { nickname ->
                 _uiState.update { it.copy(nickname = nickname) }
             }
-            loadAlarmStatus()
-        }
-    }
-
-    fun loadAlarmStatus() {
-        viewModelScope.launch {
-            val isAlarmEnabled = fcmTokenRepository.isAlarmEnabled()
-            _uiState.update { it.copy(isAlarmEnabled = isAlarmEnabled) }
         }
     }
 
@@ -70,7 +62,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun onAlarmToggledClicked(hasSystemPermission: Boolean, isPermissionNeeded: Boolean) {
+    fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
         val isAlarmEnabled = _uiState.value.isAlarmEnabled
 
         if (isAlarmEnabled) {
@@ -81,16 +73,7 @@ class MyPageViewModel @Inject constructor(
             if (hasSystemPermission) {
                 updateAlarmStatus()
             } else {
-                // 권한 없을 경우
-                if (isPermissionNeeded) {
-                    // 비허용 이력 있을 경우 -> 설정 모달
-                    _uiState.update { it.copy(showPermissionModal = true) }
-                } else {
-                    // 최초 시도 -> 시스템 팝업 요청
-                    viewModelScope.launch {
-                        _sideEffect.emit(MyPageSideEffect.RequestNotificationPermission)
-                    }
-                }
+                _uiState.update { it.copy(showPermissionModal = true) }
             }
         }
     }
@@ -99,9 +82,16 @@ class MyPageViewModel @Inject constructor(
     fun onPermissionResult(isGranted: Boolean) {
         if (isGranted) {
             // 허용 -> 서버 토글 요청
-            updateAlarmStatus()
+            viewModelScope.launch {
+                _uiState.update { it.copy(isAlarmEnabled = true) }
+                fcmTokenRepository.saveAlarmEnabled(true)
+                updateAlarmStatus()
+            }
         } else {
             // 비허용 -> off 유지
+            _uiState.update {
+                it.copy(showPermissionModal = false, isAlarmEnabled = false)
+            }
         }
     }
 
@@ -116,6 +106,8 @@ class MyPageViewModel @Inject constructor(
                     fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
                 }
                 .onFailure {
+                    _uiState.update { it.copy(isAlarmEnabled = false) }
+                    fcmTokenRepository.saveAlarmEnabled(false)
                     MyPageSideEffect.ShowSnackBar("다시 시도해 주세요.")
                 }
         }
@@ -132,10 +124,14 @@ class MyPageViewModel @Inject constructor(
     // 설정 -> 앱 복귀 시 알람 상태 동기화
     fun syncAlarmState(hasSystemPermission: Boolean) {
         viewModelScope.launch {
-            if (!hasSystemPermission && _uiState.value.isAlarmEnabled) {
-                updateAlarmStatus()
+
+            if (!hasSystemPermission) {
+                _uiState.update { it.copy(isAlarmEnabled = false) }
+                fcmTokenRepository.saveAlarmEnabled(false)
+
             } else {
-                loadAlarmStatus()
+                val savedState = fcmTokenRepository.isAlarmEnabled()
+                _uiState.update { it.copy(isAlarmEnabled = savedState) }
             }
         }
     }

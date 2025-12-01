@@ -190,6 +190,8 @@ class SplashViewModel @Inject constructor(
                 if (isGranted) {
                     fcmTokenRepository.saveAlarmEnabled(true)
                     fcmTokenRepository.allowQuestAlarm()
+                } else {
+                    fcmTokenRepository.saveAlarmEnabled(false)
                 }
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
 

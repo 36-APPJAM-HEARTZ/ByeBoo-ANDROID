@@ -52,6 +52,7 @@ import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
 
@@ -76,32 +77,58 @@ fun MyPageRoute(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
-            viewModel.onPermissionResult(isGranted)
+            if (isGranted) {
+                viewModel.onPermissionResult(true)
+            } else {
+                val showRationale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+                } else false
+
+                if (!showRationale) {
+                    viewModel.onAlarmToggledClicked(hasSystemPermission = false)
+                } else {
+                    viewModel.onPermissionResult(false)
+                }
+            }
         }
     )
 
     val onAlarmToggleClick = {
-        val hasPermission = context.hasNotificationPermission()
-        val isPermissionNeeded = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (context.hasNotificationPermission()) {
+                viewModel.onAlarmToggledClicked(true)
+            } else {
+                val shouldShowRationale =
+                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+
+                if (shouldShowRationale) {
+                    viewModel.onAlarmToggledClicked(false)
+                } else {
+                    permissionLauncher.launch(POST_NOTIFICATIONS)
+                }
+            }
         } else {
-            false
+            viewModel.onAlarmToggledClicked(true)
         }
-        viewModel.onAlarmToggledClicked(hasPermission, isPermissionNeeded)
     }
 
     if (uiState.showPermissionModal) {
-        MyPageModal(
+        BasicNotificationModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
-            myPageModalMainText = "알림 권한 필요",
-            myPageModalSubText = "알림을 받으려면 설정에서 권한을 허용해야 합니다.",
-            onCancelClick = { viewModel.onDismissModal(ModalType.PERMISSION) },
-            onConfirmClick = viewModel::onGoToSettingClicked,
-            onConfirmText = "허용하기",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+            onConfirmClick = {
+                viewModel.onDismissModal(ModalType.PERMISSION)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val shouldShowRationale =
+                        activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+
+                    if (shouldShowRationale) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+
+                    } else {
+                        viewModel.onGoToSettingClicked()
+                    }
+                }
+            }
         )
     }
 
@@ -134,6 +161,10 @@ fun MyPageRoute(
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
+
+//    LaunchedEffect(Unit) {
+//        viewModel.loadAlarmStatus()
+//    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
