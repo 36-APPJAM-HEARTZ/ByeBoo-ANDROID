@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.main
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -19,7 +20,7 @@ import com.byeboo.app.presentation.tutorial.navigation.tutorialGraph
 @Composable
 fun MainNavHost(
     navigator: MainNavigator,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val clearStackNavOptions = navOptions {
@@ -53,13 +54,13 @@ fun MainNavHost(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToUserInfo = { navigator.navigateToUserInfo(clearStackNavOptions) },
             navigateToTermsOfService = { navigator.navigateToTerms(clearStackNavOptions) },
-            padding = padding
+            paddingValues = paddingValues
         )
 
         authGraph(
             navigateToLoading = { navigator.navigateToLoading(clearStackNavOptions) },
             navigateToHomeAmulet = { navigator.navigateToHomeAmulet(clearStackNavOptions) },
-            padding = padding
+            paddingValues = paddingValues
         )
 
         homeGraph(
@@ -83,7 +84,7 @@ fun MainNavHost(
             },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
-            padding = padding
+            paddingValues = paddingValues
 
         )
 
@@ -132,7 +133,7 @@ fun MainNavHost(
                 )
             },
             navigateUp = navigator::navigateUp,
-            padding = padding
+            paddingValues = paddingValues
         )
 
         myPageGraph(
@@ -145,7 +146,7 @@ fun MainNavHost(
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
             navigateToSplash = { navigator.navigateToSplash(clearStackNavOptions) },
-            padding = padding
+            paddingValues = paddingValues
         )
 
         offboardingGraph(
@@ -174,12 +175,12 @@ fun MainNavHost(
                     keepStackNavOptions
                 )
             },
-            padding = padding
+            paddingValues = paddingValues
         )
 
         tutorialGraph(
             navigateToUp = navigator::navigateUp,
-            padding = padding
+            paddingValues = paddingValues
         )
     }
 }

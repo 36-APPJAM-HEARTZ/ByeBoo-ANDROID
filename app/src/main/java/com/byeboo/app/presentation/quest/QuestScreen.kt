@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +43,7 @@ fun QuestRoute(
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompleteGuide: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     viewModel: QuestViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -63,16 +62,9 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    effect.questId,
-                    effect.questType
-                )
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(
-                    effect.questId
-                )
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(
-                    effect.questId
-                )
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
+                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
+                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
@@ -83,7 +75,7 @@ fun QuestRoute(
     QuestScreen(
         uiState = uiState,
         listState = listState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClick,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
@@ -95,7 +87,7 @@ fun QuestRoute(
 private fun QuestScreen(
     uiState: QuestUiState,
     listState: LazyListState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
     onTipClick: () -> Unit,
@@ -119,10 +111,14 @@ private fun QuestScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = screenWidthDp(24.dp))) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
                 text = uiState.progressPeriod.toString(),
@@ -143,7 +139,11 @@ private fun QuestScreen(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding = PaddingValues(bottom = screenHeightDp(bottomPadding + 37.dp)),
+            contentPadding = PaddingValues(
+                start = screenWidthDp(24.dp),
+                end = screenWidthDp(24.dp),
+                bottom = screenHeightDp(37.dp)
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .background(ByeBooTheme.colors.black)

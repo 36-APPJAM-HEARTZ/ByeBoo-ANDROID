@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,7 +44,7 @@ import com.byeboo.app.presentation.home.component.SpeechBubbleWithText
 @Composable
 fun HomeOnboardingRoute(
     navigateToHome: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     viewModel: HomeOnboardingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +61,7 @@ fun HomeOnboardingRoute(
     HomeOnboardingScreen(
         uiState = uiState,
         onHomeClick = viewModel::onHomeLongClick,
-        bottomPadding = bottomPadding
+        paddingValues = paddingValues,
     )
 }
 
@@ -69,7 +69,7 @@ fun HomeOnboardingRoute(
 private fun HomeOnboardingScreen(
     uiState: HomeOnboardingUiState,
     onHomeClick: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val haptic = LocalHapticFeedback.current
@@ -155,7 +155,7 @@ private fun HomeOnboardingScreen(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
+                        .padding(bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding())
                         .then(clickableModifier)
                         .aspectRatio(1f)
                 )

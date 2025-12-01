@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,7 +55,7 @@ fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
@@ -107,7 +108,7 @@ fun SplashRoute(
     }
 
     SplashScreen(
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         showLoginButton = showLoginButton,
         onClick = {
             val availableButton = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
@@ -119,7 +120,7 @@ fun SplashRoute(
 
 @Composable
 private fun SplashScreen(
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     showLoginButton: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -163,7 +164,7 @@ private fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = screenHeightDp( 10.dp) + bottomPadding)
+                .padding(bottom = screenHeightDp( 10.dp) + paddingValues.calculateBottomPadding())
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))
