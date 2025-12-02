@@ -172,12 +172,12 @@ class QuestRecordingViewModel @Inject constructor(
     fun updateContent(isFocused: Boolean, questAnswer: String) {
         val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
         _uiState.update { prev ->
-            val hasChanged = questAnswer != prev.originalAnswer
-            val newHasAnswerChanged = prev.hasAnswerChanged || hasChanged
+            val hasAnswerChanged = questAnswer != prev.originalAnswer
+
             val next = prev.copy(
                 questAnswer = questAnswer,
                 contentsState = contentState,
-                hasAnswerChanged = newHasAnswerChanged
+                hasAnswerChanged = hasAnswerChanged
             )
             val isButtonEnabled = completeButtonEnabled(
                 state = next,
@@ -192,16 +192,7 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun onBackClicked() {
-        if (uiState.value.isEditMode) {
-            _uiState.update { it.copy(isEditMode = false) }
-            viewModelScope.launch {
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.NavigateUp
-                )
-            }
-        } else {
-            _uiState.update { it.copy(showQuitModal = true) }
-        }
+        _uiState.update { it.copy(showQuitModal = true) }
     }
 
     fun onDismissModal() {
@@ -209,8 +200,14 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun onQuitClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuest)
+        if (uiState.value.isEditMode) {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
+            }
+        } else {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuest)
+            }
         }
     }
 
