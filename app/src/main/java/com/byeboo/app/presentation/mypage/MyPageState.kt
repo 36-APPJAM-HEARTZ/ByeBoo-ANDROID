@@ -2,7 +2,7 @@ package com.byeboo.app.presentation.mypage
 
 data class MyPageState(
     val nickname: String = "",
-    val isAlarmEnabled: Boolean = false,
+    val isAlarmEnabled: Boolean? = null,
     val showLogoutModal: Boolean = false,
     val showDeleteAccountModal: Boolean = false,
     val showPermissionModal: Boolean = false
