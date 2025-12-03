@@ -15,6 +15,12 @@ class FcmTokenRepositoryImpl @Inject constructor(
 ): FcmTokenRepository {
     override suspend fun saveFcmToken(fcmToken: FcmTokenModel): Result<Unit> {
         return runCatching {
+            val savedLocalToken = fcmLocalDataSource.getFcmToken()
+
+            if (savedLocalToken == fcmToken.token) {
+                return@runCatching
+            }
+
             fcmRemoteDataSource.saveFcmToken(fcmToken.toData())
             fcmLocalDataSource.saveFcmToken(fcmToken.token)
 
