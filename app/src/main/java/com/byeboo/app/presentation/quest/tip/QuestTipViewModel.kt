@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.navigation.QuestTip
@@ -54,7 +53,6 @@ class QuestTipViewModel @Inject constructor(
             result.onSuccess { tip ->
                 _uiState.update {
                     it.copy(
-                        questType = QuestType.Companion.fromQuestStyle(tip.step),
                         stepNumber = tip.stepNumber,
                         questNumber = tip.questNumber,
                         question = tip.question,
