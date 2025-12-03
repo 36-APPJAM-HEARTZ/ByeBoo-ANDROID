@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,7 +27,6 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -36,7 +34,6 @@ import com.byeboo.app.presentation.quest.component.modal.GuideContent
 
 @Composable
 fun QuestStartRoute(
-    journey: QuestType?,
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
     paddingValues: PaddingValues,
@@ -59,7 +56,7 @@ fun QuestStartRoute(
     QuestStartScreen(
         uiState = uiState,
         onBackClick = viewModel::onBackClicked,
-        onStartClick = { viewModel.onStartClicked(journey) },
+        onStartClick = viewModel::onStartClicked,
         paddingValues = paddingValues,
         modifier = modifier
     )
@@ -87,6 +84,7 @@ private fun QuestStartScreen(
             Row(
                 modifier = modifier
                     .fillMaxWidth()
+                    .padding(top = screenHeightDp(67.dp))
                     .padding(horizontal = screenWidthDp(24.dp)),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
