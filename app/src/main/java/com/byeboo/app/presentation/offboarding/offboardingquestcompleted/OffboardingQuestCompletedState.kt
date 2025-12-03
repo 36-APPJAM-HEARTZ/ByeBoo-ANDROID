@@ -10,7 +10,7 @@ data class QuestCompletedState(
     val questGroups: ImmutableList<QuestCompletedGroup> = persistentListOf(),
     val progressPeriod: String = "",
     val userName: String = "하츠핑",
-    val journeyType: QuestType = QuestType.RECORDING,
+    val questType: QuestType = QuestType.RECORDING,
     val selectedQuest: Quest? = null
 )
 

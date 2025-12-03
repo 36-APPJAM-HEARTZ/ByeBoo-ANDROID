@@ -1,11 +1,13 @@
 package com.byeboo.app.presentation.quest.start
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.model.quest.QuestType
 
 @Immutable
 data class QuestStartState(
     val nickname: String = "하츠핑",
-    val journeyName: String = "감정 직면"
+    val journeyName: String = "감정 직면",
+    val questType: QuestType = QuestType.RECORDING
 )
 
 sealed interface QuestStartSideEffect {

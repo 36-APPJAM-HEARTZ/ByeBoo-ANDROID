@@ -116,8 +116,8 @@ class MainNavigator(
         navController.navigateToUserInfo(navOptions)
     }
 
-    fun navigateToQuestStart(journeyName: QuestType? = null, navOptions: NavOptions) {
-        navController.navigateToQuestStart(journey = journeyName, navOptions = navOptions)
+    fun navigateToQuestStart(questType: QuestType? = null, navOptions: NavOptions) {
+        navController.navigateToQuestStart(questType = questType, navOptions = navOptions)
     }
 
     fun navigateToQuest(options: NavOptions) {
@@ -184,8 +184,8 @@ class MainNavigator(
         navController.navigateToOffboardingCompletedJourney(navOptions)
     }
 
-    fun navigateToOffboardingQuestCompleted(journey: QuestType, navOptions: NavOptions) {
-        navController.navigateToOffboardingQuestCompleted(journey = journey, navOptions = navOptions)
+    fun navigateToOffboardingQuestCompleted(questType: QuestType, navOptions: NavOptions) {
+        navController.navigateToOffboardingQuestCompleted(questType = questType, navOptions = navOptions)
     }
 
     fun navigateToSplash(navOptions: NavOptions) {
