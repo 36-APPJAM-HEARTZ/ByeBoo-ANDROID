@@ -65,15 +65,17 @@ class MyPageViewModel @Inject constructor(
     fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
         val isAlarmEnabled = _uiState.value.isAlarmEnabled
 
-        if (isAlarmEnabled) {
-            updateAlarmStatus()
-        } else {
-            // [off -> on]
-            // 권한 있을 경우
-            if (hasSystemPermission) {
+        isAlarmEnabled?.let {
+            if (isAlarmEnabled) {
                 updateAlarmStatus()
             } else {
-                _uiState.update { it.copy(showPermissionModal = true) }
+                // [off -> on]
+                // 권한 있을 경우
+                if (hasSystemPermission) {
+                    updateAlarmStatus()
+                } else {
+                    _uiState.update { it.copy(showPermissionModal = true) }
+                }
             }
         }
     }

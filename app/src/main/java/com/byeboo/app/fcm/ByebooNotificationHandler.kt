@@ -17,13 +17,12 @@ class ByebooNotificationHandler @Inject constructor(
 ) {
     fun showNotification(
         title: String?,
-        message: String?,
-        questId: String?
+        message: String?
     ) {
         val notifyId = System.currentTimeMillis().toInt()
 
         val intent = Intent(context, MainActivity::class.java).apply {
-            putExtra("questId", questId)
+            putExtra(DESTINATION, QUEST_HOME)
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
@@ -50,5 +49,7 @@ class ByebooNotificationHandler @Inject constructor(
     companion object {
         const val CHANNEL_ID = "BYEBOO"
         const val CHANNEL_NAME = "Byeboo 알림 채널"
+        const val DESTINATION = "destination"
+        const val QUEST_HOME = "questHome"
     }
 }
