@@ -296,7 +296,8 @@ private fun QuestRecordingScreen(
             buttonText = "완료하기",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             onClick = onClickCompleteButton,
-            isEnabled = uiState.isCompleteButtonEnabled
+            isEnabled = uiState.isCompleteButtonEnabled,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))

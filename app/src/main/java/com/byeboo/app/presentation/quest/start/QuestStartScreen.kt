@@ -84,7 +84,6 @@ private fun QuestStartScreen(
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(top = screenHeightDp(67.dp))
                     .padding(horizontal = screenWidthDp(24.dp)),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
