@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.start
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -27,7 +27,6 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -37,7 +36,7 @@ import com.byeboo.app.presentation.quest.component.modal.GuideContent
 fun QuestStartRoute(
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestStartViewModel = hiltViewModel()
 ) {
@@ -57,8 +56,8 @@ fun QuestStartRoute(
     QuestStartScreen(
         uiState = uiState,
         onBackClick = viewModel::onBackClicked,
-        onStartClick = viewModel::onStartClicked,
-        padding = padding,
+        onStartClick = { viewModel.onStartClicked(journey) },
+        paddingValues = paddingValues,
         modifier = modifier
     )
 }
@@ -68,14 +67,18 @@ private fun QuestStartScreen(
     uiState: QuestStartState,
     onBackClick: () -> Unit,
     onStartClick: () -> Unit,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(bottom = padding)
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding()
+            ),
+        contentPadding = PaddingValues(top = screenHeightDp(43.dp), bottom = screenHeightDp(10.dp))
     ) {
         item {
             Row(
@@ -115,9 +118,7 @@ private fun QuestStartScreen(
                 buttonStyle = ByeBooTheme.typography.body2,
                 buttonTextColor = ByeBooTheme.colors.white,
                 buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                modifier = Modifier
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(bottom = 10.dp)
+                modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
             )
         }
     }

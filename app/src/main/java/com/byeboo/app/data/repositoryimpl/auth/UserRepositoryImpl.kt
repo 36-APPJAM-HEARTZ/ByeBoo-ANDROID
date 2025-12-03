@@ -81,4 +81,12 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun setUserRegistered(isRegistered: Boolean) {
         userLocalDataSource.setUserRegistered(isRegistered)
     }
+
+    override fun getLoggedIn(): Flow<Boolean> {
+        return userLocalDataSource.getLoggedIn()
+    }
+
+    override suspend fun setLoggedIn(isLoggedIn: Boolean) {
+        userLocalDataSource.setLoggedIn(isLoggedIn)
+    }
 }

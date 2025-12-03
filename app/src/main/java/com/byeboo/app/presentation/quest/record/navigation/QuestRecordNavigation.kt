@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.record.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -27,7 +28,7 @@ fun NavGraphBuilder.questRecordGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
-    bottomPadding: Dp
+    paddingValues: PaddingValues
 ) {
     routeNavigation<QuestRecord, QuestRecording> {
         composable<QuestRecording> {
@@ -37,7 +38,7 @@ fun NavGraphBuilder.questRecordGraph(
                 navigateToQuestRecordingComplete = navigateToQuestRecordingComplete,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateUp = navigateUp,
-                bottomPadding = bottomPadding
+                paddingValues = paddingValues
             )
         }
 
@@ -45,7 +46,7 @@ fun NavGraphBuilder.questRecordGraph(
             QuestRecordingCompleteRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
-                bottomPadding = bottomPadding
+                paddingValues = paddingValues
             )
         }
     }

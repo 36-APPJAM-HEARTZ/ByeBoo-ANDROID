@@ -40,7 +40,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 fun OffboardingQuestCompletedRoute(
     navigateUp: () -> Unit,
     navigateToQuestReview: (Long) -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
 ) {
@@ -62,7 +62,7 @@ fun OffboardingQuestCompletedRoute(
     OffboardingQuestCompletedScreen(
         uiState = uiState,
         onCancelClick = viewModel::onCancelClicked,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         modifier = modifier
     )
@@ -72,7 +72,7 @@ fun OffboardingQuestCompletedRoute(
 private fun OffboardingQuestCompletedScreen(
     uiState: QuestCompletedState,
     onCancelClick: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -81,18 +81,21 @@ private fun OffboardingQuestCompletedScreen(
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
-            .padding(top = screenHeightDp(67.dp), bottom = bottomPadding)
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = "",
+            contentDescription = null,
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
                 .align(Alignment.End)
                 .clickable(onClick = onCancelClick)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_PERIOD,
@@ -100,7 +103,7 @@ private fun OffboardingQuestCompletedScreen(
             textStyle = ByeBooTheme.typography.cap2
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         DescriptionText(
             nicknameText = "${uiState.userName}님의",
@@ -111,7 +114,7 @@ private fun OffboardingQuestCompletedScreen(
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = screenHeightDp(37.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(21.dp)),
             modifier = Modifier.fillMaxWidth()
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
@@ -119,17 +122,17 @@ private fun OffboardingQuestCompletedScreen(
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = ByeBooTheme.colors.whiteAlpha10,
-                        modifier = Modifier.padding(vertical = 8.dp)
+                        modifier = Modifier.padding(vertical = screenHeightDp(8.dp))
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestStepTitle(
                         stepNumber = (stepIndex + 1).toLong(),
                         stepTitle = group.stepTitle
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                 }
 
                 val questChunks = group.quests.chunked(3)
@@ -153,7 +156,7 @@ private fun OffboardingQuestCompletedScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                     }
                 }
             }

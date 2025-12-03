@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,16 +25,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun TutorialRoute(
     navigateToUp: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: TutorialViewModel = hiltViewModel()
 ) {
@@ -46,7 +48,7 @@ fun TutorialRoute(
     }
 
     TutorialScreen(
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         modifier = modifier
     )
@@ -54,7 +56,7 @@ fun TutorialRoute(
 
 @Composable
 private fun TutorialScreen(
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -62,8 +64,11 @@ private fun TutorialScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = 24.dp)
-            .padding(top = 67.dp, bottom = bottomPadding)
+            .padding(horizontal = screenWidthDp(24.dp))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
@@ -78,22 +83,23 @@ private fun TutorialScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = (14.5).dp)
+                .padding(horizontal = screenWidthDp((14.5).dp))
+                .padding(top = screenHeightDp(24.dp), bottom = screenHeightDp(16.dp))
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
             for (contents in TutorialContent.entries) {
                 key(contents) {
                     Image(
                         painter = painterResource(id = contents.image),
-                        contentDescription = "",
+                        contentDescription = null,
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                     Text(
                         text = contents.content,
@@ -102,11 +108,9 @@ private fun TutorialScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }

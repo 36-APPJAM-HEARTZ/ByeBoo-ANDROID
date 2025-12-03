@@ -11,6 +11,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -67,7 +67,7 @@ fun HomeRoute(
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -106,7 +106,7 @@ fun HomeRoute(
         onClickQuest = viewModel::onClickQuest,
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         onLottieClick = viewModel::onLottieClicked
     )
@@ -118,7 +118,7 @@ private fun HomeScreen(
     onClickQuest: () -> Unit,
     onClickQuestStart: () -> Unit,
     onHelpIconClick: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onOffboardingNewJourneyClick: () -> Unit,
     onLottieClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -181,7 +181,7 @@ private fun HomeScreen(
                     modifier = modifier
                         .fillMaxSize()
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(top = screenHeightDp(67.dp))
+                        .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp))
                 ) {
                     when (uiState.status) {
                         HomeStatus.INITIAL_START -> {
@@ -229,7 +229,9 @@ private fun HomeScreen(
                                 subtitle = "퀘스트를 하고나면 한층 더 성장할 거에요.",
                                 onClick = onClickQuest
                             )
+
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
+
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
@@ -244,7 +246,9 @@ private fun HomeScreen(
                                 onClick = onClickQuest,
                                 borderColor = Color.Unspecified
                             )
+
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
+
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
@@ -269,7 +273,7 @@ private fun HomeScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = maxOf(bottomPadding - screenHeightDp(20.dp), 0.dp))
+                        .padding(bottom = maxOf(paddingValues.calculateBottomPadding() - screenHeightDp(20.dp), 0.dp))
                 ) {
                     // 하단 말풍선
                     Box(
@@ -288,7 +292,7 @@ private fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .matchParentSize()
-                                .padding(bottom = 14.dp),
+                                .padding(bottom = screenHeightDp(14.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Column {

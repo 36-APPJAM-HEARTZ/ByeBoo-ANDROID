@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.quest.navigation
 
-import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -50,14 +50,14 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
-    padding: Dp
+    paddingValues: PaddingValues
 ) {
     routeNavigation<Quest, QuestStart> {
         composable<QuestStart> {
             QuestStartRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToHome = navigateToHome,
-                padding = padding
+                paddingValues = paddingValues
             )
         }
 
@@ -68,14 +68,14 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToOffboardingCompleteGuide = navigateToOffboardingCompleteGuide,
-                bottomPadding = padding
+                paddingValues = paddingValues
             )
         }
 
         composable<QuestTip> {
             QuestTipRoute(
                 navigateToQuest = navigateUp,
-                bottomPadding = padding
+                paddingValues = paddingValues
             )
         }
 
@@ -84,7 +84,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
-                bottomPadding = padding
+                paddingValues = paddingValues
             )
         }
 
@@ -95,7 +95,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             navigateUp = navigateUp,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
 
         questBehaviorGraph(
@@ -105,7 +105,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompleteGuide,
             navigateUp = navigateUp,
-            bottomPadding = padding
+            paddingValues = paddingValues
         )
     }
 }

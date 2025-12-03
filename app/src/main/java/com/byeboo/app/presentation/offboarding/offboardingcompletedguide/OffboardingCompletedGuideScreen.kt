@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,6 +57,7 @@ import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.component.OffboardingNewJourneyButton
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -66,7 +68,7 @@ fun OffboardingCompletedGuideRoute(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
 ) {
@@ -91,7 +93,7 @@ fun OffboardingCompletedGuideRoute(
 
     OffboardingCompleteGuideScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
@@ -103,7 +105,7 @@ fun OffboardingCompletedGuideRoute(
 @Composable
 private fun OffboardingCompleteGuideScreen(
     uiState: OffboardingCompletedGuideState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     onNewJourneyClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
@@ -122,7 +124,7 @@ private fun OffboardingCompleteGuideScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.bg_userinfo),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -135,13 +137,16 @@ private fun OffboardingCompleteGuideScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 67.dp, bottom = bottomPadding + 10.dp),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(
+                        top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                        bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = ByeBooTheme.colors.white,
                     modifier = Modifier
                         .size(24.dp)
@@ -154,7 +159,7 @@ private fun OffboardingCompleteGuideScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(156.dp),
+                        .height(screenHeightDp(156.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -176,7 +181,7 @@ private fun OffboardingCompleteGuideScreen(
                             onAdvance = { nextIndex -> index = nextIndex }
                         )
                     } else {
-                        Spacer(Modifier.height(32.dp))
+                        Spacer(Modifier.height(screenHeightDp(32.dp)))
 
                         Text(
                             text = "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?",
@@ -192,7 +197,7 @@ private fun OffboardingCompleteGuideScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = screenWidthDp(16.dp)),
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     LottieAnimation(
@@ -200,7 +205,7 @@ private fun OffboardingCompleteGuideScreen(
                         progress = progress,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 34.dp)
+                            .padding(bottom = screenHeightDp(34.dp))
                     )
                 }
 
@@ -245,7 +250,7 @@ fun TextSequence(
         return
     }
 
-    Spacer(modifier = Modifier.height(topGap))
+    Spacer(modifier = Modifier.height(screenHeightDp(topGap)))
 
     Animation(
         firstSentence = firstSentence,

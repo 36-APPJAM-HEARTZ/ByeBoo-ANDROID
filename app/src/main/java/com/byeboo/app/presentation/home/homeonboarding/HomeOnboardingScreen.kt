@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,7 +44,7 @@ import com.byeboo.app.presentation.home.component.SpeechBubbleWithText
 @Composable
 fun HomeOnboardingRoute(
     navigateToHome: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     viewModel: HomeOnboardingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +61,7 @@ fun HomeOnboardingRoute(
     HomeOnboardingScreen(
         uiState = uiState,
         onHomeClick = viewModel::onHomeLongClick,
-        bottomPadding = bottomPadding
+        paddingValues = paddingValues,
     )
 }
 
@@ -69,7 +69,7 @@ fun HomeOnboardingRoute(
 private fun HomeOnboardingScreen(
     uiState: HomeOnboardingUiState,
     onHomeClick: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val haptic = LocalHapticFeedback.current
@@ -135,28 +135,27 @@ private fun HomeOnboardingScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-            }
-
-            AnimatedVisibility(
-                visible = uiState.showSpeechBubble,
-                enter = fadeIn(animationSpec = tween(1000))
-            ) {
-                SpeechBubbleWithText(
-                    firstText = "바이부에 오신 걸 환영해요!",
-                    secondText = "저는 보리라고 해요.",
-                    thirdText = "여정을 시작하러 가볼까요?"
+                        .padding(bottom = screenHeightDp(16.dp))
                 )
             }
 
             if (isLottieReady) {
+                AnimatedVisibility(
+                    visible = uiState.showSpeechBubble,
+                    enter = fadeIn(animationSpec = tween(1000))
+                ) {
+                    SpeechBubbleWithText(
+                        firstText = "바이부에 오신 걸 환영해요!",
+                        secondText = "저는 보리라고 해요.",
+                        thirdText = "여정을 시작하러 가볼까요?"
+                    )
+                }
                 LottieAnimation(
                     composition = composition,
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(89.dp) + bottomPadding)
+                        .padding(bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding())
                         .then(clickableModifier)
                         .aspectRatio(1f)
                 )

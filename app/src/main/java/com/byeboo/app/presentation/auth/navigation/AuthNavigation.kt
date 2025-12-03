@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.auth.navigation
 
-import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -21,12 +21,12 @@ fun NavController.navigateToLoading(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.authGraph(
     navigateToLoading: () -> Unit,
     navigateToHomeAmulet: () -> Unit,
-    padding: Dp
+    paddingValues: PaddingValues
 ) {
     composable<UserInfo> {
         UserInfoRoute(
             navigateToLoading = navigateToLoading,
-            padding = padding
+            paddingValues = paddingValues
         )
     }
 

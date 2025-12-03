@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun TermsAllButton(
@@ -33,7 +35,7 @@ fun TermsAllButton(
     val backgroundColor = if (isChecked) ByeBooTheme.colors.primary300Alpha20 else ByeBooTheme.colors.whiteAlpha10
 
     Column(
-        modifier = modifier.padding(vertical = 8.dp),
+        modifier = modifier.padding(vertical = screenHeightDp(8.dp)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -54,7 +56,7 @@ fun TermsAllButton(
                         Modifier
                     }
                 )
-                .padding(vertical = 18.dp, horizontal = 24.dp)
+                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
                 .noRippleClickable(onClick = onTermsAllClick),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -64,7 +66,7 @@ fun TermsAllButton(
                 tint = Color.Unspecified
             )
 
-            Spacer(modifier = modifier.width(8.dp))
+            Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
 
             Text(
                 text = "전체 동의",

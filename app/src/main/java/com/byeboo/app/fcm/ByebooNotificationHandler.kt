@@ -18,7 +18,7 @@ class ByebooNotificationHandler @Inject constructor(
     fun showNotification(
         title: String?,
         message: String?,
-        questId: String
+        questId: String?
     ) {
         val notifyId = System.currentTimeMillis().toInt()
 

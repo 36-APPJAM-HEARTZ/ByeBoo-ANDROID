@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
 fun TermsCheckButton(
@@ -32,7 +33,7 @@ fun TermsCheckButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = screenHeightDp(8.dp))
             .noRippleClickable { onCheckClick(!isSelected) },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -44,7 +45,7 @@ fun TermsCheckButton(
                 .size(12.dp)
         )
 
-        Spacer(modifier = modifier.padding(horizontal = 8.dp))
+        Spacer(modifier = modifier.padding(horizontal = screenHeightDp(8.dp)))
 
         Text(
             text = title,

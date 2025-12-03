@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
 import com.byeboo.app.domain.usecase.WithdrawUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val fcmTokenRepository: FcmTokenRepository,
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
     private val mixpanelUtil: MixpanelUtil
@@ -36,6 +38,14 @@ class MyPageViewModel @Inject constructor(
             userRepository.getNickname().collect { nickname ->
                 _uiState.update { it.copy(nickname = nickname) }
             }
+            loadAlarmStatus()
+        }
+    }
+
+    fun loadAlarmStatus() {
+        viewModelScope.launch {
+            val isAlarmEnabled = fcmTokenRepository.isAlarmEnabled()
+            _uiState.update { it.copy(isAlarmEnabled = isAlarmEnabled) }
         }
     }
 
@@ -60,6 +70,76 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun onAlarmToggledClicked(hasSystemPermission: Boolean, isPermissionNeeded: Boolean) {
+        val isAlarmEnabled = _uiState.value.isAlarmEnabled
+
+        if (isAlarmEnabled) {
+            updateAlarmStatus()
+        } else {
+            // [off -> on]
+            // 권한 있을 경우
+            if (hasSystemPermission) {
+                updateAlarmStatus()
+            } else {
+                // 권한 없을 경우
+                if (isPermissionNeeded) {
+                    // 비허용 이력 있을 경우 -> 설정 모달
+                    _uiState.update { it.copy(showPermissionModal = true) }
+                } else {
+                    // 최초 시도 -> 시스템 팝업 요청
+                    viewModelScope.launch {
+                        _sideEffect.emit(MyPageSideEffect.RequestNotificationPermission)
+                    }
+                }
+            }
+        }
+    }
+
+    // 시스템 권한 팝업 결과 처리
+    fun onPermissionResult(isGranted: Boolean) {
+        if (isGranted) {
+            // 허용 -> 서버 토글 요청
+            updateAlarmStatus()
+        } else {
+            // 비허용 -> off 유지
+        }
+    }
+
+    // 서버 토글 요청
+    private fun updateAlarmStatus() {
+        viewModelScope.launch {
+            fcmTokenRepository.allowQuestAlarm()
+                .onSuccess { notificationSetting ->
+                    _uiState.update {
+                        it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
+                    }
+                    fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
+                }
+                .onFailure {
+                    MyPageSideEffect.ShowSnackBar("다시 시도해 주세요.")
+                }
+        }
+    }
+
+    // 설정 화면으로 이동할 경우
+    fun onGoToSettingClicked() {
+        _uiState.update { it.copy(showPermissionModal = false) }
+        viewModelScope.launch {
+            _sideEffect.emit(MyPageSideEffect.NavigateToSetting)
+        }
+    }
+
+    // 설정 -> 앱 복귀 시 알람 상태 동기화
+    fun syncAlarmState(hasSystemPermission: Boolean) {
+        viewModelScope.launch {
+            if (!hasSystemPermission && _uiState.value.isAlarmEnabled) {
+                updateAlarmStatus()
+            } else {
+                loadAlarmStatus()
+            }
+        }
+    }
+
     private fun emitOpenUrl(url: String) {
         viewModelScope.launch {
             _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
@@ -78,6 +158,7 @@ class MyPageViewModel @Inject constructor(
         when (modalType) {
             ModalType.LOGOUT -> _uiState.update { it.copy(showLogoutModal = false) }
             ModalType.DELETE_ACCOUNT -> _uiState.update { it.copy(showDeleteAccountModal = false) }
+            ModalType.PERMISSION -> _uiState.update { it.copy(showPermissionModal = false) }
         }
     }
 

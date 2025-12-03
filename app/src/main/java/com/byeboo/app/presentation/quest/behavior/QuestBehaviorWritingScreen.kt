@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
@@ -70,7 +70,7 @@ fun QuestBehaviorWritingRoute(
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel()
 ) {
@@ -113,7 +113,7 @@ fun QuestBehaviorWritingRoute(
 
     QuestBehaviorWritingScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onTipClick = viewModel::onTipClicked,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
@@ -130,7 +130,7 @@ fun QuestBehaviorWritingRoute(
 @Composable
 private fun QuestBehaviorWritingScreen(
     uiState: QuestBehaviorState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onTipClick: () -> Unit,
     onUpdateSelectedImage: (Uri?) -> Unit,
@@ -169,24 +169,29 @@ private fun QuestBehaviorWritingScreen(
                 }
             }
             .addFocusCleaner(focusManager)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp(bottomPadding))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
             modifier = modifier
-                .padding(
-                    top = screenHeightDp((27.dp) + bottomPadding),
-                    bottom = screenHeightDp(16.dp)
-                )
+                .padding(horizontal = screenWidthDp(24.dp))
                 .align(Alignment.Start)
                 .clickable(onClick = onBackClick)
         )
 
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
         LazyColumn(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(
+                start = screenWidthDp(24.dp),
+                end = screenWidthDp(24.dp),
+            )
         ) {
             item {
                 Row(
@@ -346,7 +351,7 @@ private fun QuestBehaviorWritingScreen(
                     isEnabled = QuestValidator.validButton(uiState.imageCount)
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
             }
         }
     }

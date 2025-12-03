@@ -1,13 +1,6 @@
 package com.byeboo.app.fcm
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.byeboo.app.R
 import com.byeboo.app.domain.usecase.UpdateFcmTokenUseCase
-import com.byeboo.app.presentation.main.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +28,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
         fcmServiceScope.launch {
             runCatching {
                 updateFcmTokenUseCase(token)
+                Timber.d("FCM 토큰 갱신(PATCH) 서버 전송 성공")
             }.onFailure { e ->
                 Timber.e(e, "FCM 토큰 갱신 실패: $token")
             }
@@ -46,7 +40,7 @@ class ByebooMessagingService : FirebaseMessagingService() {
 
         val title = message.notification?.title
         val body = message.notification?.body
-        val questId = message.data["questId"] ?: "1"
+        val questId = message.data["questId"]
 
         message.notification?.let {
             notificationHandler.showNotification(title, body, questId)

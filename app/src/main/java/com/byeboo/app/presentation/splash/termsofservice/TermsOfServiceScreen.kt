@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,13 +25,15 @@ import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.openUrl
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsAllButton
 import com.byeboo.app.presentation.splash.termsofservice.component.TermsCheckButton
 
 @Composable
 fun TermsOfServiceRoute(
     navigateToUserInfo: () -> Unit,
-    padding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: TermsOfServiceViewModel = hiltViewModel()
 ) {
@@ -51,7 +53,7 @@ fun TermsOfServiceRoute(
 
     TermsOfServiceScreen(
         uiState = uiState,
-        padding = padding,
+        paddingValues= paddingValues,
         onTermsAllClicked = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
         onTermsLinkClick = { url -> viewModel.onTermsLinkClicked(url) },
@@ -63,7 +65,7 @@ fun TermsOfServiceRoute(
 @Composable
 private fun TermsOfServiceScreen(
     uiState: TermsOfServiceUiState,
-    padding: Dp,
+    paddingValues: PaddingValues,
     onTermsAllClicked: () -> Unit,
     onCheckClick: (TermType) -> Unit,
     onTermsLinkClick: (String?) -> Unit,
@@ -83,8 +85,8 @@ private fun TermsOfServiceScreen(
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .padding(top = 107.dp, bottom = padding)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp), bottom = paddingValues.calculateBottomPadding())
                 .fillMaxSize()
         ) {
             TermsHeader()
@@ -94,10 +96,10 @@ private fun TermsOfServiceScreen(
                 isChecked = uiState.isAllChecked
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Column(
-                modifier = Modifier.padding(horizontal = 15.dp)
+                modifier = Modifier.padding(horizontal = screenWidthDp(15.dp))
             ) {
                 TermType.entries.forEach { term ->
                     TermsCheckButton(
@@ -120,7 +122,7 @@ private fun TermsOfServiceScreen(
                 onClick = onNextButton
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
         }
     }
 }
@@ -128,7 +130,7 @@ private fun TermsOfServiceScreen(
 @Composable
 private fun TermsHeader() {
     Column(
-        modifier = Modifier.padding(vertical = 20.dp),
+        modifier = Modifier.padding(vertical = screenHeightDp(20.dp)),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -137,7 +139,7 @@ private fun TermsHeader() {
             color = ByeBooTheme.colors.gray50
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = "Bye Boo 이용을 위해 필요해요",

@@ -13,11 +13,12 @@ data class QuestBehaviorCompleteState(
     val imageUrl: String = "",
     val selectedImageUri: Uri? = null,
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL
+    val selectedEmotion: LargeTagType? = LargeTagType.EMOTION_NEUTRAL
 )
 
 sealed interface QuestBehaviorCompleteSideEffect{
     data object NavigateToQuest : QuestBehaviorCompleteSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestBehaviorCompleteSideEffect
+    data object ShowInAppReview : QuestBehaviorCompleteSideEffect
     data class ShowSnackBar(val message: String) : QuestBehaviorCompleteSideEffect
 }

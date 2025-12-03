@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingnewjourney
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +35,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.noRippleClickable
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
@@ -44,7 +45,7 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 fun OffboardingNewJourneyRoute(
     navigateToQuestStart: (QuestType?) -> Unit,
     navigateUp: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
     offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
@@ -64,7 +65,7 @@ fun OffboardingNewJourneyRoute(
 
     OffboardingNewJourneyScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onBackClick = offboardingNewJourneyViewModel::onBackClicked,
         onJourneyUncompletedCardClick = { type ->
             offboardingNewJourneyViewModel.postNewJourney(
@@ -78,7 +79,7 @@ fun OffboardingNewJourneyRoute(
 @Composable
 private fun OffboardingNewJourneyScreen(
     uiState: OffboardingJourneyState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: (QuestType) -> Unit,
     modifier: Modifier = Modifier
@@ -87,20 +88,23 @@ private fun OffboardingNewJourneyScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = 24.dp)
-            .padding(top = 67.dp, bottom = bottomPadding)
+            .padding(horizontal = screenWidthDp(24.dp))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
             .verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-            contentDescription = "",
+            contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
             modifier = Modifier
                 .size(24.dp)
                 .noRippleClickable(onClick = onBackClick)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
         Text(
             text = "어떤 여정을 시작해 볼까요?",
@@ -108,7 +112,7 @@ private fun OffboardingNewJourneyScreen(
             style = ByeBooTheme.typography.head1
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
@@ -116,12 +120,12 @@ private fun OffboardingNewJourneyScreen(
             style = ByeBooTheme.typography.body6
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
 
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
             color = ByeBooTheme.colors.whiteAlpha10
         )
@@ -129,8 +133,8 @@ private fun OffboardingNewJourneyScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(vertical = screenHeightDp(16.dp)),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
 
         ) {
             Row(
@@ -180,7 +184,7 @@ private fun PreparingCard() {
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(12.dp))
             .background(color = ByeBooTheme.colors.whiteAlpha10)
-            .padding(vertical = 22.dp)
+            .padding(vertical = screenHeightDp(22.dp))
     ) {
         Text(
             text = "준비 중",

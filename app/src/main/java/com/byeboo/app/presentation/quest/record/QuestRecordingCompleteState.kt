@@ -18,5 +18,6 @@ data class QuestRecordingCompleteState(
 sealed interface QuestRecordingCompleteSideEffect {
     data object NavigateToQuest : QuestRecordingCompleteSideEffect
     data object NavigateToOffboardingCompletedGuide : QuestRecordingCompleteSideEffect
+    data object ShowInAppReview : QuestRecordingCompleteSideEffect
     data class ShowSnackBar(val message: String) : QuestRecordingCompleteSideEffect
 }

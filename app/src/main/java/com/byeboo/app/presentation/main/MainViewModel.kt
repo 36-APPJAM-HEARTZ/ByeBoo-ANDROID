@@ -5,19 +5,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
+import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val questStateRepository: QuestStateRepository,
+    private val fcmTokenRepository: FcmTokenRepository,
+    private val userRepository: UserRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
     val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()

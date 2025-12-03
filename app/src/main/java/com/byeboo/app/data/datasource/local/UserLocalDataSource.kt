@@ -22,4 +22,5 @@ interface UserLocalDataSource {
     suspend fun clear()
     suspend fun isUserRegistered(): Boolean
     suspend fun setUserRegistered(isRegistered: Boolean)
+    fun getLoggedIn(): Flow<Boolean>
 }

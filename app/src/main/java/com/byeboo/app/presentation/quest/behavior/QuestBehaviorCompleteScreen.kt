@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,7 +33,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +44,8 @@ import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.findActivity
+import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
@@ -54,12 +56,14 @@ import com.byeboo.app.presentation.quest.component.text.CreatedText
 fun QuestBehaviorCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: QuestBehaviorCompleteViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
+    val context = LocalContext.current
+    val activity = context.findActivity()
 
     val imageUri = when {
         uiState.selectedImageUri != null -> uiState.selectedImageUri
@@ -72,6 +76,11 @@ fun QuestBehaviorCompleteRoute(
             when (effect) {
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
+                    activity?.let { activity ->
+                        inAppReview(activity)
+                    }
+                }
                 is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -81,7 +90,7 @@ fun QuestBehaviorCompleteRoute(
 
     QuestBehaviorCompleteScreen(
         uiState = uiState,
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
         modifier = modifier
@@ -91,7 +100,7 @@ fun QuestBehaviorCompleteRoute(
 @Composable
 private fun QuestBehaviorCompleteScreen(
     uiState: QuestBehaviorCompleteState,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
     modifier: Modifier = Modifier
@@ -100,13 +109,15 @@ private fun QuestBehaviorCompleteScreen(
         modifier = modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp(bottomPadding))
+            .padding(
+                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                bottom = paddingValues.calculateBottomPadding()
+            )
     ) {
-        Spacer(modifier = modifier.height(67.dp))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.End
         ) {
             Icon(
@@ -117,19 +128,24 @@ private fun QuestBehaviorCompleteScreen(
             )
         }
 
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(
+                top = screenHeightDp(8.dp),
+                bottom = screenHeightDp(24.dp),
+                start = screenWidthDp(24.dp),
+                end = screenWidthDp(24.dp)
+            )
         ) {
             item {
-                Spacer(modifier = modifier.height(8.dp))
-
                 QuestCompleteCard(
                     modifier = modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = modifier.height(32.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(32.dp)))
             }
 
             item {
@@ -157,11 +173,11 @@ private fun QuestBehaviorCompleteScreen(
                         )
                     }
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     CreatedText(uiState.createdAt)
 
-                    Spacer(modifier = modifier.height(12.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                     Text(
                         text = uiState.question,
@@ -171,7 +187,7 @@ private fun QuestBehaviorCompleteScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -195,7 +211,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -230,12 +246,12 @@ private fun QuestBehaviorCompleteScreen(
                     }
 
                     if (uiState.questAnswer.isNotBlank()) {
-                        Spacer(modifier = modifier.height(12.dp))
+                        Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                         ContentText(uiState.questAnswer)
                     }
 
-                    Spacer(modifier = modifier.height(24.dp))
+                    Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
                 }
             }
 
@@ -258,7 +274,7 @@ private fun QuestBehaviorCompleteScreen(
                     )
                 }
 
-                Spacer(modifier = modifier.height(12.dp))
+                Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 uiState.selectedEmotion?.let { emotion ->
                     QuestEmotionDescriptionCard(
@@ -266,8 +282,6 @@ private fun QuestBehaviorCompleteScreen(
                         emotionType = emotion
                     )
                 }
-
-                Spacer(modifier = modifier.height(24.dp))
             }
         }
     }

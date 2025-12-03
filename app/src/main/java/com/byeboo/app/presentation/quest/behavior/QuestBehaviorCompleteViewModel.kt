@@ -23,7 +23,7 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
-): ViewModel() {
+) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
 
     private val _uiState = MutableStateFlow(QuestBehaviorCompleteState(questId = questIdArg))
@@ -75,6 +75,10 @@ class QuestBehaviorCompleteViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
+
+                if (uiState.value.questId == 1L) {
+                    _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
+                }
             }
         }
     }

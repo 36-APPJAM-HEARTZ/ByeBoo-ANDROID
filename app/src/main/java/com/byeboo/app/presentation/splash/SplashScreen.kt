@@ -1,5 +1,9 @@
 package com.byeboo.app.presentation.splash
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -9,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,13 +55,20 @@ fun SplashRoute(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onPermissionResult(isGranted)
+        }
+    )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -82,13 +94,21 @@ fun SplashRoute(
                     )
                 }
 
+                is SplashStateSideEffect.RequestNotificationPermission -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    } else {
+                        viewModel.onPermissionResult(true)
+                    }
+                }
+
                 is SplashStateSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
             }
         }
     }
 
     SplashScreen(
-        bottomPadding = bottomPadding,
+        paddingValues = paddingValues,
         showLoginButton = showLoginButton,
         onClick = {
             val availableButton = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
@@ -100,7 +120,7 @@ fun SplashRoute(
 
 @Composable
 private fun SplashScreen(
-    bottomPadding: Dp,
+    paddingValues: PaddingValues,
     showLoginButton: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -143,8 +163,8 @@ private fun SplashScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = bottomPadding + 10.dp)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(bottom = screenHeightDp( 10.dp) + paddingValues.calculateBottomPadding())
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -157,7 +177,7 @@ private fun SplashScreen(
                         .background(color = ByeBooTheme.colors.kakaoYellow)
                         .graphicsLayer { alpha = buttonAlpha.toPx() }
                         .noRippleClickable(onClick = onClick)
-                        .padding(vertical = 16.dp),
+                        .padding(vertical = screenHeightDp(16.dp)),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -166,7 +186,7 @@ private fun SplashScreen(
                         contentDescription = "kakao logo"
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
 
                     Text(
                         text = "Kakao로 시작하기",

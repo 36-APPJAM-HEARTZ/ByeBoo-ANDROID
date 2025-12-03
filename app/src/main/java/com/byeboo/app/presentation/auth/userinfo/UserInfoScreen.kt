@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +29,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 fun UserInfoRoute(
     navigateToLoading: () -> Unit,
     modifier: Modifier = Modifier,
-    padding: Dp,
+    paddingValues: PaddingValues,
     viewModel: UserInfoViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -88,7 +88,7 @@ fun UserInfoRoute(
         onResetQuest = viewModel::resetQuest,
         onSubmit = viewModel::finishUserInfo,
         modifier = modifier,
-        padding = padding
+        paddingValues = paddingValues,
     )
 }
 
@@ -106,8 +106,8 @@ private fun UserInfoScreen(
     onResetEmotion: () -> Unit,
     onResetQuest: () -> Unit,
     onSubmit: () -> Unit,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    padding: Dp
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -155,13 +155,12 @@ private fun UserInfoScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp))
         ) {
-            Spacer(modifier = Modifier.padding(top = screenHeightDp(67.dp)))
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(24.dp)
+                    .height(screenHeightDp(24.dp))
             ) {
                 if (pagerState.currentPage != 0) {
                     Icon(
@@ -180,7 +179,7 @@ private fun UserInfoScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             StepProgressBar(currentStep = pagerState.currentPage + 1)
 
@@ -211,7 +210,7 @@ private fun UserInfoScreen(
 
             ByeBooActivationButton(
                 modifier = Modifier
-                    .padding(bottom = padding + screenHeightDp(10.dp)),
+                    .padding(bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)),
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,

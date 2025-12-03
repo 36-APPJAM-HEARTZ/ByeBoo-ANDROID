@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
@@ -47,7 +48,7 @@ fun QuestContent(
                 style = ByeBooTheme.typography.body2
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         ContentText(text = contentText)
     }
