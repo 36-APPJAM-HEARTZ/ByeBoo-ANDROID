@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
-import com.byeboo.app.domain.repository.auth.UserRepository
-import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
+import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.DESTINATION
+import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.QUEST_HOME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,8 +25,8 @@ class MainViewModel @Inject constructor(
     val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()
         .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
 
-    private val _notificationQuestId = MutableStateFlow<String?>(null)
-    val notificationQuestId: StateFlow<String?> = _notificationQuestId.asStateFlow()
+    private val _questHomeNavigation = MutableStateFlow<Boolean>(false)
+    val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
 
     fun trackJourneyStart() {
         viewModelScope.launch {
@@ -42,17 +42,14 @@ class MainViewModel @Inject constructor(
     }
 
     fun handleIntent(intent: Intent) {
-        val questId = intent.getStringExtra("questId")
-        if (questId != null) {
-            updateNotificationQuestId(questId)
+        val destination = intent.getStringExtra(DESTINATION)
+
+        if (destination == QUEST_HOME) {
+            _questHomeNavigation.value = true
         }
     }
-    
-    fun updateNotificationQuestId(questId: String?) {
-        _notificationQuestId.value = questId
-    }
 
-    fun clearNotificationQuestId() {
-        _notificationQuestId.value = null
+    fun clearNavigateQuestHome() {
+        _questHomeNavigation.value = false
     }
 }

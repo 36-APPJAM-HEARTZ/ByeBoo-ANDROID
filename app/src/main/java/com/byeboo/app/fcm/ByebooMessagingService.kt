@@ -40,10 +40,9 @@ class ByebooMessagingService : FirebaseMessagingService() {
 
         val title = message.notification?.title
         val body = message.notification?.body
-        val questId = message.data["questId"]
 
         message.notification?.let {
-            notificationHandler.showNotification(title, body, questId)
+            notificationHandler.showNotification(title, body)
         }
     }
 
