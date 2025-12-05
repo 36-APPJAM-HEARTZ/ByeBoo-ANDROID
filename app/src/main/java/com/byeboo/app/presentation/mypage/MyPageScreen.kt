@@ -162,10 +162,6 @@ fun MyPageRoute(
         )
     }
 
-//    LaunchedEffect(Unit) {
-//        viewModel.loadAlarmStatus()
-//    }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {

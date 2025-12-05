@@ -110,7 +110,6 @@ class MyPageViewModel @Inject constructor(
                 .onFailure {
                     _uiState.update { it.copy(isAlarmEnabled = false) }
                     fcmTokenRepository.saveAlarmEnabled(false)
-                    MyPageSideEffect.ShowSnackBar("다시 시도해 주세요.")
                 }
         }
     }
