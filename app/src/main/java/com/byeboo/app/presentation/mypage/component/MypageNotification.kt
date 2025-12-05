@@ -17,10 +17,12 @@ import com.byeboo.app.core.util.noRippleClickable
 @Composable
 fun MyPageNotification(
     modifier: Modifier = Modifier,
-    isEnabledAlarm: Boolean,
+    isEnabledAlarm: Boolean?,
     onCheckedClick: (Boolean) -> Unit
 ) {
-    val toggle = if (isEnabledAlarm) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+    val toggle = if (isEnabledAlarm == true) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
+    val alpha = if (isEnabledAlarm == null) 0f else 1f
+
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -37,9 +39,12 @@ fun MyPageNotification(
         Image(
             imageVector = ImageVector.vectorResource(toggle),
             contentDescription = "alarm toggle",
+            alpha = alpha,
             modifier = Modifier
                 .noRippleClickable(
-                    onClick = { onCheckedClick(!isEnabledAlarm) }
+                    onClick = {
+                        isEnabledAlarm?.let { onCheckedClick(!isEnabledAlarm) }
+                    }
                 )
         )
     }

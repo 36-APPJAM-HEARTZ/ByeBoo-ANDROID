@@ -36,9 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
-    viewModel: MainViewModel = hiltViewModel(),
-    notificationQuestId: String? = null,
-    onClearQuestId: () -> Unit = {}
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -46,6 +44,7 @@ fun MainScreen(
     val currentTab = navigator.currentTab
     val showBottomBar = navigator.showBottomBar()
     val status by viewModel.journeyStatus.collectAsStateWithLifecycle()
+    val isMoveToQuestHome by viewModel.questHomeNavigation.collectAsStateWithLifecycle()
 
     val onShowSnackBar: (String) -> Unit = { message ->
         scope.launch {
@@ -108,10 +107,12 @@ fun MainScreen(
         }
     }
 
-    LaunchedEffect(notificationQuestId, status) {
-        if (notificationQuestId != null && status!= null && !isNavigating) {
+    LaunchedEffect(isMoveToQuestHome, status) {
+        if (isMoveToQuestHome && !isNavigating && status != JourneyStatusType.UNKNOWN) {
+            delay(100L)
             moveToQuestNavigation()
-            onClearQuestId()
+            delay(50L)
+            viewModel.clearNavigateQuestHome()
         }
     }
 
