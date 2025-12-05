@@ -26,19 +26,22 @@ class QuestTipViewModel @Inject constructor(
     private val questIdArg = savedStateHandle.toRoute<QuestTip>().questId
     private val questTypeArg = savedStateHandle.toRoute<QuestTip>().questType
 
-    private val _uiState = MutableStateFlow(QuestTipState())
+    private val _uiState = MutableStateFlow(QuestTipState(
+        questId = questIdArg,
+        questType = questTypeArg
+    ))
     val uiState: StateFlow<QuestTipState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<QuestTipSideEffect>()
     val sideEffect: SharedFlow<QuestTipSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        _uiState.update {
-            it.copy(
+        loadQuestTip(
+            Quest(
                 questId = questIdArg,
-                questType = questTypeArg
+                type = questTypeArg
             )
-        }
+        )
     }
 
     fun onCloseClicked() {
@@ -47,7 +50,7 @@ class QuestTipViewModel @Inject constructor(
         }
     }
 
-    fun loadQuestTip(quest: Quest) {
+    private fun loadQuestTip(quest: Quest) {
         viewModelScope.launch {
             val result = questTipRepository.getQuestTip(quest.questId)
             result.onSuccess { tip ->

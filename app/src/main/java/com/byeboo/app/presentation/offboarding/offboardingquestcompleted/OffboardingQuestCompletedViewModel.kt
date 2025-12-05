@@ -39,7 +39,7 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(userName = nickname)
                 }
-                loadQuests(questTypeArg, nickname = nickname)
+                loadQuests(journey = questTypeArg, nickname = nickname)
             }
         }
     }
@@ -68,7 +68,7 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
 
     fun onQuestClicked(questId: Long) {
         viewModelScope.launch {
-            _sideEffect.emit(QuestCompletedSideEffect.NavigateToQuestReview(questId))
+            _sideEffect.emit(QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg))
         }
     }
 }

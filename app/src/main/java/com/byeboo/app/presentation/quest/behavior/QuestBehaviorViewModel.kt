@@ -40,12 +40,14 @@ class QuestBehaviorViewModel @Inject constructor(
 ) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
     private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
+    private val fromOffboardingArg: Boolean = savedStateHandle["fromOffboarding"] ?: false
     private val imageKeyArg: String? = savedStateHandle["imageKey"]
 
     private val _uiState = MutableStateFlow(
         QuestBehaviorState(
             questId = questIdArg,
             isEditMode = isEditModeArg,
+            fromOffboarding = fromOffboardingArg,
             imageKey = imageKeyArg.orEmpty()
         )
     )
@@ -90,7 +92,8 @@ class QuestBehaviorViewModel @Inject constructor(
                     it.copy(
                         questAnswer = detail.questAnswer,
                         imageUrl = detail.imageUrl.orEmpty(),
-                        imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0
+                        imageCount = if (!detail.imageUrl.isNullOrEmpty()) 1 else 0,
+                        originalAnswer = detail.questAnswer
                     )
                 }
             }.onFailure {
@@ -111,6 +114,7 @@ class QuestBehaviorViewModel @Inject constructor(
             val answer = state.questAnswer
             val emotion = state.selectedEmotion?.toData().orEmpty()
             val isEditMode = state.isEditMode
+            val fromOffboarding = state.fromOffboarding
 
             runCatching {
                 val inputStream = context.contentResolver.openInputStream(imageUrl)
@@ -148,9 +152,15 @@ class QuestBehaviorViewModel @Inject constructor(
                         )
                     )
                 }
+                questRecordedDetailRepository.getQuestRecordedDetail(questId)
+
                 _sideEffect.emit(
                     if (isEditMode) {
-                        QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                        if (fromOffboarding){
+                            QuestBehaviorSideEffect.NavigateUp
+                        } else {
+                            QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                        }
                     } else {
                         QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId)
                     }
@@ -220,11 +230,11 @@ class QuestBehaviorViewModel @Inject constructor(
     }
 
     fun onQuitClicked() {
-        if (uiState.value.isEditMode){
+        if (uiState.value.isEditMode || uiState.value.fromOffboarding) {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateUp)
             }
-        } else{
+        } else {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
                 delay(NAVIGATION_DELAY_MS)
@@ -263,15 +273,13 @@ class QuestBehaviorViewModel @Inject constructor(
         state: QuestBehaviorState
     ): Boolean {
         val hasImage = state.imageCount > 0
-        if (!hasImage) return false
 
-        if (!state.isEditMode) {
-            return true
+        return if (state.isEditMode) {
+            val imageChanged = state.selectedImageUri != null
+            state.hasAnswerChanged || imageChanged
+        } else {
+            hasImage
         }
-
-        val imageChanged = state.selectedImageUri != null
-
-        return state.hasAnswerChanged || imageChanged
     }
 
     private fun uploadWithoutImageChange() {

@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.record
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,11 +35,13 @@ class QuestRecordingViewModel @Inject constructor(
 ) : ViewModel() {
     private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
     private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
+    private val fromOffboardingArg: Boolean = savedStateHandle["fromOffboarding"] ?: false
 
     private val _uiState = MutableStateFlow(
         QuestRecordingState(
             questId = questIdArg,
-            isEditMode = isEditModeArg
+            isEditMode = isEditModeArg,
+            fromOffboarding = fromOffboardingArg
         )
     )
     val uiState: StateFlow<QuestRecordingState> = _uiState.asStateFlow()
@@ -158,9 +161,15 @@ class QuestRecordingViewModel @Inject constructor(
                     it.copy(isEditMode = false)
                 }
 
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.NavigateToQuestReview(questId)
-                )
+                questRecordedDetailRepository.getQuestRecordedDetail(questId)
+
+                if (uiState.value.fromOffboarding){
+                    _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
+                } else {
+                    _sideEffect.emit(
+                        QuestRecordingSideEffect.NavigateToQuestReview(questId)
+                    )
+                }
             }.onFailure {
                 _sideEffect.emit(
                     QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
@@ -200,7 +209,7 @@ class QuestRecordingViewModel @Inject constructor(
     }
 
     fun onQuitClicked() {
-        if (uiState.value.isEditMode) {
+        if (uiState.value.isEditMode || uiState.value.fromOffboarding) {
             viewModelScope.launch {
                 _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
             }
@@ -214,6 +223,11 @@ class QuestRecordingViewModel @Inject constructor(
     fun onTipClicked() {
         val questId = uiState.value.questId
         val questNumber = uiState.value.questNumber
+        Log.d(
+            "QuestRecordingVM",
+            "onTipClicked() called, questId=$questId, fromOffboarding=${uiState.value.fromOffboarding}, isEditMode=${uiState.value.isEditMode}"
+        )
+
         viewModelScope.launch {
             mixpanelUtil.trackEvent(
                 eventName = "quest_tip_pageview",

@@ -5,7 +5,6 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.byeboo.app.presentation.auth.navigation.authGraph
@@ -67,8 +66,8 @@ fun MainNavHost(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    journey,
-                    questNavOptions
+                    questType = journey,
+                    navOptions = questNavOptions
                 )
             },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
@@ -94,15 +93,15 @@ fun MainNavHost(
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
-            navigateToOffboardingCompleteGuide = {
+            navigateToOffboardingCompletedGuide = {
                 navigator.navigateToOffboardingCompletedGuide(
                     clearStackNavOptions
                 )
             },
             navigateToQuestRecordingComplete = { questId ->
                 navigator.navigateToQuestRecordingComplete(
-                    questId,
-                    clearStackNavOptions
+                    questId = questId,
+                    navOptions = clearStackNavOptions
                 )
             },
             navigateToQuestRecordingEdit = { questId, isEditMode ->
@@ -122,14 +121,14 @@ fun MainNavHost(
             },
             navigateToQuestTip = { questId, questType ->
                 navigator.navigateToQuestTip(
-                    questId,
-                    questType
+                    questId = questId,
+                    questType = questType
                 )
             },
             navigateToQuestBehaviorComplete = { questId ->
                 navigator.navigateToQuestBehaviorComplete(
-                    questId,
-                    clearStackNavOptions
+                    questId = questId,
+                    navOptions = clearStackNavOptions
                 )
             },
             navigateUp = navigator::navigateUp,
@@ -163,16 +162,36 @@ fun MainNavHost(
             },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    journey,
-                    keepStackNavOptions
+                    questType = journey,
+                    navOptions = keepStackNavOptions
                 )
             },
-            navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
+            navigateToOffboardingQuestReview = { questId, journey -> navigator.navigateToOffboardingQuestReview(questId, journey) },
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey ->
                 navigator.navigateToOffboardingQuestCompleted(
-                    journey,
-                    keepStackNavOptions
+                    questType = journey,
+                    navOptions = keepStackNavOptions
+                )
+            },
+            navigateToOffboardingQuestCompletedFromReview = { journey ->
+                navigator.navigateToOffboardingQuestCompletedFromReview(journey)
+            },
+            navigateToQuestRecordingEdit = { questId, isEditMode, fromOffboarding ->
+                navigator.navigateToQuestRecording(
+                    questId = questId,
+                    isEditMode = isEditMode,
+                    fromOffboarding = fromOffboarding,
+                    navOptions = keepStackNavOptions
+                )
+            },
+            navigateToQuestBehaviorEdit = { questId, isEditMode, fromOffboarding, imageKey ->
+                navigator.navigateToQuestBehavior(
+                    questId = questId,
+                    isEditMode = isEditMode,
+                    fromOffboarding = fromOffboarding,
+                    imageKey = imageKey,
+                    navOptions = keepStackNavOptions
                 )
             },
             paddingValues = paddingValues

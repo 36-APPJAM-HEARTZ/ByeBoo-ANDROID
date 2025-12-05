@@ -35,7 +35,6 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.QuestViewModel
 import com.byeboo.app.presentation.quest.component.text.QuestContent
 import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
@@ -44,24 +43,11 @@ fun QuestTipRoute(
     navigateToQuest: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestTipViewModel = hiltViewModel(),
-    questViewModel: QuestViewModel = hiltViewModel()
+    viewModel: QuestTipViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val questUiState by questViewModel.uiState.collectAsStateWithLifecycle()
-
-    val questId = uiState.questId
-    val questGroups = questUiState.questGroups
 
     val showSnackBar = LocalSnackBarTrigger.current
-
-    LaunchedEffect(questId, questGroups) {
-        val quest = questGroups
-            .flatMap { it.quests }
-            .find { it.questId == questId }
-
-        quest?.let { viewModel.loadQuestTip(it) }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
