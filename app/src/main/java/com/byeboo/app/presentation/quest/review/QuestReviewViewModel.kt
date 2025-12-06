@@ -3,9 +3,11 @@ package com.byeboo.app.presentation.quest.review
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
+import com.byeboo.app.presentation.quest.navigation.QuestReview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +24,7 @@ class QuestReviewViewModel @Inject constructor(
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
+    val questIdArg: Long = savedStateHandle.toRoute<QuestReview>().questId
 
     private val _uiState = MutableStateFlow(QuestReviewState(
         questId = questIdArg

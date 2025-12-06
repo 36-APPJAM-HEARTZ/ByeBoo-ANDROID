@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
@@ -14,6 +15,7 @@ import com.byeboo.app.domain.model.quest.QuestRecordingModel
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordingRepository
+import com.byeboo.app.presentation.quest.record.navigation.QuestRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,9 +35,9 @@ class QuestRecordingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
-    private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
-    private val fromOffboardingArg: Boolean = savedStateHandle["fromOffboarding"] ?: false
+    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestRecord.QuestRecording>().questId)
+    private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().isEditMode
+    private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().fromOffboarding
 
     private val _uiState = MutableStateFlow(
         QuestRecordingState(

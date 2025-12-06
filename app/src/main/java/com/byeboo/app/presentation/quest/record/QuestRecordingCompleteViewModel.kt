@@ -3,10 +3,12 @@ package com.byeboo.app.presentation.quest.record
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
+import com.byeboo.app.presentation.quest.record.navigation.QuestRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +26,7 @@ class QuestRecordingCompleteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
+    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId)
 
     private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
     val uiState: StateFlow<QuestRecordingCompleteState>

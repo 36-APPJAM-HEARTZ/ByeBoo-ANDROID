@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.LargeTagType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
@@ -16,6 +17,7 @@ import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.domain.usecase.UploadImageUseCase
+import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,10 +40,10 @@ class QuestBehaviorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle["questId"])
-    private val isEditModeArg: Boolean = savedStateHandle["isEditMode"] ?: false
-    private val fromOffboardingArg: Boolean = savedStateHandle["fromOffboarding"] ?: false
-    private val imageKeyArg: String? = savedStateHandle["imageKey"]
+    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().questId)
+    private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().isEditMode
+    private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().fromOffboarding
+    private val imageKeyArg: String? = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().imageKey
 
     private val _uiState = MutableStateFlow(
         QuestBehaviorState(
