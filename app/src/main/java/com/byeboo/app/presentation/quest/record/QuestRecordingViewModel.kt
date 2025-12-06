@@ -194,8 +194,6 @@ class QuestRecordingViewModel @Inject constructor(
             )
 
             next.copy(
-                questAnswer = questAnswer,
-                contentsState = contentState,
                 isCompleteButtonEnabled = isButtonEnabled
             )
         }
