@@ -310,7 +310,11 @@ class QuestBehaviorViewModel @Inject constructor(
                 )
 
                 _sideEffect.emit(
-                    QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                    if (uiState.value.fromOffboarding){
+                        QuestBehaviorSideEffect.NavigateUp
+                    } else {
+                        QuestBehaviorSideEffect.NavigateToQuestReview(questId)
+                    }
                 )
             }.onFailure {
                 _sideEffect.emit(
