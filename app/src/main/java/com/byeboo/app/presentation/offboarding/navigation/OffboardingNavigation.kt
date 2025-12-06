@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.offboarding.offboardingcompletedguide.Offboar
 import com.byeboo.app.presentation.offboarding.offboardingcompletedjourney.OffboardingCompletedJourneyRoute
 import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneyRoute
 import com.byeboo.app.presentation.offboarding.offboardingquestcompleted.OffboardingQuestCompletedRoute
+import com.byeboo.app.presentation.offboarding.offboardingquestreview.OffboardingQuestReviewRoute
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateToOffboardingCompletedGuide(navOptions: NavOptions? = null) {
@@ -32,14 +33,21 @@ fun NavController.navigateToOffboardingQuestCompleted(
     navigate(OffboardingQuestCompleted(questType), navOptions)
 }
 
+fun NavController.navigateToOffboardingQuestReview(questId: Long, journey: QuestType, navOptions: NavOptions? = null) {
+    navigate(OffboardingQuestReview(questId, journey), navOptions)
+}
+
 fun NavGraphBuilder.offboardingGraph(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToQuestStart: (QuestType?) -> Unit,
-    navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingQuestReview: (Long, QuestType) -> Unit,
     navigateUp: () -> Unit,
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
+    navigateToOffboardingQuestCompletedFromReview: (QuestType) -> Unit,
+    navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
+    navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
     paddingValues: PaddingValues
 ) {
     composable<OffboardingCompletedGuide> {
@@ -70,10 +78,20 @@ fun NavGraphBuilder.offboardingGraph(
     composable<OffboardingQuestCompleted> {
         OffboardingQuestCompletedRoute(
             navigateUp = navigateUp,
-            navigateToQuestReview = navigateToQuestReview,
+            navigateToOffboardingQuestReview = navigateToOffboardingQuestReview,
             paddingValues = paddingValues
         )
     }
+
+    composable<OffboardingQuestReview> {
+        OffboardingQuestReviewRoute(
+            paddingValues = paddingValues,
+            navigateToOffboardingQuestCompleted = navigateToOffboardingQuestCompletedFromReview,
+            navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
+            navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit
+        )
+    }
+
 }
 
 @Serializable
@@ -87,3 +105,6 @@ data object OffboardingCompletedJourney : Route
 
 @Serializable
 data class OffboardingQuestCompleted(val questType: QuestType) : Route
+
+@Serializable
+data class OffboardingQuestReview(val questId: Long, val journeyType: QuestType) : Route

@@ -31,6 +31,7 @@ import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.chip.QuestBox
@@ -39,7 +40,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestStepTitle
 @Composable
 fun OffboardingQuestCompletedRoute(
     navigateUp: () -> Unit,
-    navigateToQuestReview: (Long) -> Unit,
+    navigateToOffboardingQuestReview: (Long, QuestType) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
@@ -51,9 +52,7 @@ fun OffboardingQuestCompletedRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToQuestReview -> navigateToQuestReview(
-                    effect.questId
-                )
+                is QuestCompletedSideEffect.NavigateToOffboardingQuestReview -> navigateToOffboardingQuestReview(effect.questId, effect.journey)
                 is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

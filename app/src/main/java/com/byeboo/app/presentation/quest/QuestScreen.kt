@@ -42,7 +42,6 @@ fun QuestRoute(
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
-    navigateToOffboardingCompleteGuide: () -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestViewModel = hiltViewModel()
 ) {
@@ -66,7 +65,6 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
                 is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
-                is QuestSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompleteGuide()
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

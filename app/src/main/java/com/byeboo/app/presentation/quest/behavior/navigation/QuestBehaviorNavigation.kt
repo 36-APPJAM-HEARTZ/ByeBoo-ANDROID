@@ -13,8 +13,8 @@ import com.byeboo.app.presentation.quest.behavior.QuestBehaviorWritingRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorComplete
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorWriting
 
-fun NavController.navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, imageKey: String? = null, navOptions: NavOptions? = null) {
-    navigate(QuestBehaviorWriting(questId, isEditMode, imageKey), navOptions)
+fun NavController.navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, fromOffboarding: Boolean = false, imageKey: String? = null, navOptions: NavOptions? = null) {
+    navigate(QuestBehaviorWriting(questId = questId, isEditMode = isEditMode, fromOffboarding = fromOffboarding, imageKey = imageKey), navOptions)
 }
 
 fun NavController.navigateToQuestBehaviorComplete(questId: Long, navOptions: NavOptions? = null) {

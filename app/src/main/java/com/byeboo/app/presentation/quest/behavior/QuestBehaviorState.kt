@@ -25,7 +25,11 @@ data class QuestBehaviorState(
     val selectedImageUri: Uri? = null,
     val showQuitModal: Boolean = false,
     val isUploading: Boolean = false,
-    val isEditMode: Boolean = false
+    val isEditMode: Boolean = false,
+    val originalAnswer: String = "",
+    val isCompleteButtonEnabled: Boolean = false,
+    val hasAnswerChanged: Boolean = false,
+    val fromOffboarding: Boolean = false
 )
 
 sealed interface QuestBehaviorSideEffect {

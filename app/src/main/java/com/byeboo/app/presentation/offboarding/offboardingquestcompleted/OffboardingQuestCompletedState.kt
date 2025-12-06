@@ -16,6 +16,6 @@ data class QuestCompletedState(
 
 sealed interface QuestCompletedSideEffect {
     data object NavigateUp : QuestCompletedSideEffect
-    data class NavigateToQuestReview(val questId: Long) : QuestCompletedSideEffect
+    data class NavigateToOffboardingQuestReview(val questId: Long, val journey: QuestType) : QuestCompletedSideEffect
     data class ShowSnackBar(val message: String) : QuestCompletedSideEffect
 }

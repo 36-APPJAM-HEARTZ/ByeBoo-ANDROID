@@ -54,13 +54,14 @@ class QuestStartViewModel @Inject constructor(
             _uiState.update { it.copy(journeyName = journey) }
         }
         _uiState.update {
-            it.copy(questType = questTypeArg ?: QuestType.RECORDING)
+            it.copy(questType = questTypeArg)
         }
     }
 
     fun onStartClicked() {
         val journey = uiState.value.questType
-        if (uiState.value.questType == null) {
+
+        if (journey == null) {
             viewModelScope.launch {
                 val result = questStateRepository.updateQuestStartState()
                 val journeyType = questStateRepository.getUserJourney() ?: "추적 실패"

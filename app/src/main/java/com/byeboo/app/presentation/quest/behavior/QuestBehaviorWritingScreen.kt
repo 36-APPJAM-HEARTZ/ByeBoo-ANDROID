@@ -348,7 +348,7 @@ private fun QuestBehaviorWritingScreen(
                         onClickCompleteButton(context)
                         onUpdateSelectedImage(uiState.selectedImageUri)
                     },
-                    isEnabled = QuestValidator.validButton(uiState.imageCount)
+                    isEnabled = uiState.isCompleteButtonEnabled
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))

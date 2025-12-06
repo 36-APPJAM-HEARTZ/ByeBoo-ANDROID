@@ -51,7 +51,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
@@ -297,7 +296,7 @@ private fun QuestRecordingScreen(
             buttonText = "완료하기",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             onClick = onClickCompleteButton,
-            isEnabled = QuestContentLengthValidator.validButton(uiState.questAnswer),
+            isEnabled = uiState.isCompleteButtonEnabled,
             modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
         )
 

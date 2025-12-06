@@ -1,7 +1,6 @@
 package com.byeboo.app.presentation.quest.record.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,8 +12,8 @@ import com.byeboo.app.presentation.quest.record.QuestRecordingRoute
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingComplete
 
-fun NavController.navigateToQuestRecording(questId: Long, isEditMode: Boolean = false, navOptions: NavOptions? = null) {
-    navigate(QuestRecording(questId = questId, isEditMode = isEditMode), navOptions)
+fun NavController.navigateToQuestRecording(questId: Long, isEditMode: Boolean = false, fromOffboarding: Boolean = false, navOptions: NavOptions? = null) {
+    navigate(QuestRecording(questId = questId, isEditMode = isEditMode, fromOffboarding = fromOffboarding), navOptions)
 }
 
 fun NavController.navigateToQuestRecordingComplete(questId: Long, navOptions: NavOptions? = null) {

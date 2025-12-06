@@ -39,19 +39,17 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(userName = nickname)
                 }
+                loadQuests(journey = questTypeArg, nickname = nickname)
             }
         }
-
-        loadQuests(questTypeArg)
     }
 
-    private fun loadQuests(journey: QuestType) {
+    private fun loadQuests(journey: QuestType, nickname: String) {
         viewModelScope.launch {
-            val userName = uiState.value.userName
             val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
 
             result.onSuccess { detail ->
-                _uiState.update { detail.toUiState(journey = journey, nickname = userName) }
+                _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
             }.onFailure {
                 viewModelScope.launch {
                     _sideEffect.emit(
@@ -70,7 +68,7 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
 
     fun onQuestClicked(questId: Long) {
         viewModelScope.launch {
-            _sideEffect.emit(QuestCompletedSideEffect.NavigateToQuestReview(questId))
+            _sideEffect.emit(QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg))
         }
     }
 }

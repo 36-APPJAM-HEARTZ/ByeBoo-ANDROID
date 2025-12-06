@@ -257,6 +257,7 @@ private fun QuestBehaviorCompleteScreen(
 
             item {
                 Row(
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
