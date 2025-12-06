@@ -235,14 +235,15 @@ class QuestBehaviorViewModel @Inject constructor(
         if (uiState.value.isEditMode || uiState.value.fromOffboarding) {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateUp)
+                clearQuestInput()
             }
         } else {
             viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuest)
                 delay(NAVIGATION_DELAY_MS)
+                clearQuestInput()
             }
         }
-        clearQuestInput()
     }
 
     fun onTipClicked() {
