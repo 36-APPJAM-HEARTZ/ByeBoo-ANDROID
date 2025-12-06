@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.quest.record
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -225,10 +224,6 @@ class QuestRecordingViewModel @Inject constructor(
     fun onTipClicked() {
         val questId = uiState.value.questId
         val questNumber = uiState.value.questNumber
-        Log.d(
-            "QuestRecordingVM",
-            "onTipClicked() called, questId=$questId, fromOffboarding=${uiState.value.fromOffboarding}, isEditMode=${uiState.value.isEditMode}"
-        )
 
         viewModelScope.launch {
             mixpanelUtil.trackEvent(
