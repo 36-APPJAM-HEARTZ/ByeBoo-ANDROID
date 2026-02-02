@@ -78,34 +78,41 @@ private fun TutorialScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = screenWidthDp((38.5).dp))
-                .padding(top = screenHeightDp(24.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            for (contents in TutorialContent.entries) {
-                key(contents) {
-                    Image(
-                        painter = painterResource(id = contents.image),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+        TutorialContent()
+    }
+}
 
-                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+@Composable
+private fun TutorialContent(
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = screenWidthDp((38.5).dp))
+            .padding(top = screenHeightDp(24.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        for (contents in TutorialContent.entries) {
+            key(contents) {
+                Image(
+                    painter = painterResource(id = contents.image),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                    Text(
-                        text = contents.content,
-                        style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.primary50,
-                        textAlign = TextAlign.Center
-                    )
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-                    Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
-                }
+                Text(
+                    text = contents.content,
+                    style = ByeBooTheme.typography.body3,
+                    color = ByeBooTheme.colors.primary50,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
             }
         }
     }
