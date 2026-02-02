@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -36,7 +35,6 @@ import com.byeboo.app.core.util.screenWidthDp
 fun TutorialRoute(
     navigateToUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: TutorialViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -49,8 +47,7 @@ fun TutorialRoute(
 
     TutorialScreen(
         paddingValues = paddingValues,
-        onBackClick = viewModel::onBackClicked,
-        modifier = modifier
+        onBackClick = viewModel::onBackClicked
     )
 }
 
@@ -64,7 +61,6 @@ private fun TutorialScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
@@ -75,21 +71,21 @@ private fun TutorialScreen(
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
             modifier = Modifier
-                .size(24.dp)
+                .padding(end = screenWidthDp(24.dp))
                 .align(Alignment.End)
                 .clickable(onClick = onBackClick)
         )
 
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = screenWidthDp((14.5).dp))
-                .padding(top = screenHeightDp(24.dp), bottom = screenHeightDp(16.dp))
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = screenWidthDp((38.5).dp))
+                .padding(top = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
             for (contents in TutorialContent.entries) {
                 key(contents) {
                     Image(
