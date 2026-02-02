@@ -31,7 +31,8 @@ fun TermsCheckButton(
     val contentColor = if (isSelected) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray400
 
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .padding(vertical = screenHeightDp(8.dp))
             .noRippleClickable { onCheckClick(!isSelected) },
@@ -41,7 +42,8 @@ fun TermsCheckButton(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check),
             contentDescription = "check button",
             tint = contentColor,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(12.dp)
         )
 

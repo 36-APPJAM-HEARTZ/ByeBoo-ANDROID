@@ -7,7 +7,12 @@ data class OffboardingCompletedGuideState(
 
 sealed interface OffboardingCompletedGuideSideEffect {
     data object NavigateToHome : OffboardingCompletedGuideSideEffect
+
     data object NavigateToOffboardingNewJourney : OffboardingCompletedGuideSideEffect
+
     data object NavigateToOffboardingCompletedJourney : OffboardingCompletedGuideSideEffect
-    data class ShowSnackBar(val message: String) : OffboardingCompletedGuideSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : OffboardingCompletedGuideSideEffect
 }

@@ -21,10 +21,8 @@ data class QuestInProgressResponseDto(
 data class QuestInProgressStepResponseDto(
     @SerialName("stepNumber")
     val stepNumber: Long,
-
     @SerialName("step")
     val step: String,
-
     @SerialName("quests")
     val quests: List<QuestInProgressQuestResponseDto>
 )
@@ -33,13 +31,10 @@ data class QuestInProgressStepResponseDto(
 data class QuestInProgressQuestResponseDto(
     @SerialName("questId")
     val questId: Long,
-
     @SerialName("question")
     val question: String,
-
     @SerialName("questStyle")
     val questStyle: String,
-
     @SerialName("questNumber")
     val questNumber: Long
 )

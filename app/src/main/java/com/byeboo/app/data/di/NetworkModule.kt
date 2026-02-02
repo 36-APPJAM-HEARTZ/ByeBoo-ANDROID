@@ -25,22 +25,23 @@ import retrofit2.Retrofit
 object NetworkModule {
     @Provides
     @Singleton
-    fun providesLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
+    fun providesLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level =
+                if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BODY
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
         }
-    }
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
-    fun providesConverterFactory(): Converter.Factory = Json.asConverterFactory(
-        "application/json".toMediaType()
-    )
+    fun providesConverterFactory(): Converter.Factory =
+        Json.asConverterFactory(
+            "application/json".toMediaType()
+        )
 
     @Provides
     @Singleton
@@ -57,7 +58,8 @@ object NetworkModule {
         tokenAuthenticator: TokenAuthenticator,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient =
-        OkHttpClient.Builder()
+        OkHttpClient
+            .Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .authenticator(tokenAuthenticator)
@@ -66,11 +68,11 @@ object NetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun providesOkHttpAuthClient(
-        loggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
+    fun providesOkHttpAuthClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
 
     @Provides
     @Singleton
@@ -78,7 +80,8 @@ object NetworkModule {
         client: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit =
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(converterFactory)
@@ -91,7 +94,8 @@ object NetworkModule {
         @Auth client: OkHttpClient,
         factory: Converter.Factory
     ): Retrofit =
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(factory)

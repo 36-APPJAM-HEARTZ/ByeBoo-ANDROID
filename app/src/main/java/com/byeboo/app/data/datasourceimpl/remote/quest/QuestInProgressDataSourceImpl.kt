@@ -6,10 +6,10 @@ import com.byeboo.app.data.dto.response.quest.QuestInProgressResponseDto
 import com.byeboo.app.data.service.quest.QuestService
 import javax.inject.Inject
 
-class QuestInProgressDataSourceImpl @Inject constructor(
+class QuestInProgressDataSourceImpl
+@Inject
+constructor(
     private val questService: QuestService
 ) : QuestInProgressDataSource {
-    override suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto> {
-        return questService.getInProgressQuest()
-    }
+    override suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto> = questService.getInProgressQuest()
 }

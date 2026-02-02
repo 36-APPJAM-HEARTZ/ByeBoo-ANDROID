@@ -10,6 +10,7 @@ import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRep
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
 import com.byeboo.app.presentation.offboarding.util.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,10 +18,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingQuestCompletedViewModel @Inject constructor(
+class OffboardingQuestCompletedViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository,
     private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository,
     savedStateHandle: SavedStateHandle
@@ -44,19 +46,25 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
         }
     }
 
-    private fun loadQuests(journey: QuestType, nickname: String) {
+    private fun loadQuests(
+        journey: QuestType,
+        nickname: String
+    ) {
         viewModelScope.launch {
             val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
 
-            result.onSuccess { detail ->
-                _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
-            }.onFailure {
-                viewModelScope.launch {
-                    _sideEffect.emit(
-                        QuestCompletedSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                    )
+            result
+                .onSuccess { detail ->
+                    _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
+                }.onFailure {
+                    viewModelScope.launch {
+                        _sideEffect.emit(
+                            QuestCompletedSideEffect.ShowSnackBar(
+                                "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                            )
+                        )
+                    }
                 }
-            }
         }
     }
 
@@ -68,7 +76,9 @@ class OffboardingQuestCompletedViewModel @Inject constructor(
 
     fun onQuestClicked(questId: Long) {
         viewModelScope.launch {
-            _sideEffect.emit(QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg))
+            _sideEffect.emit(
+                QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg)
+            )
         }
     }
 }

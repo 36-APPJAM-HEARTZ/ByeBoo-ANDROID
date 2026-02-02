@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OffboardingNewJourneyViewModel @Inject constructor(
+class OffboardingNewJourneyViewModel
+@Inject
+constructor(
     private val questStateRepository: QuestStateRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {

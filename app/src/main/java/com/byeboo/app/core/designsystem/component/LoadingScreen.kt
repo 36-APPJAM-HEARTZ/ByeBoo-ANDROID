@@ -11,9 +11,10 @@ import androidx.compose.ui.Modifier
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 
 @Composable
-fun LoadingScreen(){
+fun LoadingScreen() {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black),
         horizontalAlignment = Alignment.CenterHorizontally,

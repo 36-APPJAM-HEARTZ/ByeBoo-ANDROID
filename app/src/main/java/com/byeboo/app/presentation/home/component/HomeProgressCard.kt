@@ -30,13 +30,13 @@ fun HomeProgressCard(
     totalSteps: Int = 30
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .background(
                 ByeBooTheme.colors.whiteAlpha10,
                 RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
+            ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
     ) {
         Column {
             Text(
@@ -52,7 +52,8 @@ fun HomeProgressCard(
             ) {
                 CustomProgressBar(
                     progress = if (totalSteps > 0) currentStep.toFloat() / totalSteps else 0f,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .weight(1f)
                         .height(screenHeightDp(6.dp))
                 )
@@ -77,12 +78,14 @@ fun CustomProgressBar(
     progressColor: Color = ByeBooTheme.colors.primary300
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .clip(RoundedCornerShape(12.dp))
             .background(backgroundColor)
     ) {
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(progress.coerceIn(0f, 1f))
                 .background(progressColor)

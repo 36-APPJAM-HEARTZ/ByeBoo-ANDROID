@@ -20,10 +20,11 @@ fun UserInfoQuestScreen(
     selectedQuest: QuestStyle?,
     onQuestSelect: (QuestStyle) -> Unit
 ) {
-    val quests = persistentListOf(
-        QuestStyle.RECORDING,
-        QuestStyle.ACTIVE
-    )
+    val quests =
+        persistentListOf(
+            QuestStyle.RECORDING,
+            QuestStyle.ACTIVE
+        )
 
     Column {
         DescriptionText(
@@ -38,17 +39,20 @@ fun UserInfoQuestScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             quests.forEach { quest ->
-                val onCardClick = remember(quest) {
-                    { onQuestSelect(quest) }
-                }
+                val onCardClick =
+                    remember(quest) {
+                        { onQuestSelect(quest) }
+                    }
 
                 UserInfoQuestCard(
                     title = quest.displayText,
-                    content = when (quest) {
+                    content =
+                    when (quest) {
                         QuestStyle.RECORDING -> "질문을 통해\n상황과 감정을\n정리해요"
                         QuestStyle.ACTIVE -> "작은 미션을 통해\n몸과 마음을\n가볍게 해요"
                     },
-                    imageRes = when (quest) {
+                    imageRes =
+                    when (quest) {
                         QuestStyle.RECORDING -> R.drawable.ic_book
                         QuestStyle.ACTIVE -> R.drawable.ic_shoes
                     },

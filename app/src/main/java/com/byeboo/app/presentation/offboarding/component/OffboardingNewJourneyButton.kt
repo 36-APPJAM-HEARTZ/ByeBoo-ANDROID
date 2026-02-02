@@ -30,7 +30,8 @@ fun OffboardingNewJourneyButton(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(color = ByeBooTheme.colors.primary300)

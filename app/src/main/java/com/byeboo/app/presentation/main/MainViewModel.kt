@@ -9,21 +9,25 @@ import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.DESTINATION
 import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.QUEST_HOME
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class MainViewModel
+@Inject
+constructor(
     private val questStateRepository: QuestStateRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
+    val journeyStatus: StateFlow<JourneyStatusType> =
+        questStateRepository
+            .getUserJourneyStatus()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
 
     private val _questHomeNavigation = MutableStateFlow<Boolean>(false)
     val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
@@ -34,7 +38,8 @@ class MainViewModel @Inject constructor(
 
             mixpanelUtil.trackEvent(
                 eventName = "journey_start_pageview",
-                properties = mapOf(
+                properties =
+                mapOf(
                     "journey_type" to journey
                 )
             )

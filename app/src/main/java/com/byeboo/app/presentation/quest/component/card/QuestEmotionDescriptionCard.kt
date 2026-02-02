@@ -26,13 +26,13 @@ fun QuestEmotionDescriptionCard(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .background(
                 color = ByeBooTheme.colors.whiteAlpha10,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+            ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             EmotionChip(emotionType = emotionType, isSelected = false)

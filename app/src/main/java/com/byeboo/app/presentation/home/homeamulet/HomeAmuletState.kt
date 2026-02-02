@@ -10,7 +10,10 @@ data class HomeAmuletState(
 
 sealed interface HomeAmuletSideEffect {
     data object NavigateToHomeOnboarding : HomeAmuletSideEffect
-    data class ShowSnackBar(val message: String) : HomeAmuletSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : HomeAmuletSideEffect
 }
 
 enum class AmuletType(
@@ -27,10 +30,10 @@ enum class AmuletType(
         "감정 정리",
         R.drawable.img_active_amulet_front,
         R.drawable.img_active_amulet_back
-    );
+    )
+    ;
 
     companion object {
-        fun from(journeyName: String): AmuletType =
-            entries.find { it.journeyName == journeyName } ?: EMOTION_FACE
+        fun from(journeyName: String): AmuletType = entries.find { it.journeyName == journeyName } ?: EMOTION_FACE
     }
 }

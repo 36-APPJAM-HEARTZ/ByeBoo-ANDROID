@@ -6,7 +6,9 @@ import com.byeboo.app.domain.model.quest.SignedUrlRequestModel
 import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import javax.inject.Inject
 
-class UploadImageUseCase @Inject constructor(
+class UploadImageUseCase
+@Inject
+constructor(
     private val questBehaviorRepository: QuestBehaviorRepository
 ) {
     suspend operator fun invoke(
@@ -17,28 +19,39 @@ class UploadImageUseCase @Inject constructor(
         answer: String,
         emotion: String,
         isEditMode: Boolean
-    ): Result<Unit> = runCatching {
-        val signedUrl = questBehaviorRepository.requestQuestSignedUrl(
-            SignedUrlRequestModel(contentType, imageKey)
-        ).getOrThrow()
+    ): Result<Unit> =
+        runCatching {
+            val signedUrl =
+                questBehaviorRepository
+                    .requestQuestSignedUrl(
+                        SignedUrlRequestModel(contentType, imageKey)
+                    ).getOrThrow()
 
-        questBehaviorRepository.uploadImageToSignedUrl(signedUrl, imageBytes, contentType)
+            questBehaviorRepository.uploadImageToSignedUrl(signedUrl, imageBytes, contentType)
 
-        val request = BehaviorAnswerRequestModel(
-            answer = answer,
-            questEmotionState = emotion,
-            imageKey = imageKey
-        )
+            val request =
+                BehaviorAnswerRequestModel(
+                    answer = answer,
+                    questEmotionState = emotion,
+                    imageKey = imageKey
+                )
 
-        val editRequest = QuestBehaviorEditModel(
-            answer = answer,
-            imageKey = imageKey
-        )
+            val editRequest =
+                QuestBehaviorEditModel(
+                    answer = answer,
+                    imageKey = imageKey
+                )
 
-        if (isEditMode) {
-            questBehaviorRepository.updateQuestBehavior(questId = questId, request = editRequest)
-        } else {
-            questBehaviorRepository.uploadQuestBehaviorAnswer(questId = questId, request = request)
+            if (isEditMode) {
+                questBehaviorRepository.updateQuestBehavior(
+                    questId = questId,
+                    request = editRequest
+                )
+            } else {
+                questBehaviorRepository.uploadQuestBehaviorAnswer(
+                    questId = questId,
+                    request = request
+                )
+            }
         }
-    }
 }

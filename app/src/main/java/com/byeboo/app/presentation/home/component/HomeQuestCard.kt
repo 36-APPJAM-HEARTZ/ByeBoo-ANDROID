@@ -36,7 +36,8 @@ fun HomeQuestCard(
     borderColor: Color = ByeBooTheme.colors.primary300
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .background(backgroundColor, shape)
             .border(1.dp, color = borderColor, shape)

@@ -11,7 +11,6 @@ data class QuestCompletedResponseDto(
     val currentStep: Int?,
     @SerialName("steps")
     val steps: List<QuestCompletedStepResponseDto>
-
 )
 
 @Serializable

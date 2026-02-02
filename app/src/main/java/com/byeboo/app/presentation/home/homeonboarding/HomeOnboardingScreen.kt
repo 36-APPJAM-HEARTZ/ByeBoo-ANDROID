@@ -61,7 +61,7 @@ fun HomeOnboardingRoute(
     HomeOnboardingScreen(
         uiState = uiState,
         onHomeClick = viewModel::onHomeLongClick,
-        paddingValues = paddingValues,
+        paddingValues = paddingValues
     )
 }
 
@@ -91,16 +91,17 @@ private fun HomeOnboardingScreen(
         speed = 1f
     )
 
-    val clickableModifier = if (uiState.showInstructionText) {
-        Modifier.noRippleCombineClickable(
-            onLongClick = {
-                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                onHomeClick()
-            }
-        )
-    } else {
-        Modifier
-    }
+    val clickableModifier =
+        if (uiState.showInstructionText) {
+            Modifier.noRippleCombineClickable(
+                onLongClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onHomeClick()
+                }
+            )
+        } else {
+            Modifier
+        }
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(
@@ -111,13 +112,15 @@ private fun HomeOnboardingScreen(
         )
 
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.blackAlpha80)
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(48.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -133,7 +136,8 @@ private fun HomeOnboardingScreen(
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.whiteAlpha50,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(bottom = screenHeightDp(16.dp))
                 )
@@ -153,9 +157,12 @@ private fun HomeOnboardingScreen(
                 LottieAnimation(
                     composition = composition,
                     progress = { progress },
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding())
+                        .padding(
+                            bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding()
+                        )
                         .then(clickableModifier)
                         .aspectRatio(1f)
                 )
@@ -164,7 +171,8 @@ private fun HomeOnboardingScreen(
 
         if (uiState.isTransitioning) {
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxSize()
                     .background(ByeBooTheme.colors.black.copy(alpha = transitionAlpha))
             )

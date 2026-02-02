@@ -59,7 +59,7 @@ fun QuestTipRoute(
         }
     }
 
-    when(val state = uiState){
+    when (val state = uiState) {
         is UiState.Loading -> {
             LoadingScreen()
         }
@@ -70,7 +70,7 @@ fun QuestTipRoute(
             QuestTipScreen(
                 uiState = state.data,
                 onCloseClick = viewModel::onCloseClicked,
-                paddingValues = paddingValues,
+                paddingValues = paddingValues
             )
 
         else -> Unit
@@ -85,7 +85,8 @@ private fun QuestTipScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -97,7 +98,8 @@ private fun QuestTipScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 top = screenHeightDp(10.dp),
                 end = screenWidthDp(24.dp),
@@ -121,7 +123,8 @@ private fun QuestTipScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
@@ -138,7 +141,8 @@ private fun QuestTipScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
@@ -156,10 +160,11 @@ private fun QuestTipScreen(
 @Composable
 private fun QuestTipHeader(
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier,
-){
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(bottom = screenHeightDp(16.dp))
@@ -168,7 +173,8 @@ private fun QuestTipHeader(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = "닫기",
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(24.dp)
                 .align(Alignment.CenterEnd)
                 .noRippleClickable(onCloseClick)
@@ -190,7 +196,7 @@ private fun QuestTipTitle(
     questNumber: Long,
     question: String,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -229,7 +235,7 @@ private fun QuestTipReason(
     questNumber: Long,
     tipAnswer: QuestTipAnswers,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -251,7 +257,7 @@ private fun QuestTipThinking(
     questType: QuestType,
     tipAnswer: QuestTipAnswers,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -280,7 +286,7 @@ private fun QuestTipThinking(
 private fun QuestTipChange(
     tipAnswer: QuestTipAnswers,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally

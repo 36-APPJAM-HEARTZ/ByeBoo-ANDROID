@@ -9,30 +9,35 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import javax.inject.Inject
 
-class LoginUseCase @Inject constructor(
+class LoginUseCase
+@Inject
+constructor(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository
 ) {
-    suspend operator fun invoke(token: String, platform: String): Result<AuthResult> {
-        return authRepository.loginWithKakao(
-            token = token,
-            platform = platform
-        ).mapCatching { auth ->
-            tokenRepository.saveTokens(
-                TokenEntity(
-                    accessToken = auth.tokens.accessToken,
-                    refreshToken = auth.tokens.refreshToken
+    suspend operator fun invoke(
+        token: String,
+        platform: String
+    ): Result<AuthResult> =
+        authRepository
+            .loginWithKakao(
+                token = token,
+                platform = platform
+            ).mapCatching { auth ->
+                tokenRepository.saveTokens(
+                    TokenEntity(
+                        accessToken = auth.tokens.accessToken,
+                        refreshToken = auth.tokens.refreshToken
+                    )
                 )
-            )
 
-            auth.name?.let { userRepository.updateUserNickname(it) }
-            questStateRepository.updateUserJourney(auth.journey.toJourneyText())
-            userRepository.setUserRegistered(auth.isRegistered)
-            userRepository.saveUserId(auth.userId)
+                auth.name?.let { userRepository.updateUserNickname(it) }
+                questStateRepository.updateUserJourney(auth.journey.toJourneyText())
+                userRepository.setUserRegistered(auth.isRegistered)
+                userRepository.saveUserId(auth.userId)
 
-            auth
-        }
-    }
+                auth
+            }
 }

@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         viewModel.handleIntent(intent)
 
         setContent {
-            ByeBooTheme{
+            ByeBooTheme {
                 MainScreen()
             }
         }

@@ -51,9 +51,10 @@ fun QuestRoute(
 
     LaunchedEffect(uiState.currentStepIndex) {
         if (uiState.questGroups.isNotEmpty() && uiState.currentStepIndex >= 0) {
-            val scrollIndex = uiState.questGroups
-                .take(uiState.currentStepIndex)
-                .sumOf { 1 + (it.quests.size + 2) / 3 }
+            val scrollIndex =
+                uiState.questGroups
+                    .take(uiState.currentStepIndex)
+                    .sumOf { 1 + (it.quests.size + 2) / 3 }
             listState.animateScrollToItem(index = scrollIndex)
         }
     }
@@ -61,9 +62,16 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(
+                    effect.questId,
+                    effect.questType
+                )
+                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(
+                    effect.questId
+                )
+                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(
+                    effect.questId
+                )
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -98,7 +106,8 @@ private fun QuestScreen(
             questQuestion = uiState.selectedQuest?.questQuestion.orEmpty(),
             navigateToTip = onTipClick,
             progressButton = onQuestStart,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
@@ -106,7 +115,8 @@ private fun QuestScreen(
     }
 
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(
@@ -114,9 +124,12 @@ private fun QuestScreen(
                 bottom = paddingValues.calculateBottomPadding()
             )
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = screenWidthDp(24.dp))) {
+        Column(
+            modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp))
+        ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
                 text = uiState.progressPeriod.toString(),
@@ -137,12 +150,14 @@ private fun QuestScreen(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 end = screenWidthDp(24.dp),
                 bottom = screenHeightDp(37.dp)
             ),
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .background(ByeBooTheme.colors.black)
         ) {

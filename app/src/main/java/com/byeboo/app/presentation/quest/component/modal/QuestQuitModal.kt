@@ -37,7 +37,8 @@ fun QuestQuitModal(
         properties = dialogProperties
     ) {
         Column(
-            modifier = modifier
+            modifier =
+            modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.gray800)

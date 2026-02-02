@@ -16,12 +16,24 @@ data class QuestReviewState(
     val questEmotionState: String = "",
     val emotionDescription: String = "",
     val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
-    val questType: QuestType = QuestType.RECORDING,
+    val questType: QuestType = QuestType.RECORDING
 )
 
 sealed interface QuestReviewSideEffect {
     data object NavigateToQuest : QuestReviewSideEffect
-    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
-    data class NavigateToQuestBehaviorEdit(val questId: Long, val isEditMode: Boolean, val imageKey: String) : QuestReviewSideEffect
-    data class ShowSnackBar(val message: String) : QuestReviewSideEffect
+
+    data class NavigateToQuestRecordingEdit(
+        val questId: Long,
+        val isEditMode: Boolean
+    ) : QuestReviewSideEffect
+
+    data class NavigateToQuestBehaviorEdit(
+        val questId: Long,
+        val isEditMode: Boolean,
+        val imageKey: String
+    ) : QuestReviewSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : QuestReviewSideEffect
 }

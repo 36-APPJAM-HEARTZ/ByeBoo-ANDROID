@@ -17,16 +17,18 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
+class SplashViewModel
+@Inject
+constructor(
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository,
     private val fcmTokenRepository: FcmTokenRepository,
@@ -35,7 +37,6 @@ class SplashViewModel @Inject constructor(
     private val reissueAccessTokenUseCase: ReissueAccessTokenUseCase,
     private val updateFcmTokenUseCase: UpdateFcmTokenUseCase
 ) : ViewModel() {
-
     private val _sideEffect = MutableSharedFlow<SplashStateSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
@@ -90,8 +91,7 @@ class SplashViewModel @Inject constructor(
                 } else {
                     _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
                 }
-            }
-            .onFailure {
+            }.onFailure {
                 _sideEffect.emit(SplashStateSideEffect.ShowLoginButton)
             }
     }
@@ -106,7 +106,10 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun updateLoginResult(token: OAuthToken?, error: Throwable?) {
+    fun updateLoginResult(
+        token: OAuthToken?,
+        error: Throwable?
+    ) {
         viewModelScope.launch {
             when {
                 token != null -> {
@@ -119,13 +122,15 @@ class SplashViewModel @Inject constructor(
                             saveFcmToken()
 
                             isRegisteredUser = auth.isRegistered
-                            _sideEffect.emit(SplashStateSideEffect.RequestNotificationPermission)
-
-                        }
-                        .onFailure {
+                            _sideEffect.emit(
+                                SplashStateSideEffect.RequestNotificationPermission
+                            )
+                        }.onFailure {
                             mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                             _sideEffect.emit(
-                                SplashStateSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                                SplashStateSideEffect.ShowSnackBar(
+                                    "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                                )
                             )
                         }
                 }
@@ -160,10 +165,10 @@ class SplashViewModel @Inject constructor(
             val token = task.result
             viewModelScope.launch {
                 withContext(NonCancellable) {
-                    fcmTokenRepository.saveFcmToken(FcmTokenModel(token))
+                    fcmTokenRepository
+                        .saveFcmToken(FcmTokenModel(token))
                         .onSuccess { Timber.d("Fcm 토큰 성공: $token") }
                         .onFailure { Timber.e(it, "Fcm 토큰 실패") }
-
                 }
             }
         }
@@ -194,7 +199,6 @@ class SplashViewModel @Inject constructor(
                     fcmTokenRepository.saveAlarmEnabled(false)
                 }
                 _sideEffect.emit(SplashStateSideEffect.NavigateToHome)
-
             } else {
                 if (isGranted) {
                     fcmTokenRepository.saveAlarmEnabled(true)

@@ -25,7 +25,8 @@ fun QuestJourneyTitle(
     questTitle: QuestType
 ) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(vertical = screenHeightDp(19.dp))
     ) {

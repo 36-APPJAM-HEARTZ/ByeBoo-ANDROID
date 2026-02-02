@@ -31,7 +31,8 @@ fun ByeBooButton(
     textAlign: TextAlign = TextAlign.Center
 ) {
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(color = buttonBackgroundColor)

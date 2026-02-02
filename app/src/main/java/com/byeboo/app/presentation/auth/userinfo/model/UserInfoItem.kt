@@ -5,6 +5,7 @@ data class QuestItem(
     val description: String,
     val imageResId: Int
 )
+
 data class EmotionItem(
     val title: String,
     val imageResId: Int

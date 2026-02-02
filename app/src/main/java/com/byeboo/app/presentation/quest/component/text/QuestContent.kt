@@ -28,7 +28,8 @@ fun QuestContent(
     contentText: String
 ) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
     ) {
         Row(

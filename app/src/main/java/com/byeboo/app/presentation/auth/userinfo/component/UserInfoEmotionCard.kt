@@ -43,7 +43,8 @@ fun UserInfoEmotionCard(
         }
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .clip(RoundedCornerShape(12.dp))
             .background(backgroundColor)
             .border(2.dp, borderColor, RoundedCornerShape(12.dp))
@@ -51,7 +52,8 @@ fun UserInfoEmotionCard(
             .padding(vertical = screenHeightDp(12.dp))
     ) {
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = screenHeightDp(11.5.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -59,7 +61,8 @@ fun UserInfoEmotionCard(
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = null,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .width(screenWidthDp(73.dp))
                     .height(screenHeightDp(100.dp))
             )

@@ -20,11 +20,12 @@ fun UserInfoEmotionScreen(
     selectedEmotion: Feeling?,
     onEmotionSelect: (Feeling) -> Unit
 ) {
-    val emotions = persistentListOf(
-        Feeling.EXHAUSTED,
-        Feeling.RECOVERING,
-        Feeling.OVERCOMING
-    )
+    val emotions =
+        persistentListOf(
+            Feeling.EXHAUSTED,
+            Feeling.RECOVERING,
+            Feeling.OVERCOMING
+        )
 
     Column {
         DescriptionText(
@@ -39,12 +40,14 @@ fun UserInfoEmotionScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             emotions.forEach { emotion ->
-                val onCardClick = remember(emotion) {
-                    { onEmotionSelect(emotion) }
-                }
+                val onCardClick =
+                    remember(emotion) {
+                        { onEmotionSelect(emotion) }
+                    }
                 UserInfoEmotionCard(
                     content = emotion.displayText,
-                    imageRes = when (emotion) {
+                    imageRes =
+                    when (emotion) {
                         Feeling.EXHAUSTED -> R.drawable.ic_emotion_sad
                         Feeling.RECOVERING -> R.drawable.ic_emotion_soso
                         Feeling.OVERCOMING -> R.drawable.ic_emotion_good

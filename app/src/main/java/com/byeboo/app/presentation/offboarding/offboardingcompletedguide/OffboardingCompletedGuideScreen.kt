@@ -130,12 +130,14 @@ private fun OffboardingCompleteGuideScreen(
         )
 
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .background(color = ByeBooTheme.colors.blackAlpha80)
         ) {
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxSize()
                     .padding(horizontal = screenWidthDp(24.dp))
                     .padding(
@@ -148,7 +150,8 @@ private fun OffboardingCompleteGuideScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                     contentDescription = null,
                     tint = ByeBooTheme.colors.white,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .size(24.dp)
                         .align(Alignment.End)
                         .noRippleClickable(onCloseClick)
@@ -157,7 +160,8 @@ private fun OffboardingCompleteGuideScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
 
                 Column(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .height(screenHeightDp(156.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -170,7 +174,8 @@ private fun OffboardingCompleteGuideScreen(
 
                     if (!isInitialAnimation) {
                         TextSequence(
-                            paragraphs = listOf(
+                            paragraphs =
+                            listOf(
                                 "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
                                 "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
                                 "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
@@ -194,7 +199,8 @@ private fun OffboardingCompleteGuideScreen(
                 }
 
                 Box(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .weight(1f)
                         .padding(horizontal = screenWidthDp(16.dp)),
@@ -203,7 +209,8 @@ private fun OffboardingCompleteGuideScreen(
                     LottieAnimation(
                         composition = composition,
                         progress = progress,
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .padding(bottom = screenHeightDp(34.dp))
                     )
@@ -286,19 +293,24 @@ private fun Animation(
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val availableWidth = with(density) { (screenWidth - 24.dp * 2).roundToPx() }
 
-    val textStyle = ByeBooTheme.typography.cap2.copy(
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Top,
-            trim = LineHeightStyle.Trim.Both
+    val textStyle =
+        ByeBooTheme.typography.cap2.copy(
+            platformStyle = PlatformTextStyle(includeFontPadding = false),
+            lineHeightStyle =
+            LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Top,
+                trim = LineHeightStyle.Trim.Both
+            )
         )
-    )
 
-    fun measureHeight(t: String) = measurer.measure(
-        AnnotatedString(t),
-        style = textStyle,
-        constraints = Constraints(maxWidth = availableWidth)
-    ).size.height.toFloat()
+    fun measureHeight(t: String) =
+        measurer
+            .measure(
+                AnnotatedString(t),
+                style = textStyle,
+                constraints = Constraints(maxWidth = availableWidth)
+            ).size.height
+            .toFloat()
 
     val height1 = measureHeight(firstSentence)
     val height2 = measureHeight(secondSentence)
@@ -317,10 +329,11 @@ private fun Animation(
     val alpha1 = remember { Animatable(1f) }
     val scale1 = remember { Animatable(activeScale) }
 
-    val colorToVector = TwoWayConverter(
-        { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
-        { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
-    )
+    val colorToVector =
+        TwoWayConverter(
+            { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
+            { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
+        )
     val color2 = remember { Animatable(subSentenceColor, colorToVector) }
     val color3 = remember { Animatable(subSentenceColor, colorToVector) }
 
@@ -372,7 +385,8 @@ private fun Animation(
     }
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .height(totalHdp)
     ) {
@@ -390,7 +404,8 @@ private fun Animation(
                 style = ByeBooTheme.typography.cap2,
                 color = color,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .graphicsLayer {
                         translationY = baseTop + shift
@@ -413,7 +428,8 @@ private fun Animation(
             style = ByeBooTheme.typography.cap2,
             color = color3.value,
             textAlign = TextAlign.Center,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .graphicsLayer {
                     translationY = line2Top + (height2 * scale2.value) + gapPx + shift3.value

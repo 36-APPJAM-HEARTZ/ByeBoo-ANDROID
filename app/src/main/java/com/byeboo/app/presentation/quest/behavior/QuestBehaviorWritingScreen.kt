@@ -55,7 +55,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.quest.QuestValidator
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
@@ -81,13 +80,18 @@ fun QuestBehaviorWritingRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    effect.questId,
-                    effect.questType
+                is QuestBehaviorSideEffect.NavigateToQuestTip ->
+                    navigateToQuestTip(
+                        effect.questId,
+                        effect.questType
+                    )
+                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(
+                    effect.questId
                 )
-                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(effect.questId)
                 is QuestBehaviorSideEffect.CompleteAndClear -> viewModel.clearQuestInput()
-                is QuestBehaviorSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestBehaviorSideEffect.NavigateToQuestReview -> navigateToQuestReview(
+                    effect.questId
+                )
                 is QuestBehaviorSideEffect.NavigateUp -> navigateUp()
                 is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -102,7 +106,8 @@ fun QuestBehaviorWritingRoute(
                 viewModel.onDismissModal()
                 viewModel.onQuitClicked()
             },
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
@@ -145,8 +150,9 @@ private fun QuestBehaviorWritingScreen(
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
-    val displayImageUri: Uri? = uiState.selectedImageUri
-        ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
+    val displayImageUri: Uri? =
+        uiState.selectedImageUri
+            ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
 
     LaunchedEffect(isFocused.value) {
         if (isFocused.value) {
@@ -156,7 +162,8 @@ private fun QuestBehaviorWritingScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .onPreInterceptKeyBeforeSoftKeyboard { event ->
@@ -167,8 +174,7 @@ private fun QuestBehaviorWritingScreen(
                 } else {
                     false
                 }
-            }
-            .addFocusCleaner(focusManager)
+            }.addFocusCleaner(focusManager)
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
@@ -178,7 +184,8 @@ private fun QuestBehaviorWritingScreen(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
-            modifier = modifier
+            modifier =
+            modifier
                 .padding(horizontal = screenWidthDp(24.dp))
                 .align(Alignment.Start)
                 .clickable(onClick = onBackClick)
@@ -188,9 +195,10 @@ private fun QuestBehaviorWritingScreen(
 
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp),
+                end = screenWidthDp(24.dp)
             )
         ) {
             item {
@@ -330,7 +338,8 @@ private fun QuestBehaviorWritingScreen(
                         onFocusChanged = {
                             isFocused.value = it
                         },
-                        modifier = modifier
+                        modifier =
+                        modifier
                             .fillMaxWidth()
                             .bringIntoViewRequester(bringIntoViewRequester)
                     )

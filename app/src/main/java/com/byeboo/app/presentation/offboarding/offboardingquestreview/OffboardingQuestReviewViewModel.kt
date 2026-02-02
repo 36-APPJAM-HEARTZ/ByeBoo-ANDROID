@@ -9,6 +9,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,18 +18,22 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingQuestReviewViewModel @Inject constructor(
+class OffboardingQuestReviewViewModel
+@Inject
+constructor(
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
     private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().journeyType
-    private val _uiState = MutableStateFlow(OffboardingQuestReviewState(
-        questId = questIdArg
-    ))
+    private val _uiState =
+        MutableStateFlow(
+            OffboardingQuestReviewState(
+                questId = questIdArg
+            )
+        )
     val uiState: StateFlow<OffboardingQuestReviewState>
         get() = _uiState.asStateFlow()
 
@@ -44,22 +49,34 @@ class OffboardingQuestReviewViewModel @Inject constructor(
         viewModelScope.launch {
             _sideEffect.emit(
                 if (questType == QuestType.RECORDING) {
-                    OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit(questId = uiState.value.questId, isEditMode = true, fromOffboarding = true)
+                    OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit(
+                        questId = uiState.value.questId,
+                        isEditMode = true,
+                        fromOffboarding = true
+                    )
                 } else {
-                    val imageKey = requireNotNull(uiState.value.imageKey) {
-                        "Behavior edit must have imageKey"
-                    }
+                    val imageKey =
+                        requireNotNull(uiState.value.imageKey) {
+                            "Behavior edit must have imageKey"
+                        }
 
-                    OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit(questId = uiState.value.questId, isEditMode = true, fromOffboarding = true, imageKey = imageKey)
+                    OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit(
+                        questId = uiState.value.questId,
+                        isEditMode = true,
+                        fromOffboarding = true,
+                        imageKey = imageKey
+                    )
                 }
             )
         }
     }
 
-    fun onCancelClicked(){
+    fun onCancelClicked() {
         viewModelScope.launch {
             _sideEffect.emit(
-                OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(journey = journeyTypeArg)
+                OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(
+                    journey = journeyTypeArg
+                )
             )
         }
     }
@@ -80,7 +97,8 @@ class OffboardingQuestReviewViewModel @Inject constructor(
                             imageUrl = detail.imageUrl.orEmpty(),
                             selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
                             emotionDescription = detail.emotionDescription,
-                            questType = if (detail.imageUrl == null) {
+                            questType =
+                            if (detail.imageUrl == null) {
                                 QuestType.RECORDING
                             } else {
                                 QuestType.ACTIVE

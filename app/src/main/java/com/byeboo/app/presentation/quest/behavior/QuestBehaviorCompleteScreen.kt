@@ -65,11 +65,12 @@ fun QuestBehaviorCompleteRoute(
     val context = LocalContext.current
     val activity = context.findActivity()
 
-    val imageUri = when {
-        uiState.selectedImageUri != null -> uiState.selectedImageUri
-        uiState.imageUrl.isNotBlank() -> uiState.imageUrl.toUri()
-        else -> null
-    }
+    val imageUri =
+        when {
+            uiState.selectedImageUri != null -> uiState.selectedImageUri
+            uiState.imageUrl.isNotBlank() -> uiState.imageUrl.toUri()
+            else -> null
+        }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -106,7 +107,8 @@ private fun QuestBehaviorCompleteScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(
@@ -115,7 +117,8 @@ private fun QuestBehaviorCompleteScreen(
             )
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.End
@@ -133,7 +136,8 @@ private fun QuestBehaviorCompleteScreen(
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 top = screenHeightDp(8.dp),
                 bottom = screenHeightDp(24.dp),
                 start = screenWidthDp(24.dp),
@@ -217,14 +221,16 @@ private fun QuestBehaviorCompleteScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(
-                        modifier = modifier
+                        modifier =
+                        modifier
                             .fillMaxWidth()
                             .aspectRatio(312 / 312f)
                             .clip(RoundedCornerShape(12.dp))
                     ) {
                         if (imageUri != null) {
                             SubcomposeAsyncImage(
-                                model = ImageRequest
+                                model =
+                                ImageRequest
                                     .Builder(LocalContext.current)
                                     .data(imageUri)
                                     .memoryCachePolicy(coil.request.CachePolicy.DISABLED)

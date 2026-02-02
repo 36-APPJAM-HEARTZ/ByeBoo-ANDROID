@@ -28,7 +28,8 @@ fun DescriptionText(
     end: Dp = 0.dp
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .padding(top = top, bottom = bottom, start = start, end = end)
     ) {

@@ -32,18 +32,21 @@ fun JourneyCard(
     modifier: Modifier = Modifier,
     borderColor: Color = Color.Unspecified
 ) {
-    val journeyTypeText = when (journeyType) {
-        QuestType.RECORDING -> "질문형"
-        QuestType.ACTIVE -> "행동형"
-    }
+    val journeyTypeText =
+        when (journeyType) {
+            QuestType.RECORDING -> "질문형"
+            QuestType.ACTIVE -> "행동형"
+        }
 
-    val journeyTitle = when (journeyType) {
-        QuestType.RECORDING -> "감정 직면 여정"
-        QuestType.ACTIVE -> "감정 정리 여정"
-    }
+    val journeyTitle =
+        when (journeyType) {
+            QuestType.RECORDING -> "감정 직면 여정"
+            QuestType.ACTIVE -> "감정 정리 여정"
+        }
 
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .noRippleClickable { onJourneyCardClick(journeyType) }
@@ -52,7 +55,8 @@ fun JourneyCard(
             .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = chipBackgroundColor)
                 .padding(horizontal = screenWidthDp(12.dp), vertical = screenHeightDp(4.dp))

@@ -18,10 +18,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class EditProfileViewModel @Inject constructor(
+class EditProfileViewModel
+@Inject
+constructor(
     val userRepository: UserRepository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(EditProfileState())
     val uiState: StateFlow<EditProfileState> = _uiState.asStateFlow()
 
@@ -68,11 +69,11 @@ class EditProfileViewModel @Inject constructor(
         viewModelScope.launch {
             if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
 
-            userRepository.updateUserNickname(nickname)
+            userRepository
+                .updateUserNickname(nickname)
                 .onSuccess {
                     _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
-                }
-                .onFailure {
+                }.onFailure {
                     _sideEffect.emit(
                         EditProfileSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )

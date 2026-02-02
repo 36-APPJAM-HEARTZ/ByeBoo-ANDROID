@@ -39,7 +39,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
@@ -63,12 +62,13 @@ fun SplashRoute(
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            viewModel.onPermissionResult(isGranted)
-        }
-    )
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                viewModel.onPermissionResult(isGranted)
+            }
+        )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -133,7 +133,8 @@ private fun SplashScreen(
 
     val buttonAlpha by animateDpAsState(
         targetValue = if (showLoginButton) 1.dp else 0.dp,
-        animationSpec = tween(
+        animationSpec =
+        tween(
             durationMillis = 450,
             delayMillis = 120,
             easing = LinearOutSlowInEasing
@@ -154,24 +155,29 @@ private fun SplashScreen(
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_splash_logo),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(horizontal = screenWidthDp(76.dp))
                 .padding(top = screenHeightDp(333.dp))
                 .offset(y = upAnimation)
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = screenHeightDp( 10.dp) + paddingValues.calculateBottomPadding())
+                .padding(
+                    bottom = screenHeightDp(10.dp) + paddingValues.calculateBottomPadding()
+                )
                 .offset(y = upAnimation)
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             if (showLoginButton) {
                 Row(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(color = ByeBooTheme.colors.kakaoYellow)

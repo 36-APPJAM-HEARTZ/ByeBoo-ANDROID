@@ -26,15 +26,14 @@ fun LargeTag(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .width(screenWidthDp(85.dp))
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(largeTagType.roundedCorner)
-            )
-            .padding(vertical = screenHeightDp(largeTagType.verticalPadding)),
+            ).padding(vertical = screenHeightDp(largeTagType.verticalPadding)),
         contentAlignment = Alignment.Center
-
     ) {
         Text(
             text = stringResource(largeTagType.titleResId),

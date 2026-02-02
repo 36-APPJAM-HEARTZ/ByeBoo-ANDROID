@@ -39,13 +39,13 @@ fun TermsAllButton(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .background(
                     color = backgroundColor,
                     shape = RoundedCornerShape(12.dp)
-                )
-                .then(
+                ).then(
                     if (isChecked) {
                         Modifier.border(
                             width = 1.dp,
@@ -55,8 +55,7 @@ fun TermsAllButton(
                     } else {
                         Modifier
                     }
-                )
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+                ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
                 .noRippleClickable(onClick = onTermsAllClick),
             verticalAlignment = Alignment.CenterVertically
         ) {

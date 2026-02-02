@@ -22,23 +22,26 @@ fun MainNavHost(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    val clearStackNavOptions = navOptions {
-        popUpTo(0) { inclusive = true }
-        launchSingleTop = true
-        restoreState = false
-    }
-    val questNavOptions = navOptions {
-        popUpTo(Home) {
-            saveState = true
-            inclusive = false
+    val clearStackNavOptions =
+        navOptions {
+            popUpTo(0) { inclusive = true }
+            launchSingleTop = true
+            restoreState = false
         }
-        launchSingleTop = true
-        restoreState = true
-    }
-    val keepStackNavOptions = navOptions {
-        launchSingleTop = true
-        restoreState = true
-    }
+    val questNavOptions =
+        navOptions {
+            popUpTo(Home) {
+                saveState = true
+                inclusive = false
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    val keepStackNavOptions =
+        navOptions {
+            launchSingleTop = true
+            restoreState = true
+        }
 
     NavHost(
         modifier = modifier,
@@ -84,7 +87,6 @@ fun MainNavHost(
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
             paddingValues = paddingValues
-
         )
 
         questGraph(
@@ -166,7 +168,12 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions
                 )
             },
-            navigateToOffboardingQuestReview = { questId, journey -> navigator.navigateToOffboardingQuestReview(questId, journey) },
+            navigateToOffboardingQuestReview = { questId, journey ->
+                navigator.navigateToOffboardingQuestReview(
+                    questId,
+                    journey
+                )
+            },
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey ->
                 navigator.navigateToOffboardingQuestCompleted(

@@ -71,7 +71,8 @@ private fun QuestStartScreen(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -82,7 +83,8 @@ private fun QuestStartScreen(
     ) {
         item {
             Row(
-                modifier = modifier
+                modifier =
+                modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(24.dp)),
                 verticalAlignment = Alignment.CenterVertically,
@@ -92,9 +94,11 @@ private fun QuestStartScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                     contentDescription = "뒤로가기",
                     tint = ByeBooTheme.colors.white,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .size(24.dp)
-                        .noRippleClickable { onBackClick() })
+                        .noRippleClickable { onBackClick() }
+                )
             }
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
         }

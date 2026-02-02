@@ -13,5 +13,5 @@ fun QuestRecordingModel.toData(): QuestRecordingRequestDto =
 
 fun QuestRecordingEditModel.toData(): QuestRecordingEditRequestDto =
     QuestRecordingEditRequestDto(
-        answer = this.answer,
+        answer = this.answer
     )

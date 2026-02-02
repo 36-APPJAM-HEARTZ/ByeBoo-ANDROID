@@ -14,24 +14,28 @@ fun QuestCompletedModel.toUiState(
     nickname: String = "하츠핑"
 ): QuestCompletedState {
     val groups: ImmutableList<QuestCompletedGroup> =
-        steps.orEmpty().map { step ->
-            val quests: ImmutableList<QuestCompleted> =
-                step.quests.orEmpty().map { quest ->
-                    QuestCompleted(
-                        questId = quest.questId,
-                        questNumber = quest.questNumber,
-                        questQuestion = quest.question,
-                        state = QuestState.Complete,
-                        type = QuestType.fromQuestStyle(quest.questStyle)
-                    )
-                }.toImmutableList()
+        steps
+            .orEmpty()
+            .map { step ->
+                val quests: ImmutableList<QuestCompleted> =
+                    step.quests
+                        .orEmpty()
+                        .map { quest ->
+                            QuestCompleted(
+                                questId = quest.questId,
+                                questNumber = quest.questNumber,
+                                questQuestion = quest.question,
+                                state = QuestState.Complete,
+                                type = QuestType.fromQuestStyle(quest.questStyle)
+                            )
+                        }.toImmutableList()
 
-            QuestCompletedGroup(
-                stepNumber = step.stepNumber,
-                stepTitle = step.step,
-                quests = quests
-            )
-        }.toImmutableList()
+                QuestCompletedGroup(
+                    stepNumber = step.stepNumber,
+                    stepTitle = step.step,
+                    quests = quests
+                )
+            }.toImmutableList()
 
     return QuestCompletedState(
         questGroups = groups,

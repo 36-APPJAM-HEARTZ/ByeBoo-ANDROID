@@ -29,7 +29,8 @@ fun StepProgressBar(
     ) {
         repeat(3) { index ->
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .weight(1f)
                     .height(screenHeightDp(6.dp))
                     .clip(RoundedCornerShape(12.dp))

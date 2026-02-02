@@ -9,12 +9,16 @@ import javax.inject.Singleton
 import org.json.JSONObject
 
 @Singleton
-class MixpanelUtil @Inject constructor() {
-
+class MixpanelUtil
+@Inject
+constructor() {
     private var mixpanel: MixpanelAPI? = null
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    fun initialize(context: Context, token: String) {
+    fun initialize(
+        context: Context,
+        token: String
+    ) {
         mixpanel = MixpanelAPI.getInstance(context, token, false)
         restoreDistinctId()
     }
@@ -31,9 +35,9 @@ class MixpanelUtil @Inject constructor() {
         }
     }
 
-    private fun isDefaultDistinctId(distinctId: String): Boolean {
-        return distinctId.startsWith("\$device:")
-    }
+    private fun isDefaultDistinctId(distinctId: String): Boolean = distinctId.startsWith(
+        "\$device:"
+    )
 
     fun setDistinctId(userId: String) {
         mainHandler.post {
@@ -45,28 +49,33 @@ class MixpanelUtil @Inject constructor() {
         }
     }
 
-    private fun getCurrentDistinctId(): String? {
-        return mixpanel?.distinctId
-    }
+    private fun getCurrentDistinctId(): String? = mixpanel?.distinctId
 
     fun hasUserDistinctId(): Boolean {
         val currentId = getCurrentDistinctId()
         return currentId != null && !isDefaultDistinctId(currentId)
     }
 
-    fun trackLogin(loginType: String, isSuccess: Boolean) {
+    fun trackLogin(
+        loginType: String,
+        isSuccess: Boolean
+    ) {
         mainHandler.post {
             mixpanel?.let { mp ->
-                val props = JSONObject().apply {
-                    put("login_type", loginType)
-                    put("is_login_complete", isSuccess)
-                }
+                val props =
+                    JSONObject().apply {
+                        put("login_type", loginType)
+                        put("is_login_complete", isSuccess)
+                    }
                 mp.track("login", props)
             }
         }
     }
 
-    fun trackEvent(eventName: String, properties: Map<String, Any> = emptyMap()) {
+    fun trackEvent(
+        eventName: String,
+        properties: Map<String, Any> = emptyMap()
+    ) {
         mainHandler.post {
             mixpanel?.let { mp ->
                 val props = JSONObject()

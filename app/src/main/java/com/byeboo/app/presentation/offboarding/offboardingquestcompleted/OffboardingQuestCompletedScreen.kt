@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,7 +51,11 @@ fun OffboardingQuestCompletedRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToOffboardingQuestReview -> navigateToOffboardingQuestReview(effect.questId, effect.journey)
+                is QuestCompletedSideEffect.NavigateToOffboardingQuestReview ->
+                    navigateToOffboardingQuestReview(
+                        effect.questId,
+                        effect.journey
+                    )
                 is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -76,7 +79,8 @@ private fun OffboardingQuestCompletedScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
@@ -89,7 +93,8 @@ private fun OffboardingQuestCompletedScreen(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.End)
                 .clickable(onClick = onCancelClick)
         )

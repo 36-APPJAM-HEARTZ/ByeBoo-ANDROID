@@ -17,12 +17,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeAmuletViewModel @Inject constructor(
+class HomeAmuletViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(HomeAmuletState())
     val uiState: StateFlow<HomeAmuletState> = _uiState.asStateFlow()
 
@@ -45,7 +46,8 @@ class HomeAmuletViewModel @Inject constructor(
 
     fun fetchJourneyFromServer() {
         viewModelScope.launch {
-            userRepository.getUserJourney()
+            userRepository
+                .getUserJourney()
                 .onSuccess { data ->
                     val amuletType = AmuletType.from(data.journey)
 
@@ -59,12 +61,12 @@ class HomeAmuletViewModel @Inject constructor(
 
                     mixpanelUtil.trackEvent(
                         eventName = "journey_card_complete",
-                        properties = mapOf(
+                        properties =
+                        mapOf(
                             "journey_type" to amuletType.journeyName
                         )
                     )
-                }
-                .onFailure {
+                }.onFailure {
                     _sideEffect.emit(
                         HomeAmuletSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )

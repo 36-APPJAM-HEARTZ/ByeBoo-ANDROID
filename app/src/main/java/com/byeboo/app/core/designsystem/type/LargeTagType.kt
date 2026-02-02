@@ -35,16 +35,16 @@ enum class LargeTagType(
         titleIcon = R.drawable.img_relief,
         titleResId = R.string.type_emotion_relief,
         title = "RELIEVED"
-    );
+    )
+    ;
 
     companion object {
-        fun fromKorean(value: String): LargeTagType {
-            return when (value) {
+        fun fromKorean(value: String): LargeTagType =
+            when (value) {
                 "슬픔" -> EMOTION_SADNESS
                 "후련함" -> EMOTION_RELIEF
                 "자기 이해" -> EMOTION_SELF_AWARE
                 else -> EMOTION_NEUTRAL
             }
-        }
     }
 }

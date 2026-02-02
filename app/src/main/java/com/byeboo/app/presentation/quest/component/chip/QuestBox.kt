@@ -20,11 +20,12 @@ fun QuestBox(
 ) {
     val isClickable = state is QuestState.Available || state is QuestState.Complete
 
-    val clickableModifier = if (isClickable) {
-        modifier.noRippleClickable { onQuestClick(questId) }
-    } else {
-        modifier
-    }
+    val clickableModifier =
+        if (isClickable) {
+            modifier.noRippleClickable { onQuestClick(questId) }
+        } else {
+            modifier
+        }
 
     when (state) {
         is QuestState.Complete -> {

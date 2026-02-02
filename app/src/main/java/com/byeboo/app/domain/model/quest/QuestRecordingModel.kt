@@ -6,5 +6,5 @@ data class QuestRecordingModel(
 )
 
 data class QuestRecordingEditModel(
-    val answer: String,
+    val answer: String
 )

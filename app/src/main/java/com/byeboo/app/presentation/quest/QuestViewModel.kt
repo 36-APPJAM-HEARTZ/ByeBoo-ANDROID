@@ -29,13 +29,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class QuestViewModel @Inject constructor(
+class QuestViewModel
+@Inject
+constructor(
     private val questUseCase: QuestUseCase,
     private val mapper: QuestUiModelMapper,
     private val userRepository: UserRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(QuestUiState())
     val uiState: StateFlow<QuestUiState> = _uiState.asStateFlow()
 
@@ -80,18 +81,16 @@ class QuestViewModel @Inject constructor(
 
                     countdownJob?.cancel()
                     if (output.openAt != null && output.serverNow != null && output.minutesUntilUnlock > 0) {
-                        countdownJob = QuestCountdownTimer
-                            .countdownFlow(output.openAt, output.serverNow)
-                            .onEach { minutes ->
-                                updateTimerLockedMinutes(minutes)
-                            }
-                            .onCompletion {
-                                viewModelScope.launch { unlockTimerLocked() }
-                            }
-                            .launchIn(viewModelScope)
+                        countdownJob =
+                            QuestCountdownTimer
+                                .countdownFlow(output.openAt, output.serverNow)
+                                .onEach { minutes ->
+                                    updateTimerLockedMinutes(minutes)
+                                }.onCompletion {
+                                    viewModelScope.launch { unlockTimerLocked() }
+                                }.launchIn(viewModelScope)
                     }
-                }
-                .onFailure { t ->
+                }.onFailure { t ->
                     _sideEffect.emit(
                         QuestSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )
@@ -102,17 +101,25 @@ class QuestViewModel @Inject constructor(
     private fun updateTimerLockedMinutes(minutes: Long) {
         _uiState.update { state ->
             state.copy(
-                questGroups = state.questGroups.map { group ->
-                    group.copy(
-                        quests = group.quests.map { quest ->
-                            if (quest.state is QuestState.TimerLocked) {
-                                quest.copy(state = quest.state.copy(remainTime = minutes))
-                            } else {
-                                quest
-                            }
-                        }.toImmutableList()
-                    )
-                }.toImmutableList()
+                questGroups =
+                state.questGroups
+                    .map { group ->
+                        group.copy(
+                            quests =
+                            group.quests
+                                .map { quest ->
+                                    if (quest.state is QuestState.TimerLocked) {
+                                        quest.copy(
+                                            state = quest.state.copy(
+                                                remainTime = minutes
+                                            )
+                                        )
+                                    } else {
+                                        quest
+                                    }
+                                }.toImmutableList()
+                        )
+                    }.toImmutableList()
             )
         }
     }
@@ -120,17 +127,21 @@ class QuestViewModel @Inject constructor(
     private fun unlockTimerLocked() {
         _uiState.update { state ->
             state.copy(
-                questGroups = state.questGroups.map { group ->
-                    group.copy(
-                        quests = group.quests.map { quest ->
-                            if (quest.state is QuestState.TimerLocked) {
-                                quest.copy(state = QuestState.Available)
-                            } else {
-                                quest
-                            }
-                        }.toImmutableList()
-                    )
-                }.toImmutableList()
+                questGroups =
+                state.questGroups
+                    .map { group ->
+                        group.copy(
+                            quests =
+                            group.quests
+                                .map { quest ->
+                                    if (quest.state is QuestState.TimerLocked) {
+                                        quest.copy(state = QuestState.Available)
+                                    } else {
+                                        quest
+                                    }
+                                }.toImmutableList()
+                        )
+                    }.toImmutableList()
             )
         }
     }
@@ -144,7 +155,8 @@ class QuestViewModel @Inject constructor(
         viewModelScope.launch {
             mixpanelUtil.trackEvent(
                 eventName = "quest_tip_pageview",
-                properties = mapOf(
+                properties =
+                mapOf(
                     "quest_number" to quest.questNumber
                 )
             )
@@ -169,9 +181,10 @@ class QuestViewModel @Inject constructor(
 
     fun onQuestClick(questId: Long) {
         viewModelScope.launch {
-            val quest = uiState.value.questGroups
-                .flatMap { it.quests }
-                .find { it.questId == questId }
+            val quest =
+                uiState.value.questGroups
+                    .flatMap { it.quests }
+                    .find { it.questId == questId }
 
             when (quest?.state) {
                 is QuestState.Available ->
@@ -194,14 +207,16 @@ class QuestViewModel @Inject constructor(
     }
 
     private fun trackQuest(quest: Quest) {
-        val questType = when (quest.type) {
-            QuestType.RECORDING -> "질문형"
-            QuestType.ACTIVE -> "행동형"
-        }
+        val questType =
+            when (quest.type) {
+                QuestType.RECORDING -> "질문형"
+                QuestType.ACTIVE -> "행동형"
+            }
 
         mixpanelUtil.trackEvent(
             eventName = "quest_write_pageview",
-            properties = mapOf(
+            properties =
+            mapOf(
                 "quest_start_at" to getFormattedDate(),
                 "quest_number" to quest.questNumber,
                 "quest_type" to questType

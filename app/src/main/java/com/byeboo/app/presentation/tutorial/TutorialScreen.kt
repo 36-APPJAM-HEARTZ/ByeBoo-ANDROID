@@ -58,7 +58,8 @@ private fun TutorialScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -70,7 +71,8 @@ private fun TutorialScreen(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(end = screenWidthDp(24.dp))
                 .align(Alignment.End)
                 .clickable(onClick = onBackClick)
@@ -83,11 +85,10 @@ private fun TutorialScreen(
 }
 
 @Composable
-private fun TutorialContent(
-    modifier: Modifier = Modifier
-){
+private fun TutorialContent(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = screenWidthDp((38.5).dp))

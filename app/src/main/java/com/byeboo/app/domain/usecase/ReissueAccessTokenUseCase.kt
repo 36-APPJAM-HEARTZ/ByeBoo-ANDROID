@@ -6,7 +6,9 @@ import com.byeboo.app.domain.repository.auth.TokenRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 
-class ReissueAccessTokenUseCase @Inject constructor(
+class ReissueAccessTokenUseCase
+@Inject
+constructor(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository
 ) {
@@ -16,7 +18,8 @@ class ReissueAccessTokenUseCase @Inject constructor(
             return Result.failure(IllegalStateException("No RefreshToken"))
         }
 
-        return authRepository.reissueAccessToken(refreshToken)
+        return authRepository
+            .reissueAccessToken(refreshToken)
             .onSuccess { tokenRepository.saveTokens(it) }
     }
 }

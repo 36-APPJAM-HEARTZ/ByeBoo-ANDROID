@@ -33,7 +33,11 @@ fun NavController.navigateToOffboardingQuestCompleted(
     navigate(OffboardingQuestCompleted(questType), navOptions)
 }
 
-fun NavController.navigateToOffboardingQuestReview(questId: Long, journey: QuestType, navOptions: NavOptions? = null) {
+fun NavController.navigateToOffboardingQuestReview(
+    questId: Long,
+    journey: QuestType,
+    navOptions: NavOptions? = null
+) {
     navigate(OffboardingQuestReview(questId, journey), navOptions)
 }
 
@@ -91,7 +95,6 @@ fun NavGraphBuilder.offboardingGraph(
             navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit
         )
     }
-
 }
 
 @Serializable
@@ -104,7 +107,12 @@ data object OffboardingNewJourney : Route
 data object OffboardingCompletedJourney : Route
 
 @Serializable
-data class OffboardingQuestCompleted(val questType: QuestType) : Route
+data class OffboardingQuestCompleted(
+    val questType: QuestType
+) : Route
 
 @Serializable
-data class OffboardingQuestReview(val questId: Long, val journeyType: QuestType) : Route
+data class OffboardingQuestReview(
+    val questId: Long,
+    val journeyType: QuestType
+) : Route

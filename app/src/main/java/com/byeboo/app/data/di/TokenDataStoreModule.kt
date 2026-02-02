@@ -29,7 +29,7 @@ object TokenDataStoreModule {
 
     @Provides
     @Singleton
-    fun provideTokenDataSource(
-        dataStore: DataStore<Preferences>
-    ): TokenDataSource = TokenDataSourceImpl(dataStore)
+    fun provideTokenDataSource(dataStore: DataStore<Preferences>): TokenDataSource = TokenDataSourceImpl(
+        dataStore
+    )
 }

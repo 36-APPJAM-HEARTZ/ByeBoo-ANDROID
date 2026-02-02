@@ -56,9 +56,10 @@ fun OffboardingCompletedJourneyRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
-                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(
-                    effect.journey
-                )
+                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted ->
+                    navigateToOffboardingQuestCompleted(
+                        effect.journey
+                    )
                 is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -82,20 +83,21 @@ private fun OffboardingCompletedJourneyScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
-            )
-            .verticalScroll(rememberScrollState())
+            ).verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(24.dp)
                 .noRippleClickable(onClick = onBackClick),
             tint = ByeBooTheme.colors.gray50
@@ -112,7 +114,8 @@ private fun OffboardingCompletedJourneyScreen(
         Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
 
         HorizontalDivider(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
@@ -120,7 +123,8 @@ private fun OffboardingCompletedJourneyScreen(
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(16.dp)),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))

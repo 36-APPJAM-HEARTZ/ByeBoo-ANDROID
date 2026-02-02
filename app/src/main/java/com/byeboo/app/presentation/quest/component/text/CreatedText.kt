@@ -9,9 +9,10 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun CreatedText(createdAt: String) {
-    val date = remember(createdAt) {
-        LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
-    }
+    val date =
+        remember(createdAt) {
+            LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+        }
 
     Text(
         text = "$date",

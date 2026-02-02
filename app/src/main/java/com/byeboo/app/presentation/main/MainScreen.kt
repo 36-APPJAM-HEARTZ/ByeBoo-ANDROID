@@ -49,9 +49,10 @@ fun MainScreen(
     val onShowSnackBar: (String) -> Unit = { message ->
         scope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
-            val job = launch {
-                snackBarHostState.showSnackbar(message)
-            }
+            val job =
+                launch {
+                    snackBarHostState.showSnackbar(message)
+                }
             delay(3000L)
             job.cancel()
         }
@@ -64,14 +65,15 @@ fun MainScreen(
             screenHeightDp(68.dp)
         }
 
-    val navOptions = navOptions {
-        popUpTo(Home) {
-            saveState = true
-            inclusive = false
+    val navOptions =
+        navOptions {
+            popUpTo(Home) {
+                saveState = true
+                inclusive = false
+            }
+            launchSingleTop = true
+            restoreState = true
         }
-        launchSingleTop = true
-        restoreState = true
-    }
 
     val moveToQuestNavigation: () -> Unit = {
         scope.launch {
@@ -123,7 +125,8 @@ fun MainScreen(
             snackbarHost = {
                 SnackbarHost(
                     hostState = snackBarHostState,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(horizontal = screenWidthDp(24.dp))
                         .padding(bottom = snackBarBottomInset)
                 ) { snackBar ->
@@ -140,7 +143,6 @@ fun MainScreen(
 
                         if (selectedTab == MainNavTab.QUEST) {
                             moveToQuestNavigation()
-
                         } else {
                             scope.launch {
                                 isNavigating = true
@@ -154,7 +156,8 @@ fun MainScreen(
                     }
                 )
             },
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.black)
         ) { paddingValues ->

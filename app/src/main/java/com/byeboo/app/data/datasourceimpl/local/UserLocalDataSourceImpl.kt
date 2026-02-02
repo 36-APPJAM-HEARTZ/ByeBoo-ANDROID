@@ -15,11 +15,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class UserLocalDataSourceImpl @Inject constructor(
+class UserLocalDataSourceImpl
+@Inject
+constructor(
     private val dataStore: DataStore<Preferences>
 ) : UserLocalDataSource {
-    override suspend fun getUserEntity(): UserEntity {
-        return runCatching {
+    override suspend fun getUserEntity(): UserEntity =
+        runCatching {
             val preferences = dataStore.data.first()
             UserEntity(
                 nickname = preferences[NICKNAME],
@@ -29,25 +31,21 @@ class UserLocalDataSourceImpl @Inject constructor(
         }.getOrElse {
             UserEntity()
         }
-    }
 
-    override suspend fun getUserId(): Long? {
-        return runCatching {
+    override suspend fun getUserId(): Long? =
+        runCatching {
             dataStore.data.first()[USERID]
         }.getOrNull()
-    }
 
-    override suspend fun isLoggedIn(): Boolean {
-        return runCatching {
+    override suspend fun isLoggedIn(): Boolean =
+        runCatching {
             dataStore.data.first()[IS_LOGGED_IN] ?: false
         }.getOrElse { false }
-    }
 
-    override fun getNickname(): Flow<String> {
-        return dataStore.data
+    override fun getNickname(): Flow<String> =
+        dataStore.data
             .map { preferences -> preferences[NICKNAME].orEmpty() }
             .catch { emit("") }
-    }
 
     override suspend fun setLoggedIn(loggedIn: Boolean) {
         dataStore.edit { preferences ->
@@ -77,16 +75,14 @@ class UserLocalDataSourceImpl @Inject constructor(
         dataStore.edit { it[JOURNEY] = journey }
     }
 
-    override suspend fun getJourney(): String? {
-        return dataStore.data.first()[JOURNEY]
-    }
+    override suspend fun getJourney(): String? = dataStore.data.first()[JOURNEY]
 
     override suspend fun saveJourneyStatus(journeyStatus: JourneyStatusType) {
         dataStore.edit { it[JOURNEY_STATUS] = journeyStatus.name }
     }
 
-    override fun getJourneyStatus(): Flow<JourneyStatusType> {
-        return dataStore.data
+    override fun getJourneyStatus(): Flow<JourneyStatusType> =
+        dataStore.data
             .map { preferences ->
                 val journeyStatusString = preferences[JOURNEY_STATUS]
                 if (journeyStatusString.isNullOrBlank()) {
@@ -94,9 +90,7 @@ class UserLocalDataSourceImpl @Inject constructor(
                 } else {
                     JourneyStatusType.valueOf(journeyStatusString)
                 }
-            }
-            .catch { emit(JourneyStatusType.UNKNOWN) }
-    }
+            }.catch { emit(JourneyStatusType.UNKNOWN) }
 
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {
         dataStore.edit { preferences ->
@@ -104,9 +98,7 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun hasSeenAboutHelp(): Boolean {
-        return dataStore.data.first()[HAS_SEEN_ABOUT_HELP] ?: false
-    }
+    override suspend fun hasSeenAboutHelp(): Boolean = dataStore.data.first()[HAS_SEEN_ABOUT_HELP] ?: false
 
     override suspend fun clear() {
         runCatching {
@@ -116,9 +108,7 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun isUserRegistered(): Boolean {
-        return dataStore.data.first()[IS_USER_REGISTERED] ?: false
-    }
+    override suspend fun isUserRegistered(): Boolean = dataStore.data.first()[IS_USER_REGISTERED] ?: false
 
     override suspend fun setUserRegistered(isRegistered: Boolean) {
         dataStore.edit { preferences ->
@@ -126,11 +116,10 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun getLoggedIn(): Flow<Boolean> {
-        return dataStore.data.map { preferences ->
+    override fun getLoggedIn(): Flow<Boolean> =
+        dataStore.data.map { preferences ->
             preferences[IS_LOGGED_IN] ?: false
         }
-    }
 
     companion object {
         private val IS_LOGGED_IN = booleanPreferencesKey("IS_LOGGED_IN")

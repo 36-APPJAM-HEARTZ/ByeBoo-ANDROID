@@ -8,6 +8,7 @@ import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,15 +19,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -57,7 +58,8 @@ class HomeViewModel @Inject constructor(
             var currentStep = 0L
             var hasError = false
 
-            questStateRepository.getQuestCount()
+            questStateRepository
+                .getQuestCount()
                 .onSuccess { model ->
                     status = HomeStatus.from(model.userCurrentStatus)
                     currentStep = model.count
@@ -65,13 +67,13 @@ class HomeViewModel @Inject constructor(
                     updateJourneyStatus(journeyStatus)
                     mixpanelUtil.trackEvent(
                         eventName = "home_pageview",
-                        properties = mapOf(
+                        properties =
+                        mapOf(
                             "is_first_pageview" to false,
                             "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패")
                         )
                     )
-                }
-                .onFailure { e ->
+                }.onFailure { e ->
                     val errorMessage = e.message.orEmpty()
                     if (!errorMessage.contains("HTTP 404")) {
                         hasError = true
@@ -107,11 +109,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun HomeStatus.toJourneyStatusType(): JourneyStatusType = when (this) {
-        HomeStatus.INITIAL_START -> JourneyStatusType.BEFORE_START
-        HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
-        HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
-    }
+    private fun HomeStatus.toJourneyStatusType(): JourneyStatusType =
+        when (this) {
+            HomeStatus.INITIAL_START -> JourneyStatusType.BEFORE_START
+            HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
+            HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
+        }
 
     fun onClickQuest() {
         viewModelScope.launch {
@@ -123,7 +126,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             mixpanelUtil.trackEvent(
                 eventName = "journey_start_pageview",
-                properties = mapOf(
+                properties =
+                mapOf(
                     "journey_type" to _uiState.value.journey
                 )
             )

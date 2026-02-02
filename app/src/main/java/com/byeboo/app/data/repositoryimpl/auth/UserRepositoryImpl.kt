@@ -11,80 +11,67 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class UserRepositoryImpl @Inject constructor(
+class UserRepositoryImpl
+@Inject
+constructor(
     private val userLocalDataSource: UserLocalDataSource,
     private val userRemoteDataSource: UserRemoteDataSource
 ) : UserRepository {
-
-    override suspend fun updateUserInfo(userInfo: UserInfoModel): Result<UserEntity> {
-        return runCatching {
+    override suspend fun updateUserInfo(userInfo: UserInfoModel): Result<UserEntity> =
+        runCatching {
             val response = userRemoteDataSource.updateUserInfo(userInfo.toData())
-            val userEntity = UserEntity(userId = response.data.id, nickname = response.data.name)
+            val userEntity = UserEntity(
+                userId = response.data.id,
+                nickname = response.data.name
+            )
             userLocalDataSource.saveId(userEntity.userId!!)
             userLocalDataSource.saveNickname(userEntity.nickname!!)
             userLocalDataSource.setLoggedIn(false)
             userLocalDataSource.setQuestStarted(false)
             userEntity
         }
-    }
 
-    override suspend fun getUserJourney(): Result<UserJourney> {
-        return runCatching {
+    override suspend fun getUserJourney(): Result<UserJourney> =
+        runCatching {
             val response = userRemoteDataSource.getUserJourney()
             response.data.toDomain()
         }
-    }
 
-    override suspend fun getUserEntity(): UserEntity {
-        return userLocalDataSource.getUserEntity()
-    }
+    override suspend fun getUserEntity(): UserEntity = userLocalDataSource.getUserEntity()
 
-    override suspend fun isLoggedIn(): Boolean {
-        return userLocalDataSource.isLoggedIn()
-    }
+    override suspend fun isLoggedIn(): Boolean = userLocalDataSource.isLoggedIn()
 
-    override fun getNickname(): Flow<String> {
-        return userLocalDataSource.getNickname()
-    }
+    override fun getNickname(): Flow<String> = userLocalDataSource.getNickname()
 
     override suspend fun saveUserId(userId: Long) {
         userLocalDataSource.saveId(userId)
     }
 
-    override suspend fun getUserId(): Long? {
-        return userLocalDataSource.getUserId()
-    }
+    override suspend fun getUserId(): Long? = userLocalDataSource.getUserId()
 
     override suspend fun setHasSeenAboutHelp(seen: Boolean) {
         userLocalDataSource.setHasSeenAboutHelp(seen)
     }
 
-    override suspend fun hasSeenAboutHelp(): Boolean {
-        return userLocalDataSource.hasSeenAboutHelp()
-    }
+    override suspend fun hasSeenAboutHelp(): Boolean = userLocalDataSource.hasSeenAboutHelp()
 
     override suspend fun clear() {
         userLocalDataSource.clear()
     }
 
-    override suspend fun updateUserNickname(nickname: String): Result<Unit> {
-        return runCatching {
+    override suspend fun updateUserNickname(nickname: String): Result<Unit> =
+        runCatching {
             userRemoteDataSource.updateUserNickname(nickname)
             userLocalDataSource.saveNickname(nickname)
         }
-    }
 
-    override suspend fun isUserRegistered(): Boolean {
-        return userLocalDataSource.isUserRegistered()
-    }
+    override suspend fun isUserRegistered(): Boolean = userLocalDataSource.isUserRegistered()
 
     override suspend fun setUserRegistered(isRegistered: Boolean) {
         userLocalDataSource.setUserRegistered(isRegistered)
     }
 
-    override fun getLoggedIn(): Flow<Boolean> {
-        return userLocalDataSource.getLoggedIn()
-    }
+    override fun getLoggedIn(): Flow<Boolean> = userLocalDataSource.getLoggedIn()
 
     override suspend fun setLoggedIn(isLoggedIn: Boolean) {
         userLocalDataSource.setLoggedIn(isLoggedIn)

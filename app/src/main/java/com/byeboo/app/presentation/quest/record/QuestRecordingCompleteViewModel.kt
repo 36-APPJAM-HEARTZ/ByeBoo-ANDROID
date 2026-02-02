@@ -10,6 +10,7 @@ import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,15 +19,18 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class QuestRecordingCompleteViewModel @Inject constructor(
+class QuestRecordingCompleteViewModel
+@Inject
+constructor(
     private val questRecordedDetailRepository: QuestRecordedDetailRepository,
     savedStateHandle: SavedStateHandle,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId)
+    private val questIdArg: Long = checkNotNull(
+        savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId
+    )
 
     private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
     val uiState: StateFlow<QuestRecordingCompleteState>
@@ -42,23 +46,26 @@ class QuestRecordingCompleteViewModel @Inject constructor(
     private fun loadQuestRecordedDetail() {
         viewModelScope.launch {
             val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
-            result.onSuccess { detail ->
-                _uiState.update {
-                    it.copy(
-                        stepNumber = detail.stepNumber,
-                        questNumber = detail.questNumber,
-                        createdAt = detail.createdAt,
-                        question = detail.question,
-                        answer = detail.questAnswer,
-                        selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
-                        emotionDescription = detail.emotionDescription
+            result
+                .onSuccess { detail ->
+                    _uiState.update {
+                        it.copy(
+                            stepNumber = detail.stepNumber,
+                            questNumber = detail.questNumber,
+                            createdAt = detail.createdAt,
+                            question = detail.question,
+                            answer = detail.questAnswer,
+                            selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
+                            emotionDescription = detail.emotionDescription
+                        )
+                    }
+                }.onFailure {
+                    _sideEffect.emit(
+                        QuestRecordingCompleteSideEffect.ShowSnackBar(
+                            "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                        )
                     )
                 }
-            }.onFailure {
-                _sideEffect.emit(
-                    QuestRecordingCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
-            }
         }
     }
 
@@ -67,7 +74,8 @@ class QuestRecordingCompleteViewModel @Inject constructor(
             viewModelScope.launch {
                 mixpanelUtil.trackEvent(
                     eventName = "journey_complete_pageview",
-                    properties = mapOf(
+                    properties =
+                    mapOf(
                         "journey_end_at" to getFormattedDate(),
                         "journey_type" to "감정 직면"
                     )

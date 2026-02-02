@@ -16,18 +16,23 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AuthLoadingViewModel @Inject constructor(
+class AuthLoadingViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<LoadingSideEffect>()
     val sideEffect: SharedFlow<LoadingSideEffect> = _sideEffect.asSharedFlow()
 
-    val nickname: StateFlow<String> = userRepository.getNickname().filterNotNull()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ""
-        )
+    val nickname: StateFlow<String> =
+        userRepository
+            .getNickname()
+            .filterNotNull()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = ""
+            )
 
     init {
         viewModelScope.launch {

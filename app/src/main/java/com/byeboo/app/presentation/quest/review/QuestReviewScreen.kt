@@ -66,8 +66,15 @@ fun QuestReviewRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestReviewSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, true)
-                is QuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(effect.questId, true, effect.imageKey)
+                is QuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(
+                    effect.questId,
+                    true
+                )
+                is QuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(
+                    effect.questId,
+                    true,
+                    effect.imageKey
+                )
                 is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -95,7 +102,8 @@ private fun QuestReviewScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -104,7 +112,8 @@ private fun QuestReviewScreen(
             )
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -128,7 +137,8 @@ private fun QuestReviewScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 top = screenHeightDp(10.dp),
                 end = screenWidthDp(24.dp),
@@ -178,16 +188,19 @@ private fun QuestReviewScreen(
                     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     Column(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .aspectRatio(312 / 312f)
                             .clip(RoundedCornerShape(12.dp))
                     ) {
                         SubcomposeAsyncImage(
-                            modifier = Modifier
+                            modifier =
+                            Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(1f),
-                            model = ImageRequest
+                            model =
+                            ImageRequest
                                 .Builder(LocalContext.current)
                                 .data(uiState.imageUrl)
                                 .memoryCachePolicy(CachePolicy.DISABLED)

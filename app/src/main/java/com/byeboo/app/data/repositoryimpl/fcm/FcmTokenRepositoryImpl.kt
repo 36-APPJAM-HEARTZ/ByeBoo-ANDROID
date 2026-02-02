@@ -9,10 +9,12 @@ import com.byeboo.app.domain.model.notification.NotificationSetting
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import javax.inject.Inject
 
-class FcmTokenRepositoryImpl @Inject constructor(
+class FcmTokenRepositoryImpl
+@Inject
+constructor(
     private val fcmLocalDataSource: FcmLocalDataSource,
     private val fcmRemoteDataSource: FcmRemoteDataSource
-): FcmTokenRepository {
+) : FcmTokenRepository {
     override suspend fun saveFcmToken(fcmToken: FcmTokenModel): Result<Unit> {
         return runCatching {
             val savedLocalToken = fcmLocalDataSource.getFcmToken()
@@ -23,43 +25,33 @@ class FcmTokenRepositoryImpl @Inject constructor(
 
             fcmRemoteDataSource.saveFcmToken(fcmToken.toData())
             fcmLocalDataSource.saveFcmToken(fcmToken.token)
-
         }
     }
 
-    override suspend fun updateFcmToken(fcmToken: FcmTokenModel): Result<Unit> {
-        return runCatching {
+    override suspend fun updateFcmToken(fcmToken: FcmTokenModel): Result<Unit> =
+        runCatching {
             fcmRemoteDataSource.updateFcmToken(fcmToken.toData())
             fcmLocalDataSource.saveFcmToken(fcmToken.token)
         }
-    }
 
-    override suspend fun deleteFcmToken(fcmToken: FcmTokenModel): Result<Unit> {
-        return runCatching {
+    override suspend fun deleteFcmToken(fcmToken: FcmTokenModel): Result<Unit> =
+        runCatching {
             fcmRemoteDataSource.deleteFcmToken(fcmToken.toData())
             fcmLocalDataSource.deleteFcmToken()
-
         }
-    }
 
-    override suspend fun allowQuestAlarm(): Result<NotificationSetting> {
-        return runCatching {
+    override suspend fun allowQuestAlarm(): Result<NotificationSetting> =
+        runCatching {
             val response = fcmRemoteDataSource.allowQuestAlarm()
             response.data.toDomain()
         }
-    }
 
-    override suspend fun getFcmToken(): String? {
-        return fcmLocalDataSource.getFcmToken()
-    }
+    override suspend fun getFcmToken(): String? = fcmLocalDataSource.getFcmToken()
 
-    override suspend fun saveAlarmEnabled(isAlarmEnabled: Boolean): Result<Unit> {
-        return runCatching {
+    override suspend fun saveAlarmEnabled(isAlarmEnabled: Boolean): Result<Unit> =
+        runCatching {
             fcmLocalDataSource.saveAlarmEnabled(isAlarmEnabled)
         }
-    }
 
-    override suspend fun isAlarmEnabled(): Boolean {
-        return fcmLocalDataSource.isAlarmEnabled()
-    }
+    override suspend fun isAlarmEnabled(): Boolean = fcmLocalDataSource.isAlarmEnabled()
 }

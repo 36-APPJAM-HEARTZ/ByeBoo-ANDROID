@@ -51,7 +51,8 @@ fun MainBottomBar(
                 color = ByeBooTheme.colors.gray800
             )
             Row(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .navigationBarsPadding()
                     .fillMaxWidth()
                     .padding(vertical = screenHeightDp(10.dp)),
@@ -84,7 +85,8 @@ fun RowScope.MainBottomBarItem(
     val bottomTextStyle = if (selected) ByeBooTheme.typography.body4 else ByeBooTheme.typography.body6
 
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .noRippleClickable(onClick = onClick)
             .weight(1f),
         horizontalAlignment = Alignment.CenterHorizontally,

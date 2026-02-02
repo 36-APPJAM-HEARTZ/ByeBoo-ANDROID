@@ -9,7 +9,9 @@ import com.byeboo.app.data.dto.response.auth.TokenReissueResponseDto
 import com.byeboo.app.data.service.auth.AuthService
 import javax.inject.Inject
 
-class AuthRemoteDataSourceImpl @Inject constructor(
+class AuthRemoteDataSourceImpl
+@Inject
+constructor(
     private val authService: AuthService
 ) : AuthRemoteDataSource {
     override suspend fun loginWithKakao(
@@ -24,11 +26,13 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     override suspend fun reissueAccessToken(refreshToken: String): BaseResponse<TokenReissueResponseDto> =
         authService.reissueAccessToken("$BEARER $refreshToken")
 
-    override suspend fun logoutAccount(token: String): NullableBaseResponse<Unit> =
-        authService.logoutAccount("$BEARER $token")
+    override suspend fun logoutAccount(token: String): NullableBaseResponse<Unit> = authService.logoutAccount(
+        "$BEARER $token"
+    )
 
-    override suspend fun withdrawAccount(token: String): NullableBaseResponse<Unit> =
-        authService.withdrawAccount("$BEARER $token")
+    override suspend fun withdrawAccount(token: String): NullableBaseResponse<Unit> = authService.withdrawAccount(
+        "$BEARER $token"
+    )
 
     companion object {
         private const val BEARER = "Bearer"

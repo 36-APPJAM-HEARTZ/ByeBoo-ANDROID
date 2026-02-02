@@ -89,13 +89,15 @@ private fun HomeAmuletScreen(
         )
 
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.blackAlpha50)
         )
 
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(35.dp)),
@@ -112,7 +114,8 @@ private fun HomeAmuletScreen(
                             style = ByeBooTheme.typography.body3,
                             color = ByeBooTheme.colors.whiteAlpha50,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier
+                            modifier =
+                            Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = screenHeightDp(32.dp))
                         )
@@ -139,7 +142,8 @@ private fun HomeAmuletScreen(
                             color = ByeBooTheme.colors.secondary300,
                             textDecoration = TextDecoration.Underline,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier
+                            modifier =
+                            Modifier
                                 .fillMaxWidth()
                                 .padding(top = screenHeightDp(32.dp))
                                 .noRippleClickable { onConfirm() }

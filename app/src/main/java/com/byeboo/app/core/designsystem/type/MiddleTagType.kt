@@ -13,7 +13,6 @@ enum class MiddleTagType(
     val verticalPadding: Dp = 4.dp,
     val roundedCorner: Dp = 12.dp,
     val dynamicContent: Boolean = false
-
 ) {
     QUEST_START_DAY(
         titleResId = R.string.type_quest_start_day,

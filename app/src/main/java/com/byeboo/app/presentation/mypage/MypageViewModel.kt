@@ -19,14 +19,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(
+class MyPageViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository,
     private val fcmTokenRepository: FcmTokenRepository,
     private val logoutUseCase: LogoutUseCase,
     private val withdrawUseCase: WithdrawUseCase,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(MyPageState())
     val uiState: StateFlow<MyPageState> = _uiState.asStateFlow()
 
@@ -100,14 +101,14 @@ class MyPageViewModel @Inject constructor(
     // 서버 토글 요청
     private fun updateAlarmStatus() {
         viewModelScope.launch {
-            fcmTokenRepository.allowQuestAlarm()
+            fcmTokenRepository
+                .allowQuestAlarm()
                 .onSuccess { notificationSetting ->
                     _uiState.update {
                         it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
                     }
                     fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
-                }
-                .onFailure {
+                }.onFailure {
                     _uiState.update { it.copy(isAlarmEnabled = false) }
                     fcmTokenRepository.saveAlarmEnabled(false)
                 }
@@ -125,11 +126,9 @@ class MyPageViewModel @Inject constructor(
     // 설정 -> 앱 복귀 시 알람 상태 동기화
     fun syncAlarmState(hasSystemPermission: Boolean) {
         viewModelScope.launch {
-
             if (!hasSystemPermission) {
                 _uiState.update { it.copy(isAlarmEnabled = false) }
                 fcmTokenRepository.saveAlarmEnabled(false)
-
             } else {
                 val savedState = fcmTokenRepository.isAlarmEnabled()
                 _uiState.update { it.copy(isAlarmEnabled = savedState) }
@@ -154,7 +153,11 @@ class MyPageViewModel @Inject constructor(
     fun onDismissModal(modalType: ModalType) {
         when (modalType) {
             ModalType.LOGOUT -> _uiState.update { it.copy(showLogoutModal = false) }
-            ModalType.DELETE_ACCOUNT -> _uiState.update { it.copy(showDeleteAccountModal = false) }
+            ModalType.DELETE_ACCOUNT -> _uiState.update {
+                it.copy(
+                    showDeleteAccountModal = false
+                )
+            }
             ModalType.PERMISSION -> _uiState.update { it.copy(showPermissionModal = false) }
         }
     }
@@ -169,30 +172,32 @@ class MyPageViewModel @Inject constructor(
 
     fun confirmLogout() {
         viewModelScope.launch {
-            logoutUseCase().onSuccess {
-                mixpanelUtil.trackEvent("logout_confirm_click")
-                _uiState.update { it.copy(showLogoutModal = false) }
-                _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
-            }.onFailure {
-                _sideEffect.emit(
-                    MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
-            }
+            logoutUseCase()
+                .onSuccess {
+                    mixpanelUtil.trackEvent("logout_confirm_click")
+                    _uiState.update { it.copy(showLogoutModal = false) }
+                    _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+                }.onFailure {
+                    _sideEffect.emit(
+                        MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
+                }
         }
     }
 
     fun confirmWithdraw() {
         viewModelScope.launch {
-            withdrawUseCase().onSuccess {
-                mixpanelUtil.trackEvent("withdraw_confirm_click")
-                mixpanelUtil.reset()
-                _uiState.update { it.copy(showDeleteAccountModal = false) }
-                _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
-            }.onFailure {
-                _sideEffect.emit(
-                    MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
-            }
+            withdrawUseCase()
+                .onSuccess {
+                    mixpanelUtil.trackEvent("withdraw_confirm_click")
+                    mixpanelUtil.reset()
+                    _uiState.update { it.copy(showDeleteAccountModal = false) }
+                    _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+                }.onFailure {
+                    _sideEffect.emit(
+                        MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    )
+                }
         }
     }
 }

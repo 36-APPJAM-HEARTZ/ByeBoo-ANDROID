@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class TutorialViewModel @Inject constructor() : ViewModel() {
-
+class TutorialViewModel
+@Inject
+constructor() : ViewModel() {
     private val _sideEffect = MutableSharedFlow<TutorialSideEffect>()
     val sideEffect: SharedFlow<TutorialSideEffect> = _sideEffect.asSharedFlow()
 

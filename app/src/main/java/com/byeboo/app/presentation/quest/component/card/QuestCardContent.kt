@@ -31,7 +31,8 @@ fun CompleteContent(
         QuestNumberLabel(
             questNumber = questNumber,
             color = ByeBooTheme.colors.whiteAlpha50,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.TopStart)
         )
     }
@@ -53,7 +54,8 @@ fun AvailableContent(
         QuestNumberLabel(
             questNumber = questNumber,
             color = ByeBooTheme.colors.primary300,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.TopStart)
         )
     }

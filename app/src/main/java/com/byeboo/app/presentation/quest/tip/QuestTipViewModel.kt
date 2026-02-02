@@ -9,6 +9,7 @@ import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.navigation.QuestTip
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,10 +18,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class QuestTipViewModel @Inject constructor(
+class QuestTipViewModel
+@Inject
+constructor(
     private val questTipRepository: QuestTipRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -45,35 +47,51 @@ class QuestTipViewModel @Inject constructor(
     private fun loadQuestTip(quest: Quest) {
         viewModelScope.launch {
             val result = questTipRepository.getQuestTip(quest.questId)
-            result.onSuccess { tip ->
-                _uiState.update {
-                    UiState.Success(
-                        QuestTipState(
-                            questId = quest.questId,
-                            questType = quest.type,
-                            stepNumber = tip.stepNumber,
-                            questNumber = tip.questNumber,
-                            question = tip.question,
-                            tipAnswer = QuestTipAnswers(
-                                reason = tip.tips.getOrNull(0)?.tipAnswer.orEmpty(),
-                                suggestion = tip.tips.getOrNull(1)?.tipAnswer.orEmpty(),
-                                change = tip.tips.getOrNull(2)?.tipAnswer.orEmpty()
+            result
+                .onSuccess { tip ->
+                    _uiState.update {
+                        UiState.Success(
+                            QuestTipState(
+                                questId = quest.questId,
+                                questType = quest.type,
+                                stepNumber = tip.stepNumber,
+                                questNumber = tip.questNumber,
+                                question = tip.question,
+                                tipAnswer =
+                                QuestTipAnswers(
+                                    reason =
+                                    tip.tips
+                                        .getOrNull(0)
+                                        ?.tipAnswer
+                                        .orEmpty(),
+                                    suggestion =
+                                    tip.tips
+                                        .getOrNull(1)
+                                        ?.tipAnswer
+                                        .orEmpty(),
+                                    change =
+                                    tip.tips
+                                        .getOrNull(2)
+                                        ?.tipAnswer
+                                        .orEmpty()
+                                )
                             )
                         )
-                    )
-                }
-            }.onFailure {
-                _uiState.update {
-                    UiState.Success(
-                        QuestTipState(
-                            questId = questIdArg,
-                            questType = questTypeArg
+                    }
+                }.onFailure {
+                    _uiState.update {
+                        UiState.Success(
+                            QuestTipState(
+                                questId = questIdArg,
+                                questType = questTypeArg
+                            )
                         )
+                    }
+
+                    _sideEffect.emit(
+                        QuestTipSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )
                 }
-
-                _sideEffect.emit(QuestTipSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."))
-            }
         }
     }
 

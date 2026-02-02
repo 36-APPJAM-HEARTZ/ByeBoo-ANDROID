@@ -16,12 +16,28 @@ data class OffboardingQuestReviewState(
     val questEmotionState: String = "",
     val emotionDescription: String = "",
     val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
-    val questType: QuestType = QuestType.RECORDING,
+    val questType: QuestType = QuestType.RECORDING
 )
 
 sealed interface OffboardingQuestReviewSideEffect {
-    data class NavigateToOffboardingQuestCompleted(val journey: QuestType) : OffboardingQuestReviewSideEffect
-    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean, val fromOffboarding: Boolean) : OffboardingQuestReviewSideEffect
-    data class NavigateToQuestBehaviorEdit(val questId: Long, val isEditMode: Boolean, val fromOffboarding: Boolean, val imageKey: String) : OffboardingQuestReviewSideEffect
-    data class ShowSnackBar(val message: String) : OffboardingQuestReviewSideEffect
+    data class NavigateToOffboardingQuestCompleted(
+        val journey: QuestType
+    ) : OffboardingQuestReviewSideEffect
+
+    data class NavigateToQuestRecordingEdit(
+        val questId: Long,
+        val isEditMode: Boolean,
+        val fromOffboarding: Boolean
+    ) : OffboardingQuestReviewSideEffect
+
+    data class NavigateToQuestBehaviorEdit(
+        val questId: Long,
+        val isEditMode: Boolean,
+        val fromOffboarding: Boolean,
+        val imageKey: String
+    ) : OffboardingQuestReviewSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : OffboardingQuestReviewSideEffect
 }

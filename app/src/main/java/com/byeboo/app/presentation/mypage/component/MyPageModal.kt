@@ -40,7 +40,8 @@ fun MyPageModal(
         properties = dialogProperties
     ) {
         Column(
-            modifier = modifier
+            modifier =
+            modifier
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.gray900)

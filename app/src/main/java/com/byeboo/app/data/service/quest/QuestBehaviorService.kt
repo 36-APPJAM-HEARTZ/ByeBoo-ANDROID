@@ -16,7 +16,6 @@ import retrofit2.http.Path
 import retrofit2.http.Url
 
 interface QuestBehaviorService {
-
     @POST("/api/v1/quests/images/signed-url")
     suspend fun requestQuestSignedUrl(
         @Body request: QuestSignedUrlRequestDto

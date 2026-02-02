@@ -7,5 +7,5 @@ data class QuestDetailModel(
     val stepNumber: Long,
     val questNumber: Long,
     val questStyle: QuestStyle,
-    val question: String,
+    val question: String
 )

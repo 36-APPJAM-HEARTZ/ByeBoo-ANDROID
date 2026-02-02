@@ -15,11 +15,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeOnboardingViewModel @Inject constructor(
+class HomeOnboardingViewModel
+@Inject
+constructor(
     private val questStateRepository: QuestStateRepository,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(HomeOnboardingUiState())
     val uiState: StateFlow<HomeOnboardingUiState> = _uiState.asStateFlow()
 
@@ -39,7 +40,8 @@ class HomeOnboardingViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isTransitioning = true)
             mixpanelUtil.trackEvent(
                 eventName = "home_pageview",
-                properties = mapOf(
+                properties =
+                mapOf(
                     "is_first_pageview" to true,
                     "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패")
                 )

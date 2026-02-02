@@ -90,7 +90,8 @@ private fun QuestRecordingCompleteScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -99,7 +100,8 @@ private fun QuestRecordingCompleteScreen(
             )
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.End
@@ -117,7 +119,8 @@ private fun QuestRecordingCompleteScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 top = screenHeightDp(8.dp),
                 end = screenWidthDp(24.dp),

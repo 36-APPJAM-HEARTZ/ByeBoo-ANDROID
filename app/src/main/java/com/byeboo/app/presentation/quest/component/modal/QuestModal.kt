@@ -45,7 +45,8 @@ fun QuestModal(
         properties = dialogProperties
     ) {
         Column(
-            modifier = modifier
+            modifier =
+            modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.gray800)
@@ -81,7 +82,8 @@ fun QuestModal(
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Text(
-                text = buildAnnotatedString {
+                text =
+                buildAnnotatedString {
                     withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
                         append(text = "작성 TIP")
                     }

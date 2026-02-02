@@ -7,24 +7,21 @@ import com.byeboo.app.domain.model.quest.BehaviorAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestBehaviorEditModel
 import com.byeboo.app.domain.model.quest.SignedUrlRequestModel
 
-fun SignedUrlRequestModel.toData(): QuestSignedUrlRequestDto {
-    return QuestSignedUrlRequestDto(
+fun SignedUrlRequestModel.toData(): QuestSignedUrlRequestDto =
+    QuestSignedUrlRequestDto(
         contentType = this.contentType,
         imageKey = this.imageKey
     )
-}
 
-fun BehaviorAnswerRequestModel.toData(): QuestBehaviorRequestDto {
-    return QuestBehaviorRequestDto(
+fun BehaviorAnswerRequestModel.toData(): QuestBehaviorRequestDto =
+    QuestBehaviorRequestDto(
         answer = this.answer,
         questEmotionState = this.questEmotionState,
         imageKey = imageKey
     )
-}
 
-fun QuestBehaviorEditModel.toData(): QuestBehaviorEditRequestDto {
-    return QuestBehaviorEditRequestDto(
+fun QuestBehaviorEditModel.toData(): QuestBehaviorEditRequestDto =
+    QuestBehaviorEditRequestDto(
         answer = this.answer,
         imageKey = this.imageKey
     )
-}

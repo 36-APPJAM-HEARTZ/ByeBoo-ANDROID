@@ -13,20 +13,33 @@ plugins {
     alias(libs.plugins.googleGmsServices)
 }
 
-val properties = Properties().apply {
-    val f = project.rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
-}
+val properties =
+    Properties().apply {
+        val f = project.rootProject.file("local.properties")
+        if (f.exists()) f.inputStream().use { load(it) }
+    }
 
 android {
     namespace = "com.byeboo.app"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.byeboo.app"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
+        versionCode =
+            libs.versions.versionCode
+                .get()
+                .toInt()
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

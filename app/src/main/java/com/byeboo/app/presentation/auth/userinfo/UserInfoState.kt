@@ -11,7 +11,11 @@ data class UserInfoState(
     val selectedQuest: QuestStyle? = null,
     val currentStep: Int = 0
 )
+
 sealed interface UserInfoSideEffect {
     data object NavigateToLoading : UserInfoSideEffect
-    data class ShowSnackBar(val message: String) : UserInfoSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : UserInfoSideEffect
 }

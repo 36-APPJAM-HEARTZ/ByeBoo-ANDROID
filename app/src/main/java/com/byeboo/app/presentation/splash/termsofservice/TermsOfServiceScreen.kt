@@ -53,7 +53,7 @@ fun TermsOfServiceRoute(
 
     TermsOfServiceScreen(
         uiState = uiState,
-        paddingValues= paddingValues,
+        paddingValues = paddingValues,
         onTermsAllClicked = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
         onTermsLinkClick = { url -> viewModel.onTermsLinkClicked(url) },
@@ -73,7 +73,8 @@ private fun TermsOfServiceScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
     ) {
         Image(
@@ -84,10 +85,13 @@ private fun TermsOfServiceScreen(
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp), bottom = paddingValues.calculateBottomPadding())
-                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp),
+                    bottom = paddingValues.calculateBottomPadding()
+                ).fillMaxSize()
         ) {
             TermsHeader()
 

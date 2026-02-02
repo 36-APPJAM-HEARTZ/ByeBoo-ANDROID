@@ -4,5 +4,5 @@ enum class JourneyStatusType {
     BEFORE_START,
     IN_PROGRESS,
     COMPLETED,
-    UNKNOWN;
+    UNKNOWN
 }

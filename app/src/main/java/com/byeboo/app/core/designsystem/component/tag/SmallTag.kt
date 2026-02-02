@@ -11,7 +11,6 @@ fun SmallTag(
     modifier: Modifier = Modifier,
     tagText: String,
     tagColor: Color = ByeBooTheme.colors.secondary300
-
 ) {
     Text(
         text = tagText,

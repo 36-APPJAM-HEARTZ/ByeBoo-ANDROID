@@ -10,10 +10,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object MixpanelModule {
-
     @Provides
     @Singleton
-    fun provideMixpanelUtil(): MixpanelUtil {
-        return MixpanelUtil()
-    }
+    fun provideMixpanelUtil(): MixpanelUtil = MixpanelUtil()
 }

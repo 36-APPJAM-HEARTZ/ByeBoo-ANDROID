@@ -7,10 +7,11 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
-class TokenRepositoryImpl @Inject constructor(
+class TokenRepositoryImpl
+@Inject
+constructor(
     private val tokenDataSource: TokenDataSource
 ) : TokenRepository {
-
     @Volatile private var cachedAccessToken: String = ""
 
     override fun getAccessToken(): Flow<String> = tokenDataSource.getAccessToken()
@@ -41,6 +42,5 @@ class TokenRepositoryImpl @Inject constructor(
         tokenDataSource.setLoginSplash(show)
     }
 
-    override suspend fun restartSplash(): Boolean =
-        tokenDataSource.restartSplash()
+    override suspend fun restartSplash(): Boolean = tokenDataSource.restartSplash()
 }

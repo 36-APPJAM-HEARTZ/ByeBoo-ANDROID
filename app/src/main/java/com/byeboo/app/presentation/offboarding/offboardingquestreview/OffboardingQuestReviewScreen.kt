@@ -66,9 +66,22 @@ fun OffboardingQuestReviewRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(effect.journey)
-                is OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, true, true)
-                is OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(effect.questId, true, true, effect.imageKey)
+                is OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted ->
+                    navigateToOffboardingQuestCompleted(
+                        effect.journey
+                    )
+                is OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(
+                    effect.questId,
+                    true,
+                    true
+                )
+                is OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit ->
+                    navigateToQuestBehaviorEdit(
+                        effect.questId,
+                        true,
+                        true,
+                        effect.imageKey
+                    )
                 is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -96,7 +109,8 @@ private fun OffboardingQuestReviewScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(
@@ -105,7 +119,8 @@ private fun OffboardingQuestReviewScreen(
             )
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(24.dp)),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -129,7 +144,8 @@ private fun OffboardingQuestReviewScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 top = screenHeightDp(10.dp),
                 end = screenWidthDp(24.dp),
@@ -179,16 +195,19 @@ private fun OffboardingQuestReviewScreen(
                     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     Column(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .aspectRatio(312 / 312f)
                             .clip(RoundedCornerShape(12.dp))
                     ) {
                         SubcomposeAsyncImage(
-                            modifier = Modifier
+                            modifier =
+                            Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(1f),
-                            model = ImageRequest
+                            model =
+                            ImageRequest
                                 .Builder(LocalContext.current)
                                 .data(uiState.imageUrl)
                                 .memoryCachePolicy(CachePolicy.DISABLED)

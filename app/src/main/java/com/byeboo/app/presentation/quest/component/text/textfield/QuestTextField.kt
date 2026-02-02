@@ -95,10 +95,15 @@ fun QuestTextField(
     }
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = textFieldBorderColor, shape = RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = textFieldBorderColor,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background(color = ByeBooTheme.colors.whiteAlpha10)
             .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
             .bringIntoViewRequester(textFieldRequester)
@@ -109,7 +114,8 @@ fun QuestTextField(
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxSize()
                     .height(screenHeightDp(275.dp))
                     .verticalScroll(scrollState)
@@ -118,14 +124,17 @@ fun QuestTextField(
                         onFocusChanged?.invoke(focusStateChanged.isFocused)
                     },
                 enabled = isEnabled,
-                textStyle = ByeBooTheme.typography.body3.copy(
+                textStyle =
+                ByeBooTheme.typography.body3.copy(
                     color = ByeBooTheme.colors.white
                 ),
-                keyboardOptions = KeyboardOptions(
+                keyboardOptions =
+                KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
-                keyboardActions = KeyboardActions(onDone = {
+                keyboardActions =
+                KeyboardActions(onDone = {
                     keyboardController?.hide()
                     focusManager.clearFocus()
                 }),
@@ -147,7 +156,8 @@ fun QuestTextField(
             )
 
             Text(
-                text = buildAnnotatedString {
+                text =
+                buildAnnotatedString {
                     append(text = "(")
 
                     append(text = currentCharCount.toString())

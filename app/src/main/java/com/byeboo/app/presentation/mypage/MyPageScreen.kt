@@ -56,7 +56,6 @@ import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
 
-
 @Composable
 fun MyPageRoute(
     navigateToEditProfile: () -> Unit,
@@ -73,25 +72,28 @@ fun MyPageRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val activity = context as? Activity
 
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-                viewModel.onPermissionResult(true)
-            } else {
-                val showRationale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-                } else false
-
-                if (!showRationale) {
-                    viewModel.onAlarmToggledClicked(hasSystemPermission = false)
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                if (isGranted) {
+                    viewModel.onPermissionResult(true)
                 } else {
-                    viewModel.onPermissionResult(false)
+                    val showRationale =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+                        } else {
+                            false
+                        }
+
+                    if (!showRationale) {
+                        viewModel.onAlarmToggledClicked(hasSystemPermission = false)
+                    } else {
+                        viewModel.onPermissionResult(false)
+                    }
                 }
             }
-        }
-    )
+        )
 
     val onAlarmToggleClick = {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -123,7 +125,6 @@ fun MyPageRoute(
 
                     if (shouldShowRationale) {
                         permissionLauncher.launch(POST_NOTIFICATIONS)
-
                     } else {
                         viewModel.onGoToSettingClicked()
                     }
@@ -132,7 +133,6 @@ fun MyPageRoute(
         )
     }
 
-
     if (uiState.showLogoutModal) {
         MyPageModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
@@ -140,7 +140,8 @@ fun MyPageRoute(
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
             onConfirmClick = viewModel::confirmLogout,
             onConfirmText = "로그아웃",
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
@@ -155,7 +156,8 @@ fun MyPageRoute(
             onConfirmClick = viewModel::confirmWithdraw,
             onConfirmText = "탈퇴하기",
             myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
@@ -172,9 +174,10 @@ fun MyPageRoute(
                 }
 
                 is MyPageSideEffect.NavigateToSetting -> {
-                    val intent = Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
-                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                    }
+                    val intent =
+                        Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                        }
                     context.startActivity(intent)
                 }
 
@@ -189,11 +192,12 @@ fun MyPageRoute(
     }
 
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.syncAlarmState(context.hasNotificationPermission())
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    viewModel.syncAlarmState(context.hasNotificationPermission())
+                }
             }
-        }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
@@ -234,7 +238,8 @@ private fun MyPageScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black)
             .padding(
@@ -247,7 +252,8 @@ private fun MyPageScreen(
             style = ByeBooTheme.typography.sub1,
             color = ByeBooTheme.colors.white,
             textAlign = TextAlign.Center,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .background(ByeBooTheme.colors.black)
                 .padding(horizontal = screenWidthDp(24.dp))
@@ -256,7 +262,8 @@ private fun MyPageScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
+            contentPadding =
+            PaddingValues(
                 start = screenWidthDp(24.dp),
                 top = screenHeightDp(8.dp),
                 end = screenWidthDp(24.dp),
@@ -265,7 +272,8 @@ private fun MyPageScreen(
         ) {
             item {
                 Row(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(color = ByeBooTheme.colors.whiteAlpha10)
@@ -296,7 +304,8 @@ private fun MyPageScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
@@ -330,7 +339,8 @@ private fun MyPageScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Column(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(color = ByeBooTheme.colors.whiteAlpha10)
@@ -338,8 +348,7 @@ private fun MyPageScreen(
                             width = 1.dp,
                             color = ByeBooTheme.colors.primary300,
                             shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onCompletedJourneyClick)
+                        ).clickable(onClick = onCompletedJourneyClick)
                         .padding(
                             horizontal = screenWidthDp(24.dp),
                             vertical = screenHeightDp(20.dp)
@@ -377,7 +386,8 @@ private fun MyPageScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Column(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
                         .background(color = ByeBooTheme.colors.whiteAlpha10)
@@ -385,8 +395,7 @@ private fun MyPageScreen(
                             width = 1.dp,
                             color = ByeBooTheme.colors.primary300,
                             shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onGoToByeBooUniverseClick)
+                        ).clickable(onClick = onGoToByeBooUniverseClick)
                         .padding(
                             horizontal = screenWidthDp(24.dp),
                             vertical = screenHeightDp(20.dp)
@@ -404,7 +413,8 @@ private fun MyPageScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,

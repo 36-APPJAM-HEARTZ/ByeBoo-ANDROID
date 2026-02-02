@@ -34,17 +34,22 @@ enum class MainNavTab(
         icon = ic_user,
         contentDescription = ic_mypage_desc,
         route = MyPage
-    );
+    )
+    ;
 
     companion object {
         @Composable
-        fun find(predicate: @Composable (MainTabRoute) -> Boolean): MainNavTab? {
-            return entries.find { predicate(it.route) }
+        fun find(predicate: @Composable (MainTabRoute) -> Boolean): MainNavTab? = entries.find {
+            predicate(
+                it.route
+            )
         }
 
         @Composable
-        fun contains(predicate: @Composable (Route) -> Boolean): Boolean {
-            return entries.map { it.route }.any { predicate(it) }
+        fun contains(predicate: @Composable (Route) -> Boolean): Boolean = entries.map { it.route }.any {
+            predicate(
+                it
+            )
         }
     }
 }

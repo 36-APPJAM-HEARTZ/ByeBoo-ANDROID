@@ -8,27 +8,30 @@ import com.byeboo.app.presentation.offboarding.model.JourneyStatus
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 
-class OffboardingJourneyMapper @Inject constructor() {
+class OffboardingJourneyMapper
+@Inject
+constructor() {
     fun toUiState(model: OffboardingJourneyModel): OffboardingJourneyState {
-        val journeyCardList = buildList {
-            model.uncompletedCards.forEach { card ->
-                add(
-                    JourneyCard(
-                        journeyType = QuestType.fromQuestStyle(card.style),
-                        status = JourneyStatus.UNCOMPLETED
+        val journeyCardList =
+            buildList {
+                model.uncompletedCards.forEach { card ->
+                    add(
+                        JourneyCard(
+                            journeyType = QuestType.fromQuestStyle(card.style),
+                            status = JourneyStatus.UNCOMPLETED
+                        )
                     )
-                )
-            }
+                }
 
-            model.completedCards.forEach { card ->
-                add(
-                    JourneyCard(
-                        journeyType = QuestType.fromQuestStyle(card.style),
-                        status = JourneyStatus.COMPLETED
+                model.completedCards.forEach { card ->
+                    add(
+                        JourneyCard(
+                            journeyType = QuestType.fromQuestStyle(card.style),
+                            status = JourneyStatus.COMPLETED
+                        )
                     )
-                )
-            }
-        }.toImmutableList()
+                }
+            }.toImmutableList()
 
         return OffboardingJourneyState(journeyCards = journeyCardList)
     }

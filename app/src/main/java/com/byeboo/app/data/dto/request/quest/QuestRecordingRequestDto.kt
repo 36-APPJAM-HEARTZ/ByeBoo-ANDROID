@@ -14,5 +14,5 @@ data class QuestRecordingRequestDto(
 @Serializable
 data class QuestRecordingEditRequestDto(
     @SerialName("answer")
-    val answer: String,
+    val answer: String
 )

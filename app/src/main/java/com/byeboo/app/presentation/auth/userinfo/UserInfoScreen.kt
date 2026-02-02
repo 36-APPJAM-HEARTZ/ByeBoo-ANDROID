@@ -88,7 +88,7 @@ fun UserInfoRoute(
         onResetQuest = viewModel::resetQuest,
         onSubmit = viewModel::finishUserInfo,
         modifier = modifier,
-        paddingValues = paddingValues,
+        paddingValues = paddingValues
     )
 }
 
@@ -107,7 +107,7 @@ private fun UserInfoScreen(
     onResetQuest: () -> Unit,
     onSubmit: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -140,7 +140,8 @@ private fun UserInfoScreen(
     }
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .addFocusCleaner(focusManager)
     ) {
@@ -152,13 +153,15 @@ private fun UserInfoScreen(
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(horizontal = screenWidthDp(24.dp))
                 .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp))
         ) {
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .height(screenHeightDp(24.dp))
             ) {
@@ -167,7 +170,8 @@ private fun UserInfoScreen(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                         contentDescription = "뒤로가기",
                         tint = ByeBooTheme.colors.white,
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .size(24.dp)
                             .noRippleClickable {
                                 coroutineScope.launch {
@@ -188,29 +192,35 @@ private fun UserInfoScreen(
                 userScrollEnabled = false
             ) { page ->
                 when (page) {
-                    0 -> UserInfoNicknameScreen(
-                        nickname = uiState.nickname,
-                        validationState = uiState.nicknameValidation.toValidationState(),
-                        onTextChange = onNicknameChange
-                    )
+                    0 ->
+                        UserInfoNicknameScreen(
+                            nickname = uiState.nickname,
+                            validationState = uiState.nicknameValidation.toValidationState(),
+                            onTextChange = onNicknameChange
+                        )
 
-                    1 -> UserInfoEmotionScreen(
-                        selectedEmotion = uiState.selectedEmotion,
-                        onEmotionSelect = onEmotionSelect
-                    )
+                    1 ->
+                        UserInfoEmotionScreen(
+                            selectedEmotion = uiState.selectedEmotion,
+                            onEmotionSelect = onEmotionSelect
+                        )
 
-                    2 -> UserInfoQuestScreen(
-                        selectedQuest = uiState.selectedQuest,
-                        onQuestSelect = onQuestSelect
-                    )
+                    2 ->
+                        UserInfoQuestScreen(
+                            selectedQuest = uiState.selectedQuest,
+                            onQuestSelect = onQuestSelect
+                        )
                 }
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             ByeBooActivationButton(
-                modifier = Modifier
-                    .padding(bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)),
+                modifier =
+                Modifier
+                    .padding(
+                        bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)
+                    ),
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,

@@ -7,11 +7,11 @@ import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
-import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestStateRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestTipRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestDetailBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestDetailRecordingRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestRecordingRepositoryImpl
@@ -109,13 +109,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindNewJourneyRepository(
-        newJourneyRepositoryImpl: NewJourneyRepositoryImpl
-    ): NewJourneyRepository
+    abstract fun bindNewJourneyRepository(newJourneyRepositoryImpl: NewJourneyRepositoryImpl): NewJourneyRepository
 
     @Binds
     @Singleton
-    abstract fun bindFcmTokenRepository(
-        fcmTokenRepositoryImpl: FcmTokenRepositoryImpl
-    ): FcmTokenRepository
+    abstract fun bindFcmTokenRepository(fcmTokenRepositoryImpl: FcmTokenRepositoryImpl): FcmTokenRepository
 }

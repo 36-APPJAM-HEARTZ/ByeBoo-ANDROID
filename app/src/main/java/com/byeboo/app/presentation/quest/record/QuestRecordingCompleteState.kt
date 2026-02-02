@@ -8,7 +8,10 @@ data class QuestRecordingCompleteState(
     val questId: Long = 0,
     val stepNumber: Long = 0,
     val questNumber: Long = 0,
-    val createdAt: String = java.time.LocalDate.now().toString(),
+    val createdAt: String =
+        java.time.LocalDate
+            .now()
+            .toString(),
     val question: String = "",
     val answer: String = "",
     val emotionDescription: String = "",
@@ -17,7 +20,12 @@ data class QuestRecordingCompleteState(
 
 sealed interface QuestRecordingCompleteSideEffect {
     data object NavigateToQuest : QuestRecordingCompleteSideEffect
+
     data object NavigateToOffboardingCompletedGuide : QuestRecordingCompleteSideEffect
+
     data object ShowInAppReview : QuestRecordingCompleteSideEffect
-    data class ShowSnackBar(val message: String) : QuestRecordingCompleteSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : QuestRecordingCompleteSideEffect
 }

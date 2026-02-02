@@ -26,13 +26,14 @@ fun QuestTitle(
     questNumber: Long,
     createdAt: String,
     questQuestion: String
-
 ) {
-    val date = remember(createdAt) {
-        LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
-    }
+    val date =
+        remember(createdAt) {
+            LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+        }
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(vertical = screenHeightDp(10.dp))
     ) {

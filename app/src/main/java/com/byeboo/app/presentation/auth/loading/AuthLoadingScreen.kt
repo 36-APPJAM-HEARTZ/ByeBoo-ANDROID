@@ -59,14 +59,16 @@ private fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(ByeBooTheme.colors.black),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .width(screenHeightDp(110.dp))
                 .height(screenHeightDp(110.dp))
                 .graphicsLayer(
@@ -86,13 +88,17 @@ private fun LoadingScreen(
         Text(
             buildAnnotatedString {
                 withStyle(
-                    style = ByeBooTheme.typography.body1.toSpanStyle()
+                    style =
+                    ByeBooTheme.typography.body1
+                        .toSpanStyle()
                         .copy(color = ByeBooTheme.colors.primary300)
                 ) {
                     append(nickname)
                 }
                 withStyle(
-                    style = ByeBooTheme.typography.body3.toSpanStyle()
+                    style =
+                    ByeBooTheme.typography.body3
+                        .toSpanStyle()
                         .copy(color = ByeBooTheme.colors.gray50)
                 ) {
                     append("님에게 꼭 맞는\n이별 극복 여정을 찾는 중...")

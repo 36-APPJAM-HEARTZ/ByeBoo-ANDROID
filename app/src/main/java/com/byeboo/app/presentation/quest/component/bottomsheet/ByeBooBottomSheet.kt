@@ -52,7 +52,8 @@ fun ByeBooBottomSheet(
             modifier = modifier,
             sheetState = sheetState,
             containerColor = ByeBooTheme.colors.gray900,
-            scrimColor = if (isBackgroundDimmed) {
+            scrimColor =
+            if (isBackgroundDimmed) {
                 ByeBooTheme.colors.blackAlpha80
             } else {
                 Color.Transparent
@@ -66,7 +67,8 @@ fun ByeBooBottomSheet(
             }
 
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(24.dp))
                     .padding(bottom = screenHeightDp(10.dp)),
@@ -92,7 +94,8 @@ fun ByeBooBottomSheet(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_caution),
                         contentDescription = "caution icon",
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .size(16.dp),
                         tint = Color.Unspecified
                     )

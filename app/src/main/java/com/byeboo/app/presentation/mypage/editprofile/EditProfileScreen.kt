@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -97,17 +96,21 @@ private fun EditProfileScreen(
     val isFocused = remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = screenHeightDp(paddingValues.calculateBottomPadding() + screenHeightDp(10.dp))
+                bottom = screenHeightDp(
+                    paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)
+                )
             )
     ) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(bottom = screenHeightDp(16.dp))
         ) {
@@ -115,7 +118,8 @@ private fun EditProfileScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                 contentDescription = null,
                 tint = ByeBooTheme.colors.gray50,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .noRippleClickable(onClick = onBackClick)
             )
 
@@ -144,7 +148,8 @@ private fun EditProfileScreen(
             onValueChange = onNicknameChange,
             onClearClick = onClearClick,
             showValidMessage = showValidMessage,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .focusRequester(focusRequester)
                 .onPreInterceptKeyBeforeSoftKeyboard { event ->
                     if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {

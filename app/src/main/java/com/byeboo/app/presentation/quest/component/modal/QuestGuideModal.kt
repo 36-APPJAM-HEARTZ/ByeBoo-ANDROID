@@ -31,7 +31,8 @@ fun GuideContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .padding(horizontal = screenWidthDp(49.dp), vertical = screenHeightDp(26.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,7 +59,8 @@ fun GuideContent(
         Image(
             painter = painterResource(id = R.drawable.bori_clover),
             contentDescription = "이미지",
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f),
             contentScale = ContentScale.Fit
@@ -69,13 +71,17 @@ fun GuideContent(
         Text(
             buildAnnotatedString {
                 withStyle(
-                    style = ByeBooTheme.typography.body1.toSpanStyle()
+                    style =
+                    ByeBooTheme.typography.body1
+                        .toSpanStyle()
                         .copy(color = ByeBooTheme.colors.primary300)
                 ) {
                     append(userName)
                 }
                 withStyle(
-                    style = ByeBooTheme.typography.body3.toSpanStyle()
+                    style =
+                    ByeBooTheme.typography.body3
+                        .toSpanStyle()
                         .copy(color = ByeBooTheme.colors.gray300)
                 ) {
                     append(guideText)

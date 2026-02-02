@@ -32,15 +32,17 @@ internal fun QuestPhotoPicker(
 ) {
     val uploadedImage = imageUrl != null
 
-    val photoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            onImageClick(uri)
+    val photoPickerLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                onImageClick(uri)
+            }
         }
-    }
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .width(screenWidthDp(96.dp))
             .aspectRatio(1f)
             .clip(RoundedCornerShape(12.dp))
@@ -62,7 +64,8 @@ private fun ImageUploadButton(
     onImageClick: () -> Unit
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .width(screenWidthDp(96.dp))
             .aspectRatio(1f)
             .clip(RoundedCornerShape(12.dp))
@@ -75,7 +78,8 @@ private fun ImageUploadButton(
                     AsyncImage(
                         model = imageUrl,
                         contentDescription = "selected image",
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp)),
                         contentScale = ContentScale.Crop

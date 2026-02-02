@@ -13,6 +13,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.presentation.quest.navigation.QuestStart
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,10 +22,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
-class QuestStartViewModel @Inject constructor(
+class QuestStartViewModel
+@Inject
+constructor(
     private val questStateRepository: QuestStateRepository,
     private val userRepository: UserRepository,
     private val newJourneyRepository: NewJourneyRepository,
@@ -106,7 +108,8 @@ class QuestStartViewModel @Inject constructor(
         val journeyName = journey.journeyName
 
         viewModelScope.launch {
-            newJourneyRepository.postNewJourney(journeyType)
+            newJourneyRepository
+                .postNewJourney(journeyType)
                 .onSuccess {
                     mixpanelUtil.trackEvent(
                         "journey_start_click",
@@ -120,8 +123,7 @@ class QuestStartViewModel @Inject constructor(
                     questStateRepository.updateUserJourney(journeyName)
                     questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
                     _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
-                }
-                .onFailure { e ->
+                }.onFailure { e ->
                     _sideEffect.emit(
                         QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )

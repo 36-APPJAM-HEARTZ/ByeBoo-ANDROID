@@ -23,81 +23,89 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(SingletonComponent::class)
 object ServiceModule {
+    @Provides
+    @Singleton
+    fun providesAuthService(
+        @Auth retrofit: Retrofit
+    ): AuthService =
+        retrofit.create(
+            AuthService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesAuthService(@Auth retrofit: Retrofit): AuthService = retrofit.create(
-        AuthService::class.java
-    )
+    fun providesUserService(retrofit: Retrofit): UserService =
+        retrofit.create(
+            UserService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesUserService(retrofit: Retrofit): UserService = retrofit.create(
-        UserService::class.java
-    )
+    fun providesQuestDetailService(retrofit: Retrofit): QuestDetailService =
+        retrofit.create(
+            QuestDetailService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesQuestDetailService(retrofit: Retrofit): QuestDetailService = retrofit.create(
-        QuestDetailService::class.java
-    )
+    fun providesQuestService(retrofit: Retrofit): QuestService =
+        retrofit.create(
+            QuestService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesQuestService(retrofit: Retrofit): QuestService = retrofit.create(
-        QuestService::class.java
-    )
+    fun providesQuestTipService(retrofit: Retrofit): QuestTipService =
+        retrofit.create(
+            QuestTipService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesQuestTipService(retrofit: Retrofit): QuestTipService = retrofit.create(
-        QuestTipService::class.java
-    )
+    fun providesQuestBehaviorService(retrofit: Retrofit): QuestBehaviorService =
+        retrofit.create(
+            QuestBehaviorService::class.java
+        )
 
     @Provides
     @Singleton
-    fun providesQuestBehaviorService(retrofit: Retrofit): QuestBehaviorService = retrofit.create(
-        QuestBehaviorService::class.java
-    )
-
-    @Provides
-    @Singleton
-    fun providesQuestRecordingService(retrofit: Retrofit): QuestRecordingService = retrofit.create(
-        QuestRecordingService::class.java
-    )
+    fun providesQuestRecordingService(retrofit: Retrofit): QuestRecordingService =
+        retrofit.create(
+            QuestRecordingService::class.java
+        )
 
     @Provides
     @Singleton
     fun providesQuestRecordedDetailService(retrofit: Retrofit): QuestRecordedDetailService =
         retrofit.create(
             QuestRecordedDetailService::class.java
-    )
+        )
 
     @Provides
     @Singleton
     fun providesOffboardingJourneyService(retrofit: Retrofit): OffboardingJourneyService =
         retrofit.create(
             OffboardingJourneyService::class.java
-    )
+        )
 
     @Provides
     @Singleton
     fun providesOffboardingNewJourneyService(retrofit: Retrofit): NewJourneyService =
         retrofit.create(
             NewJourneyService::class.java
-    )
+        )
 
     @Provides
     @Singleton
     fun providesOffboardingQuestCompletedService(retrofit: Retrofit): OffboardingQuestCompletedService =
         retrofit.create(
             OffboardingQuestCompletedService::class.java
-    )
+        )
 
     @Provides
     @Singleton
     fun providesNotificationService(retrofit: Retrofit): NotificationService =
         retrofit.create(
             NotificationService::class.java
-    )
+        )
 }

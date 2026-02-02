@@ -59,20 +59,22 @@ fun NicknameTextField(
     val focusManager = LocalFocusManager.current
     val shape = remember { RoundedCornerShape(12.dp) }
 
-    val borderColor = if (focusState.value) {
+    val borderColor =
+        if (focusState.value) {
+            when (validationState) {
+                UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
+                UserInfoValidationState.Invalid -> ByeBooTheme.colors.error300
+                UserInfoValidationState.Empty -> ByeBooTheme.colors.whiteAlpha10
+            }
+        } else {
+            Color.Transparent
+        }
+    val guideColor =
         when (validationState) {
             UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
             UserInfoValidationState.Invalid -> ByeBooTheme.colors.error300
-            UserInfoValidationState.Empty -> ByeBooTheme.colors.whiteAlpha10
+            UserInfoValidationState.Empty -> ByeBooTheme.colors.gray400
         }
-    } else {
-        Color.Transparent
-    }
-    val guideColor = when (validationState) {
-        UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
-        UserInfoValidationState.Invalid -> ByeBooTheme.colors.error300
-        UserInfoValidationState.Empty -> ByeBooTheme.colors.gray400
-    }
 
     var cursorText by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(value, selection = TextRange(value.length)))
@@ -86,7 +88,8 @@ fun NicknameTextField(
     }
     Column(modifier = modifier.padding(vertical = screenHeightDp(8.dp))) {
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .border(1.dp, borderColor, shape)
                 .clip(shape)
@@ -100,12 +103,12 @@ fun NicknameTextField(
                     cursorText = newValue
                     onValueChange(newValue.text)
                 },
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .then(
                         if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier
-                    )
-                    .onFocusChanged { focus ->
+                    ).onFocusChanged { focus ->
                         focusState.value = focus.isFocused
                         if (focus.isFocused && cursorText.composition == null) {
                             val end = cursorText.text.length
@@ -147,7 +150,8 @@ fun NicknameTextField(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete),
                     contentDescription = "Clear text",
                     tint = Color.Unspecified,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .align(Alignment.CenterEnd)
                         .noRippleClickable { onClearClick() }
                 )
@@ -159,22 +163,23 @@ fun NicknameTextField(
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
 
         when (validationState) {
-            UserInfoValidationState.Valid -> if (showValidMessage) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "* 설정 가능한 닉네임이에요!",
-                        style = ByeBooTheme.typography.cap2,
-                        color = guideColor,
-                        modifier = Modifier.weight(1f)
-                    )
+            UserInfoValidationState.Valid ->
+                if (showValidMessage) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "* 설정 가능한 닉네임이에요!",
+                            style = ByeBooTheme.typography.cap2,
+                            color = guideColor,
+                            modifier = Modifier.weight(1f)
+                        )
 
-                    Text(
-                        text = "${value.length}/5",
-                        style = ByeBooTheme.typography.cap2,
-                        color = guideColor
-                    )
+                        Text(
+                            text = "${value.length}/5",
+                            style = ByeBooTheme.typography.cap2,
+                            color = guideColor
+                        )
+                    }
                 }
-            }
 
             UserInfoValidationState.Invalid -> {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -182,8 +187,12 @@ fun NicknameTextField(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_error),
                         contentDescription = "에러",
                         tint = Color.Unspecified,
-                        modifier = Modifier
-                            .padding(horizontal = screenWidthDp(2.dp), vertical = screenHeightDp(2.dp))
+                        modifier =
+                        Modifier
+                            .padding(
+                                horizontal = screenWidthDp(2.dp),
+                                vertical = screenHeightDp(2.dp)
+                            )
                             .size(12.dp)
                     )
 
@@ -191,7 +200,8 @@ fun NicknameTextField(
                         text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
                         color = guideColor,
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .padding(start = screenWidthDp(3.dp))
                             .weight(1f)
                     )
@@ -210,8 +220,12 @@ fun NicknameTextField(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_default_error),
                         contentDescription = "기본",
                         tint = Color.Unspecified,
-                        modifier = Modifier
-                            .padding(horizontal = screenWidthDp(2.dp), vertical = screenHeightDp(2.dp))
+                        modifier =
+                        Modifier
+                            .padding(
+                                horizontal = screenWidthDp(2.dp),
+                                vertical = screenHeightDp(2.dp)
+                            )
                             .size(12.dp)
                     )
 
@@ -219,7 +233,8 @@ fun NicknameTextField(
                         text = "2자 이상 · 공백 제외 · 영어 숫자 한글 구성",
                         style = ByeBooTheme.typography.cap2,
                         color = guideColor,
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .padding(start = screenWidthDp(3.dp))
                             .weight(1f)
                     )

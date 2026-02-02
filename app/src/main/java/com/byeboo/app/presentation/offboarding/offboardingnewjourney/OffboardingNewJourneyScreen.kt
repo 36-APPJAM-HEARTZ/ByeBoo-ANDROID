@@ -55,9 +55,10 @@ fun OffboardingNewJourneyRoute(
     LaunchedEffect(Unit) {
         offboardingNewJourneyViewModel.sideEffect.collect { effect ->
             when (effect) {
-                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart(
-                    effect.journey
-                )
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart ->
+                    navigateToQuestStart(
+                        effect.journey
+                    )
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
@@ -85,21 +86,22 @@ private fun OffboardingNewJourneyScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .background(color = ByeBooTheme.colors.black)
             .padding(horizontal = screenWidthDp(24.dp))
             .padding(
                 top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                 bottom = paddingValues.calculateBottomPadding()
-            )
-            .verticalScroll(rememberScrollState())
+            ).verticalScroll(rememberScrollState())
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(24.dp)
                 .noRippleClickable(onClick = onBackClick)
         )
@@ -123,7 +125,8 @@ private fun OffboardingNewJourneyScreen(
         Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
 
         HorizontalDivider(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
@@ -131,14 +134,15 @@ private fun OffboardingNewJourneyScreen(
         )
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(16.dp)),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
-
         ) {
             Row(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -180,7 +184,8 @@ private fun OffboardingNewJourneyScreen(
 @Composable
 private fun PreparingCard() {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(12.dp))
             .background(color = ByeBooTheme.colors.whiteAlpha10)

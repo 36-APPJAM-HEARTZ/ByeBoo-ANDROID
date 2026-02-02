@@ -30,7 +30,8 @@ fun ByeBooActivationButton(
     val buttonTextColor = if (isEnabled) ByeBooTheme.colors.white else buttonDisableTextColor
 
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(color = buttonBackgroundColor)

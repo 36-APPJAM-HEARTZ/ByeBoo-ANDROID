@@ -19,7 +19,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OffboardingCompletedGuideViewModel @Inject constructor(
+class OffboardingCompletedGuideViewModel
+@Inject
+constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
     private val savedStateHandle: SavedStateHandle,
@@ -35,10 +37,11 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
         private const val ANIMATION_PLAYED = "animation_played"
     }
 
-    val isInitialAnimation: StateFlow<Boolean> = savedStateHandle.getStateFlow(
-        ANIMATION_PLAYED,
-        false
-    )
+    val isInitialAnimation: StateFlow<Boolean> =
+        savedStateHandle.getStateFlow(
+            ANIMATION_PLAYED,
+            false
+        )
 
     init {
         loadInitialData()
@@ -46,15 +49,15 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
 
     private fun loadInitialData() {
         viewModelScope.launch {
-            userRepository.getNickname()
+            userRepository
+                .getNickname()
                 .catch { e ->
                     _sideEffect.emit(
                         OffboardingCompletedGuideSideEffect.ShowSnackBar(
                             "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
                         )
                     )
-                }
-                .collect { name ->
+                }.collect { name ->
                     _uiState.update { it.copy(nickname = name) }
                 }
         }
@@ -73,14 +76,20 @@ class OffboardingCompletedGuideViewModel @Inject constructor(
     }
 
     fun onCloseClicked() {
-        viewModelScope.launch { _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToHome) }
+        viewModelScope.launch {
+            _sideEffect.emit(
+                OffboardingCompletedGuideSideEffect.NavigateToHome
+            )
+        }
     }
 
     fun onNewJourneyClicked() {
         viewModelScope.launch {
             savedStateHandle[ANIMATION_PLAYED] = true
             mixpanelUtil.trackEvent("journey_new_pageview")
-            _sideEffect.emit(OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney)
+            _sideEffect.emit(
+                OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney
+            )
         }
     }
 

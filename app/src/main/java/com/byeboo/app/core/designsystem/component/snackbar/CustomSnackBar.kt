@@ -25,13 +25,13 @@ fun CustomSnackBar(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .background(
                 color = ByeBooTheme.colors.blackAlpha80,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            ).padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

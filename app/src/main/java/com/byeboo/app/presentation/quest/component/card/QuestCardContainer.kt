@@ -30,7 +30,8 @@ fun QuestCardContainer(
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .aspectRatio(1f)
             .clip(RoundedCornerShape(cornerRadius))
             .background(backgroundColor)
@@ -44,8 +45,7 @@ fun QuestCardContainer(
                 } else {
                     Modifier
                 }
-            )
-            .padding(horizontal = screenWidthDp(8.dp), vertical = screenHeightDp(8.dp))
+            ).padding(horizontal = screenWidthDp(8.dp), vertical = screenHeightDp(8.dp))
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             content()
@@ -58,7 +58,8 @@ fun BackgroundImageLayer(imageResId: Int) {
     Image(
         painter = painterResource(id = imageResId),
         contentDescription = null,
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
             .padding(horizontal = screenWidthDp(3.dp))
             .padding(top = screenHeightDp(6.dp))

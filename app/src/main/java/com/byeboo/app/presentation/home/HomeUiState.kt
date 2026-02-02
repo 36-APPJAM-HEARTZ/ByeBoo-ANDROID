@@ -14,14 +14,23 @@ data class HomeUiState(
     val hasError: Boolean = false,
     val isBubbleClicked: Boolean = false,
     val showBubble: Boolean = true,
-    val isBubbleEnabled: Boolean = true,
+    val isBubbleEnabled: Boolean = true
 )
 
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
-    data class NavigateToQuestStart(val journey: QuestType?) : HomeSideEffect
+
+    data class NavigateToQuestStart(
+        val journey: QuestType?
+    ) : HomeSideEffect
+
     data object NavigateToTutorial : HomeSideEffect
+
     data object NavigateToOffboardingCompletedGuide : HomeSideEffect
+
     data object NavigateToOffboardingNewJourney : HomeSideEffect
-    data class ShowSnackBar(val message: String) : HomeSideEffect
+
+    data class ShowSnackBar(
+        val message: String
+    ) : HomeSideEffect
 }

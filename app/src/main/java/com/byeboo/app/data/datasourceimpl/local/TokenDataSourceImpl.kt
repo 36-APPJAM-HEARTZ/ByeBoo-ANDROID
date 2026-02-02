@@ -10,21 +10,25 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class TokenDataSourceImpl @Inject constructor(
+class TokenDataSourceImpl
+@Inject
+constructor(
     private val datastore: DataStore<Preferences>
 ) : TokenDataSource {
+    override fun getAccessToken(): Flow<String> =
+        datastore.data.map { preferences ->
+            preferences[ACCESS_TOKEN].orEmpty()
+        }
 
-    override fun getAccessToken(): Flow<String> = datastore.data.map {
-            preferences ->
-        preferences[ACCESS_TOKEN].orEmpty()
-    }
+    override fun getRefreshToken(): Flow<String> =
+        datastore.data.map { preferences ->
+            preferences[REFRESH_TOKEN].orEmpty()
+        }
 
-    override fun getRefreshToken(): Flow<String> = datastore.data.map {
-            preferences ->
-        preferences[REFRESH_TOKEN].orEmpty()
-    }
-
-    override suspend fun updateTokens(accessToken: String, refreshToken: String) {
+    override suspend fun updateTokens(
+        accessToken: String,
+        refreshToken: String
+    ) {
         datastore.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken
             preferences[REFRESH_TOKEN] = refreshToken

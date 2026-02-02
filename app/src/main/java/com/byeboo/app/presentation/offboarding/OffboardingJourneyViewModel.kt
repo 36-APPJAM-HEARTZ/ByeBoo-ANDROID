@@ -18,7 +18,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class OffboardingJourneyViewModel @Inject constructor(
+class OffboardingJourneyViewModel
+@Inject
+constructor(
     private val offboardingJourneyRepository: OffboardingJourneyRepository,
     private val mapper: OffboardingJourneyMapper,
     private val mixpanelUtil: MixpanelUtil
@@ -62,10 +64,11 @@ class OffboardingJourneyViewModel @Inject constructor(
                             journeyCards = output.journeyCards
                         )
                     }
-                }
-                .onFailure { e ->
+                }.onFailure { e ->
                     _sideEffect.emit(
-                        OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                        OffboardingJourneySideEffect.ShowSnackBar(
+                            "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."
+                        )
                     )
                 }
         }

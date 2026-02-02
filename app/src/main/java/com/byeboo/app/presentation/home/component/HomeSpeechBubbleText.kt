@@ -46,7 +46,8 @@ fun SpeechBubbleWithText(
     }
 
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .aspectRatio(264f / 62f)
     ) {
@@ -55,15 +56,17 @@ fun SpeechBubbleWithText(
             contentDescription = null,
             modifier = Modifier.matchParentSize()
         )
-        val textToShow = when {
-            showFirstText -> firstText
-            showSecondText -> secondText
-            showThirdText -> thirdText
-            else -> null
-        }
+        val textToShow =
+            when {
+                showFirstText -> firstText
+                showSecondText -> secondText
+                showThirdText -> thirdText
+                else -> null
+            }
         if (textToShow != null) {
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .matchParentSize()
                     .padding(bottom = screenHeightDp(14.dp)),
                 contentAlignment = Alignment.Center

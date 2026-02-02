@@ -41,7 +41,8 @@ fun UserInfoQuestCard(
     val textStyle = if (isSelected) ByeBooTheme.typography.body5 else ByeBooTheme.typography.body6
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .clip(RoundedCornerShape(12.dp))
             .background(backgroundColor)
             .border(2.dp, borderColor, RoundedCornerShape(12.dp))
@@ -49,14 +50,16 @@ fun UserInfoQuestCard(
             .padding(vertical = screenHeightDp(24.dp))
     ) {
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = null,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .size(width = screenWidthDp(56.dp), height = screenHeightDp(56.dp))
             )
 

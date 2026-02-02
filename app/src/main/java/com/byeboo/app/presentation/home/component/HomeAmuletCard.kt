@@ -44,18 +44,19 @@ fun HomeAmuletCard(
     val cameraDistance = remember { 12f * density }
 
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
             .aspectRatio(290 / 419f)
             .graphicsLayer {
                 rotationY = rotation
                 this.cameraDistance = cameraDistance
-            }
-            .clickable(enabled = !isFlipped) { onFlip() }
+            }.clickable(enabled = !isFlipped) { onFlip() }
     ) {
         if (showBack) {
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .matchParentSize()
                     .graphicsLayer { rotationY = 180f }
             ) {
@@ -71,7 +72,8 @@ fun HomeAmuletCard(
                     style = ByeBooTheme.typography.body6,
                     color = ByeBooTheme.colors.secondary50,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(horizontal = screenWidthDp(37.dp))
                         .padding(top = screenHeightDp(131.dp))

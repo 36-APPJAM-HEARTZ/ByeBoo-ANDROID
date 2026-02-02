@@ -24,14 +24,15 @@ fun MyPageNotification(
     val alpha = if (isEnabledAlarm == null) 0f else 1f
 
     Row(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "퀘스트 오픈 알림",
             style = ByeBooTheme.typography.body3,
-            color = ByeBooTheme.colors.gray50,
+            color = ByeBooTheme.colors.gray50
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -40,7 +41,8 @@ fun MyPageNotification(
             imageVector = ImageVector.vectorResource(toggle),
             contentDescription = "alarm toggle",
             alpha = alpha,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .noRippleClickable(
                     onClick = {
                         isEnabledAlarm?.let { onCheckedClick(!isEnabledAlarm) }

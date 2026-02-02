@@ -17,6 +17,9 @@ data class TermsOfServiceUiState(
 }
 
 sealed interface TermsOfServiceSideEffect {
-    data class OpenUrl(val url: String) : TermsOfServiceSideEffect
+    data class OpenUrl(
+        val url: String
+    ) : TermsOfServiceSideEffect
+
     data object NavigateToUserInfo : TermsOfServiceSideEffect
 }

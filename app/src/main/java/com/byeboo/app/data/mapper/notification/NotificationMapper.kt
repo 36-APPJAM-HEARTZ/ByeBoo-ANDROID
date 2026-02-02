@@ -5,14 +5,12 @@ import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import com.byeboo.app.domain.model.notification.FcmTokenModel
 import com.byeboo.app.domain.model.notification.NotificationSetting
 
-fun FcmTokenModel.toData(): NotificationRequestDto {
-    return NotificationRequestDto(
+fun FcmTokenModel.toData(): NotificationRequestDto =
+    NotificationRequestDto(
         token = this.token
     )
-}
 
-fun NotificationResponseDto.toDomain(): NotificationSetting {
-    return NotificationSetting(
+fun NotificationResponseDto.toDomain(): NotificationSetting =
+    NotificationSetting(
         alarmEnabled = this.alarmEnabled
     )
-}

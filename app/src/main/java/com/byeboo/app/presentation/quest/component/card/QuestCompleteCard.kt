@@ -23,19 +23,17 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun QuestCompleteCard(
-    modifier: Modifier = Modifier
-) {
+fun QuestCompleteCard(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_congrats))
     val progress by animateLottieCompositionAsState(composition = composition)
 
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .background(
                 color = ByeBooTheme.colors.whiteAlpha10,
                 shape = RoundedCornerShape(12.dp)
-            )
-            .padding(
+            ).padding(
                 horizontal = screenWidthDp(60.dp),
                 vertical = screenHeightDp(24.dp)
             ),

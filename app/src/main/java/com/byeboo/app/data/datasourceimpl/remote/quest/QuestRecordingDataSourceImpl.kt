@@ -7,20 +7,24 @@ import com.byeboo.app.data.dto.request.quest.QuestRecordingRequestDto
 import com.byeboo.app.data.service.quest.QuestRecordingService
 import javax.inject.Inject
 
-class QuestRecordingDataSourceImpl @Inject constructor(
+class QuestRecordingDataSourceImpl
+@Inject
+constructor(
     private val questRecordingService: QuestRecordingService
 ) : QuestRecordingDataSource {
     override suspend fun postQuestRecording(
         questId: Long,
         request: QuestRecordingRequestDto
-    ): NullableBaseResponse<Unit> {
-        return questRecordingService.postRecording(questId = questId, request = request)
-    }
+    ): NullableBaseResponse<Unit> = questRecordingService.postRecording(
+        questId = questId,
+        request = request
+    )
 
     override suspend fun updateQuestRecording(
         questId: Long,
         request: QuestRecordingEditRequestDto
-    ): NullableBaseResponse<Unit> {
-        return questRecordingService.patchRecording(questId = questId, request = request)
-    }
+    ): NullableBaseResponse<Unit> = questRecordingService.patchRecording(
+        questId = questId,
+        request = request
+    )
 }

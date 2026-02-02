@@ -7,7 +7,9 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import javax.inject.Inject
 
-class LogoutUseCase @Inject constructor(
+class LogoutUseCase
+@Inject
+constructor(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
     private val userRepository: UserRepository,

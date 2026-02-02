@@ -8,22 +8,19 @@ import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import com.byeboo.app.data.service.notification.NotificationService
 import javax.inject.Inject
 
-class FcmRemoteDataSourceImpl @Inject constructor(
+class FcmRemoteDataSourceImpl
+@Inject
+constructor(
     private val notificationService: NotificationService
-): FcmRemoteDataSource {
-    override suspend fun saveFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> {
-        return  notificationService.saveFcmToken(request)
-    }
+) : FcmRemoteDataSource {
+    override suspend fun saveFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> =
+        notificationService.saveFcmToken(request)
 
-    override suspend fun updateFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> {
-        return notificationService.updateFcmToken(request)
-    }
+    override suspend fun updateFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> =
+        notificationService.updateFcmToken(request)
 
-    override suspend fun deleteFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> {
-        return notificationService.deleteFcmToken(request)
-    }
+    override suspend fun deleteFcmToken(request: NotificationRequestDto): NullableBaseResponse<Unit> =
+        notificationService.deleteFcmToken(request)
 
-    override suspend fun allowQuestAlarm(): BaseResponse<NotificationResponseDto> {
-        return notificationService.allowQuestAlarm()
-    }
+    override suspend fun allowQuestAlarm(): BaseResponse<NotificationResponseDto> = notificationService.allowQuestAlarm()
 }

@@ -5,7 +5,9 @@ import com.byeboo.app.domain.repository.quest.QuestInProgressRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import javax.inject.Inject
 
-class QuestUseCase @Inject constructor(
+class QuestUseCase
+@Inject
+constructor(
     private val questInProgressRepository: QuestInProgressRepository,
     private val questStateRepository: QuestStateRepository
 ) {
