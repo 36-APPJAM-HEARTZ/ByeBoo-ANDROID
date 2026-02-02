@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class LoadingViewModel @Inject constructor(
+class AuthLoadingViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<LoadingSideEffect>()

@@ -33,7 +33,7 @@ import com.byeboo.app.core.util.screenHeightDp
 fun LoadingRoute(
     navigateToHomeAmulet: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LoadingViewModel = hiltViewModel()
+    viewModel: AuthLoadingViewModel = hiltViewModel()
 ) {
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
 
