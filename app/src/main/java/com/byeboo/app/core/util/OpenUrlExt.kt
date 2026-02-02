@@ -9,7 +9,7 @@ import java.lang.Exception
 
 fun openUrl(
     context: Context,
-    url: String
+    url: String,
 ) {
     val uri = url.toUri()
 

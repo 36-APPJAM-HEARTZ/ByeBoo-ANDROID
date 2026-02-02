@@ -6,7 +6,7 @@ import com.byeboo.app.domain.model.auth.AuthResult
 interface AuthRepository {
     suspend fun loginWithKakao(
         token: String,
-        platform: String
+        platform: String,
     ): Result<AuthResult>
 
     suspend fun reissueAccessToken(refreshToken: String): Result<TokenEntity>

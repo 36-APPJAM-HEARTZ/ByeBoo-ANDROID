@@ -21,16 +21,16 @@ fun ByeBooDragHandle(content: @Composable () -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
-        Modifier
-            .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
-            .clip(shape = RoundedCornerShape(12.dp))
+            Modifier
+                .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
+                .clip(shape = RoundedCornerShape(12.dp)),
     ) {
         Box(
             modifier =
-            Modifier
-                .width(screenWidthDp(35.dp))
-                .height(screenHeightDp(5.dp))
-                .background(ByeBooTheme.colors.whiteAlpha10)
+                Modifier
+                    .width(screenWidthDp(35.dp))
+                    .height(screenHeightDp(5.dp))
+                    .background(ByeBooTheme.colors.whiteAlpha10),
         )
         content()
     }

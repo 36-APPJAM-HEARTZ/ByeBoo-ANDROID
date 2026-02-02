@@ -4,7 +4,7 @@ enum class HomeStatus {
     INITIAL_START,
     TODAY_INCOMPLETE,
     TODAY_COMPLETE,
-    JOURNEY_COMPLETE
+    JOURNEY_COMPLETE,
     ;
 
     companion object {

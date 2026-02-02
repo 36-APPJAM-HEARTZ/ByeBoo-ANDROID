@@ -10,7 +10,7 @@ fun Context.hasNotificationPermission(): Boolean =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         ContextCompat.checkSelfPermission(
             this,
-            POST_NOTIFICATIONS
+            POST_NOTIFICATIONS,
         ) == PackageManager.PERMISSION_GRANTED
     } else {
         true

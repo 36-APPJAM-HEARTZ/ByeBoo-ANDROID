@@ -16,7 +16,7 @@ fun QuestBox(
     questNumber: Long,
     state: QuestState,
     onQuestClick: (Long) -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val isClickable = state is QuestState.Available || state is QuestState.Complete
 
@@ -32,7 +32,7 @@ fun QuestBox(
             CompleteContent(
                 questNumber = questNumber,
                 imageResId = R.drawable.ic_quest_main_complete,
-                modifier = clickableModifier
+                modifier = clickableModifier,
             )
         }
 
@@ -40,7 +40,7 @@ fun QuestBox(
             AvailableContent(
                 questNumber = questNumber,
                 imageResId = R.drawable.quest_available,
-                modifier = clickableModifier
+                modifier = clickableModifier,
             )
         }
 
@@ -48,14 +48,14 @@ fun QuestBox(
             TimerLockedContent(
                 questNumber = questNumber,
                 remainingTime = state.remainTime,
-                modifier = clickableModifier
+                modifier = clickableModifier,
             )
         }
 
         is QuestState.Locked -> {
             LockedContent(
                 questNumber = questNumber,
-                modifier = clickableModifier
+                modifier = clickableModifier,
             )
         }
     }

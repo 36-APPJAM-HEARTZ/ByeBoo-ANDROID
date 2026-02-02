@@ -29,35 +29,35 @@ fun QuestCompleteCard(modifier: Modifier = Modifier) {
 
     Column(
         modifier =
-        modifier
-            .background(
-                color = ByeBooTheme.colors.whiteAlpha10,
-                shape = RoundedCornerShape(12.dp)
-            ).padding(
-                horizontal = screenWidthDp(60.dp),
-                vertical = screenHeightDp(24.dp)
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+            modifier
+                .background(
+                    color = ByeBooTheme.colors.whiteAlpha10,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(
+                    horizontal = screenWidthDp(60.dp),
+                    vertical = screenHeightDp(24.dp),
+                ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = "QUEST",
             color = ByeBooTheme.colors.primary300,
             textAlign = TextAlign.Center,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Text(
             text = "COMPLETE!",
             color = ByeBooTheme.colors.primary100,
             textAlign = TextAlign.Center,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LottieAnimation(
             composition = composition,
-            progress = progress
+            progress = progress,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -66,7 +66,7 @@ fun QuestCompleteCard(modifier: Modifier = Modifier) {
             text = "기특해요!\n점점 극복해 나가고 있어요:)",
             color = ByeBooTheme.colors.gray300,
             textAlign = TextAlign.Center,
-            style = ByeBooTheme.typography.body3
+            style = ByeBooTheme.typography.body3,
         )
     }
 }

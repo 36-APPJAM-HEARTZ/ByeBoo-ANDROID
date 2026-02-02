@@ -14,11 +14,11 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 fun LoadingScreen() {
     Column(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black),
+            Modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         CircularProgressIndicator()
     }

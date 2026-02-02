@@ -33,7 +33,7 @@ import com.byeboo.app.core.util.screenHeightDp
 fun LoadingRoute(
     navigateToHomeAmulet: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AuthLoadingViewModel = hiltViewModel()
+    viewModel: AuthLoadingViewModel = hiltViewModel(),
 ) {
     val nickname by viewModel.nickname.collectAsStateWithLifecycle()
 
@@ -49,39 +49,39 @@ fun LoadingRoute(
 
     LoadingScreen(
         nickname = nickname,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
 @Composable
 private fun LoadingScreen(
     nickname: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black),
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Box(
             modifier =
-            Modifier
-                .width(screenHeightDp(110.dp))
-                .height(screenHeightDp(110.dp))
-                .graphicsLayer(
-                    scaleX = 4f,
-                    scaleY = 4f
-                )
+                Modifier
+                    .width(screenHeightDp(110.dp))
+                    .height(screenHeightDp(110.dp))
+                    .graphicsLayer(
+                        scaleX = 4f,
+                        scaleY = 4f,
+                    ),
         ) {
             val composition by rememberLottieComposition(
-                LottieCompositionSpec.RawRes(R.raw.loading_byeboo)
+                LottieCompositionSpec.RawRes(R.raw.loading_byeboo),
             )
             LottieAnimation(
                 composition = composition,
-                iterations = LottieConstants.IterateForever
+                iterations = LottieConstants.IterateForever,
             )
         }
 
@@ -89,23 +89,23 @@ private fun LoadingScreen(
             buildAnnotatedString {
                 withStyle(
                     style =
-                    ByeBooTheme.typography.body1
-                        .toSpanStyle()
-                        .copy(color = ByeBooTheme.colors.primary300)
+                        ByeBooTheme.typography.body1
+                            .toSpanStyle()
+                            .copy(color = ByeBooTheme.colors.primary300),
                 ) {
                     append(nickname)
                 }
                 withStyle(
                     style =
-                    ByeBooTheme.typography.body3
-                        .toSpanStyle()
-                        .copy(color = ByeBooTheme.colors.gray50)
+                        ByeBooTheme.typography.body3
+                            .toSpanStyle()
+                            .copy(color = ByeBooTheme.colors.gray50),
                 ) {
                     append("님에게 꼭 맞는\n이별 극복 여정을 찾는 중...")
                 }
             },
             style = ByeBooTheme.typography.body3,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

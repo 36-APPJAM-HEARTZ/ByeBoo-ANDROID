@@ -4,7 +4,7 @@ import com.byeboo.app.core.model.quest.QuestType
 
 sealed interface OffboardingNewJourneySideEffect {
     data class NavigateToQuestStart(
-        val journey: QuestType?
+        val journey: QuestType?,
     ) : OffboardingNewJourneySideEffect
 
     data object NavigateUp : OffboardingNewJourneySideEffect

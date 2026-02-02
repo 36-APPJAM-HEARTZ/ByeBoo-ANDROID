@@ -18,21 +18,21 @@ import com.byeboo.app.core.util.noRippleClickable
 fun MyPageNotification(
     modifier: Modifier = Modifier,
     isEnabledAlarm: Boolean?,
-    onCheckedClick: (Boolean) -> Unit
+    onCheckedClick: (Boolean) -> Unit,
 ) {
     val toggle = if (isEnabledAlarm == true) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
     val alpha = if (isEnabledAlarm == null) 0f else 1f
 
     Row(
         modifier =
-        modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+            modifier
+                .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "퀘스트 오픈 알림",
             style = ByeBooTheme.typography.body3,
-            color = ByeBooTheme.colors.gray50
+            color = ByeBooTheme.colors.gray50,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -42,12 +42,12 @@ fun MyPageNotification(
             contentDescription = "alarm toggle",
             alpha = alpha,
             modifier =
-            Modifier
-                .noRippleClickable(
-                    onClick = {
-                        isEnabledAlarm?.let { onCheckedClick(!isEnabledAlarm) }
-                    }
-                )
+                Modifier
+                    .noRippleClickable(
+                        onClick = {
+                            isEnabledAlarm?.let { onCheckedClick(!isEnabledAlarm) }
+                        },
+                    ),
         )
     }
 }

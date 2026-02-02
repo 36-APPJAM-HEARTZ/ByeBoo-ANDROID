@@ -8,10 +8,10 @@ import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
 import javax.inject.Inject
 
 class OffboardingQuestCompletedDataSourceImpl
-@Inject
-constructor(
-    private val offboardingService: OffboardingQuestCompletedService
-) : OffboardingQuestCompletedDataSource {
-    override suspend fun getCompletedQuest(journey: QuestType): BaseResponse<QuestCompletedResponseDto> =
-        offboardingService.getCompletedQuest(journey.journeyType)
-}
+    @Inject
+    constructor(
+        private val offboardingService: OffboardingQuestCompletedService,
+    ) : OffboardingQuestCompletedDataSource {
+        override suspend fun getCompletedQuest(journey: QuestType): BaseResponse<QuestCompletedResponseDto> =
+            offboardingService.getCompletedQuest(journey.journeyType)
+    }

@@ -8,36 +8,38 @@ import com.byeboo.app.data.dto.request.quest.QuestBehaviorRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestSignedUrlRequestDto
 import com.byeboo.app.data.dto.response.quest.QuestSingedUrlResponseDto
 import com.byeboo.app.data.service.quest.QuestBehaviorService
-import javax.inject.Inject
 import okhttp3.RequestBody
 import retrofit2.Response
+import javax.inject.Inject
 
 class QuestBehaviorDataSourceImpl
-@Inject
-constructor(
-    private val questBehaviorService: QuestBehaviorService
-) : QuestBehaviorDataSource {
-    override suspend fun requestQuestSignedUrl(request: QuestSignedUrlRequestDto): BaseResponse<QuestSingedUrlResponseDto> =
-        questBehaviorService.requestQuestSignedUrl(request = request)
+    @Inject
+    constructor(
+        private val questBehaviorService: QuestBehaviorService,
+    ) : QuestBehaviorDataSource {
+        override suspend fun requestQuestSignedUrl(request: QuestSignedUrlRequestDto): BaseResponse<QuestSingedUrlResponseDto> =
+            questBehaviorService.requestQuestSignedUrl(request = request)
 
-    override suspend fun uploadImageToSignedUrl(
-        signedUrl: String,
-        requestBody: RequestBody
-    ): Response<Unit> = questBehaviorService.uploadImageToUrl(signedUrl, requestBody)
+        override suspend fun uploadImageToSignedUrl(
+            signedUrl: String,
+            requestBody: RequestBody,
+        ): Response<Unit> = questBehaviorService.uploadImageToUrl(signedUrl, requestBody)
 
-    override suspend fun uploadQuestBehaviorAnswer(
-        questId: Long,
-        request: QuestBehaviorRequestDto
-    ): NullableBaseResponse<Unit> = questBehaviorService.uploadQuestAnswer(
-        questId = questId,
-        request = request
-    )
+        override suspend fun uploadQuestBehaviorAnswer(
+            questId: Long,
+            request: QuestBehaviorRequestDto,
+        ): NullableBaseResponse<Unit> =
+            questBehaviorService.uploadQuestAnswer(
+                questId = questId,
+                request = request,
+            )
 
-    override suspend fun updateQuestBehavior(
-        questId: Long,
-        request: QuestBehaviorEditRequestDto
-    ): NullableBaseResponse<Unit> = questBehaviorService.patchQuestBehavior(
-        questId = questId,
-        request = request
-    )
-}
+        override suspend fun updateQuestBehavior(
+            questId: Long,
+            request: QuestBehaviorEditRequestDto,
+        ): NullableBaseResponse<Unit> =
+            questBehaviorService.patchQuestBehavior(
+                questId = questId,
+                request = request,
+            )
+    }

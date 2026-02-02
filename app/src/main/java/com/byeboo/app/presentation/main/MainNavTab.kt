@@ -18,38 +18,40 @@ import com.byeboo.app.presentation.quest.navigation.Quest
 enum class MainNavTab(
     @DrawableRes val icon: Int,
     @StringRes val contentDescription: Int,
-    val route: MainTabRoute
+    val route: MainTabRoute,
 ) {
     HOME(
         icon = ic_home,
         contentDescription = ic_home_desc,
-        route = Home
+        route = Home,
     ),
     QUEST(
         icon = ic_quest,
         contentDescription = ic_quest_desc,
-        route = Quest
+        route = Quest,
     ),
     MYPAGE(
         icon = ic_user,
         contentDescription = ic_mypage_desc,
-        route = MyPage
-    )
+        route = MyPage,
+    ),
     ;
 
     companion object {
         @Composable
-        fun find(predicate: @Composable (MainTabRoute) -> Boolean): MainNavTab? = entries.find {
-            predicate(
-                it.route
-            )
-        }
+        fun find(predicate: @Composable (MainTabRoute) -> Boolean): MainNavTab? =
+            entries.find {
+                predicate(
+                    it.route,
+                )
+            }
 
         @Composable
-        fun contains(predicate: @Composable (Route) -> Boolean): Boolean = entries.map { it.route }.any {
-            predicate(
-                it
-            )
-        }
+        fun contains(predicate: @Composable (Route) -> Boolean): Boolean =
+            entries.map { it.route }.any {
+                predicate(
+                    it,
+                )
+            }
     }
 }

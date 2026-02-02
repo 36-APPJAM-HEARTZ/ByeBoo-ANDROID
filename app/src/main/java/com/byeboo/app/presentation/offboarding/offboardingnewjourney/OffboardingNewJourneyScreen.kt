@@ -48,7 +48,7 @@ fun OffboardingNewJourneyRoute(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
-    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
+    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -57,7 +57,7 @@ fun OffboardingNewJourneyRoute(
             when (effect) {
                 is OffboardingNewJourneySideEffect.NavigateToQuestStart ->
                     navigateToQuestStart(
-                        effect.journey
+                        effect.journey,
                     )
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
@@ -70,10 +70,10 @@ fun OffboardingNewJourneyRoute(
         onBackClick = offboardingNewJourneyViewModel::onBackClicked,
         onJourneyUncompletedCardClick = { type ->
             offboardingNewJourneyViewModel.postNewJourney(
-                type
+                type,
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -83,27 +83,27 @@ private fun OffboardingNewJourneyScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: (QuestType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            ).verticalScroll(rememberScrollState())
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ).verticalScroll(rememberScrollState()),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
             modifier =
-            Modifier
-                .size(24.dp)
-                .noRippleClickable(onClick = onBackClick)
+                Modifier
+                    .size(24.dp)
+                    .noRippleClickable(onClick = onBackClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
@@ -111,7 +111,7 @@ private fun OffboardingNewJourneyScreen(
         Text(
             text = "어떤 여정을 시작해 볼까요?",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -119,38 +119,38 @@ private fun OffboardingNewJourneyScreen(
         Text(
             text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body6
+            style = ByeBooTheme.typography.body6,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
 
         HorizontalDivider(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(8.dp)),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
+            color = ByeBooTheme.colors.whiteAlpha10,
         )
 
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(16.dp)),
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = screenHeightDp(16.dp)),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
         ) {
             Row(
                 modifier =
-                Modifier
-                    .fillMaxWidth(),
+                    Modifier
+                        .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "미완료",
                     color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2
+                    style = ByeBooTheme.typography.cap2,
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -158,7 +158,7 @@ private fun OffboardingNewJourneyScreen(
                 Text(
                     text = "${uiState.uncompletedCount}개",
                     color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2
+                    style = ByeBooTheme.typography.body2,
                 )
             }
 
@@ -171,7 +171,7 @@ private fun OffboardingNewJourneyScreen(
                         chipTextColor = ByeBooTheme.colors.white,
                         journeyTitleTextColor = ByeBooTheme.colors.white,
                         journeyCardTextStyle = ByeBooTheme.typography.body2,
-                        borderColor = ByeBooTheme.colors.primary300
+                        borderColor = ByeBooTheme.colors.primary300,
                     )
                 }
             }
@@ -185,18 +185,18 @@ private fun OffboardingNewJourneyScreen(
 private fun PreparingCard() {
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(color = ByeBooTheme.colors.whiteAlpha10)
-            .padding(vertical = screenHeightDp(22.dp))
+            Modifier
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .padding(vertical = screenHeightDp(22.dp)),
     ) {
         Text(
             text = "준비 중",
             color = ByeBooTheme.colors.gray600,
             style = ByeBooTheme.typography.body6,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

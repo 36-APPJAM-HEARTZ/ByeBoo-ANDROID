@@ -45,7 +45,7 @@ import com.byeboo.app.presentation.home.component.SpeechBubbleWithText
 fun HomeOnboardingRoute(
     navigateToHome: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: HomeOnboardingViewModel = hiltViewModel()
+    viewModel: HomeOnboardingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -61,7 +61,7 @@ fun HomeOnboardingRoute(
     HomeOnboardingScreen(
         uiState = uiState,
         onHomeClick = viewModel::onHomeLongClick,
-        paddingValues = paddingValues
+        paddingValues = paddingValues,
     )
 }
 
@@ -70,25 +70,25 @@ private fun HomeOnboardingScreen(
     uiState: HomeOnboardingUiState,
     onHomeClick: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val haptic = LocalHapticFeedback.current
 
     val transitionAlpha by animateFloatAsState(
         targetValue = if (uiState.isTransitioning) 0.85f else 0f,
         animationSpec = tween(500),
-        label = "fadeBlack"
+        label = "fadeBlack",
     )
 
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(R.raw.bori_onboarding)
+        LottieCompositionSpec.RawRes(R.raw.bori_onboarding),
     )
     val isLottieReady = composition != null
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
         isPlaying = isLottieReady && !uiState.isTransitioning,
-        speed = 1f
+        speed = 1f,
     )
 
     val clickableModifier =
@@ -97,7 +97,7 @@ private fun HomeOnboardingScreen(
                 onLongClick = {
                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                     onHomeClick()
-                }
+                },
             )
         } else {
             Modifier
@@ -108,28 +108,28 @@ private fun HomeOnboardingScreen(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(ByeBooTheme.colors.blackAlpha80)
+                Modifier
+                    .fillMaxSize()
+                    .background(ByeBooTheme.colors.blackAlpha80),
         )
 
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             AnimatedVisibility(
                 visible = uiState.showInstructionText,
-                enter = slideInVertically(animationSpec = tween(1000)) { it }
+                enter = slideInVertically(animationSpec = tween(1000)) { it },
             ) {
                 Text(
                     text = "보리를 꾸욱 눌러주세요!",
@@ -137,34 +137,33 @@ private fun HomeOnboardingScreen(
                     color = ByeBooTheme.colors.whiteAlpha50,
                     textAlign = TextAlign.Center,
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = screenHeightDp(16.dp))
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = screenHeightDp(16.dp)),
                 )
             }
 
             if (isLottieReady) {
                 AnimatedVisibility(
                     visible = uiState.showSpeechBubble,
-                    enter = fadeIn(animationSpec = tween(1000))
+                    enter = fadeIn(animationSpec = tween(1000)),
                 ) {
                     SpeechBubbleWithText(
                         firstText = "바이부에 오신 걸 환영해요!",
                         secondText = "저는 보리라고 해요.",
-                        thirdText = "여정을 시작하러 가볼까요?"
+                        thirdText = "여정을 시작하러 가볼까요?",
                     )
                 }
                 LottieAnimation(
                     composition = composition,
                     progress = { progress },
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding()
-                        )
-                        .then(clickableModifier)
-                        .aspectRatio(1f)
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                bottom = screenHeightDp(89.dp) + paddingValues.calculateBottomPadding(),
+                            ).then(clickableModifier)
+                            .aspectRatio(1f),
                 )
             }
         }
@@ -172,9 +171,9 @@ private fun HomeOnboardingScreen(
         if (uiState.isTransitioning) {
             Box(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(ByeBooTheme.colors.black.copy(alpha = transitionAlpha))
+                    Modifier
+                        .fillMaxSize()
+                        .background(ByeBooTheme.colors.black.copy(alpha = transitionAlpha)),
             )
         }
     }

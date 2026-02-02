@@ -38,28 +38,28 @@ fun QuestModal(
     navigateToTip: () -> Unit,
     progressButton: () -> Unit,
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties = DialogProperties()
+    dialogProperties: DialogProperties = DialogProperties(),
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = dialogProperties
+        properties = dialogProperties,
     ) {
         Column(
             modifier =
-            modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.gray800)
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
+                modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = ByeBooTheme.colors.gray800)
+                    .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.bori_quest_banner),
                 contentDescription = "이미지",
                 Modifier
                     .fillMaxWidth()
-                    .height(screenHeightDp(58.dp))
+                    .height(screenHeightDp(58.dp)),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp((17.5).dp)))
@@ -67,7 +67,7 @@ fun QuestModal(
             Text(
                 text = "${questNumber}번째 퀘스트",
                 style = ByeBooTheme.typography.body3,
-                color = ByeBooTheme.colors.gray400
+                color = ByeBooTheme.colors.gray400,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -76,21 +76,21 @@ fun QuestModal(
                 text = questQuestion,
                 style = ByeBooTheme.typography.sub3,
                 color = ByeBooTheme.colors.gray50,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Text(
                 text =
-                buildAnnotatedString {
-                    withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-                        append(text = "작성 TIP")
-                    }
-                },
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
+                            append(text = "작성 TIP")
+                        }
+                    },
                 style = ByeBooTheme.typography.body5,
                 color = ByeBooTheme.colors.gray300,
-                modifier = Modifier.clickable { navigateToTip() }
+                modifier = Modifier.clickable { navigateToTip() },
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp((17.5).dp)))
@@ -100,7 +100,7 @@ fun QuestModal(
                 buttonText = "진행하기",
                 buttonStyle = ByeBooTheme.typography.body3,
                 buttonTextColor = ByeBooTheme.colors.white,
-                buttonBackgroundColor = ByeBooTheme.colors.primary300
+                buttonBackgroundColor = ByeBooTheme.colors.primary300,
             )
         }
     }

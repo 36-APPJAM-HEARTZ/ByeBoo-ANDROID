@@ -11,11 +11,11 @@ fun QuestTipResponseDto.toDomain(): QuestTip =
         step = this.step,
         stepNumber = this.stepNumber,
         questNumber = this.questNumber,
-        tips = this.tips.map { it: Tip -> it.toDomain() }
+        tips = this.tips.map { it: Tip -> it.toDomain() },
     )
 
 fun Tip.toDomain(): QuestTips =
     QuestTips(
         tipStep = this.tipStep,
-        tipAnswer = this.tipAnswer
+        tipAnswer = this.tipAnswer,
     )

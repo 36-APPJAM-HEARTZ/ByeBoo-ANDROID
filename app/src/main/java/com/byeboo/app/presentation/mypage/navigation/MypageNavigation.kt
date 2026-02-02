@@ -25,7 +25,7 @@ fun NavGraphBuilder.myPageGraph(
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
     navigateToMyPage: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<MyPage> {
         MyPageRoute(
@@ -33,14 +33,14 @@ fun NavGraphBuilder.myPageGraph(
             navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
             navigateToTutorial = navigateToTutorial,
             navigateToSplash = navigateToSplash,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
     composable<EditProfile> {
         EditProfileRoute(
             navigateToMyPage = navigateToMyPage,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

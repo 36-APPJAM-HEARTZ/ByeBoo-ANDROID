@@ -18,12 +18,12 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun UserInfoQuestScreen(
     selectedQuest: QuestStyle?,
-    onQuestSelect: (QuestStyle) -> Unit
+    onQuestSelect: (QuestStyle) -> Unit,
 ) {
     val quests =
         persistentListOf(
             QuestStyle.RECORDING,
-            QuestStyle.ACTIVE
+            QuestStyle.ACTIVE,
         )
 
     Column {
@@ -31,12 +31,12 @@ fun UserInfoQuestScreen(
             title = "퀘스트 방식",
             guideText = "을 골라주세요",
             contentText = "나에게 맞는 방식으로 퀘스트를 받아볼 수 있어요.",
-            bottom = 20.dp
+            bottom = 20.dp,
         )
         Row(
             modifier = Modifier.padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             quests.forEach { quest ->
                 val onCardClick =
@@ -47,18 +47,18 @@ fun UserInfoQuestScreen(
                 UserInfoQuestCard(
                     title = quest.displayText,
                     content =
-                    when (quest) {
-                        QuestStyle.RECORDING -> "질문을 통해\n상황과 감정을\n정리해요"
-                        QuestStyle.ACTIVE -> "작은 미션을 통해\n몸과 마음을\n가볍게 해요"
-                    },
+                        when (quest) {
+                            QuestStyle.RECORDING -> "질문을 통해\n상황과 감정을\n정리해요"
+                            QuestStyle.ACTIVE -> "작은 미션을 통해\n몸과 마음을\n가볍게 해요"
+                        },
                     imageRes =
-                    when (quest) {
-                        QuestStyle.RECORDING -> R.drawable.ic_book
-                        QuestStyle.ACTIVE -> R.drawable.ic_shoes
-                    },
+                        when (quest) {
+                            QuestStyle.RECORDING -> R.drawable.ic_book
+                            QuestStyle.ACTIVE -> R.drawable.ic_shoes
+                        },
                     isSelected = selectedQuest == quest,
                     onCardClick = onCardClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

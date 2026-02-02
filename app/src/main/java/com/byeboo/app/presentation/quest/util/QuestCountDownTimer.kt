@@ -1,15 +1,15 @@
 package com.byeboo.app.presentation.quest.util
 
-import java.time.Duration
-import java.time.Instant
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.Duration
+import java.time.Instant
 
 object QuestCountdownTimer {
     fun countdownFlow(
         openAt: Instant,
-        now: Instant
+        now: Instant,
     ): Flow<Long> =
         flow {
             val totalInitialRemainingSeconds =

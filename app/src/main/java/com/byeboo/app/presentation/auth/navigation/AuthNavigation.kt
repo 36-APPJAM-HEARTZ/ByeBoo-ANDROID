@@ -21,18 +21,18 @@ fun NavController.navigateToLoading(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.authGraph(
     navigateToLoading: () -> Unit,
     navigateToHomeAmulet: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<UserInfo> {
         UserInfoRoute(
             navigateToLoading = navigateToLoading,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
     composable<Loading> {
         LoadingRoute(
-            navigateToHomeAmulet = navigateToHomeAmulet
+            navigateToHomeAmulet = navigateToHomeAmulet,
         )
     }
 }

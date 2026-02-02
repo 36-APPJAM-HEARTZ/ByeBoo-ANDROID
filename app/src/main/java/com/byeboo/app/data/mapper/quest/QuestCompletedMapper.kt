@@ -11,14 +11,14 @@ fun QuestCompletedResponseDto.toDomain(): QuestCompletedModel =
     QuestCompletedModel(
         progressPeriod = progressPeriod,
         currentStep = currentStep,
-        steps = steps.orEmpty().map { it.toDomain() }
+        steps = steps.orEmpty().map { it.toDomain() },
     )
 
 fun QuestCompletedStepResponseDto.toDomain(): QuestCompletedStepModel =
     QuestCompletedStepModel(
         stepNumber = stepNumber,
         step = step,
-        quests = quests.orEmpty().map { it.toDomain() }
+        quests = quests.orEmpty().map { it.toDomain() },
     )
 
 fun QuestCompletedQuestResponseDto.toDomain(): QuestCompletedQuestModel =
@@ -26,5 +26,5 @@ fun QuestCompletedQuestResponseDto.toDomain(): QuestCompletedQuestModel =
         questId = questId,
         question = question,
         questStyle = questStyle,
-        questNumber = questNumber
+        questNumber = questNumber,
     )

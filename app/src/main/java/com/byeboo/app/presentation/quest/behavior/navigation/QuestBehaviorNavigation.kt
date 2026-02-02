@@ -17,22 +17,22 @@ fun NavController.navigateToQuestBehavior(
     isEditMode: Boolean = false,
     fromOffboarding: Boolean = false,
     imageKey: String? = null,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(
         QuestBehaviorWriting(
             questId = questId,
             isEditMode = isEditMode,
             fromOffboarding = fromOffboarding,
-            imageKey = imageKey
+            imageKey = imageKey,
         ),
-        navOptions
+        navOptions,
     )
 }
 
 fun NavController.navigateToQuestBehaviorComplete(
     questId: Long,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(QuestBehaviorComplete(questId), navOptions)
 }
@@ -44,7 +44,7 @@ fun NavGraphBuilder.questBehaviorGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     routeNavigation<QuestBehavior, QuestBehaviorWriting> {
         composable<QuestBehaviorWriting> {
@@ -54,7 +54,7 @@ fun NavGraphBuilder.questBehaviorGraph(
                 navigateToQuestBehaviorComplete = navigateToQuestBehaviorComplete,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateUp = navigateUp,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
@@ -62,7 +62,7 @@ fun NavGraphBuilder.questBehaviorGraph(
             QuestBehaviorCompleteRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
     }

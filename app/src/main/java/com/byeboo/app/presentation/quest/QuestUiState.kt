@@ -16,5 +16,5 @@ data class QuestUiState(
     val selectedQuest: Quest? = null,
     val showQuitModal: Boolean = false,
     val completedQuestCount: Long = 1L,
-    val error: String? = null
+    val error: String? = null,
 )

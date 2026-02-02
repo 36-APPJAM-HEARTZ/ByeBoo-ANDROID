@@ -23,17 +23,17 @@ fun QuestCompleteTitle(
     stepNumber: Long,
     questNumber: Long,
     createdAt: String,
-    questQuestion: String
+    questQuestion: String,
 ) {
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(10.dp)),
-        horizontalAlignment = Alignment.CenterHorizontally
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(10.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SmallTag(tagText = "STEP $stepNumber")
 
@@ -43,7 +43,7 @@ fun QuestCompleteTitle(
                 text = "${questNumber}번째 퀘스트",
                 color = ByeBooTheme.colors.gray400,
                 style = ByeBooTheme.typography.body5,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
 
@@ -53,7 +53,7 @@ fun QuestCompleteTitle(
             text = createdAt,
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body5,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
@@ -62,7 +62,7 @@ fun QuestCompleteTitle(
             text = questQuestion,
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.head1,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

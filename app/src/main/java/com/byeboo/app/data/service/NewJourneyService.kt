@@ -7,6 +7,6 @@ import retrofit2.http.Query
 interface NewJourneyService {
     @POST("/api/v1/quests/journey")
     suspend fun postNewJourney(
-        @Query("journey") journey: String
+        @Query("journey") journey: String,
     ): NullableBaseResponse<Unit>
 }

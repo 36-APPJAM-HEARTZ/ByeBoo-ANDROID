@@ -4,7 +4,7 @@ object QuestContentLengthValidator {
     fun validate(
         isFocused: Boolean,
         text: String,
-        maxLength: Int = 500
+        maxLength: Int = 500,
     ): QuestWritingState =
         when {
             text.isBlank() -> QuestWritingState.Empty
@@ -15,6 +15,6 @@ object QuestContentLengthValidator {
 
     fun validButton(
         text: String,
-        maxLength: Int = 500
+        maxLength: Int = 500,
     ): Boolean = text.length >= 10 && text.length <= maxLength
 }

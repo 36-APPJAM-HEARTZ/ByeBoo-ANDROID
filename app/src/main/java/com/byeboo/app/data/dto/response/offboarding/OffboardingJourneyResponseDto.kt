@@ -12,7 +12,7 @@ data class OffboardingJourneyResponseDto(
     @SerialName("completedCount")
     val completedCount: Int,
     @SerialName("completedJourneys")
-    val completedJourneys: List<OffboardingJourneyDto>
+    val completedJourneys: List<OffboardingJourneyDto>,
 )
 
 @Serializable
@@ -20,5 +20,5 @@ data class OffboardingJourneyDto(
     @SerialName("journey")
     val journey: String,
     @SerialName("style")
-    val style: String
+    val style: String,
 )

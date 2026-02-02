@@ -17,8 +17,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -26,86 +26,86 @@ object ServiceModule {
     @Provides
     @Singleton
     fun providesAuthService(
-        @Auth retrofit: Retrofit
+        @Auth retrofit: Retrofit,
     ): AuthService =
         retrofit.create(
-            AuthService::class.java
+            AuthService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesUserService(retrofit: Retrofit): UserService =
         retrofit.create(
-            UserService::class.java
+            UserService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestDetailService(retrofit: Retrofit): QuestDetailService =
         retrofit.create(
-            QuestDetailService::class.java
+            QuestDetailService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestService(retrofit: Retrofit): QuestService =
         retrofit.create(
-            QuestService::class.java
+            QuestService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestTipService(retrofit: Retrofit): QuestTipService =
         retrofit.create(
-            QuestTipService::class.java
+            QuestTipService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestBehaviorService(retrofit: Retrofit): QuestBehaviorService =
         retrofit.create(
-            QuestBehaviorService::class.java
+            QuestBehaviorService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestRecordingService(retrofit: Retrofit): QuestRecordingService =
         retrofit.create(
-            QuestRecordingService::class.java
+            QuestRecordingService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesQuestRecordedDetailService(retrofit: Retrofit): QuestRecordedDetailService =
         retrofit.create(
-            QuestRecordedDetailService::class.java
+            QuestRecordedDetailService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesOffboardingJourneyService(retrofit: Retrofit): OffboardingJourneyService =
         retrofit.create(
-            OffboardingJourneyService::class.java
+            OffboardingJourneyService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesOffboardingNewJourneyService(retrofit: Retrofit): NewJourneyService =
         retrofit.create(
-            NewJourneyService::class.java
+            NewJourneyService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesOffboardingQuestCompletedService(retrofit: Retrofit): OffboardingQuestCompletedService =
         retrofit.create(
-            OffboardingQuestCompletedService::class.java
+            OffboardingQuestCompletedService::class.java,
         )
 
     @Provides
     @Singleton
     fun providesNotificationService(retrofit: Retrofit): NotificationService =
         retrofit.create(
-            NotificationService::class.java
+            NotificationService::class.java,
         )
 }

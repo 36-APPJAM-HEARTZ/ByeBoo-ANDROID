@@ -21,20 +21,20 @@ fun StepProgressBar(
     currentStep: Int,
     modifier: Modifier = Modifier,
     activeColor: Color = ByeBooTheme.colors.primary300,
-    inactiveColor: Color = ByeBooTheme.colors.primary300Alpha20
+    inactiveColor: Color = ByeBooTheme.colors.primary300Alpha20,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(screenWidthDp(6.dp)),
-        modifier = modifier.padding(vertical = screenHeightDp(13.dp))
+        modifier = modifier.padding(vertical = screenHeightDp(13.dp)),
     ) {
         repeat(3) { index ->
             Box(
                 modifier =
-                Modifier
-                    .weight(1f)
-                    .height(screenHeightDp(6.dp))
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(if (index == currentStep - 1) activeColor else inactiveColor)
+                    Modifier
+                        .weight(1f)
+                        .height(screenHeightDp(6.dp))
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(if (index == currentStep - 1) activeColor else inactiveColor),
             )
         }
     }

@@ -10,5 +10,5 @@ fun QuestDetailResponseDto.toDomain(): QuestDetailModel =
         stepNumber = this.stepNumber,
         questNumber = this.questNumber,
         questStyle = QuestStyle.valueOf(this.questStyle),
-        question = this.question
+        question = this.question,
     )

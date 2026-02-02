@@ -13,5 +13,5 @@ fun QuestRecordedDetailResponseDto.toDomain(): QuestRecordedDetailModel =
         questEmotionState = this.questEmotionState,
         imageKey = this.imageKey,
         imageUrl = this.imageUrl,
-        emotionDescription = this.emotionDescription
+        emotionDescription = this.emotionDescription,
     )

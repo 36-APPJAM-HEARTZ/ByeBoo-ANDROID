@@ -36,28 +36,28 @@ fun MainBottomBar(
     visible: Boolean,
     tabs: ImmutableList<MainNavTab>,
     currentTab: MainNavTab?,
-    onTabSelected: (MainNavTab) -> Unit
+    onTabSelected: (MainNavTab) -> Unit,
 ) {
     AnimatedVisibility(
         visible = visible,
         enter = EnterTransition.None,
-        exit = ExitTransition.None
+        exit = ExitTransition.None,
     ) {
         Column(
-            modifier = Modifier.background(ByeBooTheme.colors.gray900)
+            modifier = Modifier.background(ByeBooTheme.colors.gray900),
         ) {
             HorizontalDivider(
                 thickness = 1.dp,
-                color = ByeBooTheme.colors.gray800
+                color = ByeBooTheme.colors.gray800,
             )
             Row(
                 modifier =
-                Modifier
-                    .navigationBarsPadding()
-                    .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(10.dp)),
+                    Modifier
+                        .navigationBarsPadding()
+                        .fillMaxWidth()
+                        .padding(vertical = screenHeightDp(10.dp)),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 tabs.forEach { tab ->
                     key(tab.route) {
@@ -65,7 +65,7 @@ fun MainBottomBar(
                         MainBottomBarItem(
                             tab = tab,
                             selected = selected,
-                            onClick = { onTabSelected(tab) }
+                            onClick = { onTabSelected(tab) },
                         )
                     }
                 }
@@ -79,29 +79,29 @@ fun RowScope.MainBottomBarItem(
     modifier: Modifier = Modifier,
     tab: MainNavTab,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val bottomItemColor = if (selected) primary300 else gray400
     val bottomTextStyle = if (selected) ByeBooTheme.typography.body4 else ByeBooTheme.typography.body6
 
     Column(
         modifier =
-        modifier
-            .noRippleClickable(onClick = onClick)
-            .weight(1f),
+            modifier
+                .noRippleClickable(onClick = onClick)
+                .weight(1f),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(1.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(tab.icon),
             contentDescription = stringResource(tab.contentDescription),
-            tint = bottomItemColor
+            tint = bottomItemColor,
         )
         Text(
             text = stringResource(tab.contentDescription),
             fontSize = 14.sp,
             style = bottomTextStyle,
-            color = bottomItemColor
+            color = bottomItemColor,
         )
     }
 }

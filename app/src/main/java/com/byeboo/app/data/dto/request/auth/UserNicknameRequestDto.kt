@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserNicknameRequestDto(
     @SerialName("name")
-    val name: String
+    val name: String,
 )

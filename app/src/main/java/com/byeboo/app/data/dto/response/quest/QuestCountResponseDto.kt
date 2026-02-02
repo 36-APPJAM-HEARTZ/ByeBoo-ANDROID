@@ -10,5 +10,5 @@ data class QuestCountResponseDto(
     @SerialName("userCurrentStatus")
     val userCurrentStatus: String,
     @SerialName("count")
-    val count: Long
+    val count: Long,
 )

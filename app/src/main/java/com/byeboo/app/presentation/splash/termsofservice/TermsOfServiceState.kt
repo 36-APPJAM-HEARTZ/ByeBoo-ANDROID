@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.splash.termsofservice
 
 data class TermsOfServiceUiState(
-    val checkedTerms: Set<TermType> = emptySet()
+    val checkedTerms: Set<TermType> = emptySet(),
 ) {
     companion object {
         private val ALL_TERMS = TermType.entries.toSet()
@@ -18,7 +18,7 @@ data class TermsOfServiceUiState(
 
 sealed interface TermsOfServiceSideEffect {
     data class OpenUrl(
-        val url: String
+        val url: String,
     ) : TermsOfServiceSideEffect
 
     data object NavigateToUserInfo : TermsOfServiceSideEffect

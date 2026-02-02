@@ -28,13 +28,13 @@ import com.byeboo.app.core.util.screenWidthDp
 internal fun QuestPhotoPicker(
     imageUrl: Uri?,
     onImageClick: (Uri?) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val uploadedImage = imageUrl != null
 
     val photoPickerLauncher =
         rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent()
+            contract = ActivityResultContracts.GetContent(),
         ) { uri: Uri? ->
             if (uri != null) {
                 onImageClick(uri)
@@ -42,16 +42,16 @@ internal fun QuestPhotoPicker(
         }
     Box(
         modifier =
-        modifier
-            .width(screenWidthDp(96.dp))
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = ByeBooTheme.colors.whiteAlpha10)
+            modifier
+                .width(screenWidthDp(96.dp))
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10),
     ) {
         ImageUploadButton(
             imageUrl = imageUrl,
             isUploaded = uploadedImage,
-            onImageClick = { photoPickerLauncher.launch("image/*") }
+            onImageClick = { photoPickerLauncher.launch("image/*") },
         )
     }
 }
@@ -61,16 +61,16 @@ private fun ImageUploadButton(
     modifier: Modifier = Modifier,
     imageUrl: Uri? = null,
     isUploaded: Boolean,
-    onImageClick: () -> Unit
+    onImageClick: () -> Unit,
 ) {
     Box(
         modifier =
-        modifier
-            .width(screenWidthDp(96.dp))
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(12.dp))
-            .noRippleClickable { onImageClick() },
-        contentAlignment = Alignment.Center
+            modifier
+                .width(screenWidthDp(96.dp))
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(12.dp))
+                .noRippleClickable { onImageClick() },
+        contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AnimatedContent(targetState = isUploaded) { uploaded ->
@@ -79,16 +79,16 @@ private fun ImageUploadButton(
                         model = imageUrl,
                         contentDescription = "selected image",
                         modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp)),
-                        contentScale = ContentScale.Crop
+                            Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop,
                     )
                 } else {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus),
                         contentDescription = null,
-                        tint = ByeBooTheme.colors.primary300
+                        tint = ByeBooTheme.colors.primary300,
                     )
                 }
             }

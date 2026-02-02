@@ -10,18 +10,18 @@ import com.byeboo.app.domain.model.quest.SignedUrlRequestModel
 fun SignedUrlRequestModel.toData(): QuestSignedUrlRequestDto =
     QuestSignedUrlRequestDto(
         contentType = this.contentType,
-        imageKey = this.imageKey
+        imageKey = this.imageKey,
     )
 
 fun BehaviorAnswerRequestModel.toData(): QuestBehaviorRequestDto =
     QuestBehaviorRequestDto(
         answer = this.answer,
         questEmotionState = this.questEmotionState,
-        imageKey = imageKey
+        imageKey = imageKey,
     )
 
 fun QuestBehaviorEditModel.toData(): QuestBehaviorEditRequestDto =
     QuestBehaviorEditRequestDto(
         answer = this.answer,
-        imageKey = this.imageKey
+        imageKey = this.imageKey,
     )

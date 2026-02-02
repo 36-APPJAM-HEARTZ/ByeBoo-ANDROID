@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 private const val TOKEN_PREFERENCES = "token_preferences"
 private val Context.tokenDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = TOKEN_PREFERENCES
+    name = TOKEN_PREFERENCES,
 )
 
 @Module
@@ -24,12 +24,13 @@ object TokenDataStoreModule {
     @Provides
     @Singleton
     fun provideTokenDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): DataStore<Preferences> = context.tokenDataStore
 
     @Provides
     @Singleton
-    fun provideTokenDataSource(dataStore: DataStore<Preferences>): TokenDataSource = TokenDataSourceImpl(
-        dataStore
-    )
+    fun provideTokenDataSource(dataStore: DataStore<Preferences>): TokenDataSource =
+        TokenDataSourceImpl(
+            dataStore,
+        )
 }

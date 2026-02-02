@@ -22,21 +22,21 @@ fun NavGraphBuilder.splashGraph(
     navigateToHome: () -> Unit,
     navigateToUserInfo: () -> Unit,
     navigateToTermsOfService: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<Splash> {
         SplashRoute(
             navigateToHome = navigateToHome,
             navigateToUserInfo = navigateToUserInfo,
             navigateToTermsOfService = navigateToTermsOfService,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
     composable<Terms> {
         TermsOfServiceRoute(
             navigateToUserInfo = navigateToUserInfo,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

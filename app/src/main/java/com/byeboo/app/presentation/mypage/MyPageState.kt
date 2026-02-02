@@ -5,18 +5,18 @@ data class MyPageState(
     val isAlarmEnabled: Boolean? = null,
     val showLogoutModal: Boolean = false,
     val showDeleteAccountModal: Boolean = false,
-    val showPermissionModal: Boolean = false
+    val showPermissionModal: Boolean = false,
 )
 
 enum class ModalType {
     LOGOUT,
     DELETE_ACCOUNT,
-    PERMISSION
+    PERMISSION,
 }
 
 sealed interface MyPageSideEffect {
     data class OpenUrl(
-        val url: String
+        val url: String,
     ) : MyPageSideEffect
 
     data object NavigateToEditProfile : MyPageSideEffect
@@ -32,6 +32,6 @@ sealed interface MyPageSideEffect {
     data object NavigateToSetting : MyPageSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : MyPageSideEffect
 }

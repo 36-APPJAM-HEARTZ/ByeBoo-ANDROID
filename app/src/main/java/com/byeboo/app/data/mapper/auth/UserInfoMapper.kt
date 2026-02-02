@@ -9,11 +9,11 @@ fun UserInfoModel.toData(): UserInfoRequestDto =
     UserInfoRequestDto(
         name = this.name,
         feeling = this.feeling,
-        questStyle = this.questStyle
+        questStyle = this.questStyle,
     )
 
 fun UserJourneyResponseDto.toDomain(): UserJourney =
     UserJourney(
         journey = this.journey,
-        description = this.description
+        description = this.description,
     )

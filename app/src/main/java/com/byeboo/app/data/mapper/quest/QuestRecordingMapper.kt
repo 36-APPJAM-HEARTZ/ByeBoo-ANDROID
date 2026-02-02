@@ -8,10 +8,10 @@ import com.byeboo.app.domain.model.quest.QuestRecordingModel
 fun QuestRecordingModel.toData(): QuestRecordingRequestDto =
     QuestRecordingRequestDto(
         answer = this.answer,
-        questEmotionState = this.questEmotionState
+        questEmotionState = this.questEmotionState,
     )
 
 fun QuestRecordingEditModel.toData(): QuestRecordingEditRequestDto =
     QuestRecordingEditRequestDto(
-        answer = this.answer
+        answer = this.answer,
     )

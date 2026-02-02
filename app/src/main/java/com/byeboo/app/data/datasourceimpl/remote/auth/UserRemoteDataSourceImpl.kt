@@ -11,17 +11,17 @@ import com.byeboo.app.data.service.auth.UserService
 import javax.inject.Inject
 
 class UserRemoteDataSourceImpl
-@Inject
-constructor(
-    private val userService: UserService
-) : UserRemoteDataSource {
-    override suspend fun updateUserInfo(request: UserInfoRequestDto): BaseResponse<UserInfoResponseDto> =
-        userService.updateUserInfo(request)
+    @Inject
+    constructor(
+        private val userService: UserService,
+    ) : UserRemoteDataSource {
+        override suspend fun updateUserInfo(request: UserInfoRequestDto): BaseResponse<UserInfoResponseDto> =
+            userService.updateUserInfo(request)
 
-    override suspend fun getUserJourney(): BaseResponse<UserJourneyResponseDto> = userService.getJourney()
+        override suspend fun getUserJourney(): BaseResponse<UserJourneyResponseDto> = userService.getJourney()
 
-    override suspend fun updateUserNickname(nickname: String): BaseResponse<UserNicknameChangeResponseDto> {
-        val request = UserNicknameRequestDto(name = nickname)
-        return userService.updateUserNickname(request)
+        override suspend fun updateUserNickname(nickname: String): BaseResponse<UserNicknameChangeResponseDto> {
+            val request = UserNicknameRequestDto(name = nickname)
+            return userService.updateUserNickname(request)
+        }
     }
-}

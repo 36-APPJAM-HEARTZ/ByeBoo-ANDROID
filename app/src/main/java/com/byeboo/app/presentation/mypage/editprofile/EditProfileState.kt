@@ -6,15 +6,15 @@ data class EditProfileState(
     val nickname: String = "",
     val initialNickname: String = "",
     val nicknameValidation: NicknameValidationResult = NicknameValidationResult.Valid,
-    val isInitial: Boolean = true
+    val isInitial: Boolean = true,
 )
 
 sealed interface EditProfileSideEffect {
     data class NavigateToMyPage(
-        val nickname: String
+        val nickname: String,
     ) : EditProfileSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : EditProfileSideEffect
 }

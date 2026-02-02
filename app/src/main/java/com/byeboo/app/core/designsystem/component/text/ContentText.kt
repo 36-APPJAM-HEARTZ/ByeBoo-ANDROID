@@ -16,21 +16,21 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun ContentText(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(
-                color = ByeBooTheme.colors.whiteAlpha10,
-                shape = RoundedCornerShape(12.dp)
-            ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = ByeBooTheme.colors.whiteAlpha10,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {
         Text(
             text = text,
             style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray300
+            color = ByeBooTheme.colors.gray300,
         )
     }
 }

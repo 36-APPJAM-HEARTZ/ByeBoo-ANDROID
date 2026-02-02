@@ -66,7 +66,7 @@ fun QuestRecordingRoute(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestRecordingViewModel = hiltViewModel()
+    viewModel: QuestRecordingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -78,14 +78,16 @@ fun QuestRecordingRoute(
                 is QuestRecordingSideEffect.NavigateToQuestTip ->
                     navigateToQuestTip(
                         effect.questId,
-                        effect.questType
+                        effect.questType,
                     )
-                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete -> navigateToQuestRecordingComplete(
-                    effect.questId
-                )
-                is QuestRecordingSideEffect.NavigateToQuestReview -> navigateToQuestReview(
-                    effect.questId
-                )
+                is QuestRecordingSideEffect.NavigateToQuestRecordingComplete ->
+                    navigateToQuestRecordingComplete(
+                        effect.questId,
+                    )
+                is QuestRecordingSideEffect.NavigateToQuestReview ->
+                    navigateToQuestReview(
+                        effect.questId,
+                    )
                 is QuestRecordingSideEffect.NavigateUp -> navigateUp()
                 is QuestRecordingSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -101,10 +103,10 @@ fun QuestRecordingRoute(
                 viewModel.onQuitClicked()
             },
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -120,7 +122,7 @@ fun QuestRecordingRoute(
         onSaveClick = viewModel::onSaveClicked,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -136,7 +138,7 @@ private fun QuestRecordingScreen(
     onSaveClick: () -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType?) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
@@ -151,32 +153,32 @@ private fun QuestRecordingScreen(
 
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .onPreInterceptKeyBeforeSoftKeyboard { event ->
-                if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
-                    focusManager.clearFocus(force = true)
-                    isFocused.value = false
-                    true
-                } else {
-                    false
-                }
-            }.addFocusCleaner(focusManager)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                    if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                        focusManager.clearFocus(force = true)
+                        isFocused.value = false
+                        true
+                    } else {
+                        false
+                    }
+                }.addFocusCleaner(focusManager)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
             modifier =
-            Modifier
-                .padding(start = screenWidthDp(24.dp))
-                .align(Alignment.Start)
-                .clickable { onBackClick() }
+                Modifier
+                    .padding(start = screenWidthDp(24.dp))
+                    .align(Alignment.Start)
+                    .clickable { onBackClick() },
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -184,7 +186,7 @@ private fun QuestRecordingScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(screenWidthDp(24.dp))
+            contentPadding = PaddingValues(screenWidthDp(24.dp)),
         ) {
             item {
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -192,11 +194,11 @@ private fun QuestRecordingScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SmallTag(
                         tagText = "STEP ${uiState.stepNumber}",
-                        tagColor = ByeBooTheme.colors.gray500
+                        tagColor = ByeBooTheme.colors.gray500,
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -204,7 +206,7 @@ private fun QuestRecordingScreen(
                     Text(
                         text = uiState.step,
                         style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray500
+                        color = ByeBooTheme.colors.gray500,
                     )
                 }
             }
@@ -217,7 +219,7 @@ private fun QuestRecordingScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray500,
                     style = ByeBooTheme.typography.body6,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
 
@@ -229,7 +231,7 @@ private fun QuestRecordingScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = ByeBooTheme.colors.gray100,
                     style = ByeBooTheme.typography.head1,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
 
@@ -238,13 +240,13 @@ private fun QuestRecordingScreen(
 
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
                         textStyle = ByeBooTheme.typography.cap1,
-                        modifier = Modifier.clickable { onTipClick() }
+                        modifier = Modifier.clickable { onTipClick() },
                     )
                 }
             }
@@ -254,9 +256,9 @@ private fun QuestRecordingScreen(
 
                 Column(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .bringIntoViewRequester(bringIntoViewRequester)
+                        Modifier
+                            .fillMaxWidth()
+                            .bringIntoViewRequester(bringIntoViewRequester),
                 ) {
                     QuestTextField(
                         questWritingState = uiState.contentsState,
@@ -269,18 +271,18 @@ private fun QuestRecordingScreen(
                         placeholder = "글로 적다 보면, 스스로에게 한 걸음 더 가까워질 수 있어요.",
                         onFocusChanged = {
                             isFocused.value = it
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
                             contentDescription = null,
-                            tint = Color.Unspecified
+                            tint = Color.Unspecified,
                         )
 
                         Spacer(modifier = Modifier.width(screenWidthDp(3.dp)))
@@ -290,7 +292,7 @@ private fun QuestRecordingScreen(
                             style = ByeBooTheme.typography.cap2,
                             color = ByeBooTheme.colors.gray400,
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
                         )
                     }
                 }
@@ -305,7 +307,7 @@ private fun QuestRecordingScreen(
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             onClick = onClickCompleteButton,
             isEnabled = uiState.isCompleteButtonEnabled,
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -316,6 +318,6 @@ private fun QuestRecordingScreen(
         navigateButton = onSaveClick,
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
-        onEmotionSelected = onEmotionSelected
+        onEmotionSelected = onEmotionSelected,
     )
 }

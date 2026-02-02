@@ -36,7 +36,7 @@ import com.byeboo.app.presentation.home.component.HomeAmuletCard
 fun HomeAmuletRoute(
     navigateToHomeOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeAmuletViewModel = hiltViewModel()
+    viewModel: HomeAmuletViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -68,7 +68,7 @@ fun HomeAmuletRoute(
             }
         },
         onConfirm = viewModel::navigateToHomeOnboarding,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -78,35 +78,35 @@ private fun HomeAmuletScreen(
     isFlipped: Boolean,
     onFlip: () -> Unit,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(ByeBooTheme.colors.blackAlpha50)
+                Modifier
+                    .fillMaxSize()
+                    .background(ByeBooTheme.colors.blackAlpha50),
         )
 
         Box(
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(35.dp)),
-            contentAlignment = Alignment.Center
+                Modifier
+                    .align(Alignment.Center)
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(35.dp)),
+            contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier.height(screenHeightDp(80.dp)),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     if (!isFlipped) {
                         Text(
@@ -115,9 +115,9 @@ private fun HomeAmuletScreen(
                             color = ByeBooTheme.colors.whiteAlpha50,
                             textAlign = TextAlign.Center,
                             modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = screenHeightDp(32.dp))
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = screenHeightDp(32.dp)),
                         )
                     }
                 }
@@ -128,12 +128,12 @@ private fun HomeAmuletScreen(
                     description = uiState.journeyDescription,
                     isFlipped = isFlipped,
                     onFlip = onFlip,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Box(
                     modifier = Modifier.height(screenHeightDp(80.dp)),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     if (isFlipped) {
                         Text(
@@ -143,10 +143,10 @@ private fun HomeAmuletScreen(
                             textDecoration = TextDecoration.Underline,
                             textAlign = TextAlign.Center,
                             modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(top = screenHeightDp(32.dp))
-                                .noRippleClickable { onConfirm() }
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = screenHeightDp(32.dp))
+                                    .noRippleClickable { onConfirm() },
                         )
                     }
                 }

@@ -31,12 +31,12 @@ fun HomeAmuletCard(
     description: String,
     isFlipped: Boolean,
     onFlip: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
         animationSpec = tween(durationMillis = 600),
-        label = "rotation"
+        label = "rotation",
     )
 
     val showBack = rotation >= 90f
@@ -45,26 +45,26 @@ fun HomeAmuletCard(
 
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .aspectRatio(290 / 419f)
-            .graphicsLayer {
-                rotationY = rotation
-                this.cameraDistance = cameraDistance
-            }.clickable(enabled = !isFlipped) { onFlip() }
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(290 / 419f)
+                .graphicsLayer {
+                    rotationY = rotation
+                    this.cameraDistance = cameraDistance
+                }.clickable(enabled = !isFlipped) { onFlip() },
     ) {
         if (showBack) {
             Box(
                 modifier =
-                Modifier
-                    .matchParentSize()
-                    .graphicsLayer { rotationY = 180f }
+                    Modifier
+                        .matchParentSize()
+                        .graphicsLayer { rotationY = 180f },
             ) {
                 Image(
                     painter = painterResource(backImageRes),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
 
                 Text(
@@ -73,21 +73,21 @@ fun HomeAmuletCard(
                     color = ByeBooTheme.colors.secondary50,
                     textAlign = TextAlign.Center,
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(37.dp))
-                        .padding(top = screenHeightDp(131.dp))
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(37.dp))
+                            .padding(top = screenHeightDp(131.dp)),
                 )
             }
         } else {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 Image(
                     painter = painterResource(frontImageRes),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
             }
         }

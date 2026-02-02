@@ -15,7 +15,7 @@ data class QuestRecordingCompleteState(
     val question: String = "",
     val answer: String = "",
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL
+    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
 )
 
 sealed interface QuestRecordingCompleteSideEffect {
@@ -26,6 +26,6 @@ sealed interface QuestRecordingCompleteSideEffect {
     data object ShowInAppReview : QuestRecordingCompleteSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : QuestRecordingCompleteSideEffect
 }

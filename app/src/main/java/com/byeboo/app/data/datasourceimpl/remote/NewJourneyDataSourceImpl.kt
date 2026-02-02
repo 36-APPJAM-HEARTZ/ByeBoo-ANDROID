@@ -6,11 +6,12 @@ import com.byeboo.app.data.service.NewJourneyService
 import javax.inject.Inject
 
 class NewJourneyDataSourceImpl
-@Inject
-constructor(
-    private val newJourneyService: NewJourneyService
-) : NewJourneyDataSource {
-    override suspend fun postNewJourney(journey: String): NullableBaseResponse<Unit> = newJourneyService.postNewJourney(
-        journey
-    )
-}
+    @Inject
+    constructor(
+        private val newJourneyService: NewJourneyService,
+    ) : NewJourneyDataSource {
+        override suspend fun postNewJourney(journey: String): NullableBaseResponse<Unit> =
+            newJourneyService.postNewJourney(
+                journey,
+            )
+    }

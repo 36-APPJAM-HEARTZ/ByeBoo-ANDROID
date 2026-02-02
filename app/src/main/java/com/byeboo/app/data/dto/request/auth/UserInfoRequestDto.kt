@@ -10,5 +10,5 @@ data class UserInfoRequestDto(
     @SerialName("feeling")
     val feeling: String,
     @SerialName("questStyle")
-    val questStyle: String
+    val questStyle: String,
 )

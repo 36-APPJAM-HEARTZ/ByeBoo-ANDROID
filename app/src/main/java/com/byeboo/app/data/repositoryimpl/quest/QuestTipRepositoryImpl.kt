@@ -7,13 +7,13 @@ import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import javax.inject.Inject
 
 class QuestTipRepositoryImpl
-@Inject
-constructor(
-    private val questTipDataSource: QuestTipDataSource
-) : QuestTipRepository {
-    override suspend fun getQuestTip(questId: Long): Result<QuestTip> =
-        runCatching {
-            val response = questTipDataSource.getQuestTip(questId)
-            response.data.toDomain()
-        }
-}
+    @Inject
+    constructor(
+        private val questTipDataSource: QuestTipDataSource,
+    ) : QuestTipRepository {
+        override suspend fun getQuestTip(questId: Long): Result<QuestTip> =
+            runCatching {
+                val response = questTipDataSource.getQuestTip(questId)
+                response.data.toDomain()
+            }
+    }

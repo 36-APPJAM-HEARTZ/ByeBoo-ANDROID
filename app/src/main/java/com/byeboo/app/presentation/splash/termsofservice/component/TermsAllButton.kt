@@ -28,7 +28,7 @@ import com.byeboo.app.core.util.screenWidthDp
 fun TermsAllButton(
     onTermsAllClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isChecked: Boolean = false
+    isChecked: Boolean = false,
 ) {
     val checkedIcon = if (isChecked) R.drawable.ic_terms_checked else R.drawable.ic_terms_unchecked
     val textColor = if (isChecked) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray300
@@ -36,33 +36,33 @@ fun TermsAllButton(
 
     Column(
         modifier = modifier.padding(vertical = screenHeightDp(8.dp)),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape(12.dp)
-                ).then(
-                    if (isChecked) {
-                        Modifier.border(
-                            width = 1.dp,
-                            color = ByeBooTheme.colors.primary300,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                    } else {
-                        Modifier
-                    }
-                ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
-                .noRippleClickable(onClick = onTermsAllClick),
-            verticalAlignment = Alignment.CenterVertically
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = backgroundColor,
+                        shape = RoundedCornerShape(12.dp),
+                    ).then(
+                        if (isChecked) {
+                            Modifier.border(
+                                width = 1.dp,
+                                color = ByeBooTheme.colors.primary300,
+                                shape = RoundedCornerShape(12.dp),
+                            )
+                        } else {
+                            Modifier
+                        },
+                    ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+                    .noRippleClickable(onClick = onTermsAllClick),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(checkedIcon),
                 contentDescription = "all agree checkButton",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
 
             Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
@@ -70,7 +70,7 @@ fun TermsAllButton(
             Text(
                 text = "전체 동의",
                 style = ByeBooTheme.typography.body3,
-                color = textColor
+                color = textColor,
             )
         }
     }

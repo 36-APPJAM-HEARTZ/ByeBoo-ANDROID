@@ -10,11 +10,11 @@ fun OffboardingJourneyResponseDto.toDomain(): OffboardingJourneyModel =
         uncompletedCount = this.uncompletedCount,
         uncompletedCards = uncompletedJourneys.map { it.toDomain() },
         completedCount = this.completedCount,
-        completedCards = completedJourneys.map { it.toDomain() }
+        completedCards = completedJourneys.map { it.toDomain() },
     )
 
 fun OffboardingJourneyDto.toDomain(): OffboardingJourneyCard =
     OffboardingJourneyCard(
         journey = this.journey,
-        style = this.style
+        style = this.style,
     )

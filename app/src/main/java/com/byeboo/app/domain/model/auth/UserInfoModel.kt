@@ -3,27 +3,27 @@ package com.byeboo.app.domain.model.auth
 data class UserInfoModel(
     val name: String,
     val feeling: String,
-    val questStyle: String
+    val questStyle: String,
 )
 
 data class UserJourney(
     val journey: String,
-    val description: String
+    val description: String,
 )
 
 enum class Feeling(
-    val displayText: String
+    val displayText: String,
 ) {
     EXHAUSTED("너무 힘들어요"),
     RECOVERING("극복 중이에요"),
-    OVERCOMING("꽤 극복했어요")
+    OVERCOMING("꽤 극복했어요"),
 }
 
 enum class QuestStyle(
-    val displayText: String
+    val displayText: String,
 ) {
     RECORDING("질문에 답하기"),
-    ACTIVE("활동 인증하기")
+    ACTIVE("활동 인증하기"),
 }
 
 fun QuestStyle.toJourneyText(): String =

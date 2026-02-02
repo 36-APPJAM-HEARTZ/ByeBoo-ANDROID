@@ -14,7 +14,7 @@ fun KakaoLoginResponseDto.toDomain(): AuthResult =
         name = name,
         journey = journey.toJourneyType(),
         journeyStatus = journeyStatus.toJourneyStatus(),
-        userId = userId
+        userId = userId,
     )
 
 internal fun String?.toJourneyType(): JourneyType =
@@ -35,5 +35,5 @@ internal fun String?.toJourneyStatus(): JourneyStatusType =
 fun TokenReissueResponseDto.toDomain(): TokenEntity =
     TokenEntity(
         accessToken = this.accessToken,
-        refreshToken = this.refreshToken
+        refreshToken = this.refreshToken,
     )

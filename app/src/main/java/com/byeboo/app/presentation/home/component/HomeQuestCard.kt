@@ -33,26 +33,26 @@ fun HomeQuestCard(
     modifier: Modifier = Modifier,
     backgroundColor: Color = ByeBooTheme.colors.whiteAlpha10,
     shape: Shape = RoundedCornerShape(12.dp),
-    borderColor: Color = ByeBooTheme.colors.primary300
+    borderColor: Color = ByeBooTheme.colors.primary300,
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .background(backgroundColor, shape)
-            .border(1.dp, color = borderColor, shape)
-            .noRippleClickable { onClick() }
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
+            modifier
+                .fillMaxWidth()
+                .background(backgroundColor, shape)
+                .border(1.dp, color = borderColor, shape)
+                .noRippleClickable { onClick() }
+                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp)),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = ByeBooTheme.typography.sub2,
-                    color = ByeBooTheme.colors.gray50
+                    color = ByeBooTheme.colors.gray50,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
@@ -60,13 +60,13 @@ fun HomeQuestCard(
                 Text(
                     text = subtitle,
                     style = ByeBooTheme.typography.body5,
-                    color = ByeBooTheme.colors.gray300
+                    color = ByeBooTheme.colors.gray300,
                 )
             }
             Icon(
                 painter = painterResource(id = R.drawable.ic_right),
                 contentDescription = null,
-                tint = ByeBooTheme.colors.gray50
+                tint = ByeBooTheme.colors.gray50,
             )
         }
     }

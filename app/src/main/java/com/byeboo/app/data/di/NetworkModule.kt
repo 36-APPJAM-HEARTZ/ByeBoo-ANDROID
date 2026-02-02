@@ -9,7 +9,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Authenticator
@@ -19,6 +18,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,7 +40,7 @@ object NetworkModule {
     @Singleton
     fun providesConverterFactory(): Converter.Factory =
         Json.asConverterFactory(
-            "application/json".toMediaType()
+            "application/json".toMediaType(),
         )
 
     @Provides
@@ -56,7 +56,7 @@ object NetworkModule {
     fun providesOkHttpClient(
         authInterceptor: Interceptor,
         tokenAuthenticator: TokenAuthenticator,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient =
         OkHttpClient
             .Builder()
@@ -78,7 +78,7 @@ object NetworkModule {
     @Singleton
     fun providesRetrofit(
         client: OkHttpClient,
-        converterFactory: Converter.Factory
+        converterFactory: Converter.Factory,
     ): Retrofit =
         Retrofit
             .Builder()
@@ -92,7 +92,7 @@ object NetworkModule {
     @Auth
     fun provideAuthRetrofit(
         @Auth client: OkHttpClient,
-        factory: Converter.Factory
+        factory: Converter.Factory,
     ): Retrofit =
         Retrofit
             .Builder()

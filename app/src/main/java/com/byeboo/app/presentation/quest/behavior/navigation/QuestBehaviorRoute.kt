@@ -10,11 +10,11 @@ sealed class QuestBehavior : Route {
         val questId: Long,
         val isEditMode: Boolean,
         val fromOffboarding: Boolean,
-        val imageKey: String?
+        val imageKey: String?,
     ) : QuestBehavior()
 
     @Serializable
     data class QuestBehaviorComplete(
-        val questId: Long
+        val questId: Long,
     ) : QuestBehavior()
 }

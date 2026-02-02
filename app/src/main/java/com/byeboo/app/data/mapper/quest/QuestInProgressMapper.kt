@@ -16,21 +16,21 @@ fun QuestInProgressResponseDto.toDomain(): QuestInProgressModel =
         questOpenTime = parseServerTimeToInstant(questOpenTime),
         currentTime = parseServerTimeToInstant(currentTime),
         steps =
-        steps.map { stepDto ->
-            QuestStepModel(
-                stepNumber = stepDto.stepNumber,
-                stepTitle = stepDto.step,
-                quests =
-                stepDto.quests.map { questDto ->
-                    QuestItemModel(
-                        questId = questDto.questId,
-                        question = questDto.question,
-                        questStyle = questDto.questStyle,
-                        questNumber = questDto.questNumber
-                    )
-                }
-            )
-        }
+            steps.map { stepDto ->
+                QuestStepModel(
+                    stepNumber = stepDto.stepNumber,
+                    stepTitle = stepDto.step,
+                    quests =
+                        stepDto.quests.map { questDto ->
+                            QuestItemModel(
+                                questId = questDto.questId,
+                                question = questDto.question,
+                                questStyle = questDto.questStyle,
+                                questNumber = questDto.questNumber,
+                            )
+                        },
+                )
+            },
     )
 
 fun parseServerTimeToInstant(serverResponse: String?): Instant? {

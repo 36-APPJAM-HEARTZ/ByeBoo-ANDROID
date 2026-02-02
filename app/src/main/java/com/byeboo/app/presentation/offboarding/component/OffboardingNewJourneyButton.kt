@@ -27,23 +27,23 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun OffboardingNewJourneyButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = ByeBooTheme.colors.primary300)
-            .noRippleClickable(onClick = onClick)
-            .padding(vertical = screenHeightDp(14.5.dp)),
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.primary300)
+                .noRippleClickable(onClick = onClick)
+                .padding(vertical = screenHeightDp(14.5.dp)),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_reset),
             contentDescription = null,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
 
         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -51,7 +51,7 @@ fun OffboardingNewJourneyButton(
         Text(
             text = "새로운 이별 극복 여정 시작하기",
             color = ByeBooTheme.colors.white,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
 }

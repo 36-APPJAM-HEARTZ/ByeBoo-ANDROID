@@ -14,7 +14,7 @@ data class QuestTipResponseDto(
     @SerialName("questNumber")
     val questNumber: Long,
     @SerialName("tips")
-    val tips: List<Tip>
+    val tips: List<Tip>,
 )
 
 @Serializable
@@ -22,5 +22,5 @@ data class Tip(
     @SerialName("tipStep")
     val tipStep: Int,
     @SerialName("tipAnswer")
-    val tipAnswer: String
+    val tipAnswer: String,
 )

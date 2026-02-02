@@ -133,7 +133,7 @@ class ByeBooColors(
     secondary300Alpha10: Color,
     gray900Alpha80: Color,
     kakaoYellow: Color,
-    isLight: Boolean
+    isLight: Boolean,
 ) {
     var primary50 by mutableStateOf(primary50)
         private set
@@ -286,7 +286,7 @@ class ByeBooColors(
             secondary300Alpha10,
             gray900Alpha80,
             kakaoYellow,
-            isLight
+            isLight,
         )
 
     fun update(colors: ByeBooColors) {
@@ -392,7 +392,7 @@ fun ByeBooDarkColors(
     Secondary300Alpha30: Color = secondary300Alpha30,
     Secondary300Alpha10: Color = secondary300Alpha10,
     Gray900Alpha80: Color = gray900Alpha80,
-    KakaoYellow: Color = kakaoYellow
+    KakaoYellow: Color = kakaoYellow,
 ) = ByeBooColors(
     Primary50,
     Primary100,
@@ -443,5 +443,5 @@ fun ByeBooDarkColors(
     Secondary300Alpha10,
     Gray900Alpha80,
     KakaoYellow,
-    isLight = true
+    isLight = true,
 )

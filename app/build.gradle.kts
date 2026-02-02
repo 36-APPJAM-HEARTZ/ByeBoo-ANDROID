@@ -51,7 +51,7 @@ android {
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            "\"$kakaoNativeAppKey\""
+            "\"$kakaoNativeAppKey\"",
         )
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
@@ -61,12 +61,12 @@ android {
         buildConfigField(
             "String",
             "BYEBOO_PRIVACY_POLICY",
-            properties["byeboo.privacy.policy"].toString()
+            properties["byeboo.privacy.policy"].toString(),
         )
         buildConfigField(
             "String",
             "BYEBOO_TERMS_OF_SERVICE",
-            properties["byeboo.terms.of.service"].toString()
+            properties["byeboo.terms.of.service"].toString(),
         )
     }
 
@@ -97,7 +97,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

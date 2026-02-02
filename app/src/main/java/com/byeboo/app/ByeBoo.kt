@@ -9,8 +9,8 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.fcm.ByebooNotificationHandler
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class ByeBoo : Application() {
@@ -49,7 +49,7 @@ class ByeBoo : Application() {
                 NotificationChannel(
                     ByebooNotificationHandler.CHANNEL_ID,
                     ByebooNotificationHandler.CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH
+                    NotificationManager.IMPORTANCE_HIGH,
                 )
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

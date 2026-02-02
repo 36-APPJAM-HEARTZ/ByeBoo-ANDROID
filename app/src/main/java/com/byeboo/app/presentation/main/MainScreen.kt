@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -119,16 +119,16 @@ fun MainScreen(
     }
 
     CompositionLocalProvider(
-        LocalSnackBarTrigger provides onShowSnackBar
+        LocalSnackBarTrigger provides onShowSnackBar,
     ) {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(
                     hostState = snackBarHostState,
                     modifier =
-                    Modifier
-                        .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = snackBarBottomInset)
+                        Modifier
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(bottom = snackBarBottomInset),
                 ) { snackBar ->
                     CustomSnackBar(message = snackBar.visuals.message)
                 }
@@ -153,18 +153,18 @@ fun MainScreen(
                                 }
                             }
                         }
-                    }
+                    },
                 )
             },
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+                Modifier
+                    .fillMaxSize()
+                    .background(ByeBooTheme.colors.black),
         ) { paddingValues ->
             MainNavHost(
                 navigator = navigator,
                 paddingValues = paddingValues,
-                modifier = Modifier
+                modifier = Modifier,
             )
         }
     }

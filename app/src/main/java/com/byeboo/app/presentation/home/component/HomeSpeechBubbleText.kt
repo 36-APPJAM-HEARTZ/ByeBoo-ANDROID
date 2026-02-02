@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 fun SpeechBubbleWithText(
     firstText: String,
     secondText: String,
-    thirdText: String
+    thirdText: String,
 ) {
     var showFirstText by remember { mutableStateOf(false) }
     var showSecondText by remember { mutableStateOf(false) }
@@ -47,14 +47,14 @@ fun SpeechBubbleWithText(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .aspectRatio(264f / 62f)
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(264f / 62f),
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_speech_bubble),
             contentDescription = null,
-            modifier = Modifier.matchParentSize()
+            modifier = Modifier.matchParentSize(),
         )
         val textToShow =
             when {
@@ -66,17 +66,17 @@ fun SpeechBubbleWithText(
         if (textToShow != null) {
             Box(
                 modifier =
-                Modifier
-                    .matchParentSize()
-                    .padding(bottom = screenHeightDp(14.dp)),
-                contentAlignment = Alignment.Center
+                    Modifier
+                        .matchParentSize()
+                        .padding(bottom = screenHeightDp(14.dp)),
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = textToShow,
                     style = ByeBooTheme.typography.body2,
                     color = ByeBooTheme.colors.primary50,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

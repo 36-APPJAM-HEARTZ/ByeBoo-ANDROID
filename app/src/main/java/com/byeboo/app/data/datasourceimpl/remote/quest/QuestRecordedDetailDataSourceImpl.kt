@@ -7,10 +7,10 @@ import com.byeboo.app.data.service.quest.QuestRecordedDetailService
 import javax.inject.Inject
 
 class QuestRecordedDetailDataSourceImpl
-@Inject
-constructor(
-    private val questRecordedDetailService: QuestRecordedDetailService
-) : QuestRecordedDetailDataSource {
-    override suspend fun getQuestRecordedDetail(questId: Long): BaseResponse<QuestRecordedDetailResponseDto> =
-        questRecordedDetailService.getQuestRecordedDetail(questId)
-}
+    @Inject
+    constructor(
+        private val questRecordedDetailService: QuestRecordedDetailService,
+    ) : QuestRecordedDetailDataSource {
+        override suspend fun getQuestRecordedDetail(questId: Long): BaseResponse<QuestRecordedDetailResponseDto> =
+            questRecordedDetailService.getQuestRecordedDetail(questId)
+    }

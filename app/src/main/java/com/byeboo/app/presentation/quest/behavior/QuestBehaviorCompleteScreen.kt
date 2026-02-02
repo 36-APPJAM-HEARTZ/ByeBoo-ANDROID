@@ -58,7 +58,7 @@ fun QuestBehaviorCompleteRoute(
     navigateToOffboardingCompletedGuide: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestBehaviorCompleteViewModel = hiltViewModel()
+    viewModel: QuestBehaviorCompleteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -94,7 +94,7 @@ fun QuestBehaviorCompleteRoute(
         paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -104,30 +104,30 @@ private fun QuestBehaviorCompleteScreen(
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalArrangement = Arrangement.End
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
+            horizontalArrangement = Arrangement.End,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                 contentDescription = "back button",
                 tint = ByeBooTheme.colors.white,
-                modifier = modifier.clickable(onClick = onCloseClick)
+                modifier = modifier.clickable(onClick = onCloseClick),
             )
         }
 
@@ -137,16 +137,16 @@ private fun QuestBehaviorCompleteScreen(
             modifier = modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding =
-            PaddingValues(
-                top = screenHeightDp(8.dp),
-                bottom = screenHeightDp(24.dp),
-                start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp)
-            )
+                PaddingValues(
+                    top = screenHeightDp(8.dp),
+                    bottom = screenHeightDp(24.dp),
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                ),
         ) {
             item {
                 QuestCompleteCard(
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = modifier.height(screenHeightDp(32.dp)))
@@ -156,16 +156,16 @@ private fun QuestBehaviorCompleteScreen(
                 Column(
                     modifier = modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Row(
                         modifier = modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         SmallTag(
                             tagText = "STEP ${uiState.stepNumber}",
-                            tagColor = ByeBooTheme.colors.gray500
+                            tagColor = ByeBooTheme.colors.gray500,
                         )
 
                         Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
@@ -173,7 +173,7 @@ private fun QuestBehaviorCompleteScreen(
                         Text(
                             text = "${uiState.questNumber}번째 퀘스트",
                             style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray500
+                            color = ByeBooTheme.colors.gray500,
                         )
                     }
 
@@ -188,7 +188,7 @@ private fun QuestBehaviorCompleteScreen(
                         style = ByeBooTheme.typography.head1,
                         color = ByeBooTheme.colors.gray100,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
 
                     Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
@@ -198,12 +198,12 @@ private fun QuestBehaviorCompleteScreen(
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
                         contentDescription = "title icon",
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -211,42 +211,42 @@ private fun QuestBehaviorCompleteScreen(
                     Text(
                         text = "이렇게 완료했어요",
                         color = ByeBooTheme.colors.gray200,
-                        style = ByeBooTheme.typography.body2
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
 
                 Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Column(
                         modifier =
-                        modifier
-                            .fillMaxWidth()
-                            .aspectRatio(312 / 312f)
-                            .clip(RoundedCornerShape(12.dp))
+                            modifier
+                                .fillMaxWidth()
+                                .aspectRatio(312 / 312f)
+                                .clip(RoundedCornerShape(12.dp)),
                     ) {
                         if (imageUri != null) {
                             SubcomposeAsyncImage(
                                 model =
-                                ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(imageUri)
-                                    .memoryCachePolicy(coil.request.CachePolicy.DISABLED)
-                                    .diskCachePolicy(coil.request.CachePolicy.DISABLED)
-                                    .build(),
+                                    ImageRequest
+                                        .Builder(LocalContext.current)
+                                        .data(imageUri)
+                                        .memoryCachePolicy(coil.request.CachePolicy.DISABLED)
+                                        .diskCachePolicy(coil.request.CachePolicy.DISABLED)
+                                        .build(),
                                 contentDescription = "uploaded image",
                                 modifier = modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop,
                                 loading = {
                                     Box(
                                         modifier = modifier.fillMaxSize(),
-                                        contentAlignment = Alignment.Center
+                                        contentAlignment = Alignment.Center,
                                     ) {
                                         CircularProgressIndicator()
                                     }
-                                }
+                                },
                             )
                         }
                     }
@@ -264,12 +264,12 @@ private fun QuestBehaviorCompleteScreen(
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_change),
                         contentDescription = "title icon",
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -277,7 +277,7 @@ private fun QuestBehaviorCompleteScreen(
                     Text(
                         text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
                         color = ByeBooTheme.colors.gray200,
-                        style = ByeBooTheme.typography.body2
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
 
@@ -286,7 +286,7 @@ private fun QuestBehaviorCompleteScreen(
                 uiState.selectedEmotion?.let { emotion ->
                     QuestEmotionDescriptionCard(
                         questEmotionDescription = uiState.emotionDescription,
-                        emotionType = emotion
+                        emotionType = emotion,
                     )
                 }
             }

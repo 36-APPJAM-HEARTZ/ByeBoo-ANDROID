@@ -19,7 +19,7 @@ fun MiddleTag(
     middleTagType: MiddleTagType,
     text: String,
     textStyle: TextStyle,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val tagText =
         if (middleTagType.dynamicContent) {
@@ -30,19 +30,19 @@ fun MiddleTag(
 
     Box(
         modifier =
-        modifier
-            .background(
-                color = middleTagColor(middleTagType.backgroundColor),
-                shape = RoundedCornerShape(middleTagType.roundedCorner)
-            ).padding(
-                horizontal = middleTagType.horizontalPadding,
-                vertical = middleTagType.verticalPadding
-            )
+            modifier
+                .background(
+                    color = middleTagColor(middleTagType.backgroundColor),
+                    shape = RoundedCornerShape(middleTagType.roundedCorner),
+                ).padding(
+                    horizontal = middleTagType.horizontalPadding,
+                    vertical = middleTagType.verticalPadding,
+                ),
     ) {
         Text(
             text = tagText,
             color = middleTagColor(middleTagType.textColor),
-            style = textStyle
+            style = textStyle,
         )
     }
 }

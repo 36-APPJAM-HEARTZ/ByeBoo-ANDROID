@@ -7,10 +7,10 @@ import com.byeboo.app.domain.model.notification.NotificationSetting
 
 fun FcmTokenModel.toData(): NotificationRequestDto =
     NotificationRequestDto(
-        token = this.token
+        token = this.token,
     )
 
 fun NotificationResponseDto.toDomain(): NotificationSetting =
     NotificationSetting(
-        alarmEnabled = this.alarmEnabled
+        alarmEnabled = this.alarmEnabled,
     )

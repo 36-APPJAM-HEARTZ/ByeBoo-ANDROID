@@ -15,12 +15,12 @@ fun NavController.navigateToTutorial(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.tutorialGraph(
     navigateToUp: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<Tutorial> {
         TutorialRoute(
             navigateToUp = navigateToUp,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

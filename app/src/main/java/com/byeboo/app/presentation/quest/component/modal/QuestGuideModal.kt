@@ -28,15 +28,15 @@ import com.byeboo.app.core.util.screenWidthDp
 fun GuideContent(
     userName: String?,
     guideText: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(horizontal = screenWidthDp(49.dp), vertical = screenHeightDp(26.dp)),
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(49.dp), vertical = screenHeightDp(26.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             buildAnnotatedString {
@@ -51,7 +51,7 @@ fun GuideContent(
                 }
             },
             style = ByeBooTheme.typography.head1,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
@@ -60,10 +60,10 @@ fun GuideContent(
             painter = painterResource(id = R.drawable.bori_clover),
             contentDescription = "이미지",
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f),
-            contentScale = ContentScale.Fit
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+            contentScale = ContentScale.Fit,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
@@ -72,22 +72,22 @@ fun GuideContent(
             buildAnnotatedString {
                 withStyle(
                     style =
-                    ByeBooTheme.typography.body1
-                        .toSpanStyle()
-                        .copy(color = ByeBooTheme.colors.primary300)
+                        ByeBooTheme.typography.body1
+                            .toSpanStyle()
+                            .copy(color = ByeBooTheme.colors.primary300),
                 ) {
                     append(userName)
                 }
                 withStyle(
                     style =
-                    ByeBooTheme.typography.body3
-                        .toSpanStyle()
-                        .copy(color = ByeBooTheme.colors.gray300)
+                        ByeBooTheme.typography.body3
+                            .toSpanStyle()
+                            .copy(color = ByeBooTheme.colors.gray300),
                 ) {
                     append(guideText)
                 }
             },
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

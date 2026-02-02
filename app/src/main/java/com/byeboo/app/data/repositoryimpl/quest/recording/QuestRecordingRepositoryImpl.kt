@@ -8,37 +8,39 @@ import com.byeboo.app.domain.repository.quest.QuestRecordingRepository
 import javax.inject.Inject
 
 class QuestRecordingRepositoryImpl
-@Inject
-constructor(
-    private val questRecordingDataSource: QuestRecordingDataSource
-) : QuestRecordingRepository {
-    override suspend fun postRecording(
-        questId: Long,
-        request: QuestRecordingModel
-    ): Result<Unit> =
-        runCatching {
-            val response = questRecordingDataSource.postQuestRecording(
-                questId,
-                request.toData()
-            )
-            if (!response.success) {
-                throw IllegalStateException("postRecording failed")
+    @Inject
+    constructor(
+        private val questRecordingDataSource: QuestRecordingDataSource,
+    ) : QuestRecordingRepository {
+        override suspend fun postRecording(
+            questId: Long,
+            request: QuestRecordingModel,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questRecordingDataSource.postQuestRecording(
+                        questId,
+                        request.toData(),
+                    )
+                if (!response.success) {
+                    throw IllegalStateException("postRecording failed")
+                }
+                Unit
             }
-            Unit
-        }
 
-    override suspend fun updateRecording(
-        questId: Long,
-        request: QuestRecordingEditModel
-    ): Result<Unit> =
-        runCatching {
-            val response = questRecordingDataSource.updateQuestRecording(
-                questId,
-                request.toData()
-            )
-            if (!response.success) {
-                throw IllegalStateException("updateRecording failed")
+        override suspend fun updateRecording(
+            questId: Long,
+            request: QuestRecordingEditModel,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questRecordingDataSource.updateQuestRecording(
+                        questId,
+                        request.toData(),
+                    )
+                if (!response.success) {
+                    throw IllegalStateException("updateRecording failed")
+                }
+                Unit
             }
-            Unit
-        }
-}
+    }

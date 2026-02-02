@@ -7,9 +7,9 @@ import com.byeboo.app.data.service.quest.QuestService
 import javax.inject.Inject
 
 class QuestInProgressDataSourceImpl
-@Inject
-constructor(
-    private val questService: QuestService
-) : QuestInProgressDataSource {
-    override suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto> = questService.getInProgressQuest()
-}
+    @Inject
+    constructor(
+        private val questService: QuestService,
+    ) : QuestInProgressDataSource {
+        override suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto> = questService.getInProgressQuest()
+    }

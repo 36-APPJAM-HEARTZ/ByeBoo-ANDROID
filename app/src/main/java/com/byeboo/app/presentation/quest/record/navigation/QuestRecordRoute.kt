@@ -9,11 +9,11 @@ sealed class QuestRecord : Route {
     data class QuestRecording(
         val questId: Long,
         val isEditMode: Boolean,
-        val fromOffboarding: Boolean
+        val fromOffboarding: Boolean,
     ) : QuestRecord()
 
     @Serializable
     data class QuestRecordingComplete(
-        val questId: Long
+        val questId: Long,
     ) : QuestRecord()
 }

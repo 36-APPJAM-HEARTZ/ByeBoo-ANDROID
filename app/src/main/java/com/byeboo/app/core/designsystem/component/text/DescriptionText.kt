@@ -25,13 +25,13 @@ fun DescriptionText(
     top: Dp = 0.dp,
     bottom: Dp = 0.dp,
     start: Dp = 0.dp,
-    end: Dp = 0.dp
+    end: Dp = 0.dp,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(top = top, bottom = bottom, start = start, end = end)
+            modifier
+                .fillMaxWidth()
+                .padding(top = top, bottom = bottom, start = start, end = end),
     ) {
         Text(
             buildAnnotatedString {
@@ -42,13 +42,13 @@ fun DescriptionText(
                     append(guideText)
                 }
             },
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = contentText,
             style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray400
+            color = ByeBooTheme.colors.gray400,
         )
     }
 }

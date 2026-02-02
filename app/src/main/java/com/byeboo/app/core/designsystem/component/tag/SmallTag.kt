@@ -10,11 +10,11 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 fun SmallTag(
     modifier: Modifier = Modifier,
     tagText: String,
-    tagColor: Color = ByeBooTheme.colors.secondary300
+    tagColor: Color = ByeBooTheme.colors.secondary300,
 ) {
     Text(
         text = tagText,
         style = ByeBooTheme.typography.cap1.copy(color = tagColor),
-        modifier = modifier
+        modifier = modifier,
     )
 }

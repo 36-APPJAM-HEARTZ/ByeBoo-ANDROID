@@ -16,7 +16,7 @@ import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
 fun NavController.navigateToQuestStart(
     questType: QuestType? = null,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(QuestStart(questType), navOptions)
 }
@@ -28,14 +28,14 @@ fun NavController.navigateToQuest(navOptions: NavOptions? = null) {
 fun NavController.navigateToQuestTip(
     questId: Long,
     questType: QuestType,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(QuestTip(questId, questType), navOptions)
 }
 
 fun NavController.navigateToQuestReview(
     questId: Long,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(QuestReview(questId), navOptions)
 }
@@ -53,14 +53,14 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
         composable<QuestStart> {
             QuestStartRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToHome = navigateToHome,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
@@ -70,14 +70,14 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
         composable<QuestTip> {
             QuestTipRoute(
                 navigateToQuest = navigateUp,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
@@ -86,7 +86,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
@@ -97,7 +97,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
 
         questBehaviorGraph(
@@ -107,7 +107,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

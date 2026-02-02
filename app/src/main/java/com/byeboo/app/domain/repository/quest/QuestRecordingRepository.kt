@@ -6,11 +6,11 @@ import com.byeboo.app.domain.model.quest.QuestRecordingModel
 interface QuestRecordingRepository {
     suspend fun postRecording(
         questId: Long,
-        request: QuestRecordingModel
+        request: QuestRecordingModel,
     ): Result<Unit>
 
     suspend fun updateRecording(
         questId: Long,
-        request: QuestRecordingEditModel
+        request: QuestRecordingEditModel,
     ): Result<Unit>
 }

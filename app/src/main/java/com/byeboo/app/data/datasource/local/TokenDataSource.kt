@@ -9,7 +9,7 @@ interface TokenDataSource {
 
     suspend fun updateTokens(
         accessToken: String,
-        refreshToken: String
+        refreshToken: String,
     )
 
     suspend fun clearTokens()

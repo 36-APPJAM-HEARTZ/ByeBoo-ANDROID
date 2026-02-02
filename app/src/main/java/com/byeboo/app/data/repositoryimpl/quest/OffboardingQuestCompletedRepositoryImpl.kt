@@ -8,13 +8,13 @@ import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRep
 import javax.inject.Inject
 
 class OffboardingQuestCompletedRepositoryImpl
-@Inject
-constructor(
-    private val offboardingQuestCompletedDataSource: OffboardingQuestCompletedDataSource
-) : OffboardingQuestCompletedRepository {
-    override suspend fun getCompletedQuest(journey: QuestType): Result<QuestCompletedModel> =
-        runCatching {
-            val response = offboardingQuestCompletedDataSource.getCompletedQuest(journey)
-            response.data.toDomain()
-        }
-}
+    @Inject
+    constructor(
+        private val offboardingQuestCompletedDataSource: OffboardingQuestCompletedDataSource,
+    ) : OffboardingQuestCompletedRepository {
+        override suspend fun getCompletedQuest(journey: QuestType): Result<QuestCompletedModel> =
+            runCatching {
+                val response = offboardingQuestCompletedDataSource.getCompletedQuest(journey)
+                response.data.toDomain()
+            }
+    }

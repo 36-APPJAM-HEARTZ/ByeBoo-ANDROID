@@ -14,21 +14,21 @@ interface AuthService {
     @POST("/api/v1/auth/login")
     suspend fun loginWithKakao(
         @Header("Authorization") authorization: String,
-        @Body request: KakaoLoginRequestDto
+        @Body request: KakaoLoginRequestDto,
     ): BaseResponse<KakaoLoginResponseDto>
 
     @POST("/api/v1/auth/reissue")
     suspend fun reissueAccessToken(
-        @Header("Authorization") authorization: String
+        @Header("Authorization") authorization: String,
     ): BaseResponse<TokenReissueResponseDto>
 
     @DELETE("/api/v1/auth/logout")
     suspend fun logoutAccount(
-        @Header("Authorization") authorization: String
+        @Header("Authorization") authorization: String,
     ): NullableBaseResponse<Unit>
 
     @DELETE("/api/v1/auth/withdraw")
     suspend fun withdrawAccount(
-        @Header("Authorization") authorization: String
+        @Header("Authorization") authorization: String,
     ): NullableBaseResponse<Unit>
 }

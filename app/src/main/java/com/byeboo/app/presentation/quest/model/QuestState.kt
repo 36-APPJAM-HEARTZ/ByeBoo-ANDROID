@@ -10,29 +10,29 @@ sealed class QuestState {
     data object Locked : QuestState()
 
     data class TimerLocked(
-        val remainTime: Long
+        val remainTime: Long,
     ) : QuestState()
 }
 
 sealed interface QuestSideEffect {
     data class NavigateToQuestTip(
         val questId: Long,
-        val questType: QuestType
+        val questType: QuestType,
     ) : QuestSideEffect
 
     data class NavigateToQuestRecording(
-        val questId: Long
+        val questId: Long,
     ) : QuestSideEffect
 
     data class NavigateToQuestBehavior(
-        val questId: Long
+        val questId: Long,
     ) : QuestSideEffect
 
     data class NavigateToQuestReview(
-        val questId: Long
+        val questId: Long,
     ) : QuestSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : QuestSideEffect
 }

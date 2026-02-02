@@ -31,7 +31,7 @@ fun UserInfoEmotionCard(
     imageRes: Int,
     isSelected: Boolean,
     onCardClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val borderColor = if (isSelected) ByeBooTheme.colors.primary300 else Color.Transparent
     val textColor = if (isSelected) ByeBooTheme.colors.primary200 else ByeBooTheme.colors.gray300
@@ -44,27 +44,27 @@ fun UserInfoEmotionCard(
 
     Box(
         modifier =
-        modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .border(2.dp, borderColor, RoundedCornerShape(12.dp))
-            .noRippleClickable(onCardClick)
-            .padding(vertical = screenHeightDp(12.dp))
+            modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(backgroundColor)
+                .border(2.dp, borderColor, RoundedCornerShape(12.dp))
+                .noRippleClickable(onCardClick)
+                .padding(vertical = screenHeightDp(12.dp)),
     ) {
         Column(
             modifier =
-            Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = screenHeightDp(11.5.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
+                Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = screenHeightDp(11.5.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = null,
                 modifier =
-                Modifier
-                    .width(screenWidthDp(73.dp))
-                    .height(screenHeightDp(100.dp))
+                    Modifier
+                        .width(screenWidthDp(73.dp))
+                        .height(screenHeightDp(100.dp)),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -74,7 +74,7 @@ fun UserInfoEmotionCard(
                 style = ByeBooTheme.typography.body5,
                 color = textColor,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }

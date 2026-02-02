@@ -15,13 +15,13 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun QuestStepTitle(
     stepNumber: Long,
-    stepTitle: String
+    stepTitle: String,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         SmallTag(
-            tagText = "STEP $stepNumber"
+            tagText = "STEP $stepNumber",
         )
 
         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -29,7 +29,7 @@ fun QuestStepTitle(
         Text(
             text = stepTitle,
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
 }

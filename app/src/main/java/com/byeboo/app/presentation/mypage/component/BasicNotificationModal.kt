@@ -9,7 +9,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 @Composable
 fun BasicNotificationModal(
     onDismissRequest: () -> Unit,
-    onConfirmClick: () -> Unit
+    onConfirmClick: () -> Unit,
 ) {
     val context = LocalContext.current
 

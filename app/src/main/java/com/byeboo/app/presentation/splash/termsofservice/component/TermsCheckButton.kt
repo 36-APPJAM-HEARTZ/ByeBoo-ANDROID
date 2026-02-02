@@ -26,25 +26,25 @@ fun TermsCheckButton(
     isSelected: Boolean = false,
     hasMoreText: Boolean,
     onCheckClick: (Boolean) -> Unit,
-    onLinkClick: () -> Unit
+    onLinkClick: () -> Unit,
 ) {
     val contentColor = if (isSelected) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray400
 
     Row(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(8.dp))
-            .noRippleClickable { onCheckClick(!isSelected) },
-        verticalAlignment = Alignment.CenterVertically
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(8.dp))
+                .noRippleClickable { onCheckClick(!isSelected) },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check),
             contentDescription = "check button",
             tint = contentColor,
             modifier =
-            Modifier
-                .size(12.dp)
+                Modifier
+                    .size(12.dp),
         )
 
         Spacer(modifier = modifier.padding(horizontal = screenHeightDp(8.dp)))
@@ -52,7 +52,7 @@ fun TermsCheckButton(
         Text(
             text = title,
             style = ByeBooTheme.typography.cap2,
-            color = contentColor
+            color = contentColor,
         )
 
         Spacer(modifier = modifier.weight(1f))
@@ -63,7 +63,7 @@ fun TermsCheckButton(
                 style = ByeBooTheme.typography.cap2,
                 color = contentColor,
                 textDecoration = TextDecoration.Underline,
-                modifier = modifier.noRippleClickable(onClick = onLinkClick)
+                modifier = modifier.noRippleClickable(onClick = onLinkClick),
             )
         }
     }

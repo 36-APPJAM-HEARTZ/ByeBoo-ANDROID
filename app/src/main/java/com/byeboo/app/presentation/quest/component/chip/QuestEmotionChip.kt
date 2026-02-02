@@ -32,7 +32,7 @@ fun EmotionChip(
     isSelected: Boolean = false,
     enabled: Boolean = true,
     isDimmed: Boolean = false,
-    onChipClick: ((LargeTagType) -> Unit)? = null
+    onChipClick: ((LargeTagType) -> Unit)? = null,
 ) {
     val backgroundColor =
         if (isSelected) {
@@ -64,34 +64,35 @@ fun EmotionChip(
                     Modifier.noRippleClickable { onChipClick(emotionType) }
                 } else {
                     Modifier
-                }
+                },
             ).clip(shape)
             .background(
                 color = backgroundColor,
-                shape = shape
+                shape = shape,
             ).then(
                 if (isSelected) {
                     Modifier.border(1.dp, ByeBooTheme.colors.primary300, shape)
                 } else {
                     Modifier
-                }
+                },
             )
 
     Box(
         modifier = baseModifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.padding(
-                horizontal = screenWidthDp(14.dp),
-                vertical = screenHeightDp(8.dp)
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier.padding(
+                    horizontal = screenWidthDp(14.dp),
+                    vertical = screenHeightDp(8.dp),
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = emotionType.titleIcon),
                 contentDescription = null,
-                modifier = Modifier.size(56.dp)
+                modifier = Modifier.size(56.dp),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -99,16 +100,16 @@ fun EmotionChip(
             Text(
                 text = stringResource(emotionType.titleResId),
                 color = textColor,
-                style = textStyle
+                style = textStyle,
             )
         }
 
         if (isDimmed) {
             Box(
                 modifier =
-                Modifier
-                    .matchParentSize()
-                    .background(color = ByeBooTheme.colors.black.copy(alpha = 0.4f))
+                    Modifier
+                        .matchParentSize()
+                        .background(color = ByeBooTheme.colors.black.copy(alpha = 0.4f)),
             )
         }
     }

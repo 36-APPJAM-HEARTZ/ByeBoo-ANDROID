@@ -44,7 +44,7 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 fun QuestTipRoute(
     navigateToQuest: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: QuestTipViewModel = hiltViewModel()
+    viewModel: QuestTipViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -70,7 +70,7 @@ fun QuestTipRoute(
             QuestTipScreen(
                 uiState = state.data,
                 onCloseClick = viewModel::onCloseClicked,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
 
         else -> Unit
@@ -82,71 +82,71 @@ private fun QuestTipScreen(
     uiState: QuestTipState,
     onCloseClick: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         QuestTipHeader(onCloseClick = onCloseClick)
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding =
-            PaddingValues(
-                start = screenWidthDp(24.dp),
-                top = screenHeightDp(10.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(24.dp)
-            )
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    top = screenHeightDp(10.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(24.dp),
+                ),
         ) {
             item {
                 QuestTipTitle(
                     stepNumber = uiState.stepNumber,
                     questNumber = uiState.questNumber,
-                    question = uiState.question
+                    question = uiState.question,
                 )
             }
 
             item {
                 QuestTipReason(
                     questNumber = uiState.questNumber,
-                    tipAnswer = uiState.tipAnswer
+                    tipAnswer = uiState.tipAnswer,
                 )
             }
 
             item {
                 HorizontalDivider(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = screenHeightDp(8.dp)),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10
+                    color = ByeBooTheme.colors.whiteAlpha10,
                 )
             }
 
             item {
                 QuestTipThinking(
                     questType = uiState.questType,
-                    tipAnswer = uiState.tipAnswer
+                    tipAnswer = uiState.tipAnswer,
                 )
             }
 
             item {
                 HorizontalDivider(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = screenHeightDp(8.dp)),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10
+                    color = ByeBooTheme.colors.whiteAlpha10,
                 )
             }
 
@@ -160,24 +160,24 @@ private fun QuestTipScreen(
 @Composable
 private fun QuestTipHeader(
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(bottom = screenHeightDp(16.dp))
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(bottom = screenHeightDp(16.dp)),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = "닫기",
             tint = ByeBooTheme.colors.white,
             modifier =
-            Modifier
-                .size(24.dp)
-                .align(Alignment.CenterEnd)
-                .noRippleClickable(onCloseClick)
+                Modifier
+                    .size(24.dp)
+                    .align(Alignment.CenterEnd)
+                    .noRippleClickable(onCloseClick),
         )
 
         Text(
@@ -185,7 +185,7 @@ private fun QuestTipHeader(
             style = ByeBooTheme.typography.sub1,
             color = ByeBooTheme.colors.white,
             modifier = Modifier.align(Alignment.Center),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -195,18 +195,18 @@ private fun QuestTipTitle(
     stepNumber: Long,
     questNumber: Long,
     question: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SmallTag(
                 tagText = "STEP $stepNumber",
-                tagColor = ByeBooTheme.colors.gray500
+                tagColor = ByeBooTheme.colors.gray500,
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -214,7 +214,7 @@ private fun QuestTipTitle(
             Text(
                 text = "${questNumber}번째 퀘스트",
                 style = ByeBooTheme.typography.body6,
-                color = ByeBooTheme.colors.gray500
+                color = ByeBooTheme.colors.gray500,
             )
         }
 
@@ -225,7 +225,7 @@ private fun QuestTipTitle(
             style = ByeBooTheme.typography.head1,
             color = ByeBooTheme.colors.gray100,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -234,18 +234,18 @@ private fun QuestTipTitle(
 private fun QuestTipReason(
     questNumber: Long,
     tipAnswer: QuestTipAnswers,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
 
         QuestContent(
             titleIcon = QuestContentType.QUEST_REASON,
             titleText = "${questNumber}번째 퀘스트로 드리는 이유",
-            contentText = tipAnswer.reason
+            contentText = tipAnswer.reason,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(14.dp)))
@@ -256,11 +256,11 @@ private fun QuestTipReason(
 private fun QuestTipThinking(
     questType: QuestType,
     tipAnswer: QuestTipAnswers,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
@@ -268,13 +268,13 @@ private fun QuestTipThinking(
             QuestContent(
                 titleIcon = QuestContentType.THINKING,
                 titleText = "이런 걸 생각해 보며 작성해 주세요.",
-                contentText = tipAnswer.suggestion
+                contentText = tipAnswer.suggestion,
             )
         } else {
             QuestContent(
                 titleIcon = QuestContentType.BEHAVIOR,
                 titleText = "이렇게 해보면 좋아요.",
-                contentText = tipAnswer.suggestion
+                contentText = tipAnswer.suggestion,
             )
         }
 
@@ -285,18 +285,18 @@ private fun QuestTipThinking(
 @Composable
 private fun QuestTipChange(
     tipAnswer: QuestTipAnswers,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
         QuestContent(
             titleIcon = QuestContentType.FEELING_CHANGE,
             titleText = "이 퀘스트가 끝나면 어떤 변화가 생길까요?",
-            contentText = tipAnswer.change
+            contentText = tipAnswer.change,
         )
     }
 }

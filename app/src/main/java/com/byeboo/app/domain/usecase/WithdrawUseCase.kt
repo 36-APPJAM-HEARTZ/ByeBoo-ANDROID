@@ -8,30 +8,30 @@ import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import javax.inject.Inject
 
 class WithdrawUseCase
-@Inject
-constructor(
-    private val authRepository: AuthRepository,
-    private val tokenRepository: TokenRepository,
-    private val userRepository: UserRepository,
-    private val fcmTokenRepository: FcmTokenRepository
-) {
-    private val accessToken: String
-        get() = tokenRepository.getCachedAccessToken()
+    @Inject
+    constructor(
+        private val authRepository: AuthRepository,
+        private val tokenRepository: TokenRepository,
+        private val userRepository: UserRepository,
+        private val fcmTokenRepository: FcmTokenRepository,
+    ) {
+        private val accessToken: String
+            get() = tokenRepository.getCachedAccessToken()
 
-    suspend operator fun invoke(): Result<Unit> {
-        val fcmToken = fcmTokenRepository.getFcmToken().orEmpty()
+        suspend operator fun invoke(): Result<Unit> {
+            val fcmToken = fcmTokenRepository.getFcmToken().orEmpty()
 
-        runCatching {
-            fcmTokenRepository.deleteFcmToken(FcmTokenModel(fcmToken))
+            runCatching {
+                fcmTokenRepository.deleteFcmToken(FcmTokenModel(fcmToken))
+            }
+
+            val withdrawResult = authRepository.withdrawAccount(accessToken)
+
+            withdrawResult.onSuccess {
+                tokenRepository.clearTokens()
+                userRepository.clear()
+                tokenRepository.setLoginSplash(true)
+            }
+            return withdrawResult
         }
-
-        val withdrawResult = authRepository.withdrawAccount(accessToken)
-
-        withdrawResult.onSuccess {
-            tokenRepository.clearTokens()
-            userRepository.clear()
-            tokenRepository.setLoginSplash(true)
-        }
-        return withdrawResult
     }
-}

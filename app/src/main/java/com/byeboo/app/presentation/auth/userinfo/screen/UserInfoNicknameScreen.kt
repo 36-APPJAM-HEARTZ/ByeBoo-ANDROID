@@ -11,20 +11,20 @@ import com.byeboo.app.presentation.auth.userinfo.model.UserInfoValidationState
 fun UserInfoNicknameScreen(
     nickname: String,
     validationState: UserInfoValidationState,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
 ) {
     Column {
         DescriptionText(
             title = "닉네임",
             guideText = "을 입력해 주세요",
             contentText = "어떤 이름으로 불러드릴까요?",
-            bottom = 20.dp
+            bottom = 20.dp,
         )
         NicknameTextField(
             value = nickname,
             validationState = validationState,
             onValueChange = onTextChange,
-            onClearClick = { onTextChange("") }
+            onClearClick = { onTextChange("") },
         )
     }
 }

@@ -68,7 +68,7 @@ fun HomeRoute(
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -109,7 +109,7 @@ fun HomeRoute(
         onHelpIconClick = viewModel::onHelpIconClicked,
         paddingValues = paddingValues,
         onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
-        onLottieClick = viewModel::onLottieClicked
+        onLottieClick = viewModel::onLottieClicked,
     )
 }
 
@@ -122,7 +122,7 @@ private fun HomeScreen(
     paddingValues: PaddingValues,
     onOffboardingNewJourneyClick: () -> Unit,
     onLottieClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_home))
     val isReady = composition != null
@@ -160,7 +160,7 @@ private fun HomeScreen(
             painter = painterResource(R.drawable.bg_home),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
         val canShowContent = isReady && !uiState.isLoading
         val canInteract = !uiState.isLoading && !uiState.hasError
@@ -173,62 +173,62 @@ private fun HomeScreen(
         AnimatedVisibility(
             visible = true,
             enter =
-            fadeIn(tween(300, easing = FastOutSlowInEasing)) +
-                scaleIn(
-                    initialScale = 0.98f,
-                    animationSpec = tween(400, easing = FastOutSlowInEasing)
-                )
+                fadeIn(tween(300, easing = FastOutSlowInEasing)) +
+                    scaleIn(
+                        initialScale = 0.98f,
+                        animationSpec = tween(400, easing = FastOutSlowInEasing),
+                    ),
         ) {
             Box(Modifier.fillMaxSize()) {
                 Column(
                     modifier =
-                    modifier
-                        .fillMaxSize()
-                        .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(
-                            top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp)
-                        )
+                        modifier
+                            .fillMaxSize()
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(
+                                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                            ),
                 ) {
                     when (uiState.status) {
                         HomeStatus.INITIAL_START -> {
                             HomeQuestCard(
                                 title = "${uiState.journey} 여정 시작하기",
                                 subtitle = "제가 옆에서 함께할게요!",
-                                onClick = { if (canInteract) onClickQuestStart() }
+                                onClick = { if (canInteract) onClickQuestStart() },
                             )
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
                             Icon(
                                 imageVector =
-                                ImageVector.vectorResource(
-                                    id = R.drawable.ic_home_question
-                                ),
+                                    ImageVector.vectorResource(
+                                        id = R.drawable.ic_home_question,
+                                    ),
                                 contentDescription = null,
                                 tint = Color.Unspecified,
                                 modifier =
-                                Modifier
-                                    .align(Alignment.End)
-                                    .noRippleClickable {
-                                        onHelpIconClick()
-                                        showBubble = false
-                                    }
+                                    Modifier
+                                        .align(Alignment.End)
+                                        .noRippleClickable {
+                                            onHelpIconClick()
+                                            showBubble = false
+                                        },
                             )
                             Spacer(Modifier.height(screenHeightDp(4.dp)))
                             AnimatedVisibility(
                                 visible = showBubble && !uiState.hasSeenAboutHelp,
                                 enter =
-                                fadeIn(tween(220)) +
-                                    scaleIn(
-                                        initialScale = 0.96f,
-                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
-                                    ),
-                                modifier = Modifier.align(Alignment.End)
+                                    fadeIn(tween(220)) +
+                                        scaleIn(
+                                            initialScale = 0.96f,
+                                            animationSpec = tween(300, easing = FastOutSlowInEasing),
+                                        ),
+                                modifier = Modifier.align(Alignment.End),
                             ) {
                                 Image(
                                     imageVector =
-                                    ImageVector.vectorResource(
-                                        id = R.drawable.ic_home_about_bori
-                                    ),
-                                    contentDescription = "보리 소개 말풍선"
+                                        ImageVector.vectorResource(
+                                            id = R.drawable.ic_home_about_bori,
+                                        ),
+                                    contentDescription = "보리 소개 말풍선",
                                 )
                             }
                         }
@@ -237,7 +237,7 @@ private fun HomeScreen(
                             HomeQuestCard(
                                 title = "오늘의 퀘스트 하러가기",
                                 subtitle = "퀘스트를 하고나면 한층 더 성장할 거에요.",
-                                onClick = onClickQuest
+                                onClick = onClickQuest,
                             )
 
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
@@ -245,7 +245,7 @@ private fun HomeScreen(
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
-                                totalSteps = uiState.totalSteps
+                                totalSteps = uiState.totalSteps,
                             )
                         }
 
@@ -254,7 +254,7 @@ private fun HomeScreen(
                                 title = "오늘의 퀘스트 완료!",
                                 subtitle = "잘하셨어요! 내일 또 만나요.",
                                 onClick = onClickQuest,
-                                borderColor = Color.Unspecified
+                                borderColor = Color.Unspecified,
                             )
 
                             Spacer(Modifier.height(screenHeightDp(16.dp)))
@@ -262,7 +262,7 @@ private fun HomeScreen(
                             HomeProgressCard(
                                 title = "${uiState.nickname}님의 ${uiState.journey} 여정",
                                 currentStep = uiState.currentStep,
-                                totalSteps = uiState.totalSteps
+                                totalSteps = uiState.totalSteps,
                             )
                         }
 
@@ -270,7 +270,7 @@ private fun HomeScreen(
                             HomeQuestCard(
                                 title = "새로운 이별 극복 여정 시작하기",
                                 subtitle = "다음 여정도, 제가 곁에서 함께할게요.",
-                                onClick = onOffboardingNewJourneyClick
+                                onClick = onOffboardingNewJourneyClick,
                             )
                         }
                     }
@@ -280,54 +280,56 @@ private fun HomeScreen(
                 // 하단 말풍선 + 로띠
                 Column(
                     modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(
-                            bottom = maxOf(
-                                paddingValues.calculateBottomPadding() - screenHeightDp(20.dp),
-                                0.dp
-                            )
-                        )
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(
+                                bottom =
+                                    maxOf(
+                                        paddingValues.calculateBottomPadding() - screenHeightDp(20.dp),
+                                        0.dp,
+                                    ),
+                            ),
                 ) {
                     // 하단 말풍선
                     Box(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(312f / 62f)
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(312f / 62f),
                     ) {
                         Image(
                             imageVector =
-                            ImageVector.vectorResource(
-                                id = R.drawable.ic_home_speech_bubble
-                            ),
+                                ImageVector.vectorResource(
+                                    id = R.drawable.ic_home_speech_bubble,
+                                ),
                             contentDescription = null,
-                            modifier = Modifier.matchParentSize()
+                            modifier = Modifier.matchParentSize(),
                         )
 
                         Box(
                             modifier =
-                            Modifier
-                                .matchParentSize()
-                                .padding(bottom = screenHeightDp(14.dp)),
-                            contentAlignment = Alignment.Center
+                                Modifier
+                                    .matchParentSize()
+                                    .padding(bottom = screenHeightDp(14.dp)),
+                            contentAlignment = Alignment.Center,
                         ) {
                             Column {
                                 AnimatedVisibility(
                                     visible = uiState.showBubble,
-                                    enter = fadeIn(
-                                        tween(durationMillis = 500, easing = LinearOutSlowInEasing)
-                                    ),
-                                    exit = fadeOut(tween(500, easing = FastOutLinearInEasing))
+                                    enter =
+                                        fadeIn(
+                                            tween(durationMillis = 500, easing = LinearOutSlowInEasing),
+                                        ),
+                                    exit = fadeOut(tween(500, easing = FastOutLinearInEasing)),
                                 ) {
                                     Text(
                                         text = bottomBubbleText,
                                         style = ByeBooTheme.typography.body2,
                                         color = ByeBooTheme.colors.primary50,
                                         textAlign = TextAlign.Center,
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth(),
                                     )
                                 }
                             }
@@ -343,16 +345,16 @@ private fun HomeScreen(
                         renderMode = RenderMode.AUTOMATIC,
                         enableMergePaths = true,
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .noRippleClickable(
-                                onClick = {
-                                    if (uiState.isBubbleEnabled) {
-                                        onLottieClick()
-                                    }
-                                }
-                            )
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f)
+                                .noRippleClickable(
+                                    onClick = {
+                                        if (uiState.isBubbleEnabled) {
+                                            onLottieClick()
+                                        }
+                                    },
+                                ),
                     )
                 }
             }

@@ -9,10 +9,10 @@ fun QuestCountResponseDto.toDomain(): QuestStateModel =
     QuestStateModel(
         todayComplete = this.todayComplete,
         userCurrentStatus = this.userCurrentStatus,
-        count = this.count.toLong()
+        count = this.count.toLong(),
     )
 
 fun QuestDialogueResponseDto.toDomain(): QuestDialogue =
     QuestDialogue(
-        dialogue = this.dialogue
+        dialogue = this.dialogue,
     )

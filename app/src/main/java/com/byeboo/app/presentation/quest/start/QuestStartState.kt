@@ -7,7 +7,7 @@ import com.byeboo.app.core.model.quest.QuestType
 data class QuestStartState(
     val nickname: String = "하츠핑",
     val journeyName: String = "감정 직면",
-    val questType: QuestType? = null
+    val questType: QuestType? = null,
 )
 
 sealed interface QuestStartSideEffect {
@@ -16,6 +16,6 @@ sealed interface QuestStartSideEffect {
     data object NavigateToHome : QuestStartSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : QuestStartSideEffect
 }

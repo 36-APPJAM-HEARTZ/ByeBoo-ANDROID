@@ -10,16 +10,16 @@ interface QuestBehaviorRepository {
     suspend fun uploadImageToSignedUrl(
         signUrl: String,
         imageBytes: ByteArray,
-        contentType: String
+        contentType: String,
     ): Result<Unit>
 
     suspend fun uploadQuestBehaviorAnswer(
         questId: Long,
-        request: BehaviorAnswerRequestModel
+        request: BehaviorAnswerRequestModel,
     ): Result<Unit>
 
     suspend fun updateQuestBehavior(
         questId: Long,
-        request: QuestBehaviorEditModel
+        request: QuestBehaviorEditModel,
     ): Result<Unit>
 }

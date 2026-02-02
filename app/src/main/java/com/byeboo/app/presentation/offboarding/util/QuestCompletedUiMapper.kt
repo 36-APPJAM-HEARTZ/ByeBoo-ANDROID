@@ -11,7 +11,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 fun QuestCompletedModel.toUiState(
     journey: QuestType,
-    nickname: String = "하츠핑"
+    nickname: String = "하츠핑",
 ): QuestCompletedState {
     val groups: ImmutableList<QuestCompletedGroup> =
         steps
@@ -26,14 +26,14 @@ fun QuestCompletedModel.toUiState(
                                 questNumber = quest.questNumber,
                                 questQuestion = quest.question,
                                 state = QuestState.Complete,
-                                type = QuestType.fromQuestStyle(quest.questStyle)
+                                type = QuestType.fromQuestStyle(quest.questStyle),
                             )
                         }.toImmutableList()
 
                 QuestCompletedGroup(
                     stepNumber = step.stepNumber,
                     stepTitle = step.step,
-                    quests = quests
+                    quests = quests,
                 )
             }.toImmutableList()
 
@@ -41,6 +41,6 @@ fun QuestCompletedModel.toUiState(
         questGroups = groups,
         progressPeriod = progressPeriod.orEmpty(),
         userName = nickname,
-        questType = journey
+        questType = journey,
     )
 }

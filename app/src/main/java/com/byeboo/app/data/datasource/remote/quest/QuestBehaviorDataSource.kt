@@ -14,16 +14,16 @@ interface QuestBehaviorDataSource {
 
     suspend fun uploadImageToSignedUrl(
         signedUrl: String,
-        requestBody: RequestBody
+        requestBody: RequestBody,
     ): Response<Unit>
 
     suspend fun uploadQuestBehaviorAnswer(
         questId: Long,
-        request: QuestBehaviorRequestDto
+        request: QuestBehaviorRequestDto,
     ): NullableBaseResponse<Unit>
 
     suspend fun updateQuestBehavior(
         questId: Long,
-        request: QuestBehaviorEditRequestDto
+        request: QuestBehaviorEditRequestDto,
     ): NullableBaseResponse<Unit>
 }

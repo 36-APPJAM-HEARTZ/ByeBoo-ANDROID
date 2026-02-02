@@ -22,18 +22,18 @@ import com.byeboo.app.core.util.screenHeightDp
 fun QuestJourneyTitle(
     dayCount: Int,
     nickname: String,
-    questTitle: QuestType
+    questTitle: QuestType,
 ) {
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(19.dp))
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(19.dp)),
     ) {
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_START_DAY,
             text = dayCount.toString(),
-            textStyle = ByeBooTheme.typography.cap2
+            textStyle = ByeBooTheme.typography.cap2,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -49,7 +49,7 @@ fun QuestJourneyTitle(
                 append(" 여정을 진행 중이에요.")
             },
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -57,7 +57,7 @@ fun QuestJourneyTitle(
         Text(
             text = "오늘도 한 걸음 나아가 볼까요?",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body5
+            style = ByeBooTheme.typography.body5,
         )
     }
 }

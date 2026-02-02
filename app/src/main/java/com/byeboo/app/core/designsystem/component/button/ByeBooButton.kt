@@ -28,25 +28,25 @@ fun ByeBooButton(
     modifier: Modifier = Modifier,
     buttonBackgroundColor: Color = Color.Unspecified,
     buttonStrokeColor: Color = Color.Unspecified,
-    textAlign: TextAlign = TextAlign.Center
+    textAlign: TextAlign = TextAlign.Center,
 ) {
     Row(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = buttonBackgroundColor)
-            .border(width = 1.dp, color = buttonStrokeColor, shape = RoundedCornerShape(12.dp))
-            .noRippleClickable(onClick = onClick)
-            .padding(vertical = screenHeightDp(16.dp)),
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = buttonBackgroundColor)
+                .border(width = 1.dp, color = buttonStrokeColor, shape = RoundedCornerShape(12.dp))
+                .noRippleClickable(onClick = onClick)
+                .padding(vertical = screenHeightDp(16.dp)),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = buttonText,
             style = buttonStyle,
             color = buttonTextColor,
-            textAlign = textAlign
+            textAlign = textAlign,
         )
     }
 }

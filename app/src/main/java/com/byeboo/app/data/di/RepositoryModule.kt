@@ -50,13 +50,13 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindQuestDetailBehaviorRepository(
-        questDetailBehaviorRepositoryImpl: QuestDetailBehaviorRepositoryImpl
+        questDetailBehaviorRepositoryImpl: QuestDetailBehaviorRepositoryImpl,
     ): QuestDetailBehaviorRepository
 
     @Binds
     @Singleton
     abstract fun bindQuestDetailRecordingRepository(
-        questDetailRecordingRepositoryImpl: QuestDetailRecordingRepositoryImpl
+        questDetailRecordingRepositoryImpl: QuestDetailRecordingRepositoryImpl,
     ): QuestDetailRecordingRepository
 
     @Binds
@@ -69,21 +69,17 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsQuestInProgressRepository(
-        questInProgressRepositoryImpl: QuestInProgressRepositoryImpl
-    ): QuestInProgressRepository
+    abstract fun bindsQuestInProgressRepository(questInProgressRepositoryImpl: QuestInProgressRepositoryImpl): QuestInProgressRepository
 
     @Binds
     @Singleton
     abstract fun bindsQuestCompletedRepository(
-        offboardingQuestCompletedRepositoryImpl: OffboardingQuestCompletedRepositoryImpl
+        offboardingQuestCompletedRepositoryImpl: OffboardingQuestCompletedRepositoryImpl,
     ): OffboardingQuestCompletedRepository
 
     @Binds
     @Singleton
-    abstract fun bindQuestBehaviorAnswerRepository(
-        questBehaviorAnswerRepositoryImpl: QuestBehaviorRepositoryImpl
-    ): QuestBehaviorRepository
+    abstract fun bindQuestBehaviorAnswerRepository(questBehaviorAnswerRepositoryImpl: QuestBehaviorRepositoryImpl): QuestBehaviorRepository
 
     @Binds
     @Singleton
@@ -91,20 +87,18 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindQuestRecordingRepository(
-        questRecordingRepositoryImpl: QuestRecordingRepositoryImpl
-    ): QuestRecordingRepository
+    abstract fun bindQuestRecordingRepository(questRecordingRepositoryImpl: QuestRecordingRepositoryImpl): QuestRecordingRepository
 
     @Binds
     @Singleton
     abstract fun bindQuestRecordedDetailRepository(
-        questRecordedDetailRepositoryImpl: QuestRecordedDetailRepositoryImpl
+        questRecordedDetailRepositoryImpl: QuestRecordedDetailRepositoryImpl,
     ): QuestRecordedDetailRepository
 
     @Binds
     @Singleton
     abstract fun bindOffboardingJourneyRepository(
-        offboardingJourneyRepositoryImpl: OffboardingJourneyRepositoryImpl
+        offboardingJourneyRepositoryImpl: OffboardingJourneyRepositoryImpl,
     ): OffboardingJourneyRepository
 
     @Binds

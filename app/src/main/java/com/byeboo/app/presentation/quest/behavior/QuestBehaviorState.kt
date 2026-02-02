@@ -32,7 +32,7 @@ data class QuestBehaviorState(
     val originalAnswer: String = "",
     val isCompleteButtonEnabled: Boolean = false,
     val hasAnswerChanged: Boolean = false,
-    val fromOffboarding: Boolean = false
+    val fromOffboarding: Boolean = false,
 )
 
 sealed interface QuestBehaviorSideEffect {
@@ -40,24 +40,24 @@ sealed interface QuestBehaviorSideEffect {
 
     data class NavigateToQuestTip(
         val questId: Long,
-        val questType: QuestType
+        val questType: QuestType,
     ) : QuestBehaviorSideEffect
 
     data class NavigateToQuestBehaviorComplete(
-        val questId: Long
+        val questId: Long,
     ) : QuestBehaviorSideEffect
 
     data class NavigateToQuestReview(
-        val questId: Long
+        val questId: Long,
     ) : QuestBehaviorSideEffect
 
     data class CompleteAndClear(
-        val questId: Long
+        val questId: Long,
     ) : QuestBehaviorSideEffect
 
     data object NavigateUp : QuestBehaviorSideEffect
 
     data class ShowSnackBar(
-        val message: String
+        val message: String,
     ) : QuestBehaviorSideEffect
 }

@@ -35,7 +35,7 @@ import com.byeboo.app.core.util.screenWidthDp
 fun TutorialRoute(
     navigateToUp: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: TutorialViewModel = hiltViewModel()
+    viewModel: TutorialViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -47,7 +47,7 @@ fun TutorialRoute(
 
     TutorialScreen(
         paddingValues = paddingValues,
-        onBackClick = viewModel::onBackClicked
+        onBackClick = viewModel::onBackClicked,
     )
 }
 
@@ -55,27 +55,27 @@ fun TutorialRoute(
 private fun TutorialScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
             modifier =
-            Modifier
-                .padding(end = screenWidthDp(24.dp))
-                .align(Alignment.End)
-                .clickable(onClick = onBackClick)
+                Modifier
+                    .padding(end = screenWidthDp(24.dp))
+                    .align(Alignment.End)
+                    .clickable(onClick = onBackClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -88,12 +88,12 @@ private fun TutorialScreen(
 private fun TutorialContent(modifier: Modifier = Modifier) {
     Column(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = screenWidthDp((38.5).dp))
-            .padding(top = screenHeightDp(24.dp)),
-        horizontalAlignment = Alignment.CenterHorizontally
+            modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = screenWidthDp((38.5).dp))
+                .padding(top = screenHeightDp(24.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         for (contents in TutorialContent.entries) {
             key(contents) {
@@ -101,7 +101,7 @@ private fun TutorialContent(modifier: Modifier = Modifier) {
                     painter = painterResource(id = contents.image),
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -110,7 +110,7 @@ private fun TutorialContent(modifier: Modifier = Modifier) {
                     text = contents.content,
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.primary50,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))

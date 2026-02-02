@@ -10,7 +10,7 @@ data class QuestCompletedResponseDto(
     @SerialName("currentStep")
     val currentStep: Int?,
     @SerialName("steps")
-    val steps: List<QuestCompletedStepResponseDto>
+    val steps: List<QuestCompletedStepResponseDto>,
 )
 
 @Serializable
@@ -20,7 +20,7 @@ data class QuestCompletedStepResponseDto(
     @SerialName("step")
     val step: String,
     @SerialName("quests")
-    val quests: List<QuestCompletedQuestResponseDto>
+    val quests: List<QuestCompletedQuestResponseDto>,
 )
 
 @Serializable
@@ -32,5 +32,5 @@ data class QuestCompletedQuestResponseDto(
     @SerialName("questStyle")
     val questStyle: String,
     @SerialName("questNumber")
-    val questNumber: Long
+    val questNumber: Long,
 )
