@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
@@ -23,8 +24,8 @@ class OffboardingJourneyViewModel @Inject constructor(
     private val mapper: OffboardingJourneyMapper,
     private val mixpanelUtil: MixpanelUtil
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(OffboardingJourneyState())
-    val uiState: StateFlow<OffboardingJourneyState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<OffboardingJourneyState>>(UiState.Loading)
+    val uiState: StateFlow<UiState<OffboardingJourneyState>> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<OffboardingJourneySideEffect>()
     val sideEffect: SharedFlow<OffboardingJourneySideEffect> = _sideEffect.asSharedFlow()
@@ -58,12 +59,16 @@ class OffboardingJourneyViewModel @Inject constructor(
                 .mapCatching { domain -> mapper.toUiState(domain) }
                 .onSuccess { output ->
                     _uiState.update {
-                        it.copy(
-                            journeyCards = output.journeyCards
+                        UiState.Success(
+                            OffboardingJourneyState(
+                                journeyCards = output.journeyCards
+                            )
                         )
                     }
                 }
                 .onFailure { e ->
+                    _uiState.update { UiState.Empty }
+
                     _sideEffect.emit(
                         OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
                     )

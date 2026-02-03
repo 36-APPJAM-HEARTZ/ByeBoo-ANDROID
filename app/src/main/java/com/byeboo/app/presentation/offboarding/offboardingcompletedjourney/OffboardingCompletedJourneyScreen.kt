@@ -33,6 +33,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -40,6 +41,7 @@ import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyViewModel
 import com.byeboo.app.presentation.offboarding.component.JourneyCard
+import com.byeboo.app.presentation.offboarding.model.JourneyCard
 
 @Composable
 fun OffboardingCompletedJourneyRoute(
@@ -64,13 +66,21 @@ fun OffboardingCompletedJourneyRoute(
         }
     }
 
-    OffboardingCompletedJourneyScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onBackClick = viewModel::onBackClicked,
-        onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
-        modifier = modifier
-    )
+    when(val state = uiState) {
+        is UiState.Loading -> Unit
+
+        is UiState.Failure -> Unit
+
+        is UiState.Success -> OffboardingCompletedJourneyScreen(
+            uiState = state.data,
+            paddingValues = paddingValues,
+            onBackClick = viewModel::onBackClicked,
+            onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
+            modifier = modifier
+        )
+
+        else -> Unit
+    }
 }
 
 @Composable
@@ -92,6 +102,29 @@ private fun OffboardingCompletedJourneyScreen(
             )
             .verticalScroll(rememberScrollState())
     ) {
+        OffboardingCompletedJourneyHeader(onBackClick = onBackClick)
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(8.dp)),
+            thickness = 1.dp,
+            color = ByeBooTheme.colors.whiteAlpha10
+        )
+
+        OffboardingCompletedJourneyContent(
+            completedCount = uiState.completedCount,
+            completedCards = uiState.completedCards,
+            onJourneyCompletedCardClick = onJourneyCompletedCardClick
+        )
+    }
+}
+
+@Composable
+private fun OffboardingCompletedJourneyHeader(
+    onBackClick: () -> Unit
+){
+    Column {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
@@ -110,64 +143,72 @@ private fun OffboardingCompletedJourneyScreen(
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
+    }
+}
 
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(8.dp)),
-            thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
-        )
+@Composable
+private fun OffboardingCompletedJourneyContent(
+    completedCount: Int,
+    completedCards: List<JourneyCard>,
+    onJourneyCompletedCardClick: (QuestType) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = screenHeightDp(16.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+    ) {
+        CompleteText(completedCount = completedCount)
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(16.dp)),
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "완료",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2
-                )
-
-                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                Text(
-                    text = "${uiState.completedCount}개",
-                    color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2
-                )
-            }
-
-            (uiState.completedCards).forEach { card ->
-                key(card) {
-                    JourneyCard(
-                        journeyType = card.journeyType,
-                        onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
-                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
-                        chipTextColor = ByeBooTheme.colors.gray300,
-                        journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                        journeyCardTextStyle = ByeBooTheme.typography.body3
-                    )
-                }
-            }
-
-            if (uiState.completedCount == 0) {
-                Spacer(modifier = Modifier.height(screenHeightDp(188.5.dp)))
-
-                Text(
-                    text = "아직 완료된 여정이 없어요!",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.body3,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
+        (completedCards).forEach { card ->
+            key(card) {
+                JourneyCard(
+                    journeyType = card.journeyType,
+                    onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
+                    chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
+                    chipTextColor = ByeBooTheme.colors.gray300,
+                    journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                    journeyCardTextStyle = ByeBooTheme.typography.body3
                 )
             }
         }
+
+        if (completedCount == 0) {
+            Spacer(modifier = Modifier.height(screenHeightDp(188.5.dp)))
+
+            Text(
+                text = "아직 완료된 여정이 없어요!",
+                color = ByeBooTheme.colors.gray300,
+                style = ByeBooTheme.typography.body3,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
+private fun CompleteText(
+    completedCount: Int,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "완료",
+            color = ByeBooTheme.colors.gray300,
+            style = ByeBooTheme.typography.cap2
+        )
+
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+        Text(
+            text = "${completedCount}개",
+            color = ByeBooTheme.colors.gray500,
+            style = ByeBooTheme.typography.body2
+        )
     }
 }
