@@ -6,7 +6,6 @@ import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.repository.auth.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
@@ -54,6 +54,16 @@ class EditProfileViewModel @Inject constructor(
                     isInitial = it.isInitial && (input == it.initialNickname)
                 )
             }
+        }
+    }
+
+    fun clearNickname() {
+        _uiState.update {
+            it.copy(
+                nickname = "",
+                nicknameValidation = NicknameValidator.validate(""),
+                isInitial = false
+            )
         }
     }
 

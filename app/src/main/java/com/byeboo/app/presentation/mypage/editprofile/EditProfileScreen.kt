@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,7 +73,7 @@ fun EditProfileRoute(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onNicknameChange = viewModel::updateNickname,
-        onClearClick = { viewModel.updateNickname("") },
+        onClearClick = viewModel::clearNickname,
         focusRequester = focusRequester,
         onCompleteClick = { viewModel.finishEditProfile(it) }
     )
