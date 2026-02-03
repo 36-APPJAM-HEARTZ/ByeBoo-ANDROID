@@ -16,9 +16,9 @@ import com.byeboo.app.core.util.noRippleClickable
 
 @Composable
 fun MyPageNotification(
-    modifier: Modifier = Modifier,
     isEnabledAlarm: Boolean?,
-    onCheckedClick: (Boolean) -> Unit
+    onCheckedClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val toggle = if (isEnabledAlarm == true) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
     val alpha = if (isEnabledAlarm == null) 0f else 1f

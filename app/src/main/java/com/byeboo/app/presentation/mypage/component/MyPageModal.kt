@@ -32,7 +32,9 @@ fun MyPageModal(
     onConfirmClick: () -> Unit,
     onConfirmText: String,
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties = DialogProperties(),
+    dialogProperties: DialogProperties = DialogProperties(
+        usePlatformDefaultWidth = false
+    ),
     myPageModalSubText: String? = null
 ) {
     Dialog(

@@ -8,6 +8,7 @@ import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
 import com.byeboo.app.domain.usecase.WithdrawUseCase
+import com.byeboo.app.presentation.mypage.type.ModalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow

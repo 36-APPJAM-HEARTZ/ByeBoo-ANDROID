@@ -55,6 +55,7 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
+import com.byeboo.app.presentation.mypage.type.ModalType
 
 
 @Composable
@@ -64,7 +65,6 @@ fun MyPageRoute(
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,22 +93,26 @@ fun MyPageRoute(
         }
     )
 
-    val onAlarmToggleClick = {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (context.hasNotificationPermission()) {
-                viewModel.onAlarmToggledClicked(true)
-            } else {
-                val shouldShowRationale =
-                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-
-                if (shouldShowRationale) {
-                    viewModel.onAlarmToggledClicked(false)
-                } else {
-                    permissionLauncher.launch(POST_NOTIFICATIONS)
-                }
-            }
+    val onAlarmToggleClick: (Boolean) -> Unit = { isChecked ->
+        if (!isChecked) {
+            viewModel.onAlarmToggledClicked(false)
         } else {
-            viewModel.onAlarmToggledClicked(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (context.hasNotificationPermission()) {
+                    viewModel.onAlarmToggledClicked(true)
+                } else {
+                    val shouldShowRationale =
+                        activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+
+                    if (shouldShowRationale) {
+                        viewModel.onAlarmToggledClicked(false)
+                    } else {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    }
+                }
+            } else {
+                viewModel.onAlarmToggledClicked(true)
+            }
         }
     }
 
@@ -123,7 +127,6 @@ fun MyPageRoute(
 
                     if (shouldShowRationale) {
                         permissionLauncher.launch(POST_NOTIFICATIONS)
-
                     } else {
                         viewModel.onGoToSettingClicked()
                     }
@@ -143,7 +146,6 @@ fun MyPageRoute(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 
@@ -158,7 +160,6 @@ fun MyPageRoute(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 
@@ -172,7 +173,7 @@ fun MyPageRoute(
                 }
 
                 is MyPageSideEffect.NavigateToSetting -> {
-                    val intent = Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                         putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                     }
                     context.startActivity(intent)
@@ -213,7 +214,6 @@ fun MyPageRoute(
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
-        modifier = modifier
     )
 }
 
@@ -226,7 +226,7 @@ private fun MyPageScreen(
     onGoToByeBooUniverseClick: () -> Unit,
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
-    onAlarmToggleClick: () -> Unit,
+    onAlarmToggleClick: (Boolean) -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -264,34 +264,10 @@ private fun MyPageScreen(
             )
         ) {
             item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .clickable(onClick = onNicknameChangeClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(18.5.dp)
-                        )
-                ) {
-                    Text(
-                        text = uiState.nickname,
-                        style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.gray300
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = ByeBooTheme.colors.gray50
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                Nickname(
+                    nickname = uiState.nickname,
+                    onNicknameChangeClick = onNicknameChangeClick
+                )
             }
 
             item {
@@ -305,101 +281,11 @@ private fun MyPageScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                MyRecord(onCompletedJourneyClick = onCompletedJourneyClick)
+            }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-
-                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                    Text(
-                        text = "나의 기록",
-                        style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .border(
-                            width = 1.dp,
-                            color = ByeBooTheme.colors.primary300,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onCompletedJourneyClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(20.dp)
-                        )
-                ) {
-                    Text(
-                        text = "완료한 여정 돌아보기",
-                        style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-
-                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                    Text(
-                        text = "보리가 궁금하다면?",
-                        style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .border(
-                            width = 1.dp,
-                            color = ByeBooTheme.colors.primary300,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onGoToByeBooUniverseClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(20.dp)
-                        )
-                ) {
-                    Text(
-                        text = "Bye Boo 세계관 보러 가기",
-                        style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+            item {
+                ByeBooUniverse(onGoToByeBooUniverseClick = onGoToByeBooUniverseClick)
             }
 
             item {
@@ -413,105 +299,304 @@ private fun MyPageScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
-                Text(
-                    text = "문의하기",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                Question(
+                    onAskingByeBooClick = onAskingByeBooClick,
+                    onServiceWithByeBooClick = onServiceWithByeBooClick
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "바이부에 문의하기",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onAskingByeBooClick)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "바이부와 함께 서비스 만들기",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onServiceWithByeBooClick)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
-                Text(
-                    text = "알림",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                Alarm(
+                    isAlarmEnabled = uiState.isAlarmEnabled,
+                    onAlarmToggleClick = onAlarmToggleClick
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                MyPageNotification(
-                    isEnabledAlarm = uiState.isAlarmEnabled,
-                    onCheckedClick = { onAlarmToggleClick() }
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
-                Text(
-                    text = "약관 및 정책",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                TermAndPolicy(
+                    onPrivacyPolicyClick = onPrivacyPolicyClick,
+                    onTermsOfServiceClick = onTermsOfServiceClick
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "개인정보 처리 방침",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onPrivacyPolicyClick)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "서비스 이용 약관",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onTermsOfServiceClick)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
-                Text(
-                    text = "계정",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "로그아웃",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onLogoutClick)
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "탈퇴",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onDeleteAccountClick)
+                Account(
+                    onLogoutClick = onLogoutClick,
+                    onDeleteAccountClick = onDeleteAccountClick
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun Nickname(
+    nickname: String,
+    onNicknameChangeClick: () -> Unit,
+) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .clickable(onClick = onNicknameChangeClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(18.5.dp)
+                )
+        ) {
+            Text(
+                text = nickname,
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray300
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = ByeBooTheme.colors.gray50
+            )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+    }
+}
+
+@Composable
+private fun MyRecord(
+    onCompletedJourneyClick: () -> Unit,
+) {
+    Column {
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+
+            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+            Text(
+                text = "나의 기록",
+                style = ByeBooTheme.typography.body1,
+                color = ByeBooTheme.colors.gray300
+            )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .clickable(onClick = onCompletedJourneyClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp)
+                )
+        ) {
+            Text(
+                text = "완료한 여정 돌아보기",
+                style = ByeBooTheme.typography.body2,
+                color = ByeBooTheme.colors.gray50
+            )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    }
+}
+
+@Composable
+private fun ByeBooUniverse(
+    onGoToByeBooUniverseClick: () -> Unit,
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+
+            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+            Text(
+                text = "보리가 궁금하다면?",
+                style = ByeBooTheme.typography.body1,
+                color = ByeBooTheme.colors.gray300
+            )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .clickable(onClick = onGoToByeBooUniverseClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp)
+                )
+        ) {
+            Text(
+                text = "Bye Boo 세계관 보러 가기",
+                style = ByeBooTheme.typography.body2,
+                color = ByeBooTheme.colors.gray50
+            )
+        }
+
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    }
+}
+
+@Composable
+private fun Question(
+    onAskingByeBooClick: () -> Unit,
+    onServiceWithByeBooClick: () -> Unit,
+) {
+    Column {
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+        Text(
+            text = "문의하기",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "바이부에 문의하기",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onAskingByeBooClick)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "바이부와 함께 서비스 만들기",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onServiceWithByeBooClick)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
+    }
+}
+
+@Composable
+private fun Alarm(
+    isAlarmEnabled: Boolean?,
+    onAlarmToggleClick: (Boolean) -> Unit,
+) {
+    Column {
+        Text(
+            text = "알림",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        MyPageNotification(
+            isEnabledAlarm = isAlarmEnabled,
+            onCheckedClick = onAlarmToggleClick
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
+    }
+}
+
+@Composable
+private fun TermAndPolicy(
+    onPrivacyPolicyClick: () -> Unit,
+    onTermsOfServiceClick: () -> Unit,
+) {
+    Column {
+        Text(
+            text = "약관 및 정책",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "개인정보 처리 방침",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onPrivacyPolicyClick)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "서비스 이용 약관",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onTermsOfServiceClick)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
+    }
+}
+
+@Composable
+private fun Account(
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit,
+) {
+    Column {
+        Text(
+            text = "계정",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "로그아웃",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onLogoutClick)
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "탈퇴",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onDeleteAccountClick)
+        )
     }
 }
