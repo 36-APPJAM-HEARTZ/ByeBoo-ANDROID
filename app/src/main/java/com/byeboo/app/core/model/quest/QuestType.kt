@@ -12,18 +12,18 @@ enum class QuestType(
     val backImg: Int
 ) {
     RECORDING(
-        "RECORDING",
-        "감정 직면",
-        "FACE_EMOTION",
-        R.drawable.img_recording_amulet_front,
-        R.drawable.img_recording_amulet_back
+        questStyle = "RECORDING",
+        journeyName = "감정 직면",
+        journeyType = "FACE_EMOTION",
+        frontImg = R.drawable.img_recording_amulet_front,
+        backImg = R.drawable.img_recording_amulet_back
     ),
     ACTIVE(
-        "ACTIVE",
-        "감정 정리",
-        "PROCESS_EMOTION",
-        R.drawable.img_active_amulet_front,
-        R.drawable.img_active_amulet_back
+        questStyle = "ACTIVE",
+        journeyName = "감정 정리",
+        journeyType = "PROCESS_EMOTION",
+        frontImg = R.drawable.img_active_amulet_front,
+        backImg = R.drawable.img_active_amulet_back
     );
 
     companion object {
