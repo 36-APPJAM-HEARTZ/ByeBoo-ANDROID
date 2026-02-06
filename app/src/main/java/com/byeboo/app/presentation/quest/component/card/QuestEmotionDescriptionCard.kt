@@ -23,16 +23,16 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 fun QuestEmotionDescriptionCard(
     questEmotionDescription: String,
     emotionType: LargeTagType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = ByeBooTheme.colors.whiteAlpha10,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = ByeBooTheme.colors.whiteAlpha10,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             EmotionChip(emotionType = emotionType, isSelected = false)
@@ -42,7 +42,7 @@ fun QuestEmotionDescriptionCard(
             Text(
                 text = questEmotionDescription,
                 style = ByeBooTheme.typography.body6,
-                color = ByeBooTheme.colors.gray300
+                color = ByeBooTheme.colors.gray300,
             )
         }
     }

@@ -11,32 +11,29 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class QuestRecordedDetailRepositoryImpl @Inject constructor(
-    private val questRecordedDetailDataSource: QuestRecordedDetailDataSource
-) : QuestRecordedDetailRepository {
+class QuestRecordedDetailRepositoryImpl
+    @Inject
+    constructor(
+        private val questRecordedDetailDataSource: QuestRecordedDetailDataSource,
+    ) : QuestRecordedDetailRepository {
+        private val cache = MutableStateFlow<Map<Long, QuestRecordedDetailModel>>(emptyMap())
 
-    private val cache = MutableStateFlow<Map<Long, QuestRecordedDetailModel>>(emptyMap())
+        override suspend fun getQuestRecordedDetail(questId: Long): Result<QuestRecordedDetailModel> =
+            runCatching {
+                val response = questRecordedDetailDataSource.getQuestRecordedDetail(questId)
+                val detail = response.data.toDomain()
 
-    override suspend fun getQuestRecordedDetail(
-        questId: Long
-    ): Result<QuestRecordedDetailModel> = runCatching {
-        val response = questRecordedDetailDataSource.getQuestRecordedDetail(questId)
-        val detail = response.data.toDomain()
+                cache.update { old ->
+                    old + (questId to detail)
+                }
 
-        cache.update { old ->
-            old + (questId to detail)
-        }
-
-        detail
-    }
-
-    override fun observeQuestRecordedDetail(
-        questId: Long
-    ): Flow<QuestRecordedDetailModel> {
-        return cache
-            .mapNotNull { it[questId] }
-            .onStart {
-                getQuestRecordedDetail(questId)
+                detail
             }
+
+        override fun observeQuestRecordedDetail(questId: Long): Flow<QuestRecordedDetailModel> =
+            cache
+                .mapNotNull { it[questId] }
+                .onStart {
+                    getQuestRecordedDetail(questId)
+                }
     }
-}

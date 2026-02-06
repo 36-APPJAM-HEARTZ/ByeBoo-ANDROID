@@ -18,11 +18,11 @@ import javax.inject.Singleton
 private const val HEARTZ_DATASTORE = "heartz_datastore"
 private const val FCM_DATASTORE = "fcm_datastore"
 private val Context.heartzDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = HEARTZ_DATASTORE
+    name = HEARTZ_DATASTORE,
 )
 
 private val Context.fcmDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = FCM_DATASTORE
+    name = FCM_DATASTORE,
 )
 
 @Module
@@ -31,12 +31,12 @@ object HeartzDataStoreModule {
     @Provides
     @Singleton
     fun provideHeartzDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): UserLocalDataSource = UserLocalDataSourceImpl(context.heartzDataStore)
 
     @Provides
     @Singleton
     fun provideFcmDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): FcmLocalDataSource = FcmLocalDataSourceImpl(context.fcmDataStore)
 }

@@ -12,17 +12,17 @@ import retrofit2.http.PUT
 interface NotificationService {
     @POST("/api/v1/notification-tokens")
     suspend fun saveFcmToken(
-        @Body request: NotificationRequestDto
+        @Body request: NotificationRequestDto,
     ): NullableBaseResponse<Unit>
 
     @PATCH("/api/v1/notification-tokens")
     suspend fun updateFcmToken(
-        @Body request: NotificationRequestDto
+        @Body request: NotificationRequestDto,
     ): NullableBaseResponse<Unit>
 
     @PUT("/api/v1/notification-tokens")
     suspend fun deleteFcmToken(
-        @Body request: NotificationRequestDto
+        @Body request: NotificationRequestDto,
     ): NullableBaseResponse<Unit>
 
     @PATCH("/api/v1/users/alarm")

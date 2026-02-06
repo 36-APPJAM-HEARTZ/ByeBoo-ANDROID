@@ -35,7 +35,7 @@ fun TermsOfServiceRoute(
     navigateToUserInfo: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: TermsOfServiceViewModel = hiltViewModel()
+    viewModel: TermsOfServiceViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -53,12 +53,12 @@ fun TermsOfServiceRoute(
 
     TermsOfServiceScreen(
         uiState = uiState,
-        paddingValues= paddingValues,
+        paddingValues = paddingValues,
         onTermsAllClicked = viewModel::onAllTermsClick,
         onCheckClick = { term -> viewModel.onTermsClick(term) },
         onTermsLinkClick = { url -> viewModel.onTermsLinkClicked(url) },
         onNextButton = viewModel::onCompleteButtonClick,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -70,36 +70,40 @@ private fun TermsOfServiceScreen(
     onCheckClick: (TermType) -> Unit,
     onTermsLinkClick: (String?) -> Unit,
     onNextButton: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Column(
-            modifier = Modifier
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp), bottom = paddingValues.calculateBottomPadding())
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(
+                        top = paddingValues.calculateTopPadding() + screenHeightDp(67.dp),
+                        bottom = paddingValues.calculateBottomPadding(),
+                    ).fillMaxSize(),
         ) {
             TermsHeader()
 
             TermsAllButton(
                 onTermsAllClick = onTermsAllClicked,
-                isChecked = uiState.isAllChecked
+                isChecked = uiState.isAllChecked,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Column(
-                modifier = Modifier.padding(horizontal = screenWidthDp(15.dp))
+                modifier = Modifier.padding(horizontal = screenWidthDp(15.dp)),
             ) {
                 TermType.entries.forEach { term ->
                     TermsCheckButton(
@@ -107,7 +111,7 @@ private fun TermsOfServiceScreen(
                         hasMoreText = term.hasMoreText,
                         isSelected = uiState.isChecked(term),
                         onCheckClick = { onCheckClick(term) },
-                        onLinkClick = { onTermsLinkClick(term.link) }
+                        onLinkClick = { onTermsLinkClick(term.link) },
                     )
                 }
             }
@@ -119,7 +123,7 @@ private fun TermsOfServiceScreen(
                 buttonText = "다음으로",
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = uiState.isAllChecked,
-                onClick = onNextButton
+                onClick = onNextButton,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -131,12 +135,12 @@ private fun TermsOfServiceScreen(
 private fun TermsHeader() {
     Column(
         modifier = Modifier.padding(vertical = screenHeightDp(20.dp)),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = "필수 약관에 동의해 주세요",
             style = ByeBooTheme.typography.head1,
-            color = ByeBooTheme.colors.gray50
+            color = ByeBooTheme.colors.gray50,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -144,7 +148,7 @@ private fun TermsHeader() {
         Text(
             text = "Bye Boo 이용을 위해 필요해요",
             style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray400
+            color = ByeBooTheme.colors.gray400,
         )
     }
 }

@@ -5,18 +5,16 @@ import com.byeboo.app.data.dto.response.offboarding.OffboardingJourneyResponseDt
 import com.byeboo.app.domain.model.offboarding.OffboardingJourneyCard
 import com.byeboo.app.domain.model.offboarding.OffboardingJourneyModel
 
-fun OffboardingJourneyResponseDto.toDomain(): OffboardingJourneyModel {
-    return OffboardingJourneyModel(
+fun OffboardingJourneyResponseDto.toDomain(): OffboardingJourneyModel =
+    OffboardingJourneyModel(
         uncompletedCount = this.uncompletedCount,
         uncompletedCards = uncompletedJourneys.map { it.toDomain() },
         completedCount = this.completedCount,
-        completedCards = completedJourneys.map { it.toDomain() }
+        completedCards = completedJourneys.map { it.toDomain() },
     )
-}
 
-fun OffboardingJourneyDto.toDomain(): OffboardingJourneyCard {
-    return OffboardingJourneyCard(
+fun OffboardingJourneyDto.toDomain(): OffboardingJourneyCard =
+    OffboardingJourneyCard(
         journey = this.journey,
-        style = this.style
+        style = this.style,
     )
-}

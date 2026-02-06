@@ -13,20 +13,33 @@ plugins {
     alias(libs.plugins.googleGmsServices)
 }
 
-val properties = Properties().apply {
-    val f = project.rootProject.file("local.properties")
-    if (f.exists()) f.inputStream().use { load(it) }
-}
+val properties =
+    Properties().apply {
+        val f = project.rootProject.file("local.properties")
+        if (f.exists()) f.inputStream().use { load(it) }
+    }
 
 android {
     namespace = "com.byeboo.app"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.byeboo.app"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
+        versionCode =
+            libs.versions.versionCode
+                .get()
+                .toInt()
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -38,7 +51,7 @@ android {
         buildConfigField(
             "String",
             "KAKAO_NATIVE_APP_KEY",
-            "\"$kakaoNativeAppKey\""
+            "\"$kakaoNativeAppKey\"",
         )
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
@@ -48,12 +61,12 @@ android {
         buildConfigField(
             "String",
             "BYEBOO_PRIVACY_POLICY",
-            properties["byeboo.privacy.policy"].toString()
+            properties["byeboo.privacy.policy"].toString(),
         )
         buildConfigField(
             "String",
             "BYEBOO_TERMS_OF_SERVICE",
-            properties["byeboo.terms.of.service"].toString()
+            properties["byeboo.terms.of.service"].toString(),
         )
     }
 
@@ -84,7 +97,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

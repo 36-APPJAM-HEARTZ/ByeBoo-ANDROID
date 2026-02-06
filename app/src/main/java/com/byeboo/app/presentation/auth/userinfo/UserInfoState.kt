@@ -9,9 +9,13 @@ data class UserInfoState(
     val nicknameValidation: NicknameValidationResult = NicknameValidationResult.Empty,
     val selectedEmotion: Feeling? = null,
     val selectedQuest: QuestStyle? = null,
-    val currentStep: Int = 0
+    val currentStep: Int = 0,
 )
+
 sealed interface UserInfoSideEffect {
     data object NavigateToLoading : UserInfoSideEffect
-    data class ShowSnackBar(val message: String) : UserInfoSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : UserInfoSideEffect
 }

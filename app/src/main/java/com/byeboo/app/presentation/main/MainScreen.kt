@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -49,9 +49,10 @@ fun MainScreen(
     val onShowSnackBar: (String) -> Unit = { message ->
         scope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
-            val job = launch {
-                snackBarHostState.showSnackbar(message)
-            }
+            val job =
+                launch {
+                    snackBarHostState.showSnackbar(message)
+                }
             delay(3000L)
             job.cancel()
         }
@@ -64,14 +65,15 @@ fun MainScreen(
             screenHeightDp(68.dp)
         }
 
-    val navOptions = navOptions {
-        popUpTo(Home) {
-            saveState = true
-            inclusive = false
+    val navOptions =
+        navOptions {
+            popUpTo(Home) {
+                saveState = true
+                inclusive = false
+            }
+            launchSingleTop = true
+            restoreState = true
         }
-        launchSingleTop = true
-        restoreState = true
-    }
 
     val moveToQuestNavigation: () -> Unit = {
         scope.launch {
@@ -117,15 +119,16 @@ fun MainScreen(
     }
 
     CompositionLocalProvider(
-        LocalSnackBarTrigger provides onShowSnackBar
+        LocalSnackBarTrigger provides onShowSnackBar,
     ) {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(
                     hostState = snackBarHostState,
-                    modifier = Modifier
-                        .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(bottom = snackBarBottomInset)
+                    modifier =
+                        Modifier
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(bottom = snackBarBottomInset),
                 ) { snackBar ->
                     CustomSnackBar(message = snackBar.visuals.message)
                 }
@@ -140,7 +143,6 @@ fun MainScreen(
 
                         if (selectedTab == MainNavTab.QUEST) {
                             moveToQuestNavigation()
-
                         } else {
                             scope.launch {
                                 isNavigating = true
@@ -151,17 +153,18 @@ fun MainScreen(
                                 }
                             }
                         }
-                    }
+                    },
                 )
             },
-            modifier = Modifier
-                .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(ByeBooTheme.colors.black),
         ) { paddingValues ->
             MainNavHost(
                 navigator = navigator,
                 paddingValues = paddingValues,
-                modifier = Modifier
+                modifier = Modifier,
             )
         }
     }

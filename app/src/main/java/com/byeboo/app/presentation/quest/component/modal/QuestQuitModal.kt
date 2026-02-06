@@ -30,25 +30,26 @@ fun QuestQuitModal(
     stayButton: () -> Unit,
     quitButton: () -> Unit,
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties = DialogProperties()
+    dialogProperties: DialogProperties = DialogProperties(),
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = dialogProperties
+        properties = dialogProperties,
     ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.gray800)
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = ByeBooTheme.colors.gray800)
+                    .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = "작성을 중단하시겠어요?",
                 style = ByeBooTheme.typography.sub3,
-                color = ByeBooTheme.colors.gray50
+                color = ByeBooTheme.colors.gray50,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -57,7 +58,7 @@ fun QuestQuitModal(
                 text = "작성하시던 내용은\n저장되지 않아요.",
                 style = ByeBooTheme.typography.body3,
                 color = ByeBooTheme.colors.gray400,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -65,7 +66,7 @@ fun QuestQuitModal(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 ByeBooButton(
                     onClick = quitButton,
@@ -73,7 +74,7 @@ fun QuestQuitModal(
                     buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.gray200,
                     buttonStrokeColor = ByeBooTheme.colors.gray400,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
@@ -84,7 +85,7 @@ fun QuestQuitModal(
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

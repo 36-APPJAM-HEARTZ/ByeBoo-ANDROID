@@ -28,12 +28,16 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 
 fun NavController.navigateToOffboardingQuestCompleted(
     questType: QuestType,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     navigate(OffboardingQuestCompleted(questType), navOptions)
 }
 
-fun NavController.navigateToOffboardingQuestReview(questId: Long, journey: QuestType, navOptions: NavOptions? = null) {
+fun NavController.navigateToOffboardingQuestReview(
+    questId: Long,
+    journey: QuestType,
+    navOptions: NavOptions? = null,
+) {
     navigate(OffboardingQuestReview(questId, journey), navOptions)
 }
 
@@ -48,14 +52,14 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToOffboardingQuestCompletedFromReview: (QuestType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<OffboardingCompletedGuide> {
         OffboardingCompletedGuideRoute(
             navigateToHome = navigateToHome,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
             navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
@@ -63,7 +67,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingNewJourneyRoute(
             navigateToQuestStart = navigateToQuestStart,
             navigateUp = navigateUp,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
@@ -71,7 +75,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingCompletedJourneyRoute(
             navigateUp = navigateUp,
             navigateToOffboardingQuestCompleted = navigateToOffboardingQuestCompleted,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
@@ -79,7 +83,7 @@ fun NavGraphBuilder.offboardingGraph(
         OffboardingQuestCompletedRoute(
             navigateUp = navigateUp,
             navigateToOffboardingQuestReview = navigateToOffboardingQuestReview,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 
@@ -88,10 +92,9 @@ fun NavGraphBuilder.offboardingGraph(
             paddingValues = paddingValues,
             navigateToOffboardingQuestCompleted = navigateToOffboardingQuestCompletedFromReview,
             navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
-            navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit
+            navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
         )
     }
-
 }
 
 @Serializable
@@ -104,7 +107,12 @@ data object OffboardingNewJourney : Route
 data object OffboardingCompletedJourney : Route
 
 @Serializable
-data class OffboardingQuestCompleted(val questType: QuestType) : Route
+data class OffboardingQuestCompleted(
+    val questType: QuestType,
+) : Route
 
 @Serializable
-data class OffboardingQuestReview(val questId: Long, val journeyType: QuestType) : Route
+data class OffboardingQuestReview(
+    val questId: Long,
+    val journeyType: QuestType,
+) : Route

@@ -8,5 +8,5 @@ data class UserJourneyResponseDto(
     @SerialName("journey")
     val journey: String,
     @SerialName("description")
-    val description: String
+    val description: String,
 )

@@ -8,6 +8,6 @@ import retrofit2.http.Query
 interface OffboardingQuestCompletedService {
     @GET("/api/v1/quests/all/completed")
     suspend fun getCompletedQuest(
-        @Query("journey") journey: String
+        @Query("journey") journey: String,
     ): BaseResponse<QuestCompletedResponseDto>
 }

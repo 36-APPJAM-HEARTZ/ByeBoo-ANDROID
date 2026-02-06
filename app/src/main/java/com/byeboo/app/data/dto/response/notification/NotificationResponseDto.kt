@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotificationResponseDto(
     @SerialName("alarmEnabled")
-    val alarmEnabled: Boolean
+    val alarmEnabled: Boolean,
 )

@@ -49,7 +49,7 @@ fun QuestTextField(
     isEnabled: Boolean = true,
     placeholder: String = "",
     isQuestion: Boolean = true,
-    onFocusChanged: ((Boolean) -> Unit)? = null
+    onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
     val currentCharCount = value.length
     val maxCharCount = if (isQuestion) 500 else 200
@@ -95,47 +95,55 @@ fun QuestTextField(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .clip(RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = textFieldBorderColor, shape = RoundedCornerShape(12.dp))
-            .background(color = ByeBooTheme.colors.whiteAlpha10)
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
-            .bringIntoViewRequester(textFieldRequester)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = textFieldBorderColor,
+                    shape = RoundedCornerShape(12.dp),
+                ).background(color = ByeBooTheme.colors.whiteAlpha10)
+                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
+                .bringIntoViewRequester(textFieldRequester),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(screenHeightDp(275.dp))
-                    .verticalScroll(scrollState)
-                    .onFocusChanged { focusStateChanged ->
-                        focusState.value = focusStateChanged.isFocused
-                        onFocusChanged?.invoke(focusStateChanged.isFocused)
-                    },
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .height(screenHeightDp(275.dp))
+                        .verticalScroll(scrollState)
+                        .onFocusChanged { focusStateChanged ->
+                            focusState.value = focusStateChanged.isFocused
+                            onFocusChanged?.invoke(focusStateChanged.isFocused)
+                        },
                 enabled = isEnabled,
-                textStyle = ByeBooTheme.typography.body3.copy(
-                    color = ByeBooTheme.colors.white
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
-                }),
+                textStyle =
+                    ByeBooTheme.typography.body3.copy(
+                        color = ByeBooTheme.colors.white,
+                    ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done,
+                    ),
+                keyboardActions =
+                    KeyboardActions(onDone = {
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }),
                 cursorBrush = SolidColor(ByeBooTheme.colors.white),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty() && !(focusState.value)) {
                         Text(
                             text = placeholder,
                             color = ByeBooTheme.colors.gray300,
-                            style = ByeBooTheme.typography.body3
+                            style = ByeBooTheme.typography.body3,
                         )
                     }
                     innerTextField()
@@ -143,25 +151,26 @@ fun QuestTextField(
                 onTextLayout = { layoutResult ->
                     lastLineBottom.value =
                         layoutResult.getLineBottom(layoutResult.lineCount - 1).toInt()
-                }
+                },
             )
 
             Text(
-                text = buildAnnotatedString {
-                    append(text = "(")
+                text =
+                    buildAnnotatedString {
+                        append(text = "(")
 
-                    append(text = currentCharCount.toString())
+                        append(text = currentCharCount.toString())
 
-                    append(text = "/")
+                        append(text = "/")
 
-                    append(text = maxCharCount.toString())
+                        append(text = maxCharCount.toString())
 
-                    append(text = ")")
-                },
+                        append(text = ")")
+                    },
                 style = ByeBooTheme.typography.body6,
                 color = textCountColor,
                 textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

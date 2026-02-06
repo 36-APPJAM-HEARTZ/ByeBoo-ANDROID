@@ -11,11 +11,18 @@ data class QuestCompletedState(
     val progressPeriod: String = "",
     val userName: String = "하츠핑",
     val questType: QuestType = QuestType.RECORDING,
-    val selectedQuest: Quest? = null
+    val selectedQuest: Quest? = null,
 )
 
 sealed interface QuestCompletedSideEffect {
     data object NavigateUp : QuestCompletedSideEffect
-    data class NavigateToOffboardingQuestReview(val questId: Long, val journey: QuestType) : QuestCompletedSideEffect
-    data class ShowSnackBar(val message: String) : QuestCompletedSideEffect
+
+    data class NavigateToOffboardingQuestReview(
+        val questId: Long,
+        val journey: QuestType,
+    ) : QuestCompletedSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestCompletedSideEffect
 }

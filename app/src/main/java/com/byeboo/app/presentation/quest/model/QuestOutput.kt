@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.quest.model
 
-import java.time.Instant
 import kotlinx.collections.immutable.ImmutableList
+import java.time.Instant
 
 data class QuestOutput(
     val questGroups: ImmutableList<QuestGroup>,
@@ -11,5 +11,5 @@ data class QuestOutput(
     val serverNow: Instant?,
     val progressPeriod: Long,
     val journeyTitle: String,
-    val questCompletedCount: Long
+    val questCompletedCount: Long,
 )

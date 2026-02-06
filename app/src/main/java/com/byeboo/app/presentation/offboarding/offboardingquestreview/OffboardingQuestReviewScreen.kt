@@ -58,7 +58,7 @@ fun OffboardingQuestReviewRoute(
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingQuestReviewViewModel = hiltViewModel()
+    viewModel: OffboardingQuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -66,9 +66,23 @@ fun OffboardingQuestReviewRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(effect.journey)
-                is OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit -> navigateToQuestRecordingEdit(effect.questId, true, true)
-                is OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit -> navigateToQuestBehaviorEdit(effect.questId, true, true, effect.imageKey)
+                is OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted ->
+                    navigateToOffboardingQuestCompleted(
+                        effect.journey,
+                    )
+                is OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit ->
+                    navigateToQuestRecordingEdit(
+                        effect.questId,
+                        true,
+                        true,
+                    )
+                is OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit ->
+                    navigateToQuestBehaviorEdit(
+                        effect.questId,
+                        true,
+                        true,
+                        effect.imageKey,
+                    )
                 is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -83,7 +97,7 @@ fun OffboardingQuestReviewRoute(
         paddingValues = paddingValues,
         onEditClick = { viewModel.onEditClicked(uiState.questType) },
         onCancelClick = viewModel::onCancelClicked,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -93,35 +107,37 @@ private fun OffboardingQuestReviewScreen(
     paddingValues: PaddingValues,
     onEditClick: () -> Unit,
     onCancelClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                 contentDescription = "edit content",
                 tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onEditClick)
+                modifier = Modifier.clickable(onClick = onEditClick),
             )
 
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                 contentDescription = "cancel button",
                 tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCancelClick)
+                modifier = Modifier.clickable(onClick = onCancelClick),
             )
         }
 
@@ -129,19 +145,20 @@ private fun OffboardingQuestReviewScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                top = screenHeightDp(10.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(28.dp)
-            )
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    top = screenHeightDp(10.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(28.dp),
+                ),
         ) {
             item {
                 QuestTitle(
                     stepNumber = uiState.stepNumber,
                     questNumber = uiState.questNumber,
                     createdAt = uiState.createdAt,
-                    questQuestion = uiState.question
+                    questQuestion = uiState.question,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
@@ -152,19 +169,19 @@ private fun OffboardingQuestReviewScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer
+                        contentText = uiState.answer,
                     )
                 }
             } else {
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
                             contentDescription = "title icon",
-                            tint = Color.Unspecified
+                            tint = Color.Unspecified,
                         )
 
                         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -172,38 +189,41 @@ private fun OffboardingQuestReviewScreen(
                         Text(
                             text = "이렇게 완료했어요",
                             color = ByeBooTheme.colors.gray200,
-                            style = ByeBooTheme.typography.body2
+                            style = ByeBooTheme.typography.body2,
                         )
                     }
 
                     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(312 / 312f)
-                            .clip(RoundedCornerShape(12.dp))
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(312 / 312f)
+                                .clip(RoundedCornerShape(12.dp)),
                     ) {
                         SubcomposeAsyncImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f),
-                            model = ImageRequest
-                                .Builder(LocalContext.current)
-                                .data(uiState.imageUrl)
-                                .memoryCachePolicy(CachePolicy.DISABLED)
-                                .diskCachePolicy(CachePolicy.DISABLED)
-                                .build(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(1f),
+                            model =
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(uiState.imageUrl)
+                                    .memoryCachePolicy(CachePolicy.DISABLED)
+                                    .diskCachePolicy(CachePolicy.DISABLED)
+                                    .build(),
                             contentDescription = "uploaded image",
                             contentScale = ContentScale.Crop,
                             loading = {
                                 Box(
                                     modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
+                                    contentAlignment = Alignment.Center,
                                 ) {
                                     CircularProgressIndicator()
                                 }
-                            }
+                            },
                         )
                     }
                     if (uiState.answer.isNotBlank()) {
@@ -218,7 +238,7 @@ private fun OffboardingQuestReviewScreen(
 
                 QuestEmotionDescriptionContent(
                     questEmotionDescription = uiState.emotionDescription,
-                    emotionType = uiState.selectedEmotion
+                    emotionType = uiState.selectedEmotion,
                 )
             }
         }
@@ -229,18 +249,18 @@ private fun OffboardingQuestReviewScreen(
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
     emotionType: LargeTagType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
                 contentDescription = "title icon",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -248,7 +268,7 @@ private fun QuestEmotionDescriptionContent(
             Text(
                 text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
                 color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2
+                style = ByeBooTheme.typography.body2,
             )
         }
 
@@ -256,7 +276,7 @@ private fun QuestEmotionDescriptionContent(
 
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
-            emotionType = emotionType
+            emotionType = emotionType,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))

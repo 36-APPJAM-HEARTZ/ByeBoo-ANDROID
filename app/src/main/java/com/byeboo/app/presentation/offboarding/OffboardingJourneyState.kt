@@ -8,7 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 data class OffboardingJourneyState(
-    val journeyCards: ImmutableList<JourneyCard> = persistentListOf()
+    val journeyCards: ImmutableList<JourneyCard> = persistentListOf(),
 ) {
     val uncompletedCards: ImmutableList<JourneyCard>
         get() = journeyCards.filter { it.status == JourneyStatus.UNCOMPLETED }.toImmutableList()
@@ -20,6 +20,12 @@ data class OffboardingJourneyState(
 
 sealed interface OffboardingJourneySideEffect {
     data object NavigateUp : OffboardingJourneySideEffect
-    data class NavigateToOffboardingQuestCompleted(val journey: QuestType) : OffboardingJourneySideEffect
-    data class ShowSnackBar(val message: String) : OffboardingJourneySideEffect
+
+    data class NavigateToOffboardingQuestCompleted(
+        val journey: QuestType,
+    ) : OffboardingJourneySideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : OffboardingJourneySideEffect
 }

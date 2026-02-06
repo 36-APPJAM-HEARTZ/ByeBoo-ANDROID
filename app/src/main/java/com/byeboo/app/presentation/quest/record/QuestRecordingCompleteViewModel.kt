@@ -21,68 +21,77 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestRecordingCompleteViewModel @Inject constructor(
-    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
-    savedStateHandle: SavedStateHandle,
-    private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId)
+class QuestRecordingCompleteViewModel
+    @Inject
+    constructor(
+        private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+        savedStateHandle: SavedStateHandle,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val questIdArg: Long =
+            checkNotNull(
+                savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId,
+            )
 
-    private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
-    val uiState: StateFlow<QuestRecordingCompleteState>
-        get() = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
+        val uiState: StateFlow<QuestRecordingCompleteState>
+            get() = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestRecordingCompleteSideEffect>()
-    val sideEffect: SharedFlow<QuestRecordingCompleteSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<QuestRecordingCompleteSideEffect>()
+        val sideEffect: SharedFlow<QuestRecordingCompleteSideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        loadQuestRecordedDetail()
-    }
+        init {
+            loadQuestRecordedDetail()
+        }
 
-    private fun loadQuestRecordedDetail() {
-        viewModelScope.launch {
-            val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
-            result.onSuccess { detail ->
-                _uiState.update {
-                    it.copy(
-                        stepNumber = detail.stepNumber,
-                        questNumber = detail.questNumber,
-                        createdAt = detail.createdAt,
-                        question = detail.question,
-                        answer = detail.questAnswer,
-                        selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
-                        emotionDescription = detail.emotionDescription
+        private fun loadQuestRecordedDetail() {
+            viewModelScope.launch {
+                val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
+                result
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                stepNumber = detail.stepNumber,
+                                questNumber = detail.questNumber,
+                                createdAt = detail.createdAt,
+                                question = detail.question,
+                                answer = detail.questAnswer,
+                                selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
+                                emotionDescription = detail.emotionDescription,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestRecordingCompleteSideEffect.ShowSnackBar(
+                                "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                            ),
+                        )
+                    }
+            }
+        }
+
+        fun onCloseClicked() {
+            if (uiState.value.questNumber == 30L) {
+                viewModelScope.launch {
+                    mixpanelUtil.trackEvent(
+                        eventName = "journey_complete_pageview",
+                        properties =
+                            mapOf(
+                                "journey_end_at" to getFormattedDate(),
+                                "journey_type" to "감정 직면",
+                            ),
+                    )
+                    _sideEffect.emit(
+                        QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide,
                     )
                 }
-            }.onFailure {
-                _sideEffect.emit(
-                    QuestRecordingCompleteSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
+            } else {
+                viewModelScope.launch {
+                    _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+                    if (uiState.value.questNumber == 1L) {
+                        _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
+                    }
+                }
             }
         }
     }
-
-    fun onCloseClicked() {
-        if (uiState.value.questNumber == 30L) {
-            viewModelScope.launch {
-                mixpanelUtil.trackEvent(
-                    eventName = "journey_complete_pageview",
-                    properties = mapOf(
-                        "journey_end_at" to getFormattedDate(),
-                        "journey_type" to "감정 직면"
-                    )
-                )
-                _sideEffect.emit(
-                    QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide
-                )
-            }
-        } else {
-            viewModelScope.launch {
-                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
-                if (uiState.value.questNumber == 1L) {
-                    _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
-                }
-            }
-        }
-    }
-}

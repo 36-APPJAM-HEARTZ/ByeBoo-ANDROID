@@ -12,12 +12,12 @@ interface QuestRecordingService {
     @POST("/api/v1/quests/{questId}/recording")
     suspend fun postRecording(
         @Path("questId") questId: Long,
-        @Body request: QuestRecordingRequestDto
+        @Body request: QuestRecordingRequestDto,
     ): NullableBaseResponse<Unit>
 
     @PATCH("/api/v1/quests/{questId}/recording")
     suspend fun patchRecording(
         @Path("questId") questId: Long,
-        @Body request: QuestRecordingEditRequestDto
+        @Body request: QuestRecordingEditRequestDto,
     ): NullableBaseResponse<Unit>
 }

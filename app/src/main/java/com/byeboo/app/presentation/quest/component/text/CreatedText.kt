@@ -9,13 +9,14 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun CreatedText(createdAt: String) {
-    val date = remember(createdAt) {
-        LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
-    }
+    val date =
+        remember(createdAt) {
+            LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+        }
 
     Text(
         text = "$date",
         style = ByeBooTheme.typography.body6,
-        color = ByeBooTheme.colors.gray500
+        color = ByeBooTheme.colors.gray500,
     )
 }

@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class QuestGroup(
     val stepNumber: Long,
     val stepTitle: String,
-    val quests: ImmutableList<Quest>
+    val quests: ImmutableList<Quest>,
 )
 
 data class Quest(
@@ -14,5 +14,5 @@ data class Quest(
     val questNumber: Long = 0,
     val questQuestion: String = "",
     val state: QuestState = QuestState.Available,
-    val type: QuestType = QuestType.RECORDING
+    val type: QuestType = QuestType.RECORDING,
 )

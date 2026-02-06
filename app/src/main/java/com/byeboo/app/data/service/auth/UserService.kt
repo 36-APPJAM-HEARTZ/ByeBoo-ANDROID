@@ -13,7 +13,7 @@ import retrofit2.http.PATCH
 interface UserService {
     @PATCH("/api/v1/users")
     suspend fun updateUserInfo(
-        @Body request: UserInfoRequestDto
+        @Body request: UserInfoRequestDto,
     ): BaseResponse<UserInfoResponseDto>
 
     @GET("/api/v1/users/journey")
@@ -21,6 +21,6 @@ interface UserService {
 
     @PATCH("/api/v1/users/name")
     suspend fun updateUserNickname(
-        @Body request: UserNicknameRequestDto
+        @Body request: UserNicknameRequestDto,
     ): BaseResponse<UserNicknameChangeResponseDto>
 }

@@ -18,38 +18,43 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val questStateRepository: QuestStateRepository,
-    private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
-    val journeyStatus: StateFlow<JourneyStatusType> = questStateRepository.getUserJourneyStatus()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
+class MainViewModel
+    @Inject
+    constructor(
+        private val questStateRepository: QuestStateRepository,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        val journeyStatus: StateFlow<JourneyStatusType> =
+            questStateRepository
+                .getUserJourneyStatus()
+                .stateIn(viewModelScope, SharingStarted.Eagerly, JourneyStatusType.UNKNOWN)
 
-    private val _questHomeNavigation = MutableStateFlow<Boolean>(false)
-    val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
+        private val _questHomeNavigation = MutableStateFlow<Boolean>(false)
+        val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
 
-    fun trackJourneyStart() {
-        viewModelScope.launch {
-            val journey = questStateRepository.getUserJourney() ?: "추적 실패"
+        fun trackJourneyStart() {
+            viewModelScope.launch {
+                val journey = questStateRepository.getUserJourney() ?: "추적 실패"
 
-            mixpanelUtil.trackEvent(
-                eventName = "journey_start_pageview",
-                properties = mapOf(
-                    "journey_type" to journey
+                mixpanelUtil.trackEvent(
+                    eventName = "journey_start_pageview",
+                    properties =
+                        mapOf(
+                            "journey_type" to journey,
+                        ),
                 )
-            )
+            }
+        }
+
+        fun handleIntent(intent: Intent) {
+            val destination = intent.getStringExtra(DESTINATION)
+
+            if (destination == QUEST_HOME) {
+                _questHomeNavigation.value = true
+            }
+        }
+
+        fun clearNavigateQuestHome() {
+            _questHomeNavigation.value = false
         }
     }
-
-    fun handleIntent(intent: Intent) {
-        val destination = intent.getStringExtra(DESTINATION)
-
-        if (destination == QUEST_HOME) {
-            _questHomeNavigation.value = true
-        }
-    }
-
-    fun clearNavigateQuestHome() {
-        _questHomeNavigation.value = false
-    }
-}

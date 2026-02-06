@@ -14,32 +14,27 @@ data class QuestInProgressResponseDto(
     @SerialName("currentTime")
     val currentTime: String? = null,
     @SerialName("steps")
-    val steps: List<QuestInProgressStepResponseDto>
+    val steps: List<QuestInProgressStepResponseDto>,
 )
 
 @Serializable
 data class QuestInProgressStepResponseDto(
     @SerialName("stepNumber")
     val stepNumber: Long,
-
     @SerialName("step")
     val step: String,
-
     @SerialName("quests")
-    val quests: List<QuestInProgressQuestResponseDto>
+    val quests: List<QuestInProgressQuestResponseDto>,
 )
 
 @Serializable
 data class QuestInProgressQuestResponseDto(
     @SerialName("questId")
     val questId: Long,
-
     @SerialName("question")
     val question: String,
-
     @SerialName("questStyle")
     val questStyle: String,
-
     @SerialName("questNumber")
-    val questNumber: Long
+    val questNumber: Long,
 )

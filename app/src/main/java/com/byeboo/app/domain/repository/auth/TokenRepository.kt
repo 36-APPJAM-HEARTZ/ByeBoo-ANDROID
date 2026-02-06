@@ -5,12 +5,20 @@ import kotlinx.coroutines.flow.Flow
 
 interface TokenRepository {
     fun getAccessToken(): Flow<String>
+
     fun getRefreshToken(): Flow<String>
+
     suspend fun saveTokens(tokens: TokenEntity)
+
     suspend fun clearTokens()
+
     suspend fun initCachedAccessToken()
+
     fun updateCachedAccessToken(token: String)
+
     fun getCachedAccessToken(): String
+
     suspend fun setLoginSplash(show: Boolean)
+
     suspend fun restartSplash(): Boolean
 }

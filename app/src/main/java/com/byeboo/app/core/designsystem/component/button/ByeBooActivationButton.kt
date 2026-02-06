@@ -24,25 +24,26 @@ fun ByeBooActivationButton(
     buttonDisableTextColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isEnabled: Boolean = false
+    isEnabled: Boolean = false,
 ) {
     val buttonBackgroundColor = if (isEnabled) ByeBooTheme.colors.primary300 else buttonDisableColor
     val buttonTextColor = if (isEnabled) ByeBooTheme.colors.white else buttonDisableTextColor
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = buttonBackgroundColor)
-            .noRippleClickable(onClick = { if (isEnabled) onClick() })
-            .padding(vertical = screenHeightDp(16.dp)),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = buttonBackgroundColor)
+                .noRippleClickable(onClick = { if (isEnabled) onClick() })
+                .padding(vertical = screenHeightDp(16.dp)),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = buttonText,
             style = ByeBooTheme.typography.body3,
-            color = buttonTextColor
+            color = buttonTextColor,
         )
     }
 }

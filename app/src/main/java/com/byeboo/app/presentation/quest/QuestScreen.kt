@@ -43,7 +43,7 @@ fun QuestRoute(
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     paddingValues: PaddingValues,
-    viewModel: QuestViewModel = hiltViewModel()
+    viewModel: QuestViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
@@ -51,9 +51,10 @@ fun QuestRoute(
 
     LaunchedEffect(uiState.currentStepIndex) {
         if (uiState.questGroups.isNotEmpty() && uiState.currentStepIndex >= 0) {
-            val scrollIndex = uiState.questGroups
-                .take(uiState.currentStepIndex)
-                .sumOf { 1 + (it.quests.size + 2) / 3 }
+            val scrollIndex =
+                uiState.questGroups
+                    .take(uiState.currentStepIndex)
+                    .sumOf { 1 + (it.quests.size + 2) / 3 }
             listState.animateScrollToItem(index = scrollIndex)
         }
     }
@@ -61,9 +62,19 @@ fun QuestRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is QuestSideEffect.NavigateToQuestTip -> navigateToQuestTip(effect.questId, effect.questType)
-                is QuestSideEffect.NavigateToQuestRecording -> navigateToQuestRecording(effect.questId)
-                is QuestSideEffect.NavigateToQuestBehavior -> navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestTip ->
+                    navigateToQuestTip(
+                        effect.questId,
+                        effect.questType,
+                    )
+                is QuestSideEffect.NavigateToQuestRecording ->
+                    navigateToQuestRecording(
+                        effect.questId,
+                    )
+                is QuestSideEffect.NavigateToQuestBehavior ->
+                    navigateToQuestBehavior(
+                        effect.questId,
+                    )
                 is QuestSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
                 is QuestSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -77,7 +88,7 @@ fun QuestRoute(
         onQuestClick = viewModel::onQuestClick,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
-        onQuestStart = viewModel::onQuestStart
+        onQuestStart = viewModel::onQuestStart,
     )
 }
 
@@ -89,7 +100,7 @@ private fun QuestScreen(
     onQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
     onTipClick: () -> Unit,
-    onQuestStart: () -> Unit
+    onQuestStart: () -> Unit,
 ) {
     if (uiState.showQuitModal) {
         QuestModal(
@@ -98,29 +109,34 @@ private fun QuestScreen(
             questQuestion = uiState.selectedQuest?.questQuestion.orEmpty(),
             navigateToTip = onTipClick,
             progressButton = onQuestStart,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = screenWidthDp(24.dp))) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
+        ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
                 text = uiState.progressPeriod.toString(),
-                textStyle = ByeBooTheme.typography.cap1
+                textStyle = ByeBooTheme.typography.cap1,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -130,21 +146,23 @@ private fun QuestScreen(
                 title = "${uiState.journeyTitle} 여정",
                 guideText = "을 진행 중이에요",
                 contentText = "오늘도 한 걸음 나아가 볼까요?",
-                bottom = 18.dp
+                bottom = 18.dp,
             )
         }
 
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(37.dp)
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(ByeBooTheme.colors.black)
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(37.dp),
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(ByeBooTheme.colors.black),
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
                 item("header_$stepIndex") {
@@ -152,14 +170,14 @@ private fun QuestScreen(
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = ByeBooTheme.colors.whiteAlpha10,
-                            modifier = Modifier.padding(vertical = screenHeightDp(8.dp))
+                            modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                         )
 
                         Spacer(modifier = Modifier.padding(top = screenHeightDp(24.dp)))
 
                         QuestStepTitle(
                             stepNumber = (stepIndex + 1).toLong(),
-                            stepTitle = group.stepTitle
+                            stepTitle = group.stepTitle,
                         )
 
                         Spacer(modifier = Modifier.padding(top = screenHeightDp(8.dp)))
@@ -171,7 +189,7 @@ private fun QuestScreen(
                     item("quest_row_${stepIndex}_$chunkIndex") {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp))
+                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
                         ) {
                             questChunk.forEach { quest ->
                                 QuestBox(
@@ -179,7 +197,7 @@ private fun QuestScreen(
                                     questId = quest.questId,
                                     questNumber = quest.questNumber,
                                     state = quest.state,
-                                    onQuestClick = { onQuestClick(quest.questId) }
+                                    onQuestClick = { onQuestClick(quest.questId) },
                                 )
                             }
 

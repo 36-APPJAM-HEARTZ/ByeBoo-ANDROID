@@ -56,7 +56,7 @@ fun UserInfoRoute(
     navigateToLoading: () -> Unit,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
-    viewModel: UserInfoViewModel = hiltViewModel()
+    viewModel: UserInfoViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -116,7 +116,7 @@ private fun UserInfoScreen(
         pagerState.currentPage,
         uiState.nicknameValidation,
         uiState.selectedEmotion,
-        uiState.selectedQuest
+        uiState.selectedQuest,
     ) {
         derivedStateOf {
             when (pagerState.currentPage) {
@@ -140,41 +140,45 @@ private fun UserInfoScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .addFocusCleaner(focusManager)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .addFocusCleaner(focusManager),
     ) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp))
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp)),
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(screenHeightDp(24.dp))
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(screenHeightDp(24.dp)),
             ) {
                 if (pagerState.currentPage != 0) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                         contentDescription = "뒤로가기",
                         tint = ByeBooTheme.colors.white,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .noRippleClickable {
-                                coroutineScope.launch {
-                                    onUpdatePreviousPage(pagerState.currentPage)
-                                    pagerState.scrollToPage(pagerState.currentPage - 1)
-                                }
-                            }
+                        modifier =
+                            Modifier
+                                .size(24.dp)
+                                .noRippleClickable {
+                                    coroutineScope.launch {
+                                        onUpdatePreviousPage(pagerState.currentPage)
+                                        pagerState.scrollToPage(pagerState.currentPage - 1)
+                                    }
+                                },
                     )
                 }
             }
@@ -185,32 +189,38 @@ private fun UserInfoScreen(
 
             HorizontalPager(
                 state = pagerState,
-                userScrollEnabled = false
+                userScrollEnabled = false,
             ) { page ->
                 when (page) {
-                    0 -> UserInfoNicknameScreen(
-                        nickname = uiState.nickname,
-                        validationState = uiState.nicknameValidation.toValidationState(),
-                        onTextChange = onNicknameChange
-                    )
+                    0 ->
+                        UserInfoNicknameScreen(
+                            nickname = uiState.nickname,
+                            validationState = uiState.nicknameValidation.toValidationState(),
+                            onTextChange = onNicknameChange,
+                        )
 
-                    1 -> UserInfoEmotionScreen(
-                        selectedEmotion = uiState.selectedEmotion,
-                        onEmotionSelect = onEmotionSelect
-                    )
+                    1 ->
+                        UserInfoEmotionScreen(
+                            selectedEmotion = uiState.selectedEmotion,
+                            onEmotionSelect = onEmotionSelect,
+                        )
 
-                    2 -> UserInfoQuestScreen(
-                        selectedQuest = uiState.selectedQuest,
-                        onQuestSelect = onQuestSelect
-                    )
+                    2 ->
+                        UserInfoQuestScreen(
+                            selectedQuest = uiState.selectedQuest,
+                            onQuestSelect = onQuestSelect,
+                        )
                 }
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             ByeBooActivationButton(
-                modifier = Modifier
-                    .padding(bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)),
+                modifier =
+                    Modifier
+                        .padding(
+                            bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp),
+                        ),
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,
@@ -244,7 +254,7 @@ private fun UserInfoScreen(
                             onSubmit()
                         }
                     }
-                }
+                },
             )
         }
     }

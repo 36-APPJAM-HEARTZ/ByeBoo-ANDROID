@@ -12,11 +12,26 @@ import com.byeboo.app.presentation.quest.record.QuestRecordingRoute
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecording
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingComplete
 
-fun NavController.navigateToQuestRecording(questId: Long, isEditMode: Boolean = false, fromOffboarding: Boolean = false, navOptions: NavOptions? = null) {
-    navigate(QuestRecording(questId = questId, isEditMode = isEditMode, fromOffboarding = fromOffboarding), navOptions)
+fun NavController.navigateToQuestRecording(
+    questId: Long,
+    isEditMode: Boolean = false,
+    fromOffboarding: Boolean = false,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        QuestRecording(
+            questId = questId,
+            isEditMode = isEditMode,
+            fromOffboarding = fromOffboarding,
+        ),
+        navOptions,
+    )
 }
 
-fun NavController.navigateToQuestRecordingComplete(questId: Long, navOptions: NavOptions? = null) {
+fun NavController.navigateToQuestRecordingComplete(
+    questId: Long,
+    navOptions: NavOptions? = null,
+) {
     navigate(QuestRecordingComplete(questId), navOptions)
 }
 
@@ -27,7 +42,7 @@ fun NavGraphBuilder.questRecordGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     routeNavigation<QuestRecord, QuestRecording> {
         composable<QuestRecording> {
@@ -37,7 +52,7 @@ fun NavGraphBuilder.questRecordGraph(
                 navigateToQuestRecordingComplete = navigateToQuestRecordingComplete,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateUp = navigateUp,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
@@ -45,7 +60,7 @@ fun NavGraphBuilder.questRecordGraph(
             QuestRecordingCompleteRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
     }

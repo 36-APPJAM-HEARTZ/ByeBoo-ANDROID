@@ -59,7 +59,7 @@ ksp = "2.0.21-1.0.25"
 # Lottie
 lottie = "6.7.0"
 
-ktlint = "13.1.0"
+ktlint = "14.0.1"
 
 # Mixpanel
 mixpanel = "8.2.4"

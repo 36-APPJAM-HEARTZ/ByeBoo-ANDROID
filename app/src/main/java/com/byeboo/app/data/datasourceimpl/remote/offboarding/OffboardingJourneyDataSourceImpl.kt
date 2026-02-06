@@ -6,10 +6,11 @@ import com.byeboo.app.data.dto.response.offboarding.OffboardingJourneyResponseDt
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import javax.inject.Inject
 
-class OffboardingJourneyDataSourceImpl @Inject constructor(
-    private val offboardingJourneyService: OffboardingJourneyService
-) : OffboardingJourneyDataSource {
-    override suspend fun getOffboardingJourney(): BaseResponse<OffboardingJourneyResponseDto> {
-        return offboardingJourneyService.getOffboardingJourney()
+class OffboardingJourneyDataSourceImpl
+    @Inject
+    constructor(
+        private val offboardingJourneyService: OffboardingJourneyService,
+    ) : OffboardingJourneyDataSource {
+        override suspend fun getOffboardingJourney(): BaseResponse<OffboardingJourneyResponseDto> =
+            offboardingJourneyService.getOffboardingJourney()
     }
-}

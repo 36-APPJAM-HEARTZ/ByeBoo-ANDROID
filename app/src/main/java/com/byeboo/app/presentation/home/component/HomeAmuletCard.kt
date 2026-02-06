@@ -31,12 +31,12 @@ fun HomeAmuletCard(
     description: String,
     isFlipped: Boolean,
     onFlip: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else 0f,
         animationSpec = tween(durationMillis = 600),
-        label = "rotation"
+        label = "rotation",
     )
 
     val showBack = rotation >= 90f
@@ -44,26 +44,27 @@ fun HomeAmuletCard(
     val cameraDistance = remember { 12f * density }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(290 / 419f)
-            .graphicsLayer {
-                rotationY = rotation
-                this.cameraDistance = cameraDistance
-            }
-            .clickable(enabled = !isFlipped) { onFlip() }
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(290 / 419f)
+                .graphicsLayer {
+                    rotationY = rotation
+                    this.cameraDistance = cameraDistance
+                }.clickable(enabled = !isFlipped) { onFlip() },
     ) {
         if (showBack) {
             Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .graphicsLayer { rotationY = 180f }
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .graphicsLayer { rotationY = 180f },
             ) {
                 Image(
                     painter = painterResource(backImageRes),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
 
                 Text(
@@ -71,21 +72,22 @@ fun HomeAmuletCard(
                     style = ByeBooTheme.typography.body6,
                     color = ByeBooTheme.colors.secondary50,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(37.dp))
-                        .padding(top = screenHeightDp(131.dp))
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(37.dp))
+                            .padding(top = screenHeightDp(131.dp)),
                 )
             }
         } else {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 Image(
                     painter = painterResource(frontImageRes),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
             }
         }

@@ -19,36 +19,37 @@ fun MiddleTag(
     middleTagType: MiddleTagType,
     text: String,
     textStyle: TextStyle,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val tagText = if (middleTagType.dynamicContent) {
-        stringResource(middleTagType.titleResId, text)
-    } else {
-        stringResource(middleTagType.titleResId)
-    }
+    val tagText =
+        if (middleTagType.dynamicContent) {
+            stringResource(middleTagType.titleResId, text)
+        } else {
+            stringResource(middleTagType.titleResId)
+        }
 
     Box(
-        modifier = modifier
-            .background(
-                color = middleTagColor(middleTagType.backgroundColor),
-                shape = RoundedCornerShape(middleTagType.roundedCorner)
-            )
-            .padding(
-                horizontal = middleTagType.horizontalPadding,
-                vertical = middleTagType.verticalPadding
-            )
+        modifier =
+            modifier
+                .background(
+                    color = middleTagColor(middleTagType.backgroundColor),
+                    shape = RoundedCornerShape(middleTagType.roundedCorner),
+                ).padding(
+                    horizontal = middleTagType.horizontalPadding,
+                    vertical = middleTagType.verticalPadding,
+                ),
     ) {
         Text(
             text = tagText,
             color = middleTagColor(middleTagType.textColor),
-            style = textStyle
+            style = textStyle,
         )
     }
 }
 
 @Composable
-fun middleTagColor(colorType: TagColorType): Color {
-    return when (colorType) {
+fun middleTagColor(colorType: TagColorType): Color =
+    when (colorType) {
         TagColorType.WHITE_ALPHA_10 -> ByeBooTheme.colors.whiteAlpha10
         TagColorType.SECONDARY_300_ALPHA_10 -> ByeBooTheme.colors.secondary300Alpha10
         TagColorType.GRAY_300 -> ByeBooTheme.colors.gray300
@@ -56,4 +57,3 @@ fun middleTagColor(colorType: TagColorType): Color {
         TagColorType.PRIMARY_50 -> ByeBooTheme.colors.primary50
         TagColorType.PRIMARY_300 -> ByeBooTheme.colors.primary300
     }
-}

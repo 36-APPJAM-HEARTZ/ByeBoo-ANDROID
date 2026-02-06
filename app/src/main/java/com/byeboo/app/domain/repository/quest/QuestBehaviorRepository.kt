@@ -6,16 +6,20 @@ import com.byeboo.app.domain.model.quest.SignedUrlRequestModel
 
 interface QuestBehaviorRepository {
     suspend fun requestQuestSignedUrl(request: SignedUrlRequestModel): Result<String>
+
     suspend fun uploadImageToSignedUrl(
         signUrl: String,
         imageBytes: ByteArray,
-        contentType: String
+        contentType: String,
     ): Result<Unit>
 
     suspend fun uploadQuestBehaviorAnswer(
         questId: Long,
-        request: BehaviorAnswerRequestModel
+        request: BehaviorAnswerRequestModel,
     ): Result<Unit>
 
-    suspend fun updateQuestBehavior(questId: Long, request: QuestBehaviorEditModel): Result<Unit>
+    suspend fun updateQuestBehavior(
+        questId: Long,
+        request: QuestBehaviorEditModel,
+    ): Result<Unit>
 }

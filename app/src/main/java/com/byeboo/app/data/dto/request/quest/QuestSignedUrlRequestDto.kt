@@ -8,5 +8,5 @@ data class QuestSignedUrlRequestDto(
     @SerialName("contentType")
     val contentType: String,
     @SerialName("imageKey")
-    val imageKey: String
+    val imageKey: String,
 )

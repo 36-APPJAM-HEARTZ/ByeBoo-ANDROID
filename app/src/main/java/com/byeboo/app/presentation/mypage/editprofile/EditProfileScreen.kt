@@ -46,7 +46,7 @@ import kotlinx.coroutines.delay
 fun EditProfileRoute(
     navigateToMyPage: () -> Unit,
     paddingValues: PaddingValues,
-    viewModel: EditProfileViewModel = hiltViewModel()
+    viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
@@ -75,7 +75,7 @@ fun EditProfileRoute(
         onNicknameChange = viewModel::updateNickname,
         onClearClick = viewModel::clearNickname,
         focusRequester = focusRequester,
-        onCompleteClick = { viewModel.finishEditProfile(it) }
+        onCompleteClick = { viewModel.finishEditProfile(it) },
     )
 }
 
@@ -88,7 +88,7 @@ private fun EditProfileScreen(
     onClearClick: () -> Unit,
     focusRequester: FocusRequester,
     onCompleteClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val isNicknameValid = uiState.nicknameValidation == NicknameValidationResult.Valid
@@ -96,26 +96,32 @@ private fun EditProfileScreen(
     val isFocused = remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = screenHeightDp(paddingValues.calculateBottomPadding() + screenHeightDp(10.dp))
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom =
+                        screenHeightDp(
+                            paddingValues.calculateBottomPadding() + screenHeightDp(10.dp),
+                        ),
+                ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = screenHeightDp(16.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = screenHeightDp(16.dp)),
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                 contentDescription = null,
                 tint = ByeBooTheme.colors.gray50,
-                modifier = Modifier
-                    .noRippleClickable(onClick = onBackClick)
+                modifier =
+                    Modifier
+                        .noRippleClickable(onClick = onBackClick),
             )
 
             Text(
@@ -123,7 +129,7 @@ private fun EditProfileScreen(
                 style = ByeBooTheme.typography.sub1,
                 color = ByeBooTheme.colors.white,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
 
@@ -132,7 +138,7 @@ private fun EditProfileScreen(
         Text(
             text = "닉네임",
             style = ByeBooTheme.typography.body1,
-            color = ByeBooTheme.colors.gray300
+            color = ByeBooTheme.colors.gray300,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -143,17 +149,18 @@ private fun EditProfileScreen(
             onValueChange = onNicknameChange,
             onClearClick = onClearClick,
             showValidMessage = showValidMessage,
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .onPreInterceptKeyBeforeSoftKeyboard { event ->
-                    if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
-                        focusManager.clearFocus(force = true)
-                        isFocused.value = false
-                        true
-                    } else {
-                        false
-                    }
-                }
+            modifier =
+                Modifier
+                    .focusRequester(focusRequester)
+                    .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                        if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                            focusManager.clearFocus(force = true)
+                            isFocused.value = false
+                            true
+                        } else {
+                            false
+                        }
+                    },
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -163,7 +170,7 @@ private fun EditProfileScreen(
             buttonText = "완료",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             isEnabled = isNicknameValid,
-            onClick = { onCompleteClick(uiState.nickname) }
+            onClick = { onCompleteClick(uiState.nickname) },
         )
     }
 }

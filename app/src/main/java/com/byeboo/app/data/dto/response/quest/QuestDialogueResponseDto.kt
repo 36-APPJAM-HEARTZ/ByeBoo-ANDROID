@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestDialogueResponseDto(
     @SerialName("dialogue")
-    val dialogue: String
+    val dialogue: String,
 )

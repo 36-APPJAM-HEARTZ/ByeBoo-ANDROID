@@ -38,12 +38,14 @@ import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 
 class MainNavigator(
-    val navController: NavHostController
+    val navController: NavHostController,
 ) {
     private val currentDestination: NavDestination?
         @Composable get() =
             navController
-                .currentBackStackEntryAsState().value?.destination
+                .currentBackStackEntryAsState()
+                .value
+                ?.destination
 
     val startDestination = Splash
 
@@ -84,9 +86,7 @@ class MainNavigator(
         }
     }
 
-    fun navigateToOffboardingQuestCompletedFromReview(
-        questType: QuestType
-    ) {
+    fun navigateToOffboardingQuestCompletedFromReview(questType: QuestType) {
         navController.navigate(OffboardingQuestCompleted(questType)) {
             popUpTo(OffboardingQuestCompleted(questType)) {
                 inclusive = true
@@ -130,7 +130,10 @@ class MainNavigator(
         navController.navigateToUserInfo(navOptions)
     }
 
-    fun navigateToQuestStart(questType: QuestType? = null, navOptions: NavOptions) {
+    fun navigateToQuestStart(
+        questType: QuestType? = null,
+        navOptions: NavOptions,
+    ) {
         navController.navigateToQuestStart(questType = questType, navOptions = navOptions)
     }
 
@@ -138,11 +141,15 @@ class MainNavigator(
         navController.navigate(route = Quest, navOptions = options)
     }
 
-    fun navigateToQuestTip(questId: Long, questType: QuestType, navOptions: NavOptions? = null) {
+    fun navigateToQuestTip(
+        questId: Long,
+        questType: QuestType,
+        navOptions: NavOptions? = null,
+    ) {
         navController.navigateToQuestTip(
             questId = questId,
             questType = questType,
-            navOptions = navOptions
+            navOptions = navOptions,
         )
     }
 
@@ -150,29 +157,50 @@ class MainNavigator(
         questId: Long,
         isEditMode: Boolean = false,
         fromOffboarding: Boolean = false,
-        navOptions: NavOptions? = null
+        navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestRecording(
             questId = questId,
             isEditMode = isEditMode,
             fromOffboarding = fromOffboarding,
-            navOptions = navOptions
+            navOptions = navOptions,
         )
     }
 
-    fun navigateToQuestBehavior(questId: Long, isEditMode: Boolean = false, fromOffboarding: Boolean = false, imageKey: String? = null, navOptions: NavOptions? = null) {
-        navController.navigateToQuestBehavior(questId = questId, isEditMode = isEditMode, imageKey = imageKey, fromOffboarding = fromOffboarding, navOptions = navOptions)
+    fun navigateToQuestBehavior(
+        questId: Long,
+        isEditMode: Boolean = false,
+        fromOffboarding: Boolean = false,
+        imageKey: String? = null,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestBehavior(
+            questId = questId,
+            isEditMode = isEditMode,
+            imageKey = imageKey,
+            fromOffboarding = fromOffboarding,
+            navOptions = navOptions,
+        )
     }
 
-    fun navigateToQuestRecordingComplete(questId: Long, navOptions: NavOptions? = null) {
+    fun navigateToQuestRecordingComplete(
+        questId: Long,
+        navOptions: NavOptions? = null,
+    ) {
         navController.navigateToQuestRecordingComplete(questId = questId, navOptions = navOptions)
     }
 
-    fun navigateToQuestBehaviorComplete(questId: Long, navOptions: NavOptions? = null) {
+    fun navigateToQuestBehaviorComplete(
+        questId: Long,
+        navOptions: NavOptions? = null,
+    ) {
         navController.navigateToQuestBehaviorComplete(questId = questId, navOptions = navOptions)
     }
 
-    fun navigateToQuestReview(questId: Long, navOptions: NavOptions? = null) {
+    fun navigateToQuestReview(
+        questId: Long,
+        navOptions: NavOptions? = null,
+    ) {
         navController.navigateToQuestReview(questId = questId, navOptions = navOptions)
     }
 
@@ -200,11 +228,20 @@ class MainNavigator(
         navController.navigateToOffboardingCompletedJourney(navOptions)
     }
 
-    fun navigateToOffboardingQuestCompleted(questType: QuestType, navOptions: NavOptions) {
-        navController.navigateToOffboardingQuestCompleted(questType = questType, navOptions = navOptions)
+    fun navigateToOffboardingQuestCompleted(
+        questType: QuestType,
+        navOptions: NavOptions,
+    ) {
+        navController.navigateToOffboardingQuestCompleted(
+            questType = questType,
+            navOptions = navOptions,
+        )
     }
 
-    fun navigateToOffboardingQuestReview(questId: Long, journey: QuestType) {
+    fun navigateToOffboardingQuestReview(
+        questId: Long,
+        journey: QuestType,
+    ) {
         navController.navigateToOffboardingQuestReview(questId = questId, journey = journey)
     }
 
@@ -214,8 +251,7 @@ class MainNavigator(
 }
 
 @Composable
-fun rememberMainNavigator(
-    navController: NavHostController = rememberNavController()
-): MainNavigator = remember(navController) {
-    MainNavigator(navController)
-}
+fun rememberMainNavigator(navController: NavHostController = rememberNavController()): MainNavigator =
+    remember(navController) {
+        MainNavigator(navController)
+    }

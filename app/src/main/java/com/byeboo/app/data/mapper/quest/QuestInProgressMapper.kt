@@ -9,28 +9,30 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-fun QuestInProgressResponseDto.toDomain(): QuestInProgressModel {
-    return QuestInProgressModel(
+fun QuestInProgressResponseDto.toDomain(): QuestInProgressModel =
+    QuestInProgressModel(
         progressPeriod = progressPeriod,
         currentStep = currentStep,
         questOpenTime = parseServerTimeToInstant(questOpenTime),
         currentTime = parseServerTimeToInstant(currentTime),
-        steps = steps.map { stepDto ->
-            QuestStepModel(
-                stepNumber = stepDto.stepNumber,
-                stepTitle = stepDto.step,
-                quests = stepDto.quests.map { questDto ->
-                    QuestItemModel(
-                        questId = questDto.questId,
-                        question = questDto.question,
-                        questStyle = questDto.questStyle,
-                        questNumber = questDto.questNumber
-                    )
-                }
-            )
-        }
+        steps =
+            steps.map { stepDto ->
+                QuestStepModel(
+                    stepNumber = stepDto.stepNumber,
+                    stepTitle = stepDto.step,
+                    quests =
+                        stepDto.quests.map { questDto ->
+                            QuestItemModel(
+                                questId = questDto.questId,
+                                question = questDto.question,
+                                questStyle = questDto.questStyle,
+                                questNumber = questDto.questNumber,
+                            )
+                        },
+                )
+            },
     )
-}
+
 fun parseServerTimeToInstant(serverResponse: String?): Instant? {
     if (serverResponse.isNullOrBlank()) return null
     val localTime = LocalDateTime.parse(serverResponse, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
