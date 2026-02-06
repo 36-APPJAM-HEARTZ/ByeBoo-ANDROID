@@ -8,7 +8,6 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,62 +16,64 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingJourneyViewModel @Inject constructor(
-    private val offboardingJourneyRepository: OffboardingJourneyRepository,
-    private val mapper: OffboardingJourneyMapper,
-    private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<OffboardingJourneyState>>(UiState.Loading)
-    val uiState: StateFlow<UiState<OffboardingJourneyState>> = _uiState.asStateFlow()
+class OffboardingJourneyViewModel
+    @Inject
+    constructor(
+        private val offboardingJourneyRepository: OffboardingJourneyRepository,
+        private val mapper: OffboardingJourneyMapper,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow<UiState<OffboardingJourneyState>>(UiState.Loading)
+        val uiState: StateFlow<UiState<OffboardingJourneyState>> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<OffboardingJourneySideEffect>()
-    val sideEffect: SharedFlow<OffboardingJourneySideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<OffboardingJourneySideEffect>()
+        val sideEffect: SharedFlow<OffboardingJourneySideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        getJourneyLists()
-    }
-
-    fun onBackClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(OffboardingJourneySideEffect.NavigateUp)
+        init {
+            getJourneyLists()
         }
-    }
 
-    fun onJourneyCompletedCardClicked(journey: QuestType) {
-        viewModelScope.launch {
-            mixpanelUtil.trackEvent(
-                "journey_review_all_pageview",
-                mapOf("review_journey_type" to journey.journeyName)
-            )
-            _sideEffect.emit(
-                OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey)
-            )
+        fun onBackClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(OffboardingJourneySideEffect.NavigateUp)
+            }
         }
-    }
 
-    private fun getJourneyLists() {
-        viewModelScope.launch {
-            val result = offboardingJourneyRepository.getOffboardingJourney()
-            result
-                .mapCatching { domain -> mapper.toUiState(domain) }
-                .onSuccess { output ->
-                    _uiState.update {
-                        UiState.Success(
-                            OffboardingJourneyState(
-                                journeyCards = output.journeyCards
+        fun onJourneyCompletedCardClicked(journey: QuestType) {
+            viewModelScope.launch {
+                mixpanelUtil.trackEvent(
+                    "journey_review_all_pageview",
+                    mapOf("review_journey_type" to journey.journeyName),
+                )
+                _sideEffect.emit(
+                    OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted(journey),
+                )
+            }
+        }
+
+        private fun getJourneyLists() {
+            viewModelScope.launch {
+                val result = offboardingJourneyRepository.getOffboardingJourney()
+                result
+                    .mapCatching { domain -> mapper.toUiState(domain) }
+                    .onSuccess { output ->
+                        _uiState.update {
+                            UiState.Success(
+                                OffboardingJourneyState(
+                                    journeyCards = output.journeyCards,
+                                ),
                             )
+                        }
+                    }.onFailure { e ->
+                        _uiState.update { UiState.Empty }
+
+                        _sideEffect.emit(
+                            OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
                         )
                     }
-                }
-                .onFailure { e ->
-                    _uiState.update { UiState.Empty }
-
-                    _sideEffect.emit(
-                        OffboardingJourneySideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                    )
-                }
+            }
         }
     }
-}

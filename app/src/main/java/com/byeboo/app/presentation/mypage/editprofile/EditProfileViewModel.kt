@@ -18,75 +18,76 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditProfileViewModel @Inject constructor(
-    val userRepository: UserRepository
-) : ViewModel() {
+class EditProfileViewModel
+    @Inject
+    constructor(
+        val userRepository: UserRepository,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(EditProfileState())
+        val uiState: StateFlow<EditProfileState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(EditProfileState())
-    val uiState: StateFlow<EditProfileState> = _uiState.asStateFlow()
+        private val _sideEffect = MutableSharedFlow<EditProfileSideEffect>()
+        val sideEffect: SharedFlow<EditProfileSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _sideEffect = MutableSharedFlow<EditProfileSideEffect>()
-    val sideEffect: SharedFlow<EditProfileSideEffect> = _sideEffect.asSharedFlow()
-
-    companion object {
-        private const val MAX_NICKNAME_LENGTH = 5
-    }
-
-    init {
-        viewModelScope.launch {
-            val initialNickname = userRepository.getNickname().first()
-            _uiState.update {
-                it.copy(
-                    nickname = initialNickname,
-                    initialNickname = initialNickname,
-                    isInitial = true
-                )
-            }
+        companion object {
+            private const val MAX_NICKNAME_LENGTH = 5
         }
-    }
 
-    fun updateNickname(input: String) {
-        if (input.length <= MAX_NICKNAME_LENGTH) {
-            _uiState.update {
-                it.copy(
-                    nickname = input,
-                    nicknameValidation = NicknameValidator.validate(input),
-                    isInitial = it.isInitial && (input == it.initialNickname)
-                )
-            }
-        }
-    }
-
-    fun clearNickname() {
-        _uiState.update {
-            it.copy(
-                nickname = "",
-                nicknameValidation = NicknameValidator.validate(""),
-                isInitial = false
-            )
-        }
-    }
-
-    fun onBackClicked() {
-        val nickname = uiState.value.nickname
-        viewModelScope.launch {
-            _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
-        }
-    }
-
-    fun finishEditProfile(nickname: String) {
-        viewModelScope.launch {
-            if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
-
-            userRepository.updateUserNickname(nickname)
-                .onSuccess {
-                    _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
-                }
-                .onFailure {
-                    _sideEffect.emit(
-                        EditProfileSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+        init {
+            viewModelScope.launch {
+                val initialNickname = userRepository.getNickname().first()
+                _uiState.update {
+                    it.copy(
+                        nickname = initialNickname,
+                        initialNickname = initialNickname,
+                        isInitial = true,
                     )
                 }
+            }
+        }
+
+        fun updateNickname(input: String) {
+            if (input.length <= MAX_NICKNAME_LENGTH) {
+                _uiState.update {
+                    it.copy(
+                        nickname = input,
+                        nicknameValidation = NicknameValidator.validate(input),
+                        isInitial = it.isInitial && (input == it.initialNickname),
+                    )
+                }
+            }
+        }
+
+        fun clearNickname() {
+            _uiState.update {
+                it.copy(
+                    nickname = "",
+                    nicknameValidation = NicknameValidator.validate(""),
+                    isInitial = false,
+                )
+            }
+        }
+
+        fun onBackClicked() {
+            val nickname = uiState.value.nickname
+            viewModelScope.launch {
+                _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
+            }
+        }
+
+        fun finishEditProfile(nickname: String) {
+            viewModelScope.launch {
+                if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
+
+                userRepository
+                    .updateUserNickname(nickname)
+                    .onSuccess {
+                        _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
+                    }.onFailure {
+                        _sideEffect.emit(
+                            EditProfileSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
         }
     }
-}

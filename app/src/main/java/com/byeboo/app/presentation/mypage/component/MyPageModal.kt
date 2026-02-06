@@ -32,27 +32,29 @@ fun MyPageModal(
     onConfirmClick: () -> Unit,
     onConfirmText: String,
     modifier: Modifier = Modifier,
-    dialogProperties: DialogProperties = DialogProperties(
-        usePlatformDefaultWidth = false
-    ),
-    myPageModalSubText: String? = null
+    dialogProperties: DialogProperties =
+        DialogProperties(
+            usePlatformDefaultWidth = false,
+        ),
+    myPageModalSubText: String? = null,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = dialogProperties
+        properties = dialogProperties,
     ) {
         Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.gray900)
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(color = ByeBooTheme.colors.gray900)
+                    .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = myPageModalMainText,
                 color = ByeBooTheme.colors.gray50,
-                style = ByeBooTheme.typography.sub3
+                style = ByeBooTheme.typography.sub3,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -62,7 +64,7 @@ fun MyPageModal(
                     text = myPageModalSubText,
                     color = ByeBooTheme.colors.gray400,
                     style = ByeBooTheme.typography.body3,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -71,7 +73,7 @@ fun MyPageModal(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 ByeBooButton(
                     onClick = onCancelClick,
@@ -79,7 +81,7 @@ fun MyPageModal(
                     buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.gray200,
                     buttonStrokeColor = ByeBooTheme.colors.gray400,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
@@ -90,7 +92,7 @@ fun MyPageModal(
                     buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

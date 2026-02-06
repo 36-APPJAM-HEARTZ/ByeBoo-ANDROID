@@ -49,7 +49,7 @@ fun OffboardingCompletedJourneyRoute(
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingJourneyViewModel = hiltViewModel()
+    viewModel: OffboardingJourneyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -58,26 +58,28 @@ fun OffboardingCompletedJourneyRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is OffboardingJourneySideEffect.NavigateUp -> navigateUp()
-                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted -> navigateToOffboardingQuestCompleted(
-                    effect.journey
-                )
+                is OffboardingJourneySideEffect.NavigateToOffboardingQuestCompleted ->
+                    navigateToOffboardingQuestCompleted(
+                        effect.journey,
+                    )
                 is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
     }
 
-    when(val state = uiState) {
+    when (val state = uiState) {
         is UiState.Loading -> Unit
 
         is UiState.Failure -> Unit
 
-        is UiState.Success -> OffboardingCompletedJourneyScreen(
-            uiState = state.data,
-            paddingValues = paddingValues,
-            onBackClick = viewModel::onBackClicked,
-            onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
-            modifier = modifier
-        )
+        is UiState.Success ->
+            OffboardingCompletedJourneyScreen(
+                uiState = state.data,
+                paddingValues = paddingValues,
+                onBackClick = viewModel::onBackClicked,
+                onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
+                modifier = modifier,
+            )
 
         else -> Unit
     }
@@ -89,49 +91,49 @@ private fun OffboardingCompletedJourneyScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onJourneyCompletedCardClick: (QuestType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
-            .verticalScroll(rememberScrollState())
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ).verticalScroll(rememberScrollState()),
     ) {
         OffboardingCompletedJourneyHeader(onBackClick = onBackClick)
 
         HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(8.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
+            color = ByeBooTheme.colors.whiteAlpha10,
         )
 
         OffboardingCompletedJourneyContent(
             completedCount = uiState.completedCount,
             completedCards = uiState.completedCards,
-            onJourneyCompletedCardClick = onJourneyCompletedCardClick
+            onJourneyCompletedCardClick = onJourneyCompletedCardClick,
         )
     }
 }
 
 @Composable
-private fun OffboardingCompletedJourneyHeader(
-    onBackClick: () -> Unit
-){
+private fun OffboardingCompletedJourneyHeader(onBackClick: () -> Unit) {
     Column {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .noRippleClickable(onClick = onBackClick),
-            tint = ByeBooTheme.colors.gray50
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .noRippleClickable(onClick = onBackClick),
+            tint = ByeBooTheme.colors.gray50,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
@@ -139,7 +141,7 @@ private fun OffboardingCompletedJourneyHeader(
         Text(
             text = "내가 완료한 여정이에요",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
@@ -151,13 +153,14 @@ private fun OffboardingCompletedJourneyContent(
     completedCount: Int,
     completedCards: List<JourneyCard>,
     onJourneyCompletedCardClick: (QuestType) -> Unit,
-    modifier: Modifier = Modifier
-){
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(16.dp)),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(16.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         CompleteText(completedCount = completedCount)
 
@@ -169,7 +172,7 @@ private fun OffboardingCompletedJourneyContent(
                     chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
                     chipTextColor = ByeBooTheme.colors.gray300,
                     journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                    journeyCardTextStyle = ByeBooTheme.typography.body3
+                    journeyCardTextStyle = ByeBooTheme.typography.body3,
                 )
             }
         }
@@ -182,7 +185,7 @@ private fun OffboardingCompletedJourneyContent(
                 color = ByeBooTheme.colors.gray300,
                 style = ByeBooTheme.typography.body3,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -191,16 +194,16 @@ private fun OffboardingCompletedJourneyContent(
 @Composable
 private fun CompleteText(
     completedCount: Int,
-    modifier: Modifier = Modifier
-){
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "완료",
             color = ByeBooTheme.colors.gray300,
-            style = ByeBooTheme.typography.cap2
+            style = ByeBooTheme.typography.cap2,
         )
 
         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -208,7 +211,7 @@ private fun CompleteText(
         Text(
             text = "${completedCount}개",
             color = ByeBooTheme.colors.gray500,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
 }

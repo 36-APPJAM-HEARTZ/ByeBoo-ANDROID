@@ -49,36 +49,38 @@ fun OffboardingNewJourneyRoute(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
-    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel()
+    offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         offboardingNewJourneyViewModel.sideEffect.collect { effect ->
             when (effect) {
-                is OffboardingNewJourneySideEffect.NavigateToQuestStart -> navigateToQuestStart(
-                    effect.journey
-                )
+                is OffboardingNewJourneySideEffect.NavigateToQuestStart ->
+                    navigateToQuestStart(
+                        effect.journey,
+                    )
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
     }
 
-    when(val state = uiState) {
+    when (val state = uiState) {
         is UiState.Loading -> Unit
 
         is UiState.Failure -> Unit
 
-        is UiState.Success ->OffboardingNewJourneyScreen(
-            uiState = state.data,
-            paddingValues = paddingValues,
-            onBackClick = offboardingNewJourneyViewModel::onBackClicked,
-            onJourneyUncompletedCardClick = { type ->
-                offboardingNewJourneyViewModel.postNewJourney(
-                    type
-                )
-            },
-        )
+        is UiState.Success ->
+            OffboardingNewJourneyScreen(
+                uiState = state.data,
+                paddingValues = paddingValues,
+                onBackClick = offboardingNewJourneyViewModel::onBackClicked,
+                onJourneyUncompletedCardClick = { type ->
+                    offboardingNewJourneyViewModel.postNewJourney(
+                        type,
+                    )
+                },
+            )
 
         else -> Unit
     }
@@ -90,49 +92,49 @@ private fun OffboardingNewJourneyScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onJourneyUncompletedCardClick: (QuestType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
-            .verticalScroll(rememberScrollState())
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ).verticalScroll(rememberScrollState()),
     ) {
         OffboardingNewJourneyHeader(onBackClick = onBackClick)
 
         HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = screenHeightDp(8.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10
+            color = ByeBooTheme.colors.whiteAlpha10,
         )
 
         OffboardingNewJourneyContent(
             uncompletedCount = uiState.uncompletedCount,
             uncompletedCards = uiState.uncompletedCards,
-            onJourneyUncompletedCardClick = onJourneyUncompletedCardClick
+            onJourneyUncompletedCardClick = onJourneyUncompletedCardClick,
         )
     }
 }
 
 @Composable
-private fun OffboardingNewJourneyHeader(
-    onBackClick: () -> Unit
-){
+private fun OffboardingNewJourneyHeader(onBackClick: () -> Unit) {
     Column {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
-            modifier = Modifier
-                .size(24.dp)
-                .noRippleClickable(onClick = onBackClick)
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .noRippleClickable(onClick = onBackClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
@@ -140,7 +142,7 @@ private fun OffboardingNewJourneyHeader(
         Text(
             text = "어떤 여정을 시작해 볼까요?",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -148,7 +150,7 @@ private fun OffboardingNewJourneyHeader(
         Text(
             text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body6
+            style = ByeBooTheme.typography.body6,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
@@ -160,14 +162,14 @@ private fun OffboardingNewJourneyContent(
     uncompletedCount: Int,
     uncompletedCards: List<JourneyCard>,
     onJourneyUncompletedCardClick: (QuestType) -> Unit,
-    modifier: Modifier = Modifier
-){
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(16.dp)),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
-
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(16.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         UncompleteText(uncompletedCount = uncompletedCount)
 
@@ -180,7 +182,7 @@ private fun OffboardingNewJourneyContent(
                     chipTextColor = ByeBooTheme.colors.white,
                     journeyTitleTextColor = ByeBooTheme.colors.white,
                     journeyCardTextStyle = ByeBooTheme.typography.body2,
-                    borderColor = ByeBooTheme.colors.primary300
+                    borderColor = ByeBooTheme.colors.primary300,
                 )
             }
         }
@@ -192,18 +194,19 @@ private fun OffboardingNewJourneyContent(
 @Composable
 private fun UncompleteText(
     uncompletedCount: Int,
-    modifier: Modifier = Modifier
-){
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "미완료",
             color = ByeBooTheme.colors.gray300,
-            style = ByeBooTheme.typography.cap2
+            style = ByeBooTheme.typography.cap2,
         )
 
         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -211,7 +214,7 @@ private fun UncompleteText(
         Text(
             text = "${uncompletedCount}개",
             color = ByeBooTheme.colors.gray500,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
 }
@@ -219,18 +222,19 @@ private fun UncompleteText(
 @Composable
 private fun PreparingCard() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(color = ByeBooTheme.colors.whiteAlpha10)
-            .padding(vertical = screenHeightDp(22.dp))
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .padding(vertical = screenHeightDp(22.dp)),
     ) {
         Text(
             text = "준비 중",
             color = ByeBooTheme.colors.gray600,
             style = ByeBooTheme.typography.body6,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
