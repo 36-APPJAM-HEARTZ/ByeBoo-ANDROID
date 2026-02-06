@@ -50,7 +50,7 @@ fun QuestRecordingCompleteRoute(
     navigateToOffboardingCompletedGuide: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestRecordingCompleteViewModel = hiltViewModel()
+    viewModel: QuestRecordingCompleteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -78,7 +78,7 @@ fun QuestRecordingCompleteRoute(
         uiState = uiState,
         paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -87,28 +87,30 @@ private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalArrangement = Arrangement.End
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
+            horizontalArrangement = Arrangement.End,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                 contentDescription = null,
                 tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCloseClick)
+                modifier = Modifier.clickable(onClick = onCloseClick),
             )
         }
 
@@ -117,16 +119,17 @@ private fun QuestRecordingCompleteScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                top = screenHeightDp(8.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(24.dp)
-            )
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    top = screenHeightDp(8.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(24.dp),
+                ),
         ) {
             item {
                 QuestCompleteCard(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -136,16 +139,16 @@ private fun QuestRecordingCompleteScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         SmallTag(
                             tagText = "STEP ${uiState.stepNumber}",
-                            tagColor = ByeBooTheme.colors.gray500
+                            tagColor = ByeBooTheme.colors.gray500,
                         )
 
                         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -153,7 +156,7 @@ private fun QuestRecordingCompleteScreen(
                         Text(
                             text = "${uiState.questNumber}번째 퀘스트",
                             style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray500
+                            color = ByeBooTheme.colors.gray500,
                         )
                     }
 
@@ -168,7 +171,7 @@ private fun QuestRecordingCompleteScreen(
                         style = ByeBooTheme.typography.head1,
                         color = ByeBooTheme.colors.gray100,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
 
                     Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
@@ -176,14 +179,14 @@ private fun QuestRecordingCompleteScreen(
                     QuestContent(
                         titleIcon = QuestContentType.THINKING,
                         titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer
+                        contentText = uiState.answer,
                     )
 
                     Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestEmotionDescriptionContent(
                         questEmotionDescription = uiState.emotionDescription,
-                        emotionType = uiState.selectedEmotion
+                        emotionType = uiState.selectedEmotion,
                     )
                 }
             }
@@ -195,18 +198,18 @@ private fun QuestRecordingCompleteScreen(
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
     emotionType: LargeTagType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
                 contentDescription = "title icon",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -214,7 +217,7 @@ private fun QuestEmotionDescriptionContent(
             Text(
                 text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
                 color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2
+                style = ByeBooTheme.typography.body2,
             )
         }
 
@@ -222,7 +225,7 @@ private fun QuestEmotionDescriptionContent(
 
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
-            emotionType = emotionType
+            emotionType = emotionType,
         )
     }
 }

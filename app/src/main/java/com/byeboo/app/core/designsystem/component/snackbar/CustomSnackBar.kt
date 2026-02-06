@@ -22,22 +22,22 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 @Composable
 fun CustomSnackBar(
     message: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = ByeBooTheme.colors.blackAlpha80,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = ByeBooTheme.colors.blackAlpha80,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_alert),
             contentDescription = "알림",
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -45,7 +45,7 @@ fun CustomSnackBar(
         Text(
             text = message,
             style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray50
+            color = ByeBooTheme.colors.gray50,
         )
     }
 }

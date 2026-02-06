@@ -23,17 +23,19 @@ private fun ByeBooTextStyle(
     fontFamily: FontFamily,
     fontSize: TextUnit,
     lineHeight: TextUnit,
-    letterSpacing: TextUnit
-): TextStyle = TextStyle(
-    fontFamily = fontFamily,
-    fontSize = fontSize,
-    lineHeight = lineHeight,
-    letterSpacing = letterSpacing,
-    lineHeightStyle = LineHeightStyle(
-        alignment = LineHeightStyle.Alignment.Center,
-        trim = LineHeightStyle.Trim.None
+    letterSpacing: TextUnit,
+): TextStyle =
+    TextStyle(
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        lineHeight = lineHeight,
+        letterSpacing = letterSpacing,
+        lineHeightStyle =
+            LineHeightStyle(
+                alignment = LineHeightStyle.Alignment.Center,
+                trim = LineHeightStyle.Trim.None,
+            ),
     )
-)
 
 @Stable
 class ByeBooTypography internal constructor(
@@ -50,7 +52,7 @@ class ByeBooTypography internal constructor(
     body5: TextStyle,
     body6: TextStyle,
     cap1: TextStyle,
-    cap2: TextStyle
+    cap2: TextStyle,
 ) {
     var head1 by mutableStateOf(head1)
         private set
@@ -81,22 +83,23 @@ class ByeBooTypography internal constructor(
     var cap2 by mutableStateOf(cap2)
         private set
 
-    fun copy(): ByeBooTypography = ByeBooTypography(
-        head1 = head1,
-        head2 = head2,
-        sub1 = sub1,
-        sub2 = sub2,
-        sub3 = sub3,
-        sub4 = sub4,
-        body1 = body1,
-        body2 = body2,
-        body3 = body3,
-        body4 = body4,
-        body5 = body5,
-        body6 = body6,
-        cap1 = cap1,
-        cap2 = cap2
-    )
+    fun copy(): ByeBooTypography =
+        ByeBooTypography(
+            head1 = head1,
+            head2 = head2,
+            sub1 = sub1,
+            sub2 = sub2,
+            sub3 = sub3,
+            sub4 = sub4,
+            body1 = body1,
+            body2 = body2,
+            body3 = body3,
+            body4 = body4,
+            body5 = body5,
+            body6 = body6,
+            cap1 = cap1,
+            cap2 = cap2,
+        )
 
     fun update(typography: ByeBooTypography) {
         head1 = typography.head1
@@ -117,91 +120,104 @@ class ByeBooTypography internal constructor(
 }
 
 @Composable
-fun ByeBooTypography(): ByeBooTypography {
-    return ByeBooTypography(
-        head1 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 24.sp,
-            lineHeight = 31.sp,
-            letterSpacing = 0.em
-        ),
-        head2 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 22.sp,
-            lineHeight = 26.sp,
-            letterSpacing = 0.em
-        ),
-        sub1 = ByeBooTextStyle(
-            fontFamily = pretendardSemiBold,
-            fontSize = 20.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.em
-        ),
-        sub2 = ByeBooTextStyle(
-            fontFamily = pretendardSemiBold,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
-            letterSpacing = 0.em
-        ),
-        sub3 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
-            letterSpacing = 0.em
-        ),
-        sub4 = ByeBooTextStyle(
-            fontFamily = pretendardRegular,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
-            letterSpacing = 0.em
-        ),
-        body1 = ByeBooTextStyle(
-            fontFamily = pretendardSemiBold,
-            fontSize = 16.sp,
-            lineHeight = 21.sp,
-            letterSpacing = 0.em
-        ),
-        body2 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 16.sp,
-            lineHeight = 21.sp,
-            letterSpacing = 0.em
-        ),
-        body3 = ByeBooTextStyle(
-            fontFamily = pretendardRegular,
-            fontSize = 16.sp,
-            lineHeight = 21.sp,
-            letterSpacing = 0.em
-        ),
-        body4 = ByeBooTextStyle(
-            fontFamily = pretendardSemiBold,
-            fontSize = 14.sp,
-            lineHeight = 18.sp,
-            letterSpacing = 0.em
-        ),
-        body5 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 14.sp,
-            lineHeight = 18.sp,
-            letterSpacing = 0.em
-        ),
-        body6 = ByeBooTextStyle(
-            fontFamily = pretendardRegular,
-            fontSize = 14.sp,
-            lineHeight = 18.sp,
-            letterSpacing = 0.em
-        ),
-        cap1 = ByeBooTextStyle(
-            fontFamily = pretendardMedium,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.em
-        ),
-        cap2 = ByeBooTextStyle(
-            fontFamily = pretendardRegular,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.em
-        )
+fun ByeBooTypography(): ByeBooTypography =
+    ByeBooTypography(
+        head1 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 24.sp,
+                lineHeight = 31.sp,
+                letterSpacing = 0.em,
+            ),
+        head2 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 22.sp,
+                lineHeight = 26.sp,
+                letterSpacing = 0.em,
+            ),
+        sub1 =
+            ByeBooTextStyle(
+                fontFamily = pretendardSemiBold,
+                fontSize = 20.sp,
+                lineHeight = 24.sp,
+                letterSpacing = 0.em,
+            ),
+        sub2 =
+            ByeBooTextStyle(
+                fontFamily = pretendardSemiBold,
+                fontSize = 18.sp,
+                lineHeight = 22.sp,
+                letterSpacing = 0.em,
+            ),
+        sub3 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 18.sp,
+                lineHeight = 22.sp,
+                letterSpacing = 0.em,
+            ),
+        sub4 =
+            ByeBooTextStyle(
+                fontFamily = pretendardRegular,
+                fontSize = 18.sp,
+                lineHeight = 22.sp,
+                letterSpacing = 0.em,
+            ),
+        body1 =
+            ByeBooTextStyle(
+                fontFamily = pretendardSemiBold,
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                letterSpacing = 0.em,
+            ),
+        body2 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                letterSpacing = 0.em,
+            ),
+        body3 =
+            ByeBooTextStyle(
+                fontFamily = pretendardRegular,
+                fontSize = 16.sp,
+                lineHeight = 21.sp,
+                letterSpacing = 0.em,
+            ),
+        body4 =
+            ByeBooTextStyle(
+                fontFamily = pretendardSemiBold,
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                letterSpacing = 0.em,
+            ),
+        body5 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                letterSpacing = 0.em,
+            ),
+        body6 =
+            ByeBooTextStyle(
+                fontFamily = pretendardRegular,
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                letterSpacing = 0.em,
+            ),
+        cap1 =
+            ByeBooTextStyle(
+                fontFamily = pretendardMedium,
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                letterSpacing = 0.em,
+            ),
+        cap2 =
+            ByeBooTextStyle(
+                fontFamily = pretendardRegular,
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                letterSpacing = 0.em,
+            ),
     )
-}

@@ -34,7 +34,7 @@ fun NavGraphBuilder.homeGraph(
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToHome: () -> Unit,
     navigateToHomeOnboarding: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     composable<Home> {
         HomeRoute(
@@ -43,20 +43,20 @@ fun NavGraphBuilder.homeGraph(
             navigateToTutorial = navigateToTutorial,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
     composable<HomeOnboarding> {
         ByeBooBackHandler()
         HomeOnboardingRoute(
             navigateToHome = navigateToHome,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
     composable<HomeAmulet> {
         ByeBooBackHandler()
         HomeAmuletRoute(
-            navigateToHomeOnboarding = navigateToHomeOnboarding
+            navigateToHomeOnboarding = navigateToHomeOnboarding,
         )
     }
 }

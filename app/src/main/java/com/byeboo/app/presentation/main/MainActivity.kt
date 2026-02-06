@@ -20,13 +20,13 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
+            navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
         )
 
         viewModel.handleIntent(intent)
 
         setContent {
-            ByeBooTheme{
+            ByeBooTheme {
                 MainScreen()
             }
         }

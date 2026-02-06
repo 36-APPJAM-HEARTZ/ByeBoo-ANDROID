@@ -70,7 +70,7 @@ fun OffboardingCompletedGuideRoute(
     navigateToOffboardingCompletedJourney: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingCompletedGuideViewModel = hiltViewModel()
+    viewModel: OffboardingCompletedGuideViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isInitialAnimation by viewModel.isInitialAnimation.collectAsStateWithLifecycle()
@@ -98,7 +98,7 @@ fun OffboardingCompletedGuideRoute(
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
         isInitialAnimation = isInitialAnimation,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -110,75 +110,80 @@ private fun OffboardingCompleteGuideScreen(
     onNewJourneyClick: () -> Unit,
     onCompletedJourneyClick: () -> Unit,
     isInitialAnimation: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var index by remember { mutableIntStateOf(0) }
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_cake))
     val progress by animateLottieCompositionAsState(
         composition = composition,
-        iterations = LottieConstants.IterateForever
+        iterations = LottieConstants.IterateForever,
     )
 
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Image(
             painter = painterResource(id = R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ByeBooTheme.colors.blackAlpha80)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = ByeBooTheme.colors.blackAlpha80),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(
-                        top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                        bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp)
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = screenWidthDp(24.dp))
+                        .padding(
+                            top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                            bottom = paddingValues.calculateBottomPadding() + screenHeightDp(10.dp),
+                        ),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                     contentDescription = null,
                     tint = ByeBooTheme.colors.white,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.End)
-                        .noRippleClickable(onCloseClick)
+                    modifier =
+                        Modifier
+                            .size(24.dp)
+                            .align(Alignment.End)
+                            .noRippleClickable(onCloseClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(screenHeightDp(156.dp)),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(screenHeightDp(156.dp)),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = "🎉 ${uiState.journeyName} 여정을 완료했어요! 🎉",
                         color = ByeBooTheme.colors.secondary300,
-                        style = ByeBooTheme.typography.sub2
+                        style = ByeBooTheme.typography.sub2,
                     )
 
                     if (!isInitialAnimation) {
                         TextSequence(
-                            paragraphs = listOf(
-                                "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
-                                "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
-                                "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?"
-                            ),
+                            paragraphs =
+                                listOf(
+                                    "무려 30개의 퀘스트를 완료했어요.\n끝까지 포기하지 않고 극복하기 위해 노력한\n${uiState.nickname}님이 너무 대단해요.",
+                                    "지금의 ${uiState.nickname}님은, 처음보다 성장했을 거예요.",
+                                    "만약 아직 정리되지 못한 감정이 남아있다면,\n또 다른 새로운 여정을 시작해 볼까요?",
+                                ),
                             index = index,
                             gap = 16.dp,
                             topGap = 32.dp,
-                            onAdvance = { nextIndex -> index = nextIndex }
+                            onAdvance = { nextIndex -> index = nextIndex },
                         )
                     } else {
                         Spacer(Modifier.height(screenHeightDp(32.dp)))
@@ -188,24 +193,26 @@ private fun OffboardingCompleteGuideScreen(
                             style = ByeBooTheme.typography.body3,
                             color = ByeBooTheme.colors.secondary50,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
 
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = screenWidthDp(16.dp)),
-                    contentAlignment = Alignment.BottomCenter
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(horizontal = screenWidthDp(16.dp)),
+                    contentAlignment = Alignment.BottomCenter,
                 ) {
                     LottieAnimation(
                         composition = composition,
                         progress = progress,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = screenHeightDp(34.dp))
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = screenHeightDp(34.dp)),
                     )
                 }
 
@@ -218,7 +225,7 @@ private fun OffboardingCompleteGuideScreen(
                     buttonText = "완료한 여정 다시보기",
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonTextColor = ByeBooTheme.colors.primary400,
-                    buttonBackgroundColor = ByeBooTheme.colors.primary50
+                    buttonBackgroundColor = ByeBooTheme.colors.primary50,
                 )
             }
         }
@@ -232,7 +239,7 @@ fun TextSequence(
     gap: Dp,
     topGap: Dp,
     modifier: Modifier = Modifier,
-    onAdvance: (Int) -> Unit = {}
+    onAdvance: (Int) -> Unit = {},
 ) {
     val firstSentence = paragraphs.getOrNull(index) ?: return
     val secondSentence = paragraphs.getOrNull(index + 1)
@@ -245,7 +252,7 @@ fun TextSequence(
             text = firstSentence,
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.secondary50,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         return
     }
@@ -264,7 +271,7 @@ fun TextSequence(
                 onAdvance(index + 1)
             }
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -277,7 +284,7 @@ private fun Animation(
     mainSentenceColor: Color,
     subSentenceColor: Color,
     onFinished: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
@@ -286,19 +293,24 @@ private fun Animation(
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val availableWidth = with(density) { (screenWidth - 24.dp * 2).roundToPx() }
 
-    val textStyle = ByeBooTheme.typography.cap2.copy(
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
-        lineHeightStyle = LineHeightStyle(
-            alignment = LineHeightStyle.Alignment.Top,
-            trim = LineHeightStyle.Trim.Both
+    val textStyle =
+        ByeBooTheme.typography.cap2.copy(
+            platformStyle = PlatformTextStyle(includeFontPadding = false),
+            lineHeightStyle =
+                LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Top,
+                    trim = LineHeightStyle.Trim.Both,
+                ),
         )
-    )
 
-    fun measureHeight(t: String) = measurer.measure(
-        AnnotatedString(t),
-        style = textStyle,
-        constraints = Constraints(maxWidth = availableWidth)
-    ).size.height.toFloat()
+    fun measureHeight(t: String) =
+        measurer
+            .measure(
+                AnnotatedString(t),
+                style = textStyle,
+                constraints = Constraints(maxWidth = availableWidth),
+            ).size.height
+            .toFloat()
 
     val height1 = measureHeight(firstSentence)
     val height2 = measureHeight(secondSentence)
@@ -317,10 +329,11 @@ private fun Animation(
     val alpha1 = remember { Animatable(1f) }
     val scale1 = remember { Animatable(activeScale) }
 
-    val colorToVector = TwoWayConverter(
-        { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
-        { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) }
-    )
+    val colorToVector =
+        TwoWayConverter(
+            { c: Color -> AnimationVector4D(c.red, c.green, c.blue, c.alpha) },
+            { v: AnimationVector4D -> Color(v.v1, v.v2, v.v3, v.v4) },
+        )
     val color2 = remember { Animatable(subSentenceColor, colorToVector) }
     val color3 = remember { Animatable(subSentenceColor, colorToVector) }
 
@@ -343,7 +356,7 @@ private fun Animation(
             launch {
                 color2.animateTo(
                     mainSentenceColor,
-                    tween(1000, easing = FastOutSlowInEasing)
+                    tween(1000, easing = FastOutSlowInEasing),
                 )
             }
 
@@ -363,7 +376,7 @@ private fun Animation(
             launch {
                 color3.animateTo(
                     mainSentenceColor,
-                    tween(1000, easing = FastOutSlowInEasing)
+                    tween(1000, easing = FastOutSlowInEasing),
                 )
             }
         }
@@ -372,9 +385,10 @@ private fun Animation(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(totalHdp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(totalHdp),
     ) {
         @Composable
         fun Line(
@@ -383,22 +397,23 @@ private fun Animation(
             shift: Float,
             alpha: Float,
             scale: Float,
-            color: Color
+            color: Color,
         ) {
             Text(
                 text = text,
                 style = ByeBooTheme.typography.cap2,
                 color = color,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .graphicsLayer {
-                        translationY = baseTop + shift
-                        scaleX = scale
-                        scaleY = scale
-                        this.alpha = alpha
-                        transformOrigin = TransformOrigin(0.5f, 0f)
-                    }
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .graphicsLayer {
+                            translationY = baseTop + shift
+                            scaleX = scale
+                            scaleY = scale
+                            this.alpha = alpha
+                            transformOrigin = TransformOrigin(0.5f, 0f)
+                        },
             )
         }
 
@@ -413,15 +428,16 @@ private fun Animation(
             style = ByeBooTheme.typography.cap2,
             color = color3.value,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .graphicsLayer {
-                    translationY = line2Top + (height2 * scale2.value) + gapPx + shift3.value
-                    scaleX = scale3.value
-                    scaleY = scale3.value
-                    alpha = alpha3.value
-                    transformOrigin = TransformOrigin(0.5f, 0f)
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .graphicsLayer {
+                        translationY = line2Top + (height2 * scale2.value) + gapPx + shift3.value
+                        scaleX = scale3.value
+                        scaleY = scale3.value
+                        alpha = alpha3.value
+                        transformOrigin = TransformOrigin(0.5f, 0f)
+                    },
         )
     }
 }

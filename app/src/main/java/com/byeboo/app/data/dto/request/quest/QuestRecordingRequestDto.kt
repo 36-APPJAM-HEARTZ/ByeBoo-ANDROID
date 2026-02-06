@@ -8,7 +8,7 @@ data class QuestRecordingRequestDto(
     @SerialName("answer")
     val answer: String,
     @SerialName("questEmotionState")
-    val questEmotionState: String
+    val questEmotionState: String,
 )
 
 @Serializable

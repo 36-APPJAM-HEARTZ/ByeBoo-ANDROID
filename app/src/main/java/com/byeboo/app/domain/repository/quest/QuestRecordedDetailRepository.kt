@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuestRecordedDetailRepository {
     suspend fun getQuestRecordedDetail(questId: Long): Result<QuestRecordedDetailModel>
+
     fun observeQuestRecordedDetail(questId: Long): Flow<QuestRecordedDetailModel>
 }

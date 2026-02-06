@@ -25,19 +25,20 @@ fun QuestTitle(
     stepNumber: Long,
     questNumber: Long,
     createdAt: String,
-    questQuestion: String
-
+    questQuestion: String,
 ) {
-    val date = remember(createdAt) {
-        LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
-    }
+    val date =
+        remember(createdAt) {
+            LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+        }
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = screenHeightDp(10.dp))
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(10.dp)),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SmallTag(tagText = "STEP $stepNumber", tagColor = ByeBooTheme.colors.gray500)
 
@@ -46,7 +47,7 @@ fun QuestTitle(
             Text(
                 text = "${questNumber}번째 퀘스트",
                 color = ByeBooTheme.colors.gray500,
-                style = ByeBooTheme.typography.body6
+                style = ByeBooTheme.typography.body6,
             )
         }
 
@@ -55,7 +56,7 @@ fun QuestTitle(
         Text(
             text = "$date",
             color = ByeBooTheme.colors.gray500,
-            style = ByeBooTheme.typography.body6
+            style = ByeBooTheme.typography.body6,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
@@ -63,7 +64,7 @@ fun QuestTitle(
         Text(
             text = questQuestion,
             color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.head1
+            style = ByeBooTheme.typography.head1,
         )
     }
 }

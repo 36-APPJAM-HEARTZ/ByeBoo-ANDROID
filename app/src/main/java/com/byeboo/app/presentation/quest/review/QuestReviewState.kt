@@ -21,7 +21,19 @@ data class QuestReviewState(
 
 sealed interface QuestReviewSideEffect {
     data object NavigateToQuest : QuestReviewSideEffect
-    data class NavigateToQuestRecordingEdit(val questId: Long, val isEditMode: Boolean) : QuestReviewSideEffect
-    data class NavigateToQuestBehaviorEdit(val questId: Long, val isEditMode: Boolean, val imageKey: String) : QuestReviewSideEffect
-    data class ShowSnackBar(val message: String) : QuestReviewSideEffect
+
+    data class NavigateToQuestRecordingEdit(
+        val questId: Long,
+        val isEditMode: Boolean,
+    ) : QuestReviewSideEffect
+
+    data class NavigateToQuestBehaviorEdit(
+        val questId: Long,
+        val isEditMode: Boolean,
+        val imageKey: String,
+    ) : QuestReviewSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestReviewSideEffect
 }

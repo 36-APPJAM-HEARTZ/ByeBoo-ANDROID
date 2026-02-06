@@ -21,7 +21,7 @@ fun ByeBooBackHandler(message: String = "뒤로가기를 한 번 더 누르면 �
         exitDelayMillis = 3000L,
         onShowSnackBar = {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
+        },
     )
 }
 
@@ -30,7 +30,7 @@ fun CloseBackHandler(
     context: Context,
     enabled: Boolean = true,
     exitDelayMillis: Long = 3000L,
-    onShowSnackBar: () -> Unit = {}
+    onShowSnackBar: () -> Unit = {},
 ) {
     var backPressedTime by remember {
         mutableLongStateOf(0L)

@@ -18,40 +18,43 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun UserInfoEmotionScreen(
     selectedEmotion: Feeling?,
-    onEmotionSelect: (Feeling) -> Unit
+    onEmotionSelect: (Feeling) -> Unit,
 ) {
-    val emotions = persistentListOf(
-        Feeling.EXHAUSTED,
-        Feeling.RECOVERING,
-        Feeling.OVERCOMING
-    )
+    val emotions =
+        persistentListOf(
+            Feeling.EXHAUSTED,
+            Feeling.RECOVERING,
+            Feeling.OVERCOMING,
+        )
 
     Column {
         DescriptionText(
             title = "감정 상태",
             guideText = "를 알려주세요",
             contentText = "이별 후, 어떤 감정으로 하루를 보내고 계신가요?",
-            bottom = 20.dp
+            bottom = 20.dp,
         )
         Row(
             modifier = Modifier.padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             emotions.forEach { emotion ->
-                val onCardClick = remember(emotion) {
-                    { onEmotionSelect(emotion) }
-                }
+                val onCardClick =
+                    remember(emotion) {
+                        { onEmotionSelect(emotion) }
+                    }
                 UserInfoEmotionCard(
                     content = emotion.displayText,
-                    imageRes = when (emotion) {
-                        Feeling.EXHAUSTED -> R.drawable.ic_emotion_sad
-                        Feeling.RECOVERING -> R.drawable.ic_emotion_soso
-                        Feeling.OVERCOMING -> R.drawable.ic_emotion_good
-                    },
+                    imageRes =
+                        when (emotion) {
+                            Feeling.EXHAUSTED -> R.drawable.ic_emotion_sad
+                            Feeling.RECOVERING -> R.drawable.ic_emotion_soso
+                            Feeling.OVERCOMING -> R.drawable.ic_emotion_good
+                        },
                     isSelected = selectedEmotion == emotion,
                     onCardClick = onCardClick,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
         }

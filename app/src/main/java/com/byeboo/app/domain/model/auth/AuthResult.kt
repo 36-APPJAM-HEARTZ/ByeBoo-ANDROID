@@ -9,19 +9,18 @@ data class AuthResult(
     val name: String?,
     val journey: JourneyType,
     val journeyStatus: JourneyStatusType,
-    val userId: Long
+    val userId: Long,
 )
 
 enum class JourneyType {
     FACE_EMOTION,
     PROCESS_EMOTION,
-    UNKNOWN;
+    UNKNOWN,
 }
 
-fun JourneyType.toJourneyText(): String {
-    return when (this) {
+fun JourneyType.toJourneyText(): String =
+    when (this) {
         JourneyType.FACE_EMOTION -> "감정 직면"
         JourneyType.PROCESS_EMOTION -> "감정 정리"
         JourneyType.UNKNOWN -> "알 수 없음"
     }
-}

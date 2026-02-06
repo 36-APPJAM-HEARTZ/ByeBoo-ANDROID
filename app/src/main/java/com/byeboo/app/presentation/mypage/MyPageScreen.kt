@@ -56,7 +56,6 @@ import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.MyPageNotification
 
-
 @Composable
 fun MyPageRoute(
     navigateToEditProfile: () -> Unit,
@@ -65,7 +64,7 @@ fun MyPageRoute(
     navigateToSplash: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: MyPageViewModel = hiltViewModel()
+    viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -73,25 +72,28 @@ fun MyPageRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val activity = context as? Activity
 
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-                viewModel.onPermissionResult(true)
-            } else {
-                val showRationale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-                } else false
-
-                if (!showRationale) {
-                    viewModel.onAlarmToggledClicked(hasSystemPermission = false)
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                if (isGranted) {
+                    viewModel.onPermissionResult(true)
                 } else {
-                    viewModel.onPermissionResult(false)
+                    val showRationale =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+                        } else {
+                            false
+                        }
+
+                    if (!showRationale) {
+                        viewModel.onAlarmToggledClicked(hasSystemPermission = false)
+                    } else {
+                        viewModel.onPermissionResult(false)
+                    }
                 }
-            }
-        }
-    )
+            },
+        )
 
     val onAlarmToggleClick = {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -123,15 +125,13 @@ fun MyPageRoute(
 
                     if (shouldShowRationale) {
                         permissionLauncher.launch(POST_NOTIFICATIONS)
-
                     } else {
                         viewModel.onGoToSettingClicked()
                     }
                 }
-            }
+            },
         )
     }
-
 
     if (uiState.showLogoutModal) {
         MyPageModal(
@@ -140,10 +140,11 @@ fun MyPageRoute(
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
             onConfirmClick = viewModel::confirmLogout,
             onConfirmText = "로그아웃",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -155,10 +156,11 @@ fun MyPageRoute(
             onConfirmClick = viewModel::confirmWithdraw,
             onConfirmText = "탈퇴하기",
             myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -172,9 +174,10 @@ fun MyPageRoute(
                 }
 
                 is MyPageSideEffect.NavigateToSetting -> {
-                    val intent = Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
-                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                    }
+                    val intent =
+                        Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                        }
                     context.startActivity(intent)
                 }
 
@@ -189,11 +192,12 @@ fun MyPageRoute(
     }
 
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.syncAlarmState(context.hasNotificationPermission())
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    viewModel.syncAlarmState(context.hasNotificationPermission())
+                }
             }
-        }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
@@ -213,7 +217,7 @@ fun MyPageRoute(
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -231,54 +235,58 @@ private fun MyPageScreen(
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Text(
             text = "내 정보",
             style = ByeBooTheme.typography.sub1,
             color = ByeBooTheme.colors.white,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(ByeBooTheme.colors.black)
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = screenHeightDp(43.dp), bottom = screenHeightDp(16.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(ByeBooTheme.colors.black)
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(top = screenHeightDp(43.dp), bottom = screenHeightDp(16.dp)),
         )
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                top = screenHeightDp(8.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(34.dp)
-            )
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    top = screenHeightDp(8.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(34.dp),
+                ),
         ) {
             item {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .clickable(onClick = onNicknameChangeClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(18.5.dp)
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(color = ByeBooTheme.colors.whiteAlpha10)
+                            .clickable(onClick = onNicknameChangeClick)
+                            .padding(
+                                horizontal = screenWidthDp(24.dp),
+                                vertical = screenHeightDp(18.5.dp),
+                            ),
                 ) {
                     Text(
                         text = uiState.nickname,
                         style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.gray300
+                        color = ByeBooTheme.colors.gray300,
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -287,7 +295,7 @@ private fun MyPageScreen(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp),
-                        tint = ByeBooTheme.colors.gray50
+                        tint = ByeBooTheme.colors.gray50,
                     )
                 }
 
@@ -296,11 +304,12 @@ private fun MyPageScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = screenHeightDp(8.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10
+                    color = ByeBooTheme.colors.whiteAlpha10,
                 )
             }
 
@@ -310,12 +319,12 @@ private fun MyPageScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -323,32 +332,32 @@ private fun MyPageScreen(
                     Text(
                         text = "나의 기록",
                         style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300
+                        color = ByeBooTheme.colors.gray300,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .border(
-                            width = 1.dp,
-                            color = ByeBooTheme.colors.primary300,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onCompletedJourneyClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(20.dp)
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(color = ByeBooTheme.colors.whiteAlpha10)
+                            .border(
+                                width = 1.dp,
+                                color = ByeBooTheme.colors.primary300,
+                                shape = RoundedCornerShape(12.dp),
+                            ).clickable(onClick = onCompletedJourneyClick)
+                            .padding(
+                                horizontal = screenWidthDp(24.dp),
+                                vertical = screenHeightDp(20.dp),
+                            ),
                 ) {
                     Text(
                         text = "완료한 여정 돌아보기",
                         style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50
+                        color = ByeBooTheme.colors.gray50,
                     )
                 }
 
@@ -357,12 +366,12 @@ private fun MyPageScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -370,32 +379,32 @@ private fun MyPageScreen(
                     Text(
                         text = "보리가 궁금하다면?",
                         style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300
+                        color = ByeBooTheme.colors.gray300,
                     )
                 }
 
                 Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.whiteAlpha10)
-                        .border(
-                            width = 1.dp,
-                            color = ByeBooTheme.colors.primary300,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable(onClick = onGoToByeBooUniverseClick)
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(20.dp)
-                        )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(color = ByeBooTheme.colors.whiteAlpha10)
+                            .border(
+                                width = 1.dp,
+                                color = ByeBooTheme.colors.primary300,
+                                shape = RoundedCornerShape(12.dp),
+                            ).clickable(onClick = onGoToByeBooUniverseClick)
+                            .padding(
+                                horizontal = screenWidthDp(24.dp),
+                                vertical = screenHeightDp(20.dp),
+                            ),
                 ) {
                     Text(
                         text = "Bye Boo 세계관 보러 가기",
                         style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50
+                        color = ByeBooTheme.colors.gray50,
                     )
                 }
 
@@ -404,11 +413,12 @@ private fun MyPageScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = screenHeightDp(8.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10
+                    color = ByeBooTheme.colors.whiteAlpha10,
                 )
             }
 
@@ -418,7 +428,7 @@ private fun MyPageScreen(
                 Text(
                     text = "문의하기",
                     style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                    color = ByeBooTheme.colors.gray400,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -427,7 +437,7 @@ private fun MyPageScreen(
                     text = "바이부에 문의하기",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onAskingByeBooClick)
+                    modifier = Modifier.clickable(onClick = onAskingByeBooClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -436,7 +446,7 @@ private fun MyPageScreen(
                     text = "바이부와 함께 서비스 만들기",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onServiceWithByeBooClick)
+                    modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -446,14 +456,14 @@ private fun MyPageScreen(
                 Text(
                     text = "알림",
                     style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                    color = ByeBooTheme.colors.gray400,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 MyPageNotification(
                     isEnabledAlarm = uiState.isAlarmEnabled,
-                    onCheckedClick = { onAlarmToggleClick() }
+                    onCheckedClick = { onAlarmToggleClick() },
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -463,7 +473,7 @@ private fun MyPageScreen(
                 Text(
                     text = "약관 및 정책",
                     style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                    color = ByeBooTheme.colors.gray400,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -472,7 +482,7 @@ private fun MyPageScreen(
                     text = "개인정보 처리 방침",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onPrivacyPolicyClick)
+                    modifier = Modifier.clickable(onClick = onPrivacyPolicyClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -481,7 +491,7 @@ private fun MyPageScreen(
                     text = "서비스 이용 약관",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onTermsOfServiceClick)
+                    modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -491,7 +501,7 @@ private fun MyPageScreen(
                 Text(
                     text = "계정",
                     style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400
+                    color = ByeBooTheme.colors.gray400,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -500,7 +510,7 @@ private fun MyPageScreen(
                     text = "로그아웃",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onLogoutClick)
+                    modifier = Modifier.clickable(onClick = onLogoutClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -509,7 +519,7 @@ private fun MyPageScreen(
                     text = "탈퇴",
                     style = ByeBooTheme.typography.body3,
                     color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onDeleteAccountClick)
+                    modifier = Modifier.clickable(onClick = onDeleteAccountClick),
                 )
             }
         }

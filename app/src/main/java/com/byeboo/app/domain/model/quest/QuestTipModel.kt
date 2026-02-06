@@ -5,10 +5,10 @@ data class QuestTip(
     val step: String,
     val stepNumber: Long,
     val questNumber: Long,
-    val tips: List<QuestTips>
+    val tips: List<QuestTips>,
 )
 
 data class QuestTips(
     val tipStep: Int,
-    val tipAnswer: String
+    val tipAnswer: String,
 )

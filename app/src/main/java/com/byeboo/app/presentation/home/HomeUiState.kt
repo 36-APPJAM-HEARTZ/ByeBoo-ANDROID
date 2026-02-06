@@ -19,9 +19,18 @@ data class HomeUiState(
 
 sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
-    data class NavigateToQuestStart(val journey: QuestType?) : HomeSideEffect
+
+    data class NavigateToQuestStart(
+        val journey: QuestType?,
+    ) : HomeSideEffect
+
     data object NavigateToTutorial : HomeSideEffect
+
     data object NavigateToOffboardingCompletedGuide : HomeSideEffect
+
     data object NavigateToOffboardingNewJourney : HomeSideEffect
-    data class ShowSnackBar(val message: String) : HomeSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : HomeSideEffect
 }

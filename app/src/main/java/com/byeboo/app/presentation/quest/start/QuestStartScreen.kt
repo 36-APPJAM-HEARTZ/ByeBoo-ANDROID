@@ -38,7 +38,7 @@ fun QuestStartRoute(
     navigateToHome: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestStartViewModel = hiltViewModel()
+    viewModel: QuestStartViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -58,7 +58,7 @@ fun QuestStartRoute(
         onBackClick = viewModel::onBackClicked,
         onStartClick = viewModel::onStartClicked,
         paddingValues = paddingValues,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -68,44 +68,48 @@ private fun QuestStartScreen(
     onBackClick: () -> Unit,
     onStartClick: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding()
-            ),
-        contentPadding = PaddingValues(top = screenHeightDp(43.dp), bottom = screenHeightDp(10.dp))
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
+        contentPadding = PaddingValues(top = screenHeightDp(43.dp), bottom = screenHeightDp(10.dp)),
     ) {
         item {
             Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                modifier =
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp)),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                     contentDescription = "뒤로가기",
                     tint = ByeBooTheme.colors.white,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .noRippleClickable { onBackClick() })
+                    modifier =
+                        Modifier
+                            .size(24.dp)
+                            .noRippleClickable { onBackClick() },
+                )
             }
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
         }
 
         item {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 GuideContent(
                     userName = uiState.nickname,
-                    guideText = "님의 상황에 꼭 맞춘\n${uiState.journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해 나가요!"
+                    guideText = "님의 상황에 꼭 맞춘\n${uiState.journeyName} 여정의 퀘스트 30개를 드릴게요.\n\n제가 드리는 퀘스트와 함께\n이별을 극복해 나가요!",
                 )
             }
 
@@ -117,7 +121,7 @@ private fun QuestStartScreen(
                 buttonStyle = ByeBooTheme.typography.body2,
                 buttonTextColor = ByeBooTheme.colors.white,
                 buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+                modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
             )
         }
     }

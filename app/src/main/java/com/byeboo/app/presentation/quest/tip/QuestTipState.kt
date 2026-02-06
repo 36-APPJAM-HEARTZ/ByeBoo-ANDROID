@@ -13,16 +13,19 @@ data class QuestTipState(
     val questNumber: Long = 0,
     val question: String = "",
     val tipStep: ImmutableList<Int> = persistentListOf(1, 2, 3),
-    val tipAnswer: QuestTipAnswers = QuestTipAnswers("", "", "")
+    val tipAnswer: QuestTipAnswers = QuestTipAnswers("", "", ""),
 )
 
 data class QuestTipAnswers(
     val reason: String,
     val suggestion: String,
-    val change: String
+    val change: String,
 )
 
 sealed interface QuestTipSideEffect {
     data object NavigateToQuest : QuestTipSideEffect
-    data class ShowSnackBar(val message: String) : QuestTipSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestTipSideEffect
 }

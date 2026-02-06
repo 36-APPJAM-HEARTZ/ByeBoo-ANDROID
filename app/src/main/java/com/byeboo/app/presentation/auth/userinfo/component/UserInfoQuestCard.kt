@@ -33,7 +33,7 @@ fun UserInfoQuestCard(
     imageRes: Int,
     isSelected: Boolean,
     onCardClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isSelected) ByeBooTheme.colors.primary300Alpha20 else whiteAlpha10
     val borderColor = if (isSelected) ByeBooTheme.colors.primary300 else Color.Transparent
@@ -41,23 +41,26 @@ fun UserInfoQuestCard(
     val textStyle = if (isSelected) ByeBooTheme.typography.body5 else ByeBooTheme.typography.body6
 
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor)
-            .border(2.dp, borderColor, RoundedCornerShape(12.dp))
-            .noRippleClickable(onCardClick)
-            .padding(vertical = screenHeightDp(24.dp))
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(backgroundColor)
+                .border(2.dp, borderColor, RoundedCornerShape(12.dp))
+                .noRippleClickable(onCardClick)
+                .padding(vertical = screenHeightDp(24.dp)),
     ) {
         Column(
-            modifier = Modifier
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(width = screenWidthDp(56.dp), height = screenHeightDp(56.dp))
+                modifier =
+                    Modifier
+                        .size(width = screenWidthDp(56.dp), height = screenHeightDp(56.dp)),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -65,7 +68,7 @@ fun UserInfoQuestCard(
             Text(
                 text = title,
                 style = ByeBooTheme.typography.sub2,
-                color = textColor
+                color = textColor,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -75,7 +78,7 @@ fun UserInfoQuestCard(
                 style = textStyle,
                 color = textColor,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

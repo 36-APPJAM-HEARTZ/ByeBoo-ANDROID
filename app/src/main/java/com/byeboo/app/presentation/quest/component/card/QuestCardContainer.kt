@@ -27,25 +27,25 @@ fun QuestCardContainer(
     backgroundColor: Color = Color.Transparent,
     borderColor: Color = Color.Transparent,
     cornerRadius: Dp = 12.dp,
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .aspectRatio(1f)
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(backgroundColor)
-            .then(
-                if (borderColor != Color.Transparent) {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = borderColor,
-                        shape = RoundedCornerShape(cornerRadius)
-                    )
-                } else {
-                    Modifier
-                }
-            )
-            .padding(horizontal = screenWidthDp(8.dp), vertical = screenHeightDp(8.dp))
+        modifier =
+            modifier
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(backgroundColor)
+                .then(
+                    if (borderColor != Color.Transparent) {
+                        Modifier.border(
+                            width = 1.dp,
+                            color = borderColor,
+                            shape = RoundedCornerShape(cornerRadius),
+                        )
+                    } else {
+                        Modifier
+                    },
+                ).padding(horizontal = screenWidthDp(8.dp), vertical = screenHeightDp(8.dp)),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             content()
@@ -58,10 +58,11 @@ fun BackgroundImageLayer(imageResId: Int) {
     Image(
         painter = painterResource(id = imageResId),
         contentDescription = null,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = screenWidthDp(3.dp))
-            .padding(top = screenHeightDp(6.dp))
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = screenWidthDp(3.dp))
+                .padding(top = screenHeightDp(6.dp)),
     )
 }
 
@@ -69,12 +70,12 @@ fun BackgroundImageLayer(imageResId: Int) {
 fun QuestNumberLabel(
     questNumber: Long,
     color: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = String.format("%02d", questNumber),
         style = ByeBooTheme.typography.cap1,
         color = color,
-        modifier = modifier
+        modifier = modifier,
     )
 }

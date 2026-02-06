@@ -55,7 +55,6 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.quest.QuestValidator
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
@@ -72,7 +71,7 @@ fun QuestBehaviorWritingRoute(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestBehaviorViewModel = hiltViewModel()
+    viewModel: QuestBehaviorViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -81,13 +80,20 @@ fun QuestBehaviorWritingRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestBehaviorSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestBehaviorSideEffect.NavigateToQuestTip -> navigateToQuestTip(
-                    effect.questId,
-                    effect.questType
-                )
-                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete -> navigateToQuestBehaviorComplete(effect.questId)
+                is QuestBehaviorSideEffect.NavigateToQuestTip ->
+                    navigateToQuestTip(
+                        effect.questId,
+                        effect.questType,
+                    )
+                is QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete ->
+                    navigateToQuestBehaviorComplete(
+                        effect.questId,
+                    )
                 is QuestBehaviorSideEffect.CompleteAndClear -> viewModel.clearQuestInput()
-                is QuestBehaviorSideEffect.NavigateToQuestReview -> navigateToQuestReview(effect.questId)
+                is QuestBehaviorSideEffect.NavigateToQuestReview ->
+                    navigateToQuestReview(
+                        effect.questId,
+                    )
                 is QuestBehaviorSideEffect.NavigateUp -> navigateUp()
                 is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
@@ -102,10 +108,11 @@ fun QuestBehaviorWritingRoute(
                 viewModel.onDismissModal()
                 viewModel.onQuitClicked()
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -122,7 +129,7 @@ fun QuestBehaviorWritingRoute(
         onClickCompleteButton = viewModel::onClickCompleteButton,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -139,14 +146,15 @@ private fun QuestBehaviorWritingScreen(
     navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (LargeTagType?) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
-    val displayImageUri: Uri? = uiState.selectedImageUri
-        ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
+    val displayImageUri: Uri? =
+        uiState.selectedImageUri
+            ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
 
     LaunchedEffect(isFocused.value) {
         if (isFocused.value) {
@@ -156,52 +164,54 @@ private fun QuestBehaviorWritingScreen(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .onPreInterceptKeyBeforeSoftKeyboard { event ->
-                if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
-                    focusManager.clearFocus(force = true)
-                    isFocused.value = false
-                    true
-                } else {
-                    false
-                }
-            }
-            .addFocusCleaner(focusManager)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .onPreInterceptKeyBeforeSoftKeyboard { event ->
+                    if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                        focusManager.clearFocus(force = true)
+                        isFocused.value = false
+                        true
+                    } else {
+                        false
+                    }
+                }.addFocusCleaner(focusManager)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = "back button",
             tint = ByeBooTheme.colors.white,
-            modifier = modifier
-                .padding(horizontal = screenWidthDp(24.dp))
-                .align(Alignment.Start)
-                .clickable(onClick = onBackClick)
+            modifier =
+                modifier
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .align(Alignment.Start)
+                    .clickable(onClick = onBackClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp),
-            )
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                ),
         ) {
             item {
                 Row(
                     modifier = modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SmallTag(
                         tagText = "STEP ${uiState.stepNumber}",
-                        tagColor = ByeBooTheme.colors.gray500
+                        tagColor = ByeBooTheme.colors.gray500,
                     )
 
                     Spacer(modifier = modifier.width(screenWidthDp(12.dp)))
@@ -209,7 +219,7 @@ private fun QuestBehaviorWritingScreen(
                     Text(
                         text = uiState.step,
                         color = ByeBooTheme.colors.gray500,
-                        style = ByeBooTheme.typography.body2
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
 
@@ -222,7 +232,7 @@ private fun QuestBehaviorWritingScreen(
                     color = ByeBooTheme.colors.gray500,
                     textAlign = TextAlign.Center,
                     style = ByeBooTheme.typography.body6,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
@@ -234,7 +244,7 @@ private fun QuestBehaviorWritingScreen(
                     color = ByeBooTheme.colors.gray100,
                     textAlign = TextAlign.Center,
                     style = ByeBooTheme.typography.head1,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = modifier.height(screenHeightDp(25.dp)))
@@ -243,13 +253,13 @@ private fun QuestBehaviorWritingScreen(
             item {
                 Box(
                     modifier = modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_TIP,
                         text = "작성 TIP",
                         textStyle = ByeBooTheme.typography.cap1,
-                        modifier = modifier.clickable { onTipClick() }
+                        modifier = modifier.clickable { onTipClick() },
                     )
                 }
 
@@ -261,7 +271,7 @@ private fun QuestBehaviorWritingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_ESSENTIAL,
                         text = "필수",
-                        textStyle = ByeBooTheme.typography.cap1
+                        textStyle = ByeBooTheme.typography.cap1,
                     )
 
                     Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
@@ -269,7 +279,7 @@ private fun QuestBehaviorWritingScreen(
                     Text(
                         text = "사진 첨부",
                         color = ByeBooTheme.colors.gray50,
-                        style = ByeBooTheme.typography.body2
+                        style = ByeBooTheme.typography.body2,
                     )
 
                     Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
@@ -277,7 +287,7 @@ private fun QuestBehaviorWritingScreen(
                     Text(
                         text = "(${uiState.imageCount}/1)",
                         color = ByeBooTheme.colors.gray400,
-                        style = ByeBooTheme.typography.body5
+                        style = ByeBooTheme.typography.body5,
                     )
                 }
 
@@ -289,7 +299,7 @@ private fun QuestBehaviorWritingScreen(
                     imageUrl = displayImageUri,
                     onImageClick = { url ->
                         onUpdateSelectedImage(url)
-                    }
+                    },
                 )
 
                 Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
@@ -300,7 +310,7 @@ private fun QuestBehaviorWritingScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.QUEST_OPTIONAL,
                         text = "선택",
-                        textStyle = ByeBooTheme.typography.cap1
+                        textStyle = ByeBooTheme.typography.cap1,
                     )
 
                     Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
@@ -308,7 +318,7 @@ private fun QuestBehaviorWritingScreen(
                     Text(
                         text = "생각 적기",
                         color = ByeBooTheme.colors.gray50,
-                        style = ByeBooTheme.typography.body2
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
 
@@ -330,9 +340,10 @@ private fun QuestBehaviorWritingScreen(
                         onFocusChanged = {
                             isFocused.value = it
                         },
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .bringIntoViewRequester(bringIntoViewRequester)
+                        modifier =
+                            modifier
+                                .fillMaxWidth()
+                                .bringIntoViewRequester(bringIntoViewRequester),
                     )
                 }
             }
@@ -348,7 +359,7 @@ private fun QuestBehaviorWritingScreen(
                         onClickCompleteButton(context)
                         onUpdateSelectedImage(uiState.selectedImageUri)
                     },
-                    isEnabled = uiState.isCompleteButtonEnabled
+                    isEnabled = uiState.isCompleteButtonEnabled,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
@@ -362,6 +373,6 @@ private fun QuestBehaviorWritingScreen(
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,
-        isUploading = uiState.isUploading
+        isUploading = uiState.isUploading,
     )
 }

@@ -22,5 +22,5 @@ data class QuestRecordedDetailResponseDto(
     @SerialName("questEmotionState")
     val questEmotionState: String,
     @SerialName("emotionDescription")
-    val emotionDescription: String
+    val emotionDescription: String,
 )

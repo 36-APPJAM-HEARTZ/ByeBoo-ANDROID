@@ -27,34 +27,35 @@ fun HomeProgressCard(
     title: String,
     modifier: Modifier = Modifier,
     currentStep: Long = 0L,
-    totalSteps: Int = 30
+    totalSteps: Int = 30,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                ByeBooTheme.colors.whiteAlpha10,
-                RoundedCornerShape(12.dp)
-            )
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    ByeBooTheme.colors.whiteAlpha10,
+                    RoundedCornerShape(12.dp),
+                ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp)),
     ) {
         Column {
             Text(
                 text = title,
                 style = ByeBooTheme.typography.sub2,
-                color = ByeBooTheme.colors.gray50
+                color = ByeBooTheme.colors.gray50,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 CustomProgressBar(
                     progress = if (totalSteps > 0) currentStep.toFloat() / totalSteps else 0f,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(screenHeightDp(6.dp))
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .height(screenHeightDp(6.dp)),
                 )
 
                 Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -62,7 +63,7 @@ fun HomeProgressCard(
                 Text(
                     text = "($currentStep/$totalSteps)",
                     style = ByeBooTheme.typography.cap2,
-                    color = ByeBooTheme.colors.gray400
+                    color = ByeBooTheme.colors.gray400,
                 )
             }
         }
@@ -74,18 +75,20 @@ fun CustomProgressBar(
     progress: Float,
     modifier: Modifier = Modifier,
     backgroundColor: Color = ByeBooTheme.colors.primary300Alpha20,
-    progressColor: Color = ByeBooTheme.colors.primary300
+    progressColor: Color = ByeBooTheme.colors.primary300,
 ) {
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(backgroundColor)
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(backgroundColor),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(progress.coerceIn(0f, 1f))
-                .background(progressColor)
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(progress.coerceIn(0f, 1f))
+                    .background(progressColor),
         )
     }
 }

@@ -7,11 +7,11 @@ import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
-import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestStateRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestTipRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestDetailBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestDetailRecordingRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestRecordingRepositoryImpl
@@ -50,13 +50,13 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindQuestDetailBehaviorRepository(
-        questDetailBehaviorRepositoryImpl: QuestDetailBehaviorRepositoryImpl
+        questDetailBehaviorRepositoryImpl: QuestDetailBehaviorRepositoryImpl,
     ): QuestDetailBehaviorRepository
 
     @Binds
     @Singleton
     abstract fun bindQuestDetailRecordingRepository(
-        questDetailRecordingRepositoryImpl: QuestDetailRecordingRepositoryImpl
+        questDetailRecordingRepositoryImpl: QuestDetailRecordingRepositoryImpl,
     ): QuestDetailRecordingRepository
 
     @Binds
@@ -69,21 +69,17 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsQuestInProgressRepository(
-        questInProgressRepositoryImpl: QuestInProgressRepositoryImpl
-    ): QuestInProgressRepository
+    abstract fun bindsQuestInProgressRepository(questInProgressRepositoryImpl: QuestInProgressRepositoryImpl): QuestInProgressRepository
 
     @Binds
     @Singleton
     abstract fun bindsQuestCompletedRepository(
-        offboardingQuestCompletedRepositoryImpl: OffboardingQuestCompletedRepositoryImpl
+        offboardingQuestCompletedRepositoryImpl: OffboardingQuestCompletedRepositoryImpl,
     ): OffboardingQuestCompletedRepository
 
     @Binds
     @Singleton
-    abstract fun bindQuestBehaviorAnswerRepository(
-        questBehaviorAnswerRepositoryImpl: QuestBehaviorRepositoryImpl
-    ): QuestBehaviorRepository
+    abstract fun bindQuestBehaviorAnswerRepository(questBehaviorAnswerRepositoryImpl: QuestBehaviorRepositoryImpl): QuestBehaviorRepository
 
     @Binds
     @Singleton
@@ -91,31 +87,25 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindQuestRecordingRepository(
-        questRecordingRepositoryImpl: QuestRecordingRepositoryImpl
-    ): QuestRecordingRepository
+    abstract fun bindQuestRecordingRepository(questRecordingRepositoryImpl: QuestRecordingRepositoryImpl): QuestRecordingRepository
 
     @Binds
     @Singleton
     abstract fun bindQuestRecordedDetailRepository(
-        questRecordedDetailRepositoryImpl: QuestRecordedDetailRepositoryImpl
+        questRecordedDetailRepositoryImpl: QuestRecordedDetailRepositoryImpl,
     ): QuestRecordedDetailRepository
 
     @Binds
     @Singleton
     abstract fun bindOffboardingJourneyRepository(
-        offboardingJourneyRepositoryImpl: OffboardingJourneyRepositoryImpl
+        offboardingJourneyRepositoryImpl: OffboardingJourneyRepositoryImpl,
     ): OffboardingJourneyRepository
 
     @Binds
     @Singleton
-    abstract fun bindNewJourneyRepository(
-        newJourneyRepositoryImpl: NewJourneyRepositoryImpl
-    ): NewJourneyRepository
+    abstract fun bindNewJourneyRepository(newJourneyRepositoryImpl: NewJourneyRepositoryImpl): NewJourneyRepository
 
     @Binds
     @Singleton
-    abstract fun bindFcmTokenRepository(
-        fcmTokenRepositoryImpl: FcmTokenRepositoryImpl
-    ): FcmTokenRepository
+    abstract fun bindFcmTokenRepository(fcmTokenRepositoryImpl: FcmTokenRepositoryImpl): FcmTokenRepository
 }

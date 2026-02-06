@@ -9,5 +9,5 @@ data class QuestRecordedDetailModel(
     val questEmotionState: String,
     val imageKey: String? = null,
     val imageUrl: String? = null,
-    val emotionDescription: String
+    val emotionDescription: String,
 )

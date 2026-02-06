@@ -32,7 +32,7 @@ object ByeBooTheme {
 fun ProvideByeBooColorsAndTypography(
     colors: ByeBooColors,
     typography: ByeBooTypography,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val provideColors = remember { colors.copy() }
     provideColors.update(colors)
@@ -42,14 +42,14 @@ fun ProvideByeBooColorsAndTypography(
     CompositionLocalProvider(
         LocalByeBooColors provides provideColors,
         LocalByeBooTypography provides provideTypography,
-        content = content
+        content = content,
     )
 }
 
 @Composable
 fun ByeBooTheme(
     darkTheme: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = ByeBooDarkColors()
     val typography = ByeBooTypography()
@@ -64,7 +64,7 @@ fun ByeBooTheme(
     }
     ProvideByeBooColorsAndTypography(colors, typography) {
         MaterialTheme(
-            content = content
+            content = content,
         )
     }
 }

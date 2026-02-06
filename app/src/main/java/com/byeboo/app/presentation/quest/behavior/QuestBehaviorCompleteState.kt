@@ -9,16 +9,24 @@ data class QuestBehaviorCompleteState(
     val questNumber: Long = 0,
     val question: String = "",
     val questAnswer: String = "",
-    val createdAt: String = java.time.LocalDate.now().toString(),
+    val createdAt: String =
+        java.time.LocalDate
+            .now()
+            .toString(),
     val imageUrl: String = "",
     val selectedImageUri: Uri? = null,
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType? = LargeTagType.EMOTION_NEUTRAL
+    val selectedEmotion: LargeTagType? = LargeTagType.EMOTION_NEUTRAL,
 )
 
-sealed interface QuestBehaviorCompleteSideEffect{
+sealed interface QuestBehaviorCompleteSideEffect {
     data object NavigateToQuest : QuestBehaviorCompleteSideEffect
+
     data object NavigateToOffboardingCompletedGuide : QuestBehaviorCompleteSideEffect
+
     data object ShowInAppReview : QuestBehaviorCompleteSideEffect
-    data class ShowSnackBar(val message: String) : QuestBehaviorCompleteSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestBehaviorCompleteSideEffect
 }

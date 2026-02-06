@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,7 +42,7 @@ fun OffboardingQuestCompletedRoute(
     navigateToOffboardingQuestReview: (Long, QuestType) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: OffboardingQuestCompletedViewModel = hiltViewModel()
+    viewModel: OffboardingQuestCompletedViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -52,7 +51,11 @@ fun OffboardingQuestCompletedRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestCompletedSideEffect.NavigateUp -> navigateUp()
-                is QuestCompletedSideEffect.NavigateToOffboardingQuestReview -> navigateToOffboardingQuestReview(effect.questId, effect.journey)
+                is QuestCompletedSideEffect.NavigateToOffboardingQuestReview ->
+                    navigateToOffboardingQuestReview(
+                        effect.questId,
+                        effect.journey,
+                    )
                 is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -63,7 +66,7 @@ fun OffboardingQuestCompletedRoute(
         onCancelClick = viewModel::onCancelClicked,
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -73,25 +76,27 @@ private fun OffboardingQuestCompletedScreen(
     onCancelClick: () -> Unit,
     paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable(onClick = onCancelClick)
+            modifier =
+                Modifier
+                    .align(Alignment.End)
+                    .clickable(onClick = onCancelClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -99,7 +104,7 @@ private fun OffboardingQuestCompletedScreen(
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_PERIOD,
             text = uiState.progressPeriod,
-            textStyle = ByeBooTheme.typography.cap2
+            textStyle = ByeBooTheme.typography.cap2,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -109,26 +114,26 @@ private fun OffboardingQuestCompletedScreen(
             title = "${uiState.questType.journeyName} 여정",
             guideText = "이에요",
             contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
-            bottom = 18.dp
+            bottom = 18.dp,
         )
 
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenHeightDp(21.dp)),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
                 item("header_$stepIndex") {
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = ByeBooTheme.colors.whiteAlpha10,
-                        modifier = Modifier.padding(vertical = screenHeightDp(8.dp))
+                        modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                     )
 
                     Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestStepTitle(
                         stepNumber = (stepIndex + 1).toLong(),
-                        stepTitle = group.stepTitle
+                        stepTitle = group.stepTitle,
                     )
 
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -139,7 +144,7 @@ private fun OffboardingQuestCompletedScreen(
                     item("quest_row_${stepIndex}_$chunkIndex") {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp))
+                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
                         ) {
                             questChunk.forEach { quest ->
                                 QuestBox(
@@ -147,7 +152,7 @@ private fun OffboardingQuestCompletedScreen(
                                     questId = quest.questId,
                                     questNumber = quest.questNumber,
                                     state = quest.state,
-                                    onQuestClick = { onQuestClick(quest.questId) }
+                                    onQuestClick = { onQuestClick(quest.questId) },
                                 )
                             }
                             repeat(3 - questChunk.size) {

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestSingedUrlResponseDto(
     @SerialName("signedUrl")
-    val signedUrl: String
+    val signedUrl: String,
 )

@@ -24,108 +24,110 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestStartViewModel @Inject constructor(
-    private val questStateRepository: QuestStateRepository,
-    private val userRepository: UserRepository,
-    private val newJourneyRepository: NewJourneyRepository,
-    savedStateHandle: SavedStateHandle,
-    private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
-    private val questTypeArg = savedStateHandle.toRoute<QuestStart>().questType
+class QuestStartViewModel
+    @Inject
+    constructor(
+        private val questStateRepository: QuestStateRepository,
+        private val userRepository: UserRepository,
+        private val newJourneyRepository: NewJourneyRepository,
+        savedStateHandle: SavedStateHandle,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val questTypeArg = savedStateHandle.toRoute<QuestStart>().questType
 
-    private val _uiState = MutableStateFlow(QuestStartState())
-    val uiState: StateFlow<QuestStartState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestStartState())
+        val uiState: StateFlow<QuestStartState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestStartSideEffect>()
-    val sideEffect: SharedFlow<QuestStartSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<QuestStartSideEffect>()
+        val sideEffect: SharedFlow<QuestStartSideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        loadInitialData()
-    }
-
-    private fun loadInitialData() {
-        viewModelScope.launch {
-            userRepository.getNickname().collect { name ->
-                _uiState.update { it.copy(nickname = name) }
-            }
+        init {
+            loadInitialData()
         }
-        viewModelScope.launch {
-            val journey = questStateRepository.getUserJourney() ?: "감정 직면"
-            _uiState.update { it.copy(journeyName = journey) }
-        }
-        _uiState.update {
-            it.copy(questType = questTypeArg)
-        }
-    }
 
-    fun onStartClicked() {
-        val journey = uiState.value.questType
-
-        if (journey == null) {
+        private fun loadInitialData() {
             viewModelScope.launch {
-                val result = questStateRepository.updateQuestStartState()
-                val journeyType = questStateRepository.getUserJourney() ?: "추적 실패"
-                if (result.isSuccess) {
-                    questStateRepository.setQuestStarted(true)
-                    questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
-                    mixpanelUtil.trackEvent(
-                        "journey_start_click",
-                        mapOf(
-                            "journey_start_at" to getFormattedDate(),
-                            "journey_type" to journeyType,
-                            "is_first_journey" to true
-                        )
-                    )
-                    mixpanelUtil.trackEvent(
-                        "quest_pageview",
-                        mapOf(
-                            "journey_type" to journeyType,
-                            "is_first_pageview" to true
-                        )
-                    )
-                    _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
-                } else {
-                    _sideEffect.emit(
-                        QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                    )
+                userRepository.getNickname().collect { name ->
+                    _uiState.update { it.copy(nickname = name) }
                 }
             }
-        } else {
-            postNewJourney(journey)
+            viewModelScope.launch {
+                val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+                _uiState.update { it.copy(journeyName = journey) }
+            }
+            _uiState.update {
+                it.copy(questType = questTypeArg)
+            }
         }
-    }
 
-    fun onBackClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestStartSideEffect.NavigateToHome)
-        }
-    }
+        fun onStartClicked() {
+            val journey = uiState.value.questType
 
-    private fun postNewJourney(journey: QuestType) {
-        val journeyType = journey.journeyType
-        val journeyName = journey.journeyName
-
-        viewModelScope.launch {
-            newJourneyRepository.postNewJourney(journeyType)
-                .onSuccess {
-                    mixpanelUtil.trackEvent(
-                        "journey_start_click",
-                        mapOf(
-                            "journey_start_at" to getFormattedDate(),
-                            "journey_type" to journeyName,
-                            "is_first_journey" to false
+            if (journey == null) {
+                viewModelScope.launch {
+                    val result = questStateRepository.updateQuestStartState()
+                    val journeyType = questStateRepository.getUserJourney() ?: "추적 실패"
+                    if (result.isSuccess) {
+                        questStateRepository.setQuestStarted(true)
+                        questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
+                        mixpanelUtil.trackEvent(
+                            "journey_start_click",
+                            mapOf(
+                                "journey_start_at" to getFormattedDate(),
+                                "journey_type" to journeyType,
+                                "is_first_journey" to true,
+                            ),
                         )
-                    )
-                    questStateRepository.setQuestStarted(true)
-                    questStateRepository.updateUserJourney(journeyName)
-                    questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
-                    _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
+                        mixpanelUtil.trackEvent(
+                            "quest_pageview",
+                            mapOf(
+                                "journey_type" to journeyType,
+                                "is_first_pageview" to true,
+                            ),
+                        )
+                        _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
+                    } else {
+                        _sideEffect.emit(
+                            QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
                 }
-                .onFailure { e ->
-                    _sideEffect.emit(
-                        QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                    )
-                }
+            } else {
+                postNewJourney(journey)
+            }
+        }
+
+        fun onBackClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestStartSideEffect.NavigateToHome)
+            }
+        }
+
+        private fun postNewJourney(journey: QuestType) {
+            val journeyType = journey.journeyType
+            val journeyName = journey.journeyName
+
+            viewModelScope.launch {
+                newJourneyRepository
+                    .postNewJourney(journeyType)
+                    .onSuccess {
+                        mixpanelUtil.trackEvent(
+                            "journey_start_click",
+                            mapOf(
+                                "journey_start_at" to getFormattedDate(),
+                                "journey_type" to journeyName,
+                                "is_first_journey" to false,
+                            ),
+                        )
+                        questStateRepository.setQuestStarted(true)
+                        questStateRepository.updateUserJourney(journeyName)
+                        questStateRepository.updateUserJourneyStatus(JourneyStatusType.IN_PROGRESS)
+                        _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
+                    }.onFailure { e ->
+                        _sideEffect.emit(
+                            QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
         }
     }
-}

@@ -32,61 +32,67 @@ fun EmotionChip(
     isSelected: Boolean = false,
     enabled: Boolean = true,
     isDimmed: Boolean = false,
-    onChipClick: ((LargeTagType) -> Unit)? = null
+    onChipClick: ((LargeTagType) -> Unit)? = null,
 ) {
-    val backgroundColor = if (isSelected) {
-        ByeBooTheme.colors.primary300Alpha20
-    } else {
-        ByeBooTheme.colors.whiteAlpha10
-    }
+    val backgroundColor =
+        if (isSelected) {
+            ByeBooTheme.colors.primary300Alpha20
+        } else {
+            ByeBooTheme.colors.whiteAlpha10
+        }
 
-    val textColor = if (isSelected) {
-        ByeBooTheme.colors.primary200
-    } else {
-        ByeBooTheme.colors.gray500
-    }
+    val textColor =
+        if (isSelected) {
+            ByeBooTheme.colors.primary200
+        } else {
+            ByeBooTheme.colors.gray500
+        }
 
-    val textStyle = if (isSelected) {
-        ByeBooTheme.typography.body4
-    } else {
-        ByeBooTheme.typography.body6
-    }
+    val textStyle =
+        if (isSelected) {
+            ByeBooTheme.typography.body4
+        } else {
+            ByeBooTheme.typography.body6
+        }
 
     val shape = RoundedCornerShape(12.dp)
 
-    val baseModifier = modifier
-        .then(
-            if (onChipClick != null && enabled) {
-                Modifier.noRippleClickable { onChipClick(emotionType) }
-            } else {
-                Modifier
-            }
-        )
-        .clip(shape)
-        .background(
-            color = backgroundColor,
-            shape = shape
-        )
-        .then(
-            if (isSelected) {
-                Modifier.border(1.dp, ByeBooTheme.colors.primary300, shape)
-            } else {
-                Modifier
-            }
-        )
+    val baseModifier =
+        modifier
+            .then(
+                if (onChipClick != null && enabled) {
+                    Modifier.noRippleClickable { onChipClick(emotionType) }
+                } else {
+                    Modifier
+                },
+            ).clip(shape)
+            .background(
+                color = backgroundColor,
+                shape = shape,
+            ).then(
+                if (isSelected) {
+                    Modifier.border(1.dp, ByeBooTheme.colors.primary300, shape)
+                } else {
+                    Modifier
+                },
+            )
 
     Box(
         modifier = baseModifier,
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = screenWidthDp(14.dp), vertical = screenHeightDp(8.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier.padding(
+                    horizontal = screenWidthDp(14.dp),
+                    vertical = screenHeightDp(8.dp),
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = emotionType.titleIcon),
                 contentDescription = null,
-                modifier = Modifier.size(56.dp)
+                modifier = Modifier.size(56.dp),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -94,15 +100,16 @@ fun EmotionChip(
             Text(
                 text = stringResource(emotionType.titleResId),
                 color = textColor,
-                style = textStyle
+                style = textStyle,
             )
         }
 
         if (isDimmed) {
             Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(color = ByeBooTheme.colors.black.copy(alpha = 0.4f))
+                modifier =
+                    Modifier
+                        .matchParentSize()
+                        .background(color = ByeBooTheme.colors.black.copy(alpha = 0.4f)),
             )
         }
     }

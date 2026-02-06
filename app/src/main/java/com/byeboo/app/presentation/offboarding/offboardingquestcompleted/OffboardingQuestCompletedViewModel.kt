@@ -20,55 +20,65 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingQuestCompletedViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestCompleted>().questType
+class OffboardingQuestCompletedViewModel
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+        private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository,
+        savedStateHandle: SavedStateHandle,
+    ) : ViewModel() {
+        private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestCompleted>().questType
 
-    private val _uiState = MutableStateFlow(QuestCompletedState())
-    val uiState: StateFlow<QuestCompletedState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestCompletedState())
+        val uiState: StateFlow<QuestCompletedState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestCompletedSideEffect>()
-    val sideEffect: SharedFlow<QuestCompletedSideEffect> = _sideEffect
+        private val _sideEffect = MutableSharedFlow<QuestCompletedSideEffect>()
+        val sideEffect: SharedFlow<QuestCompletedSideEffect> = _sideEffect
 
-    init {
-        viewModelScope.launch {
-            userRepository.getNickname().collect { nickname ->
-                _uiState.update {
-                    it.copy(userName = nickname)
-                }
-                loadQuests(journey = questTypeArg, nickname = nickname)
-            }
-        }
-    }
-
-    private fun loadQuests(journey: QuestType, nickname: String) {
-        viewModelScope.launch {
-            val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
-
-            result.onSuccess { detail ->
-                _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
-            }.onFailure {
-                viewModelScope.launch {
-                    _sideEffect.emit(
-                        QuestCompletedSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                    )
+        init {
+            viewModelScope.launch {
+                userRepository.getNickname().collect { nickname ->
+                    _uiState.update {
+                        it.copy(userName = nickname)
+                    }
+                    loadQuests(journey = questTypeArg, nickname = nickname)
                 }
             }
         }
-    }
 
-    fun onCancelClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestCompletedSideEffect.NavigateUp)
+        private fun loadQuests(
+            journey: QuestType,
+            nickname: String,
+        ) {
+            viewModelScope.launch {
+                val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
+
+                result
+                    .onSuccess { detail ->
+                        _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
+                    }.onFailure {
+                        viewModelScope.launch {
+                            _sideEffect.emit(
+                                QuestCompletedSideEffect.ShowSnackBar(
+                                    "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                ),
+                            )
+                        }
+                    }
+            }
+        }
+
+        fun onCancelClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestCompletedSideEffect.NavigateUp)
+            }
+        }
+
+        fun onQuestClicked(questId: Long) {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg),
+                )
+            }
         }
     }
-
-    fun onQuestClicked(questId: Long) {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg))
-        }
-    }
-}

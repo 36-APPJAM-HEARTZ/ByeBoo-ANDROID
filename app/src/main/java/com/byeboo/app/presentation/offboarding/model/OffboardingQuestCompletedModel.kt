@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class QuestCompletedGroup(
     val stepNumber: Long,
     val stepTitle: String,
-    val quests: ImmutableList<QuestCompleted>
+    val quests: ImmutableList<QuestCompleted>,
 )
 
 data class QuestCompleted(
@@ -15,5 +15,5 @@ data class QuestCompleted(
     val questNumber: Long = 0,
     val questQuestion: String = "",
     val state: QuestState = QuestState.Complete,
-    val type: QuestType = QuestType.RECORDING
+    val type: QuestType = QuestType.RECORDING,
 )

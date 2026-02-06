@@ -25,19 +25,20 @@ import com.byeboo.app.presentation.quest.component.type.QuestContentType
 fun QuestContent(
     titleIcon: QuestContentType,
     titleText: String,
-    contentText: String
+    contentText: String,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+            Modifier
+                .fillMaxWidth(),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = titleIcon.iconResId),
                 contentDescription = "title icon",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
@@ -45,7 +46,7 @@ fun QuestContent(
             Text(
                 text = titleText,
                 color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2
+                style = ByeBooTheme.typography.body2,
             )
         }
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))

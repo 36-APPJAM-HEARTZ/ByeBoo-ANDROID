@@ -39,7 +39,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.byeboo.app.R
@@ -57,18 +56,19 @@ fun SplashRoute(
     navigateToTermsOfService: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: SplashViewModel = hiltViewModel()
+    viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            viewModel.onPermissionResult(isGranted)
-        }
-    )
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                viewModel.onPermissionResult(isGranted)
+            },
+        )
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -83,14 +83,14 @@ fun SplashRoute(
                 is SplashStateSideEffect.StartKakaoTalkLogin -> {
                     UserApiClient.instance.loginWithKakaoTalk(
                         context = context,
-                        callback = viewModel::updateLoginResult
+                        callback = viewModel::updateLoginResult,
                     )
                 }
 
                 is SplashStateSideEffect.StartKakaoWebLogin -> {
                     UserApiClient.instance.loginWithKakaoAccount(
                         context = context,
-                        callback = viewModel::updateLoginResult
+                        callback = viewModel::updateLoginResult,
                     )
                 }
 
@@ -114,7 +114,7 @@ fun SplashRoute(
             val availableButton = UserApiClient.instance.isKakaoTalkLoginAvailable(context)
             viewModel.startKakaoLogin(availableButton)
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -123,67 +123,72 @@ private fun SplashScreen(
     paddingValues: PaddingValues,
     showLoginButton: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val upAnimation by animateDpAsState(
         targetValue = if (showLoginButton) (-24).dp else 0.dp,
         animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
-        label = "upShift"
+        label = "upShift",
     )
 
     val buttonAlpha by animateDpAsState(
         targetValue = if (showLoginButton) 1.dp else 0.dp,
-        animationSpec = tween(
-            durationMillis = 450,
-            delayMillis = 120,
-            easing = LinearOutSlowInEasing
-        ),
-        label = "buttonAlpha"
+        animationSpec =
+            tween(
+                durationMillis = 450,
+                delayMillis = 120,
+                easing = LinearOutSlowInEasing,
+            ),
+        label = "buttonAlpha",
     )
 
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Image(
             painter = painterResource(R.drawable.bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_splash_logo),
             contentDescription = null,
-            modifier = Modifier
-                .padding(horizontal = screenWidthDp(76.dp))
-                .padding(top = screenHeightDp(333.dp))
-                .offset(y = upAnimation)
+            modifier =
+                Modifier
+                    .padding(horizontal = screenWidthDp(76.dp))
+                    .padding(top = screenHeightDp(333.dp))
+                    .offset(y = upAnimation),
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = screenHeightDp( 10.dp) + paddingValues.calculateBottomPadding())
-                .offset(y = upAnimation)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(
+                        bottom = screenHeightDp(10.dp) + paddingValues.calculateBottomPadding(),
+                    ).offset(y = upAnimation),
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             if (showLoginButton) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(color = ByeBooTheme.colors.kakaoYellow)
-                        .graphicsLayer { alpha = buttonAlpha.toPx() }
-                        .noRippleClickable(onClick = onClick)
-                        .padding(vertical = screenHeightDp(16.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(color = ByeBooTheme.colors.kakaoYellow)
+                            .graphicsLayer { alpha = buttonAlpha.toPx() }
+                            .noRippleClickable(onClick = onClick)
+                            .padding(vertical = screenHeightDp(16.dp)),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_kakao_logo),
-                        contentDescription = "kakao logo"
+                        contentDescription = "kakao logo",
                     )
 
                     Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
@@ -191,7 +196,7 @@ private fun SplashScreen(
                     Text(
                         text = "Kakao로 시작하기",
                         style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.black
+                        color = ByeBooTheme.colors.black,
                     )
                 }
             }

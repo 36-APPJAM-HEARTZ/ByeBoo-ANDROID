@@ -27,257 +27,276 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestRecordingViewModel @Inject constructor(
-    val questDetailRecordingRepository: QuestDetailRecordingRepository,
-    val questRecordingRepository: QuestRecordingRepository,
-    val questRecordedDetailRepository: QuestRecordedDetailRepository,
-    savedStateHandle: SavedStateHandle,
-    private val mixpanelUtil: MixpanelUtil
-) : ViewModel() {
-    private val questIdArg: Long = checkNotNull(savedStateHandle.toRoute<QuestRecord.QuestRecording>().questId)
-    private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().isEditMode
-    private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().fromOffboarding
-
-    private val _uiState = MutableStateFlow(
-        QuestRecordingState(
-            questId = questIdArg,
-            isEditMode = isEditModeArg,
-            fromOffboarding = fromOffboardingArg
-        )
-    )
-    val uiState: StateFlow<QuestRecordingState> = _uiState.asStateFlow()
-
-    private val _sideEffect = MutableSharedFlow<QuestRecordingSideEffect>()
-    val sideEffect: SharedFlow<QuestRecordingSideEffect> = _sideEffect.asSharedFlow()
-
-    init {
-        loadQuestInfo()
-
-        if (isEditModeArg) {
-            loadRecordedContent()
-        }
-    }
-
-    private fun loadQuestInfo() {
-        viewModelScope.launch {
-            val result = questDetailRecordingRepository.getQuestRecordingDetail(questIdArg)
-            result.onSuccess { detail ->
-                _uiState.update {
-                    it.copy(
-                        step = detail.step,
-                        stepNumber = detail.stepNumber,
-                        questNumber = detail.questNumber,
-                        question = detail.question
-                    )
-                }
-            }.onFailure {
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
-            }
-        }
-    }
-
-    private fun loadRecordedContent() {
-        viewModelScope.launch {
-            val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
-            result.onSuccess { detail ->
-                _uiState.update {
-                    it.copy(
-                        questAnswer = detail.questAnswer,
-                        originalAnswer = detail.questAnswer,
-                        isCompleteButtonEnabled = false
-                    )
-                }
-            }.onFailure {
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
-                )
-            }
-        }
-    }
-
-    fun onSaveClicked() {
-        val state = uiState.value
-        val questId = state.questId
-        val questNumber = state.questNumber
-        val answer = state.questAnswer
-        val emotion = state.selectedEmotion?.title.orEmpty()
-
-        viewModelScope.launch {
-            val request = QuestRecordingModel(
-                answer = answer,
-                questEmotionState = emotion
+class QuestRecordingViewModel
+    @Inject
+    constructor(
+        val questDetailRecordingRepository: QuestDetailRecordingRepository,
+        val questRecordingRepository: QuestRecordingRepository,
+        val questRecordedDetailRepository: QuestRecordedDetailRepository,
+        savedStateHandle: SavedStateHandle,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val questIdArg: Long =
+            checkNotNull(
+                savedStateHandle.toRoute<QuestRecord.QuestRecording>().questId,
             )
-            val result = questRecordingRepository.postRecording(questId, request)
+        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().isEditMode
+        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().fromOffboarding
 
-            result.onSuccess {
-                mixpanelUtil.trackEvent(
-                    eventName = "quest_success",
-                    properties = mapOf(
-                        "quest_end_at" to getFormattedDate(),
-                        "quest_number" to questNumber,
-                        "quest_type" to "질문형",
-                        "after_emotion_type" to emotion
+        private val _uiState =
+            MutableStateFlow(
+                QuestRecordingState(
+                    questId = questIdArg,
+                    isEditMode = isEditModeArg,
+                    fromOffboarding = fromOffboardingArg,
+                ),
+            )
+        val uiState: StateFlow<QuestRecordingState> = _uiState.asStateFlow()
+
+        private val _sideEffect = MutableSharedFlow<QuestRecordingSideEffect>()
+        val sideEffect: SharedFlow<QuestRecordingSideEffect> = _sideEffect.asSharedFlow()
+
+        init {
+            loadQuestInfo()
+
+            if (isEditModeArg) {
+                loadRecordedContent()
+            }
+        }
+
+        private fun loadQuestInfo() {
+            viewModelScope.launch {
+                val result = questDetailRecordingRepository.getQuestRecordingDetail(questIdArg)
+                result
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                step = detail.step,
+                                stepNumber = detail.stepNumber,
+                                questNumber = detail.questNumber,
+                                question = detail.question,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
+        }
+
+        private fun loadRecordedContent() {
+            viewModelScope.launch {
+                val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
+                result
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                questAnswer = detail.questAnswer,
+                                originalAnswer = detail.questAnswer,
+                                isCompleteButtonEnabled = false,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
+        }
+
+        fun onSaveClicked() {
+            val state = uiState.value
+            val questId = state.questId
+            val questNumber = state.questNumber
+            val answer = state.questAnswer
+            val emotion = state.selectedEmotion?.title.orEmpty()
+
+            viewModelScope.launch {
+                val request =
+                    QuestRecordingModel(
+                        answer = answer,
+                        questEmotionState = emotion,
                     )
-                )
-                _uiState.update {
-                    it.copy(showBottomSheet = false)
-                }
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId)
-                )
-            }.onFailure {
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                val result = questRecordingRepository.postRecording(questId, request)
+
+                result
+                    .onSuccess {
+                        mixpanelUtil.trackEvent(
+                            eventName = "quest_success",
+                            properties =
+                                mapOf(
+                                    "quest_end_at" to getFormattedDate(),
+                                    "quest_number" to questNumber,
+                                    "quest_type" to "질문형",
+                                    "after_emotion_type" to emotion,
+                                ),
+                        )
+                        _uiState.update {
+                            it.copy(showBottomSheet = false)
+                        }
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
+                        )
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
+        }
+
+        private fun onSaveEditClicked() {
+            val state = uiState.value
+            val questId = state.questId
+            val questNumber = state.questNumber
+            val answer = state.questAnswer
+
+            viewModelScope.launch {
+                val request = QuestRecordingEditModel(answer = answer)
+                val result =
+                    questRecordingRepository.updateRecording(
+                        questId = questId,
+                        request = request,
+                    )
+
+                result
+                    .onSuccess {
+                        mixpanelUtil.trackEvent(
+                            eventName = "quest_success",
+                            properties =
+                                mapOf(
+                                    "quest_end_at" to getFormattedDate(),
+                                    "quest_number" to questNumber,
+                                    "quest_type" to "질문형",
+                                ),
+                        )
+
+                        _uiState.update {
+                            it.copy(isEditMode = false)
+                        }
+
+                        questRecordedDetailRepository.getQuestRecordedDetail(questId)
+
+                        if (uiState.value.fromOffboarding) {
+                            _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
+                        } else {
+                            _sideEffect.emit(
+                                QuestRecordingSideEffect.NavigateToQuestReview(questId),
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
+        }
+
+        fun updateContent(
+            isFocused: Boolean,
+            questAnswer: String,
+        ) {
+            val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
+            _uiState.update { prev ->
+                val hasAnswerChanged = questAnswer != prev.originalAnswer
+
+                val next =
+                    prev.copy(
+                        questAnswer = questAnswer,
+                        contentsState = contentState,
+                        hasAnswerChanged = hasAnswerChanged,
+                    )
+                val isButtonEnabled =
+                    completeButtonEnabled(
+                        state = next,
+                    )
+
+                next.copy(
+                    isCompleteButtonEnabled = isButtonEnabled,
                 )
             }
         }
-    }
 
-    private fun onSaveEditClicked() {
-        val state = uiState.value
-        val questId = state.questId
-        val questNumber = state.questNumber
-        val answer = state.questAnswer
+        fun onBackClicked() {
+            _uiState.update { it.copy(showQuitModal = true) }
+        }
 
-        viewModelScope.launch {
-            val request = QuestRecordingEditModel(answer = answer)
-            val result = questRecordingRepository.updateRecording(
-                questId = questId,
-                request = request
-            )
+        fun onDismissModal() {
+            _uiState.update { it.copy(showQuitModal = false) }
+        }
 
-            result.onSuccess {
-                mixpanelUtil.trackEvent(
-                    eventName = "quest_success",
-                    properties = mapOf(
-                        "quest_end_at" to getFormattedDate(),
-                        "quest_number" to questNumber,
-                        "quest_type" to "질문형",
-                    )
-                )
-
-                _uiState.update {
-                    it.copy(isEditMode = false)
-                }
-
-                questRecordedDetailRepository.getQuestRecordedDetail(questId)
-
-                if (uiState.value.fromOffboarding){
+        fun onQuitClicked() {
+            if (uiState.value.isEditMode || uiState.value.fromOffboarding) {
+                viewModelScope.launch {
                     _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
-                } else {
-                    _sideEffect.emit(
-                        QuestRecordingSideEffect.NavigateToQuestReview(questId)
-                    )
                 }
-            }.onFailure {
+            } else {
+                viewModelScope.launch {
+                    _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuest)
+                }
+            }
+        }
+
+        fun onTipClicked() {
+            val questId = uiState.value.questId
+            val questNumber = uiState.value.questNumber
+
+            viewModelScope.launch {
+                mixpanelUtil.trackEvent(
+                    eventName = "quest_tip_pageview",
+                    properties =
+                        mapOf(
+                            "quest_number" to questNumber,
+                        ),
+                )
                 _sideEffect.emit(
-                    QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.")
+                    QuestRecordingSideEffect.NavigateToQuestTip(
+                        questId = questId,
+                        questType = QuestType.RECORDING,
+                    ),
                 )
             }
         }
-    }
 
-    fun updateContent(isFocused: Boolean, questAnswer: String) {
-        val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
-        _uiState.update { prev ->
-            val hasAnswerChanged = questAnswer != prev.originalAnswer
-
-            val next = prev.copy(
-                questAnswer = questAnswer,
-                contentsState = contentState,
-                hasAnswerChanged = hasAnswerChanged
-            )
-            val isButtonEnabled = completeButtonEnabled(
-                state = next,
-            )
-
-            next.copy(
-                isCompleteButtonEnabled = isButtonEnabled
-            )
-        }
-    }
-
-    fun onBackClicked() {
-        _uiState.update { it.copy(showQuitModal = true) }
-    }
-
-    fun onDismissModal() {
-        _uiState.update { it.copy(showQuitModal = false) }
-    }
-
-    fun onQuitClicked() {
-        if (uiState.value.isEditMode || uiState.value.fromOffboarding) {
-            viewModelScope.launch {
-                _sideEffect.emit(QuestRecordingSideEffect.NavigateUp)
-            }
-        } else {
-            viewModelScope.launch {
-                _sideEffect.emit(QuestRecordingSideEffect.NavigateToQuest)
+        fun onClickCompleteButton() {
+            if (uiState.value.isEditMode) {
+                onSaveEditClicked()
+            } else {
+                openBottomSheet()
             }
         }
-    }
 
-    fun onTipClicked() {
-        val questId = uiState.value.questId
-        val questNumber = uiState.value.questNumber
+        private fun completeButtonEnabled(state: QuestRecordingState): Boolean {
+            val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
 
-        viewModelScope.launch {
+            return if (state.isEditMode) {
+                isValid && state.hasAnswerChanged
+            } else {
+                isValid
+            }
+        }
+
+        private fun openBottomSheet() {
+            val questNumber = uiState.value.questNumber
+            val answer = uiState.value.questAnswer
             mixpanelUtil.trackEvent(
-                eventName = "quest_tip_pageview",
-                properties = mapOf(
-                    "quest_number" to questNumber
-                )
+                eventName = "quest_complete",
+                properties =
+                    mapOf(
+                        "quest_length" to answer.length,
+                        "quest_number" to questNumber,
+                        "quest_type" to "질문형",
+                    ),
             )
-            _sideEffect.emit(
-                QuestRecordingSideEffect.NavigateToQuestTip(
-                    questId = questId,
-                    questType = QuestType.RECORDING
-                )
-            )
+            _uiState.update { it.copy(showBottomSheet = true) }
+        }
+
+        fun closeBottomSheet() {
+            _uiState.update { it.copy(showBottomSheet = false) }
+        }
+
+        fun updateSelectedEmotion(emotion: LargeTagType?) {
+            _uiState.update { it.copy(selectedEmotion = emotion) }
         }
     }
-
-    fun onClickCompleteButton() {
-        if (uiState.value.isEditMode) {
-            onSaveEditClicked()
-        } else {
-            openBottomSheet()
-        }
-    }
-
-    private fun completeButtonEnabled(
-        state: QuestRecordingState,
-    ): Boolean {
-        val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
-
-        return if (state.isEditMode) {
-            isValid && state.hasAnswerChanged
-        } else {
-            isValid
-        }
-    }
-
-    private fun openBottomSheet() {
-        val questNumber = uiState.value.questNumber
-        val answer = uiState.value.questAnswer
-        mixpanelUtil.trackEvent(
-            eventName = "quest_complete",
-            properties = mapOf(
-                "quest_length" to answer.length,
-                "quest_number" to questNumber,
-                "quest_type" to "질문형"
-            )
-        )
-        _uiState.update { it.copy(showBottomSheet = true) }
-    }
-
-    fun closeBottomSheet() {
-        _uiState.update { it.copy(showBottomSheet = false) }
-    }
-
-    fun updateSelectedEmotion(emotion: LargeTagType?) {
-        _uiState.update { it.copy(selectedEmotion = emotion) }
-    }
-}

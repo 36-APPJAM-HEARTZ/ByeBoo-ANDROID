@@ -14,5 +14,5 @@ data class QuestDetailResponseDto(
     @SerialName("questStyle")
     val questStyle: String,
     @SerialName("question")
-    val question: String
+    val question: String,
 )

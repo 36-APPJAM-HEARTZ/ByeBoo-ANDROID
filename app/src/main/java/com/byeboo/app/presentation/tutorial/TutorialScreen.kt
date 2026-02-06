@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -36,8 +35,7 @@ import com.byeboo.app.core.util.screenWidthDp
 fun TutorialRoute(
     navigateToUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
-    viewModel: TutorialViewModel = hiltViewModel()
+    viewModel: TutorialViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -50,7 +48,6 @@ fun TutorialRoute(
     TutorialScreen(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
-        modifier = modifier
     )
 }
 
@@ -58,58 +55,65 @@ fun TutorialRoute(
 private fun TutorialScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.End)
-                .clickable(onClick = onBackClick)
+            modifier =
+                Modifier
+                    .padding(end = screenWidthDp(24.dp))
+                    .align(Alignment.End)
+                    .clickable(onClick = onBackClick),
         )
 
-        Column(
-            modifier = Modifier
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        TutorialContent()
+    }
+}
+
+@Composable
+private fun TutorialContent(modifier: Modifier = Modifier) {
+    Column(
+        modifier =
+            modifier
                 .fillMaxWidth()
-                .padding(horizontal = screenWidthDp((14.5).dp))
-                .padding(top = screenHeightDp(24.dp), bottom = screenHeightDp(16.dp))
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = screenWidthDp((38.5).dp))
+                .padding(top = screenHeightDp(24.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        for (contents in TutorialContent.entries) {
+            key(contents) {
+                Image(
+                    painter = painterResource(id = contents.image),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.fillMaxWidth(),
+                )
 
-            for (contents in TutorialContent.entries) {
-                key(contents) {
-                    Image(
-                        painter = painterResource(id = contents.image),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-                    Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+                Text(
+                    text = contents.content,
+                    style = ByeBooTheme.typography.body3,
+                    color = ByeBooTheme.colors.primary50,
+                    textAlign = TextAlign.Center,
+                )
 
-                    Text(
-                        text = contents.content,
-                        style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.primary50,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
-                }
+                Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
             }
         }
     }

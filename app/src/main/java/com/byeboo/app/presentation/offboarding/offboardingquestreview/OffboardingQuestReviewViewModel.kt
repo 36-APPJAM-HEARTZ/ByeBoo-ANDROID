@@ -20,74 +20,92 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OffboardingQuestReviewViewModel @Inject constructor(
-    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
-    private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().journeyType
-    private val _uiState = MutableStateFlow(OffboardingQuestReviewState(
-        questId = questIdArg
-    ))
-    val uiState: StateFlow<OffboardingQuestReviewState>
-        get() = _uiState.asStateFlow()
-
-    private val _sideEffect = MutableSharedFlow<OffboardingQuestReviewSideEffect>()
-    val sideEffect: SharedFlow<OffboardingQuestReviewSideEffect>
-        get() = _sideEffect.asSharedFlow()
-
-    init {
-        observeQuestRecordedDetail()
-    }
-
-    fun onEditClicked(questType: QuestType) {
-        viewModelScope.launch {
-            _sideEffect.emit(
-                if (questType == QuestType.RECORDING) {
-                    OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit(questId = uiState.value.questId, isEditMode = true, fromOffboarding = true)
-                } else {
-                    val imageKey = requireNotNull(uiState.value.imageKey) {
-                        "Behavior edit must have imageKey"
-                    }
-
-                    OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit(questId = uiState.value.questId, isEditMode = true, fromOffboarding = true, imageKey = imageKey)
-                }
+class OffboardingQuestReviewViewModel
+    @Inject
+    constructor(
+        private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+        savedStateHandle: SavedStateHandle,
+    ) : ViewModel() {
+        private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
+        private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().journeyType
+        private val _uiState =
+            MutableStateFlow(
+                OffboardingQuestReviewState(
+                    questId = questIdArg,
+                ),
             )
-        }
-    }
+        val uiState: StateFlow<OffboardingQuestReviewState>
+            get() = _uiState.asStateFlow()
 
-    fun onCancelClicked(){
-        viewModelScope.launch {
-            _sideEffect.emit(
-                OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(journey = journeyTypeArg)
-            )
-        }
-    }
+        private val _sideEffect = MutableSharedFlow<OffboardingQuestReviewSideEffect>()
+        val sideEffect: SharedFlow<OffboardingQuestReviewSideEffect>
+            get() = _sideEffect.asSharedFlow()
 
-    private fun observeQuestRecordedDetail() {
-        viewModelScope.launch {
-            questRecordedDetailRepository
-                .observeQuestRecordedDetail(questIdArg)
-                .collect { detail ->
-                    _uiState.update {
-                        it.copy(
-                            stepNumber = detail.stepNumber,
-                            questNumber = detail.questNumber,
-                            createdAt = detail.createdAt,
-                            question = detail.question,
-                            answer = detail.questAnswer,
-                            imageKey = detail.imageKey.orEmpty(),
-                            imageUrl = detail.imageUrl.orEmpty(),
-                            selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
-                            emotionDescription = detail.emotionDescription,
-                            questType = if (detail.imageUrl == null) {
-                                QuestType.RECORDING
-                            } else {
-                                QuestType.ACTIVE
-                            }
+        init {
+            observeQuestRecordedDetail()
+        }
+
+        fun onEditClicked(questType: QuestType) {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    if (questType == QuestType.RECORDING) {
+                        OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit(
+                            questId = uiState.value.questId,
+                            isEditMode = true,
+                            fromOffboarding = true,
                         )
+                    } else {
+                        val imageKey =
+                            requireNotNull(uiState.value.imageKey) {
+                                "Behavior edit must have imageKey"
+                            }
+
+                        OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit(
+                            questId = uiState.value.questId,
+                            isEditMode = true,
+                            fromOffboarding = true,
+                            imageKey = imageKey,
+                        )
+                    },
+                )
+            }
+        }
+
+        fun onCancelClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(
+                        journey = journeyTypeArg,
+                    ),
+                )
+            }
+        }
+
+        private fun observeQuestRecordedDetail() {
+            viewModelScope.launch {
+                questRecordedDetailRepository
+                    .observeQuestRecordedDetail(questIdArg)
+                    .collect { detail ->
+                        _uiState.update {
+                            it.copy(
+                                stepNumber = detail.stepNumber,
+                                questNumber = detail.questNumber,
+                                createdAt = detail.createdAt,
+                                question = detail.question,
+                                answer = detail.questAnswer,
+                                imageKey = detail.imageKey.orEmpty(),
+                                imageUrl = detail.imageUrl.orEmpty(),
+                                selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
+                                emotionDescription = detail.emotionDescription,
+                                questType =
+                                    if (detail.imageUrl == null) {
+                                        QuestType.RECORDING
+                                    } else {
+                                        QuestType.ACTIVE
+                                    },
+                            )
+                        }
                     }
-                }
+            }
         }
     }
-}

@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface QuestTipService {
     @GET("/api/v1/quests/{questId}/tip")
     suspend fun getQuestTip(
-        @Path("questId") questId: Long
+        @Path("questId") questId: Long,
     ): BaseResponse<QuestTipResponseDto>
 }

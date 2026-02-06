@@ -12,44 +12,50 @@ import com.byeboo.app.presentation.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ByebooNotificationHandler @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
-    fun showNotification(
-        title: String?,
-        message: String?
+class ByebooNotificationHandler
+    @Inject
+    constructor(
+        @ApplicationContext private val context: Context,
     ) {
-        val notifyId = System.currentTimeMillis().toInt()
+        fun showNotification(
+            title: String?,
+            message: String?,
+        ) {
+            val notifyId = System.currentTimeMillis().toInt()
 
-        val intent = Intent(context, MainActivity::class.java).apply {
-            putExtra(DESTINATION, QUEST_HOME)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            val intent =
+                Intent(context, MainActivity::class.java).apply {
+                    putExtra(DESTINATION, QUEST_HOME)
+                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
+
+            val pendingIntent =
+                PendingIntent.getActivity(
+                    context,
+                    notifyId,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
+
+            val builder =
+                NotificationCompat
+                    .Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+
+            val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.notify(notifyId, builder.build())
         }
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            notifyId,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notifyId, builder.build())
+        companion object {
+            const val CHANNEL_ID = "BYEBOO"
+            const val CHANNEL_NAME = "Byeboo 알림 채널"
+            const val DESTINATION = "destination"
+            const val QUEST_HOME = "questHome"
+        }
     }
-
-    companion object {
-        const val CHANNEL_ID = "BYEBOO"
-        const val CHANNEL_NAME = "Byeboo 알림 채널"
-        const val DESTINATION = "destination"
-        const val QUEST_HOME = "questHome"
-    }
-}

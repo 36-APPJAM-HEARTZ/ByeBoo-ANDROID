@@ -12,7 +12,10 @@ data class QuestBehaviorState(
     val questNumber: Long = 0,
     val question: String = "",
     val imageCount: Int = 0,
-    val createdAt: String = java.time.LocalDate.now().toString(),
+    val createdAt: String =
+        java.time.LocalDate
+            .now()
+            .toString(),
     val questAnswer: String = "",
     val imageUrl: String = "",
     val imageKey: String? = "",
@@ -29,15 +32,32 @@ data class QuestBehaviorState(
     val originalAnswer: String = "",
     val isCompleteButtonEnabled: Boolean = false,
     val hasAnswerChanged: Boolean = false,
-    val fromOffboarding: Boolean = false
+    val fromOffboarding: Boolean = false,
 )
 
 sealed interface QuestBehaviorSideEffect {
     data object NavigateToQuest : QuestBehaviorSideEffect
-    data class NavigateToQuestTip(val questId: Long, val questType: QuestType) : QuestBehaviorSideEffect
-    data class NavigateToQuestBehaviorComplete(val questId: Long) : QuestBehaviorSideEffect
-    data class NavigateToQuestReview(val questId: Long) : QuestBehaviorSideEffect
-    data class CompleteAndClear(val questId: Long) : QuestBehaviorSideEffect
-    data object NavigateUp: QuestBehaviorSideEffect
-    data class ShowSnackBar(val message: String) : QuestBehaviorSideEffect
+
+    data class NavigateToQuestTip(
+        val questId: Long,
+        val questType: QuestType,
+    ) : QuestBehaviorSideEffect
+
+    data class NavigateToQuestBehaviorComplete(
+        val questId: Long,
+    ) : QuestBehaviorSideEffect
+
+    data class NavigateToQuestReview(
+        val questId: Long,
+    ) : QuestBehaviorSideEffect
+
+    data class CompleteAndClear(
+        val questId: Long,
+    ) : QuestBehaviorSideEffect
+
+    data object NavigateUp : QuestBehaviorSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestBehaviorSideEffect
 }

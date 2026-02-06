@@ -30,37 +30,41 @@ fun JourneyCard(
     journeyTitleTextColor: Color,
     journeyCardTextStyle: TextStyle,
     modifier: Modifier = Modifier,
-    borderColor: Color = Color.Unspecified
+    borderColor: Color = Color.Unspecified,
 ) {
-    val journeyTypeText = when (journeyType) {
-        QuestType.RECORDING -> "질문형"
-        QuestType.ACTIVE -> "행동형"
-    }
+    val journeyTypeText =
+        when (journeyType) {
+            QuestType.RECORDING -> "질문형"
+            QuestType.ACTIVE -> "행동형"
+        }
 
-    val journeyTitle = when (journeyType) {
-        QuestType.RECORDING -> "감정 직면 여정"
-        QuestType.ACTIVE -> "감정 정리 여정"
-    }
+    val journeyTitle =
+        when (journeyType) {
+            QuestType.RECORDING -> "감정 직면 여정"
+            QuestType.ACTIVE -> "감정 정리 여정"
+        }
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .noRippleClickable { onJourneyCardClick(journeyType) }
-            .background(color = ByeBooTheme.colors.whiteAlpha10)
-            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
-            .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp))
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .noRippleClickable { onJourneyCardClick(journeyType) }
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
+                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {
         Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(color = chipBackgroundColor)
-                .padding(horizontal = screenWidthDp(12.dp), vertical = screenHeightDp(4.dp))
+            modifier =
+                Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = chipBackgroundColor)
+                    .padding(horizontal = screenWidthDp(12.dp), vertical = screenHeightDp(4.dp)),
         ) {
             Text(
                 text = journeyTypeText,
                 color = chipTextColor,
-                style = ByeBooTheme.typography.cap1
+                style = ByeBooTheme.typography.cap1,
             )
         }
 
@@ -69,7 +73,7 @@ fun JourneyCard(
         Text(
             text = journeyTitle,
             color = journeyTitleTextColor,
-            style = journeyCardTextStyle
+            style = journeyCardTextStyle,
         )
     }
 }

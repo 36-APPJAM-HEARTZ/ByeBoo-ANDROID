@@ -21,15 +21,28 @@ data class QuestRecordingState(
     val originalAnswer: String = "",
     val isCompleteButtonEnabled: Boolean = false,
     val hasAnswerChanged: Boolean = false,
-    val fromOffboarding: Boolean = false
+    val fromOffboarding: Boolean = false,
 )
 
 sealed interface QuestRecordingSideEffect {
     data object NavigateToQuest : QuestRecordingSideEffect
-    data class NavigateToQuestTip(val questId: Long, val questType: QuestType) : QuestRecordingSideEffect
 
-    data class NavigateToQuestRecordingComplete(val questId: Long) : QuestRecordingSideEffect
-    data class NavigateToQuestReview(val questId: Long) : QuestRecordingSideEffect
-    data object NavigateUp: QuestRecordingSideEffect
-    data class ShowSnackBar(val message: String) : QuestRecordingSideEffect
+    data class NavigateToQuestTip(
+        val questId: Long,
+        val questType: QuestType,
+    ) : QuestRecordingSideEffect
+
+    data class NavigateToQuestRecordingComplete(
+        val questId: Long,
+    ) : QuestRecordingSideEffect
+
+    data class NavigateToQuestReview(
+        val questId: Long,
+    ) : QuestRecordingSideEffect
+
+    data object NavigateUp : QuestRecordingSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : QuestRecordingSideEffect
 }
