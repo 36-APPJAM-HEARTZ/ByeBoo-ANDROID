@@ -233,7 +233,6 @@ fun MyPageRoute(
             )
         }
         else -> Unit
-
     }
 }
 
@@ -289,7 +288,7 @@ private fun MyPageScreen(
             item {
                 NicknameSection(
                     onNicknameChangeClicked = onNicknameChangeClicked,
-                    nickname = uiState.nickname
+                    nickname = uiState.nickname,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -306,21 +305,18 @@ private fun MyPageScreen(
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
             }
 
             item {
                 MyRecordingSection(onCompletedJourneyClicked = onCompletedJourneyClicked)
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
             }
 
             item {
                 ByeBooUniverseSection(onGoToByeBooUniverseClicked = onGoToByeBooUniverseClicked)
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
             }
 
             item {
@@ -339,7 +335,7 @@ private fun MyPageScreen(
             item {
                 AskingSection(
                     onAskingByeBooClicked = onAskingByeBooClicked,
-                    onServiceWithByeBooClicked = onServiceWithByeBooClicked
+                    onServiceWithByeBooClicked = onServiceWithByeBooClicked,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -348,7 +344,7 @@ private fun MyPageScreen(
             item {
                 NotificationSection(
                     isAlarmEnabled = uiState.isAlarmEnabled,
-                    onAlarmToggleClicked = onAlarmToggleClicked
+                    onAlarmToggleClicked = onAlarmToggleClicked,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -357,7 +353,7 @@ private fun MyPageScreen(
             item {
                 TermsSection(
                     onPrivacyPolicyClicked = onPrivacyPolicyClicked,
-                    onTermsOfServiceClicked = onTermsOfServiceClicked
+                    onTermsOfServiceClicked = onTermsOfServiceClicked,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
@@ -366,7 +362,7 @@ private fun MyPageScreen(
             item {
                 AccountSection(
                     onLogoutClicked = onLogoutClicked,
-                    onDeleteAccountClicked = onDeleteAccountClicked
+                    onDeleteAccountClicked = onDeleteAccountClicked,
                 )
             }
         }
@@ -377,7 +373,7 @@ private fun MyPageScreen(
 private fun NicknameSection(
     onNicknameChangeClicked: () -> Unit,
     nickname: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier =
@@ -411,7 +407,7 @@ private fun NicknameSection(
 @Composable
 private fun MyRecordingSection(
     onCompletedJourneyClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -462,7 +458,7 @@ private fun MyRecordingSection(
 @Composable
 private fun ByeBooUniverseSection(
     onGoToByeBooUniverseClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -508,17 +504,16 @@ private fun ByeBooUniverseSection(
             color = ByeBooTheme.colors.gray50,
         )
     }
-
 }
 
 @Composable
 private fun AskingSection(
     onAskingByeBooClicked: () -> Unit,
     onServiceWithByeBooClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "문의하기",
@@ -550,11 +545,11 @@ private fun AskingSection(
 private fun NotificationSection(
     isAlarmEnabled: Boolean,
     onAlarmToggleClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
-        ) {
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Text(
             text = "알림",
             style = ByeBooTheme.typography.body1,
@@ -566,19 +561,18 @@ private fun NotificationSection(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-
-            ) {
+        ) {
             Text(
                 text = "퀘스트 오픈 알림",
                 style = ByeBooTheme.typography.body3,
-                color = ByeBooTheme.colors.gray50
+                color = ByeBooTheme.colors.gray50,
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             NotificationToggle(
                 isToggleOn = isAlarmEnabled,
-                onToggleClicked = { onAlarmToggleClicked() }
+                onToggleClicked = { onAlarmToggleClicked() },
             )
         }
     }
@@ -588,10 +582,10 @@ private fun NotificationSection(
 private fun TermsSection(
     onPrivacyPolicyClicked: () -> Unit,
     onTermsOfServiceClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "약관 및 정책",
@@ -623,10 +617,10 @@ private fun TermsSection(
 private fun AccountSection(
     onLogoutClicked: () -> Unit,
     onDeleteAccountClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "계정",

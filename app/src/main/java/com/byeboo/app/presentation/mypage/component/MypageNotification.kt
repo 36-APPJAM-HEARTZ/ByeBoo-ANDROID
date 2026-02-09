@@ -30,37 +30,36 @@ fun NotificationToggle(
     val togglePadding = 2.dp
     val thumbSize = toggleHeight - togglePadding * 2
 
-    val onOffset = remember(toggleWidth, thumbSize, togglePadding) {
-        toggleWidth - thumbSize - togglePadding * 2
-    }
+    val onOffset =
+        remember(toggleWidth, thumbSize, togglePadding) {
+            toggleWidth - thumbSize - togglePadding * 2
+        }
 
     val toggleOffset by animateDpAsState(
-        targetValue = if (isToggleOn) onOffset else 0.dp
+        targetValue = if (isToggleOn) onOffset else 0.dp,
     )
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isToggleOn) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray600
+        targetValue = if (isToggleOn) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray600,
     )
 
     Box(
-        modifier = modifier
-            .width(toggleWidth)
-            .height(toggleHeight)
-            .clip(CircleShape)
-            .background(backgroundColor)
-            .noRippleClickable { onToggleClicked(!isToggleOn) }
-            .padding(togglePadding)
+        modifier =
+            modifier
+                .width(toggleWidth)
+                .height(toggleHeight)
+                .clip(CircleShape)
+                .background(backgroundColor)
+                .noRippleClickable { onToggleClicked(!isToggleOn) }
+                .padding(togglePadding),
     ) {
         Box(
-            modifier = Modifier
-                .offset(toggleOffset)
-                .size(thumbSize)
-                .clip(CircleShape)
-                .background(ByeBooTheme.colors.white)
+            modifier =
+                Modifier
+                    .offset(toggleOffset)
+                    .size(thumbSize)
+                    .clip(CircleShape)
+                    .background(ByeBooTheme.colors.white),
         )
-
-
     }
 }
-
-

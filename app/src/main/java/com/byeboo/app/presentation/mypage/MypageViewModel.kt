@@ -41,12 +41,13 @@ class MyPageViewModel
 
                 userRepository.getNickname().collect { nickname ->
                     if (_uiState.value is UiState.Loading) {
-                        _uiState.value = UiState.Success(
-                            MyPageState(
-                                nickname = nickname,
-                                isAlarmEnabled = savedAlarmState
+                        _uiState.value =
+                            UiState.Success(
+                                MyPageState(
+                                    nickname = nickname,
+                                    isAlarmEnabled = savedAlarmState,
+                                ),
                             )
-                        )
                     } else {
                         _uiState.updateSuccess { it.copy(nickname = nickname) }
                     }
@@ -79,19 +80,19 @@ class MyPageViewModel
             val currentState = (_uiState.value as? UiState.Success)?.data ?: return
             val isAlarmEnabled = currentState.isAlarmEnabled
 
-                if (isAlarmEnabled) {
+            if (isAlarmEnabled) {
+                updateAlarmStatus()
+            } else {
+                // [off -> on]
+                // 권한 있을 경우
+                if (hasSystemPermission) {
                     updateAlarmStatus()
                 } else {
-                    // [off -> on]
-                    // 권한 있을 경우
-                    if (hasSystemPermission) {
-                        updateAlarmStatus()
-                    } else {
-                        _uiState.updateSuccess {
-                            it.copy(showPermissionModal = true) }
+                    _uiState.updateSuccess {
+                        it.copy(showPermissionModal = true)
                     }
                 }
-
+            }
         }
 
         // 시스템 권한 팝업 결과 처리
@@ -168,8 +169,7 @@ class MyPageViewModel
                 when (modalType) {
                     ModalType.LOGOUT -> state.copy(showLogoutModal = false)
                     ModalType.DELETE_ACCOUNT -> state.copy(showDeleteAccountModal = false)
-                ModalType.PERMISSION -> state.copy(showPermissionModal = false)
-
+                    ModalType.PERMISSION -> state.copy(showPermissionModal = false)
                 }
             }
         }
