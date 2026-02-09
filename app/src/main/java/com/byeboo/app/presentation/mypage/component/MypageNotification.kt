@@ -1,53 +1,66 @@
 package com.byeboo.app.presentation.mypage.component
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import com.byeboo.app.R
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 
 @Composable
-fun MyPageNotification(
+fun NotificationToggle(
+    isToggleOn: Boolean,
+    onToggleClicked: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    isEnabledAlarm: Boolean?,
-    onCheckedClick: (Boolean) -> Unit,
 ) {
-    val toggle = if (isEnabledAlarm == true) R.drawable.ic_toggle_on else R.drawable.ic_toggle_off
-    val alpha = if (isEnabledAlarm == null) 0f else 1f
+    val toggleWidth = 48.dp
+    val toggleHeight = 28.dp
+    val togglePadding = 2.dp
+    val thumbSize = toggleHeight - togglePadding * 2
 
-    Row(
-        modifier =
-            modifier
-                .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+    val onOffset = remember(toggleWidth, thumbSize, togglePadding) {
+        toggleWidth - thumbSize - togglePadding * 2
+    }
+
+    val toggleOffset by animateDpAsState(
+        targetValue = if (isToggleOn) onOffset else 0.dp
+    )
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isToggleOn) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray600
+    )
+
+    Box(
+        modifier = modifier
+            .width(toggleWidth)
+            .height(toggleHeight)
+            .clip(CircleShape)
+            .background(backgroundColor)
+            .noRippleClickable { onToggleClicked(!isToggleOn) }
+            .padding(togglePadding)
     ) {
-        Text(
-            text = "퀘스트 오픈 알림",
-            style = ByeBooTheme.typography.body3,
-            color = ByeBooTheme.colors.gray50,
+        Box(
+            modifier = Modifier
+                .offset(toggleOffset)
+                .size(thumbSize)
+                .clip(CircleShape)
+                .background(ByeBooTheme.colors.white)
         )
 
-        Spacer(modifier = Modifier.weight(1f))
 
-        Image(
-            imageVector = ImageVector.vectorResource(toggle),
-            contentDescription = "alarm toggle",
-            alpha = alpha,
-            modifier =
-                Modifier
-                    .noRippleClickable(
-                        onClick = {
-                            isEnabledAlarm?.let { onCheckedClick(!isEnabledAlarm) }
-                        },
-                    ),
-        )
     }
 }
+
+
