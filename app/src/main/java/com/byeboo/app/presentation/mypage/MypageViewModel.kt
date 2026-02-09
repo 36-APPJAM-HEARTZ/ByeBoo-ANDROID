@@ -3,7 +3,9 @@ package com.byeboo.app.presentation.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
+import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.updateSuccess
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LogoutUseCase
@@ -14,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,16 +29,27 @@ class MyPageViewModel
         private val withdrawUseCase: WithdrawUseCase,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
-        private val _uiState = MutableStateFlow(MyPageState())
-        val uiState: StateFlow<MyPageState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow<UiState<MyPageState>>(UiState.Loading)
+        val uiState: StateFlow<UiState<MyPageState>> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<MyPageSideEffect>()
         val sideEffect = _sideEffect.asSharedFlow()
 
         init {
             viewModelScope.launch {
+                val savedAlarmState = fcmTokenRepository.isAlarmEnabled()
+
                 userRepository.getNickname().collect { nickname ->
-                    _uiState.update { it.copy(nickname = nickname) }
+                    if (_uiState.value is UiState.Loading) {
+                        _uiState.value = UiState.Success(
+                            MyPageState(
+                                nickname = nickname,
+                                isAlarmEnabled = savedAlarmState
+                            )
+                        )
+                    } else {
+                        _uiState.updateSuccess { it.copy(nickname = nickname) }
+                    }
                 }
             }
         }
@@ -64,9 +76,9 @@ class MyPageViewModel
         }
 
         fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
-            val isAlarmEnabled = _uiState.value.isAlarmEnabled
+            val currentState = (_uiState.value as? UiState.Success)?.data ?: return
+            val isAlarmEnabled = currentState.isAlarmEnabled
 
-            isAlarmEnabled?.let {
                 if (isAlarmEnabled) {
                     updateAlarmStatus()
                 } else {
@@ -75,10 +87,11 @@ class MyPageViewModel
                     if (hasSystemPermission) {
                         updateAlarmStatus()
                     } else {
-                        _uiState.update { it.copy(showPermissionModal = true) }
+                        _uiState.updateSuccess {
+                            it.copy(showPermissionModal = true) }
                     }
                 }
-            }
+
         }
 
         // 시스템 권한 팝업 결과 처리
@@ -86,13 +99,13 @@ class MyPageViewModel
             if (isGranted) {
                 // 허용 -> 서버 토글 요청
                 viewModelScope.launch {
-                    _uiState.update { it.copy(isAlarmEnabled = true) }
+                    _uiState.updateSuccess { it.copy(isAlarmEnabled = true) }
                     fcmTokenRepository.saveAlarmEnabled(true)
                     updateAlarmStatus()
                 }
             } else {
                 // 비허용 -> off 유지
-                _uiState.update {
+                _uiState.updateSuccess {
                     it.copy(showPermissionModal = false, isAlarmEnabled = false)
                 }
             }
@@ -104,12 +117,12 @@ class MyPageViewModel
                 fcmTokenRepository
                     .allowQuestAlarm()
                     .onSuccess { notificationSetting ->
-                        _uiState.update {
+                        _uiState.updateSuccess {
                             it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
                         }
                         fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
                     }.onFailure {
-                        _uiState.update { it.copy(isAlarmEnabled = false) }
+                        _uiState.updateSuccess { it.copy(isAlarmEnabled = false) }
                         fcmTokenRepository.saveAlarmEnabled(false)
                     }
             }
@@ -117,7 +130,7 @@ class MyPageViewModel
 
         // 설정 화면으로 이동할 경우
         fun onGoToSettingClicked() {
-            _uiState.update { it.copy(showPermissionModal = false) }
+            _uiState.updateSuccess { it.copy(showPermissionModal = false) }
             viewModelScope.launch {
                 _sideEffect.emit(MyPageSideEffect.NavigateToSetting)
             }
@@ -127,11 +140,11 @@ class MyPageViewModel
         fun syncAlarmState(hasSystemPermission: Boolean) {
             viewModelScope.launch {
                 if (!hasSystemPermission) {
-                    _uiState.update { it.copy(isAlarmEnabled = false) }
+                    _uiState.updateSuccess { it.copy(isAlarmEnabled = false) }
                     fcmTokenRepository.saveAlarmEnabled(false)
                 } else {
                     val savedState = fcmTokenRepository.isAlarmEnabled()
-                    _uiState.update { it.copy(isAlarmEnabled = savedState) }
+                    _uiState.updateSuccess { it.copy(isAlarmEnabled = savedState) }
                 }
             }
         }
@@ -151,24 +164,22 @@ class MyPageViewModel
         fun onTermsOfServiceClicked() = emitOpenUrl(BuildConfig.BYEBOO_TERMS_OF_SERVICE)
 
         fun onDismissModal(modalType: ModalType) {
-            when (modalType) {
-                ModalType.LOGOUT -> _uiState.update { it.copy(showLogoutModal = false) }
-                ModalType.DELETE_ACCOUNT ->
-                    _uiState.update {
-                        it.copy(
-                            showDeleteAccountModal = false,
-                        )
-                    }
-                ModalType.PERMISSION -> _uiState.update { it.copy(showPermissionModal = false) }
+            _uiState.updateSuccess { state ->
+                when (modalType) {
+                    ModalType.LOGOUT -> state.copy(showLogoutModal = false)
+                    ModalType.DELETE_ACCOUNT -> state.copy(showDeleteAccountModal = false)
+                ModalType.PERMISSION -> state.copy(showPermissionModal = false)
+
+                }
             }
         }
 
         fun onLogoutClicked() {
-            _uiState.update { it.copy(showLogoutModal = true) }
+            _uiState.updateSuccess { it.copy(showLogoutModal = true) }
         }
 
         fun onDeleteAccountClicked() {
-            _uiState.update { it.copy(showDeleteAccountModal = true) }
+            _uiState.updateSuccess { it.copy(showDeleteAccountModal = true) }
         }
 
         fun confirmLogout() {
@@ -176,7 +187,7 @@ class MyPageViewModel
                 logoutUseCase()
                     .onSuccess {
                         mixpanelUtil.trackEvent("logout_confirm_click")
-                        _uiState.update { it.copy(showLogoutModal = false) }
+                        _uiState.updateSuccess { it.copy(showLogoutModal = false) }
                         _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
                     }.onFailure {
                         _sideEffect.emit(
@@ -192,7 +203,7 @@ class MyPageViewModel
                     .onSuccess {
                         mixpanelUtil.trackEvent("withdraw_confirm_click")
                         mixpanelUtil.reset()
-                        _uiState.update { it.copy(showDeleteAccountModal = false) }
+                        _uiState.updateSuccess { it.copy(showDeleteAccountModal = false) }
                         _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
                     }.onFailure {
                         _sideEffect.emit(

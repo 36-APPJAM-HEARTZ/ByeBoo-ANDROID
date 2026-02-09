@@ -46,15 +46,17 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
-import com.byeboo.app.presentation.mypage.component.MyPageNotification
+import com.byeboo.app.presentation.mypage.component.NotificationToggle
 
 @Composable
 fun MyPageRoute(
@@ -114,56 +116,6 @@ fun MyPageRoute(
         }
     }
 
-    if (uiState.showPermissionModal) {
-        BasicNotificationModal(
-            onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
-            onConfirmClick = {
-                viewModel.onDismissModal(ModalType.PERMISSION)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    val shouldShowRationale =
-                        activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-
-                    if (shouldShowRationale) {
-                        permissionLauncher.launch(POST_NOTIFICATIONS)
-                    } else {
-                        viewModel.onGoToSettingClicked()
-                    }
-                }
-            },
-        )
-    }
-
-    if (uiState.showLogoutModal) {
-        MyPageModal(
-            onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            myPageModalMainText = "로그아웃하시겠어요?",
-            onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            onConfirmClick = viewModel::confirmLogout,
-            onConfirmText = "로그아웃",
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-        )
-    }
-
-    if (uiState.showDeleteAccountModal) {
-        MyPageModal(
-            onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            myPageModalMainText = "정말 탈퇴하시겠어요?",
-            onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            onConfirmClick = viewModel::confirmWithdraw,
-            onConfirmText = "탈퇴하기",
-            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-        )
-    }
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
@@ -204,21 +156,85 @@ fun MyPageRoute(
         }
     }
 
-    MyPageScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onNicknameChangeClick = viewModel::onNicknameChangeClicked,
-        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
-        onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
-        onAskingByeBooClick = viewModel::onAskingByeBooClicked,
-        onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
-        onAlarmToggleClick = onAlarmToggleClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
-        onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
-        onLogoutClick = viewModel::onLogoutClicked,
-        onDeleteAccountClick = viewModel::onDeleteAccountClicked,
-        modifier = modifier,
-    )
+    when (val state = uiState) {
+        is UiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is UiState.Failure -> Unit
+
+        is UiState.Success -> {
+            val myPageState = state.data
+
+            if (myPageState.showPermissionModal) {
+                BasicNotificationModal(
+                    onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
+                    onConfirmClick = {
+                        viewModel.onDismissModal(ModalType.PERMISSION)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val shouldShowRationale =
+                                activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+
+                            if (shouldShowRationale) {
+                                permissionLauncher.launch(POST_NOTIFICATIONS)
+                            } else {
+                                viewModel.onGoToSettingClicked()
+                            }
+                        }
+                    },
+                )
+            }
+
+            if (myPageState.showLogoutModal) {
+                MyPageModal(
+                    onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
+                    myPageModalMainText = "로그아웃하시겠어요?",
+                    onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
+                    onConfirmClick = viewModel::confirmLogout,
+                    onConfirmText = "로그아웃",
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(48.dp)),
+                    dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+                )
+            }
+
+            if (myPageState.showDeleteAccountModal) {
+                MyPageModal(
+                    onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
+                    myPageModalMainText = "정말 탈퇴하시겠어요?",
+                    onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
+                    onConfirmClick = viewModel::confirmWithdraw,
+                    onConfirmText = "탈퇴하기",
+                    myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(48.dp)),
+                    dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+                )
+            }
+
+            MyPageScreen(
+                uiState = myPageState,
+                paddingValues = paddingValues,
+                onNicknameChangeClick = viewModel::onNicknameChangeClicked,
+                onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
+                onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
+                onAskingByeBooClick = viewModel::onAskingByeBooClicked,
+                onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
+                onAlarmToggleClick = onAlarmToggleClick,
+                onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
+                onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
+                onLogoutClick = viewModel::onLogoutClicked,
+                onDeleteAccountClick = viewModel::onDeleteAccountClicked,
+                modifier = modifier,
+            )
+        }
+        else -> Unit
+
+    }
 }
 
 @Composable
@@ -461,10 +477,28 @@ private fun MyPageScreen(
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-                MyPageNotification(
-                    isEnabledAlarm = uiState.isAlarmEnabled,
-                    onCheckedClick = { onAlarmToggleClick() },
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+
+                    ) {
+                    Text(
+                        text = "퀘스트 오픈 알림",
+                        style = ByeBooTheme.typography.body3,
+                        color = ByeBooTheme.colors.gray50
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    NotificationToggle(
+                        isToggleOn = uiState.isAlarmEnabled,
+                        onToggleClicked = { onAlarmToggleClick() }
+                    )
+
+
+                }
+
+
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
