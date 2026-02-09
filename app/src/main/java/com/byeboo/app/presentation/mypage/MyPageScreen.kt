@@ -97,7 +97,7 @@ fun MyPageRoute(
             },
         )
 
-    val onAlarmToggleClick = {
+    val onAlarmToggleClicked = {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (context.hasNotificationPermission()) {
                 viewModel.onAlarmToggledClicked(true)
@@ -219,16 +219,16 @@ fun MyPageRoute(
             MyPageScreen(
                 uiState = myPageState,
                 paddingValues = paddingValues,
-                onNicknameChangeClick = viewModel::onNicknameChangeClicked,
-                onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
-                onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
-                onAskingByeBooClick = viewModel::onAskingByeBooClicked,
-                onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
-                onAlarmToggleClick = onAlarmToggleClick,
-                onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
-                onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
-                onLogoutClick = viewModel::onLogoutClicked,
-                onDeleteAccountClick = viewModel::onDeleteAccountClicked,
+                onNicknameChangeClicked = viewModel::onNicknameChangeClicked,
+                onCompletedJourneyClicked = viewModel::onCompletedJourneyClicked,
+                onGoToByeBooUniverseClicked = viewModel::onGoToByeBooUniverseClicked,
+                onAskingByeBooClicked = viewModel::onAskingByeBooClicked,
+                onServiceWithByeBooClicked = viewModel::onServiceWithByeBooClicked,
+                onAlarmToggleClicked = onAlarmToggleClicked,
+                onPrivacyPolicyClicked = viewModel::onPrivacyPolicyClicked,
+                onTermsOfServiceClicked = viewModel::onTermsOfServiceClicked,
+                onLogoutClicked = viewModel::onLogoutClicked,
+                onDeleteAccountClicked = viewModel::onDeleteAccountClicked,
                 modifier = modifier,
             )
         }
@@ -241,16 +241,16 @@ fun MyPageRoute(
 private fun MyPageScreen(
     uiState: MyPageState,
     paddingValues: PaddingValues,
-    onNicknameChangeClick: () -> Unit,
-    onCompletedJourneyClick: () -> Unit,
-    onGoToByeBooUniverseClick: () -> Unit,
-    onAskingByeBooClick: () -> Unit,
-    onServiceWithByeBooClick: () -> Unit,
-    onAlarmToggleClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit,
-    onTermsOfServiceClick: () -> Unit,
-    onLogoutClick: () -> Unit,
-    onDeleteAccountClick: () -> Unit,
+    onNicknameChangeClicked: () -> Unit,
+    onCompletedJourneyClicked: () -> Unit,
+    onGoToByeBooUniverseClicked: () -> Unit,
+    onAskingByeBooClicked: () -> Unit,
+    onServiceWithByeBooClicked: () -> Unit,
+    onAlarmToggleClicked: () -> Unit,
+    onPrivacyPolicyClicked: () -> Unit,
+    onTermsOfServiceClicked: () -> Unit,
+    onLogoutClicked: () -> Unit,
+    onDeleteAccountClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -287,33 +287,10 @@ private fun MyPageScreen(
                 ),
         ) {
             item {
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(color = ByeBooTheme.colors.whiteAlpha10)
-                            .clickable(onClick = onNicknameChangeClick)
-                            .padding(
-                                horizontal = screenWidthDp(24.dp),
-                                vertical = screenHeightDp(18.5.dp),
-                            ),
-                ) {
-                    Text(
-                        text = uiState.nickname,
-                        style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.gray300,
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = ByeBooTheme.colors.gray50,
-                    )
-                }
+                NicknameSection(
+                    onNicknameChangeClicked = onNicknameChangeClicked,
+                    nickname = uiState.nickname
+                )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
@@ -327,104 +304,23 @@ private fun MyPageScreen(
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.whiteAlpha10,
                 )
+
+                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
             }
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
-
-                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                    Text(
-                        text = "나의 기록",
-                        style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(color = ByeBooTheme.colors.whiteAlpha10)
-                            .border(
-                                width = 1.dp,
-                                color = ByeBooTheme.colors.primary300,
-                                shape = RoundedCornerShape(12.dp),
-                            ).clickable(onClick = onCompletedJourneyClick)
-                            .padding(
-                                horizontal = screenWidthDp(24.dp),
-                                vertical = screenHeightDp(20.dp),
-                            ),
-                ) {
-                    Text(
-                        text = "완료한 여정 돌아보기",
-                        style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50,
-                    )
-                }
+                MyRecordingSection(onCompletedJourneyClicked = onCompletedJourneyClicked)
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
+            }
 
-                    Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                    Text(
-                        text = "보리가 궁금하다면?",
-                        style = ByeBooTheme.typography.body1,
-                        color = ByeBooTheme.colors.gray300,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(color = ByeBooTheme.colors.whiteAlpha10)
-                            .border(
-                                width = 1.dp,
-                                color = ByeBooTheme.colors.primary300,
-                                shape = RoundedCornerShape(12.dp),
-                            ).clickable(onClick = onGoToByeBooUniverseClick)
-                            .padding(
-                                horizontal = screenWidthDp(24.dp),
-                                vertical = screenHeightDp(20.dp),
-                            ),
-                ) {
-                    Text(
-                        text = "Bye Boo 세계관 보러 가기",
-                        style = ByeBooTheme.typography.body2,
-                        color = ByeBooTheme.colors.gray50,
-                    )
-                }
+            item {
+                ByeBooUniverseSection(onGoToByeBooUniverseClicked = onGoToByeBooUniverseClicked)
 
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
             }
 
             item {
@@ -436,126 +332,324 @@ private fun MyPageScreen(
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.whiteAlpha10,
                 )
-            }
 
-            item {
                 Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+            }
 
-                Text(
-                    text = "문의하기",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400,
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "바이부에 문의하기",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onAskingByeBooClick),
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "바이부와 함께 서비스 만들기",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
+            item {
+                AskingSection(
+                    onAskingByeBooClicked = onAskingByeBooClicked,
+                    onServiceWithByeBooClicked = onServiceWithByeBooClicked
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
-                Text(
-                    text = "알림",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400,
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-
-                    ) {
-                    Text(
-                        text = "퀘스트 오픈 알림",
-                        style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.gray50
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    NotificationToggle(
-                        isToggleOn = uiState.isAlarmEnabled,
-                        onToggleClicked = { onAlarmToggleClick() }
-                    )
-
-
-                }
-
-
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
-            }
-
-            item {
-                Text(
-                    text = "약관 및 정책",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400,
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "개인정보 처리 방침",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onPrivacyPolicyClick),
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "서비스 이용 약관",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
+                NotificationSection(
+                    isAlarmEnabled = uiState.isAlarmEnabled,
+                    onAlarmToggleClicked = onAlarmToggleClicked
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
-                Text(
-                    text = "계정",
-                    style = ByeBooTheme.typography.body1,
-                    color = ByeBooTheme.colors.gray400,
+                TermsSection(
+                    onPrivacyPolicyClicked = onPrivacyPolicyClicked,
+                    onTermsOfServiceClicked = onTermsOfServiceClicked
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
+            }
 
-                Text(
-                    text = "로그아웃",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onLogoutClick),
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-                Text(
-                    text = "탈퇴",
-                    style = ByeBooTheme.typography.body3,
-                    color = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.clickable(onClick = onDeleteAccountClick),
+            item {
+                AccountSection(
+                    onLogoutClicked = onLogoutClicked,
+                    onDeleteAccountClicked = onDeleteAccountClicked
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun NicknameSection(
+    onNicknameChangeClicked: () -> Unit,
+    nickname: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .clickable(onClick = onNicknameChangeClicked)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(18.5.dp),
+                ),
+    ) {
+        Text(
+            text = nickname,
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray300,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = ByeBooTheme.colors.gray50,
+        )
+    }
+}
+
+@Composable
+private fun MyRecordingSection(
+    onCompletedJourneyClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+        Text(
+            text = "나의 기록",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray300,
+        )
+    }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable(onClick = onCompletedJourneyClicked)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp),
+                ),
+    ) {
+        Text(
+            text = "완료한 여정 돌아보기",
+            style = ByeBooTheme.typography.body2,
+            color = ByeBooTheme.colors.gray50,
+        )
+    }
+}
+
+@Composable
+private fun ByeBooUniverseSection(
+    onGoToByeBooUniverseClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+        Text(
+            text = "보리가 궁금하다면?",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray300,
+        )
+    }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable(onClick = onGoToByeBooUniverseClicked)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp),
+                ),
+    ) {
+        Text(
+            text = "Bye Boo 세계관 보러 가기",
+            style = ByeBooTheme.typography.body2,
+            color = ByeBooTheme.colors.gray50,
+        )
+    }
+
+}
+
+@Composable
+private fun AskingSection(
+    onAskingByeBooClicked: () -> Unit,
+    onServiceWithByeBooClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "문의하기",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "바이부에 문의하기",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onAskingByeBooClicked),
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "바이부와 함께 서비스 만들기",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onServiceWithByeBooClicked),
+        )
+    }
+}
+
+@Composable
+private fun NotificationSection(
+    isAlarmEnabled: Boolean,
+    onAlarmToggleClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+        ) {
+        Text(
+            text = "알림",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+
+            ) {
+            Text(
+                text = "퀘스트 오픈 알림",
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray50
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            NotificationToggle(
+                isToggleOn = isAlarmEnabled,
+                onToggleClicked = { onAlarmToggleClicked() }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TermsSection(
+    onPrivacyPolicyClicked: () -> Unit,
+    onTermsOfServiceClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "약관 및 정책",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "개인정보 처리 방침",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onPrivacyPolicyClicked),
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "서비스 이용 약관",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onTermsOfServiceClicked),
+        )
+    }
+}
+
+@Composable
+private fun AccountSection(
+    onLogoutClicked: () -> Unit,
+    onDeleteAccountClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = "계정",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray400,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "로그아웃",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onLogoutClicked),
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
+        Text(
+            text = "탈퇴",
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray50,
+            modifier = Modifier.clickable(onClick = onDeleteAccountClicked),
+        )
     }
 }
