@@ -30,13 +30,13 @@ fun NotificationToggle(
     val togglePadding = 2.dp
     val thumbSize = toggleHeight - togglePadding * 2
 
-    val onOffset =
+    val toggleOnOffset =
         remember(toggleWidth, thumbSize, togglePadding) {
             toggleWidth - thumbSize - togglePadding * 2
         }
 
     val toggleOffset by animateDpAsState(
-        targetValue = if (isToggleOn) onOffset else 0.dp,
+        targetValue = if (isToggleOn) toggleOnOffset else 0.dp,
     )
 
     val backgroundColor by animateColorAsState(

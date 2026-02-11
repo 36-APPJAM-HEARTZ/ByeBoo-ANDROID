@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,10 +48,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenHeightDp
@@ -97,24 +97,27 @@ fun MyPageRoute(
             },
         )
 
-    val onAlarmToggleClicked = {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (context.hasNotificationPermission()) {
-                viewModel.onAlarmToggledClicked(true)
-            } else {
-                val shouldShowRationale =
-                    activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+    val onAlarmToggleClicked =
+        remember(context, viewModel, activity, permissionLauncher) {
+            { _: Boolean ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (context.hasNotificationPermission()) {
+                        viewModel.onAlarmToggledClicked(true)
+                    } else {
+                        val shouldShowRationale =
+                            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
 
-                if (shouldShowRationale) {
-                    viewModel.onAlarmToggledClicked(false)
+                        if (shouldShowRationale) {
+                            viewModel.onAlarmToggledClicked(false)
+                        } else {
+                            permissionLauncher.launch(POST_NOTIFICATIONS)
+                        }
+                    }
                 } else {
-                    permissionLauncher.launch(POST_NOTIFICATIONS)
+                    viewModel.onAlarmToggledClicked(true)
                 }
             }
-        } else {
-            viewModel.onAlarmToggledClicked(true)
         }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -156,100 +159,87 @@ fun MyPageRoute(
         }
     }
 
-    when (val state = uiState) {
-        is UiState.Loading -> {
-            LoadingScreen()
-        }
+    if (uiState.showPermissionModal) {
+        BasicNotificationModal(
+            onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
+            onConfirmClick = {
+                viewModel.onDismissModal(ModalType.PERMISSION)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val shouldShowRationale =
+                        activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
 
-        is UiState.Failure -> Unit
-
-        is UiState.Success -> {
-            val myPageState = state.data
-
-            if (myPageState.showPermissionModal) {
-                BasicNotificationModal(
-                    onDismissRequest = { viewModel.onDismissModal(ModalType.PERMISSION) },
-                    onConfirmClick = {
-                        viewModel.onDismissModal(ModalType.PERMISSION)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            val shouldShowRationale =
-                                activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-
-                            if (shouldShowRationale) {
-                                permissionLauncher.launch(POST_NOTIFICATIONS)
-                            } else {
-                                viewModel.onGoToSettingClicked()
-                            }
-                        }
-                    },
-                )
-            }
-
-            if (myPageState.showLogoutModal) {
-                MyPageModal(
-                    onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-                    myPageModalMainText = "로그아웃하시겠어요?",
-                    onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-                    onConfirmClick = viewModel::confirmLogout,
-                    onConfirmText = "로그아웃",
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = screenWidthDp(48.dp)),
-                    dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-                )
-            }
-
-            if (myPageState.showDeleteAccountModal) {
-                MyPageModal(
-                    onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-                    myPageModalMainText = "정말 탈퇴하시겠어요?",
-                    onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-                    onConfirmClick = viewModel::confirmWithdraw,
-                    onConfirmText = "탈퇴하기",
-                    myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = screenWidthDp(48.dp)),
-                    dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-                )
-            }
-
-            MyPageScreen(
-                uiState = myPageState,
-                paddingValues = paddingValues,
-                onNicknameChangeClicked = viewModel::onNicknameChangeClicked,
-                onCompletedJourneyClicked = viewModel::onCompletedJourneyClicked,
-                onGoToByeBooUniverseClicked = viewModel::onGoToByeBooUniverseClicked,
-                onAskingByeBooClicked = viewModel::onAskingByeBooClicked,
-                onServiceWithByeBooClicked = viewModel::onServiceWithByeBooClicked,
-                onAlarmToggleClicked = onAlarmToggleClicked,
-                onPrivacyPolicyClicked = viewModel::onPrivacyPolicyClicked,
-                onTermsOfServiceClicked = viewModel::onTermsOfServiceClicked,
-                onLogoutClicked = viewModel::onLogoutClicked,
-                onDeleteAccountClicked = viewModel::onDeleteAccountClicked,
-                modifier = modifier,
-            )
-        }
-        else -> Unit
+                    if (shouldShowRationale) {
+                        permissionLauncher.launch(POST_NOTIFICATIONS)
+                    } else {
+                        viewModel.onGoToSettingClicked()
+                    }
+                }
+            },
+        )
     }
+
+    if (uiState.showLogoutModal) {
+        MyPageModal(
+            onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
+            myPageModalMainText = "로그아웃하시겠어요?",
+            onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
+            onConfirmClick = viewModel::confirmLogout,
+            onConfirmText = "로그아웃",
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+        )
+    }
+
+    if (uiState.showDeleteAccountModal) {
+        MyPageModal(
+            onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
+            myPageModalMainText = "정말 탈퇴하시겠어요?",
+            onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
+            onConfirmClick = viewModel::confirmWithdraw,
+            onConfirmText = "탈퇴하기",
+            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
+        )
+    }
+
+    MyPageScreen(
+        uiState = uiState,
+        paddingValues = paddingValues,
+        onNicknameChangeClick = viewModel::onNicknameChangeClicked,
+        onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
+        onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
+        onAskingByeBooClick = viewModel::onAskingByeBooClicked,
+        onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
+        onAlarmToggleClick = onAlarmToggleClicked,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
+        onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
+        onLogoutClick = viewModel::onLogoutClicked,
+        onDeleteAccountClick = viewModel::onDeleteAccountClicked,
+        modifier = modifier,
+    )
 }
 
 @Composable
 private fun MyPageScreen(
     uiState: MyPageState,
     paddingValues: PaddingValues,
-    onNicknameChangeClicked: () -> Unit,
-    onCompletedJourneyClicked: () -> Unit,
-    onGoToByeBooUniverseClicked: () -> Unit,
-    onAskingByeBooClicked: () -> Unit,
-    onServiceWithByeBooClicked: () -> Unit,
-    onAlarmToggleClicked: () -> Unit,
-    onPrivacyPolicyClicked: () -> Unit,
-    onTermsOfServiceClicked: () -> Unit,
-    onLogoutClicked: () -> Unit,
-    onDeleteAccountClicked: () -> Unit,
+    onNicknameChangeClick: () -> Unit,
+    onCompletedJourneyClick: () -> Unit,
+    onGoToByeBooUniverseClick: () -> Unit,
+    onAskingByeBooClick: () -> Unit,
+    onServiceWithByeBooClick: () -> Unit,
+    onAlarmToggleClick: (Boolean) -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onTermsOfServiceClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -287,11 +277,9 @@ private fun MyPageScreen(
         ) {
             item {
                 NicknameSection(
-                    onNicknameChangeClicked = onNicknameChangeClicked,
+                    onNicknameChangeClick = onNicknameChangeClick,
                     nickname = uiState.nickname,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
             }
 
             item {
@@ -303,20 +291,14 @@ private fun MyPageScreen(
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.whiteAlpha10,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
             }
 
             item {
-                MyRecordingSection(onCompletedJourneyClicked = onCompletedJourneyClicked)
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                MyRecordingSection(onCompletedJourneyClick = onCompletedJourneyClick)
             }
 
             item {
-                ByeBooUniverseSection(onGoToByeBooUniverseClicked = onGoToByeBooUniverseClicked)
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                ByeBooUniverseSection(onGoToByeBooUniverseClick = onGoToByeBooUniverseClick)
             }
 
             item {
@@ -328,41 +310,33 @@ private fun MyPageScreen(
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.whiteAlpha10,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
             }
 
             item {
                 AskingSection(
-                    onAskingByeBooClicked = onAskingByeBooClicked,
-                    onServiceWithByeBooClicked = onServiceWithByeBooClicked,
+                    onAskingByeBooClick = onAskingByeBooClick,
+                    onServiceWithByeBooClick = onServiceWithByeBooClick,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
                 NotificationSection(
                     isAlarmEnabled = uiState.isAlarmEnabled,
-                    onAlarmToggleClicked = onAlarmToggleClicked,
+                    onAlarmToggleClick = onAlarmToggleClick,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
                 TermsSection(
-                    onPrivacyPolicyClicked = onPrivacyPolicyClicked,
-                    onTermsOfServiceClicked = onTermsOfServiceClicked,
+                    onPrivacyPolicyClick = onPrivacyPolicyClick,
+                    onTermsOfServiceClick = onTermsOfServiceClick,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
             }
 
             item {
                 AccountSection(
-                    onLogoutClicked = onLogoutClicked,
-                    onDeleteAccountClicked = onDeleteAccountClicked,
+                    onLogoutClick = onLogoutClick,
+                    onDeleteAccountClick = onDeleteAccountClick,
                 )
             }
         }
@@ -371,7 +345,7 @@ private fun MyPageScreen(
 
 @Composable
 private fun NicknameSection(
-    onNicknameChangeClicked: () -> Unit,
+    onNicknameChangeClick: () -> Unit,
     nickname: String,
     modifier: Modifier = Modifier,
 ) {
@@ -381,7 +355,7 @@ private fun NicknameSection(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha10)
-                .clickable(onClick = onNicknameChangeClicked)
+                .clickable(onClick = onNicknameChangeClick)
                 .padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(18.5.dp),
@@ -402,13 +376,17 @@ private fun NicknameSection(
             tint = ByeBooTheme.colors.gray50,
         )
     }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 }
 
 @Composable
 private fun MyRecordingSection(
-    onCompletedJourneyClicked: () -> Unit,
+    onCompletedJourneyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
@@ -441,7 +419,7 @@ private fun MyRecordingSection(
                     width = 1.dp,
                     color = ByeBooTheme.colors.primary300,
                     shape = RoundedCornerShape(12.dp),
-                ).clickable(onClick = onCompletedJourneyClicked)
+                ).clickable(onClick = onCompletedJourneyClick)
                 .padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(20.dp),
@@ -457,9 +435,11 @@ private fun MyRecordingSection(
 
 @Composable
 private fun ByeBooUniverseSection(
-    onGoToByeBooUniverseClicked: () -> Unit,
+    onGoToByeBooUniverseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
@@ -492,7 +472,7 @@ private fun ByeBooUniverseSection(
                     width = 1.dp,
                     color = ByeBooTheme.colors.primary300,
                     shape = RoundedCornerShape(12.dp),
-                ).clickable(onClick = onGoToByeBooUniverseClicked)
+                ).clickable(onClick = onGoToByeBooUniverseClick)
                 .padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(20.dp),
@@ -504,14 +484,17 @@ private fun ByeBooUniverseSection(
             color = ByeBooTheme.colors.gray50,
         )
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
 private fun AskingSection(
-    onAskingByeBooClicked: () -> Unit,
-    onServiceWithByeBooClicked: () -> Unit,
+    onAskingByeBooClick: () -> Unit,
+    onServiceWithByeBooClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -527,7 +510,7 @@ private fun AskingSection(
             text = "바이부에 문의하기",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onAskingByeBooClicked),
+            modifier = Modifier.clickable(onClick = onAskingByeBooClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -536,17 +519,20 @@ private fun AskingSection(
             text = "바이부와 함께 서비스 만들기",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onServiceWithByeBooClicked),
+            modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
         )
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
 private fun NotificationSection(
-    isAlarmEnabled: Boolean,
-    onAlarmToggleClicked: () -> Unit,
+    isAlarmEnabled: Boolean?,
+    onAlarmToggleClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -570,20 +556,36 @@ private fun NotificationSection(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            NotificationToggle(
-                isToggleOn = isAlarmEnabled,
-                onToggleClicked = { onAlarmToggleClicked() },
-            )
+            when (isAlarmEnabled) {
+                null -> {
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(width = 48.dp, height = 28.dp)
+                                .background(Color.Transparent),
+                    )
+                }
+
+                else -> {
+                    NotificationToggle(
+                        isToggleOn = isAlarmEnabled,
+                        onToggleClicked = onAlarmToggleClick,
+                    )
+                }
+            }
         }
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
 private fun TermsSection(
-    onPrivacyPolicyClicked: () -> Unit,
-    onTermsOfServiceClicked: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onTermsOfServiceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -599,7 +601,7 @@ private fun TermsSection(
             text = "개인정보 처리 방침",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onPrivacyPolicyClicked),
+            modifier = Modifier.clickable(onClick = onPrivacyPolicyClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -608,17 +610,20 @@ private fun TermsSection(
             text = "서비스 이용 약관",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onTermsOfServiceClicked),
+            modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
         )
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
 private fun AccountSection(
-    onLogoutClicked: () -> Unit,
-    onDeleteAccountClicked: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -634,7 +639,7 @@ private fun AccountSection(
             text = "로그아웃",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onLogoutClicked),
+            modifier = Modifier.clickable(onClick = onLogoutClick),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -643,7 +648,7 @@ private fun AccountSection(
             text = "탈퇴",
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
-            modifier = Modifier.clickable(onClick = onDeleteAccountClicked),
+            modifier = Modifier.clickable(onClick = onDeleteAccountClick),
         )
     }
 }
