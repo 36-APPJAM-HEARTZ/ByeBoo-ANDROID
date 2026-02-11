@@ -130,7 +130,7 @@ fun MyPageRoute(
 
                 is MyPageSideEffect.NavigateToSetting -> {
                     val intent =
-                        Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
+                        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                         }
                     context.startActivity(intent)
