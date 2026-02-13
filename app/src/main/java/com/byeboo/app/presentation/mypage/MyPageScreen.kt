@@ -57,6 +57,7 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.NotificationToggle
+import com.byeboo.app.presentation.mypage.type.ModalType
 
 @Composable
 fun MyPageRoute(
