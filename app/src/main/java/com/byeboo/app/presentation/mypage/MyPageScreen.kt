@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -53,8 +56,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
 import com.byeboo.app.presentation.mypage.component.MyPageModal
-import com.byeboo.app.presentation.mypage.component.MyPageNotification
-import com.byeboo.app.presentation.mypage.type.ModalType
+import com.byeboo.app.presentation.mypage.component.NotificationToggle
 
 @Composable
 fun MyPageRoute(
@@ -63,6 +65,7 @@ fun MyPageRoute(
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
     paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -94,26 +97,65 @@ fun MyPageRoute(
             },
         )
 
-    val onAlarmToggleClick: (Boolean) -> Unit = { isChecked ->
-        if (!isChecked) {
-            viewModel.onAlarmToggledClicked(false)
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                if (context.hasNotificationPermission()) {
-                    viewModel.onAlarmToggledClicked(true)
-                } else {
-                    val shouldShowRationale =
-                        activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
-
-                    if (shouldShowRationale) {
-                        viewModel.onAlarmToggledClicked(false)
+    val onAlarmToggleClicked =
+        remember(context, viewModel, activity, permissionLauncher) {
+            { _: Boolean ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (context.hasNotificationPermission()) {
+                        viewModel.onAlarmToggledClicked(true)
                     } else {
+                        val shouldShowRationale =
+                            activity?.shouldShowRequestPermissionRationale(POST_NOTIFICATIONS) == true
+
+                        if (shouldShowRationale) {
+                            viewModel.onAlarmToggledClicked(false)
+                        } else {
+                            permissionLauncher.launch(POST_NOTIFICATIONS)
+                        }
+                    }
+                } else {
+                    viewModel.onAlarmToggledClicked(true)
+                }
+            }
+        }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is MyPageSideEffect.RequestNotificationPermission -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         permissionLauncher.launch(POST_NOTIFICATIONS)
                     }
                 }
-            } else {
-                viewModel.onAlarmToggledClicked(true)
+
+                is MyPageSideEffect.NavigateToSetting -> {
+                    val intent =
+                        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                        }
+                    context.startActivity(intent)
+                }
+
+                is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
+                is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
+                is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
+                is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
+                is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
+                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    viewModel.syncAlarmState(context.hasNotificationPermission())
+                }
+            }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -147,6 +189,7 @@ fun MyPageRoute(
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -162,47 +205,8 @@ fun MyPageRoute(
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
+            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { effect ->
-            when (effect) {
-                is MyPageSideEffect.RequestNotificationPermission -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        permissionLauncher.launch(POST_NOTIFICATIONS)
-                    }
-                }
-
-                is MyPageSideEffect.NavigateToSetting -> {
-                    val intent =
-                        Intent(Settings.ACTION_ALL_APPS_NOTIFICATION_SETTINGS).apply {
-                            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-                        }
-                    context.startActivity(intent)
-                }
-
-                is MyPageSideEffect.OpenUrl -> openUrl(context = context, effect.url)
-                is MyPageSideEffect.NavigateToEditProfile -> navigateToEditProfile()
-                is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
-                is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
-                is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
-                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
-            }
-        }
-    }
-
-    DisposableEffect(lifecycleOwner) {
-        val observer =
-            LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    viewModel.syncAlarmState(context.hasNotificationPermission())
-                }
-            }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
     }
 
     MyPageScreen(
@@ -213,11 +217,12 @@ fun MyPageRoute(
         onGoToByeBooUniverseClick = viewModel::onGoToByeBooUniverseClicked,
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
-        onAlarmToggleClick = onAlarmToggleClick,
+        onAlarmToggleClick = onAlarmToggleClicked,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
         onDeleteAccountClick = viewModel::onDeleteAccountClicked,
+        modifier = modifier,
     )
 }
 
@@ -271,9 +276,9 @@ private fun MyPageScreen(
                 ),
         ) {
             item {
-                Nickname(
-                    nickname = uiState.nickname,
+                NicknameSection(
                     onNicknameChangeClick = onNicknameChangeClick,
+                    nickname = uiState.nickname,
                 )
             }
 
@@ -289,11 +294,11 @@ private fun MyPageScreen(
             }
 
             item {
-                MyRecord(onCompletedJourneyClick = onCompletedJourneyClick)
+                MyRecordingSection(onCompletedJourneyClick = onCompletedJourneyClick)
             }
 
             item {
-                ByeBooUniverse(onGoToByeBooUniverseClick = onGoToByeBooUniverseClick)
+                ByeBooUniverseSection(onGoToByeBooUniverseClick = onGoToByeBooUniverseClick)
             }
 
             item {
@@ -308,28 +313,28 @@ private fun MyPageScreen(
             }
 
             item {
-                Question(
+                AskingSection(
                     onAskingByeBooClick = onAskingByeBooClick,
                     onServiceWithByeBooClick = onServiceWithByeBooClick,
                 )
             }
 
             item {
-                Alarm(
+                NotificationSection(
                     isAlarmEnabled = uiState.isAlarmEnabled,
                     onAlarmToggleClick = onAlarmToggleClick,
                 )
             }
 
             item {
-                TermAndPolicy(
+                TermsSection(
                     onPrivacyPolicyClick = onPrivacyPolicyClick,
                     onTermsOfServiceClick = onTermsOfServiceClick,
                 )
             }
 
             item {
-                Account(
+                AccountSection(
                     onLogoutClick = onLogoutClick,
                     onDeleteAccountClick = onDeleteAccountClick,
                 )
@@ -339,157 +344,160 @@ private fun MyPageScreen(
 }
 
 @Composable
-private fun Nickname(
-    nickname: String,
+private fun NicknameSection(
     onNicknameChangeClick: () -> Unit,
+    nickname: String,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.whiteAlpha10)
-                    .clickable(onClick = onNicknameChangeClick)
-                    .padding(
-                        horizontal = screenWidthDp(24.dp),
-                        vertical = screenHeightDp(18.5.dp),
-                    ),
-        ) {
-            Text(
-                text = nickname,
-                style = ByeBooTheme.typography.body3,
-                color = ByeBooTheme.colors.gray300,
-            )
+    Row(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .clickable(onClick = onNicknameChangeClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(18.5.dp),
+                ),
+    ) {
+        Text(
+            text = nickname,
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray300,
+        )
 
-            Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
 
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = ByeBooTheme.colors.gray50,
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_right),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = ByeBooTheme.colors.gray50,
+        )
+    }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+}
+
+@Composable
+private fun MyRecordingSection(
+    onCompletedJourneyClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+
+        Text(
+            text = "나의 기록",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray300,
+        )
+    }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable(onClick = onCompletedJourneyClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp),
+                ),
+    ) {
+        Text(
+            text = "완료한 여정 돌아보기",
+            style = ByeBooTheme.typography.body2,
+            color = ByeBooTheme.colors.gray50,
+        )
     }
 }
 
 @Composable
-private fun MyRecord(onCompletedJourneyClick: () -> Unit) {
-    Column {
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+private fun ByeBooUniverseSection(
+    onGoToByeBooUniverseClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_tip_write),
-                contentDescription = null,
-                tint = Color.Unspecified,
-            )
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
 
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
-            Text(
-                text = "나의 기록",
-                style = ByeBooTheme.typography.body1,
-                color = ByeBooTheme.colors.gray300,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.whiteAlpha10)
-                    .border(
-                        width = 1.dp,
-                        color = ByeBooTheme.colors.primary300,
-                        shape = RoundedCornerShape(12.dp),
-                    ).clickable(onClick = onCompletedJourneyClick)
-                    .padding(
-                        horizontal = screenWidthDp(24.dp),
-                        vertical = screenHeightDp(20.dp),
-                    ),
-        ) {
-            Text(
-                text = "완료한 여정 돌아보기",
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.gray50,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+        Text(
+            text = "보리가 궁금하다면?",
+            style = ByeBooTheme.typography.body1,
+            color = ByeBooTheme.colors.gray300,
+        )
     }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .border(
+                    width = 1.dp,
+                    color = ByeBooTheme.colors.primary300,
+                    shape = RoundedCornerShape(12.dp),
+                ).clickable(onClick = onGoToByeBooUniverseClick)
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(20.dp),
+                ),
+    ) {
+        Text(
+            text = "Bye Boo 세계관 보러 가기",
+            style = ByeBooTheme.typography.body2,
+            color = ByeBooTheme.colors.gray50,
+        )
+    }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
-private fun ByeBooUniverse(onGoToByeBooUniverseClick: () -> Unit) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                contentDescription = null,
-                tint = Color.Unspecified,
-            )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-            Text(
-                text = "보리가 궁금하다면?",
-                style = ByeBooTheme.typography.body1,
-                color = ByeBooTheme.colors.gray300,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.whiteAlpha10)
-                    .border(
-                        width = 1.dp,
-                        color = ByeBooTheme.colors.primary300,
-                        shape = RoundedCornerShape(12.dp),
-                    ).clickable(onClick = onGoToByeBooUniverseClick)
-                    .padding(
-                        horizontal = screenWidthDp(24.dp),
-                        vertical = screenHeightDp(20.dp),
-                    ),
-        ) {
-            Text(
-                text = "Bye Boo 세계관 보러 가기",
-                style = ByeBooTheme.typography.body2,
-                color = ByeBooTheme.colors.gray50,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-    }
-}
-
-@Composable
-private fun Question(
+private fun AskingSection(
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Text(
             text = "문의하기",
             style = ByeBooTheme.typography.body1,
@@ -513,17 +521,21 @@ private fun Question(
             color = ByeBooTheme.colors.gray50,
             modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
-private fun Alarm(
+private fun NotificationSection(
     isAlarmEnabled: Boolean?,
     onAlarmToggleClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Text(
             text = "알림",
             style = ByeBooTheme.typography.body1,
@@ -532,21 +544,51 @@ private fun Alarm(
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-        MyPageNotification(
-            isEnabledAlarm = isAlarmEnabled,
-            onCheckedClick = onAlarmToggleClick,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "퀘스트 오픈 알림",
+                style = ByeBooTheme.typography.body3,
+                color = ByeBooTheme.colors.gray50,
+            )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
+            Spacer(modifier = Modifier.weight(1f))
+
+            when (isAlarmEnabled) {
+                null -> {
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(width = 48.dp, height = 28.dp)
+                                .background(Color.Transparent),
+                    )
+                }
+
+                else -> {
+                    NotificationToggle(
+                        isToggleOn = isAlarmEnabled,
+                        onToggleClicked = onAlarmToggleClick,
+                    )
+                }
+            }
+        }
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
-private fun TermAndPolicy(
+private fun TermsSection(
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Text(
             text = "약관 및 정책",
             style = ByeBooTheme.typography.body1,
@@ -570,17 +612,21 @@ private fun TermAndPolicy(
             color = ByeBooTheme.colors.gray50,
             modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(48.dp)))
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
-private fun Account(
+private fun AccountSection(
     onLogoutClick: () -> Unit,
     onDeleteAccountClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Text(
             text = "계정",
             style = ByeBooTheme.typography.body1,

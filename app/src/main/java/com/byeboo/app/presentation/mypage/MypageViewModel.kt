@@ -40,6 +40,9 @@ class MyPageViewModel
                 userRepository.getNickname().collect { nickname ->
                     _uiState.update { it.copy(nickname = nickname) }
                 }
+
+                val savedAlarmState = fcmTokenRepository.isAlarmEnabled()
+                _uiState.update { it.copy(isAlarmEnabled = savedAlarmState) }
             }
         }
 
@@ -65,18 +68,18 @@ class MyPageViewModel
         }
 
         fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
-            val isAlarmEnabled = _uiState.value.isAlarmEnabled
+            val currentAlarmState = _uiState.value.isAlarmEnabled ?: return
 
-            isAlarmEnabled?.let {
-                if (isAlarmEnabled) {
+            if (currentAlarmState) {
+                updateAlarmStatus()
+            } else {
+                // [off -> on]
+                // 권한 있을 경우
+                if (hasSystemPermission) {
                     updateAlarmStatus()
                 } else {
-                    // [off -> on]
-                    // 권한 있을 경우
-                    if (hasSystemPermission) {
-                        updateAlarmStatus()
-                    } else {
-                        _uiState.update { it.copy(showPermissionModal = true) }
+                    _uiState.update {
+                        it.copy(showPermissionModal = true)
                     }
                 }
             }
@@ -152,15 +155,12 @@ class MyPageViewModel
         fun onTermsOfServiceClicked() = emitOpenUrl(BuildConfig.BYEBOO_TERMS_OF_SERVICE)
 
         fun onDismissModal(modalType: ModalType) {
-            when (modalType) {
-                ModalType.LOGOUT -> _uiState.update { it.copy(showLogoutModal = false) }
-                ModalType.DELETE_ACCOUNT ->
-                    _uiState.update {
-                        it.copy(
-                            showDeleteAccountModal = false,
-                        )
-                    }
-                ModalType.PERMISSION -> _uiState.update { it.copy(showPermissionModal = false) }
+            _uiState.update { state ->
+                when (modalType) {
+                    ModalType.LOGOUT -> state.copy(showLogoutModal = false)
+                    ModalType.DELETE_ACCOUNT -> state.copy(showDeleteAccountModal = false)
+                    ModalType.PERMISSION -> state.copy(showPermissionModal = false)
+                }
             }
         }
 
