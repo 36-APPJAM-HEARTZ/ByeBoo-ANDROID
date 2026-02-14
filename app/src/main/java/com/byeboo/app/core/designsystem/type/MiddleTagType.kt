@@ -9,6 +9,7 @@ enum class MiddleTagType(
     @StringRes val titleResId: Int,
     val backgroundColor: TagColorType,
     val textColor: TagColorType,
+    val borderColor: TagColorType? = null,
     val horizontalPadding: Dp = 18.dp,
     val verticalPadding: Dp = 4.dp,
     val roundedCorner: Dp = 12.dp,
@@ -16,15 +17,16 @@ enum class MiddleTagType(
 ) {
     QUEST_START_DAY(
         titleResId = R.string.type_quest_start_day,
-        backgroundColor = TagColorType.WHITE_ALPHA_10,
+        backgroundColor = TagColorType.WHITE_ALPHA_5,
         textColor = TagColorType.GRAY_300,
         dynamicContent = true,
     ),
 
     QUEST_TIP(
         titleResId = R.string.type_quest_tip,
-        backgroundColor = TagColorType.PRIMARY_300,
-        textColor = TagColorType.PRIMARY_50,
+        backgroundColor = TagColorType.WHITE_ALPHA_5,
+        textColor = TagColorType.PRIMARY_200,
+        borderColor = TagColorType.GRAY_800,
         dynamicContent = false,
     ),
 
@@ -37,24 +39,26 @@ enum class MiddleTagType(
 
     QUEST_OPTIONAL(
         titleResId = R.string.type_quest_optional,
-        backgroundColor = TagColorType.WHITE_ALPHA_10,
+        backgroundColor = TagColorType.WHITE_ALPHA_5,
         textColor = TagColorType.GRAY_300,
         dynamicContent = false,
     ),
 
     QUEST_PERIOD(
         titleResId = R.string.type_quest_period,
-        backgroundColor = TagColorType.WHITE_ALPHA_10,
+        backgroundColor = TagColorType.WHITE_ALPHA_5,
         textColor = TagColorType.GRAY_300,
         dynamicContent = true,
     ),
 }
 
 enum class TagColorType {
-    WHITE_ALPHA_10,
+    WHITE_ALPHA_5,
     SECONDARY_300_ALPHA_10,
     GRAY_300,
+    GRAY_800,
     SECONDARY_300,
     PRIMARY_50,
+    PRIMARY_200,
     PRIMARY_300,
 }
