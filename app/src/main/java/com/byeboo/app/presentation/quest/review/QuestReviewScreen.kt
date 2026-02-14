@@ -40,7 +40,7 @@ import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -242,7 +242,7 @@ private fun QuestReviewScreen(
 @Composable
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     modifier: Modifier = Modifier,
 ) {
     Column(

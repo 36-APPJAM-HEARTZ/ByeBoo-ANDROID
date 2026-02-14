@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -28,17 +28,17 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun EmotionChip(
     modifier: Modifier = Modifier,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     isSelected: Boolean = false,
     enabled: Boolean = true,
     isDimmed: Boolean = false,
-    onChipClick: ((LargeTagType) -> Unit)? = null,
+    onChipClick: ((EmotionChipType) -> Unit)? = null,
 ) {
     val backgroundColor =
         if (isSelected) {
             ByeBooTheme.colors.primary300Alpha20
         } else {
-            ByeBooTheme.colors.whiteAlpha10
+            ByeBooTheme.colors.whiteAlpha5
         }
 
     val textColor =
@@ -52,7 +52,7 @@ fun EmotionChip(
         if (isSelected) {
             ByeBooTheme.typography.body4
         } else {
-            ByeBooTheme.typography.body6
+            ByeBooTheme.typography.body5
         }
 
     val shape = RoundedCornerShape(12.dp)

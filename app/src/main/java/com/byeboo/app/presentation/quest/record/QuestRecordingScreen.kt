@@ -44,7 +44,7 @@ import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -137,7 +137,7 @@ private fun QuestRecordingScreen(
     onUpdateContent: (Boolean, String) -> Unit,
     onSaveClick: () -> Unit,
     onBottomSheetDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType?) -> Unit,
+    onEmotionSelected: (EmotionChipType?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -302,7 +302,7 @@ private fun QuestRecordingScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         ByeBooActivationButton(
-            buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
+            buttonDisableColor = ByeBooTheme.colors.whiteAlpha5,
             buttonText = "완료하기",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             onClick = onClickCompleteButton,

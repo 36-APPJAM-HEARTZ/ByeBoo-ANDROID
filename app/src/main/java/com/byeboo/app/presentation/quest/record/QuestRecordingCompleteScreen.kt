@@ -32,7 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.findActivity
 import com.byeboo.app.core.util.inAppReview
@@ -197,7 +197,7 @@ private fun QuestRecordingCompleteScreen(
 @Composable
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     modifier: Modifier = Modifier,
 ) {
     Column(

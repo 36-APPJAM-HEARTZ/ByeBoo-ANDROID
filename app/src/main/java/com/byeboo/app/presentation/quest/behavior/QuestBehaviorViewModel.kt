@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
@@ -363,7 +363,7 @@ class QuestBehaviorViewModel
             _uiState.update { it.copy(showBottomSheet = false) }
         }
 
-        fun updateSelectedEmotion(emotion: LargeTagType?) {
+        fun updateSelectedEmotion(emotion: EmotionChipType?) {
             _uiState.update { it.copy(selectedEmotion = emotion) }
         }
 
