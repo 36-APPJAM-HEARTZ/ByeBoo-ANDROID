@@ -69,7 +69,7 @@ class QuestReviewViewModel
             }
         }
 
-        fun onCancelClicked() {
+        fun onBackClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(
                     QuestReviewSideEffect.NavigateToQuest,

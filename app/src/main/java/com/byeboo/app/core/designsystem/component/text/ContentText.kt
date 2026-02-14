@@ -29,8 +29,8 @@ fun ContentText(
     ) {
         Text(
             text = text,
-            style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray300,
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray100,
         )
     }
 }

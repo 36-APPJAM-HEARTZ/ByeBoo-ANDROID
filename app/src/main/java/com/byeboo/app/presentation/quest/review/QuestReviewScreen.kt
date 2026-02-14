@@ -89,8 +89,8 @@ fun QuestReviewRoute(
     QuestReviewScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onEditClick = { viewModel.onEditClicked(uiState.questType) },
-        onCancelClick = viewModel::onCancelClicked,
         modifier = modifier,
     )
 }
@@ -99,8 +99,8 @@ fun QuestReviewRoute(
 private fun QuestReviewScreen(
     uiState: QuestReviewState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -121,17 +121,17 @@ private fun QuestReviewScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
+                contentDescription = "back button",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onBackClick),
+            )
+
+            Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                 contentDescription = "edit content",
                 tint = ByeBooTheme.colors.white,
                 modifier = Modifier.clickable(onClick = onEditClick),
-            )
-
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = "cancel button",
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCancelClick),
             )
         }
 
@@ -155,40 +155,17 @@ private fun QuestReviewScreen(
                     questQuestion = uiState.question,
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
             }
 
             if (uiState.imageUrl.isNullOrBlank()) {
                 item {
-                    QuestContent(
-                        titleIcon = QuestContentType.THINKING,
-                        titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer,
+                    ContentText(
+                        text = uiState.answer,
                     )
                 }
             } else {
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
-                            contentDescription = "title icon",
-                            tint = Color.Unspecified,
-                        )
-
-                        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                        Text(
-                            text = "이렇게 완료했어요",
-                            color = ByeBooTheme.colors.gray200,
-                            style = ByeBooTheme.typography.body2,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
                     Column(
                         modifier =
                             Modifier
@@ -221,14 +198,14 @@ private fun QuestReviewScreen(
                         )
                     }
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
                         ContentText(uiState.answer)
                     }
                 }
             }
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                 QuestEmotionDescriptionContent(
                     questEmotionDescription = uiState.emotionDescription,
@@ -248,31 +225,10 @@ private fun QuestEmotionDescriptionContent(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                contentDescription = "title icon",
-                tint = Color.Unspecified,
-            )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-            Text(
-                text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
-                color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
             emotionType = emotionType,
         )
-
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
     }
 }

@@ -61,10 +61,19 @@ fun QuestTitle(
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
-        Text(
-            text = questQuestion,
-            color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.head1,
-        )
+        Row {
+            Text(
+                text = "Q.",
+                color = ByeBooTheme.colors.primary200,
+                style = ByeBooTheme.typography.head2,
+                modifier = Modifier.padding(end = 4.dp)
+            )
+
+            Text(
+                text = questQuestion,
+                color = ByeBooTheme.colors.gray100,
+                style = ByeBooTheme.typography.head2,
+            )
+        }
     }
 }
