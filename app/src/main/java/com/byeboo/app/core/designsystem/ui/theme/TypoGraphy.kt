@@ -125,7 +125,7 @@ fun ByeBooTypography(): ByeBooTypography =
         head1 =
             ByeBooTextStyle(
                 fontFamily = pretendardMedium,
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 lineHeight = 31.sp,
                 letterSpacing = 0.em,
             ),
@@ -182,14 +182,14 @@ fun ByeBooTypography(): ByeBooTypography =
             ByeBooTextStyle(
                 fontFamily = pretendardRegular,
                 fontSize = 16.sp,
-                lineHeight = 21.sp,
+                lineHeight = 24.sp,
                 letterSpacing = 0.em,
             ),
         body4 =
             ByeBooTextStyle(
                 fontFamily = pretendardSemiBold,
                 fontSize = 14.sp,
-                lineHeight = 18.sp,
+                lineHeight = 21.sp,
                 letterSpacing = 0.em,
             ),
         body5 =
@@ -203,7 +203,7 @@ fun ByeBooTypography(): ByeBooTypography =
             ByeBooTextStyle(
                 fontFamily = pretendardRegular,
                 fontSize = 14.sp,
-                lineHeight = 18.sp,
+                lineHeight = 21.sp,
                 letterSpacing = 0.em,
             ),
         cap1 =
