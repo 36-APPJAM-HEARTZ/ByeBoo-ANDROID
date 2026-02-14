@@ -13,13 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun LargeTag(
-    largeTagType: LargeTagType,
+fun EmotionChip(
+    emotionChipType: EmotionChipType,
     backgroundColor: Color,
     textColor: Color,
     textStyle: TextStyle,
@@ -31,12 +31,12 @@ fun LargeTag(
                 .width(screenWidthDp(85.dp))
                 .background(
                     color = backgroundColor,
-                    shape = RoundedCornerShape(largeTagType.roundedCorner),
-                ).padding(vertical = screenHeightDp(largeTagType.verticalPadding)),
+                    shape = RoundedCornerShape(emotionChipType.roundedCorner),
+                ).padding(vertical = screenHeightDp(emotionChipType.verticalPadding)),
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(largeTagType.titleResId),
+            text = stringResource(emotionChipType.titleResId),
             color = textColor,
             style = textStyle,
         )
