@@ -24,7 +24,7 @@ fun CompleteContent(
 ) {
     QuestCardContainer(
         modifier = modifier,
-        backgroundColor = ByeBooTheme.colors.whiteAlpha10,
+        backgroundColor = ByeBooTheme.colors.whiteAlpha5,
     ) {
         BackgroundImageLayer(imageResId)
 
@@ -69,7 +69,7 @@ fun TimerLockedContent(
 ) {
     QuestCardContainer(
         modifier = modifier,
-        backgroundColor = ByeBooTheme.colors.whiteAlpha10,
+        backgroundColor = ByeBooTheme.colors.whiteAlpha5,
         borderColor = ByeBooTheme.colors.secondary300,
     ) {
         Column(
@@ -87,7 +87,7 @@ fun TimerLockedContent(
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_lock),
                 contentDescription = "locked",
-                tint = ByeBooTheme.colors.whiteAlpha10,
+                tint = ByeBooTheme.colors.whiteAlpha5,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
@@ -109,13 +109,13 @@ fun LockedContent(
 ) {
     QuestCardContainer(
         modifier = modifier,
-        backgroundColor = ByeBooTheme.colors.whiteAlpha10,
+        backgroundColor = ByeBooTheme.colors.whiteAlpha5,
     ) {
-        QuestNumberLabel(questNumber, ByeBooTheme.colors.whiteAlpha10)
+        QuestNumberLabel(questNumber, ByeBooTheme.colors.whiteAlpha5)
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_lock),
             contentDescription = "locked",
-            tint = ByeBooTheme.colors.whiteAlpha10,
+            tint = ByeBooTheme.colors.whiteAlpha5,
             modifier = Modifier.align(Alignment.Center),
         )
     }

@@ -289,7 +289,7 @@ private fun MyPageScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                 )
             }
 
@@ -308,7 +308,7 @@ private fun MyPageScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                 )
             }
 
@@ -354,7 +354,7 @@ private fun NicknameSection(
             modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .background(color = ByeBooTheme.colors.whiteAlpha5)
                 .clickable(onClick = onNicknameChangeClick)
                 .padding(
                     horizontal = screenWidthDp(24.dp),
@@ -414,7 +414,7 @@ private fun MyRecordingSection(
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .background(color = ByeBooTheme.colors.whiteAlpha5)
                 .border(
                     width = 1.dp,
                     color = ByeBooTheme.colors.primary300,
@@ -467,7 +467,7 @@ private fun ByeBooUniverseSection(
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .background(color = ByeBooTheme.colors.whiteAlpha5)
                 .border(
                     width = 1.dp,
                     color = ByeBooTheme.colors.primary300,

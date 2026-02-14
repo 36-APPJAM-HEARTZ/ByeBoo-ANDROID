@@ -31,7 +31,7 @@ fun HomeQuestCard(
     subtitle: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = ByeBooTheme.colors.whiteAlpha10,
+    backgroundColor: Color = ByeBooTheme.colors.whiteAlpha5,
     shape: Shape = RoundedCornerShape(12.dp),
     borderColor: Color = ByeBooTheme.colors.primary300,
 ) {

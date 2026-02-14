@@ -119,7 +119,7 @@ private fun OffboardingCompletedJourneyScreen(
                     .fillMaxWidth()
                     .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10,
+            color = ByeBooTheme.colors.whiteAlpha5,
         )
 
         Column(
@@ -153,7 +153,7 @@ private fun OffboardingCompletedJourneyScreen(
                     JourneyCard(
                         journeyType = card.journeyType,
                         onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
-                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
+                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha5,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,
                         journeyCardTextStyle = ByeBooTheme.typography.body3,

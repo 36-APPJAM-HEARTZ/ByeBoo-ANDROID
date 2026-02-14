@@ -130,7 +130,7 @@ private fun OffboardingNewJourneyScreen(
                     .fillMaxWidth()
                     .padding(vertical = screenHeightDp(8.dp)),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10,
+            color = ByeBooTheme.colors.whiteAlpha5,
         )
 
         Column(
@@ -188,7 +188,7 @@ private fun PreparingCard() {
             Modifier
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .background(color = ByeBooTheme.colors.whiteAlpha5)
                 .padding(vertical = screenHeightDp(22.dp)),
     ) {
         Text(

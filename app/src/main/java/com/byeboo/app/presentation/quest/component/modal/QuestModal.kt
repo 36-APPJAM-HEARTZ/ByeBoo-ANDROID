@@ -26,6 +26,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
+import com.byeboo.app.core.designsystem.component.tag.MiddleTag
+import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -49,7 +51,7 @@ fun QuestModal(
                 modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.gray800)
+                    .background(color = ByeBooTheme.colors.background)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -79,21 +81,16 @@ fun QuestModal(
                 textAlign = TextAlign.Center,
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
-            Text(
-                text =
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-                            append(text = "작성 TIP")
-                        }
-                    },
-                style = ByeBooTheme.typography.body5,
-                color = ByeBooTheme.colors.gray300,
-                modifier = Modifier.clickable { navigateToTip() },
+            MiddleTag(
+                middleTagType = MiddleTagType.QUEST_TIP,
+                text = "작성 TIP",
+                textStyle = ByeBooTheme.typography.cap1,
+                modifier = Modifier.clickable { navigateToTip() }
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp((17.5).dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
             ByeBooButton(
                 onClick = progressButton,

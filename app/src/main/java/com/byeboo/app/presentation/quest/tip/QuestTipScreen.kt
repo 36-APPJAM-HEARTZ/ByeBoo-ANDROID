@@ -128,7 +128,7 @@ private fun QuestTipScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                 )
             }
 
@@ -146,7 +146,7 @@ private fun QuestTipScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                 )
             }
 

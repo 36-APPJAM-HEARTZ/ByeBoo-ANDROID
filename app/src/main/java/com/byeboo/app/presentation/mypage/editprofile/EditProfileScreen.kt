@@ -166,8 +166,8 @@ private fun EditProfileScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         ByeBooActivationButton(
-            buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
-            buttonText = "완료",
+            buttonDisableColor = ByeBooTheme.colors.whiteAlpha5,
+            buttonText = "완료하기",
             buttonDisableTextColor = ByeBooTheme.colors.gray300,
             isEnabled = isNicknameValid,
             onClick = { onCompleteClick(uiState.nickname) },

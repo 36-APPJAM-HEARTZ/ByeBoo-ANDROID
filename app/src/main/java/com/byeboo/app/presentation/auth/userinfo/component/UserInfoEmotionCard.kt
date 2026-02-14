@@ -39,7 +39,7 @@ fun UserInfoEmotionCard(
         if (isSelected) {
             ByeBooTheme.colors.primary300Alpha10
         } else {
-            ByeBooTheme.colors.whiteAlpha10
+            ByeBooTheme.colors.whiteAlpha5
         }
 
     Box(
