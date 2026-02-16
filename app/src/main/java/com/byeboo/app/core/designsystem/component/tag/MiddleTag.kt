@@ -1,6 +1,7 @@
 package com.byeboo.app.core.designsystem.component.tag
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.type.TagColorType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -17,7 +19,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 @Composable
 fun MiddleTag(
     middleTagType: MiddleTagType,
-    text: String,
+    text: String = "",
     textStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
@@ -27,17 +29,26 @@ fun MiddleTag(
         } else {
             stringResource(middleTagType.titleResId)
         }
-
+    val shape = RoundedCornerShape(middleTagType.roundedCorner)
     Box(
-        modifier =
-            modifier
-                .background(
-                    color = middleTagColor(middleTagType.backgroundColor),
-                    shape = RoundedCornerShape(middleTagType.roundedCorner),
-                ).padding(
-                    horizontal = middleTagType.horizontalPadding,
-                    vertical = middleTagType.verticalPadding,
-                ),
+        modifier = modifier
+            .background(
+                color = middleTagColor(middleTagType.backgroundColor),
+                shape = shape,
+            )
+            .then(
+                if (middleTagType.borderColor != null) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = middleTagColor(middleTagType.borderColor),
+                        shape = shape
+                    )
+                } else Modifier
+            )
+            .padding(
+                horizontal = middleTagType.horizontalPadding,
+                vertical = middleTagType.verticalPadding,
+            ),
     ) {
         Text(
             text = tagText,
@@ -53,7 +64,9 @@ fun middleTagColor(colorType: TagColorType): Color =
         TagColorType.WHITE_ALPHA_10 -> ByeBooTheme.colors.whiteAlpha10
         TagColorType.SECONDARY_300_ALPHA_10 -> ByeBooTheme.colors.secondary300Alpha10
         TagColorType.GRAY_300 -> ByeBooTheme.colors.gray300
+        TagColorType.GRAY_800 -> ByeBooTheme.colors.gray800
         TagColorType.SECONDARY_300 -> ByeBooTheme.colors.secondary300
         TagColorType.PRIMARY_50 -> ByeBooTheme.colors.primary50
+        TagColorType.PRIMARY_200 -> ByeBooTheme.colors.primary200
         TagColorType.PRIMARY_300 -> ByeBooTheme.colors.primary300
     }
