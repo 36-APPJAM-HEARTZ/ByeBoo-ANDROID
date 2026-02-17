@@ -55,7 +55,7 @@ fun QuestModal(
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bori_quest_banner),
+                painter = painterResource(id = R.drawable.img_bori_quest_banner),
                 contentDescription = "이미지",
                 Modifier
                     .fillMaxWidth()

@@ -66,7 +66,7 @@ fun OffboardingModal(
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
             Image(
-                painter = painterResource(id = R.drawable.bori_clover),
+                painter = painterResource(id = R.drawable.img_bori_clover),
                 contentDescription = "이미지",
                 modifier = Modifier.size(160.dp),
             )

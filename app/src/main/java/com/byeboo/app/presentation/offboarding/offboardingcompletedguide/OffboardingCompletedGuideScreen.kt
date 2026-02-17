@@ -123,7 +123,7 @@ private fun OffboardingCompleteGuideScreen(
         modifier = modifier.fillMaxSize(),
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_userinfo),
+            painter = painterResource(id = R.drawable.img_bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,

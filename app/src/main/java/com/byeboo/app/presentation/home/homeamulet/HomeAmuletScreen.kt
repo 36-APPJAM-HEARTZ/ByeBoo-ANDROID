@@ -82,7 +82,7 @@ private fun HomeAmuletScreen(
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.bg_userinfo),
+            painter = painterResource(R.drawable.img_bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
