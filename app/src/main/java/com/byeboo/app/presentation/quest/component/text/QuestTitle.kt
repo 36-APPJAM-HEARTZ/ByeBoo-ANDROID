@@ -66,7 +66,7 @@ fun QuestTitle(
                 text = "Q.",
                 color = ByeBooTheme.colors.primary200,
                 style = ByeBooTheme.typography.head2,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier.padding(end = 4.dp),
             )
 
             Text(

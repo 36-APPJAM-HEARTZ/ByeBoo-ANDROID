@@ -238,7 +238,7 @@ class ByeBooColors(
     var kakaoYellow by mutableStateOf(kakaoYellow)
         private set
     var background by mutableStateOf(background)
-        private  set
+        private set
     var isLight by mutableStateOf(isLight)
 
     fun copy(): ByeBooColors =
@@ -401,7 +401,7 @@ fun ByeBooDarkColors(
     Secondary300Alpha10: Color = secondary300Alpha10,
     Gray900Alpha80: Color = gray900Alpha80,
     KakaoYellow: Color = kakaoYellow,
-    Background: Color = background
+    Background: Color = background,
 ) = ByeBooColors(
     Primary50,
     Primary100,

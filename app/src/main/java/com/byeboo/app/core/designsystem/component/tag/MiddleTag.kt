@@ -37,23 +37,20 @@ fun MiddleTag(
                 .background(
                     color = middleTagColor(middleTagType.backgroundColor),
                     shape = RoundedCornerShape(middleTagType.roundedCorner),
-                )
-                .then(
+                ).then(
                     if (borderColor != null) {
                         Modifier.border(
                             width = 1.dp,
                             color = borderColor,
-                            shape = RoundedCornerShape(middleTagType.roundedCorner)
+                            shape = RoundedCornerShape(middleTagType.roundedCorner),
                         )
                     } else {
                         Modifier
-                    }
-                )
-                .padding(
+                    },
+                ).padding(
                     horizontal = middleTagType.horizontalPadding,
                     vertical = middleTagType.verticalPadding,
-                )
-                ,
+                ),
     ) {
         Text(
             text = tagText,

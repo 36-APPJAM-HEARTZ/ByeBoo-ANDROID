@@ -16,11 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -87,7 +83,7 @@ fun QuestModal(
                 middleTagType = MiddleTagType.QUEST_TIP,
                 text = "작성 TIP",
                 textStyle = ByeBooTheme.typography.cap1,
-                modifier = Modifier.clickable { navigateToTip() }
+                modifier = Modifier.clickable { navigateToTip() },
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))

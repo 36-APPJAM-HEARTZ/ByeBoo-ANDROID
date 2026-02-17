@@ -364,7 +364,7 @@ private fun NicknameSection(
         Text(
             text = nickname,
             color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.body3
+            style = ByeBooTheme.typography.body3,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -403,7 +403,7 @@ private fun MyRecordingSection(
         Text(
             text = "나의 기록",
             color = ByeBooTheme.colors.gray300,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
     }
 
@@ -428,7 +428,7 @@ private fun MyRecordingSection(
         Text(
             text = "완료한 여정 돌아보기",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
 }
@@ -456,7 +456,7 @@ private fun ByeBooUniverseSection(
         Text(
             text = "보리가 궁금하다면?",
             color = ByeBooTheme.colors.gray300,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
     }
 
@@ -481,7 +481,7 @@ private fun ByeBooUniverseSection(
         Text(
             text = "Bye Boo 세계관 보러 가기",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
     }
     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
@@ -501,7 +501,7 @@ private fun AskingSection(
         Text(
             text = "문의하기",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -539,7 +539,7 @@ private fun NotificationSection(
         Text(
             text = "알림",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -551,7 +551,7 @@ private fun NotificationSection(
             Text(
                 text = "퀘스트 오픈 알림",
                 color = ByeBooTheme.colors.gray50,
-                style = ByeBooTheme.typography.body3
+                style = ByeBooTheme.typography.body3,
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -592,7 +592,7 @@ private fun TermsSection(
         Text(
             text = "약관 및 정책",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -630,7 +630,7 @@ private fun AccountSection(
         Text(
             text = "계정",
             color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body1
+            style = ByeBooTheme.typography.body1,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
