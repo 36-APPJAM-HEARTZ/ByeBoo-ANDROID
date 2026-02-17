@@ -60,7 +60,7 @@ val gray800 = Color(0xFF2C2C2C)
 val gray900 = Color(0xFF161616)
 
 // black_and_white
-val black = Color(0xFF000000)
+val black = Color(0xFF161616)
 val white = Color(0xFFFFFFFF)
 
 // opacity

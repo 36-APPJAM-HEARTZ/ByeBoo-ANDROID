@@ -106,7 +106,7 @@ private fun OffboardingNewJourneyScreen(
                     .noRippleClickable(onClick = onBackClick),
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(26.dp)))
 
         Text(
             text = "어떤 여정을 시작해 볼까요?",
@@ -114,7 +114,7 @@ private fun OffboardingNewJourneyScreen(
             style = ByeBooTheme.typography.head1,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         Text(
             text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
@@ -122,7 +122,7 @@ private fun OffboardingNewJourneyScreen(
             style = ByeBooTheme.typography.body6,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         HorizontalDivider(
             modifier =
@@ -137,7 +137,7 @@ private fun OffboardingNewJourneyScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(16.dp)),
+                    .padding(vertical = screenHeightDp(20.dp)),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
         ) {
             Row(
@@ -189,7 +189,7 @@ private fun PreparingCard() {
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha5)
-                .padding(vertical = screenHeightDp(22.dp)),
+                .padding(vertical = screenHeightDp(24.dp)),
     ) {
         Text(
             text = "준비 중",

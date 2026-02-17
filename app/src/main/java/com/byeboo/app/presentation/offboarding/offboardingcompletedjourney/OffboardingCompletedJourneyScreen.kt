@@ -103,7 +103,7 @@ private fun OffboardingCompletedJourneyScreen(
             tint = ByeBooTheme.colors.gray50,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(36.dp)))
 
         Text(
             text = "내가 완료한 여정이에요",
@@ -116,8 +116,7 @@ private fun OffboardingCompletedJourneyScreen(
         HorizontalDivider(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(8.dp)),
+                    .fillMaxWidth(),
             thickness = 1.dp,
             color = ByeBooTheme.colors.whiteAlpha5,
         )
@@ -126,7 +125,7 @@ private fun OffboardingCompletedJourneyScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(16.dp)),
+                    .padding(vertical = screenHeightDp(20.dp)),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
         ) {
             Row(
@@ -162,7 +161,7 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             if (uiState.completedCount == 0) {
-                Spacer(modifier = Modifier.height(screenHeightDp(188.5.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(176.5.dp)))
 
                 Text(
                     text = "아직 완료된 여정이 없어요!",

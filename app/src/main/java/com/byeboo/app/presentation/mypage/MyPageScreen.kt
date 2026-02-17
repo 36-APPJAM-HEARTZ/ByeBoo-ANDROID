@@ -254,8 +254,8 @@ private fun MyPageScreen(
     ) {
         Text(
             text = "내 정보",
-            style = ByeBooTheme.typography.sub1,
             color = ByeBooTheme.colors.white,
+            style = ByeBooTheme.typography.sub1,
             textAlign = TextAlign.Center,
             modifier =
                 Modifier
@@ -272,7 +272,7 @@ private fun MyPageScreen(
                     start = screenWidthDp(24.dp),
                     top = screenHeightDp(8.dp),
                     end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(34.dp),
+                    bottom = screenHeightDp(56.dp),
                 ),
         ) {
             item {
@@ -358,13 +358,13 @@ private fun NicknameSection(
                 .clickable(onClick = onNicknameChangeClick)
                 .padding(
                     horizontal = screenWidthDp(24.dp),
-                    vertical = screenHeightDp(18.5.dp),
+                    vertical = screenHeightDp(17.5.dp),
                 ),
     ) {
         Text(
             text = nickname,
-            style = ByeBooTheme.typography.body3,
-            color = ByeBooTheme.colors.gray300,
+            color = ByeBooTheme.colors.gray100,
+            style = ByeBooTheme.typography.body3
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -377,7 +377,7 @@ private fun NicknameSection(
         )
     }
 
-    Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 }
 
 @Composable
@@ -385,7 +385,7 @@ private fun MyRecordingSection(
     onCompletedJourneyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -402,8 +402,8 @@ private fun MyRecordingSection(
 
         Text(
             text = "나의 기록",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray300,
+            style = ByeBooTheme.typography.body1
         )
     }
 
@@ -427,8 +427,8 @@ private fun MyRecordingSection(
     ) {
         Text(
             text = "완료한 여정 돌아보기",
-            style = ByeBooTheme.typography.body2,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body2
         )
     }
 }
@@ -438,7 +438,7 @@ private fun ByeBooUniverseSection(
     onGoToByeBooUniverseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -455,8 +455,8 @@ private fun ByeBooUniverseSection(
 
         Text(
             text = "보리가 궁금하다면?",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray300,
+            style = ByeBooTheme.typography.body1
         )
     }
 
@@ -480,11 +480,11 @@ private fun ByeBooUniverseSection(
     ) {
         Text(
             text = "Bye Boo 세계관 보러 가기",
-            style = ByeBooTheme.typography.body2,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body2
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 }
 
 @Composable
@@ -493,23 +493,23 @@ private fun AskingSection(
     onServiceWithByeBooClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "문의하기",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         Text(
             text = "바이부에 문의하기",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onAskingByeBooClick),
         )
 
@@ -517,12 +517,12 @@ private fun AskingSection(
 
         Text(
             text = "바이부와 함께 서비스 만들기",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 }
 
 @Composable
@@ -531,15 +531,15 @@ private fun NotificationSection(
     onAlarmToggleClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "알림",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -550,8 +550,8 @@ private fun NotificationSection(
         ) {
             Text(
                 text = "퀘스트 오픈 알림",
-                style = ByeBooTheme.typography.body3,
                 color = ByeBooTheme.colors.gray50,
+                style = ByeBooTheme.typography.body3
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -575,7 +575,7 @@ private fun NotificationSection(
             }
         }
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 }
 
 @Composable
@@ -584,23 +584,23 @@ private fun TermsSection(
     onTermsOfServiceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "약관 및 정책",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         Text(
             text = "개인정보 처리 방침",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onPrivacyPolicyClick),
         )
 
@@ -608,12 +608,12 @@ private fun TermsSection(
 
         Text(
             text = "서비스 이용 약관",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 }
 
 @Composable
@@ -622,23 +622,23 @@ private fun AccountSection(
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+    Spacer(modifier = Modifier.height(screenHeightDp(24.5.dp)))
 
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = "계정",
-            style = ByeBooTheme.typography.body1,
             color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
         Text(
             text = "로그아웃",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onLogoutClick),
         )
 
@@ -646,8 +646,8 @@ private fun AccountSection(
 
         Text(
             text = "탈퇴",
-            style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
             modifier = Modifier.clickable(onClick = onDeleteAccountClick),
         )
     }

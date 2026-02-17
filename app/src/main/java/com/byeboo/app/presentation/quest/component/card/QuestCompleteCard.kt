@@ -31,7 +31,7 @@ fun QuestCompleteCard(modifier: Modifier = Modifier) {
         modifier =
             modifier
                 .background(
-                    color = ByeBooTheme.colors.whiteAlpha5,
+                    color = ByeBooTheme.colors.background,
                     shape = RoundedCornerShape(12.dp),
                 ).padding(
                     horizontal = screenWidthDp(60.dp),
