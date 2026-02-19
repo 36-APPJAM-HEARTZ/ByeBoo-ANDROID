@@ -169,7 +169,7 @@ private fun QuestScreen(
                     Column {
                         HorizontalDivider(
                             thickness = 1.dp,
-                            color = ByeBooTheme.colors.whiteAlpha5,
+                            color = ByeBooTheme.colors.gray800,
                             modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                         )
 

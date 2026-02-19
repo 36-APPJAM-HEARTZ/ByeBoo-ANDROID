@@ -118,7 +118,7 @@ private fun OffboardingCompletedJourneyScreen(
                 Modifier
                     .fillMaxWidth(),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha5,
+            color = ByeBooTheme.colors.gray800,
         )
 
         Column(
