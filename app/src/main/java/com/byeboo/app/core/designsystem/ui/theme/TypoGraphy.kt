@@ -103,7 +103,7 @@ class ByeBooTypography internal constructor(
             body6 = body6,
             cap1 = cap1,
             cap2 = cap2,
-            bori = bori
+            bori = bori,
         )
 
     fun update(typography: ByeBooTypography) {
@@ -231,6 +231,6 @@ fun ByeBooTypography(): ByeBooTypography =
                 fontFamily = omyuPretty,
                 fontSize = 18.sp,
                 lineHeight = 27.sp,
-                letterSpacing = 0.em
+                letterSpacing = 0.em,
             ),
     )
