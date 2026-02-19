@@ -497,14 +497,13 @@ private fun AskingSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
             text = "문의하기",
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body1,
         )
-
 
         Text(
             text = "바이부에 문의하기",
@@ -533,14 +532,13 @@ private fun NotificationSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
             text = "알림",
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body1,
         )
-
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -586,8 +584,7 @@ private fun TermsSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
-
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
             text = "약관 및 정책",
@@ -622,7 +619,7 @@ private fun AccountSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
             text = "계정",

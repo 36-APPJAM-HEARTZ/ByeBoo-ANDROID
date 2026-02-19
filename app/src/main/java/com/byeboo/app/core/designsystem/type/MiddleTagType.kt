@@ -37,4 +37,3 @@ enum class MiddleTagType(
         dynamicContent = true,
     ),
 }
-

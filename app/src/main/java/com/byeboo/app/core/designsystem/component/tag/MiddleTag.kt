@@ -62,31 +62,35 @@ fun MiddleTag(
 
 @Composable
 fun getTagColors(type: MiddleTagType): Triple<Color, Color, Color?> =
-    when(type) {
-        MiddleTagType.QUEST_START_DAY -> Triple(
-            ByeBooTheme.colors.whiteAlpha5,
-            ByeBooTheme.colors.gray300,
-            null
-        )
-        MiddleTagType.QUEST_TIP -> Triple(
-            ByeBooTheme.colors.whiteAlpha5,
-            ByeBooTheme.colors.primary200,
-            ByeBooTheme.colors.gray800
-        )
-        MiddleTagType.QUEST_ESSENTIAL -> Triple(
-            ByeBooTheme.colors.whiteAlpha5,
-            ByeBooTheme.colors.gray300,
-            null
-        )
-        MiddleTagType.QUEST_OPTIONAL -> Triple(
-            ByeBooTheme.colors.whiteAlpha5,
-            ByeBooTheme.colors.gray300,
-            null
-        )
-        MiddleTagType.QUEST_PERIOD -> Triple(
-            ByeBooTheme.colors.whiteAlpha5,
-            ByeBooTheme.colors.gray300,
-            null
-        )
+    when (type) {
+        MiddleTagType.QUEST_START_DAY ->
+            Triple(
+                ByeBooTheme.colors.whiteAlpha5,
+                ByeBooTheme.colors.gray300,
+                null,
+            )
+        MiddleTagType.QUEST_TIP ->
+            Triple(
+                ByeBooTheme.colors.whiteAlpha5,
+                ByeBooTheme.colors.primary200,
+                ByeBooTheme.colors.gray800,
+            )
+        MiddleTagType.QUEST_ESSENTIAL ->
+            Triple(
+                ByeBooTheme.colors.whiteAlpha5,
+                ByeBooTheme.colors.gray300,
+                null,
+            )
+        MiddleTagType.QUEST_OPTIONAL ->
+            Triple(
+                ByeBooTheme.colors.whiteAlpha5,
+                ByeBooTheme.colors.gray300,
+                null,
+            )
+        MiddleTagType.QUEST_PERIOD ->
+            Triple(
+                ByeBooTheme.colors.whiteAlpha5,
+                ByeBooTheme.colors.gray300,
+                null,
+            )
     }
-

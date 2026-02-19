@@ -83,7 +83,7 @@ fun QuestModal(
                 middleTagType = MiddleTagType.QUEST_TIP,
                 text = "작성 TIP",
                 textStyle = ByeBooTheme.typography.cap1,
-                modifier = Modifier.clickable(onClick = navigateToTip)
+                modifier = Modifier.clickable(onClick = navigateToTip),
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
