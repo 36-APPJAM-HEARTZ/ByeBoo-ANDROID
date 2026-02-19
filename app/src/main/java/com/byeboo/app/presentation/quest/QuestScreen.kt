@@ -121,7 +121,7 @@ private fun QuestScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -162,14 +162,14 @@ private fun QuestScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .background(ByeBooTheme.colors.black),
+                    .background(ByeBooTheme.colors.background),
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
                 item("header_$stepIndex") {
                     Column {
                         HorizontalDivider(
                             thickness = 1.dp,
-                            color = ByeBooTheme.colors.whiteAlpha10,
+                            color = ByeBooTheme.colors.gray800,
                             modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                         )
 

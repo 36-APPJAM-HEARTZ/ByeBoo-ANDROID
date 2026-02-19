@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -22,7 +22,7 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 @Composable
 fun QuestEmotionDescriptionCard(
     questEmotionDescription: String,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -30,7 +30,7 @@ fun QuestEmotionDescriptionCard(
             modifier
                 .fillMaxWidth()
                 .background(
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                     shape = RoundedCornerShape(12.dp),
                 ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {
@@ -42,7 +42,7 @@ fun QuestEmotionDescriptionCard(
             Text(
                 text = questEmotionDescription,
                 style = ByeBooTheme.typography.body6,
-                color = ByeBooTheme.colors.gray300,
+                color = ByeBooTheme.colors.gray100,
             )
         }
     }

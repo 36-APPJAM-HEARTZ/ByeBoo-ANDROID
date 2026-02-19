@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 
-enum class LargeTagType(
+enum class EmotionChipType(
     @DrawableRes val titleIcon: Int,
     @StringRes val titleResId: Int,
     val title: String,
@@ -39,7 +39,7 @@ enum class LargeTagType(
     ;
 
     companion object {
-        fun fromKorean(value: String): LargeTagType =
+        fun fromKorean(value: String): EmotionChipType =
             when (value) {
                 "슬픔" -> EMOTION_SADNESS
                 "후련함" -> EMOTION_RELIEF

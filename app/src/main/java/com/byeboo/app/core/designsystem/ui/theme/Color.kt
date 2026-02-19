@@ -56,7 +56,7 @@ val gray400 = Color(0xFFA6A6A6)
 val gray500 = Color(0xFF878787)
 val gray600 = Color(0xFF6E6E6E)
 val gray700 = Color(0xFF404040)
-val gray800 = Color(0xFF262626)
+val gray800 = Color(0xFF2C2C2C)
 val gray900 = Color(0xFF161616)
 
 // black_and_white
@@ -68,7 +68,7 @@ val blackAlpha80 = black.copy(alpha = 0.8f)
 val blackAlpha50 = black.copy(alpha = 0.5f)
 
 val whiteAlpha50 = white.copy(alpha = 0.5f)
-val whiteAlpha10 = white.copy(alpha = 0.1f)
+val whiteAlpha5 = white.copy(alpha = 0.05f)
 
 val primary300Alpha10 = primary300.copy(alpha = 0.1f)
 val primary300Alpha20 = primary300.copy(alpha = 0.2f)
@@ -81,6 +81,9 @@ val gray900Alpha80 = gray900.copy(alpha = 0.8f)
 
 // kakao
 val kakaoYellow = Color(0xFFFEE500)
+
+// background
+val background = Color(0xFF161616)
 
 @Stable
 class ByeBooColors(
@@ -125,7 +128,7 @@ class ByeBooColors(
     blackAlpha80: Color,
     blackAlpha50: Color,
     whiteAlpha50: Color,
-    whiteAlpha10: Color,
+    whiteAlpha5: Color,
     primary300Alpha10: Color,
     primary300Alpha20: Color,
     primary50Alpha50: Color,
@@ -133,6 +136,7 @@ class ByeBooColors(
     secondary300Alpha10: Color,
     gray900Alpha80: Color,
     kakaoYellow: Color,
+    background: Color,
     isLight: Boolean,
 ) {
     var primary50 by mutableStateOf(primary50)
@@ -217,7 +221,7 @@ class ByeBooColors(
         private set
     var whiteAlpha50 by mutableStateOf(whiteAlpha50)
         private set
-    var whiteAlpha10 by mutableStateOf(whiteAlpha10)
+    var whiteAlpha5 by mutableStateOf(whiteAlpha5)
         private set
     var primary300Alpha10 by mutableStateOf(primary300Alpha10)
         private set
@@ -232,6 +236,8 @@ class ByeBooColors(
     var gray900Alpha80 by mutableStateOf(gray900Alpha80)
         private set
     var kakaoYellow by mutableStateOf(kakaoYellow)
+        private set
+    var background by mutableStateOf(background)
         private set
     var isLight by mutableStateOf(isLight)
 
@@ -278,7 +284,7 @@ class ByeBooColors(
             blackAlpha80,
             blackAlpha50,
             whiteAlpha50,
-            whiteAlpha10,
+            whiteAlpha5,
             primary300Alpha10,
             primary300Alpha20,
             primary50Alpha50,
@@ -286,6 +292,7 @@ class ByeBooColors(
             secondary300Alpha10,
             gray900Alpha80,
             kakaoYellow,
+            background,
             isLight,
         )
 
@@ -331,7 +338,7 @@ class ByeBooColors(
         blackAlpha80 = colors.blackAlpha80
         blackAlpha50 = colors.blackAlpha50
         whiteAlpha50 = colors.whiteAlpha50
-        whiteAlpha10 = colors.whiteAlpha10
+        whiteAlpha5 = colors.whiteAlpha5
         primary300Alpha10 = colors.primary300Alpha10
         primary300Alpha20 = colors.primary300Alpha20
         primary50Alpha50 = colors.primary50Alpha50
@@ -339,6 +346,7 @@ class ByeBooColors(
         secondary300Alpha10 = colors.secondary300Alpha10
         gray900Alpha80 = colors.gray900Alpha80
         kakaoYellow = colors.kakaoYellow
+        background = colors.background
         isLight = colors.isLight
     }
 }
@@ -385,7 +393,7 @@ fun ByeBooDarkColors(
     BlackAlpha80: Color = blackAlpha80,
     BlackAlpha50: Color = blackAlpha50,
     WhiteAlpha50: Color = whiteAlpha50,
-    WhiteAlpha10: Color = whiteAlpha10,
+    WhiteAlpha5: Color = whiteAlpha5,
     Primary300Alpha10: Color = primary300Alpha10,
     Primary300Alpha20: Color = primary300Alpha20,
     Primary50Alpha50: Color = primary50Alpha50,
@@ -393,6 +401,7 @@ fun ByeBooDarkColors(
     Secondary300Alpha10: Color = secondary300Alpha10,
     Gray900Alpha80: Color = gray900Alpha80,
     KakaoYellow: Color = kakaoYellow,
+    Background: Color = background,
 ) = ByeBooColors(
     Primary50,
     Primary100,
@@ -435,7 +444,7 @@ fun ByeBooDarkColors(
     BlackAlpha80,
     BlackAlpha50,
     WhiteAlpha50,
-    WhiteAlpha10,
+    WhiteAlpha5,
     Primary300Alpha10,
     Primary300Alpha20,
     Primary50Alpha50,
@@ -443,5 +452,6 @@ fun ByeBooDarkColors(
     Secondary300Alpha10,
     Gray900Alpha80,
     KakaoYellow,
+    Background,
     isLight = true,
 )

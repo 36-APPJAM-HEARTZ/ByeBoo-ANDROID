@@ -1,11 +1,11 @@
 package com.byeboo.app.data.mapper.quest
 
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 
-fun LargeTagType.toData(): String =
+fun EmotionChipType.toData(): String =
     when (this) {
-        LargeTagType.EMOTION_NEUTRAL -> "NEUTRAL"
-        LargeTagType.EMOTION_SADNESS -> "SAD"
-        LargeTagType.EMOTION_RELIEF -> "RELIEVED"
-        LargeTagType.EMOTION_SELF_AWARE -> "SELF_UNDERSTANDING"
+        EmotionChipType.EMOTION_NEUTRAL -> "NEUTRAL"
+        EmotionChipType.EMOTION_SADNESS -> "SAD"
+        EmotionChipType.EMOTION_RELIEF -> "RELIEVED"
+        EmotionChipType.EMOTION_SELF_AWARE -> "SELF_UNDERSTANDING"
     }

@@ -46,7 +46,7 @@ internal fun QuestPhotoPicker(
                 .width(screenWidthDp(96.dp))
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
-                .background(color = ByeBooTheme.colors.whiteAlpha10),
+                .background(color = ByeBooTheme.colors.whiteAlpha5),
     ) {
         ImageUploadButton(
             imageUrl = imageUrl,

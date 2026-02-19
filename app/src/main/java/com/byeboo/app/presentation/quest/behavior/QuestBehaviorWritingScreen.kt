@@ -48,7 +48,7 @@ import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -145,7 +145,7 @@ private fun QuestBehaviorWritingScreen(
     onUpdateContent: (String) -> Unit,
     navigateButton: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType?) -> Unit,
+    onEmotionSelected: (EmotionChipType?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -167,7 +167,7 @@ private fun QuestBehaviorWritingScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .onPreInterceptKeyBeforeSoftKeyboard { event ->
                     if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
                         focusManager.clearFocus(force = true)
@@ -352,7 +352,7 @@ private fun QuestBehaviorWritingScreen(
                 Spacer(modifier = modifier.height(screenHeightDp(24.dp)))
 
                 ByeBooActivationButton(
-                    buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
+                    buttonDisableColor = ByeBooTheme.colors.whiteAlpha5,
                     buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = {
