@@ -18,6 +18,7 @@ import com.byeboo.app.R
 val pretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold, FontWeight.SemiBold))
 val pretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medium))
 val pretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
+val omyuPretty = FontFamily(Font(R.font.omyu_pretty, FontWeight.Normal))
 
 private fun ByeBooTextStyle(
     fontFamily: FontFamily,
@@ -53,6 +54,7 @@ class ByeBooTypography internal constructor(
     body6: TextStyle,
     cap1: TextStyle,
     cap2: TextStyle,
+    bori: TextStyle,
 ) {
     var head1 by mutableStateOf(head1)
         private set
@@ -82,6 +84,8 @@ class ByeBooTypography internal constructor(
         private set
     var cap2 by mutableStateOf(cap2)
         private set
+    var bori by mutableStateOf(bori)
+        private set
 
     fun copy(): ByeBooTypography =
         ByeBooTypography(
@@ -99,6 +103,7 @@ class ByeBooTypography internal constructor(
             body6 = body6,
             cap1 = cap1,
             cap2 = cap2,
+            bori = bori
         )
 
     fun update(typography: ByeBooTypography) {
@@ -116,6 +121,7 @@ class ByeBooTypography internal constructor(
         body6 = typography.body6
         cap1 = typography.cap1
         cap2 = typography.cap2
+        bori = typography.bori
     }
 }
 
@@ -219,5 +225,12 @@ fun ByeBooTypography(): ByeBooTypography =
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
                 letterSpacing = 0.em,
+            ),
+        bori =
+            ByeBooTextStyle(
+                fontFamily = omyuPretty,
+                fontSize = 18.sp,
+                lineHeight = 27.sp,
+                letterSpacing = 0.em
             ),
     )
