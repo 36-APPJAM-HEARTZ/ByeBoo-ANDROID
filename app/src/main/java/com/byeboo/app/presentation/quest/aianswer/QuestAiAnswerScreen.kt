@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -124,20 +127,28 @@ private fun QuestAiAnswer(
         Column(
             modifier =
                 Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(195.dp)),
+                    .padding(top = screenHeightDp(195.dp), bottom = screenHeightDp(22.dp)),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = questAiAnswer,
                 style = ByeBooTheme.typography.bori,
                 color = ByeBooTheme.colors.primary50,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(264 / 270f)
+                        .verticalScroll(state = rememberScrollState()),
             )
 
             Text(
                 text = "보리의 답장",
                 style = ByeBooTheme.typography.bori,
                 color = ByeBooTheme.colors.primary50,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
