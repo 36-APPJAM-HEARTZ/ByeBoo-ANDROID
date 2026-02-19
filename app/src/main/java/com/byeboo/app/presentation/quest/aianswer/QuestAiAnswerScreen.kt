@@ -34,28 +34,31 @@ import com.byeboo.app.presentation.quest.aianswer.type.QuestAiAnswerStatusType
 @Composable
 fun QuestAiAnswerRoute(
     paddingValues: PaddingValues,
-    viewModel: QuestAiAnswerViewModel = hiltViewModel()
+    viewModel: QuestAiAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when(val state = uiState){
-        is UiState.Loading -> QuestAiAnswerStatusScreen(
-            paddingValues = paddingValues,
-            onCloseClick = viewModel::onCloseClicked,
-            statusType = QuestAiAnswerStatusType.LOADING
-        )
+    when (val state = uiState) {
+        is UiState.Loading ->
+            QuestAiAnswerStatusScreen(
+                paddingValues = paddingValues,
+                onCloseClick = viewModel::onCloseClicked,
+                statusType = QuestAiAnswerStatusType.LOADING,
+            )
 
-        is UiState.Failure -> QuestAiAnswerStatusScreen(
-            paddingValues = paddingValues,
-            onCloseClick = viewModel::onCloseClicked,
-            statusType = QuestAiAnswerStatusType.FAIL
-        )
+        is UiState.Failure ->
+            QuestAiAnswerStatusScreen(
+                paddingValues = paddingValues,
+                onCloseClick = viewModel::onCloseClicked,
+                statusType = QuestAiAnswerStatusType.FAIL,
+            )
 
-        is UiState.Success -> QuestAiAnswerScreen(
-            uiState = state.data,
-            paddingValues = paddingValues,
-            onCloseClick = viewModel::onCloseClicked
-        )
+        is UiState.Success ->
+            QuestAiAnswerScreen(
+                uiState = state.data,
+                paddingValues = paddingValues,
+                onCloseClick = viewModel::onCloseClicked,
+            )
 
         else -> Unit
     }
@@ -66,18 +69,19 @@ private fun QuestAiAnswerScreen(
     uiState: QuestAiAnswerState,
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(horizontal = screenWidthDp(24.dp))
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            ),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(35.dp))
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(35.dp)),
     ) {
         Row(
             modifier =
@@ -94,7 +98,7 @@ private fun QuestAiAnswerScreen(
         }
 
         QuestAiAnswer(
-            questAiAnswer = uiState.questAiAnswer
+            questAiAnswer = uiState.questAiAnswer,
         )
     }
 }
@@ -102,36 +106,37 @@ private fun QuestAiAnswerScreen(
 @Composable
 private fun QuestAiAnswer(
     questAiAnswer: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(312 / 547f)
-    )
-    {
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(312 / 547f),
+    ) {
         Image(
             painter = painterResource(id = R.drawable.img_bori_letter),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
 
         // TODO: 텍스트 스타일 지정
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(top = screenHeightDp(195.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(top = screenHeightDp(195.dp)),
         ) {
             Text(
                 text = questAiAnswer,
-                color = ByeBooTheme.colors.primary50
+                color = ByeBooTheme.colors.primary50,
             )
 
             Text(
                 text = "보리의 답장",
-                color = ByeBooTheme.colors.primary50
+                color = ByeBooTheme.colors.primary50,
             )
         }
     }

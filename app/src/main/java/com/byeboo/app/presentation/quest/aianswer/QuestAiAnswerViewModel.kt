@@ -9,19 +9,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestAiAnswerViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<QuestAiAnswerState>>(UiState.Loading)
-    val uiState: StateFlow<UiState<QuestAiAnswerState>> = _uiState.asStateFlow()
+class QuestAiAnswerViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _uiState = MutableStateFlow<UiState<QuestAiAnswerState>>(UiState.Loading)
+        val uiState: StateFlow<UiState<QuestAiAnswerState>> = _uiState.asStateFlow()
 
-    init {
-        loadQuestAiAnswer()
-    }
+        init {
+            loadQuestAiAnswer()
+        }
 
-    private fun loadQuestAiAnswer(){
-        // TODO: 서버 연결
-    }
+        private fun loadQuestAiAnswer() {
+            // TODO: 서버 연결
+        }
 
-    fun onCloseClicked(){
-        // TODO: 나의 여정 퀘스트 메인 화면으로 이동
+        fun onCloseClicked() {
+            // TODO: 나의 여정 퀘스트 메인 화면으로 이동
+        }
     }
-}

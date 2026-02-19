@@ -32,17 +32,18 @@ fun QuestAiAnswerStatusScreen(
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     statusType: QuestAiAnswerStatusType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            ),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(227.dp))
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(227.dp)),
     ) {
         Row(
             modifier =
@@ -60,23 +61,21 @@ fun QuestAiAnswerStatusScreen(
         }
 
         QuestAiAnswerStatusContent(
-            statusType = statusType
+            statusType = statusType,
         )
     }
 }
 
 @Composable
-private fun QuestAiAnswerStatusContent(
-    statusType: QuestAiAnswerStatusType
-) {
+private fun QuestAiAnswerStatusContent(statusType: QuestAiAnswerStatusType) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp)),
     ) {
         Image(
             painter = painterResource(id = statusType.statusImage),
             contentDescription = null,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(100.dp),
         )
 
         Text(
@@ -84,7 +83,7 @@ private fun QuestAiAnswerStatusContent(
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.body3,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
