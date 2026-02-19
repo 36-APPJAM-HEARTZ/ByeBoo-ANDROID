@@ -127,10 +127,9 @@ private fun OffboardingNewJourneyScreen(
         HorizontalDivider(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(8.dp)),
+                    .fillMaxWidth(),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha5,
+            color = ByeBooTheme.colors.gray800,
         )
 
         Column(
@@ -189,7 +188,7 @@ private fun PreparingCard() {
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha5)
-                .padding(vertical = screenHeightDp(24.dp)),
+                .padding(vertical = screenHeightDp(22.dp)),
     ) {
         Text(
             text = "준비 중",

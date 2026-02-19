@@ -60,7 +60,7 @@ fun QuestModal(
                     .height(screenHeightDp(58.dp)),
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp((17.5).dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
             Text(
                 text = "${questNumber}번째 퀘스트",
@@ -83,7 +83,7 @@ fun QuestModal(
                 middleTagType = MiddleTagType.QUEST_TIP,
                 text = "작성 TIP",
                 textStyle = ByeBooTheme.typography.cap1,
-                modifier = Modifier.clickable { navigateToTip() },
+                modifier = Modifier.clickable(onClick = navigateToTip)
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))

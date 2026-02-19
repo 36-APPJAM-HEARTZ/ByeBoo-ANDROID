@@ -289,7 +289,7 @@ private fun MyPageScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha5,
+                    color = ByeBooTheme.colors.gray800,
                 )
             }
 
@@ -308,7 +308,7 @@ private fun MyPageScreen(
                             .fillMaxWidth()
                             .padding(vertical = screenHeightDp(8.dp)),
                     thickness = 1.dp,
-                    color = ByeBooTheme.colors.whiteAlpha5,
+                    color = ByeBooTheme.colors.gray800,
                 )
             }
 
