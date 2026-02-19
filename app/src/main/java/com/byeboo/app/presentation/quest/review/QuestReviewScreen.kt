@@ -137,7 +137,6 @@ private fun QuestReviewScreen(
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
-                    top = screenHeightDp(10.dp),
                     end = screenWidthDp(24.dp),
                     bottom = screenHeightDp(28.dp),
                 ),
@@ -165,14 +164,13 @@ private fun QuestReviewScreen(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(312 / 312f)
+                                .aspectRatio(1f)
                                 .clip(RoundedCornerShape(12.dp)),
                     ) {
                         SubcomposeAsyncImage(
                             modifier =
                                 Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(1f),
+                                    .fillMaxWidth(),
                             model =
                                 ImageRequest
                                     .Builder(LocalContext.current)

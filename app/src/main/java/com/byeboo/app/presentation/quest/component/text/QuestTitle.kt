@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,8 @@ fun QuestTitle(
             Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(10.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp))
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -51,15 +54,11 @@ fun QuestTitle(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         Text(
             text = "$date",
             color = ByeBooTheme.colors.gray500,
             style = ByeBooTheme.typography.body6,
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         Row {
             Text(
