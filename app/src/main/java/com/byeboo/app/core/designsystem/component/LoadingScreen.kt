@@ -16,7 +16,7 @@ fun LoadingScreen() {
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black),
+                .background(ByeBooTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

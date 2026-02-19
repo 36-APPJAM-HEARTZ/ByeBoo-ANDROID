@@ -246,7 +246,7 @@ private fun MyPageScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -260,7 +260,7 @@ private fun MyPageScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .background(ByeBooTheme.colors.black)
+                    .background(ByeBooTheme.colors.background)
                     .padding(horizontal = screenWidthDp(24.dp))
                     .padding(top = screenHeightDp(43.dp), bottom = screenHeightDp(16.dp)),
         )

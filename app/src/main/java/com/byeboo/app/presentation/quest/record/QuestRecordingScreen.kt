@@ -155,7 +155,7 @@ private fun QuestRecordingScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .onPreInterceptKeyBeforeSoftKeyboard { event ->
                     if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
                         focusManager.clearFocus(force = true)

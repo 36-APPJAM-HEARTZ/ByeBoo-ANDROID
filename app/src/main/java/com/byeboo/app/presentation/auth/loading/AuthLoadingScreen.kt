@@ -62,7 +62,7 @@ private fun LoadingScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(ByeBooTheme.colors.black),
+                .background(ByeBooTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
