@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.quest.navigation.QuestReview
@@ -69,7 +69,7 @@ class QuestReviewViewModel
             }
         }
 
-        fun onCancelClicked() {
+        fun onBackClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(
                     QuestReviewSideEffect.NavigateToQuest,
@@ -96,7 +96,7 @@ class QuestReviewViewModel
                                     imageKey = detail.imageKey.orEmpty(),
                                     imageUrl = detail.imageUrl.orEmpty(),
                                     selectedEmotion =
-                                        LargeTagType.Companion.fromKorean(
+                                        EmotionChipType.fromKorean(
                                             detail.questEmotionState,
                                         ),
                                     emotionDescription = detail.emotionDescription,

@@ -1,10 +1,10 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
@@ -36,6 +36,7 @@ fun QuestTitle(
             Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(10.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -51,20 +52,25 @@ fun QuestTitle(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         Text(
             text = "$date",
             color = ByeBooTheme.colors.gray500,
             style = ByeBooTheme.typography.body6,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+        Row {
+            Text(
+                text = "Q.",
+                color = ByeBooTheme.colors.primary200,
+                style = ByeBooTheme.typography.head2,
+                modifier = Modifier.padding(end = screenWidthDp(4.dp)),
+            )
 
-        Text(
-            text = questQuestion,
-            color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.head1,
-        )
+            Text(
+                text = questQuestion,
+                color = ByeBooTheme.colors.gray50,
+                style = ByeBooTheme.typography.head2,
+            )
+        }
     }
 }

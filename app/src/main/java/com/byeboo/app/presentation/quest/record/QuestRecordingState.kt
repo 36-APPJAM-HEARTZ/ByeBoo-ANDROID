@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.quest.record
 
 import androidx.compose.runtime.Immutable
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestWritingState
 
@@ -16,7 +16,7 @@ data class QuestRecordingState(
     val contentsState: QuestWritingState = QuestWritingState.Empty,
     val showQuitModal: Boolean = false,
     val showBottomSheet: Boolean = false,
-    val selectedEmotion: LargeTagType? = null,
+    val selectedEmotion: EmotionChipType? = null,
     val isEditMode: Boolean = false,
     val originalAnswer: String = "",
     val isCompleteButtonEnabled: Boolean = false,

@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
@@ -56,7 +56,7 @@ class QuestRecordingCompleteViewModel
                                 createdAt = detail.createdAt,
                                 question = detail.question,
                                 answer = detail.questAnswer,
-                                selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
+                                selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
                             )
                         }

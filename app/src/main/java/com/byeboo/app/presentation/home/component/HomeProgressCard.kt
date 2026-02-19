@@ -34,7 +34,7 @@ fun HomeProgressCard(
             modifier
                 .fillMaxWidth()
                 .background(
-                    ByeBooTheme.colors.whiteAlpha10,
+                    ByeBooTheme.colors.whiteAlpha5,
                     RoundedCornerShape(12.dp),
                 ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp)),
     ) {

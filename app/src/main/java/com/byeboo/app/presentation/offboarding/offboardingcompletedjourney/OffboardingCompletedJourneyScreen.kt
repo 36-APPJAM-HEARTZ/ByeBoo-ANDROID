@@ -86,7 +86,7 @@ private fun OffboardingCompletedJourneyScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
@@ -103,7 +103,7 @@ private fun OffboardingCompletedJourneyScreen(
             tint = ByeBooTheme.colors.gray50,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(26.dp)))
 
         Text(
             text = "내가 완료한 여정이에요",
@@ -111,22 +111,21 @@ private fun OffboardingCompletedJourneyScreen(
             style = ByeBooTheme.typography.head1,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(6.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         HorizontalDivider(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(8.dp)),
+                    .fillMaxWidth(),
             thickness = 1.dp,
-            color = ByeBooTheme.colors.whiteAlpha10,
+            color = ByeBooTheme.colors.gray800,
         )
 
         Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(16.dp)),
+                    .padding(vertical = screenHeightDp(20.dp)),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
         ) {
             Row(
@@ -153,7 +152,7 @@ private fun OffboardingCompletedJourneyScreen(
                     JourneyCard(
                         journeyType = card.journeyType,
                         onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
-                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha10,
+                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha5,
                         chipTextColor = ByeBooTheme.colors.gray300,
                         journeyTitleTextColor = ByeBooTheme.colors.gray300,
                         journeyCardTextStyle = ByeBooTheme.typography.body3,
@@ -162,7 +161,7 @@ private fun OffboardingCompletedJourneyScreen(
             }
 
             if (uiState.completedCount == 0) {
-                Spacer(modifier = Modifier.height(screenHeightDp(188.5.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(176.dp)))
 
                 Text(
                     text = "아직 완료된 여정이 없어요!",

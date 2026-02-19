@@ -6,7 +6,7 @@
     <string name="ic_home_desc">홈</string>
     <string name="ic_mypage_desc">내 정보</string>
 
-    <!--공통 컴포넌트 LargeTag-->
+    <!--공통 컴포넌트 EmotionChipType-->
     <string name="type_emotion_neutral">그저그런</string>
     <string name="type_emotion_self_aware">자기이해</string>
     <string name="type_emotion_sadness">슬픔</string>

@@ -30,7 +30,7 @@ fun ByeBooDragHandle(content: @Composable () -> Unit = {}) {
                 Modifier
                     .width(screenWidthDp(35.dp))
                     .height(screenHeightDp(5.dp))
-                    .background(ByeBooTheme.colors.whiteAlpha10),
+                    .background(ByeBooTheme.colors.whiteAlpha5),
         )
         content()
     }

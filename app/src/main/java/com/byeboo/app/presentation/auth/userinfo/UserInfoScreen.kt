@@ -224,7 +224,7 @@ private fun UserInfoScreen(
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,
-                buttonText = "다음으로",
+                buttonText = if (pagerState.currentPage == 0 || pagerState.currentPage == 1) "다음으로" else "완료하기",
                 onClick = {
                     coroutineScope.launch {
                         val nextPage = pagerState.currentPage + 1

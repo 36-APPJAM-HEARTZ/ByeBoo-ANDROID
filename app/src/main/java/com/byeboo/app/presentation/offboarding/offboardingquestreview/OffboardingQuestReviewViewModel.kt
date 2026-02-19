@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
@@ -95,7 +95,7 @@ class OffboardingQuestReviewViewModel
                                 answer = detail.questAnswer,
                                 imageKey = detail.imageKey.orEmpty(),
                                 imageUrl = detail.imageUrl.orEmpty(),
-                                selectedEmotion = LargeTagType.fromKorean(detail.questEmotionState),
+                                selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
                                 questType =
                                     if (detail.imageUrl == null) {
