@@ -121,7 +121,6 @@ private fun QuestAiAnswer(
             modifier = Modifier.fillMaxSize(),
         )
 
-        // TODO: 텍스트 스타일 지정
         Column(
             modifier =
                 Modifier
@@ -131,11 +130,13 @@ private fun QuestAiAnswer(
         ) {
             Text(
                 text = questAiAnswer,
+                style = ByeBooTheme.typography.bori,
                 color = ByeBooTheme.colors.primary50,
             )
 
             Text(
                 text = "보리의 답장",
+                style = ByeBooTheme.typography.bori,
                 color = ByeBooTheme.colors.primary50,
             )
         }
