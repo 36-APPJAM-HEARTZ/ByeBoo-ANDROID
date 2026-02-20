@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.util
 
+import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestData
 import com.byeboo.app.presentation.quest.model.Quest
@@ -9,6 +10,10 @@ import com.byeboo.app.presentation.quest.model.QuestState
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class QuestUiModelMapper
@@ -77,4 +82,34 @@ class QuestUiModelMapper
             if (openAt == null || now == null) return 0
             return Duration.between(now, openAt).toMinutes().coerceAtLeast(0)
         }
+        fun formatWrittenTime(writtenAt: LocalDateTime): String {
+            val now = LocalDateTime.now()
+            val today = LocalDate.now()
+            val writtenDate = writtenAt.toLocalDate()
+
+            return if (writtenDate.isEqual(today)) {
+                val minutes = ChronoUnit.MINUTES.between(writtenAt, now)
+                val hours = ChronoUnit.HOURS.between(writtenAt, now)
+
+                when {
+                    minutes < 60 -> {
+                        if (minutes < 1) "1분 전" else "${minutes}분 전"
+                    }
+                    else -> "${hours}시간 전"
+                }
+            } else {
+                writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+            }
+        }
+
+        fun mapToIconRes(iconName: String): Int {
+            return when (iconName) {
+                "SADNESS" -> R.drawable.ic_profile_sadness
+                "SELF_UNDERSTANDING" -> R.drawable.ic_profile_self_understanding
+                "SO_SO" -> R.drawable.ic_profile_so_so
+                "RELIEVED" -> R.drawable.ic_profile_relieved
+                else -> R.drawable.ic_profile_relieved
+            }
+        }
+
     }
