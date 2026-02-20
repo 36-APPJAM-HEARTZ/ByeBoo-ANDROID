@@ -598,7 +598,7 @@ private fun CommunitySection(
     onBreakupSupportChatClick: () -> Unit,
     onInstagramClick: () -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
     Column(

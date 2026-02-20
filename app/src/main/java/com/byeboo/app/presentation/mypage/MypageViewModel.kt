@@ -20,193 +20,193 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel
-@Inject
-constructor(
-    private val userRepository: UserRepository,
-    private val fcmTokenRepository: FcmTokenRepository,
-    private val logoutUseCase: LogoutUseCase,
-    private val withdrawUseCase: WithdrawUseCase,
-    private val mixpanelUtil: MixpanelUtil,
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(MyPageState())
-    val uiState: StateFlow<MyPageState> = _uiState.asStateFlow()
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+        private val fcmTokenRepository: FcmTokenRepository,
+        private val logoutUseCase: LogoutUseCase,
+        private val withdrawUseCase: WithdrawUseCase,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(MyPageState())
+        val uiState: StateFlow<MyPageState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<MyPageSideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<MyPageSideEffect>()
+        val sideEffect = _sideEffect.asSharedFlow()
 
-    init {
-        viewModelScope.launch {
-            userRepository.getNickname().collect { nickname ->
-                _uiState.update { it.copy(nickname = nickname) }
+        init {
+            viewModelScope.launch {
+                userRepository.getNickname().collect { nickname ->
+                    _uiState.update { it.copy(nickname = nickname) }
+                }
+
+                val savedAlarmState = fcmTokenRepository.isAlarmEnabled()
+                _uiState.update { it.copy(isAlarmEnabled = savedAlarmState) }
             }
-
-            val savedAlarmState = fcmTokenRepository.isAlarmEnabled()
-            _uiState.update { it.copy(isAlarmEnabled = savedAlarmState) }
         }
-    }
 
-    fun onNicknameChangeClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.NavigateToEditProfile)
+        fun onNicknameChangeClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.NavigateToEditProfile)
+            }
         }
-    }
 
-    fun onCompletedJourneyClicked() {
-        viewModelScope.launch {
-            mixpanelUtil.trackEvent("mypage_journey_review_click")
-            _sideEffect.emit(MyPageSideEffect.NavigateToOffboardingCompletedJourney)
+        fun onCompletedJourneyClicked() {
+            viewModelScope.launch {
+                mixpanelUtil.trackEvent("mypage_journey_review_click")
+                _sideEffect.emit(MyPageSideEffect.NavigateToOffboardingCompletedJourney)
+            }
         }
-    }
 
-    fun onGoToByeBooUniverseClicked() {
-        viewModelScope.launch {
-            mixpanelUtil.trackEvent("tutorial_button_click")
-            mixpanelUtil.trackEvent("tutorial_pageview")
-            _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
+        fun onGoToByeBooUniverseClicked() {
+            viewModelScope.launch {
+                mixpanelUtil.trackEvent("tutorial_button_click")
+                mixpanelUtil.trackEvent("tutorial_pageview")
+                _sideEffect.emit(MyPageSideEffect.NavigateToTutorial)
+            }
         }
-    }
 
-    fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
-        val currentAlarmState = _uiState.value.isAlarmEnabled ?: return
+        fun onAlarmToggledClicked(hasSystemPermission: Boolean) {
+            val currentAlarmState = _uiState.value.isAlarmEnabled ?: return
 
-        if (currentAlarmState) {
-            updateAlarmStatus()
-        } else {
-            // [off -> on]
-            // 권한 있을 경우
-            if (hasSystemPermission) {
+            if (currentAlarmState) {
                 updateAlarmStatus()
             } else {
-                _uiState.update {
-                    it.copy(showPermissionModal = true)
+                // [off -> on]
+                // 권한 있을 경우
+                if (hasSystemPermission) {
+                    updateAlarmStatus()
+                } else {
+                    _uiState.update {
+                        it.copy(showPermissionModal = true)
+                    }
                 }
             }
         }
-    }
 
-    // 시스템 권한 팝업 결과 처리
-    fun onPermissionResult(isGranted: Boolean) {
-        if (isGranted) {
-            // 허용 -> 서버 토글 요청
-            viewModelScope.launch {
-                _uiState.update { it.copy(isAlarmEnabled = true) }
-                fcmTokenRepository.saveAlarmEnabled(true)
-                updateAlarmStatus()
-            }
-        } else {
-            // 비허용 -> off 유지
-            _uiState.update {
-                it.copy(showPermissionModal = false, isAlarmEnabled = false)
+        // 시스템 권한 팝업 결과 처리
+        fun onPermissionResult(isGranted: Boolean) {
+            if (isGranted) {
+                // 허용 -> 서버 토글 요청
+                viewModelScope.launch {
+                    _uiState.update { it.copy(isAlarmEnabled = true) }
+                    fcmTokenRepository.saveAlarmEnabled(true)
+                    updateAlarmStatus()
+                }
+            } else {
+                // 비허용 -> off 유지
+                _uiState.update {
+                    it.copy(showPermissionModal = false, isAlarmEnabled = false)
+                }
             }
         }
-    }
 
-    // 서버 토글 요청
-    private fun updateAlarmStatus() {
-        viewModelScope.launch {
-            fcmTokenRepository
-                .allowQuestAlarm()
-                .onSuccess { notificationSetting ->
-                    _uiState.update {
-                        it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
+        // 서버 토글 요청
+        private fun updateAlarmStatus() {
+            viewModelScope.launch {
+                fcmTokenRepository
+                    .allowQuestAlarm()
+                    .onSuccess { notificationSetting ->
+                        _uiState.update {
+                            it.copy(isAlarmEnabled = notificationSetting.alarmEnabled)
+                        }
+                        fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
+                    }.onFailure {
+                        _uiState.update { it.copy(isAlarmEnabled = false) }
+                        fcmTokenRepository.saveAlarmEnabled(false)
                     }
-                    fcmTokenRepository.saveAlarmEnabled(notificationSetting.alarmEnabled)
-                }.onFailure {
+            }
+        }
+
+        // 설정 화면으로 이동할 경우
+        fun onGoToSettingClicked() {
+            _uiState.update { it.copy(showPermissionModal = false) }
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.NavigateToSetting)
+            }
+        }
+
+        // 설정 -> 앱 복귀 시 알람 상태 동기화
+        fun syncAlarmState(hasSystemPermission: Boolean) {
+            viewModelScope.launch {
+                if (!hasSystemPermission) {
                     _uiState.update { it.copy(isAlarmEnabled = false) }
                     fcmTokenRepository.saveAlarmEnabled(false)
+                } else {
+                    val savedState = fcmTokenRepository.isAlarmEnabled()
+                    _uiState.update { it.copy(isAlarmEnabled = savedState) }
                 }
+            }
         }
-    }
 
-    // 설정 화면으로 이동할 경우
-    fun onGoToSettingClicked() {
-        _uiState.update { it.copy(showPermissionModal = false) }
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.NavigateToSetting)
+        fun onBlockedUsersClicked() {
+            // TODO: 차단 사용자 목록 화면으로 이동
         }
-    }
 
-    // 설정 -> 앱 복귀 시 알람 상태 동기화
-    fun syncAlarmState(hasSystemPermission: Boolean) {
-        viewModelScope.launch {
-            if (!hasSystemPermission) {
-                _uiState.update { it.copy(isAlarmEnabled = false) }
-                fcmTokenRepository.saveAlarmEnabled(false)
-            } else {
-                val savedState = fcmTokenRepository.isAlarmEnabled()
-                _uiState.update { it.copy(isAlarmEnabled = savedState) }
+        private fun emitOpenUrl(url: String) {
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
+            }
+        }
+
+        fun onBreakupSupportChatClicked() = emitOpenUrl(BuildConfig.BYEBOO_SUPPORT_CHAT)
+
+        fun onInstagramClicked() = emitOpenUrl(BuildConfig.BYEBOO_INSTAGRAM)
+
+        fun onAskingByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_ASKING)
+
+        fun onServiceWithByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_SERVICE)
+
+        fun onPrivacyPolicyClicked() = emitOpenUrl(BuildConfig.BYEBOO_PRIVACY_POLICY)
+
+        fun onTermsOfServiceClicked() = emitOpenUrl(BuildConfig.BYEBOO_TERMS_OF_SERVICE)
+
+        fun onDismissModal(modalType: ModalType) {
+            _uiState.update { state ->
+                when (modalType) {
+                    ModalType.LOGOUT -> state.copy(showLogoutModal = false)
+                    ModalType.DELETE_ACCOUNT -> state.copy(showDeleteAccountModal = false)
+                    ModalType.PERMISSION -> state.copy(showPermissionModal = false)
+                }
+            }
+        }
+
+        fun onLogoutClicked() {
+            _uiState.update { it.copy(showLogoutModal = true) }
+        }
+
+        fun onDeleteAccountClicked() {
+            _uiState.update { it.copy(showDeleteAccountModal = true) }
+        }
+
+        fun confirmLogout() {
+            viewModelScope.launch {
+                logoutUseCase()
+                    .onSuccess {
+                        mixpanelUtil.trackEvent("logout_confirm_click")
+                        _uiState.update { it.copy(showLogoutModal = false) }
+                        _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+                    }.onFailure {
+                        _sideEffect.emit(
+                            MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
+            }
+        }
+
+        fun confirmWithdraw() {
+            viewModelScope.launch {
+                withdrawUseCase()
+                    .onSuccess {
+                        mixpanelUtil.trackEvent("withdraw_confirm_click")
+                        mixpanelUtil.reset()
+                        _uiState.update { it.copy(showDeleteAccountModal = false) }
+                        _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
+                    }.onFailure {
+                        _sideEffect.emit(
+                            MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        )
+                    }
             }
         }
     }
-
-    fun onBlockedUsersClicked() {
-        // TODO: 차단 사용자 목록 화면으로 이동
-    }
-
-    private fun emitOpenUrl(url: String) {
-        viewModelScope.launch {
-            _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
-        }
-    }
-
-    fun onBreakupSupportChatClicked() = emitOpenUrl(BuildConfig.BYEBOO_SUPPORT_CHAT)
-
-    fun onInstagramClicked() = emitOpenUrl(BuildConfig.BYEBOO_INSTAGRAM)
-
-    fun onAskingByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_ASKING)
-
-    fun onServiceWithByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_SERVICE)
-
-    fun onPrivacyPolicyClicked() = emitOpenUrl(BuildConfig.BYEBOO_PRIVACY_POLICY)
-
-    fun onTermsOfServiceClicked() = emitOpenUrl(BuildConfig.BYEBOO_TERMS_OF_SERVICE)
-
-    fun onDismissModal(modalType: ModalType) {
-        _uiState.update { state ->
-            when (modalType) {
-                ModalType.LOGOUT -> state.copy(showLogoutModal = false)
-                ModalType.DELETE_ACCOUNT -> state.copy(showDeleteAccountModal = false)
-                ModalType.PERMISSION -> state.copy(showPermissionModal = false)
-            }
-        }
-    }
-
-    fun onLogoutClicked() {
-        _uiState.update { it.copy(showLogoutModal = true) }
-    }
-
-    fun onDeleteAccountClicked() {
-        _uiState.update { it.copy(showDeleteAccountModal = true) }
-    }
-
-    fun confirmLogout() {
-        viewModelScope.launch {
-            logoutUseCase()
-                .onSuccess {
-                    mixpanelUtil.trackEvent("logout_confirm_click")
-                    _uiState.update { it.copy(showLogoutModal = false) }
-                    _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
-                }.onFailure {
-                    _sideEffect.emit(
-                        MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
-                    )
-                }
-        }
-    }
-
-    fun confirmWithdraw() {
-        viewModelScope.launch {
-            withdrawUseCase()
-                .onSuccess {
-                    mixpanelUtil.trackEvent("withdraw_confirm_click")
-                    mixpanelUtil.reset()
-                    _uiState.update { it.copy(showDeleteAccountModal = false) }
-                    _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
-                }.onFailure {
-                    _sideEffect.emit(
-                        MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
-                    )
-                }
-        }
-    }
-}
