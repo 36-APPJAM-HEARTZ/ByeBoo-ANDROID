@@ -218,6 +218,9 @@ fun MyPageRoute(
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
         onAlarmToggleClick = onAlarmToggleClicked,
+        onBreakupSupportChatClick = viewModel::onBreakupSupportChatClicked,
+        onInstagramClick = viewModel::onInstagramClicked,
+        onBlockedUsersClick = viewModel::onBlockedUsersClicked,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
@@ -236,6 +239,9 @@ private fun MyPageScreen(
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
     onAlarmToggleClick: (Boolean) -> Unit,
+    onBreakupSupportChatClick: () -> Unit,
+    onInstagramClick: () -> Unit,
+    onBlockedUsersClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -323,6 +329,19 @@ private fun MyPageScreen(
                 NotificationSection(
                     isAlarmEnabled = uiState.isAlarmEnabled,
                     onAlarmToggleClick = onAlarmToggleClick,
+                )
+            }
+
+            item {
+                CommunitySection(
+                    onBreakupSupportChatClick = onBreakupSupportChatClick,
+                    onInstagramClick = onInstagramClick,
+                )
+            }
+
+            item {
+                SettingsSection(
+                    onBlockedUsersClick = onBlockedUsersClick,
                 )
             }
 
@@ -571,6 +590,70 @@ private fun NotificationSection(
             }
         }
     }
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+}
+
+@Composable
+private fun CommunitySection(
+    onBreakupSupportChatClick: () -> Unit,
+    onInstagramClick: () -> Unit,
+    modifier: Modifier = Modifier,
+){
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+    ) {
+        Text(
+            text = "참여하기",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1,
+        )
+
+        Text(
+            text = "이별 극복 소통방",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onBreakupSupportChatClick),
+        )
+
+        Text(
+            text = "공식 인스타그램",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onInstagramClick),
+        )
+    }
+
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+}
+
+@Composable
+private fun SettingsSection(
+    onBlockedUsersClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+    ) {
+        Text(
+            text = "관리",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1,
+        )
+
+        Text(
+            text = "차단 사용자 목록",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onBlockedUsersClick),
+        )
+    }
+
     Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
