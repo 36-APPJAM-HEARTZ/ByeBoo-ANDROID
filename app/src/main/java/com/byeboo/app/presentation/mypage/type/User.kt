@@ -5,5 +5,5 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class User(
     val id: Long,
-    val name: String
+    val name: String,
 )

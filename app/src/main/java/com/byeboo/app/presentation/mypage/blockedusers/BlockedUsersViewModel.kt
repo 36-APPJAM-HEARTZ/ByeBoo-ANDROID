@@ -9,23 +9,22 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class BlockedUsersViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<BlockedUsersState>>(UiState.Loading)
-    val uiState: StateFlow<UiState<BlockedUsersState>> = _uiState.asStateFlow()
+class BlockedUsersViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _uiState = MutableStateFlow<UiState<BlockedUsersState>>(UiState.Loading)
+        val uiState: StateFlow<UiState<BlockedUsersState>> = _uiState.asStateFlow()
 
-    init {
-        loadBlockedUsers()
+        init {
+            loadBlockedUsers()
+        }
+
+        private fun loadBlockedUsers() {
+        }
+
+        fun onUnblockClicked(userId: Long) {
+        }
+
+        fun onBackClicked() {
+        }
     }
-
-    private fun loadBlockedUsers() {
-
-    }
-
-    fun onUnblockClicked(userId: Long){
-
-    }
-
-    fun onBackClicked() {
-
-    }
-}

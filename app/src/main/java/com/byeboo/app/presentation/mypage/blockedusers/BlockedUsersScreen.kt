@@ -39,7 +39,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun BlockedUsersRoute(
     paddingValues: PaddingValues,
-    viewModel: BlockedUsersViewModel = hiltViewModel()
+    viewModel: BlockedUsersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -48,14 +48,15 @@ fun BlockedUsersRoute(
 
         is UiState.Failure -> Unit
 
-        is UiState.Success -> BlockedUsersScreen(
-            state = state.data,
-            paddingValues = paddingValues,
-            onUnblockClick = { userId ->
-                viewModel.onUnblockClicked(userId)
-            },
-            onBackClick = viewModel::onBackClicked
-        )
+        is UiState.Success ->
+            BlockedUsersScreen(
+                state = state.data,
+                paddingValues = paddingValues,
+                onUnblockClick = { userId ->
+                    viewModel.onUnblockClicked(userId)
+                },
+                onBackClick = viewModel::onBackClicked,
+            )
 
         else -> Unit
     }
@@ -67,25 +68,25 @@ private fun BlockedUsersScreen(
     paddingValues: PaddingValues,
     onUnblockClick: (Long) -> Unit,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.background)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            )
-            .padding(horizontal = screenWidthDp(24.dp))
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.background)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ).padding(horizontal = screenWidthDp(24.dp)),
     ) {
         BlockedUsersHeader(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
         )
 
         BlockedUsersSection(
             userLists = state.userLists,
-            onUnblockClick = onUnblockClick
+            onUnblockClick = onUnblockClick,
         )
     }
 }
@@ -93,18 +94,19 @@ private fun BlockedUsersScreen(
 @Composable
 private fun BlockedUsersHeader(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = ByeBooTheme.colors.background),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = ByeBooTheme.colors.background),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
-            modifier = Modifier.noRippleClickable(onClick = onBackClick)
+            modifier = Modifier.noRippleClickable(onClick = onBackClick),
         )
 
         Text(
@@ -112,7 +114,7 @@ private fun BlockedUsersHeader(
             color = ByeBooTheme.colors.white,
             style = ByeBooTheme.typography.sub1,
             textAlign = TextAlign.Center,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
         )
     }
 
@@ -123,10 +125,10 @@ private fun BlockedUsersHeader(
 private fun BlockedUsersSection(
     userLists: ImmutableList<User>,
     onUnblockClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         if (userLists.isEmpty()) {
             NoBlockedUser()
@@ -136,7 +138,7 @@ private fun BlockedUsersSection(
             userLists.forEach { user ->
                 BlockedUser(
                     blockedUsername = user.name,
-                    onUnblockClick = { onUnblockClick(user.id) }
+                    onUnblockClick = { onUnblockClick(user.id) },
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
@@ -154,7 +156,7 @@ private fun NoBlockedUser() {
         color = ByeBooTheme.colors.gray400,
         style = ByeBooTheme.typography.body6,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -162,34 +164,35 @@ private fun NoBlockedUser() {
 private fun BlockedUser(
     blockedUsername: String,
     onUnblockClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = blockedUsername,
             color = ByeBooTheme.colors.white,
-            style = ByeBooTheme.typography.body2
+            style = ByeBooTheme.typography.body2,
         )
 
         Text(
             text = "해제",
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.cap1,
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(12.dp))
-                .border(
-                    width = 1.dp,
-                    color = ByeBooTheme.colors.gray800,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .background(color = ByeBooTheme.colors.whiteAlpha5)
-                .noRippleClickable(onClick = onUnblockClick)
-                .padding(horizontal = screenWidthDp(18.dp), vertical = screenHeightDp(4.dp))
+            modifier =
+                Modifier
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .border(
+                        width = 1.dp,
+                        color = ByeBooTheme.colors.gray800,
+                        shape = RoundedCornerShape(12.dp),
+                    ).background(color = ByeBooTheme.colors.whiteAlpha5)
+                    .noRippleClickable(onClick = onUnblockClick)
+                    .padding(horizontal = screenWidthDp(18.dp), vertical = screenHeightDp(4.dp)),
         )
     }
 }
