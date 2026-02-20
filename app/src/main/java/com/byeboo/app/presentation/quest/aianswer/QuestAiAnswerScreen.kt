@@ -78,7 +78,7 @@ private fun QuestAiAnswerScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(color = ByeBooTheme.colors.background)
                 .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
@@ -129,7 +129,7 @@ private fun QuestAiAnswer(
                 Modifier
                     .fillMaxSize()
                     .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(195.dp), bottom = screenHeightDp(22.dp)),
+                    .padding(top = screenHeightDp(184.dp), bottom = screenHeightDp(22.dp)),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
