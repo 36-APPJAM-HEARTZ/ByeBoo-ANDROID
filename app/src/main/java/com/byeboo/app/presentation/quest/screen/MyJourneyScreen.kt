@@ -31,15 +31,16 @@ fun MyJourneyScreen(
     userName: String,
     listState: LazyListState,
     onQuestClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_START_DAY,
@@ -61,12 +62,13 @@ fun MyJourneyScreen(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(37.dp),
-            ),
-            modifier = Modifier.fillMaxWidth()
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(37.dp),
+                ),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             state.questGroups.forEachIndexed { stepIndex, group ->
                 item("header_$stepIndex") {

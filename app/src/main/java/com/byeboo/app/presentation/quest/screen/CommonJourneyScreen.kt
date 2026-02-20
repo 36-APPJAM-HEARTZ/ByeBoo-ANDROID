@@ -38,7 +38,7 @@ import java.time.LocalDate
 fun CommonJourneyScreen(
     state: CommonJourneyState,
     onDateChange: (LocalDate) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
@@ -47,18 +47,19 @@ fun CommonJourneyScreen(
     }
 
     CompositionLocalProvider(
-        LocalOverscrollFactory provides null
+        LocalOverscrollFactory provides null,
     ) {
         LazyColumn(
             state = listState,
             contentPadding = PaddingValues(bottom = 24.dp),
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize(),
         ) {
             item {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp))
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     DescriptionText(
                         title = "함께 이별을 극복하는 공간이에요",
@@ -81,31 +82,33 @@ fun CommonJourneyScreen(
 
             stickyHeader {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(ByeBooTheme.colors.black)
-                        .padding(horizontal = screenWidthDp(24.dp))
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(ByeBooTheme.colors.black)
+                            .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     QuestDateSelector(
                         selectedDate = state.selectedDate,
                         onDateChange = onDateChange,
-                        modifier = Modifier.padding(vertical = screenHeightDp(12.dp))
+                        modifier = Modifier.padding(vertical = screenHeightDp(12.dp)),
                     )
                 }
             }
 
             item {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp))
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     if (state.question.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
                         Text(
                             text = "Q. ${state.question}",
                             style = ByeBooTheme.typography.head2,
-                            color = ByeBooTheme.colors.gray50
+                            color = ByeBooTheme.colors.gray50,
                         )
 
                         val isToday = state.selectedDate == LocalDate.now()
@@ -114,7 +117,7 @@ fun CommonJourneyScreen(
                             Text(
                                 text = "23:59까지 답변 가능해요",
                                 style = ByeBooTheme.typography.cap2,
-                                color = ByeBooTheme.colors.gray400
+                                color = ByeBooTheme.colors.gray400,
                             )
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                             ByeBooButton(
@@ -123,7 +126,7 @@ fun CommonJourneyScreen(
                                 buttonStyle = ByeBooTheme.typography.body2,
                                 buttonTextColor = ByeBooTheme.colors.primary500,
                                 buttonBackgroundColor = ByeBooTheme.colors.primary100,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
 
@@ -131,7 +134,7 @@ fun CommonJourneyScreen(
                         Text(
                             text = "${state.answerCount}개의 답변",
                             style = ByeBooTheme.typography.cap2,
-                            color = ByeBooTheme.colors.gray400
+                            color = ByeBooTheme.colors.gray400,
                         )
                         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
                     }
@@ -141,29 +144,31 @@ fun CommonJourneyScreen(
             if (state.answers.isEmpty()) {
                 item {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillParentMaxHeight(0.5f),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight(0.5f),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = "아직 작성된 답변이 없어요!",
                             style = ByeBooTheme.typography.body6,
                             color = ByeBooTheme.colors.gray400,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
             } else {
                 items(
                     items = state.answers,
-                    key = { it.answerId }
+                    key = { it.answerId },
                 ) { answer ->
                     CommonAnswerItem(
                         answer = answer,
-                        modifier = Modifier
-                            .padding(horizontal = screenWidthDp(24.dp))
-                            .padding(bottom = screenHeightDp(24.dp))
+                        modifier =
+                            Modifier
+                                .padding(horizontal = screenWidthDp(24.dp))
+                                .padding(bottom = screenHeightDp(24.dp)),
                     )
                 }
             }

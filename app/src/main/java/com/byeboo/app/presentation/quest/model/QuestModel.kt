@@ -22,5 +22,5 @@ data class CommonAnswerModel(
     val writer: String,
     val profileIconRes: Int,
     val displayTime: String,
-    val content: String
+    val content: String,
 )

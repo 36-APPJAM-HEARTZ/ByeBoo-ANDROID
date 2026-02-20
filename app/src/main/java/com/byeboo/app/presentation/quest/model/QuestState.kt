@@ -39,5 +39,5 @@ sealed interface QuestSideEffect {
 
 enum class QuestTab {
     MY_JOURNEY,
-    COMMON_JOURNEY
+    COMMON_JOURNEY,
 }

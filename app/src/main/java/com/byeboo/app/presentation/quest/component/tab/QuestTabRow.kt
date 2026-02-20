@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.quest.component.tab
 
-import com.byeboo.app.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -36,27 +36,32 @@ fun QuestTabRow(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        
         QuestTabItem(
-            iconRes = if (selectedTab == QuestTab.MY_JOURNEY) R.drawable.ic_my_journey_selected
-            else R.drawable.ic_my_journey_unselected,
+            iconRes =
+                if (selectedTab == QuestTab.MY_JOURNEY) {
+                    R.drawable.ic_my_journey_selected
+                } else {
+                    R.drawable.ic_my_journey_unselected
+                },
             label = "나의 여정",
             isSelected = selectedTab == QuestTab.MY_JOURNEY,
-            onTabClick = { onTabSelected(QuestTab.MY_JOURNEY) }
+            onTabClick = { onTabSelected(QuestTab.MY_JOURNEY) },
         )
 
-        
         Spacer(modifier = Modifier.width(4.dp))
 
-        
         QuestTabItem(
-            iconRes = if (selectedTab == QuestTab.COMMON_JOURNEY) R.drawable.ic_common_journey_selected
-            else R.drawable.ic_common_journey_unselected,
+            iconRes =
+                if (selectedTab == QuestTab.COMMON_JOURNEY) {
+                    R.drawable.ic_common_journey_selected
+                } else {
+                    R.drawable.ic_common_journey_unselected
+                },
             label = "공통 여정",
             isSelected = selectedTab == QuestTab.COMMON_JOURNEY,
-            onTabClick = { onTabSelected(QuestTab.COMMON_JOURNEY) }
+            onTabClick = { onTabSelected(QuestTab.COMMON_JOURNEY) },
         )
     }
 }
@@ -71,21 +76,23 @@ private fun QuestTabItem(
     val contentColor = if (isSelected) ByeBooTheme.colors.gray100 else ByeBooTheme.colors.gray600
 
     Column(
-        modifier = Modifier
-            .width(IntrinsicSize.Max)
-            .noRippleClickable { onTabClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .width(IntrinsicSize.Max)
+                .noRippleClickable { onTabClick() },
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
-            modifier = Modifier
-                .padding(horizontal = screenWidthDp(11.5.dp)), 
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .padding(horizontal = screenWidthDp(11.5.dp)),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = label,
                 tint = Color.Unspecified,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(2.dp)))
@@ -95,7 +102,7 @@ private fun QuestTabItem(
                 style = ByeBooTheme.typography.body2,
                 color = contentColor,
                 maxLines = 1,
-                softWrap = false
+                softWrap = false,
             )
         }
 
@@ -103,10 +110,11 @@ private fun QuestTabItem(
 
         if (isSelected) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(screenHeightDp(1.dp))
-                    .background(ByeBooTheme.colors.gray300)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(screenHeightDp(1.dp))
+                        .background(ByeBooTheme.colors.gray300),
             )
         } else {
             Spacer(modifier = Modifier.height(screenHeightDp(1.dp)))

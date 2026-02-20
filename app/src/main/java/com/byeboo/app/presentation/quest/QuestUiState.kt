@@ -15,7 +15,7 @@ data class QuestUiState(
     val error: String? = null,
     val isLoading: Boolean = false,
     val myJourneyState: MyJourneyState = MyJourneyState(),
-    val commonJourneyState: CommonJourneyState = CommonJourneyState()
+    val commonJourneyState: CommonJourneyState = CommonJourneyState(),
 )
 
 data class MyJourneyState(
@@ -34,5 +34,5 @@ data class CommonJourneyState(
     val question: String = "",
     val answerCount: Int = 0,
     val answers: ImmutableList<CommonAnswerModel> = persistentListOf(),
-    val isMyAnswerDone: Boolean = false
+    val isMyAnswerDone: Boolean = false,
 )

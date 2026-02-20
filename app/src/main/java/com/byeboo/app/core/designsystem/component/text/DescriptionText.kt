@@ -29,21 +29,23 @@ fun DescriptionText(
     end: Dp = 0.dp,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = top, bottom = bottom, start = start, end = end),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = top, bottom = bottom, start = start, end = end),
     ) {
         Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
-                    if (!nicknameText.isNullOrBlank()) {
-                        append(nicknameText)
-                        append("\n")
+            text =
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
+                        if (!nicknameText.isNullOrBlank()) {
+                            append(nicknameText)
+                            append("\n")
+                        }
+                        append(title)
+                        append(guideText)
                     }
-                    append(title)
-                    append(guideText)
-                }
-            },
+                },
             style = ByeBooTheme.typography.head2,
         )
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))

@@ -27,8 +27,8 @@ import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.tab.QuestTabRow
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestTab
-import com.byeboo.app.presentation.quest.screen.MyJourneyScreen
 import com.byeboo.app.presentation.quest.screen.CommonJourneyScreen
+import com.byeboo.app.presentation.quest.screen.MyJourneyScreen
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
@@ -84,7 +84,7 @@ fun QuestRoute(
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClick,
-        onDateChange = viewModel::onDateChange
+        onDateChange = viewModel::onDateChange,
     )
 }
 
@@ -104,28 +104,33 @@ private fun QuestScreen(
         QuestModal(
             onDismissRequest = onDismissModal,
             questNumber = uiState.myJourneyState.selectedQuest?.questNumber ?: 0L,
-            questQuestion = uiState.myJourneyState.selectedQuest?.questQuestion.orEmpty(),
+            questQuestion =
+                uiState.myJourneyState.selectedQuest
+                    ?.questQuestion
+                    .orEmpty(),
             navigateToTip = onTipClick,
             progressButton = onQuestStart,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
             dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.black)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            ),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.black)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         QuestTabRow(
             selectedTab = uiState.selectedTab,
-            onTabSelected = onTabClick
+            onTabSelected = onTabClick,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -136,13 +141,13 @@ private fun QuestScreen(
                     state = uiState.myJourneyState,
                     userName = uiState.userName,
                     listState = listState,
-                    onQuestClick = onQuestClick
+                    onQuestClick = onQuestClick,
                 )
             }
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
-                    onDateChange = onDateChange
+                    onDateChange = onDateChange,
                 )
             }
         }

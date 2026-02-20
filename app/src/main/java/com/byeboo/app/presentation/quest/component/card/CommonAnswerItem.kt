@@ -26,27 +26,27 @@ import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 @Composable
 fun CommonAnswerItem(
     answer: CommonAnswerModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = ByeBooTheme.colors.whiteAlpha10,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(
-                horizontal = screenWidthDp(24.dp),
-                vertical = screenHeightDp(16.dp)
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = ByeBooTheme.colors.whiteAlpha10,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(16.dp),
+                ),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(id = answer.profileIconRes),
                 contentDescription = null,
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(4.dp)))
@@ -54,7 +54,7 @@ fun CommonAnswerItem(
             Text(
                 text = answer.writer,
                 style = ByeBooTheme.typography.body6,
-                color = ByeBooTheme.colors.gray200
+                color = ByeBooTheme.colors.gray200,
             )
         }
 
@@ -65,16 +65,15 @@ fun CommonAnswerItem(
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray100,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-
         Text(
             text = answer.displayTime,
             style = ByeBooTheme.typography.cap1,
-            color = ByeBooTheme.colors.gray500
+            color = ByeBooTheme.colors.gray500,
         )
     }
 }

@@ -82,6 +82,7 @@ class QuestUiModelMapper
             if (openAt == null || now == null) return 0
             return Duration.between(now, openAt).toMinutes().coerceAtLeast(0)
         }
+
         fun formatWrittenTime(writtenAt: LocalDateTime): String {
             val now = LocalDateTime.now()
             val today = LocalDate.now()
@@ -102,14 +103,12 @@ class QuestUiModelMapper
             }
         }
 
-        fun mapToIconRes(iconName: String): Int {
-            return when (iconName) {
+        fun mapToIconRes(iconName: String): Int =
+            when (iconName) {
                 "SADNESS" -> R.drawable.ic_profile_sadness
                 "SELF_UNDERSTANDING" -> R.drawable.ic_profile_self_understanding
                 "SO_SO" -> R.drawable.ic_profile_so_so
                 "RELIEVED" -> R.drawable.ic_profile_relieved
                 else -> R.drawable.ic_profile_relieved
             }
-        }
-
     }
