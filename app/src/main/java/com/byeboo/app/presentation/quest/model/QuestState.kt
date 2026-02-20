@@ -36,3 +36,8 @@ sealed interface QuestSideEffect {
         val message: String,
     ) : QuestSideEffect
 }
+
+enum class QuestTab {
+    MY_JOURNEY,
+    COMMON_JOURNEY
+}
