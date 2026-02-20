@@ -16,3 +16,11 @@ data class Quest(
     val state: QuestState = QuestState.Available,
     val type: QuestType = QuestType.RECORDING,
 )
+
+data class CommonAnswerModel(
+    val answerId: Long,
+    val writer: String,
+    val profileIconRes: Int,
+    val displayTime: String,
+    val content: String
+)
