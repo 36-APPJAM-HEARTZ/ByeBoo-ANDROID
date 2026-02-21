@@ -64,6 +64,7 @@ fun MyPageRoute(
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
+    navigateToBlockedUsers: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel(),
@@ -141,6 +142,7 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
+                is MyPageSideEffect.NavigateToBlockedUsers -> navigateToBlockedUsers()
                 is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

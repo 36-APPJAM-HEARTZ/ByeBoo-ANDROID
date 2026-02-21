@@ -140,7 +140,9 @@ class MyPageViewModel
         }
 
         fun onBlockedUsersClicked() {
-            // TODO: 차단 사용자 목록 화면으로 이동
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.NavigateToBlockedUsers)
+            }
         }
 
         private fun emitOpenUrl(url: String) {

@@ -146,7 +146,9 @@ fun MainNavHost(
             },
             navigateToTutorial = { navigator.navigateToTutorial(keepStackNavOptions) },
             navigateToMyPage = { navigator.navigateToMyPage(clearStackNavOptions) },
+            navigateToBlockedUsers = { navigator.navigateToBlockedUsers(keepStackNavOptions) },
             navigateToSplash = { navigator.navigateToSplash(clearStackNavOptions) },
+            navigateUp = { navigator.navigateUp() },
             paddingValues = paddingValues,
         )
 

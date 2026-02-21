@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,27 +29,52 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.LoadingScreen
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.mypage.component.modal.BlockedUserModal
 import com.byeboo.app.presentation.mypage.type.User
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun BlockedUsersRoute(
     paddingValues: PaddingValues,
+    navigateUp: () -> Unit,
     viewModel: BlockedUsersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is BlockedUsersSideEffect.NavigateUp -> navigateUp()
+                is BlockedUsersSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+            }
+        }
+    }
 
     when (val state = uiState) {
         is UiState.Loading -> LoadingScreen()
 
         is UiState.Failure -> Unit
 
-        is UiState.Success ->
+        is UiState.Success -> {
+            if (state.data.showBlockedModal) {
+                BlockedUserModal(
+                    onDismissRequest = viewModel::onDismissModal,
+                    onNoClick = viewModel::onDismissModal,
+                    onYesClick = viewModel::fetchBlockedUser,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(48.dp)),
+                )
+            }
+
             BlockedUsersScreen(
                 state = state.data,
                 paddingValues = paddingValues,
@@ -57,6 +83,7 @@ fun BlockedUsersRoute(
                 },
                 onBackClick = viewModel::onBackClicked,
             )
+        }
 
         else -> Unit
     }

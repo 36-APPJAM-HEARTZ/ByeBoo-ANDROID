@@ -10,3 +10,11 @@ data class BlockedUsersState(
     val userLists: ImmutableList<User> = persistentListOf(),
     val showBlockedModal: Boolean = false,
 )
+
+sealed interface BlockedUsersSideEffect {
+    data object NavigateUp : BlockedUsersSideEffect
+
+    data class ShowSnackBar(
+        val message: String,
+    ) : BlockedUsersSideEffect
+}
