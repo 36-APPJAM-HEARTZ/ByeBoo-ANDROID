@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -96,7 +96,7 @@ private fun QuestAiAnswerScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
                 contentDescription = null,
                 tint = ByeBooTheme.colors.white,
-                modifier = modifier.clickable(onClick = onCloseClick),
+                modifier = Modifier.clickable(onClick = onCloseClick),
             )
         }
 
@@ -128,8 +128,8 @@ private fun QuestAiAnswer(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(184.dp), bottom = screenHeightDp(22.dp)),
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 184.dp, bottom = 22.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
