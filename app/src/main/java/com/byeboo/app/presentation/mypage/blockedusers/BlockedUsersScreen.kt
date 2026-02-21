@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -164,19 +165,16 @@ private fun BlockedUsersSection(
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(start = screenWidthDp(24.dp), top = screenHeightDp(12.dp), end = screenWidthDp(24.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
     ) {
         items(
-            count = userLists.size,
-            key = { index -> userLists[index].id },
-        ) {
-            userLists.forEach { user ->
-                BlockedUser(
-                    blockedUsername = user.name,
-                    onUnblockClick = { onUnblockClick(user.id) },
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-            }
+            items = userLists,
+            key = { it.id },
+        ) { user ->
+            BlockedUser(
+                blockedUsername = user.name,
+                onUnblockClick = { onUnblockClick(user.id) },
+            )
         }
     }
 }
