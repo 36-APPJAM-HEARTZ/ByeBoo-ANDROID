@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.component.modal
+package com.byeboo.app.presentation.mypage.component.modal
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,20 +6,20 @@ import androidx.compose.ui.window.DialogProperties
 import com.byeboo.app.core.designsystem.component.modal.ByeBooModal
 
 @Composable
-fun QuestQuitModal(
+fun LogoutModal(
     onDismissRequest: () -> Unit,
-    stayButton: () -> Unit,
-    quitButton: () -> Unit,
+    onCancelClick: () -> Unit,
+    onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
 ) {
     ByeBooModal(
         onDismissRequest = onDismissRequest,
-        modalMainText = "작성을 중단하시겠어요?",
-        onLeftButtonClick = quitButton,
-        onLeftButtonText = "나가기",
-        onRightButtonClick = stayButton,
-        onRightButtonText = "머무르기",
+        modalMainText = "로그아웃하시겠어요?",
+        onLeftButtonClick = onCancelClick,
+        onLeftButtonText = "취소",
+        onRightButtonClick = onLogoutClick,
+        onRightButtonText = "로그아웃",
         dialogProperties = dialogProperties,
         modifier = modifier,
     )

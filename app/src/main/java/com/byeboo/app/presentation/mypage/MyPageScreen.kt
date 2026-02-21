@@ -41,7 +41,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -54,9 +53,10 @@ import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
-import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.NotificationToggle
+import com.byeboo.app.presentation.mypage.component.modal.BasicNotificationModal
+import com.byeboo.app.presentation.mypage.component.modal.DeleteAccountModal
+import com.byeboo.app.presentation.mypage.component.modal.LogoutModal
 
 @Composable
 fun MyPageRoute(
@@ -179,33 +179,26 @@ fun MyPageRoute(
     }
 
     if (uiState.showLogoutModal) {
-        MyPageModal(
+        LogoutModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            onConfirmClick = viewModel::confirmLogout,
-            onConfirmText = "로그아웃",
+            onLogoutClick = viewModel::confirmLogout,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
     if (uiState.showDeleteAccountModal) {
-        MyPageModal(
+        DeleteAccountModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            myPageModalMainText = "정말 탈퇴하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            onConfirmClick = viewModel::confirmWithdraw,
-            onConfirmText = "탈퇴하기",
-            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
+            onDeleteAccountClick = viewModel::confirmWithdraw,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
