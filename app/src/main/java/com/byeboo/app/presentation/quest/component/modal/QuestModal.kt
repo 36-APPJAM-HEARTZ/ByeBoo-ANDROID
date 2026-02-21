@@ -84,7 +84,7 @@ private fun QuestModalContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bori_quest_banner),
+            painter = painterResource(id = R.drawable.img_bori_quest_banner),
             contentDescription = null,
             Modifier
                 .fillMaxWidth()
