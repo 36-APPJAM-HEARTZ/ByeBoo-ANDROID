@@ -6,7 +6,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.byeboo.app.core.designsystem.component.modal.ByeBooModal
 
 @Composable
-private fun QuestDeleteModal(
+fun QuestDeleteModal(
     onDismissRequest: () -> Unit,
     onNoClick: () -> Unit,
     onYesClick: () -> Unit,
@@ -15,7 +15,7 @@ private fun QuestDeleteModal(
 ) {
     ByeBooModal(
         onDismissRequest = onDismissRequest,
-        modalMainText = "정말 삭제하시곘어요?",
+        modalMainText = "정말 삭제하시겠어요?",
         onLeftButtonClick = onNoClick,
         onLeftButtonText = "아니오",
         onRightButtonClick = onYesClick,

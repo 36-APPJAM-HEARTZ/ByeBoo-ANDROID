@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -25,7 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.LoadingScreen
@@ -105,7 +106,7 @@ private fun BlockedUsersScreen(
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
-                ).padding(horizontal = screenWidthDp(24.dp)),
+                ),
     ) {
         BlockedUsersHeader(
             onBackClick = onBackClick,
@@ -127,7 +128,8 @@ private fun BlockedUsersHeader(
         modifier =
             modifier
                 .fillMaxWidth()
-                .background(color = ByeBooTheme.colors.background),
+                .background(color = ByeBooTheme.colors.background)
+                .padding(horizontal = screenWidthDp(24.dp)),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
@@ -154,21 +156,26 @@ private fun BlockedUsersSection(
     onUnblockClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        if (userLists.isEmpty()) {
-            NoBlockedUser()
-        } else {
-            Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+    if (userLists.isEmpty()) {
+        NoBlockedUser()
+        return
+    }
 
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(start = screenWidthDp(24.dp), top = screenHeightDp(12.dp), end = screenWidthDp(24.dp)),
+    ) {
+        items(
+            count = userLists.size,
+            key = { index -> userLists[index].id },
+        ) {
             userLists.forEach { user ->
                 BlockedUser(
                     blockedUsername = user.name,
                     onUnblockClick = { onUnblockClick(user.id) },
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
             }
         }
     }
