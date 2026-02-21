@@ -157,7 +157,7 @@ private fun HomeScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.bg_home),
+            painter = painterResource(R.drawable.img_bg_home),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
