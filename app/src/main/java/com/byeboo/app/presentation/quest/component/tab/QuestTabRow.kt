@@ -50,7 +50,7 @@ fun QuestTabRow(
             onTabClick = { onTabSelected(QuestTab.MY_JOURNEY) },
         )
 
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(screenWidthDp(4.dp)))
 
         QuestTabItem(
             iconRes =

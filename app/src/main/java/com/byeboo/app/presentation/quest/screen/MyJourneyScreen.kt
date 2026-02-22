@@ -75,7 +75,7 @@ fun MyJourneyScreen(
                     Column {
                         HorizontalDivider(
                             thickness = 1.dp,
-                            color = ByeBooTheme.colors.whiteAlpha10,
+                            color = ByeBooTheme.colors.whiteAlpha5,
                             modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                         )
 

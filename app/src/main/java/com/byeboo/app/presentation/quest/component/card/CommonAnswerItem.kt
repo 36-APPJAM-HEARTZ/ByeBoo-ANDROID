@@ -33,7 +33,7 @@ fun CommonAnswerItem(
             modifier
                 .fillMaxWidth()
                 .background(
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                     shape = RoundedCornerShape(12.dp),
                 ).padding(
                     horizontal = screenWidthDp(24.dp),
@@ -72,8 +72,8 @@ fun CommonAnswerItem(
 
         Text(
             text = answer.displayTime,
-            style = ByeBooTheme.typography.cap1,
-            color = ByeBooTheme.colors.gray500,
+            style = ByeBooTheme.typography.cap2,
+            color = ByeBooTheme.colors.gray400,
         )
     }
 }

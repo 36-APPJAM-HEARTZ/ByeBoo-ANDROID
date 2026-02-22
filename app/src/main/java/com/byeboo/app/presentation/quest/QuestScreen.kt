@@ -122,7 +122,7 @@ private fun QuestScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),

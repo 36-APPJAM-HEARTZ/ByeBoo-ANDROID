@@ -31,7 +31,10 @@ fun QuestDateSelector(
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = screenWidthDp(20.dp),
+            alignment = Alignment.CenterHorizontally
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(onClick = { onDateChange(selectedDate.minusDays(1)) }) {
@@ -42,7 +45,6 @@ fun QuestDateSelector(
             )
         }
 
-        Spacer(modifier = Modifier.width(screenWidthDp(20.dp)))
 
         Text(
             text = selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
@@ -50,22 +52,19 @@ fun QuestDateSelector(
             color = ByeBooTheme.colors.gray50,
         )
 
-        Spacer(modifier = Modifier.width(screenWidthDp(20.dp)))
 
         IconButton(
             onClick = { onDateChange(selectedDate.plusDays(1)) },
             enabled = !isToday,
         ) {
             Icon(
-                painter =
-                    painterResource(
-                        id =
-                            if (isToday) {
-                                R.drawable.ic_date_right_disabled
-                            } else {
-                                R.drawable.ic_date_right_enabled
-                            },
-                    ),
+                painter = painterResource(
+                    id = if (isToday) {
+                        R.drawable.ic_date_right_disabled
+                    } else {
+                        R.drawable.ic_date_right_enabled
+                    },
+                ),
                 contentDescription = "다음 날짜",
                 tint = Color.Unspecified,
             )
