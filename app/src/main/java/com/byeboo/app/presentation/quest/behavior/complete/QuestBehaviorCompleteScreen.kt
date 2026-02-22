@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.complete
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -38,6 +38,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
@@ -233,8 +234,8 @@ private fun QuestBehaviorCompleteScreen(
                                     ImageRequest
                                         .Builder(LocalContext.current)
                                         .data(imageUri)
-                                        .memoryCachePolicy(coil.request.CachePolicy.DISABLED)
-                                        .diskCachePolicy(coil.request.CachePolicy.DISABLED)
+                                        .memoryCachePolicy(CachePolicy.DISABLED)
+                                        .diskCachePolicy(CachePolicy.DISABLED)
                                         .build(),
                                 contentDescription = "uploaded image",
                                 modifier = modifier.fillMaxSize(),

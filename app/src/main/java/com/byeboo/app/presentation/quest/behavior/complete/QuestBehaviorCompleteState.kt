@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.complete
 
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.EmotionChipType

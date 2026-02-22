@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.writing
 
 import android.content.Context
 import android.net.Uri

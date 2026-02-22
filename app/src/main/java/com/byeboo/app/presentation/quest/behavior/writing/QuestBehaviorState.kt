@@ -1,9 +1,10 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.writing
 
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestWritingState
+import java.time.LocalDate
 
 data class QuestBehaviorState(
     val stepNumber: Long = 0,
@@ -13,7 +14,7 @@ data class QuestBehaviorState(
     val question: String = "",
     val imageCount: Int = 0,
     val createdAt: String =
-        java.time.LocalDate
+        LocalDate
             .now()
             .toString(),
     val questAnswer: String = "",

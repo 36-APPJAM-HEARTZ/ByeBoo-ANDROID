@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.complete
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

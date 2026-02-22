@@ -1,8 +1,9 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.writing
 
 import QuestPhotoPicker
 import android.content.Context
 import android.net.Uri
+import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -172,7 +173,7 @@ private fun QuestBehaviorWritingScreen(
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
                 .onPreInterceptKeyBeforeSoftKeyboard { event ->
-                    if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_BACK) {
+                    if (event.key.nativeKeyCode == KeyEvent.KEYCODE_BACK) {
                         focusManager.clearFocus(force = true)
                         isFocused.value = false
                         true
