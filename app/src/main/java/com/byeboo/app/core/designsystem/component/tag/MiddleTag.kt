@@ -27,28 +27,29 @@ fun MiddleTag(
     val textColor = middleTagColor(middleTagType.textColor)
     val borderColor = middleTagType.borderColor?.let { middleTagColor(it) }
 
-    val tagText = if (middleTagType.dynamicContent) {
-        stringResource(middleTagType.titleResId, text)
-    } else {
-        stringResource(middleTagType.titleResId)
-    }
+    val tagText =
+        if (middleTagType.dynamicContent) {
+            stringResource(middleTagType.titleResId, text)
+        } else {
+            stringResource(middleTagType.titleResId)
+        }
 
     val shape = RoundedCornerShape(middleTagType.roundedCorner)
 
     Box(
-        modifier = modifier
-            .background(color = backgroundColor, shape = shape)
-            .then(
-                if (borderColor != null) {
-                    Modifier.border(width = 1.dp, color = borderColor, shape = shape)
-                } else {
-                    Modifier
-                }
-            )
-            .padding(
-                horizontal = middleTagType.horizontalPadding,
-                vertical = middleTagType.verticalPadding,
-            ),
+        modifier =
+            modifier
+                .background(color = backgroundColor, shape = shape)
+                .then(
+                    if (borderColor != null) {
+                        Modifier.border(width = 1.dp, color = borderColor, shape = shape)
+                    } else {
+                        Modifier
+                    },
+                ).padding(
+                    horizontal = middleTagType.horizontalPadding,
+                    vertical = middleTagType.verticalPadding,
+                ),
     ) {
         Text(
             text = tagText,

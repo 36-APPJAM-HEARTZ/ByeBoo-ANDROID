@@ -100,34 +100,38 @@ fun CommonJourneyScreen(
 
             item {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     if (state.question.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
-                        val annotatedQuestion = buildAnnotatedString {
-                            withStyle(
-                                style = ByeBooTheme.typography.body1.toSpanStyle().copy(
-                                    color = ByeBooTheme.colors.primary200
-                                )
-                            ) {
-                                append("Q. ")
+                        val annotatedQuestion =
+                            buildAnnotatedString {
+                                withStyle(
+                                    style =
+                                        ByeBooTheme.typography.body1.toSpanStyle().copy(
+                                            color = ByeBooTheme.colors.primary200,
+                                        ),
+                                ) {
+                                    append("Q. ")
+                                }
+                                withStyle(
+                                    style =
+                                        ByeBooTheme.typography.sub3.toSpanStyle().copy(
+                                            color = ByeBooTheme.colors.gray50,
+                                        ),
+                                ) {
+                                    append(state.question)
+                                }
                             }
-                            withStyle(
-                                style = ByeBooTheme.typography.sub3.toSpanStyle().copy(
-                                    color = ByeBooTheme.colors.gray50
-                                )
-                            ) {
-                                append(state.question)
-                            }
-                        }
 
                         val isToday = state.selectedDate == LocalDate.now()
 
                         Text(
-                            text = annotatedQuestion
+                            text = annotatedQuestion,
                         )
 
                         if (isToday && !state.isMyAnswerDone) {
