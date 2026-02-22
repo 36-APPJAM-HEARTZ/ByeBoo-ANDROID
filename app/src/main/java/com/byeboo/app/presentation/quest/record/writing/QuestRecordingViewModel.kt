@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.writing
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -133,11 +133,11 @@ class QuestRecordingViewModel
                                 ),
                         )
                         _uiState.update {
-                            it.copy(showBottomSheet = false)
+                            it.copy(
+                                showBottomSheet = false,
+                                showCompleteModal = true
+                            )
                         }
-                        _sideEffect.emit(
-                            QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
-                        )
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
@@ -145,6 +145,17 @@ class QuestRecordingViewModel
                     }
             }
         }
+
+    fun onCompleteModalTimeout() {
+        val questId = _uiState.value.questId
+
+        _uiState.update { it.copy(showCompleteModal = false) }
+
+        viewModelScope.launch {
+            _sideEffect.emit(
+                QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
+            )        }
+    }
 
         private fun onSaveEditClicked() {
             val state = uiState.value
@@ -259,7 +270,7 @@ class QuestRecordingViewModel
             }
         }
 
-        fun onClickCompleteButton() {
+        fun onCompleteClicked() {
             if (uiState.value.isEditMode) {
                 onSaveEditClicked()
             } else {

@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -30,7 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
+import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
+import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -42,6 +45,7 @@ import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.CreatedText
 import com.byeboo.app.presentation.quest.component.text.QuestContent
+import com.byeboo.app.presentation.quest.component.text.QuestTitle
 import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
@@ -114,7 +118,7 @@ private fun QuestRecordingCompleteScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -122,71 +126,42 @@ private fun QuestRecordingCompleteScreen(
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
-                    top = screenHeightDp(8.dp),
                     end = screenWidthDp(24.dp),
                     bottom = screenHeightDp(24.dp),
                 ),
         ) {
-            item {
-                QuestCompleteCard(
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
-
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        SmallTag(
-                            tagText = "STEP ${uiState.stepNumber}",
-                            tagColor = ByeBooTheme.colors.gray500,
-                        )
-
-                        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                        Text(
-                            text = "${uiState.questNumber}번째 퀘스트",
-                            style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray500,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                    CreatedText(uiState.createdAt)
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-                    Text(
-                        text = uiState.question,
-                        style = ByeBooTheme.typography.head1,
-                        color = ByeBooTheme.colors.gray100,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
+                    QuestTitle(
+                        stepNumber = uiState.stepNumber,
+                        questNumber = uiState.questNumber,
+                        createdAt = uiState.createdAt,
+                        questQuestion = uiState.question
                     )
 
-                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
-                    QuestContent(
-                        titleIcon = QuestContentType.THINKING,
-                        titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer,
+                    ContentText(
+                        text = uiState.answer
                     )
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
                     QuestEmotionDescriptionContent(
                         questEmotionDescription = uiState.emotionDescription,
                         emotionType = uiState.selectedEmotion,
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    ByeBooButton(
+                        buttonText = "보리에게 답장 받기",
+                        buttonTextColor = ByeBooTheme.colors.white,
+                        buttonStyle = ByeBooTheme.typography.body2,
+                        buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                        onClick = {}
                     )
                 }
             }
@@ -203,26 +178,6 @@ private fun QuestEmotionDescriptionContent(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                contentDescription = "title icon",
-                tint = Color.Unspecified,
-            )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-            Text(
-                text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
-                color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
             emotionType = emotionType,

@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.writing
 
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.designsystem.type.EmotionChipType
@@ -22,6 +22,7 @@ data class QuestRecordingState(
     val isCompleteButtonEnabled: Boolean = false,
     val hasAnswerChanged: Boolean = false,
     val fromOffboarding: Boolean = false,
+    val showCompleteModal: Boolean = false
 )
 
 sealed interface QuestRecordingSideEffect {

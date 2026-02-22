@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
