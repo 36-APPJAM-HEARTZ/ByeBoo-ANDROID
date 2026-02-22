@@ -107,17 +107,18 @@ fun QuestRecordingRoute(
     if (uiState.showCompleteModal) {
         Dialog(
             onDismissRequest = {},
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                dismissOnBackPress = false,
-                dismissOnClickOutside = false
-            )
+            properties =
+                DialogProperties(
+                    usePlatformDefaultWidth = false,
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                ),
         ) {
             QuestCompleteCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp))
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp)),
             )
         }
         LaunchedEffect(Unit) {
@@ -160,7 +161,6 @@ private fun QuestRecordingScreen(
     val isFocused = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
-
     Column(
         modifier =
             modifier
@@ -174,8 +174,7 @@ private fun QuestRecordingScreen(
                     } else {
                         false
                     }
-                }
-                .addFocusCleaner(focusManager)
+                }.addFocusCleaner(focusManager)
                 .imePadding()
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
@@ -185,15 +184,16 @@ private fun QuestRecordingScreen(
         QuestWritingTopBar(
             isEnabled = uiState.isCompleteButtonEnabled,
             onBackClick = onBackClick,
-            onCompleteClick = onCompleteClick
+            onCompleteClick = onCompleteClick,
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f, false)
-                .verticalScroll(scrollState)
-                .padding(horizontal = screenWidthDp(24.dp)),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f, false)
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = screenWidthDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -201,7 +201,7 @@ private fun QuestRecordingScreen(
             QuestWritingTitle(
                 questNumber = uiState.questNumber,
                 question = uiState.question,
-                onTipClick = onTipClick
+                onTipClick = onTipClick,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -224,14 +224,14 @@ private fun QuestRecordingScreen(
                 onFocusChanged = {
                     isFocused.value = it
                 },
-                scrollState = scrollState
+                scrollState = scrollState,
             )
             Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
         }
 
         QuestWritingFooter(
             currentCharCount = uiState.questAnswer.length,
-            isPhotoQuestion = false
+            isPhotoQuestion = false,
         )
     }
 

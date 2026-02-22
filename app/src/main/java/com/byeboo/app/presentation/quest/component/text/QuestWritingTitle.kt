@@ -21,8 +21,8 @@ import com.byeboo.app.core.util.screenHeightDp
 fun QuestWritingTitle(
     questNumber: Long,
     question: String,
-    onTipClick:() -> Unit,
-    modifier: Modifier = Modifier
+    onTipClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -49,7 +49,7 @@ fun QuestWritingTitle(
 
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_TIP,

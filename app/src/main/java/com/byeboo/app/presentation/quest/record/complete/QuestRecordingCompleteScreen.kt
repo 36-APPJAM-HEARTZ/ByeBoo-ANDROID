@@ -12,27 +12,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
-import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
@@ -41,12 +35,8 @@ import com.byeboo.app.core.util.findActivity
 import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
-import com.byeboo.app.presentation.quest.component.text.CreatedText
-import com.byeboo.app.presentation.quest.component.text.QuestContent
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
-import com.byeboo.app.presentation.quest.component.type.QuestContentType
 
 @Composable
 fun QuestRecordingCompleteRoute(
@@ -130,8 +120,6 @@ private fun QuestRecordingCompleteScreen(
                     bottom = screenHeightDp(24.dp),
                 ),
         ) {
-
-
             item {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -142,11 +130,11 @@ private fun QuestRecordingCompleteScreen(
                         stepNumber = uiState.stepNumber,
                         questNumber = uiState.questNumber,
                         createdAt = uiState.createdAt,
-                        questQuestion = uiState.question
+                        questQuestion = uiState.question,
                     )
 
                     ContentText(
-                        text = uiState.answer
+                        text = uiState.answer,
                     )
 
                     QuestEmotionDescriptionContent(
@@ -161,7 +149,7 @@ private fun QuestRecordingCompleteScreen(
                         buttonTextColor = ByeBooTheme.colors.white,
                         buttonStyle = ByeBooTheme.typography.body2,
                         buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                        onClick = {}
+                        onClick = {},
                     )
                 }
             }

@@ -19,12 +19,12 @@ import com.byeboo.app.core.util.screenWidthDp
 @Composable
 fun QuestWritingTopBar(
     isEnabled: Boolean,
-    onBackClick:() -> Unit,
-    onCompleteClick:() -> Unit
+    onBackClick: () -> Unit,
+    onCompleteClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.padding(horizontal = screenWidthDp(22.dp)),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
@@ -43,7 +43,7 @@ fun QuestWritingTopBar(
             style = ByeBooTheme.typography.body2,
             modifier =
                 Modifier
-                    .clickable(onClick = onCompleteClick)
+                    .clickable(onClick = onCompleteClick),
         )
     }
 }

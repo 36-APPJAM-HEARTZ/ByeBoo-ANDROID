@@ -135,7 +135,7 @@ class QuestRecordingViewModel
                         _uiState.update {
                             it.copy(
                                 showBottomSheet = false,
-                                showCompleteModal = true
+                                showCompleteModal = true,
                             )
                         }
                     }.onFailure {
@@ -146,16 +146,17 @@ class QuestRecordingViewModel
             }
         }
 
-    fun onCompleteModalTimeout() {
-        val questId = _uiState.value.questId
+        fun onCompleteModalTimeout() {
+            val questId = _uiState.value.questId
 
-        _uiState.update { it.copy(showCompleteModal = false) }
+            _uiState.update { it.copy(showCompleteModal = false) }
 
-        viewModelScope.launch {
-            _sideEffect.emit(
-                QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
-            )        }
-    }
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
+                )
+            }
+        }
 
         private fun onSaveEditClicked() {
             val state = uiState.value

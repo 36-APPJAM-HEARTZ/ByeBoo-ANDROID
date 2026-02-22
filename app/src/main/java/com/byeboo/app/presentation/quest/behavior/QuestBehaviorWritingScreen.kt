@@ -166,7 +166,6 @@ private fun QuestBehaviorWritingScreen(
 
     val scrollState = rememberScrollState()
 
-
     Column(
         modifier =
             modifier
@@ -346,7 +345,7 @@ private fun QuestBehaviorWritingScreen(
                             modifier
                                 .fillMaxWidth()
                                 .bringIntoViewRequester(bringIntoViewRequester),
-                        scrollState = scrollState
+                        scrollState = scrollState,
                     )
                 }
             }

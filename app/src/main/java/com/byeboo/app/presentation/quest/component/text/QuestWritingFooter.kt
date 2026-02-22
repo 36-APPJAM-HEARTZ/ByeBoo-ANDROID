@@ -24,14 +24,15 @@ import com.byeboo.app.core.util.screenWidthDp
 fun QuestWritingFooter(
     currentCharCount: Int,
     isPhotoQuestion: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val maxCharCount = if (isPhotoQuestion) 200 else 500
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -54,13 +55,11 @@ fun QuestWritingFooter(
         Text(
             text =
                 buildAnnotatedString {
-
                     append(text = currentCharCount.toString())
 
                     append(text = "/")
 
                     append(text = maxCharCount.toString())
-
                 },
             style = ByeBooTheme.typography.body6,
             color = ByeBooTheme.colors.gray400,
