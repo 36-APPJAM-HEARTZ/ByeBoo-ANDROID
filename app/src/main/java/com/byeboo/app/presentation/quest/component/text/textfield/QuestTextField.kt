@@ -33,7 +33,9 @@ fun QuestTextField(
     val lastLineBottom = remember { mutableStateOf(0) }
 
     LaunchedEffect(value) {
-        scrollState.animateScrollTo(scrollState.maxValue)
+        if (focusState.value) {
+            scrollState.animateScrollTo(scrollState.maxValue)
+        }
     }
     BasicTextField(
         value = value,
