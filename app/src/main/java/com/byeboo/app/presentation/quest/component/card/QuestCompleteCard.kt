@@ -58,6 +58,7 @@ fun QuestCompleteCard(modifier: Modifier = Modifier) {
         LottieAnimation(
             composition = composition,
             progress = progress,
+            modifier = Modifier.height(screenHeightDp(172.dp))
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
