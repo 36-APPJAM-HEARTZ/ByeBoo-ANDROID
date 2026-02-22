@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -162,6 +163,9 @@ private fun QuestBehaviorWritingScreen(
             bringIntoViewRequester.bringIntoView()
         }
     }
+
+    val scrollState = rememberScrollState()
+
 
     Column(
         modifier =
@@ -328,7 +332,6 @@ private fun QuestBehaviorWritingScreen(
             item {
                 Column {
                     QuestTextField(
-                        questWritingState = uiState.contentState,
                         value = uiState.questAnswer,
                         onValueChange = {
                             if (it.length <= 200) {
@@ -336,7 +339,6 @@ private fun QuestBehaviorWritingScreen(
                             }
                         },
                         placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해 보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
-                        isQuestion = false,
                         onFocusChanged = {
                             isFocused.value = it
                         },
@@ -344,6 +346,7 @@ private fun QuestBehaviorWritingScreen(
                             modifier
                                 .fillMaxWidth()
                                 .bringIntoViewRequester(bringIntoViewRequester),
+                        scrollState = scrollState
                     )
                 }
             }
