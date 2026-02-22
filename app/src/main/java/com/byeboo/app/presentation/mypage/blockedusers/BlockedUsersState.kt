@@ -12,7 +12,7 @@ data class BlockedUsersState(
 )
 
 sealed interface BlockedUsersSideEffect {
-    data object NavigateToMyPage : BlockedUsersSideEffect
+    data object NavigateUp : BlockedUsersSideEffect
 
     data class ShowSnackBar(
         val message: String,

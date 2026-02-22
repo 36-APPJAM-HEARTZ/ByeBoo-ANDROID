@@ -31,6 +31,7 @@ fun NavGraphBuilder.myPageGraph(
     navigateToSplash: () -> Unit,
     navigateToMyPage: () -> Unit,
     navigateToBlockedUsers: () -> Unit,
+    navigateUp: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<MyPage> {
@@ -54,7 +55,7 @@ fun NavGraphBuilder.myPageGraph(
     composable<BlockedUsers> {
         BlockedUsersRoute(
             paddingValues = paddingValues,
-            navigateToMyPage = navigateToMyPage,
+            navigateUp = navigateUp,
         )
     }
 }
