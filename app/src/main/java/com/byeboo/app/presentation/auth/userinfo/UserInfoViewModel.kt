@@ -3,7 +3,6 @@ package com.byeboo.app.presentation.auth.userinfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
-import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.model.auth.QuestStyle
@@ -64,31 +63,9 @@ class UserInfoViewModel
             mixpanelUtil.trackEvent("nickname_complete")
         }
 
-        fun updateEmotion(emotion: Feeling) {
-            _uiState.update {
-                it.copy(selectedEmotion = emotion)
-            }
-        }
-
-        fun onCurrentEmotionComplete() {
-            mixpanelUtil.trackEvent("current_emotion_complete")
-        }
-
         fun updateQuest(quest: QuestStyle) {
             _uiState.update {
                 it.copy(selectedQuest = quest)
-            }
-        }
-
-        fun resetEmotion() {
-            _uiState.update {
-                it.copy(selectedEmotion = null)
-            }
-        }
-
-        fun resetQuest() {
-            _uiState.update {
-                it.copy(selectedQuest = null)
             }
         }
 
@@ -106,52 +83,46 @@ class UserInfoViewModel
             )
         }
 
-        fun finishUserInfo() {
-            if (hasSubmitted) return
-            hasSubmitted = true
+    fun finishUserInfo() {
+        if (hasSubmitted) return
+        hasSubmitted = true
 
-            viewModelScope.launch {
-                if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
-                    hasSubmitted = false
-                    return@launch
+        viewModelScope.launch {
+            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
+                hasSubmitted = false
+                return@launch
+            }
+
+            // TODO: 서버 필드명 확정 시 수정 필요
+            val userInfo = UserInfoModel(
+                name = _uiState.value.nickname,
+                feeling = "",
+                questStyle = _uiState.value.selectedQuest?.name.orEmpty(),
+            )
+
+            val result = userRepository.updateUserInfo(userInfo)
+
+            if (result.isSuccess) {
+                _uiState.value.selectedQuest?.let { selectedQuest ->
+                    trackQuestSelected(selectedQuest)
+                    questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
+                    userRepository.setUserRegistered(true)
                 }
+                saveFcmToken()
 
-                val userInfo =
-                    UserInfoModel(
-                        name = _uiState.value.nickname,
-                        feeling =
-                            _uiState.value.selectedEmotion
-                                ?.name
-                                .orEmpty(),
-                        questStyle =
-                            _uiState.value.selectedQuest
-                                ?.name
-                                .orEmpty(),
-                    )
-
-                val result = userRepository.updateUserInfo(userInfo)
-
-                if (result.isSuccess) {
-                    _uiState.value.selectedQuest?.let { selectedQuest ->
-                        trackQuestSelected(selectedQuest)
-                        questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
-                        userRepository.setUserRegistered(true)
-                    }
-                    saveFcmToken()
-
-                    val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
-                    if (isRegisteredUser) {
-                        fcmTokenRepository.allowQuestAlarm()
-                    }
-                    _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
-                } else {
-                    hasSubmitted = false
-                    _sideEffect.emit(
-                        UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
-                    )
+                val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
+                if (isRegisteredUser) {
+                    fcmTokenRepository.allowQuestAlarm()
                 }
+                _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
+            } else {
+                hasSubmitted = false
+                _sideEffect.emit(
+                    UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                )
             }
         }
+    }
 
         private fun saveFcmToken() {
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
