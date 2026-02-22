@@ -44,7 +44,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun BlockedUsersRoute(
     paddingValues: PaddingValues,
-    navigateUp: () -> Unit,
+    navigateToMyPage: () -> Unit,
     viewModel: BlockedUsersViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,7 +53,7 @@ fun BlockedUsersRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is BlockedUsersSideEffect.NavigateUp -> navigateUp()
+                is BlockedUsersSideEffect.NavigateToMyPage -> navigateToMyPage()
                 is BlockedUsersSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }

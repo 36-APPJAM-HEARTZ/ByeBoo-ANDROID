@@ -42,7 +42,7 @@ class BlockedUsersViewModel
         fun onBackClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(
-                    BlockedUsersSideEffect.NavigateUp,
+                    BlockedUsersSideEffect.NavigateToMyPage,
                 )
             }
         }
