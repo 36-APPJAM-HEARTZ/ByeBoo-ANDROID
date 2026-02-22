@@ -11,19 +11,11 @@ data class UserJourney(
     val description: String,
 )
 
-enum class Feeling(
-    val displayText: String,
-) {
-    EXHAUSTED("너무 힘들어요"),
-    RECOVERING("극복 중이에요"),
-    OVERCOMING("꽤 극복했어요"),
-}
-
 enum class QuestStyle(
     val displayText: String,
 ) {
-    RECORDING("질문에 답하기"),
-    ACTIVE("활동 인증하기"),
+    RECORDING("재회 준비"),
+    ACTIVE("이별 극복"),
 }
 
 fun QuestStyle.toJourneyText(): String =
