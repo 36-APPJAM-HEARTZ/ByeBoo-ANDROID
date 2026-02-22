@@ -50,7 +50,7 @@ fun JourneyCard(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .noRippleClickable { onJourneyCardClick(journeyType) }
-                .background(color = ByeBooTheme.colors.whiteAlpha10)
+                .background(color = ByeBooTheme.colors.whiteAlpha5)
                 .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(12.dp))
                 .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {

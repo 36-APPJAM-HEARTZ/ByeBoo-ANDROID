@@ -32,7 +32,7 @@ fun TermsAllButton(
 ) {
     val checkedIcon = if (isChecked) R.drawable.ic_terms_checked else R.drawable.ic_terms_unchecked
     val textColor = if (isChecked) ByeBooTheme.colors.gray50 else ByeBooTheme.colors.gray300
-    val backgroundColor = if (isChecked) ByeBooTheme.colors.primary300Alpha20 else ByeBooTheme.colors.whiteAlpha10
+    val backgroundColor = if (isChecked) ByeBooTheme.colors.primary300Alpha20 else ByeBooTheme.colors.whiteAlpha5
 
     Column(
         modifier = modifier.padding(vertical = screenHeightDp(8.dp)),

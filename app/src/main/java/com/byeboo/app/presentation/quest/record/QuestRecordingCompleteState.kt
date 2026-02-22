@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.quest.record
 
 import androidx.compose.runtime.Immutable
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 
 @Immutable
 data class QuestRecordingCompleteState(
@@ -15,7 +15,7 @@ data class QuestRecordingCompleteState(
     val question: String = "",
     val answer: String = "",
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
+    val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
 )
 
 sealed interface QuestRecordingCompleteSideEffect {

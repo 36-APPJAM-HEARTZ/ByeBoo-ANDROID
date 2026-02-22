@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestreview
 
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
 
@@ -15,7 +15,7 @@ data class OffboardingQuestReviewState(
     val imageUrl: String? = null,
     val questEmotionState: String = "",
     val emotionDescription: String = "",
-    val selectedEmotion: LargeTagType = LargeTagType.EMOTION_NEUTRAL,
+    val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
     val questType: QuestType = QuestType.RECORDING,
 )
 

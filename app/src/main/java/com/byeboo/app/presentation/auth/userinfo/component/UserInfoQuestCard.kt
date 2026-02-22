@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.designsystem.ui.theme.whiteAlpha10
+import com.byeboo.app.core.designsystem.ui.theme.whiteAlpha5
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -35,7 +35,7 @@ fun UserInfoQuestCard(
     onCardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val backgroundColor = if (isSelected) ByeBooTheme.colors.primary300Alpha20 else whiteAlpha10
+    val backgroundColor = if (isSelected) ByeBooTheme.colors.primary300Alpha20 else whiteAlpha5
     val borderColor = if (isSelected) ByeBooTheme.colors.primary300 else Color.Transparent
     val textColor = if (isSelected) ByeBooTheme.colors.primary200 else ByeBooTheme.colors.gray300
     val textStyle = if (isSelected) ByeBooTheme.typography.body5 else ByeBooTheme.typography.body6

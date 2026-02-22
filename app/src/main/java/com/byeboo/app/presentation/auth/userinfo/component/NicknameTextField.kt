@@ -64,7 +64,7 @@ fun NicknameTextField(
             when (validationState) {
                 UserInfoValidationState.Valid -> ByeBooTheme.colors.primary300
                 UserInfoValidationState.Invalid -> ByeBooTheme.colors.error300
-                UserInfoValidationState.Empty -> ByeBooTheme.colors.whiteAlpha10
+                UserInfoValidationState.Empty -> ByeBooTheme.colors.whiteAlpha5
             }
         } else {
             Color.Transparent
@@ -93,7 +93,7 @@ fun NicknameTextField(
                     .fillMaxWidth()
                     .border(1.dp, borderColor, shape)
                     .clip(shape)
-                    .background(ByeBooTheme.colors.whiteAlpha10)
+                    .background(ByeBooTheme.colors.whiteAlpha5)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
             contentAlignment = Alignment.Center,
         ) {

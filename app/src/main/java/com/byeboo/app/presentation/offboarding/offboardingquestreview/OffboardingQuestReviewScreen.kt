@@ -40,7 +40,7 @@ import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
@@ -113,7 +113,7 @@ private fun OffboardingQuestReviewScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -248,7 +248,7 @@ private fun OffboardingQuestReviewScreen(
 @Composable
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     modifier: Modifier = Modifier,
 ) {
     Column(

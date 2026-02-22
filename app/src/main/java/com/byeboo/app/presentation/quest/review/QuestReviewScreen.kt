@@ -14,19 +14,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,14 +37,12 @@ import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
-import com.byeboo.app.presentation.quest.component.text.QuestContent
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
-import com.byeboo.app.presentation.quest.component.type.QuestContentType
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -89,8 +84,8 @@ fun QuestReviewRoute(
     QuestReviewScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onEditClick = { viewModel.onEditClicked(uiState.questType) },
-        onCancelClick = viewModel::onCancelClicked,
         modifier = modifier,
     )
 }
@@ -99,15 +94,15 @@ fun QuestReviewRoute(
 private fun QuestReviewScreen(
     uiState: QuestReviewState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(color = ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -121,17 +116,17 @@ private fun QuestReviewScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
+                contentDescription = "back button",
+                tint = ByeBooTheme.colors.white,
+                modifier = Modifier.clickable(onClick = onBackClick),
+            )
+
+            Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_edit),
                 contentDescription = "edit content",
                 tint = ByeBooTheme.colors.white,
                 modifier = Modifier.clickable(onClick = onEditClick),
-            )
-
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = "cancel button",
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCancelClick),
             )
         }
 
@@ -142,7 +137,6 @@ private fun QuestReviewScreen(
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
-                    top = screenHeightDp(10.dp),
                     end = screenWidthDp(24.dp),
                     bottom = screenHeightDp(28.dp),
                 ),
@@ -155,52 +149,28 @@ private fun QuestReviewScreen(
                     questQuestion = uiState.question,
                 )
 
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
             }
 
             if (uiState.imageUrl.isNullOrBlank()) {
                 item {
-                    QuestContent(
-                        titleIcon = QuestContentType.THINKING,
-                        titleText = "이렇게 생각했어요",
-                        contentText = uiState.answer,
+                    ContentText(
+                        text = uiState.answer,
                     )
                 }
             } else {
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_shoe),
-                            contentDescription = "title icon",
-                            tint = Color.Unspecified,
-                        )
-
-                        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-                        Text(
-                            text = "이렇게 완료했어요",
-                            color = ByeBooTheme.colors.gray200,
-                            style = ByeBooTheme.typography.body2,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
                     Column(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .aspectRatio(312 / 312f)
+                                .aspectRatio(1f)
                                 .clip(RoundedCornerShape(12.dp)),
                     ) {
                         SubcomposeAsyncImage(
                             modifier =
                                 Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(1f),
+                                    .fillMaxWidth(),
                             model =
                                 ImageRequest
                                     .Builder(LocalContext.current)
@@ -221,14 +191,14 @@ private fun QuestReviewScreen(
                         )
                     }
                     if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
                         ContentText(uiState.answer)
                     }
                 }
             }
 
             item {
-                Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                 QuestEmotionDescriptionContent(
                     questEmotionDescription = uiState.emotionDescription,
@@ -242,37 +212,16 @@ private fun QuestReviewScreen(
 @Composable
 private fun QuestEmotionDescriptionContent(
     questEmotionDescription: String,
-    emotionType: LargeTagType,
+    emotionType: EmotionChipType,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_change),
-                contentDescription = "title icon",
-                tint = Color.Unspecified,
-            )
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
-            Text(
-                text = "퀘스트 완료 후, 이런 감정을 느꼈어요",
-                color = ByeBooTheme.colors.gray200,
-                style = ByeBooTheme.typography.body2,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         QuestEmotionDescriptionCard(
             questEmotionDescription = questEmotionDescription,
             emotionType = emotionType,
         )
-
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
     }
 }

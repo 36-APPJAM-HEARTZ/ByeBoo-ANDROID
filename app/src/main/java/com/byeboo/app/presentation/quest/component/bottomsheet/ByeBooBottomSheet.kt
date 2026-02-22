@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
-import com.byeboo.app.core.designsystem.type.LargeTagType
+import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -35,10 +35,10 @@ import com.byeboo.app.presentation.quest.component.chip.EmotionChip
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ByeBooBottomSheet(
-    selectedEmotion: LargeTagType?,
+    selectedEmotion: EmotionChipType?,
     navigateButton: () -> Unit,
     onDismiss: () -> Unit,
-    onEmotionSelected: (LargeTagType?) -> Unit,
+    onEmotionSelected: (EmotionChipType?) -> Unit,
     modifier: Modifier = Modifier,
     showBottomSheet: Boolean = false,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -82,7 +82,7 @@ fun ByeBooBottomSheet(
                     text = "퀘스트를 완료한 후,\n어떤 감정이 느껴지시나요?",
                     color = ByeBooTheme.colors.gray50,
                     textAlign = TextAlign.Center,
-                    style = ByeBooTheme.typography.head1,
+                    style = ByeBooTheme.typography.head2,
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -121,8 +121,8 @@ fun ByeBooBottomSheet(
                 Spacer(modifier = Modifier.height(screenHeightDp(37.dp)))
 
                 ByeBooActivationButton(
-                    buttonDisableColor = ByeBooTheme.colors.whiteAlpha10,
-                    buttonText = "완료",
+                    buttonDisableColor = ByeBooTheme.colors.whiteAlpha5,
+                    buttonText = "완료하기",
                     buttonDisableTextColor = ByeBooTheme.colors.gray300,
                     onClick = {
                         selectedEmotion?.let { emotion ->
@@ -139,8 +139,8 @@ fun ByeBooBottomSheet(
 
 @Composable
 private fun EmotionChipList(
-    selectedEmotion: LargeTagType?,
-    onEmotionSelected: (LargeTagType) -> Unit,
+    selectedEmotion: EmotionChipType?,
+    onEmotionSelected: (EmotionChipType) -> Unit,
     isUploading: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -152,21 +152,21 @@ private fun EmotionChipList(
             horizontalArrangement = Arrangement.Center,
         ) {
             EmotionChip(
-                emotionType = LargeTagType.EMOTION_NEUTRAL,
-                isSelected = selectedEmotion == LargeTagType.EMOTION_NEUTRAL,
+                emotionType = EmotionChipType.EMOTION_NEUTRAL,
+                isSelected = selectedEmotion == EmotionChipType.EMOTION_NEUTRAL,
                 enabled = !isUploading,
-                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_NEUTRAL,
-                onChipClick = { onEmotionSelected(LargeTagType.EMOTION_NEUTRAL) },
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != EmotionChipType.EMOTION_NEUTRAL,
+                onChipClick = { onEmotionSelected(EmotionChipType.EMOTION_NEUTRAL) },
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(20.dp)))
 
             EmotionChip(
-                emotionType = LargeTagType.EMOTION_SELF_AWARE,
-                isSelected = selectedEmotion == LargeTagType.EMOTION_SELF_AWARE,
+                emotionType = EmotionChipType.EMOTION_SELF_AWARE,
+                isSelected = selectedEmotion == EmotionChipType.EMOTION_SELF_AWARE,
                 enabled = !isUploading,
-                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_SELF_AWARE,
-                onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SELF_AWARE) },
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != EmotionChipType.EMOTION_SELF_AWARE,
+                onChipClick = { onEmotionSelected(EmotionChipType.EMOTION_SELF_AWARE) },
             )
         }
 
@@ -177,21 +177,21 @@ private fun EmotionChipList(
             horizontalArrangement = Arrangement.Center,
         ) {
             EmotionChip(
-                emotionType = LargeTagType.EMOTION_SADNESS,
-                isSelected = selectedEmotion == LargeTagType.EMOTION_SADNESS,
+                emotionType = EmotionChipType.EMOTION_SADNESS,
+                isSelected = selectedEmotion == EmotionChipType.EMOTION_SADNESS,
                 enabled = !isUploading,
-                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_SADNESS,
-                onChipClick = { onEmotionSelected(LargeTagType.EMOTION_SADNESS) },
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != EmotionChipType.EMOTION_SADNESS,
+                onChipClick = { onEmotionSelected(EmotionChipType.EMOTION_SADNESS) },
             )
 
             Spacer(modifier = Modifier.width(screenWidthDp(20.dp)))
 
             EmotionChip(
-                emotionType = LargeTagType.EMOTION_RELIEF,
-                isSelected = selectedEmotion == LargeTagType.EMOTION_RELIEF,
+                emotionType = EmotionChipType.EMOTION_RELIEF,
+                isSelected = selectedEmotion == EmotionChipType.EMOTION_RELIEF,
                 enabled = !isUploading,
-                isDimmed = isOthersBackgroundDimmed && selectedEmotion != LargeTagType.EMOTION_RELIEF,
-                onChipClick = { onEmotionSelected(LargeTagType.EMOTION_RELIEF) },
+                isDimmed = isOthersBackgroundDimmed && selectedEmotion != EmotionChipType.EMOTION_RELIEF,
+                onChipClick = { onEmotionSelected(EmotionChipType.EMOTION_RELIEF) },
             )
         }
     }

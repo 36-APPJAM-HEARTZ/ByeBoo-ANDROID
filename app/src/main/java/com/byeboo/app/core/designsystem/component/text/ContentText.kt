@@ -23,14 +23,14 @@ fun ContentText(
             modifier
                 .fillMaxWidth()
                 .background(
-                    color = ByeBooTheme.colors.whiteAlpha10,
+                    color = ByeBooTheme.colors.whiteAlpha5,
                     shape = RoundedCornerShape(12.dp),
                 ).padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(18.dp)),
     ) {
         Text(
             text = text,
-            style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray300,
+            style = ByeBooTheme.typography.body3,
+            color = ByeBooTheme.colors.gray100,
         )
     }
 }

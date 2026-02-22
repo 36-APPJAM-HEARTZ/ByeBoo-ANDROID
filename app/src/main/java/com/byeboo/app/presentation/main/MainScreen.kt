@@ -159,7 +159,7 @@ fun MainScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(ByeBooTheme.colors.black),
+                    .background(ByeBooTheme.colors.background),
         ) { paddingValues ->
             MainNavHost(
                 navigator = navigator,

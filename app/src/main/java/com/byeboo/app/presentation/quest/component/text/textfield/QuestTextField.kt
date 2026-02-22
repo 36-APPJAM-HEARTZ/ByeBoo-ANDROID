@@ -103,7 +103,7 @@ fun QuestTextField(
                     width = 1.dp,
                     color = textFieldBorderColor,
                     shape = RoundedCornerShape(12.dp),
-                ).background(color = ByeBooTheme.colors.whiteAlpha10)
+                ).background(color = ByeBooTheme.colors.whiteAlpha5)
                 .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(16.dp))
                 .bringIntoViewRequester(textFieldRequester),
     ) {

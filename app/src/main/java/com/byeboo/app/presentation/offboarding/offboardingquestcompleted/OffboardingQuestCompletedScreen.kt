@@ -82,7 +82,7 @@ private fun OffboardingQuestCompletedScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .background(ByeBooTheme.colors.black)
+                .background(ByeBooTheme.colors.background)
                 .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
@@ -125,7 +125,7 @@ private fun OffboardingQuestCompletedScreen(
                 item("header_$stepIndex") {
                     HorizontalDivider(
                         thickness = 1.dp,
-                        color = ByeBooTheme.colors.whiteAlpha10,
+                        color = ByeBooTheme.colors.whiteAlpha5,
                         modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                     )
 

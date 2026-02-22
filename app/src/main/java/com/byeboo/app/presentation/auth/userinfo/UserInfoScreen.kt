@@ -146,7 +146,7 @@ private fun UserInfoScreen(
                 .addFocusCleaner(focusManager),
     ) {
         Image(
-            painter = painterResource(R.drawable.bg_userinfo),
+            painter = painterResource(R.drawable.img_bg_userinfo),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -224,7 +224,7 @@ private fun UserInfoScreen(
                 buttonDisableColor = ByeBooTheme.colors.blackAlpha50,
                 buttonDisableTextColor = ByeBooTheme.colors.gray400,
                 isEnabled = isStepValid,
-                buttonText = "다음으로",
+                buttonText = if (pagerState.currentPage == 0 || pagerState.currentPage == 1) "다음으로" else "완료하기",
                 onClick = {
                     coroutineScope.launch {
                         val nextPage = pagerState.currentPage + 1

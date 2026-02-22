@@ -23,37 +23,36 @@ fun MiddleTag(
     textStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
-    val tagText =
-        if (middleTagType.dynamicContent) {
-            stringResource(middleTagType.titleResId, text)
-        } else {
-            stringResource(middleTagType.titleResId)
-        }
+    val backgroundColor = middleTagColor(middleTagType.backgroundColor)
+    val textColor = middleTagColor(middleTagType.textColor)
+    val borderColor = middleTagType.borderColor?.let { middleTagColor(it) }
+
+    val tagText = if (middleTagType.dynamicContent) {
+        stringResource(middleTagType.titleResId, text)
+    } else {
+        stringResource(middleTagType.titleResId)
+    }
+
     val shape = RoundedCornerShape(middleTagType.roundedCorner)
+
     Box(
-        modifier =
-            modifier
-                .background(
-                    color = middleTagColor(middleTagType.backgroundColor),
-                    shape = shape,
-                ).then(
-                    if (middleTagType.borderColor != null) {
-                        Modifier.border(
-                            width = 1.dp,
-                            color = middleTagColor(middleTagType.borderColor),
-                            shape = shape,
-                        )
-                    } else {
-                        Modifier
-                    },
-                ).padding(
-                    horizontal = middleTagType.horizontalPadding,
-                    vertical = middleTagType.verticalPadding,
-                ),
+        modifier = modifier
+            .background(color = backgroundColor, shape = shape)
+            .then(
+                if (borderColor != null) {
+                    Modifier.border(width = 1.dp, color = borderColor, shape = shape)
+                } else {
+                    Modifier
+                }
+            )
+            .padding(
+                horizontal = middleTagType.horizontalPadding,
+                vertical = middleTagType.verticalPadding,
+            ),
     ) {
         Text(
             text = tagText,
-            color = middleTagColor(middleTagType.textColor),
+            color = textColor,
             style = textStyle,
         )
     }
@@ -62,7 +61,7 @@ fun MiddleTag(
 @Composable
 fun middleTagColor(colorType: TagColorType): Color =
     when (colorType) {
-        TagColorType.WHITE_ALPHA_10 -> ByeBooTheme.colors.whiteAlpha10
+        TagColorType.WHITE_ALPHA_5 -> ByeBooTheme.colors.whiteAlpha5
         TagColorType.SECONDARY_300_ALPHA_10 -> ByeBooTheme.colors.secondary300Alpha10
         TagColorType.GRAY_300 -> ByeBooTheme.colors.gray300
         TagColorType.GRAY_800 -> ByeBooTheme.colors.gray800

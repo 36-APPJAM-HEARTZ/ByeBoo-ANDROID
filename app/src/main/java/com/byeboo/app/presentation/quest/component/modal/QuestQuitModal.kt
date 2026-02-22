@@ -41,7 +41,7 @@ fun QuestQuitModal(
                 modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(color = ByeBooTheme.colors.gray800)
+                    .background(color = ByeBooTheme.colors.background)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
