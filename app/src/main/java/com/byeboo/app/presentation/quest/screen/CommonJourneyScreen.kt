@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,9 +21,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
@@ -113,31 +112,25 @@ fun CommonJourneyScreen(
                     if (state.question.isNotEmpty()) {
                         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
-                        val annotatedQuestion =
-                            buildAnnotatedString {
-                                withStyle(
-                                    style =
-                                        ByeBooTheme.typography.body1.toSpanStyle().copy(
-                                            color = ByeBooTheme.colors.primary200,
-                                        ),
-                                ) {
-                                    append("Q. ")
-                                }
-                                withStyle(
-                                    style =
-                                        ByeBooTheme.typography.sub3.toSpanStyle().copy(
-                                            color = ByeBooTheme.colors.gray50,
-                                        ),
-                                ) {
-                                    append(state.question)
-                                }
-                            }
-
                         val isToday = state.selectedDate == LocalDate.now()
 
-                        Text(
-                            text = annotatedQuestion,
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.Top,
+                        ) {
+                            Text(
+                                text = "Q. ",
+                                style = ByeBooTheme.typography.body1,
+                                color = ByeBooTheme.colors.primary200,
+                            )
+
+                            Text(
+                                text = state.question,
+                                style = ByeBooTheme.typography.sub3,
+                                color = ByeBooTheme.colors.gray50,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
 
                         if (isToday && !state.isMyAnswerDone) {
                             Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
