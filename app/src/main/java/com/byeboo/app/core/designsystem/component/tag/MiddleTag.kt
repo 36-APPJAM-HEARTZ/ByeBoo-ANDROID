@@ -13,16 +13,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.type.MiddleTagType
+import com.byeboo.app.core.designsystem.type.TagColorType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 
 @Composable
 fun MiddleTag(
     middleTagType: MiddleTagType,
-    text: String,
+    text: String = "",
     textStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
-    val (backgroundColor, textColor, borderColor) = getTagColors(middleTagType)
+    val backgroundColor = middleTagColor(middleTagType.backgroundColor)
+    val textColor = middleTagColor(middleTagType.textColor)
+    val borderColor = middleTagType.borderColor?.let { middleTagColor(it) }
 
     val tagText =
         if (middleTagType.dynamicContent) {
@@ -31,19 +34,15 @@ fun MiddleTag(
             stringResource(middleTagType.titleResId)
         }
 
+    val shape = RoundedCornerShape(middleTagType.roundedCorner)
+
     Box(
         modifier =
             modifier
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape(middleTagType.roundedCorner),
-                ).then(
+                .background(color = backgroundColor, shape = shape)
+                .then(
                     if (borderColor != null) {
-                        Modifier.border(
-                            width = 1.dp,
-                            color = borderColor,
-                            shape = RoundedCornerShape(middleTagType.roundedCorner),
-                        )
+                        Modifier.border(width = 1.dp, color = borderColor, shape = shape)
                     } else {
                         Modifier
                     },
@@ -61,36 +60,14 @@ fun MiddleTag(
 }
 
 @Composable
-fun getTagColors(type: MiddleTagType): Triple<Color, Color, Color?> =
-    when (type) {
-        MiddleTagType.QUEST_START_DAY ->
-            Triple(
-                ByeBooTheme.colors.whiteAlpha5,
-                ByeBooTheme.colors.gray300,
-                null,
-            )
-        MiddleTagType.QUEST_TIP ->
-            Triple(
-                ByeBooTheme.colors.whiteAlpha5,
-                ByeBooTheme.colors.primary200,
-                ByeBooTheme.colors.gray800,
-            )
-        MiddleTagType.QUEST_ESSENTIAL ->
-            Triple(
-                ByeBooTheme.colors.secondary300Alpha10,
-                ByeBooTheme.colors.secondary300,
-                null,
-            )
-        MiddleTagType.QUEST_OPTIONAL ->
-            Triple(
-                ByeBooTheme.colors.whiteAlpha5,
-                ByeBooTheme.colors.gray300,
-                null,
-            )
-        MiddleTagType.QUEST_PERIOD ->
-            Triple(
-                ByeBooTheme.colors.whiteAlpha5,
-                ByeBooTheme.colors.gray300,
-                null,
-            )
+fun middleTagColor(colorType: TagColorType): Color =
+    when (colorType) {
+        TagColorType.WHITE_ALPHA_5 -> ByeBooTheme.colors.whiteAlpha5
+        TagColorType.SECONDARY_300_ALPHA_10 -> ByeBooTheme.colors.secondary300Alpha10
+        TagColorType.GRAY_300 -> ByeBooTheme.colors.gray300
+        TagColorType.GRAY_800 -> ByeBooTheme.colors.gray800
+        TagColorType.SECONDARY_300 -> ByeBooTheme.colors.secondary300
+        TagColorType.PRIMARY_50 -> ByeBooTheme.colors.primary50
+        TagColorType.PRIMARY_200 -> ByeBooTheme.colors.primary200
+        TagColorType.PRIMARY_300 -> ByeBooTheme.colors.primary300
     }
