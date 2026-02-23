@@ -14,6 +14,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
 fun DescriptionText(
@@ -34,17 +35,21 @@ fun DescriptionText(
                 .padding(top = top, bottom = bottom, start = start, end = end),
     ) {
         Text(
-            buildAnnotatedString {
-                withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
-                    append(nicknameText.orEmpty())
-                    append("\n")
-                    append(title)
-                    append(guideText)
-                }
-            },
-            style = ByeBooTheme.typography.head1,
+            text =
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = ByeBooTheme.colors.gray50)) {
+                        if (!nicknameText.isNullOrBlank()) {
+                            append(nicknameText)
+                            append("\n")
+                        }
+                        append(title)
+                        append(guideText)
+                    }
+                },
+            style = ByeBooTheme.typography.head2,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
         Text(
             text = contentText,
             style = ByeBooTheme.typography.body6,
