@@ -83,7 +83,7 @@ fun QuestRoute(
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
-        onTabClick = viewModel::onTabClick,
+        onTabClick = viewModel::onTabClicked,
         onDateChange = viewModel::onDateChange,
     )
 }

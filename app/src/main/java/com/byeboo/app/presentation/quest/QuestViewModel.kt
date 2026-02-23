@@ -94,7 +94,7 @@ class QuestViewModel
                 ),
             )
 
-        fun onTabClick(tab: QuestTab) {
+        fun onTabClicked(tab: QuestTab) {
             _uiState.update { it.copy(selectedTab = tab) }
         }
 
