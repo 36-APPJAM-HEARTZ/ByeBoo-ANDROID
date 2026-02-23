@@ -36,10 +36,11 @@ fun QuestTabRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(
-            space = screenWidthDp(4.dp),
-            alignment = Alignment.CenterHorizontally
-        ),
+        horizontalArrangement =
+            Arrangement.spacedBy(
+                space = screenWidthDp(4.dp),
+                alignment = Alignment.CenterHorizontally,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         QuestTabItem(
@@ -53,7 +54,6 @@ fun QuestTabRow(
             isSelected = selectedTab == QuestTab.MY_JOURNEY,
             onTabClick = { onTabSelected(QuestTab.MY_JOURNEY) },
         )
-
 
         QuestTabItem(
             iconRes =
@@ -84,14 +84,14 @@ private fun QuestTabItem(
                 .width(IntrinsicSize.Max)
                 .noRippleClickable(onClick = onTabClick),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(4.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(4.dp)),
     ) {
         Row(
             modifier =
                 Modifier
                     .padding(horizontal = screenWidthDp(11.5.dp)),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(2.dp))
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(2.dp)),
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = iconRes),
@@ -99,7 +99,6 @@ private fun QuestTabItem(
                 tint = Color.Unspecified,
                 modifier = Modifier.size(24.dp),
             )
-
 
             Text(
                 text = label,
@@ -110,15 +109,18 @@ private fun QuestTabItem(
             )
         }
 
-
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(screenHeightDp(1.dp))
-                .background(
-                    if (isSelected) ByeBooTheme.colors.gray300
-                    else Color.Transparent
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(screenHeightDp(1.dp))
+                    .background(
+                        if (isSelected) {
+                            ByeBooTheme.colors.gray300
+                        } else {
+                            Color.Transparent
+                        },
+                    ),
         )
     }
 }

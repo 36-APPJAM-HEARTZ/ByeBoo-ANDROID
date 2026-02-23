@@ -104,22 +104,19 @@ class QuestUiModelMapper
             }
         }
 
-    fun mapToIconRes(iconName: String): Int {
-        return ProfileIconType.fromName(iconName).iconResId
-    }
+        fun mapToIconRes(iconName: String): Int = ProfileIconType.fromName(iconName).iconResId
     }
 
 enum class ProfileIconType(
-    @DrawableRes val iconResId: Int
+    @DrawableRes val iconResId: Int,
 ) {
     SADNESS(R.drawable.ic_profile_sadness),
     SELF_UNDERSTANDING(R.drawable.ic_profile_self_understanding),
     SO_SO(R.drawable.ic_profile_so_so),
-    RELIEVED(R.drawable.ic_profile_relieved);
+    RELIEVED(R.drawable.ic_profile_relieved),
+    ;
 
     companion object {
-        fun fromName(name: String?): ProfileIconType {
-            return entries.find { it.name == name } ?: RELIEVED
-        }
+        fun fromName(name: String?): ProfileIconType = entries.find { it.name == name } ?: RELIEVED
     }
 }

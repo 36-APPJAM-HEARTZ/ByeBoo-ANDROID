@@ -43,7 +43,7 @@ fun CommonAnswerItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp))
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp)),
         ) {
             Icon(
                 painter = painterResource(id = answer.profileIconRes),
@@ -51,7 +51,6 @@ fun CommonAnswerItem(
                 tint = Color.Unspecified,
                 modifier = Modifier.size(20.dp),
             )
-
 
             Text(
                 text = answer.writer,

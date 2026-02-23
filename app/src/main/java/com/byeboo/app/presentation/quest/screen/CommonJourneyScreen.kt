@@ -73,9 +73,10 @@ fun CommonJourneyScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.MY_ANSWERS,
                         textStyle = ByeBooTheme.typography.cap1,
-                        modifier = Modifier.noRippleClickable{
-                            // TODO: 나의 답변 모아보기 화면 이동 
-                        }
+                        modifier =
+                            Modifier.noRippleClickable {
+                                // TODO: 나의 답변 모아보기 화면 이동
+                            },
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                     HorizontalDivider(

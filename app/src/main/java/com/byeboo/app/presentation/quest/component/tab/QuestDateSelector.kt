@@ -56,10 +56,15 @@ fun QuestDateSelector(
             enabled = !isToday,
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    id = if (isToday) R.drawable.ic_date_right_disabled
-                    else R.drawable.ic_date_right_enabled
-                ),
+                imageVector =
+                    ImageVector.vectorResource(
+                        id =
+                            if (isToday) {
+                                R.drawable.ic_date_right_disabled
+                            } else {
+                                R.drawable.ic_date_right_enabled
+                            },
+                    ),
                 contentDescription = "다음 날짜",
                 tint = Color.Unspecified,
             )
