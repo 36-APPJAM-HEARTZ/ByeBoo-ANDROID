@@ -29,6 +29,7 @@ import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.CommonJourneyState
@@ -53,7 +54,7 @@ fun CommonJourneyScreen(
     ) {
         LazyColumn(
             state = listState,
-            contentPadding = PaddingValues(bottom = 24.dp),
+            contentPadding = PaddingValues(bottom = screenHeightDp(24.dp)),
             modifier = modifier.fillMaxSize(),
         ) {
             item {
@@ -72,6 +73,9 @@ fun CommonJourneyScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.MY_ANSWERS,
                         textStyle = ByeBooTheme.typography.cap1,
+                        modifier = Modifier.noRippleClickable{
+                            // TODO: 나의 답변 모아보기 화면 이동 
+                        }
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                     HorizontalDivider(

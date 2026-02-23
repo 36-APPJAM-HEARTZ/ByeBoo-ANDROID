@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.util
 
+import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestData
@@ -94,7 +95,7 @@ class QuestUiModelMapper
 
                 when {
                     minutes < 60 -> {
-                        if (minutes < 1) "1분 전" else "${minutes}분 전"
+                        if (minutes < 1) "방금전" else "${minutes}분 전"
                     }
                     else -> "${hours}시간 전"
                 }
@@ -103,12 +104,22 @@ class QuestUiModelMapper
             }
         }
 
-        fun mapToIconRes(iconName: String): Int =
-            when (iconName) {
-                "SADNESS" -> R.drawable.ic_profile_sadness
-                "SELF_UNDERSTANDING" -> R.drawable.ic_profile_self_understanding
-                "SO_SO" -> R.drawable.ic_profile_so_so
-                "RELIEVED" -> R.drawable.ic_profile_relieved
-                else -> R.drawable.ic_profile_relieved
-            }
+    fun mapToIconRes(iconName: String): Int {
+        return ProfileIconType.fromName(iconName).iconResId
     }
+    }
+
+enum class ProfileIconType(
+    @DrawableRes val iconResId: Int
+) {
+    SADNESS(R.drawable.ic_profile_sadness),
+    SELF_UNDERSTANDING(R.drawable.ic_profile_self_understanding),
+    SO_SO(R.drawable.ic_profile_so_so),
+    RELIEVED(R.drawable.ic_profile_relieved);
+
+    companion object {
+        fun fromName(name: String?): ProfileIconType {
+            return entries.find { it.name == name } ?: RELIEVED
+        }
+    }
+}

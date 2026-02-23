@@ -48,7 +48,7 @@ fun MyJourneyScreen(
                 textStyle = ByeBooTheme.typography.cap1,
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
             DescriptionText(
                 nicknameText = "${userName}님, 지금",
@@ -76,17 +76,16 @@ fun MyJourneyScreen(
                         HorizontalDivider(
                             thickness = 1.dp,
                             color = ByeBooTheme.colors.whiteAlpha5,
-                            modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                         )
 
-                        Spacer(modifier = Modifier.padding(top = screenHeightDp(24.dp)))
+                        Spacer(modifier = Modifier.padding(top = screenHeightDp(20.dp)))
 
                         QuestStepTitle(
                             stepNumber = (stepIndex + 1).toLong(),
                             stepTitle = group.stepTitle,
                         )
 
-                        Spacer(modifier = Modifier.padding(top = screenHeightDp(8.dp)))
+                        Spacer(modifier = Modifier.padding(top = screenHeightDp(16.dp)))
                     }
                 }
 

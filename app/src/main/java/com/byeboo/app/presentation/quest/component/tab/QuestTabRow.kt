@@ -1,12 +1,12 @@
 package com.byeboo.app.presentation.quest.component.tab
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -35,7 +36,10 @@ fun QuestTabRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = screenWidthDp(4.dp),
+            alignment = Alignment.CenterHorizontally
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         QuestTabItem(
@@ -50,7 +54,6 @@ fun QuestTabRow(
             onTabClick = { onTabSelected(QuestTab.MY_JOURNEY) },
         )
 
-        Spacer(modifier = Modifier.width(screenWidthDp(4.dp)))
 
         QuestTabItem(
             iconRes =
@@ -68,7 +71,7 @@ fun QuestTabRow(
 
 @Composable
 private fun QuestTabItem(
-    iconRes: Int,
+    @DrawableRes iconRes: Int,
     label: String,
     isSelected: Boolean,
     onTabClick: () -> Unit,
@@ -79,23 +82,24 @@ private fun QuestTabItem(
         modifier =
             Modifier
                 .width(IntrinsicSize.Max)
-                .noRippleClickable { onTabClick() },
+                .noRippleClickable(onClick = onTabClick),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(4.dp))
     ) {
         Row(
             modifier =
                 Modifier
                     .padding(horizontal = screenWidthDp(11.5.dp)),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(2.dp))
         ) {
             Icon(
-                painter = painterResource(id = iconRes),
+                imageVector = ImageVector.vectorResource(id = iconRes),
                 contentDescription = label,
                 tint = Color.Unspecified,
                 modifier = Modifier.size(24.dp),
             )
 
-            Spacer(modifier = Modifier.width(screenWidthDp(2.dp)))
 
             Text(
                 text = label,
@@ -106,18 +110,15 @@ private fun QuestTabItem(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
 
-        if (isSelected) {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(screenHeightDp(1.dp))
-                        .background(ByeBooTheme.colors.gray300),
-            )
-        } else {
-            Spacer(modifier = Modifier.height(screenHeightDp(1.dp)))
-        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(screenHeightDp(1.dp))
+                .background(
+                    if (isSelected) ByeBooTheme.colors.gray300
+                    else Color.Transparent
+                ),
+        )
     }
 }

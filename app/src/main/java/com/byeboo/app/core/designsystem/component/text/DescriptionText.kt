@@ -53,7 +53,7 @@ fun DescriptionText(
         Text(
             text = contentText,
             style = ByeBooTheme.typography.body6,
-            color = ByeBooTheme.colors.gray300,
+            color = ByeBooTheme.colors.gray400,
         )
     }
 }

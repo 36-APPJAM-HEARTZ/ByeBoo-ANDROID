@@ -1,5 +1,7 @@
 package com.byeboo.app.presentation.quest.model
 
+import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.model.quest.QuestType
 import kotlinx.collections.immutable.ImmutableList
 
@@ -17,10 +19,11 @@ data class Quest(
     val type: QuestType = QuestType.RECORDING,
 )
 
+@Immutable
 data class CommonAnswerModel(
     val answerId: Long,
     val writer: String,
-    val profileIconRes: Int,
+    @DrawableRes val profileIconRes: Int,
     val displayTime: String,
     val content: String,
 )

@@ -1,13 +1,14 @@
 package com.byeboo.app.presentation.quest.component.card
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,14 +43,15 @@ fun CommonAnswerItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp))
         ) {
             Icon(
                 painter = painterResource(id = answer.profileIconRes),
                 contentDescription = null,
                 tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp),
             )
 
-            Spacer(modifier = Modifier.width(screenWidthDp(4.dp)))
 
             Text(
                 text = answer.writer,

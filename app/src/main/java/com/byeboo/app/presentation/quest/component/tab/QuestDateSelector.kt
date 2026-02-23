@@ -10,7 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -38,7 +39,7 @@ fun QuestDateSelector(
     ) {
         IconButton(onClick = { onDateChange(selectedDate.minusDays(1)) }) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_date_left),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_date_left),
                 contentDescription = "이전 날짜",
                 tint = Color.Unspecified,
             )
@@ -55,15 +56,10 @@ fun QuestDateSelector(
             enabled = !isToday,
         ) {
             Icon(
-                painter =
-                    painterResource(
-                        id =
-                            if (isToday) {
-                                R.drawable.ic_date_right_disabled
-                            } else {
-                                R.drawable.ic_date_right_enabled
-                            },
-                    ),
+                imageVector = ImageVector.vectorResource(
+                    id = if (isToday) R.drawable.ic_date_right_disabled
+                    else R.drawable.ic_date_right_enabled
+                ),
                 contentDescription = "다음 날짜",
                 tint = Color.Unspecified,
             )
