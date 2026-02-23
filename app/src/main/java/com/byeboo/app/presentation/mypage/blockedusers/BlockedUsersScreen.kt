@@ -53,7 +53,7 @@ fun BlockedUsersRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is BlockedUsersSideEffect.NavigateToMyPage -> navigateUp()
+                is BlockedUsersSideEffect.NavigateUp -> navigateUp()
                 is BlockedUsersSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
