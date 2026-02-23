@@ -35,20 +35,22 @@ fun QuestWritingFooter(
                 .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
-            contentDescription = null,
-            tint = Color.Unspecified,
-        )
+        if (!isPhotoQuestion) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_caution),
+                contentDescription = null,
+                tint = Color.Unspecified,
+            )
 
-        Spacer(modifier = Modifier.width(screenWidthDp(3.dp)))
+            Spacer(modifier = Modifier.width(screenWidthDp(3.dp)))
 
-        Text(
-            text = "10글자 이상 작성해 주세요.",
-            style = ByeBooTheme.typography.cap2,
-            color = ByeBooTheme.colors.gray400,
-            textAlign = TextAlign.Start,
-        )
+            Text(
+                text = "10글자 이상 작성해 주세요.",
+                style = ByeBooTheme.typography.cap2,
+                color = ByeBooTheme.colors.gray400,
+                textAlign = TextAlign.Start,
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 

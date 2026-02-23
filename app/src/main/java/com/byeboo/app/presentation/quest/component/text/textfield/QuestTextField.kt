@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
@@ -27,16 +28,20 @@ fun QuestTextField(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     placeholder: String = "",
-    onFocusChanged: ((Boolean) -> Unit)? = null,
+    onFocusChanged: ((Boolean) -> Unit)? = null
 ) {
-    val focusState = remember { mutableStateOf(false) }
+    val isFocused = remember { mutableStateOf(false) }
     val lastLineBottom = remember { mutableStateOf(0) }
 
-    LaunchedEffect(value) {
-        if (focusState.value) {
-            scrollState.animateScrollTo(scrollState.maxValue)
+    LaunchedEffect(isFocused.value) {
+        if (isFocused.value) {
+            snapshotFlow { scrollState.maxValue }
+                .collect {
+                    scrollState.scrollTo(it)
+                }
         }
     }
+
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -45,7 +50,7 @@ fun QuestTextField(
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = screenHeightDp(180.dp))
                 .onFocusChanged { focusStateChanged ->
-                    focusState.value = focusStateChanged.isFocused
+                    isFocused.value = focusStateChanged.isFocused
                     onFocusChanged?.invoke(focusStateChanged.isFocused)
                 },
         enabled = isEnabled,
@@ -60,14 +65,14 @@ fun QuestTextField(
             ),
         cursorBrush = SolidColor(ByeBooTheme.colors.white),
         decorationBox = { innerTextField ->
-            if (value.isEmpty() && !(focusState.value)) {
-                Text(
-                    text = placeholder,
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.body3,
-                )
-            }
-            innerTextField()
+                if (value.isEmpty() && !(isFocused.value)) {
+                    Text(
+                        text = placeholder,
+                        color = ByeBooTheme.colors.gray300,
+                        style = ByeBooTheme.typography.body3,
+                    )
+                }
+                innerTextField()
         },
         onTextLayout = { layoutResult ->
             lastLineBottom.value =

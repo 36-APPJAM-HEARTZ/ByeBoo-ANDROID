@@ -43,7 +43,7 @@ internal fun QuestPhotoPicker(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(96.dp))
+                .width(screenWidthDp(312.dp))
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha5),
@@ -66,7 +66,7 @@ private fun ImageUploadButton(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(96.dp))
+                .width(screenWidthDp(312.dp))
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .noRippleClickable { onImageClick() },
@@ -88,7 +88,7 @@ private fun ImageUploadButton(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus),
                         contentDescription = null,
-                        tint = ByeBooTheme.colors.primary300,
+                        tint = ByeBooTheme.colors.gray500,
                     )
                 }
             }

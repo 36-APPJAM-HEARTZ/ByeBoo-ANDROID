@@ -77,8 +77,8 @@ fun getTagColors(type: MiddleTagType): Triple<Color, Color, Color?> =
             )
         MiddleTagType.QUEST_ESSENTIAL ->
             Triple(
-                ByeBooTheme.colors.whiteAlpha5,
-                ByeBooTheme.colors.gray300,
+                ByeBooTheme.colors.secondary300Alpha10,
+                ByeBooTheme.colors.secondary300,
                 null,
             )
         MiddleTagType.QUEST_OPTIONAL ->
