@@ -276,7 +276,7 @@ class QuestBehaviorViewModel
             }
         }
 
-        fun onClickCompleteButton(context: Context) {
+        fun onCompleteClicked(context: Context) {
             if (uiState.value.isEditMode) {
                 if (uiState.value.selectedImageUri == null) {
                     uploadWithoutImageChange()
