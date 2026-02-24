@@ -94,6 +94,7 @@ fun MainNavHost(
             navigateToHome = { navigator.navigateToHome(questNavOptions) },
             navigateToQuestRecording = { questId -> navigator.navigateToQuestRecording(questId) },
             navigateToQuestBehavior = { questId -> navigator.navigateToQuestBehavior(questId) },
+            navigateToQuestCommon = { questId -> navigator.navigateToQuestCommon(questId)},
             navigateToQuestReview = { questId -> navigator.navigateToQuestReview(questId) },
             navigateToOffboardingCompletedGuide = {
                 navigator.navigateToOffboardingCompletedGuide(
@@ -131,6 +132,12 @@ fun MainNavHost(
                 navigator.navigateToQuestBehaviorComplete(
                     questId = questId,
                     navOptions = clearStackNavOptions,
+                )
+            },
+            navigateToQuestCommonComplete = { questId ->
+                navigator.navigateToQuestCommonComplete(
+                    questId = questId,
+                    navOptions = clearStackNavOptions
                 )
             },
             navigateUp = navigator::navigateUp,
