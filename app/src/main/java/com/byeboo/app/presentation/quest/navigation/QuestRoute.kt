@@ -25,3 +25,8 @@ data class QuestTip(
 data class QuestReview(
     val questId: Long,
 ) : Route
+
+@Serializable
+data class QuestCommonAnswer(
+    val answerId: Long,
+) : Route

@@ -133,6 +133,12 @@ fun MainNavHost(
                     navOptions = clearStackNavOptions,
                 )
             },
+            navigateToQuestCommonAnswer = { answerId ->
+                navigator.navigateToQuestCommonAnswer(
+                    answerId = answerId,
+                    navOptions = clearStackNavOptions
+                )
+            },
             navigateUp = navigator::navigateUp,
             paddingValues = paddingValues,
         )

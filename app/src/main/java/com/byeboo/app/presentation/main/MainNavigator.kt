@@ -27,6 +27,7 @@ import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBeha
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestStart
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
@@ -195,6 +196,13 @@ class MainNavigator(
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestBehaviorComplete(questId = questId, navOptions = navOptions)
+    }
+
+    fun navigateToQuestCommonAnswer(
+        answerId: Long,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestCommonAnswer(answerId = answerId, navOptions = navOptions)
     }
 
     fun navigateToQuestReview(

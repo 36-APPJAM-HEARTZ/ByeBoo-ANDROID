@@ -38,6 +38,7 @@ fun QuestRoute(
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToCommonAnswer: (Long) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestViewModel = hiltViewModel(),
 ) {
@@ -84,6 +85,7 @@ fun QuestRoute(
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClicked,
+        onCommonAnswerClick = navigateToCommonAnswer,
         onDateChange = viewModel::onDateChange,
     )
 }
@@ -98,6 +100,7 @@ private fun QuestScreen(
     onTipClick: () -> Unit,
     onQuestStart: () -> Unit,
     onTabClick: (QuestTab) -> Unit,
+    onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
 ) {
     if (uiState.myJourneyState.showQuitModal) {
@@ -147,6 +150,7 @@ private fun QuestScreen(
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
+                    onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,
                 )
             }

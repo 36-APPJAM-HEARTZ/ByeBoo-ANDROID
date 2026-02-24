@@ -40,6 +40,7 @@ import java.time.LocalDate
 fun CommonJourneyScreen(
     state: CommonJourneyState,
     onDateChange: (LocalDate) -> Unit,
+    onAnswerClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -185,6 +186,7 @@ fun CommonJourneyScreen(
                 ) { answer ->
                     CommonAnswerItem(
                         answer = answer,
+                        onClick = { onAnswerClick(1) },
                         modifier =
                             Modifier
                                 .padding(horizontal = screenWidthDp(24.dp))

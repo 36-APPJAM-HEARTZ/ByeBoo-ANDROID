@@ -10,7 +10,8 @@ import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
-import com.byeboo.app.presentation.quest.review.QuestReviewRoute
+import com.byeboo.app.presentation.quest.review.common.CommonAnswerRoute
+import com.byeboo.app.presentation.quest.review.my.QuestReviewRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
@@ -40,6 +41,13 @@ fun NavController.navigateToQuestReview(
     navigate(QuestReview(questId), navOptions)
 }
 
+fun NavController.navigateToQuestCommonAnswer(
+    answerId: Long,
+    navOptions: NavOptions? = null,
+) {
+    navigate(QuestCommonAnswer(answerId), navOptions)
+}
+
 fun NavGraphBuilder.questGraph(
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
@@ -53,6 +61,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
+    navigateToQuestCommonAnswer: (Long) -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -70,6 +79,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
                 navigateToQuestReview = navigateToQuestReview,
+                navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 paddingValues = paddingValues,
             )
         }
@@ -87,6 +97,12 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
                 paddingValues = paddingValues,
+            )
+        }
+
+        composable<QuestCommonAnswer> {
+            CommonAnswerRoute(
+                paddingValues = paddingValues
             )
         }
 
