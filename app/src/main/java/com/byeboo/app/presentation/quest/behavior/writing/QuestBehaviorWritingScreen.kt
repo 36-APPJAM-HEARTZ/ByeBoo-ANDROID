@@ -11,14 +11,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,16 +29,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
-import androidx.compose.ui.layout.findRootCoordinates
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -156,13 +151,15 @@ private fun QuestBehaviorWritingScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val isFocused = remember { mutableStateOf(false) }
     val displayImageUri: Uri? =
         uiState.selectedImageUri
             ?: uiState.imageUrl.takeIf { it.isNotBlank() }?.toUri()
 
     val scrollState = rememberScrollState()
+
+    val density = LocalDensity.current
+    val isImeVisible = WindowInsets.ime.getBottom(density) > 0
 
     Column(
         modifier =
@@ -179,9 +176,10 @@ private fun QuestBehaviorWritingScreen(
                     }
                 }
                 .addFocusCleaner(focusManager)
+                .imePadding()
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
                 )
     ) {
         QuestWritingTopBar(
@@ -235,17 +233,15 @@ private fun QuestBehaviorWritingScreen(
 
             Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
 
+            QuestWritingFooter(
+                currentCharCount = uiState.questAnswer.length,
+                isPhotoQuestion = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 14.dp)
+
+            )
         }
-
-        QuestWritingFooter(
-            currentCharCount = uiState.questAnswer.length,
-            isPhotoQuestion = true,
-            modifier = Modifier
-                .advancedImePadding()
-                .padding(bottom = 14.dp)
-
-        )
-
     }
 
     ByeBooBottomSheet(
@@ -292,15 +288,15 @@ private fun EssentialSection(
             )
         }
 
-            Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
+        Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
-            QuestPhotoPicker(
-                imageUrl = displayImageUri,
-                onImageClick = { url ->
-                    onUpdateSelectedImage(url)
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+        QuestPhotoPicker(
+            imageUrl = displayImageUri,
+            onImageClick = { url ->
+                onUpdateSelectedImage(url)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -349,19 +345,3 @@ private fun OptionalSection(
         )
     }
 }
-
-fun Modifier.advancedImePadding() = composed {
-    var consumePadding by remember { mutableStateOf(0) }
-    onGloballyPositioned { coordinates ->
-        consumePadding = (coordinates.findRootCoordinates().size.height -
-                (coordinates.positionInWindow().y + coordinates.size.height).toInt()).coerceAtLeast(
-            0
-        )
-    }
-        .consumeWindowInsets(
-            PaddingValues(bottom = with(LocalDensity.current) { consumePadding.toDp() })
-        )
-        .imePadding()
-}
-
-
