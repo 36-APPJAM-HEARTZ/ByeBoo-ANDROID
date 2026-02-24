@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review
+package com.byeboo.app.presentation.quest.review.my
 
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType

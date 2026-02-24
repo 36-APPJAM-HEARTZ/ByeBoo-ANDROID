@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review
+package com.byeboo.app.presentation.quest.review.my
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background

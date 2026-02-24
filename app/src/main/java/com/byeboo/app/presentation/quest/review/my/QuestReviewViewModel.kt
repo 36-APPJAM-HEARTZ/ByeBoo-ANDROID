@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review
+package com.byeboo.app.presentation.quest.review.my
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
