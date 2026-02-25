@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -152,19 +153,29 @@ private fun BlockedUsersHeader(
 }
 
 @Composable
-private fun BlockedUsersSection(
+private fun ColumnScope.BlockedUsersSection(
     userLists: ImmutableList<User>,
     onUnblockClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (userLists.isEmpty()) {
+        Spacer(modifier = Modifier.weight(0.34f))
+
         NoBlockedUser()
+
+        Spacer(modifier = Modifier.weight(0.66f))
+
         return
     }
 
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = screenWidthDp(24.dp), top = screenHeightDp(12.dp), end = screenWidthDp(24.dp)),
+        contentPadding =
+            PaddingValues(
+                start = screenWidthDp(24.dp),
+                top = screenHeightDp(12.dp),
+                end = screenWidthDp(24.dp),
+            ),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
     ) {
         items(
@@ -180,16 +191,21 @@ private fun BlockedUsersSection(
 }
 
 @Composable
-private fun NoBlockedUser() {
-    Spacer(modifier = Modifier.height(screenHeightDp(220.dp)))
-
-    Text(
-        text = "차단하신 사용자가 없어요",
-        color = ByeBooTheme.colors.gray400,
-        style = ByeBooTheme.typography.body6,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth(),
-    )
+private fun NoBlockedUser(modifier: Modifier = Modifier) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = "차단하신 사용자가 없어요",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body6,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }
 
 @Composable

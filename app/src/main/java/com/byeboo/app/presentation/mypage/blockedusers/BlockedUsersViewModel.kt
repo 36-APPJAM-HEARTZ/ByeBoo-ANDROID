@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.updateSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +29,15 @@ class BlockedUsersViewModel
         }
 
         private fun loadBlockedUsers() {
+            viewModelScope.launch {
+                _uiState.value =
+                    UiState.Success(
+                        BlockedUsersState(
+                            userLists = persistentListOf(), // 빈 리스트
+                            showBlockedModal = false,
+                        ),
+                    )
+            }
         }
 
         // TODO: 서버 연결할 때, userId 관련 코드 수정 예정

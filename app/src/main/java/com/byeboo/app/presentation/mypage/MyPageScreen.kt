@@ -498,6 +498,7 @@ private fun ByeBooUniverseSection(
             style = ByeBooTheme.typography.body2,
         )
     }
+
     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 }
 
@@ -507,10 +508,11 @@ private fun AskingSection(
     onServiceWithByeBooClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(36.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = screenHeightDp(36.dp), bottom = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -533,7 +535,6 @@ private fun AskingSection(
             modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -542,10 +543,11 @@ private fun NotificationSection(
     onAlarmToggleClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -585,7 +587,6 @@ private fun NotificationSection(
             }
         }
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -594,10 +595,11 @@ private fun CommunitySection(
     onInstagramClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -620,8 +622,6 @@ private fun CommunitySection(
             modifier = Modifier.clickable(onClick = onInstagramClick),
         )
     }
-
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -629,10 +629,11 @@ private fun SettingsSection(
     onBlockedUsersClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -648,8 +649,6 @@ private fun SettingsSection(
             modifier = Modifier.clickable(onClick = onBlockedUsersClick),
         )
     }
-
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -658,10 +657,11 @@ private fun TermsSection(
     onTermsOfServiceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -684,7 +684,6 @@ private fun TermsSection(
             modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -693,10 +692,11 @@ private fun AccountSection(
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
