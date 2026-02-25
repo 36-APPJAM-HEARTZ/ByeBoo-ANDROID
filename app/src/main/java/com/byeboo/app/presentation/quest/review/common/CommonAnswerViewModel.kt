@@ -1,14 +1,20 @@
 package com.byeboo.app.presentation.quest.review.common
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.presentation.quest.component.type.OptionType
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +23,9 @@ class CommonAnswerViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CommonAnswerState())
     val uiState: StateFlow<CommonAnswerState> = _uiState.asStateFlow()
+
+    private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
+    val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         loadCommonAnswer(1L)
@@ -33,5 +42,37 @@ class CommonAnswerViewModel @Inject constructor(
         )
 
         _uiState.update { it.copy(answer = dummyAnswer) }
+    }
+
+    fun onClickMoreOptions() {
+        _uiState.update { it.copy(showBottomSheet = true) }
+    }
+
+    fun onDismissBottomSheet() {
+        _uiState.update { it.copy(showBottomSheet = false) }
+    }
+
+    fun onOptionClick(option: OptionType) {
+        onDismissBottomSheet()
+
+        viewModelScope.launch {
+            when(option) {
+                OptionType.BLOCK -> {
+                    _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+                    _sideEffect.emit(CommonAnswerSideEffect.ShowSnackBar(
+                        message = "차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요.",
+                        iconType = CustomSnackBarType.SUCCESS)
+                    )
+                }
+
+                OptionType.REPORT -> {
+                    _sideEffect.emit(CommonAnswerSideEffect.ShowSnackBar(
+                        message = "신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요.",
+                        iconType = CustomSnackBarType.SUCCESS)
+                    )
+                }
+                else -> {}
+            }
+        }
     }
 }

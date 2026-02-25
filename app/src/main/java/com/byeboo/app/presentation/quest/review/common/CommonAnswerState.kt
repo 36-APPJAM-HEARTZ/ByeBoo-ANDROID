@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.quest.review.common
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
-
 
 data class CommonAnswerState(
     val answer: CommonAnswerModel = CommonAnswerModel(
@@ -10,5 +10,16 @@ data class CommonAnswerState(
         profileIconRes = -1,
         displayTime = "2026.01.30",
         content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝났다는 걸 깨달았을 때... 그때가 제일 힘들었던 것 같아요."
-    )
+    ),
+
+    val showBottomSheet: Boolean = false,
 )
+
+sealed interface CommonAnswerSideEffect {
+    data class ShowSnackBar(
+        val message: String,
+        val iconType: CustomSnackBarType
+    ) : CommonAnswerSideEffect
+
+    data object NavigateToQuest : CommonAnswerSideEffect
+}
