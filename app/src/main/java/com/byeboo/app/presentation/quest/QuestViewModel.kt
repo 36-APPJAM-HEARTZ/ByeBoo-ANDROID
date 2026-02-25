@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
@@ -172,7 +173,10 @@ class QuestViewModel
                         }
                     }.onFailure { t ->
                         _sideEffect.emit(
-                            QuestSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestSideEffect.ShowSnackBar(
+                                message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                iconType = CustomSnackBarType.ALERT
+                            ),
                         )
                     }
             }

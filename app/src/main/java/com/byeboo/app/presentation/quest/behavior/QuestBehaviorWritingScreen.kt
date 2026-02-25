@@ -95,7 +95,7 @@ fun QuestBehaviorWritingRoute(
                         effect.questId,
                     )
                 is QuestBehaviorSideEffect.NavigateUp -> navigateUp()
-                is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestBehaviorSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }

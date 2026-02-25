@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.review.my
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
@@ -35,5 +36,6 @@ sealed interface QuestReviewSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : QuestReviewSideEffect
 }

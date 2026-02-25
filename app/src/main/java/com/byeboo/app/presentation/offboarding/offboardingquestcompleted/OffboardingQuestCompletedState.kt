@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestcompleted
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.offboarding.model.QuestCompletedGroup
 import com.byeboo.app.presentation.quest.model.Quest
@@ -24,5 +25,6 @@ sealed interface QuestCompletedSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : QuestCompletedSideEffect
 }

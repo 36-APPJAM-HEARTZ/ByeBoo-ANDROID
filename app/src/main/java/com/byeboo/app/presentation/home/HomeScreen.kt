@@ -96,7 +96,7 @@ fun HomeRoute(
                 is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
                 is HomeSideEffect.ShowSnackBar -> {
-                    showSnackBar(effect.message)
+                    showSnackBar(effect.message, effect.iconType)
                 }
             }
         }

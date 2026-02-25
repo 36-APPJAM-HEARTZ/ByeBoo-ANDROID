@@ -141,7 +141,7 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
-                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }

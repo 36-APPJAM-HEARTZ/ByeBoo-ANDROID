@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.behavior
 
 import android.net.Uri
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestWritingState
@@ -59,5 +60,6 @@ sealed interface QuestBehaviorSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : QuestBehaviorSideEffect
 }

@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
@@ -27,5 +28,6 @@ sealed interface OffboardingJourneySideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : OffboardingJourneySideEffect
 }

@@ -51,10 +51,10 @@ fun QuestTipRoute(
     val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is QuestTipSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
+                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }

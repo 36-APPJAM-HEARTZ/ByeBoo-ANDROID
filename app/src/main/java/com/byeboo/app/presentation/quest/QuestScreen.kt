@@ -71,7 +71,7 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.ShowSnackBar ->
-                    showSnackBar(effect.message)
+                    showSnackBar(effect.message, effect.iconType)
             }
         }
     }

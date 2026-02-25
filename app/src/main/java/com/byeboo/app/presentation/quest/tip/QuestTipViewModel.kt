@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.state.UiState
 import com.byeboo.app.domain.repository.quest.QuestTipRepository
 import com.byeboo.app.presentation.quest.model.Quest
@@ -89,7 +90,10 @@ class QuestTipViewModel
                         }
 
                         _sideEffect.emit(
-                            QuestTipSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestTipSideEffect.ShowSnackBar(
+                                message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                iconType = CustomSnackBarType.ALERT
+                            ),
                         )
                     }
             }

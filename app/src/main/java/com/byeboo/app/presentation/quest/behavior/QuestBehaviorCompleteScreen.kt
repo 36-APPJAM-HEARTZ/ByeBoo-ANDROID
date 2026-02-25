@@ -82,7 +82,7 @@ fun QuestBehaviorCompleteRoute(
                         inAppReview(activity)
                     }
                 }
-                is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }

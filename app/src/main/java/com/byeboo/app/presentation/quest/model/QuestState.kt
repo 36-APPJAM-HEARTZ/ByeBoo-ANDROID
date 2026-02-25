@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.model
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 
 sealed class QuestState {
@@ -34,6 +35,7 @@ sealed interface QuestSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : QuestSideEffect
 }
 

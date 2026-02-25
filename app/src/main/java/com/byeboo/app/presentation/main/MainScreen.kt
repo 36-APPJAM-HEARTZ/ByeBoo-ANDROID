@@ -22,7 +22,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.navOptions
 import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.snackbar.CustomSnackBar
+import com.byeboo.app.core.designsystem.component.snackbar.CustomSnackBarVisuals
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -46,12 +48,17 @@ fun MainScreen(
     val status by viewModel.journeyStatus.collectAsStateWithLifecycle()
     val isMoveToQuestHome by viewModel.questHomeNavigation.collectAsStateWithLifecycle()
 
-    val onShowSnackBar: (String) -> Unit = { message ->
+    val onShowSnackBar: (String, CustomSnackBarType) -> Unit = { message, type ->
         scope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
             val job =
                 launch {
-                    snackBarHostState.showSnackbar(message)
+                    snackBarHostState.showSnackbar(
+                        CustomSnackBarVisuals(
+                        message = message,
+                        type = type
+                        )
+                    )
                 }
             delay(3000L)
             job.cancel()
@@ -130,7 +137,9 @@ fun MainScreen(
                             .padding(horizontal = screenWidthDp(24.dp))
                             .padding(bottom = snackBarBottomInset),
                 ) { snackBar ->
-                    CustomSnackBar(message = snackBar.visuals.message)
+                    val customVisuals = snackBar.visuals as? CustomSnackBarVisuals
+                    val iconType = customVisuals?.type ?: CustomSnackBarType.ALERT
+                    CustomSnackBar(message = snackBar.visuals.message, iconType = iconType)
                 }
             },
             bottomBar = {

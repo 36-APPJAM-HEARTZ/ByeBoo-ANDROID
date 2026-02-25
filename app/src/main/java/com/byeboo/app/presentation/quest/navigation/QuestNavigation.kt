@@ -102,6 +102,7 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestCommonAnswer> {
             CommonAnswerRoute(
+                navigateToQuest = navigateToQuest,
                 paddingValues = paddingValues
             )
         }

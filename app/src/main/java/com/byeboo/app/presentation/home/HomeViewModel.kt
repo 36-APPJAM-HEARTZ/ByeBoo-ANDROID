@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.home.HomeStatus
@@ -78,7 +79,10 @@ class HomeViewModel
                         if (!errorMessage.contains("HTTP 404")) {
                             hasError = true
                             _sideEffect.emit(
-                                HomeSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                                HomeSideEffect.ShowSnackBar(
+                                    message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                    iconType = CustomSnackBarType.ALERT
+                                ),
                             )
                         }
                     }

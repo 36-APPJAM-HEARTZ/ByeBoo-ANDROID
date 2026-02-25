@@ -71,8 +71,8 @@ fun SplashRoute(
         )
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is SplashStateSideEffect.ShowLoginButton -> {
                     showLoginButton = true
                 }
@@ -102,7 +102,7 @@ fun SplashRoute(
                     }
                 }
 
-                is SplashStateSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
+                is SplashStateSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }

@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.LoginType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.notification.FcmTokenModel
@@ -129,7 +130,8 @@ class SplashViewModel
                                 mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                                 _sideEffect.emit(
                                     SplashStateSideEffect.ShowSnackBar(
-                                        "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                        message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                        iconType = CustomSnackBarType.ALERT
                                     ),
                                 )
                             }

@@ -1,5 +1,8 @@
 package com.byeboo.app.presentation.mypage
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.presentation.quest.util.ProfileIconType
+
 data class MyPageState(
     val nickname: String = "",
     val isAlarmEnabled: Boolean? = null,
@@ -33,5 +36,6 @@ sealed interface MyPageSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : MyPageSideEffect
 }

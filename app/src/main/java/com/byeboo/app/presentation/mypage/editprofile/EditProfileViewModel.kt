@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -75,7 +76,9 @@ class EditProfileViewModel
                         _sideEffect.emit(EditProfileSideEffect.NavigateToMyPage(nickname))
                     }.onFailure {
                         _sideEffect.emit(
-                            EditProfileSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            EditProfileSideEffect.ShowSnackBar(
+                                message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                iconType = CustomSnackBarType.ALERT),
                         )
                     }
             }

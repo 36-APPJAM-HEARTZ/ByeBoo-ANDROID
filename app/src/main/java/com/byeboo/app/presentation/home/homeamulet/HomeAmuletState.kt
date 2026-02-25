@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.home.homeamulet
 
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 
 data class HomeAmuletState(
     val journey: AmuletType = AmuletType.EMOTION_FACE,
@@ -13,6 +14,7 @@ sealed interface HomeAmuletSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : HomeAmuletSideEffect
 }
 

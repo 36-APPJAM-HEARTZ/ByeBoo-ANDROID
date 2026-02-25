@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.mypage.editprofile
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 
 data class EditProfileState(
@@ -16,5 +17,6 @@ sealed interface EditProfileSideEffect {
 
     data class ShowSnackBar(
         val message: String,
+        val iconType: CustomSnackBarType
     ) : EditProfileSideEffect
 }
