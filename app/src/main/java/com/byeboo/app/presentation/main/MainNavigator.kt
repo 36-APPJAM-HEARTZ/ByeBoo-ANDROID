@@ -15,6 +15,7 @@ import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.navigateToHome
 import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
+import com.byeboo.app.presentation.mypage.navigation.navigateToBlockedUsers
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
@@ -210,6 +211,10 @@ class MainNavigator(
 
     fun navigateToEditProfile(navOptions: NavOptions) {
         navController.navigateToEditProfile(navOptions)
+    }
+
+    fun navigateToBlockedUsers(navOptions: NavOptions) {
+        navController.navigateToBlockedUsers(navOptions)
     }
 
     fun navigateToTutorial(navOptions: NavOptions) {

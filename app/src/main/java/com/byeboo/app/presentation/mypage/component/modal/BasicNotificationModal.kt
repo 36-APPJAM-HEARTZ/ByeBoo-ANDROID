@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.mypage.component
+package com.byeboo.app.presentation.mypage.component.modal
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
