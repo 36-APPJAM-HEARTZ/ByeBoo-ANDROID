@@ -183,7 +183,6 @@ fun MyPageRoute(
     if (uiState.showLogoutModal) {
         LogoutModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
             onLogoutClick = viewModel::confirmLogout,
             modifier =

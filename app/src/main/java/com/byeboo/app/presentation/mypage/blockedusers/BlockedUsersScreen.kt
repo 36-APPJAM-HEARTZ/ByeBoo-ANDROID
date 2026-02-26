@@ -55,7 +55,7 @@ fun BlockedUsersRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is BlockedUsersSideEffect.NavigateUp -> navigateUp()
-                is BlockedUsersSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is BlockedUsersSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
         }
     }
