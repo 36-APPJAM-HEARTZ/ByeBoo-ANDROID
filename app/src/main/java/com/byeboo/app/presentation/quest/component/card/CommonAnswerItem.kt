@@ -75,12 +75,14 @@ fun CommonAnswerItem(
             overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        if (!isExpanded) {
+            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        Text(
-            text = answer.displayTime,
-            style = ByeBooTheme.typography.cap2,
-            color = ByeBooTheme.colors.gray400,
-        )
+            Text(
+                text = answer.displayTime,
+                style = ByeBooTheme.typography.cap2,
+                color = ByeBooTheme.colors.gray400,
+            )
+        }
     }
 }
