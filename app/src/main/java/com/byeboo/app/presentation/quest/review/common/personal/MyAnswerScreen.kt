@@ -41,8 +41,8 @@ fun MyAnswerRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collectLatest {effect ->
-            when(effect) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
                 is MyAnswerSideEffect.NavigateToQuestMyAnswerDetail ->
                     navigateToQuestMyAnswerDetail(effect.answerId)
             }
@@ -52,7 +52,7 @@ fun MyAnswerRoute(
     MyAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
-        onMyAnswerContentClick = viewModel::onMyAnswerContentClick
+        onMyAnswerContentClick = viewModel::onMyAnswerContentClick,
     )
 }
 
@@ -61,17 +61,18 @@ fun MyAnswerScreen(
     uiState: MyAnswerState,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.background)
-            .padding(horizontal = 24.dp)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.background)
+                .padding(horizontal = 24.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
@@ -84,22 +85,24 @@ fun MyAnswerScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                     contentDescription = null,
                     tint = ByeBooTheme.colors.gray50,
-                    modifier = Modifier.noRippleClickable(
-                        //Todo: 뒤로가기
-                    )
+                    modifier =
+                        Modifier.noRippleClickable(
+                            // Todo: 뒤로가기
+                        ),
                 )
 
                 Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
 
                 Text(
-                    text = buildAnnotatedString {
-                        append("하츠핑하츠님의")
-                        append("\n")
-                        append("공통퀘스트 답변이에요")
-                    },
+                    text =
+                        buildAnnotatedString {
+                            append("하츠핑하츠님의")
+                            append("\n")
+                            append("공통퀘스트 답변이에요")
+                        },
                     color = ByeBooTheme.colors.gray50,
                     style = ByeBooTheme.typography.head2,
-                    modifier = Modifier.padding(vertical = screenHeightDp(10.dp))
+                    modifier = Modifier.padding(vertical = screenHeightDp(10.dp)),
                 )
             }
 
@@ -109,7 +112,7 @@ fun MyAnswerScreen(
                         modifier =
                             Modifier
                                 .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = "아직 작성한 답변이 없어요!",
@@ -126,7 +129,7 @@ fun MyAnswerScreen(
                 ) { answer ->
                     MyAnswerItem(
                         answer = answer,
-                        onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) }
+                        onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) },
                     )
                 }
             }

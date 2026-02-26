@@ -24,38 +24,37 @@ import com.byeboo.app.presentation.quest.model.MyAnswerModel
 fun MyAnswerItem(
     answer: MyAnswerModel,
     modifier: Modifier = Modifier,
-    onMyAnswerContentClick: (Long) -> Unit = {}
+    onMyAnswerContentClick: (Long) -> Unit = {},
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .noRippleClickable {
-                onMyAnswerContentClick(answer.answerId)
-            }
-            .background(
-                color = ByeBooTheme.colors.whiteAlpha5,
-                shape = RoundedCornerShape(12.dp),
-            )
-            .padding(
-                horizontal = screenWidthDp(24.dp),
-                vertical = screenHeightDp(16.dp),
-            )
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .noRippleClickable {
+                    onMyAnswerContentClick(answer.answerId)
+                }.background(
+                    color = ByeBooTheme.colors.whiteAlpha5,
+                    shape = RoundedCornerShape(12.dp),
+                ).padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(16.dp),
+                ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                    text = "Q.",
-                    color = ByeBooTheme.colors.primary200,
-                    style = ByeBooTheme.typography.sub2,
-                    modifier = Modifier.padding(end = screenWidthDp(4.dp)),
-                )
+                text = "Q.",
+                color = ByeBooTheme.colors.primary200,
+                style = ByeBooTheme.typography.sub2,
+                modifier = Modifier.padding(end = screenWidthDp(4.dp)),
+            )
 
             Text(
-                    text = answer.question,
-                    color = ByeBooTheme.colors.gray100,
-                    style = ByeBooTheme.typography.sub3,
-                )
+                text = answer.question,
+                color = ByeBooTheme.colors.gray100,
+                style = ByeBooTheme.typography.sub3,
+            )
         }
 
         Spacer(modifier = Modifier.padding(screenHeightDp(12.dp)))
@@ -65,7 +64,7 @@ fun MyAnswerItem(
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.body3,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))

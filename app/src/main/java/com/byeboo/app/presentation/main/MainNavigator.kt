@@ -208,15 +208,13 @@ class MainNavigator(
         navController.navigateToQuestCommonAnswer(answerId = answerId, navOptions = navOptions)
     }
 
-    fun navigateToQuestMyAnswers(
-        navOptions: NavOptions? = null
-    ) {
+    fun navigateToQuestMyAnswers(navOptions: NavOptions? = null) {
         navController.navigateToQuestMyAnswers(navOptions = navOptions)
     }
 
     fun navigateToQuestMyAnswerDetail(
         answerId: Long,
-        navOptions: NavOptions? = null
+        navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
     }

@@ -33,6 +33,6 @@ sealed interface HomeSideEffect {
 
     data class ShowSnackBar(
         val message: String,
-        val iconType: CustomSnackBarType
+        val iconType: CustomSnackBarType,
     ) : HomeSideEffect
 }

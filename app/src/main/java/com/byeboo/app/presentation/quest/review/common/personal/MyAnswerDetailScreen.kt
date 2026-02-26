@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
@@ -37,7 +36,7 @@ import com.byeboo.app.presentation.quest.component.type.OptionType
 fun MyAnswerDetailRoute(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: MyAnswerViewModel = hiltViewModel()
+    viewModel: MyAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -47,7 +46,7 @@ fun MyAnswerDetailRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClick(option) },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -59,33 +58,34 @@ private fun MyAnswerDetailScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (OptionType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
     val answerState = uiState.answers.first()
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.background)
-            .verticalScroll(scrollState)
-            .padding(horizontal = 24.dp)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.background)
+                .verticalScroll(scrollState)
+                .padding(horizontal = 24.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         MyAnswerDetailTopBar(
             onClickMoreOptions = onClickMoreOptions,
-            modifier = modifier
+            modifier = modifier,
         )
 
-        //Todo: QuestWritingTitle 컴포넌트로 교체
+        // Todo: QuestWritingTitle 컴포넌트로 교체
         QuestTitle(
             stepNumber = 2,
             questNumber = 10,
             createdAt = answerState.writtenAt,
-            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?"
+            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
         )
 
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(10.dp)))
@@ -100,27 +100,29 @@ private fun MyAnswerDetailScreen(
         bottomOption = OptionType.DELETE,
         onOptionClick = onOptionClick,
         showBottomSheet = uiState.showBottomSheet,
-        onDismissRequest = onDismissBottomSheet
+        onDismissRequest = onDismissBottomSheet,
     )
 }
 
 @Composable
 private fun MyAnswerDetailTopBar(
     onClickMoreOptions: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
             tint = ByeBooTheme.colors.gray50,
-            modifier = Modifier.noRippleClickable(
-                //Todo: 뒤로가기
-            )
+            modifier =
+                Modifier.noRippleClickable(
+                    // Todo: 뒤로가기
+                ),
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -129,9 +131,10 @@ private fun MyAnswerDetailTopBar(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_overflow_menu),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier.noRippleClickable(
-                onClick = onClickMoreOptions
-            )
+            modifier =
+                Modifier.noRippleClickable(
+                    onClick = onClickMoreOptions,
+                ),
         )
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
     }
@@ -140,7 +143,7 @@ private fun MyAnswerDetailTopBar(
 @Composable
 private fun MyAnswerContent(
     content: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
@@ -152,12 +155,12 @@ private fun MyAnswerContent(
                 ).padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(18.dp),
-                )
+                ),
     ) {
         Text(
             text = content,
             color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.body3
+            style = ByeBooTheme.typography.body3,
         )
     }
 }

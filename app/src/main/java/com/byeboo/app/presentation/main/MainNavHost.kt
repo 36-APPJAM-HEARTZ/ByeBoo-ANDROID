@@ -136,7 +136,7 @@ fun MainNavHost(
             navigateToQuestCommonAnswer = { answerId ->
                 navigator.navigateToQuestCommonAnswer(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions
+                    navOptions = clearStackNavOptions,
                 )
             },
             navigateToQuestMyAnswers = {
@@ -145,9 +145,8 @@ fun MainNavHost(
             navigateToQuestMyAnswerDetail = { answerId ->
                 navigator.navigateToQuestMyAnswerDetail(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions
+                    navOptions = clearStackNavOptions,
                 )
-
             },
             navigateUp = navigator::navigateUp,
             paddingValues = paddingValues,

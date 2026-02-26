@@ -4,7 +4,6 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.QuestStyle
-import com.byeboo.app.presentation.quest.component.type.OptionType
 
 data class UserInfoState(
     val nickname: String = "",

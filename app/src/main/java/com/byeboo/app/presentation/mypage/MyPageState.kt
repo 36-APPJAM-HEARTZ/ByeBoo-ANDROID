@@ -1,9 +1,7 @@
 package com.byeboo.app.presentation.mypage
 
-import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.presentation.quest.util.ProfileIconType
-
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 
 @Immutable
 data class MyPageState(
@@ -41,6 +39,6 @@ sealed interface MyPageSideEffect {
 
     data class ShowSnackBar(
         val message: String,
-        val iconType: CustomSnackBarType
+        val iconType: CustomSnackBarType,
     ) : MyPageSideEffect
 }

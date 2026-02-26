@@ -14,7 +14,7 @@ sealed interface HomeAmuletSideEffect {
 
     data class ShowSnackBar(
         val message: String,
-        val iconType: CustomSnackBarType
+        val iconType: CustomSnackBarType,
     ) : HomeAmuletSideEffect
 }
 

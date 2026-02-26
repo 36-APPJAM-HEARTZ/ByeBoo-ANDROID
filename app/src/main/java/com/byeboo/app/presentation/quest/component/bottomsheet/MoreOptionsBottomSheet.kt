@@ -37,9 +37,9 @@ fun MoreOptionsBottomSheet(
     modifier: Modifier = Modifier,
     showBottomSheet: Boolean = false,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-    isBackgroundDimmed: Boolean = true
+    isBackgroundDimmed: Boolean = true,
 ) {
-    val scrimColor = if (isBackgroundDimmed) ByeBooTheme.colors.blackAlpha80  else Color.Transparent
+    val scrimColor = if (isBackgroundDimmed) ByeBooTheme.colors.blackAlpha80 else Color.Transparent
 
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -48,27 +48,29 @@ fun MoreOptionsBottomSheet(
             sheetState = sheetState,
             containerColor = ByeBooTheme.colors.gray900,
             scrimColor = scrimColor,
-            dragHandle = null
+            dragHandle = null,
         ) {
             Column(
-               modifier = modifier
-                   .fillMaxWidth()
-                   .padding(horizontal = screenWidthDp(24.dp)),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ByeBooDragHandle()
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .noRippleClickable { onOptionClick(topOption) }
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .noRippleClickable { onOptionClick(topOption) },
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(topOption.optionIcon),
                         contentDescription = null,
-                        tint = ByeBooTheme.colors.white
+                        tint = ByeBooTheme.colors.white,
                     )
 
                     Spacer(modifier = Modifier.padding(end = screenWidthDp(12.dp)))
@@ -76,28 +78,29 @@ fun MoreOptionsBottomSheet(
                     Text(
                         text = topOption.optionTitle,
                         style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.white
-
+                        color = ByeBooTheme.colors.white,
                     )
                 }
 
                 HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 20.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp),
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.gray800,
                 )
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .noRippleClickable { onOptionClick(bottomOption) }
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .noRippleClickable { onOptionClick(bottomOption) },
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(bottomOption.optionIcon),
                         contentDescription = null,
-                        tint = ByeBooTheme.colors.error300
+                        tint = ByeBooTheme.colors.error300,
                     )
 
                     Spacer(modifier = Modifier.padding(end = screenWidthDp(12.dp)))
@@ -105,7 +108,7 @@ fun MoreOptionsBottomSheet(
                     Text(
                         text = bottomOption.optionTitle,
                         style = ByeBooTheme.typography.body3,
-                        color = ByeBooTheme.colors.error300
+                        color = ByeBooTheme.colors.error300,
                     )
                 }
 
@@ -117,7 +120,7 @@ fun MoreOptionsBottomSheet(
                     buttonTextColor = ByeBooTheme.colors.gray300,
                     buttonBackgroundColor = ByeBooTheme.colors.whiteAlpha5,
                     onClick = onDismissRequest,
-                    modifier = Modifier.padding(bottom = screenHeightDp(10.dp))
+                    modifier = Modifier.padding(bottom = screenHeightDp(10.dp)),
                 )
             }
         }

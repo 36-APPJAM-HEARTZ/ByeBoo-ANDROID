@@ -30,16 +30,15 @@ fun CommonAnswerItem(
     answer: CommonAnswerModel,
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxWidth()
                 .noRippleClickable(
-                    onClick = onClick
-                )
-                .background(
+                    onClick = onClick,
+                ).background(
                     color = ByeBooTheme.colors.whiteAlpha5,
                     shape = RoundedCornerShape(12.dp),
                 ).padding(

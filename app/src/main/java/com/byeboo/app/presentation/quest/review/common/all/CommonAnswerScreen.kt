@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
-import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
@@ -41,13 +40,12 @@ fun CommonAnswerRoute(
     modifier: Modifier = Modifier,
     viewModel: CommonAnswerViewModel = hiltViewModel(),
 ) {
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
-            when(effect) {
+            when (effect) {
                 is CommonAnswerSideEffect.NavigateToQuest -> navigateToQuest()
                 is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
             }
@@ -60,7 +58,7 @@ fun CommonAnswerRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClick(option) },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -72,38 +70,39 @@ private fun CommonAnswerScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (OptionType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.background)
-            .verticalScroll(scrollState)
-            .padding(horizontal = 24.dp)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding(),
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.background)
+                .verticalScroll(scrollState)
+                .padding(horizontal = 24.dp)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
     ) {
         CommonAnswerTopBar(
             onClickMoreOptions = onClickMoreOptions,
-            modifier = modifier
+            modifier = modifier,
         )
 
         QuestTitle(
             stepNumber = 2,
             questNumber = 10,
             createdAt = "2025-06-01",
-            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?"
+            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
         )
 
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(10.dp)))
 
         CommonAnswerItem(
             answer = uiState.answer,
-            isExpanded = true
+            isExpanded = true,
         )
     }
 
@@ -112,25 +111,25 @@ private fun CommonAnswerScreen(
         bottomOption = OptionType.REPORT,
         onOptionClick = onOptionClick,
         showBottomSheet = uiState.showBottomSheet,
-        onDismissRequest = onDismissBottomSheet
+        onDismissRequest = onDismissBottomSheet,
     )
-
 }
 
 @Composable
 private fun CommonAnswerTopBar(
     onClickMoreOptions: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
             contentDescription = null,
-            tint = ByeBooTheme.colors.gray50
+            tint = ByeBooTheme.colors.gray50,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -139,13 +138,12 @@ private fun CommonAnswerTopBar(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_overflow_menu),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier.noRippleClickable(
-                onClick = onClickMoreOptions
-            )
+            modifier =
+                Modifier.noRippleClickable(
+                    onClick = onClickMoreOptions,
+                ),
         )
 
         Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
     }
 }
-
-

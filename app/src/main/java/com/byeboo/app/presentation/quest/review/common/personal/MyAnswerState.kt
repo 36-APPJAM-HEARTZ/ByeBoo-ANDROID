@@ -7,7 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class MyAnswerState(
     val answers: ImmutableList<MyAnswerModel> = persistentListOf(),
     val showBottomSheet: Boolean = false,
-    )
+)
 
 sealed interface MyAnswerSideEffect {
     data class NavigateToQuestMyAnswerDetail(

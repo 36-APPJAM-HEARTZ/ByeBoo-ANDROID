@@ -175,7 +175,7 @@ class QuestViewModel
                         _sideEffect.emit(
                             QuestSideEffect.ShowSnackBar(
                                 message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                                iconType = CustomSnackBarType.ALERT
+                                iconType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -287,11 +287,11 @@ class QuestViewModel
             }
         }
 
-    fun onMyAnswersClick() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
+        fun onMyAnswersClick() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
+            }
         }
-    }
 
         private suspend fun handleCompletedQuestClick(quest: Quest) {
             mixpanelUtil.trackEvent(

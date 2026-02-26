@@ -36,5 +36,5 @@ data object QuestMyAnswers : Route
 
 @Serializable
 data class QuestMyAnswersDetail(
-    val answerId: Long
+    val answerId: Long,
 ) : Route

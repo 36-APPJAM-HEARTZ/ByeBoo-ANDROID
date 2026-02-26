@@ -50,9 +50,7 @@ fun NavController.navigateToQuestCommonAnswer(
     navigate(QuestCommonAnswer(answerId), navOptions)
 }
 
-fun NavController.navigateToQuestMyAnswers(
-    navOptions: NavOptions? = null,
-    ) {
+fun NavController.navigateToQuestMyAnswers(navOptions: NavOptions? = null) {
     navigate(QuestMyAnswers, navOptions)
 }
 
@@ -121,20 +119,20 @@ fun NavGraphBuilder.questGraph(
         composable<QuestCommonAnswer> {
             CommonAnswerRoute(
                 navigateToQuest = navigateToQuest,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
         composable<QuestMyAnswers> {
             MyAnswerRoute(
                 navigateToQuestMyAnswerDetail = navigateToQuestMyAnswerDetail,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 
         composable<QuestMyAnswersDetail> {
             MyAnswerDetailRoute(
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
             )
         }
 

@@ -55,9 +55,9 @@ fun MainScreen(
                 launch {
                     snackBarHostState.showSnackbar(
                         CustomSnackBarVisuals(
-                        message = message,
-                        type = type
-                        )
+                            message = message,
+                            type = type,
+                        ),
                     )
                 }
             delay(3000L)

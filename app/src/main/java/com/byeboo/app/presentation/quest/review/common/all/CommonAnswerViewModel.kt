@@ -18,61 +18,66 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CommonAnswerViewModel @Inject constructor(
+class CommonAnswerViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _uiState = MutableStateFlow(CommonAnswerState())
+        val uiState: StateFlow<CommonAnswerState> = _uiState.asStateFlow()
 
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(CommonAnswerState())
-    val uiState: StateFlow<CommonAnswerState> = _uiState.asStateFlow()
+        private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
+        val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
-    val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
+        init {
+            loadCommonAnswer(1L)
+        }
 
-    init {
-        loadCommonAnswer(1L)
-    }
+        // Todo : 더미데이터 변경
+        private fun loadCommonAnswer(answerId: Long) {
+            val dummyAnswer =
+                CommonAnswerModel(
+                    answerId = answerId,
+                    writer = "장원영",
+                    profileIconRes = R.drawable.ic_profile_sadness,
+                    displayTime = "2026. 01. 30.",
+                    content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝났다는 걸 깨달았을 때... 그때가 제일 힘들었던 것 같아요.",
+                )
 
-    // Todo : 더미데이터 변경
-    private fun loadCommonAnswer(answerId: Long) {
-        val dummyAnswer = CommonAnswerModel(
-            answerId = answerId,
-            writer = "장원영",
-            profileIconRes = R.drawable.ic_profile_sadness,
-            displayTime = "2026. 01. 30.",
-            content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝났다는 걸 깨달았을 때... 그때가 제일 힘들었던 것 같아요."
-        )
+            _uiState.update { it.copy(answer = dummyAnswer) }
+        }
 
-        _uiState.update { it.copy(answer = dummyAnswer) }
-    }
+        fun onClickMoreOptions() {
+            _uiState.update { it.copy(showBottomSheet = true) }
+        }
 
-    fun onClickMoreOptions() {
-        _uiState.update { it.copy(showBottomSheet = true) }
-    }
+        fun onDismissBottomSheet() {
+            _uiState.update { it.copy(showBottomSheet = false) }
+        }
 
-    fun onDismissBottomSheet() {
-        _uiState.update { it.copy(showBottomSheet = false) }
-    }
+        fun onOptionClick(option: OptionType) {
+            onDismissBottomSheet()
 
-    fun onOptionClick(option: OptionType) {
-        onDismissBottomSheet()
+            viewModelScope.launch {
+                when (option) {
+                    OptionType.BLOCK -> {
+                        _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.ShowSnackBar(
+                                message = "차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요.",
+                                iconType = CustomSnackBarType.SUCCESS,
+                            ),
+                        )
+                    }
 
-        viewModelScope.launch {
-            when(option) {
-                OptionType.BLOCK -> {
-                    _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
-                    _sideEffect.emit(CommonAnswerSideEffect.ShowSnackBar(
-                        message = "차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요.",
-                        iconType = CustomSnackBarType.SUCCESS)
-                    )
+                    OptionType.REPORT -> {
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.ShowSnackBar(
+                                message = "신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요.",
+                                iconType = CustomSnackBarType.SUCCESS,
+                            ),
+                        )
+                    }
+                    else -> {}
                 }
-
-                OptionType.REPORT -> {
-                    _sideEffect.emit(CommonAnswerSideEffect.ShowSnackBar(
-                        message = "신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요.",
-                        iconType = CustomSnackBarType.SUCCESS)
-                    )
-                }
-                else -> {}
             }
         }
     }
-}

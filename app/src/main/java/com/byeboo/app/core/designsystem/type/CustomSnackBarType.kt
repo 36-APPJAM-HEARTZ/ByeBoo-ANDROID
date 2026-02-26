@@ -4,13 +4,13 @@ import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 
 enum class CustomSnackBarType(
-    @DrawableRes val icon: Int
+    @DrawableRes val icon: Int,
 ) {
     ALERT(
-        icon = R.drawable.ic_alert
+        icon = R.drawable.ic_alert,
     ),
 
     SUCCESS(
-        icon = R.drawable.ic_success
-    )
+        icon = R.drawable.ic_success,
+    ),
 }
