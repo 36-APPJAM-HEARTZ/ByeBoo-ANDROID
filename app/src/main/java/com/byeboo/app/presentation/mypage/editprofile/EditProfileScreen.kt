@@ -1,9 +1,9 @@
 package com.byeboo.app.presentation.mypage.editprofile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -109,7 +110,7 @@ private fun EditProfileScreen(
                         ),
                 ),
     ) {
-        Row(
+        Box(
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -129,7 +130,7 @@ private fun EditProfileScreen(
                 style = ByeBooTheme.typography.sub1,
                 color = ByeBooTheme.colors.white,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.align(Alignment.Center),
             )
         }
 

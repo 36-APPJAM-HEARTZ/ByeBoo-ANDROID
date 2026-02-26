@@ -140,11 +140,21 @@ class MyPageViewModel
             }
         }
 
+        fun onBlockedUsersClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.NavigateToBlockedUsers)
+            }
+        }
+
         private fun emitOpenUrl(url: String) {
             viewModelScope.launch {
                 _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
             }
         }
+
+        fun onBreakupSupportChatClicked() = emitOpenUrl(BuildConfig.BYEBOO_SUPPORT_CHAT)
+
+        fun onInstagramClicked() = emitOpenUrl(BuildConfig.BYEBOO_INSTAGRAM)
 
         fun onAskingByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_ASKING)
 

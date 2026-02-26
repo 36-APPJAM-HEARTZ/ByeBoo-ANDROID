@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -112,7 +111,6 @@ fun QuestBehaviorWritingRoute(
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
