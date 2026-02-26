@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common
+package com.byeboo.app.presentation.quest.review.common.all
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
