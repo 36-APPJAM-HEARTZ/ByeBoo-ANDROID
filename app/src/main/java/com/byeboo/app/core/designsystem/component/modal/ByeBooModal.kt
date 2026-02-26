@@ -1,14 +1,11 @@
-package com.byeboo.app.presentation.mypage.component
+package com.byeboo.app.core.designsystem.component.modal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,15 +22,16 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun MyPageModal(
+fun ByeBooModal(
     onDismissRequest: () -> Unit,
-    myPageModalMainText: String,
-    onCancelClick: () -> Unit,
-    onConfirmClick: () -> Unit,
-    onConfirmText: String,
+    modalMainText: String,
+    onLeftButtonClick: () -> Unit,
+    onLeftButtonText: String,
+    onRightButtonClick: () -> Unit,
+    onRightButtonText: String,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties(),
-    myPageModalSubText: String? = null,
+    modalSubText: String? = null,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
@@ -47,45 +45,40 @@ fun MyPageModal(
                     .background(color = ByeBooTheme.colors.background)
                     .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
         ) {
             Text(
-                text = myPageModalMainText,
+                text = modalMainText,
                 color = ByeBooTheme.colors.gray50,
                 style = ByeBooTheme.typography.sub3,
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
-
-            if (myPageModalSubText != null) {
+            if (modalSubText != null) {
                 Text(
-                    text = myPageModalSubText,
+                    text = modalSubText,
                     color = ByeBooTheme.colors.gray400,
                     style = ByeBooTheme.typography.body3,
                     textAlign = TextAlign.Center,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(16.dp)),
             ) {
                 ByeBooButton(
-                    onClick = onCancelClick,
-                    buttonText = "취소",
+                    onClick = onLeftButtonClick,
+                    buttonText = onLeftButtonText,
                     buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.gray200,
                     buttonStrokeColor = ByeBooTheme.colors.gray400,
                     modifier = Modifier.weight(1f),
                 )
 
-                Spacer(modifier = Modifier.width(screenWidthDp(16.dp)))
-
                 ByeBooButton(
-                    onClick = onConfirmClick,
-                    buttonText = onConfirmText,
+                    onClick = onRightButtonClick,
+                    buttonText = onRightButtonText,
                     buttonStyle = ByeBooTheme.typography.body3,
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,

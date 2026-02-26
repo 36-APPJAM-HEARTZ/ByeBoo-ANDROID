@@ -56,6 +56,8 @@ android {
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
 
         buildConfigField("String", "MIXPANEL_TOKEN", "\"${properties["mixpanel.token"]}\"")
+        buildConfigField("String", "BYEBOO_SUPPORT_CHAT", properties["byeboo.support.chat"].toString())
+        buildConfigField("String", "BYEBOO_INSTAGRAM", properties["byeboo.instagram"].toString())
         buildConfigField("String", "BYEBOO_ASKING", properties["byeboo.asking"].toString())
         buildConfigField("String", "BYEBOO_SERVICE", properties["byeboo.service"].toString())
         buildConfigField(
