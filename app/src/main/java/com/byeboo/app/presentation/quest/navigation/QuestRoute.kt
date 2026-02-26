@@ -30,3 +30,11 @@ data class QuestReview(
 data class QuestCommonAnswer(
     val answerId: Long,
 ) : Route
+
+@Serializable
+data object QuestMyAnswers : Route
+
+@Serializable
+data class QuestMyAnswersDetail(
+    val answerId: Long
+) : Route

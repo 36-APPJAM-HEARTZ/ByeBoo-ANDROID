@@ -287,6 +287,12 @@ class QuestViewModel
             }
         }
 
+    fun onMyAnswersClick() {
+        viewModelScope.launch {
+            _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
+        }
+    }
+
         private suspend fun handleCompletedQuestClick(quest: Quest) {
             mixpanelUtil.trackEvent(
                 "quest_box_click",

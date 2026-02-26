@@ -39,6 +39,7 @@ import java.time.LocalDate
 @Composable
 fun CommonJourneyScreen(
     state: CommonJourneyState,
+    onMyAnswersClick: () -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -74,9 +75,7 @@ fun CommonJourneyScreen(
                         middleTagType = MiddleTagType.MY_ANSWERS,
                         textStyle = ByeBooTheme.typography.cap1,
                         modifier =
-                            Modifier.noRippleClickable {
-                                // TODO: 나의 답변 모아보기 화면 이동
-                            },
+                            Modifier.noRippleClickable(onClick = onMyAnswersClick),
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                     HorizontalDivider(
