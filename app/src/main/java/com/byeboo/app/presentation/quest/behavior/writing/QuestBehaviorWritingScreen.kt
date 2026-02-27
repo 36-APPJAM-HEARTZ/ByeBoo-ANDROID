@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,10 +54,12 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,6 +120,29 @@ fun QuestBehaviorWritingRoute(
         )
     }
 
+    if (uiState.showCompleteModal) {
+        Dialog(
+            onDismissRequest = {},
+            properties =
+                DialogProperties(
+                    usePlatformDefaultWidth = false,
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                ),
+        ) {
+            QuestCompleteCard(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp)),
+            )
+        }
+        LaunchedEffect(Unit) {
+            delay(2000L)
+            viewModel.onCompleteModalTimeout()
+        }
+    }
+
     BackHandler { viewModel.onBackClicked() }
 
     QuestBehaviorWritingScreen(
@@ -126,7 +152,7 @@ fun QuestBehaviorWritingRoute(
         onTipClick = viewModel::onTipClicked,
         onUpdateSelectedImage = viewModel::updateSelectedImage,
         onUpdateContent = viewModel::updateContent,
-        navigateButton = viewModel::uploadImage,
+        onSaveClick = viewModel::onSaveClicked,
         onCompleteClick = viewModel::onCompleteClicked,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
@@ -144,7 +170,7 @@ private fun QuestBehaviorWritingScreen(
     onUpdateSelectedImage: (Uri?) -> Unit,
     onCompleteClick: (Context) -> Unit,
     onUpdateContent: (String) -> Unit,
-    navigateButton: (Context) -> Unit,
+    onSaveClick: (Context) -> Unit,
     onBottomSheetDismiss: () -> Unit,
     onEmotionSelected: (EmotionChipType?) -> Unit,
     modifier: Modifier = Modifier,
@@ -246,7 +272,7 @@ private fun QuestBehaviorWritingScreen(
 
     ByeBooBottomSheet(
         selectedEmotion = uiState.selectedEmotion,
-        navigateButton = { navigateButton(context) },
+        navigateButton = { onSaveClick(context) },
         showBottomSheet = uiState.showBottomSheet,
         onDismiss = onBottomSheetDismiss,
         onEmotionSelected = onEmotionSelected,

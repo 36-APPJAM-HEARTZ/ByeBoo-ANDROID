@@ -34,6 +34,7 @@ data class QuestBehaviorState(
     val isCompleteButtonEnabled: Boolean = false,
     val hasAnswerChanged: Boolean = false,
     val fromOffboarding: Boolean = false,
+    val showCompleteModal: Boolean = false
 )
 
 sealed interface QuestBehaviorSideEffect {

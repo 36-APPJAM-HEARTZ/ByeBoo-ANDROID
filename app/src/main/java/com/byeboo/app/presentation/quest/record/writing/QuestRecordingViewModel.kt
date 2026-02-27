@@ -105,6 +105,14 @@ class QuestRecordingViewModel
             }
         }
 
+    fun onCompleteClicked() {
+        if (uiState.value.isEditMode) {
+            onSaveEditClicked()
+        } else {
+            openBottomSheet()
+        }
+    }
+
         fun onSaveClicked() {
             val state = uiState.value
             val questId = state.questId
@@ -271,14 +279,7 @@ class QuestRecordingViewModel
             }
         }
 
-        fun onCompleteClicked() {
-            if (uiState.value.isEditMode) {
-                onSaveEditClicked()
-            } else {
-                openBottomSheet()
-            }
-        }
-
+    
         private fun completeButtonEnabled(state: QuestRecordingState): Boolean {
             val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
 
