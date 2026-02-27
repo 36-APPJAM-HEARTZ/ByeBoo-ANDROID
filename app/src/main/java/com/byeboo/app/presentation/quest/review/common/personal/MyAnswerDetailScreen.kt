@@ -3,7 +3,6 @@ package com.byeboo.app.presentation.quest.review.common.personal
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,25 +11,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
 import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
 
 @Composable
 fun MyAnswerDetailRoute(
@@ -75,7 +69,7 @@ private fun MyAnswerDetailScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        MyAnswerDetailTopBar(
+        AnswerDetailTopBar(
             onClickMoreOptions = onClickMoreOptions,
             modifier = modifier,
         )
@@ -102,42 +96,6 @@ private fun MyAnswerDetailScreen(
         showBottomSheet = uiState.showBottomSheet,
         onDismissRequest = onDismissBottomSheet,
     )
-}
-
-@Composable
-private fun MyAnswerDetailTopBar(
-    onClickMoreOptions: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier =
-            modifier
-                .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-            contentDescription = null,
-            tint = ByeBooTheme.colors.gray50,
-            modifier =
-                Modifier.noRippleClickable(
-                    // Todo: 뒤로가기
-                ),
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_overflow_menu),
-            contentDescription = null,
-            tint = ByeBooTheme.colors.white,
-            modifier =
-                Modifier.noRippleClickable(
-                    onClick = onClickMoreOptions,
-                ),
-        )
-        Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
-    }
 }
 
 @Composable

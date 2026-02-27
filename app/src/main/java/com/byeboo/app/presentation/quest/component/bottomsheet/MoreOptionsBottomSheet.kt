@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -73,7 +74,7 @@ fun MoreOptionsBottomSheet(
                         tint = ByeBooTheme.colors.white,
                     )
 
-                    Spacer(modifier = Modifier.padding(end = screenWidthDp(12.dp)))
+                    Spacer(modifier = Modifier.width(screenWidthDp(12.dp)))
 
                     Text(
                         text = topOption.optionTitle,
