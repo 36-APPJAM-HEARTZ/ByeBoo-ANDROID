@@ -38,10 +38,10 @@ class QuestRecordingViewModel
     ) : ViewModel() {
         private val questIdArg: Long =
             checkNotNull(
-                savedStateHandle.toRoute<QuestRecord.QuestRecording>().questId,
+                savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().questId,
             )
-        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().isEditMode
-        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().fromOffboarding
+        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().isEditMode
+        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().fromOffboarding
 
         private val _uiState =
             MutableStateFlow(
@@ -94,7 +94,6 @@ class QuestRecordingViewModel
                             it.copy(
                                 questAnswer = detail.questAnswer,
                                 originalAnswer = detail.questAnswer,
-                                isCompleteButtonEnabled = false,
                             )
                         }
                     }.onFailure {
@@ -219,22 +218,10 @@ class QuestRecordingViewModel
         ) {
             val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
             _uiState.update { prev ->
-                val hasAnswerChanged = questAnswer != prev.originalAnswer
-
-                val next =
                     prev.copy(
                         questAnswer = questAnswer,
                         contentsState = contentState,
-                        hasAnswerChanged = hasAnswerChanged,
                     )
-                val isButtonEnabled =
-                    completeButtonEnabled(
-                        state = next,
-                    )
-
-                next.copy(
-                    isCompleteButtonEnabled = isButtonEnabled,
-                )
             }
         }
 
@@ -276,17 +263,6 @@ class QuestRecordingViewModel
                         questType = QuestType.RECORDING,
                     ),
                 )
-            }
-        }
-
-    
-        private fun completeButtonEnabled(state: QuestRecordingState): Boolean {
-            val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
-
-            return if (state.isEditMode) {
-                isValid && state.hasAnswerChanged
-            } else {
-                isValid
             }
         }
 

@@ -19,10 +19,10 @@ import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
 fun QuestWritingTitle(
-    questNumber: Long? = null,
     question: String,
-    onTipClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
+    questNumber: Long? = null,
+    onTipClick: (() -> Unit)? = null,
 ) {
     val questTitle = if (questNumber == null) "공통퀘스트" else "${questNumber}번째 퀘스트"
 
@@ -42,9 +42,9 @@ fun QuestWritingTitle(
         Text(
             text = question,
             modifier = Modifier.fillMaxWidth(),
-            color = ByeBooTheme.colors.gray100,
+            color = ByeBooTheme.colors.gray50,
             textAlign = TextAlign.Center,
-            style = ByeBooTheme.typography.head1,
+            style = ByeBooTheme.typography.head2,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -56,7 +56,6 @@ fun QuestWritingTitle(
             ) {
                 MiddleTag(
                     middleTagType = MiddleTagType.QUEST_TIP,
-                    text = "작성 TIP",
                     textStyle = ByeBooTheme.typography.cap1,
                     modifier = Modifier.clickable(onClick = onTipClick),
                 )

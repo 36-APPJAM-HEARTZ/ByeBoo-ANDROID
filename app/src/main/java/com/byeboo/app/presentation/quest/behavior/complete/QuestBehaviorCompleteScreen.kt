@@ -157,7 +157,6 @@ private fun QuestBehaviorCompleteScreen(
             }
 
             item {
-
                 Column(
                     modifier =
                         Modifier
@@ -165,29 +164,30 @@ private fun QuestBehaviorCompleteScreen(
                             .aspectRatio(1f)
                             .clip(RoundedCornerShape(12.dp)),
                 ) {
-                    SubcomposeAsyncImage(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth(),
-                        model =
-                            ImageRequest
-                                .Builder(LocalContext.current)
-                                .data(uiState.imageUrl)
-                                .memoryCachePolicy(CachePolicy.DISABLED)
-                                .diskCachePolicy(CachePolicy.DISABLED)
-                                .build(),
-                        contentDescription = "uploaded image",
-                        contentScale = ContentScale.Crop,
-                        loading = {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        },
-                    )
-
+                    if (imageUri != null) {
+                        SubcomposeAsyncImage(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
+                            model =
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(imageUri)
+                                    .memoryCachePolicy(CachePolicy.DISABLED)
+                                    .diskCachePolicy(CachePolicy.DISABLED)
+                                    .build(),
+                            contentDescription = "uploaded image",
+                            contentScale = ContentScale.Crop,
+                            loading = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            },
+                        )
+                    }
                 }
                 if (uiState.questAnswer.isNotBlank()) {
                     Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
@@ -205,7 +205,6 @@ private fun QuestBehaviorCompleteScreen(
             }
 
             item {
-
                 Spacer(modifier = Modifier.weight(1f))
 
                 ByeBooButton(
@@ -216,7 +215,6 @@ private fun QuestBehaviorCompleteScreen(
                     onClick = { /*Todo: ai 버튼 연결 */ },
                 )
             }
-
         }
     }
 }

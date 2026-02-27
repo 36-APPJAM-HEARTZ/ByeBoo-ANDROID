@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -43,7 +44,8 @@ internal fun QuestPhotoPicker(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(312.dp))
+                //.width(screenWidthDp(312.dp))
+                .fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha5),
@@ -52,6 +54,7 @@ internal fun QuestPhotoPicker(
             imageUrl = imageUrl,
             isUploaded = uploadedImage,
             onImageClick = { photoPickerLauncher.launch("image/*") },
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
@@ -66,8 +69,6 @@ private fun ImageUploadButton(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(312.dp))
-                .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .noRippleClickable { onImageClick() },
         contentAlignment = Alignment.Center,

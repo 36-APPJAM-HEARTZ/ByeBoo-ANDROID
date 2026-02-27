@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.record.complete.QuestRecordingCompleteRoute
-import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecording
+import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingWriting
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingComplete
 import com.byeboo.app.presentation.quest.record.writing.QuestRecordingRoute
 
@@ -19,7 +19,7 @@ fun NavController.navigateToQuestRecording(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        QuestRecording(
+        QuestRecordingWriting(
             questId = questId,
             isEditMode = isEditMode,
             fromOffboarding = fromOffboarding,
@@ -44,8 +44,8 @@ fun NavGraphBuilder.questRecordGraph(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
 ) {
-    routeNavigation<QuestRecord, QuestRecording> {
-        composable<QuestRecording> {
+    routeNavigation<QuestRecord, QuestRecordingWriting> {
+        composable<QuestRecordingWriting> {
             QuestRecordingRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestTip = navigateToQuestTip,

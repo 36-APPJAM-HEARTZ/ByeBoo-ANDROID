@@ -31,8 +31,7 @@ fun QuestWritingFooter(
     Row(
         modifier =
             modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+                .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (!isPhotoQuestion) {
@@ -65,7 +64,6 @@ fun QuestWritingFooter(
                 },
             style = ByeBooTheme.typography.body6,
             color = ByeBooTheme.colors.gray400,
-            textAlign = TextAlign.End,
         )
     }
 }

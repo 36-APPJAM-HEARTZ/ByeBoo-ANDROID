@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,8 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,7 +52,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
-import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
@@ -116,27 +114,16 @@ fun QuestBehaviorWritingRoute(
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
     if (uiState.showCompleteModal) {
-        Dialog(
-            onDismissRequest = {},
-            properties =
-                DialogProperties(
-                    usePlatformDefaultWidth = false,
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
-                ),
-        ) {
-            QuestCompleteCard(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp)),
-            )
-        }
+        QuestCompleteDialog(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        )
+
         LaunchedEffect(Unit) {
             delay(2000L)
             viewModel.onCompleteModalTimeout()
@@ -242,7 +229,7 @@ private fun QuestBehaviorWritingScreen(
 
             Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-            EssentialSection(
+            QuestPhotoSection(
                 imageCount = uiState.imageCount,
                 displayImageUri = displayImageUri,
                 onUpdateSelectedImage = onUpdateSelectedImage,
@@ -250,7 +237,7 @@ private fun QuestBehaviorWritingScreen(
 
             Spacer(modifier = modifier.height(screenHeightDp(20.dp)))
 
-            OptionalSection(
+            QuestWritingSection(
                 questAnswer = uiState.questAnswer,
                 onFocusChanged = { isFocused.value = it },
                 onUpdateContent = onUpdateContent,
@@ -281,15 +268,19 @@ private fun QuestBehaviorWritingScreen(
 }
 
 @Composable
-private fun EssentialSection(
+private fun QuestPhotoSection(
     imageCount: Int,
     displayImageUri: Uri?,
     onUpdateSelectedImage: (Uri?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp))
+    ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp))
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_ESSENTIAL,
@@ -297,24 +288,18 @@ private fun EssentialSection(
                 textStyle = ByeBooTheme.typography.cap1,
             )
 
-            Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
-
             Text(
                 text = "사진 첨부",
                 color = ByeBooTheme.colors.gray50,
                 style = ByeBooTheme.typography.body2,
             )
 
-            Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
-
             Text(
                 text = "(${imageCount}/1)",
                 color = ByeBooTheme.colors.gray400,
-                style = ByeBooTheme.typography.body5,
+                style = ByeBooTheme.typography.body6,
             )
         }
-
-        Spacer(modifier = modifier.height(screenHeightDp(12.dp)))
 
         QuestPhotoPicker(
             imageUrl = displayImageUri,
@@ -327,7 +312,7 @@ private fun EssentialSection(
 }
 
 @Composable
-private fun OptionalSection(
+private fun QuestWritingSection(
     questAnswer: String,
     onUpdateContent: (String) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
@@ -335,9 +320,13 @@ private fun OptionalSection(
     modifier: Modifier = Modifier
 
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp))
+    ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp))
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_OPTIONAL,
@@ -345,16 +334,12 @@ private fun OptionalSection(
                 textStyle = ByeBooTheme.typography.cap1,
             )
 
-            Spacer(modifier = modifier.width(screenWidthDp(8.dp)))
-
             Text(
                 text = "생각 적기",
                 color = ByeBooTheme.colors.gray50,
                 style = ByeBooTheme.typography.body2,
             )
         }
-
-        Spacer(modifier = modifier.height(screenHeightDp(8.dp)))
 
         QuestTextField(
             value = questAnswer,
@@ -364,9 +349,7 @@ private fun OptionalSection(
                 }
             },
             placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해 보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
-            onFocusChanged = {
-                onFocusChanged(it)
-            },
+            onFocusChanged = onFocusChanged,
             scrollState = scrollState
         )
     }

@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.util.routeNavigation
-import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.QuestCommon
+import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.QuestCommonWriting
 import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.QuestCommonComplete
 import com.byeboo.app.presentation.quest.common.writing.QuestCommonRoute
 
@@ -15,7 +15,7 @@ fun NavController.navigateToQuestCommon(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        QuestCommon(
+        QuestCommonWriting(
             questId = questId,
         ),
         navOptions,
@@ -35,8 +35,8 @@ fun NavGraphBuilder.questCommonGraph(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
 ) {
-    routeNavigation<QuestCommonRoute, QuestCommon> {
-        composable<QuestCommon> {
+    routeNavigation<QuestCommonRoute, QuestCommonWriting> {
+        composable<QuestCommonWriting> {
             QuestCommonRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestCommonComplete = navigateToQuestCommonComplete,

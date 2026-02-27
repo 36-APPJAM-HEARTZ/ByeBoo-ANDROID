@@ -4,6 +4,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +15,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -32,6 +35,8 @@ fun QuestTextField(
 ) {
     val isFocused = remember { mutableStateOf(false) }
     val lastLineBottom = remember { mutableStateOf(0) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(isFocused.value) {
         if (isFocused.value) {
@@ -61,8 +66,13 @@ fun QuestTextField(
         keyboardOptions =
             KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Default,
+                imeAction = ImeAction.Done,
             ),
+        keyboardActions =
+            KeyboardActions(onDone = {
+                keyboardController?.hide()
+                focusManager.clearFocus()
+            }),
         cursorBrush = SolidColor(ByeBooTheme.colors.white),
         decorationBox = { innerTextField ->
                 if (value.isEmpty() && !(isFocused.value)) {

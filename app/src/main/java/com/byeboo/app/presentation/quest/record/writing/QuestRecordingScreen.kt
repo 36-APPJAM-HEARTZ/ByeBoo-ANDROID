@@ -43,7 +43,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
-import com.byeboo.app.presentation.quest.component.card.QuestCompleteCard
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
@@ -108,22 +108,12 @@ fun QuestRecordingRoute(
     }
 
     if (uiState.showCompleteModal) {
-        Dialog(
-            onDismissRequest = {},
-            properties =
-                DialogProperties(
-                    usePlatformDefaultWidth = false,
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
-                ),
-        ) {
-            QuestCompleteCard(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp)),
-            )
-        }
+        QuestCompleteDialog(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        )
+
         LaunchedEffect(Unit) {
             delay(2000L)
             viewModel.onCompleteModalTimeout()
@@ -237,7 +227,8 @@ private fun QuestRecordingScreen(
         QuestWritingFooter(
             currentCharCount = uiState.questAnswer.length,
             isPhotoQuestion = false,
-            modifier = Modifier.padding(bottom = screenHeightDp(14.dp))
+            modifier = Modifier
+                .padding(horizontal = screenWidthDp(24.dp))
         )
     }
 

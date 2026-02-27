@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -61,6 +64,7 @@ fun QuestRecordingCompleteRoute(
                         inAppReview(activity)
                     }
                 }
+
                 is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
             }
         }
@@ -83,11 +87,14 @@ private fun QuestRecordingCompleteScreen(
     onCloseClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
+                .padding(horizontal = 24.dp)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -96,8 +103,7 @@ private fun QuestRecordingCompleteScreen(
         Row(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
             Icon(
@@ -110,50 +116,38 @@ private fun QuestRecordingCompleteScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding =
-                PaddingValues(
-                    start = screenWidthDp(24.dp),
-                    end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(24.dp),
-                ),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
         ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-                ) {
-                    QuestTitle(
-                        stepNumber = uiState.stepNumber,
-                        questNumber = uiState.questNumber,
-                        createdAt = uiState.createdAt,
-                        questQuestion = uiState.question,
-                    )
+            QuestTitle(
+                stepNumber = uiState.stepNumber,
+                questNumber = uiState.questNumber,
+                createdAt = uiState.createdAt,
+                questQuestion = uiState.question,
+            )
 
-                    ContentText(
-                        text = uiState.answer,
-                    )
+            ContentText(
+                text = uiState.answer,
+            )
 
-                    QuestEmotionDescriptionContent(
-                        questEmotionDescription = uiState.emotionDescription,
-                        emotionType = uiState.selectedEmotion,
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    ByeBooButton(
-                        buttonText = "보리에게 답장 받기",
-                        buttonTextColor = ByeBooTheme.colors.white,
-                        buttonStyle = ByeBooTheme.typography.body2,
-                        buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                        onClick = {},
-                    )
-                }
-            }
+            QuestEmotionDescriptionContent(
+                questEmotionDescription = uiState.emotionDescription,
+                emotionType = uiState.selectedEmotion,
+            )
         }
+
+        ByeBooButton(
+            buttonText = "보리에게 답장 받기",
+            buttonTextColor = ByeBooTheme.colors.white,
+            buttonStyle = ByeBooTheme.typography.body2,
+            buttonBackgroundColor = ByeBooTheme.colors.primary300,
+            onClick = { /*Todo: ai 버튼 연결 */ },
+        )
     }
 }
 

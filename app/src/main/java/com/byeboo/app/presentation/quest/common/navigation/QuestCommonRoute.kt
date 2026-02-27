@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 sealed class QuestCommonRoute : Route {
 
     @Serializable
-    data class QuestCommon(
+    data class QuestCommonWriting(
         val questId: Long,
     ) : QuestCommonRoute()
 

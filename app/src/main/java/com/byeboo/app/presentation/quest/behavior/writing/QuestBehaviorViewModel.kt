@@ -255,15 +255,10 @@ constructor(
 
     fun updateSelectedImage(uri: Uri?) {
         _uiState.update { prev ->
-            val updated =
                 prev.copy(
                     selectedImageUri = uri,
                     imageCount = if (uri != null) 1 else 0,
                 )
-
-            updated.copy(
-                isCompleteButtonEnabled = completeButtonEnabled(updated),
-            )
         }
     }
 
@@ -276,17 +271,11 @@ constructor(
             }
 
         _uiState.update { prev ->
-            val hasAnswerChanged = text != prev.originalAnswer
-            val updated =
                 prev.copy(
                     questAnswer = text,
                     contentState = contentState,
-                    hasAnswerChanged = hasAnswerChanged,
-                )
 
-            updated.copy(
-                isCompleteButtonEnabled = completeButtonEnabled(updated),
-            )
+                )
         }
     }
 
@@ -337,17 +326,6 @@ constructor(
             _sideEffect.emit(
                 QuestBehaviorSideEffect.NavigateToQuestTip(questId, QuestType.ACTIVE),
             )
-        }
-    }
-
-    private fun completeButtonEnabled(state: QuestBehaviorState): Boolean {
-        val hasImage = state.imageCount > 0
-
-        return if (state.isEditMode) {
-            val imageChanged = state.selectedImageUri != null
-            state.hasAnswerChanged || imageChanged
-        } else {
-            hasImage
         }
     }
 

@@ -35,32 +35,10 @@ class QuestCommonViewModel @Inject constructor(
     ) {
         val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
         _uiState.update { prev ->
-            val hasAnswerChanged = questAnswer != prev.originalAnswer
-
-            val next =
                 prev.copy(
                     questAnswer = questAnswer,
                     contentsState = contentState,
-                    hasAnswerChanged = hasAnswerChanged,
                 )
-            val isButtonEnabled =
-                completeButtonEnabled(
-                    state = next,
-                )
-
-            next.copy(
-                isCompleteButtonEnabled = isButtonEnabled,
-            )
-        }
-    }
-
-    private fun completeButtonEnabled(state: QuestCommonState): Boolean {
-        val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
-
-        return if (state.isEditMode) {
-            isValid && state.hasAnswerChanged
-        } else {
-            isValid
         }
     }
 }
