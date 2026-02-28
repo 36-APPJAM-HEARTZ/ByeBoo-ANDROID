@@ -109,9 +109,6 @@ private fun QuestReviewScreen(
         derivedStateOf { listState.canScrollForward || listState.canScrollBackward }
     }
 
-    val bottomOverlaySpace =
-        screenHeightDp(16.dp) + screenHeightDp(56.dp) + screenHeightDp(16.dp) // 대충: 패딩+버튼+패딩
-
     Column(
         modifier =
             modifier
@@ -154,7 +151,6 @@ private fun QuestReviewScreen(
                     PaddingValues(
                         start = screenWidthDp(24.dp),
                         end = screenWidthDp(24.dp),
-                        // 스크롤이 없을 때만 오버레이 버튼 자리 확보
                         bottom = screenHeightDp(28.dp),
                     ),
             ) {
