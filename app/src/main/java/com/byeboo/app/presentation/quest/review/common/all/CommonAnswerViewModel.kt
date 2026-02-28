@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,12 +53,12 @@ constructor() : ViewModel() {
         _uiState.update { it.copy(showBottomSheet = false) }
     }
 
-    fun onOptionClick(option: OptionType) {
+    fun onOptionClick(option: OtherPostOption) {
         onDismissBottomSheet()
 
         viewModelScope.launch {
             when (option) {
-                OptionType.BLOCK -> {
+                OtherPostOption.BLOCK -> {
                     _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
                     _sideEffect.emit(
                         CommonAnswerSideEffect.ShowSnackBar(
@@ -67,14 +67,13 @@ constructor() : ViewModel() {
                     )
                 }
 
-                OptionType.REPORT -> {
+                OtherPostOption.REPORT -> {
                     _sideEffect.emit(
                         CommonAnswerSideEffect.ShowSnackBar(
                             snackBarType = CustomSnackBarType.SUCCESS("신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요.")
                         ),
                     )
                 }
-                else -> {}
             }
         }
     }

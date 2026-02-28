@@ -26,14 +26,14 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.component.type.PostOption
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreOptionsBottomSheet(
-    topOption: OptionType,
-    bottomOption: OptionType,
-    onOptionClick: (OptionType) -> Unit,
+    topOption: PostOption,
+    bottomOption: PostOption,
+    onOptionClick: (PostOption) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     showBottomSheet: Boolean = false,
