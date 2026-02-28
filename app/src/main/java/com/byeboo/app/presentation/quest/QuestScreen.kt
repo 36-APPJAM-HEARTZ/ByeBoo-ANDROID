@@ -83,7 +83,7 @@ fun QuestRoute(
         listState = listState,
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
-        onMyAnswersClick = viewModel::onMyAnswersClick,
+        onMyAnswersClick = viewModel::onMyAnswersClicked,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,

@@ -286,7 +286,7 @@ class QuestViewModel
             }
         }
 
-        fun onMyAnswersClick() {
+        fun onMyAnswersClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
             }
