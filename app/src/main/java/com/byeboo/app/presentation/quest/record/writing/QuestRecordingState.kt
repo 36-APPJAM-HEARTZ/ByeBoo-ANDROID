@@ -1,8 +1,9 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.writing
 
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.domain.model.quest.QuestWritingState
 
 @Immutable
@@ -19,10 +20,17 @@ data class QuestRecordingState(
     val selectedEmotion: EmotionChipType? = null,
     val isEditMode: Boolean = false,
     val originalAnswer: String = "",
-    val isCompleteButtonEnabled: Boolean = false,
-    val hasAnswerChanged: Boolean = false,
     val fromOffboarding: Boolean = false,
-)
+    val showCompleteModal: Boolean = false,
+) {
+    val hasAnswerChanged: Boolean
+        get() = questAnswer != originalAnswer
+
+    val isCompleteButtonEnabled: Boolean get() {
+        val isValid = QuestContentLengthValidator.validButton(questAnswer)
+        return if (isEditMode) isValid && hasAnswerChanged else isValid
+    }
+}
 
 sealed interface QuestRecordingSideEffect {
     data object NavigateToQuest : QuestRecordingSideEffect

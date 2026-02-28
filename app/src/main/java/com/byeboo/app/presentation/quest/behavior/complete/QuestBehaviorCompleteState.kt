@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.complete
 
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.EmotionChipType
@@ -16,7 +16,7 @@ data class QuestBehaviorCompleteState(
     val imageUrl: String = "",
     val selectedImageUri: Uri? = null,
     val emotionDescription: String = "",
-    val selectedEmotion: EmotionChipType? = EmotionChipType.EMOTION_NEUTRAL,
+    val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
 )
 
 sealed interface QuestBehaviorCompleteSideEffect {

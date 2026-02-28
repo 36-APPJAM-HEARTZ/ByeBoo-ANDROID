@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class QuestRecord : Route {
     @Serializable
-    data class QuestRecording(
+    data class QuestRecordingWriting(
         val questId: Long,
         val isEditMode: Boolean,
         val fromOffboarding: Boolean,

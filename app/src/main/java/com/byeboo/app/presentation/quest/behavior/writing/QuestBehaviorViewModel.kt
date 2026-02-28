@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.writing
 
 import android.content.Context
 import android.net.Uri
@@ -46,9 +46,12 @@ class QuestBehaviorViewModel
             checkNotNull(
                 savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().questId,
             )
-        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().isEditMode
-        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().fromOffboarding
-        private val imageKeyArg: String? = savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().imageKey
+        private val isEditModeArg: Boolean =
+            savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().isEditMode
+        private val fromOffboardingArg: Boolean =
+            savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().fromOffboarding
+        private val imageKeyArg: String? =
+            savedStateHandle.toRoute<QuestBehavior.QuestBehaviorWriting>().imageKey
 
         private val _uiState =
             MutableStateFlow(
@@ -114,7 +117,15 @@ class QuestBehaviorViewModel
             }
         }
 
-        fun uploadImage(context: Context) {
+        fun onCompleteClicked(context: Context) {
+            if (uiState.value.isEditMode) {
+                onSaveEditClicked(context)
+            } else {
+                openBottomSheet()
+            }
+        }
+
+        fun onSaveClicked(context: Context) {
             viewModelScope.launch {
                 _uiState.update { it.copy(isUploading = true) }
 
@@ -123,7 +134,74 @@ class QuestBehaviorViewModel
                 val questId = state.questId
                 val answer = state.questAnswer
                 val emotion = state.selectedEmotion?.toData().orEmpty()
-                val isEditMode = state.isEditMode
+
+                runCatching {
+                    val inputStream = context.contentResolver.openInputStream(imageUrl)
+                    val imageBytes = inputStream?.readBytes() ?: error("이미지 파일을 읽을 수 없습니다.")
+                    val contentType = context.contentResolver.getType(imageUrl).toString()
+                    val imageKey = UUID.randomUUID().toString()
+
+                    uploadImageUseCase(
+                        imageBytes = imageBytes,
+                        contentType = contentType,
+                        imageKey = imageKey,
+                        questId = questId,
+                        answer = answer,
+                        emotion = emotion,
+                        isEditMode = false,
+                    ).getOrThrow()
+                }.onSuccess {
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_success",
+                        properties =
+                            mapOf(
+                                "quest_end_at" to getFormattedDate(),
+                                "quest_number" to questId,
+                                "quest_type" to "행동형",
+                                "after_emotion_type" to emotion,
+                            ),
+                    )
+                    _uiState.update {
+                        it.copy(
+                            showBottomSheet = false,
+                            showCompleteModal = true,
+                        )
+                    }
+                }.onFailure {
+                    _sideEffect.emit(
+                        QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                    )
+                }
+            }
+        }
+
+        private fun onSaveEditClicked(context: Context) {
+            if (uiState.value.selectedImageUri == null) {
+                uploadWithoutImageChange()
+            } else {
+                uploadEditedImage(context)
+            }
+        }
+
+        fun onCompleteModalTimeout() {
+            val questId = _uiState.value.questId
+
+            _uiState.update { it.copy(showBottomSheet = false) }
+
+            viewModelScope.launch {
+                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
+            }
+        }
+
+        fun uploadEditedImage(context: Context) {
+            viewModelScope.launch {
+                _uiState.update { it.copy(isUploading = true) }
+
+                val state = _uiState.value
+                val imageUrl = state.selectedImageUri ?: return@launch
+                val questId = state.questId
+                val answer = state.questAnswer
+                val emotion = state.selectedEmotion?.toData().orEmpty()
                 val fromOffboarding = state.fromOffboarding
 
                 runCatching {
@@ -139,66 +217,43 @@ class QuestBehaviorViewModel
                         questId = questId,
                         answer = answer,
                         emotion = emotion,
-                        isEditMode = isEditMode,
+                        isEditMode = true,
                     ).getOrThrow()
                 }.onSuccess {
-                    if (isEditMode) {
-                        mixpanelUtil.trackEvent(
-                            eventName = "quest_edit",
-                            properties =
-                                mapOf(
-                                    "quest_end_at" to getFormattedDate(),
-                                    "quest_number" to questId,
-                                    "quest_type" to "행동형",
-                                ),
-                        )
-                    } else {
-                        mixpanelUtil.trackEvent(
-                            eventName = "quest_success",
-                            properties =
-                                mapOf(
-                                    "quest_end_at" to getFormattedDate(),
-                                    "quest_number" to questId,
-                                    "quest_type" to "행동형",
-                                    "after_emotion_type" to emotion,
-                                ),
-                        )
-                    }
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_edit",
+                        properties =
+                            mapOf(
+                                "quest_end_at" to getFormattedDate(),
+                                "quest_number" to questId,
+                                "quest_type" to "행동형",
+                            ),
+                    )
+
                     questRecordedDetailRepository.getQuestRecordedDetail(questId)
 
                     _sideEffect.emit(
-                        if (isEditMode) {
-                            if (fromOffboarding) {
-                                QuestBehaviorSideEffect.NavigateUp
-                            } else {
-                                QuestBehaviorSideEffect.NavigateToQuestReview(questId)
-                            }
+                        if (fromOffboarding) {
+                            QuestBehaviorSideEffect.NavigateUp
                         } else {
-                            QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId)
+                            QuestBehaviorSideEffect.NavigateToQuestReview(questId)
                         },
                     )
                     _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
-                    closeBottomSheet()
-                }.onFailure { e ->
+                }.onFailure {
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
                     )
                 }
-
                 _uiState.update { it.copy(isUploading = false) }
             }
         }
 
         fun updateSelectedImage(uri: Uri?) {
             _uiState.update { prev ->
-                val updated =
-                    prev.copy(
-                        selectedImageUri = uri,
-                        imageCount = if (uri != null) 1 else 0,
-                    )
-
-                updated.copy(
-                    isCompleteButtonEnabled = completeButtonEnabled(updated),
+                prev.copy(
+                    selectedImageUri = uri,
+                    imageCount = if (uri != null) 1 else 0,
                 )
             }
         }
@@ -212,16 +267,9 @@ class QuestBehaviorViewModel
                 }
 
             _uiState.update { prev ->
-                val hasAnswerChanged = text != prev.originalAnswer
-                val updated =
-                    prev.copy(
-                        questAnswer = text,
-                        contentState = contentState,
-                        hasAnswerChanged = hasAnswerChanged,
-                    )
-
-                updated.copy(
-                    isCompleteButtonEnabled = completeButtonEnabled(updated),
+                prev.copy(
+                    questAnswer = text,
+                    contentState = contentState,
                 )
             }
         }
@@ -273,29 +321,6 @@ class QuestBehaviorViewModel
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.NavigateToQuestTip(questId, QuestType.ACTIVE),
                 )
-            }
-        }
-
-        fun onClickCompleteButton(context: Context) {
-            if (uiState.value.isEditMode) {
-                if (uiState.value.selectedImageUri == null) {
-                    uploadWithoutImageChange()
-                } else {
-                    uploadImage(context)
-                }
-            } else {
-                openBottomSheet()
-            }
-        }
-
-        private fun completeButtonEnabled(state: QuestBehaviorState): Boolean {
-            val hasImage = state.imageCount > 0
-
-            return if (state.isEditMode) {
-                val imageChanged = state.selectedImageUri != null
-                state.hasAnswerChanged || imageChanged
-            } else {
-                hasImage
             }
         }
 

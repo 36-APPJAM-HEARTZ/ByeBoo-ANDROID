@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.writing
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -38,10 +38,10 @@ class QuestRecordingViewModel
     ) : ViewModel() {
         private val questIdArg: Long =
             checkNotNull(
-                savedStateHandle.toRoute<QuestRecord.QuestRecording>().questId,
+                savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().questId,
             )
-        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().isEditMode
-        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecording>().fromOffboarding
+        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().isEditMode
+        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().fromOffboarding
 
         private val _uiState =
             MutableStateFlow(
@@ -94,7 +94,6 @@ class QuestRecordingViewModel
                             it.copy(
                                 questAnswer = detail.questAnswer,
                                 originalAnswer = detail.questAnswer,
-                                isCompleteButtonEnabled = false,
                             )
                         }
                     }.onFailure {
@@ -102,6 +101,14 @@ class QuestRecordingViewModel
                             QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
                         )
                     }
+            }
+        }
+
+        fun onCompleteClicked() {
+            if (uiState.value.isEditMode) {
+                onSaveEditClicked()
+            } else {
+                openBottomSheet()
             }
         }
 
@@ -133,16 +140,28 @@ class QuestRecordingViewModel
                                 ),
                         )
                         _uiState.update {
-                            it.copy(showBottomSheet = false)
+                            it.copy(
+                                showBottomSheet = false,
+                                showCompleteModal = true,
+                            )
                         }
-                        _sideEffect.emit(
-                            QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
-                        )
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
                         )
                     }
+            }
+        }
+
+        fun onCompleteModalTimeout() {
+            val questId = _uiState.value.questId
+
+            _uiState.update { it.copy(showCompleteModal = false) }
+
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
+                )
             }
         }
 
@@ -199,21 +218,9 @@ class QuestRecordingViewModel
         ) {
             val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
             _uiState.update { prev ->
-                val hasAnswerChanged = questAnswer != prev.originalAnswer
-
-                val next =
-                    prev.copy(
-                        questAnswer = questAnswer,
-                        contentsState = contentState,
-                        hasAnswerChanged = hasAnswerChanged,
-                    )
-                val isButtonEnabled =
-                    completeButtonEnabled(
-                        state = next,
-                    )
-
-                next.copy(
-                    isCompleteButtonEnabled = isButtonEnabled,
+                prev.copy(
+                    questAnswer = questAnswer,
+                    contentsState = contentState,
                 )
             }
         }
@@ -256,24 +263,6 @@ class QuestRecordingViewModel
                         questType = QuestType.RECORDING,
                     ),
                 )
-            }
-        }
-
-        fun onClickCompleteButton() {
-            if (uiState.value.isEditMode) {
-                onSaveEditClicked()
-            } else {
-                openBottomSheet()
-            }
-        }
-
-        private fun completeButtonEnabled(state: QuestRecordingState): Boolean {
-            val isValid = QuestContentLengthValidator.validButton(state.questAnswer)
-
-            return if (state.isEditMode) {
-                isValid && state.hasAnswerChanged
-            } else {
-                isValid
             }
         }
 

@@ -26,6 +26,8 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestReview
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
+import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommon
+import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
@@ -184,6 +186,12 @@ class MainNavigator(
         )
     }
 
+    fun navigateToQuestCommon(questId: Long) {
+        navController.navigateToQuestCommon(
+            questId = questId,
+        )
+    }
+
     fun navigateToQuestRecordingComplete(
         questId: Long,
         navOptions: NavOptions? = null,
@@ -196,6 +204,13 @@ class MainNavigator(
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestBehaviorComplete(questId = questId, navOptions = navOptions)
+    }
+
+    fun navigateToQuestCommonComplete(
+        questId: Long,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestCommonComplete(questId = questId, navOptions = navOptions)
     }
 
     fun navigateToQuestReview(

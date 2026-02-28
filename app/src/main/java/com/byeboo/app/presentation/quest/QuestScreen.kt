@@ -36,6 +36,7 @@ fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
+    navigateToQuestCommon: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestViewModel = hiltViewModel(),
@@ -66,6 +67,8 @@ fun QuestRoute(
                     navigateToQuestRecording(effect.questId)
                 is QuestSideEffect.NavigateToQuestBehavior ->
                     navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestCommon ->
+                    navigateToQuestCommon(effect.questId)
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.ShowSnackBar ->
@@ -79,6 +82,7 @@ fun QuestRoute(
         listState = listState,
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClick,
+        onCommonQuestClick = navigateToQuestCommon,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
@@ -93,6 +97,7 @@ private fun QuestScreen(
     listState: LazyListState,
     paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
+    onCommonQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
     onTipClick: () -> Unit,
     onQuestStart: () -> Unit,
@@ -146,6 +151,7 @@ private fun QuestScreen(
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
                     onDateChange = onDateChange,
+                    onCommonQuestClick = onCommonQuestClick,
                 )
             }
         }

@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
-import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
+import com.byeboo.app.presentation.quest.record.navigation.QuestRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestBehaviorCompleteViewModel
+class QuestRecordingCompleteViewModel
     @Inject
     constructor(
         private val questRecordedDetailRepository: QuestRecordedDetailRepository,
@@ -30,14 +30,15 @@ class QuestBehaviorCompleteViewModel
     ) : ViewModel() {
         private val questIdArg: Long =
             checkNotNull(
-                savedStateHandle.toRoute<QuestBehavior.QuestBehaviorComplete>().questId,
+                savedStateHandle.toRoute<QuestRecord.QuestRecordingComplete>().questId,
             )
 
-        private val _uiState = MutableStateFlow(QuestBehaviorCompleteState(questId = questIdArg))
-        val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestRecordingCompleteState(questId = questIdArg))
+        val uiState: StateFlow<QuestRecordingCompleteState>
+            get() = _uiState.asStateFlow()
 
-        private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
-        val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<QuestRecordingCompleteSideEffect>()
+        val sideEffect: SharedFlow<QuestRecordingCompleteSideEffect> = _sideEffect.asSharedFlow()
 
         init {
             loadQuestRecordedDetail()
@@ -54,15 +55,14 @@ class QuestBehaviorCompleteViewModel
                                 questNumber = detail.questNumber,
                                 createdAt = detail.createdAt,
                                 question = detail.question,
-                                questAnswer = detail.questAnswer,
-                                imageUrl = detail.imageUrl.orEmpty(),
+                                answer = detail.questAnswer,
                                 selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
                             )
                         }
                     }.onFailure {
                         _sideEffect.emit(
-                            QuestBehaviorCompleteSideEffect.ShowSnackBar(
+                            QuestRecordingCompleteSideEffect.ShowSnackBar(
                                 "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
                             ),
                         )
@@ -78,19 +78,18 @@ class QuestBehaviorCompleteViewModel
                         properties =
                             mapOf(
                                 "journey_end_at" to getFormattedDate(),
-                                "journey_type" to "감정 정리",
+                                "journey_type" to "감정 직면",
                             ),
                     )
                     _sideEffect.emit(
-                        QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide,
+                        QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide,
                     )
                 }
             } else {
                 viewModelScope.launch {
-                    _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
-
-                    if (uiState.value.questId == 1L) {
-                        _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
+                    _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
+                    if (uiState.value.questNumber == 1L) {
+                        _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
                     }
                 }
             }
