@@ -14,14 +14,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
-import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun ByeBooTopbar(
-    textColor: Color,
-    textStyle: TextStyle,
     modifier: Modifier = Modifier,
     title: String? = null,
+    textColor: Color = ByeBooTheme.colors.gray50,
+    textStyle: TextStyle = ByeBooTheme.typography.sub1,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable () -> Unit = {},
     backgroundColor: Color = ByeBooTheme.colors.background,
@@ -31,7 +30,6 @@ fun ByeBooTopbar(
             modifier
                 .fillMaxWidth()
                 .background(backgroundColor)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(bottom = screenHeightDp(16.dp)),
     ) {
         Row(
