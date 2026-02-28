@@ -118,7 +118,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuest = navigateToQuest,
             navigateToQuestCommonComplete = navigateToQuestCommonComplete,
             navigateUp = navigateUp,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

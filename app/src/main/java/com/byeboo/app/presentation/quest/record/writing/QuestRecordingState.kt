@@ -30,7 +30,6 @@ data class QuestRecordingState(
         val isValid = QuestContentLengthValidator.validButton(questAnswer)
         return if (isEditMode) isValid && hasAnswerChanged else isValid
     }
-
 }
 
 sealed interface QuestRecordingSideEffect {

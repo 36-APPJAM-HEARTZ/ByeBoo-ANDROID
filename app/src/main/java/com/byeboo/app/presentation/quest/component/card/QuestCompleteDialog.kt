@@ -25,21 +25,20 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun QuestCompleteDialog(
-    modifier: Modifier = Modifier
-) {
+fun QuestCompleteDialog(modifier: Modifier = Modifier) {
     Dialog(
         onDismissRequest = {},
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false,
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-        ),
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
+            ),
     ) {
         QuestCompleteCard(modifier = modifier)
     }
-
 }
+
 @Composable
 private fun QuestCompleteCard(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bori_congrats))

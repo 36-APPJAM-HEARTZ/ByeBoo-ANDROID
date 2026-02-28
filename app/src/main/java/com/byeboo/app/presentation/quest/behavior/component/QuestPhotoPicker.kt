@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -23,7 +22,6 @@ import coil.compose.AsyncImage
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
-import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 internal fun QuestPhotoPicker(
@@ -53,7 +51,7 @@ internal fun QuestPhotoPicker(
             imageUrl = imageUrl,
             isUploaded = uploadedImage,
             onImageClick = { photoPickerLauncher.launch("image/*") },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }

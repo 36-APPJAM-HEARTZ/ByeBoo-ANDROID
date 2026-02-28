@@ -21,7 +21,6 @@ data class QuestCommonState(
     }
 }
 
-sealed interface QuestCommonSideEffect{
+sealed interface QuestCommonSideEffect {
     data object NavigateToQuest
-
 }

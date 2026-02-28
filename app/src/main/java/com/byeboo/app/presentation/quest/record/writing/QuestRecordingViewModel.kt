@@ -104,13 +104,13 @@ class QuestRecordingViewModel
             }
         }
 
-    fun onCompleteClicked() {
-        if (uiState.value.isEditMode) {
-            onSaveEditClicked()
-        } else {
-            openBottomSheet()
+        fun onCompleteClicked() {
+            if (uiState.value.isEditMode) {
+                onSaveEditClicked()
+            } else {
+                openBottomSheet()
+            }
         }
-    }
 
         fun onSaveClicked() {
             val state = uiState.value
@@ -218,10 +218,10 @@ class QuestRecordingViewModel
         ) {
             val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
             _uiState.update { prev ->
-                    prev.copy(
-                        questAnswer = questAnswer,
-                        contentsState = contentState,
-                    )
+                prev.copy(
+                    questAnswer = questAnswer,
+                    contentsState = contentState,
+                )
             }
         }
 

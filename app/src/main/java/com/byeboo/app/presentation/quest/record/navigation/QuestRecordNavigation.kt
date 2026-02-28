@@ -8,8 +8,8 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.record.complete.QuestRecordingCompleteRoute
-import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingWriting
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingComplete
+import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingWriting
 import com.byeboo.app.presentation.quest.record.writing.QuestRecordingRoute
 
 fun NavController.navigateToQuestRecording(

@@ -13,32 +13,31 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestCommonViewModel @Inject constructor(
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(QuestCommonState())
-    val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
+class QuestCommonViewModel
+    @Inject
+    constructor() : ViewModel() {
+        private val _uiState = MutableStateFlow(QuestCommonState())
+        val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
-    val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
+        val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
 
-    fun onBackClicked() {
+        fun onBackClicked() {
+        }
 
-    }
+        fun onCompleteClicked() {
+        }
 
-    fun onCompleteClicked() {
-
-    }
-
-    fun updateContent(
-        isFocused: Boolean,
-        questAnswer: String
-    ) {
-        val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
-        _uiState.update { prev ->
+        fun updateContent(
+            isFocused: Boolean,
+            questAnswer: String,
+        ) {
+            val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
+            _uiState.update { prev ->
                 prev.copy(
                     questAnswer = questAnswer,
                     contentsState = contentState,
                 )
+            }
         }
     }
-}

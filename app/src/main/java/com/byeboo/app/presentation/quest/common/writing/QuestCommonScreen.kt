@@ -33,10 +33,10 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
+import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
 
 @Composable
 fun QuestCommonRoute(
@@ -45,7 +45,7 @@ fun QuestCommonRoute(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestCommonViewModel = hiltViewModel()
+    viewModel: QuestCommonViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -55,9 +55,8 @@ fun QuestCommonRoute(
         onBackClick = viewModel::onBackClicked,
         onCompleteClick = viewModel::onCompleteClicked,
         onUpdateContent = viewModel::updateContent,
-        modifier = modifier
+        modifier = modifier,
     )
-
 }
 
 @Composable
@@ -67,7 +66,7 @@ private fun QuestCommonScreen(
     onBackClick: () -> Unit,
     onCompleteClick: () -> Unit,
     onUpdateContent: (Boolean, String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val isFocused = remember { mutableStateOf(false) }

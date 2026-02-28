@@ -24,5 +24,5 @@ data class QuestRecordedDetailResponseDto(
     @SerialName("emotionDescription")
     val emotionDescription: String,
     @SerialName("aiAnswerExists")
-    val aiAnswerExists: Boolean
+    val aiAnswerExists: Boolean,
 )

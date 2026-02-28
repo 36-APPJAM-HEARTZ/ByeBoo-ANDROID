@@ -3,7 +3,6 @@ package com.byeboo.app.presentation.quest.behavior.writing
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.domain.model.quest.QuestWritingState
 import java.time.LocalDate
 
@@ -33,7 +32,7 @@ data class QuestBehaviorState(
     val isEditMode: Boolean = false,
     val originalAnswer: String = "",
     val fromOffboarding: Boolean = false,
-    val showCompleteModal: Boolean = false
+    val showCompleteModal: Boolean = false,
 ) {
     val hasAnswerChanged: Boolean
         get() = questAnswer != originalAnswer
@@ -48,7 +47,6 @@ data class QuestBehaviorState(
             hasImage
         }
     }
-
 }
 
 sealed interface QuestBehaviorSideEffect {

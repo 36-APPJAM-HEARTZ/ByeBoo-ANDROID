@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.behavior.complete.QuestBehaviorCompleteRoute
-import com.byeboo.app.presentation.quest.behavior.writing.QuestBehaviorWritingRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorComplete
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorWriting
+import com.byeboo.app.presentation.quest.behavior.writing.QuestBehaviorWritingRoute
 
 fun NavController.navigateToQuestBehavior(
     questId: Long,

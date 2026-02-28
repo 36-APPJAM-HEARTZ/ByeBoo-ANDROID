@@ -31,7 +31,7 @@ fun QuestTextField(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     placeholder: String = "",
-    onFocusChanged: ((Boolean) -> Unit)? = null
+    onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
     val isFocused = remember { mutableStateOf(false) }
     val lastLineBottom = remember { mutableStateOf(0) }
@@ -75,14 +75,14 @@ fun QuestTextField(
             }),
         cursorBrush = SolidColor(ByeBooTheme.colors.white),
         decorationBox = { innerTextField ->
-                if (value.isEmpty() && !(isFocused.value)) {
-                    Text(
-                        text = placeholder,
-                        color = ByeBooTheme.colors.gray300,
-                        style = ByeBooTheme.typography.body3,
-                    )
-                }
-                innerTextField()
+            if (value.isEmpty() && !(isFocused.value)) {
+                Text(
+                    text = placeholder,
+                    color = ByeBooTheme.colors.gray300,
+                    style = ByeBooTheme.typography.body3,
+                )
+            }
+            innerTextField()
         },
         onTextLayout = { layoutResult ->
             lastLineBottom.value =

@@ -82,7 +82,7 @@ fun QuestRoute(
         listState = listState,
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClick,
-        onCommonQuestClick = navigateToQuestCommon ,
+        onCommonQuestClick = navigateToQuestCommon,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
@@ -151,7 +151,7 @@ private fun QuestScreen(
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
                     onDateChange = onDateChange,
-                    onCommonQuestClick = onCommonQuestClick
+                    onCommonQuestClick = onCommonQuestClick,
                 )
             }
         }

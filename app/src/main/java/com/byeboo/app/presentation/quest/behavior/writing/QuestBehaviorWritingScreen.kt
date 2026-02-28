@@ -50,13 +50,13 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
+import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
@@ -119,9 +119,10 @@ fun QuestBehaviorWritingRoute(
 
     if (uiState.showCompleteModal) {
         QuestCompleteDialog(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
         )
 
         LaunchedEffect(Unit) {
@@ -187,13 +188,12 @@ private fun QuestBehaviorWritingScreen(
                     } else {
                         false
                     }
-                }
-                .addFocusCleaner(focusManager)
+                }.addFocusCleaner(focusManager)
                 .imePadding()
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                )
+                ),
     ) {
         QuestWritingTopBar(
             isEnabled = uiState.isCompleteButtonEnabled,
@@ -241,7 +241,7 @@ private fun QuestBehaviorWritingScreen(
                 questAnswer = uiState.questAnswer,
                 onFocusChanged = { isFocused.value = it },
                 onUpdateContent = onUpdateContent,
-                scrollState = scrollState
+                scrollState = scrollState,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
@@ -249,10 +249,10 @@ private fun QuestBehaviorWritingScreen(
             QuestWritingFooter(
                 currentCharCount = uiState.questAnswer.length,
                 isPhotoQuestion = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = screenHeightDp(14.dp))
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = screenHeightDp(14.dp)),
             )
         }
     }
@@ -276,11 +276,11 @@ private fun QuestPhotoSection(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp))
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_ESSENTIAL,
@@ -295,7 +295,7 @@ private fun QuestPhotoSection(
             )
 
             Text(
-                text = "(${imageCount}/1)",
+                text = "($imageCount/1)",
                 color = ByeBooTheme.colors.gray400,
                 style = ByeBooTheme.typography.body6,
             )
@@ -306,7 +306,7 @@ private fun QuestPhotoSection(
             onImageClick = { url ->
                 onUpdateSelectedImage(url)
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
@@ -317,16 +317,15 @@ private fun QuestWritingSection(
     onUpdateContent: (String) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     scrollState: ScrollState,
-    modifier: Modifier = Modifier
-
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp))
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp)),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp))
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
         ) {
             MiddleTag(
                 middleTagType = MiddleTagType.QUEST_OPTIONAL,
@@ -350,7 +349,7 @@ private fun QuestWritingSection(
             },
             placeholder = "꼭 적지 않아도 괜찮지만, 글로 정리해 보면 스스로에게 한 걸음 더 가까워질 수 있어요.",
             onFocusChanged = onFocusChanged,
-            scrollState = scrollState
+            scrollState = scrollState,
         )
     }
 }

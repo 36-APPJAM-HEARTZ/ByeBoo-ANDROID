@@ -21,7 +21,7 @@ fun QuestWritingTopBar(
     isEnabled: Boolean,
     onBackClick: () -> Unit,
     onCompleteClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.padding(horizontal = screenWidthDp(22.dp)),
@@ -42,11 +42,11 @@ fun QuestWritingTopBar(
             text = "완료",
             color = if (isEnabled) ByeBooTheme.colors.primary300 else ByeBooTheme.colors.gray600,
             style = ByeBooTheme.typography.body2,
-
-            modifier = Modifier
+            modifier =
+                Modifier
                     .clickable(
                         enabled = isEnabled,
-                        onClick = onCompleteClick
+                        onClick = onCompleteClick,
                     ),
         )
     }

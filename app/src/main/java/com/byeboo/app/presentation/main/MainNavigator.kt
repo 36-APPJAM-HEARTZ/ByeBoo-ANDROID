@@ -186,11 +186,9 @@ class MainNavigator(
         )
     }
 
-    fun navigateToQuestCommon(
-        questId: Long
-    ) {
+    fun navigateToQuestCommon(questId: Long) {
         navController.navigateToQuestCommon(
-            questId = questId
+            questId = questId,
         )
     }
 
