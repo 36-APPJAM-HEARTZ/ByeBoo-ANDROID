@@ -40,5 +40,5 @@ sealed interface OffboardingQuestReviewSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : OffboardingQuestReviewSideEffect
+    ) : OffboardingQuestReviewSideEffect
 }

@@ -81,7 +81,7 @@ class QuestRecordingViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -103,7 +103,7 @@ class QuestRecordingViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -146,7 +146,7 @@ class QuestRecordingViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -195,7 +195,7 @@ class QuestRecordingViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

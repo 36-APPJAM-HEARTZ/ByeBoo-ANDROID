@@ -39,5 +39,5 @@ sealed interface MyPageSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : MyPageSideEffect
+    ) : MyPageSideEffect
 }

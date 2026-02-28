@@ -91,7 +91,7 @@ class QuestTipViewModel
 
                         _sideEffect.emit(
                             QuestTipSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

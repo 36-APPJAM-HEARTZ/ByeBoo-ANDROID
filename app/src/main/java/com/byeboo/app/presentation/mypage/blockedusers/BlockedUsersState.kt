@@ -17,5 +17,5 @@ sealed interface BlockedUsersSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : BlockedUsersSideEffect
+    ) : BlockedUsersSideEffect
 }

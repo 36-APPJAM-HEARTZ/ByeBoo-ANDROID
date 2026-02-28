@@ -40,8 +40,7 @@ fun CommonAnswerItem(
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(
                     color = ByeBooTheme.colors.whiteAlpha5,
-                )
-                .noRippleClickable(
+                ).noRippleClickable(
                     onClick = onClick,
                 ).padding(
                     horizontal = screenWidthDp(24.dp),

@@ -18,5 +18,5 @@ sealed interface UserInfoSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : UserInfoSideEffect
+    ) : UserInfoSideEffect
 }

@@ -44,6 +44,6 @@ sealed interface QuestRecordingSideEffect {
     data object NavigateUp : QuestRecordingSideEffect
 
     data class ShowSnackBar(
-        val snackBarType: CustomSnackBarType
-        ) : QuestRecordingSideEffect
+        val snackBarType: CustomSnackBarType,
+    ) : QuestRecordingSideEffect
 }

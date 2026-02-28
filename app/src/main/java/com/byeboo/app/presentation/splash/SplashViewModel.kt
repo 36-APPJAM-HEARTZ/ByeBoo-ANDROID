@@ -130,7 +130,7 @@ class SplashViewModel
                                 mixpanelUtil.trackLogin(LoginType.KAKAO, false)
                                 _sideEffect.emit(
                                     SplashStateSideEffect.ShowSnackBar(
-                                        snackBarType = CustomSnackBarType.ALERT
+                                        snackBarType = CustomSnackBarType.ALERT,
                                     ),
                                 )
                             }

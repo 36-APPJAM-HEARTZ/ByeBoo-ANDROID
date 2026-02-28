@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -19,7 +18,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -32,7 +30,7 @@ import com.byeboo.app.presentation.quest.component.type.PostOption
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T: PostOption> MoreOptionsBottomSheet(
+fun <T : PostOption> MoreOptionsBottomSheet(
     topOption: T,
     bottomOption: T,
     onOptionClick: (T) -> Unit,
@@ -67,7 +65,7 @@ fun <T: PostOption> MoreOptionsBottomSheet(
                         Modifier
                             .fillMaxWidth()
                             .noRippleClickable { onOptionClick(topOption) },
-                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(12.dp))
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(12.dp)),
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(topOption.optionIcon),
@@ -86,7 +84,7 @@ fun <T: PostOption> MoreOptionsBottomSheet(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(screenHeightDp( 20.dp)),
+                            .padding(screenHeightDp(20.dp)),
                     thickness = 1.dp,
                     color = ByeBooTheme.colors.gray800,
                 )
@@ -96,8 +94,7 @@ fun <T: PostOption> MoreOptionsBottomSheet(
                         Modifier
                             .fillMaxWidth()
                             .noRippleClickable { onOptionClick(bottomOption) },
-                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(12.dp))
-
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(12.dp)),
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(bottomOption.optionIcon),

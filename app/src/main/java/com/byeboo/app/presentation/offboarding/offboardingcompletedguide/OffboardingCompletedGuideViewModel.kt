@@ -55,7 +55,7 @@ class OffboardingCompletedGuideViewModel
                     .catch { e ->
                         _sideEffect.emit(
                             OffboardingCompletedGuideSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }.collect { name ->
@@ -69,7 +69,7 @@ class OffboardingCompletedGuideViewModel
                 }.onFailure { e ->
                     _sideEffect.emit(
                         OffboardingCompletedGuideSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }

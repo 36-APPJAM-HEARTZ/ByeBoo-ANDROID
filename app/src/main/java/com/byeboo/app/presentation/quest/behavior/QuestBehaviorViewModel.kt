@@ -89,7 +89,7 @@ class QuestBehaviorViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestBehaviorSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -112,7 +112,7 @@ class QuestBehaviorViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestBehaviorSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -187,7 +187,7 @@ class QuestBehaviorViewModel
                 }.onFailure { e ->
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }
@@ -346,7 +346,7 @@ class QuestBehaviorViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestBehaviorSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

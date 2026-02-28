@@ -55,7 +55,7 @@ fun MainScreen(
                 launch {
                     snackBarHostState.showSnackbar(
                         CustomSnackBarVisuals(
-                            type = type
+                            type = type,
                         ),
                     )
                 }

@@ -174,7 +174,7 @@ class QuestViewModel
                     }.onFailure { t ->
                         _sideEffect.emit(
                             QuestSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

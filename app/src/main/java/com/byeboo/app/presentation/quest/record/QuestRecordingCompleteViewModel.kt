@@ -64,7 +64,7 @@ class QuestRecordingCompleteViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingCompleteSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

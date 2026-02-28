@@ -17,5 +17,5 @@ sealed interface EditProfileSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : EditProfileSideEffect
+    ) : EditProfileSideEffect
 }

@@ -70,7 +70,7 @@ class HomeAmuletViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             HomeAmuletSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

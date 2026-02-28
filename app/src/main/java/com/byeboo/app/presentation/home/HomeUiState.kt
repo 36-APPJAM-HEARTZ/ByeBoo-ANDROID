@@ -33,5 +33,5 @@ sealed interface HomeSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : HomeSideEffect
+    ) : HomeSideEffect
 }

@@ -60,5 +60,5 @@ sealed interface QuestBehaviorSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : QuestBehaviorSideEffect
+    ) : QuestBehaviorSideEffect
 }

@@ -37,7 +37,7 @@ sealed interface QuestSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : QuestSideEffect
+    ) : QuestSideEffect
 }
 
 enum class QuestTab {

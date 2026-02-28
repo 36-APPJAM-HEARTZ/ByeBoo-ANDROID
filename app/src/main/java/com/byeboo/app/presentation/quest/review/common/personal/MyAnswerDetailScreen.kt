@@ -71,7 +71,7 @@ private fun MyAnswerDetailScreen(
                 ),
     ) {
         AnswerDetailTopBar(
-            onClickMoreOptions = onClickMoreOptions
+            onClickMoreOptions = onClickMoreOptions,
         )
 
         // Todo: QuestWritingTitle 컴포넌트로 교체

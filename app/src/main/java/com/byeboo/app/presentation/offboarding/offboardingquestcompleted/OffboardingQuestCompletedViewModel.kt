@@ -61,7 +61,7 @@ class OffboardingQuestCompletedViewModel
                         viewModelScope.launch {
                             _sideEffect.emit(
                                 QuestCompletedSideEffect.ShowSnackBar(
-                                    snackBarType = CustomSnackBarType.ALERT
+                                    snackBarType = CustomSnackBarType.ALERT,
                                 ),
                             )
                         }

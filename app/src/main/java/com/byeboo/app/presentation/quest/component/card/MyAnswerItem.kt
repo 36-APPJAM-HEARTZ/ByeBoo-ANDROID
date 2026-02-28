@@ -35,8 +35,7 @@ fun MyAnswerItem(
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(
                     color = ByeBooTheme.colors.whiteAlpha5,
-                )
-                .noRippleClickable {
+                ).noRippleClickable {
                     onMyAnswerContentClick(answer.answerId)
                 }.padding(
                     horizontal = screenWidthDp(24.dp),

@@ -149,7 +149,7 @@ class UserInfoViewModel
                     hasSubmitted = false
                     _sideEffect.emit(
                         UserInfoSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }

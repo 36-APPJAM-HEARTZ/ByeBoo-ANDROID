@@ -80,7 +80,7 @@ class HomeViewModel
                             hasError = true
                             _sideEffect.emit(
                                 HomeSideEffect.ShowSnackBar(
-                                    snackBarType = CustomSnackBarType.ALERT
+                                    snackBarType = CustomSnackBarType.ALERT,
                                 ),
                             )
                         }

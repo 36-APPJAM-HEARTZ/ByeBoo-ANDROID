@@ -90,7 +90,7 @@ class QuestStartViewModel
                     } else {
                         _sideEffect.emit(
                             QuestStartSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -129,7 +129,7 @@ class QuestStartViewModel
                     }.onFailure { e ->
                         _sideEffect.emit(
                             QuestStartSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

@@ -77,7 +77,7 @@ class EditProfileViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             EditProfileSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

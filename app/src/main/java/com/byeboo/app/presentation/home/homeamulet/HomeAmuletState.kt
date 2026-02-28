@@ -14,7 +14,7 @@ sealed interface HomeAmuletSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : HomeAmuletSideEffect
+    ) : HomeAmuletSideEffect
 }
 
 enum class AmuletType(

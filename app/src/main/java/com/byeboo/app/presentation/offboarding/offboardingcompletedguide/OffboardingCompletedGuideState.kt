@@ -16,5 +16,5 @@ sealed interface OffboardingCompletedGuideSideEffect {
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
-        ) : OffboardingCompletedGuideSideEffect
+    ) : OffboardingCompletedGuideSideEffect
 }

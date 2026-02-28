@@ -27,6 +27,6 @@ sealed interface QuestRecordingCompleteSideEffect {
     data object ShowInAppReview : QuestRecordingCompleteSideEffect
 
     data class ShowSnackBar(
-        val snackBarType: CustomSnackBarType
-        ) : QuestRecordingCompleteSideEffect
+        val snackBarType: CustomSnackBarType,
+    ) : QuestRecordingCompleteSideEffect
 }

@@ -192,7 +192,7 @@ class MyPageViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             MyPageSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -210,7 +210,7 @@ class MyPageViewModel
                     }.onFailure {
                         _sideEffect.emit(
                             MyPageSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

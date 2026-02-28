@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -113,14 +112,14 @@ fun MyAnswerScreen(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .padding(top = screenHeightDp(184.dp))
+                                .padding(top = screenHeightDp(184.dp)),
                     ) {
                         Text(
                             text = "아직 작성한 답변이 없어요!",
                             style = ByeBooTheme.typography.body6,
                             color = ByeBooTheme.colors.gray400,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
