@@ -18,7 +18,6 @@ sealed interface SplashStateSideEffect {
     data object RequestNotificationPermission : SplashStateSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : SplashStateSideEffect
 }

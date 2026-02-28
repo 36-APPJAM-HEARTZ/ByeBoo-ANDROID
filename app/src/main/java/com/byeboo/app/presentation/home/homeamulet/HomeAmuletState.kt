@@ -13,9 +13,8 @@ sealed interface HomeAmuletSideEffect {
     data object NavigateToHomeOnboarding : HomeAmuletSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : HomeAmuletSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : HomeAmuletSideEffect
 }
 
 enum class AmuletType(

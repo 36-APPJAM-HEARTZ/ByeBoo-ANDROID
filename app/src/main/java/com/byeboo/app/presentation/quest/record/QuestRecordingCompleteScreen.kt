@@ -67,7 +67,7 @@ fun QuestRecordingCompleteRoute(
                         inAppReview(activity)
                     }
                 }
-                is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

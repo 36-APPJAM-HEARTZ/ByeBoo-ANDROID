@@ -60,7 +60,7 @@ fun OffboardingCompletedJourneyRoute(
                     navigateToOffboardingQuestCompleted(
                         effect.journey,
                     )
-                is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

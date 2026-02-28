@@ -17,7 +17,6 @@ sealed interface QuestStartSideEffect {
     data object NavigateToHome : QuestStartSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : QuestStartSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : QuestStartSideEffect
 }

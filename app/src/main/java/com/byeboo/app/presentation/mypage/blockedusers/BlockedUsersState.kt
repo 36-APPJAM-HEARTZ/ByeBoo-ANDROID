@@ -16,7 +16,6 @@ sealed interface BlockedUsersSideEffect {
     data object NavigateUp : BlockedUsersSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : BlockedUsersSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : BlockedUsersSideEffect
 }

@@ -32,7 +32,6 @@ sealed interface HomeSideEffect {
     data object NavigateToOffboardingNewJourney : HomeSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : HomeSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : HomeSideEffect
 }

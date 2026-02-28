@@ -73,7 +73,7 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
                     navigateToQuestMyAnswers()
                 is QuestSideEffect.ShowSnackBar ->
-                    showSnackBar(effect.message, effect.iconType)
+                    showSnackBar(effect.snackBarType)
             }
         }
     }

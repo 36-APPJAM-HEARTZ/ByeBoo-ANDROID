@@ -17,8 +17,7 @@ data class CommonAnswerState(
 
 sealed interface CommonAnswerSideEffect {
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType
     ) : CommonAnswerSideEffect
 
     data object NavigateToQuest : CommonAnswerSideEffect

@@ -102,7 +102,7 @@ fun SplashRoute(
                     }
                 }
 
-                is SplashStateSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is SplashStateSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

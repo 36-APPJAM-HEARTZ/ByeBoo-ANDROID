@@ -54,7 +54,7 @@ fun QuestTipRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestTipSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

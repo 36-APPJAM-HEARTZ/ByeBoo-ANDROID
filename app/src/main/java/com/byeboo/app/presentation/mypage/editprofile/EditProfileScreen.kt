@@ -58,7 +58,7 @@ fun EditProfileRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is EditProfileSideEffect.NavigateToMyPage -> navigateToMyPage()
-                is EditProfileSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is EditProfileSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

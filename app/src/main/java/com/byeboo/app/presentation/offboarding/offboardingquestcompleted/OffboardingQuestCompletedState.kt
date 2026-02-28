@@ -24,7 +24,6 @@ sealed interface QuestCompletedSideEffect {
     ) : QuestCompletedSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : QuestCompletedSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : QuestCompletedSideEffect
 }

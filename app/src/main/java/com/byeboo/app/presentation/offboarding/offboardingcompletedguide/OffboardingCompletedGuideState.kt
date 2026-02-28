@@ -15,7 +15,6 @@ sealed interface OffboardingCompletedGuideSideEffect {
     data object NavigateToOffboardingCompletedJourney : OffboardingCompletedGuideSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : OffboardingCompletedGuideSideEffect
+        val snackBarType: CustomSnackBarType,
+        ) : OffboardingCompletedGuideSideEffect
 }

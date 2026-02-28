@@ -71,7 +71,7 @@ private fun MyAnswerDetailScreen(
     ) {
         AnswerDetailTopBar(
             onClickMoreOptions = onClickMoreOptions,
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth()
         )
 
         // Todo: QuestWritingTitle 컴포넌트로 교체

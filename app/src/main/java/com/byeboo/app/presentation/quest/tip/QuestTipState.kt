@@ -27,7 +27,6 @@ sealed interface QuestTipSideEffect {
     data object NavigateToQuest : QuestTipSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
-    ) : QuestTipSideEffect
+        val snackBarType: CustomSnackBarType
+        ) : QuestTipSideEffect
 }

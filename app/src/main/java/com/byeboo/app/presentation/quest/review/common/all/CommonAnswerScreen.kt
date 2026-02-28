@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,7 +42,7 @@ fun CommonAnswerRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is CommonAnswerSideEffect.NavigateToQuest -> navigateToQuest()
-                is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -81,7 +83,7 @@ private fun CommonAnswerScreen(
     ) {
         AnswerDetailTopBar(
             onClickMoreOptions = onClickMoreOptions,
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         QuestTitle(
@@ -91,7 +93,7 @@ private fun CommonAnswerScreen(
             questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
         )
 
-        Spacer(modifier = Modifier.padding(bottom = screenHeightDp(10.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         CommonAnswerItem(
             answer = uiState.answer,

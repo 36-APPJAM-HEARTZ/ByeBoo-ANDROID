@@ -82,7 +82,7 @@ fun OffboardingCompletedGuideRoute(
                 is OffboardingCompletedGuideSideEffect.NavigateToHome -> navigateToHome()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
-                is OffboardingCompletedGuideSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is OffboardingCompletedGuideSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
