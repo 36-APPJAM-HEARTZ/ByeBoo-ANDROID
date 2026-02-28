@@ -233,7 +233,7 @@ class QuestViewModel
             _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
         }
 
-        fun onTipClick() {
+        fun onTipClicked() {
             val quest = uiState.value.myJourneyState.selectedQuest ?: return
             viewModelScope.launch {
                 mixpanelUtil.trackEvent(
@@ -259,7 +259,7 @@ class QuestViewModel
             }
         }
 
-        fun onQuestClick(questId: Long) {
+        fun onQuestClicked(questId: Long) {
             viewModelScope.launch {
                 val quest =
                     uiState.value.myJourneyState.questGroups

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -52,7 +53,7 @@ fun MyAnswerRoute(
     MyAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
-        onMyAnswerContentClick = viewModel::onMyAnswerContentClick,
+        onMyAnswerContentClick = viewModel::onMyAnswerContentClicked,
     )
 }
 
@@ -91,7 +92,7 @@ fun MyAnswerScreen(
                         ),
                 )
 
-                Spacer(modifier = Modifier.padding(bottom = screenHeightDp(16.dp)))
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
                 Text(
                     text =
@@ -111,14 +112,15 @@ fun MyAnswerScreen(
                     Box(
                         modifier =
                             Modifier
-                                .fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
+                                .fillMaxWidth()
+                                .padding(top = screenHeightDp(184.dp))
                     ) {
                         Text(
                             text = "아직 작성한 답변이 없어요!",
                             style = ByeBooTheme.typography.body6,
                             color = ByeBooTheme.colors.gray400,
                             textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }

@@ -53,7 +53,7 @@ constructor() : ViewModel() {
         _uiState.update { it.copy(showBottomSheet = false) }
     }
 
-    fun onOptionClick(option: OtherPostOption) {
+    fun onOptionClicked(option: OtherPostOption) {
         onDismissBottomSheet()
 
         viewModelScope.launch {

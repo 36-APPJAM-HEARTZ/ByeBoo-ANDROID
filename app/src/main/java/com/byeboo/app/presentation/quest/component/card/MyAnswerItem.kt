@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.component.card
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -30,24 +32,25 @@ fun MyAnswerItem(
         modifier =
             modifier
                 .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(12.dp))
+                .background(
+                    color = ByeBooTheme.colors.whiteAlpha5,
+                )
                 .noRippleClickable {
                     onMyAnswerContentClick(answer.answerId)
-                }.background(
-                    color = ByeBooTheme.colors.whiteAlpha5,
-                    shape = RoundedCornerShape(12.dp),
-                ).padding(
+                }.padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(16.dp),
                 ),
     ) {
         Row(
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "Q.",
                 color = ByeBooTheme.colors.primary200,
                 style = ByeBooTheme.typography.sub2,
-                modifier = Modifier.padding(end = screenWidthDp(4.dp)),
             )
 
             Text(
@@ -57,7 +60,7 @@ fun MyAnswerItem(
             )
         }
 
-        Spacer(modifier = Modifier.padding(screenHeightDp(12.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         Text(
             text = answer.content,

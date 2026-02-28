@@ -185,7 +185,7 @@ fun CommonJourneyScreen(
                 ) { answer ->
                     CommonAnswerItem(
                         answer = answer,
-                        onClick = { onAnswerClick(1) },
+                        onClick = { /* Todo: 네비 연결 */ },
                         modifier =
                             Modifier
                                 .padding(horizontal = screenWidthDp(24.dp))

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +24,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
-import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
 
 @Composable
@@ -39,7 +40,7 @@ fun MyAnswerDetailRoute(
         paddingValues = paddingValues,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
-        onOptionClick = { option -> viewModel.onOptionClick(option) },
+        onOptionClick = { option -> viewModel.onOptionClicked(option) },
         modifier = modifier,
     )
 }
@@ -51,7 +52,7 @@ private fun MyAnswerDetailScreen(
     paddingValues: PaddingValues,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
-    onOptionClick: (OptionType) -> Unit,
+    onOptionClick: (MyPostOption) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -70,8 +71,7 @@ private fun MyAnswerDetailScreen(
                 ),
     ) {
         AnswerDetailTopBar(
-            onClickMoreOptions = onClickMoreOptions,
-            modifier = Modifier.fillMaxWidth()
+            onClickMoreOptions = onClickMoreOptions
         )
 
         // Todo: QuestWritingTitle 컴포넌트로 교체
@@ -82,7 +82,7 @@ private fun MyAnswerDetailScreen(
             questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
         )
 
-        Spacer(modifier = Modifier.padding(bottom = screenHeightDp(10.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         MyAnswerContent(
             content = answerState.content,
@@ -90,8 +90,8 @@ private fun MyAnswerDetailScreen(
     }
 
     MoreOptionsBottomSheet(
-        topOption = OptionType.EDIT,
-        bottomOption = OptionType.DELETE,
+        topOption = MyPostOption.EDIT,
+        bottomOption = MyPostOption.DELETE,
         onOptionClick = onOptionClick,
         showBottomSheet = uiState.showBottomSheet,
         onDismissRequest = onDismissBottomSheet,

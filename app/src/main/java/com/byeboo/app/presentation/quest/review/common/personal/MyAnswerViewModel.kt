@@ -64,7 +64,7 @@ class MyAnswerViewModel
                 ),
             )
 
-        fun onMyAnswerContentClick(answerId: Long) {
+        fun onMyAnswerContentClicked(answerId: Long) {
             viewModelScope.launch {
                 _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
             }
@@ -78,7 +78,7 @@ class MyAnswerViewModel
             _uiState.update { it.copy(showBottomSheet = false) }
         }
 
-        fun onOptionClick(option: MyPostOption) {
+        fun onOptionClicked(option: MyPostOption) {
             onDismissBottomSheet()
 
             viewModelScope.launch {
