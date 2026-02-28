@@ -2,32 +2,28 @@ package com.byeboo.app.presentation.quest.aianswer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.screenHeightDp
@@ -86,19 +82,9 @@ private fun QuestAiAnswerScreen(
                 ),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(35.dp)),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = null,
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCloseClick),
-            )
-        }
+        CloseTopbar(
+            onCloseClick = onCloseClick,
+        )
 
         QuestAiAnswer(
             questAiAnswer = uiState.questAiAnswer,

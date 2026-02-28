@@ -10,12 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,17 +20,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
@@ -93,25 +87,16 @@ private fun OffboardingCompletedJourneyScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ).verticalScroll(rememberScrollState()),
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-            contentDescription = null,
-            modifier =
-                Modifier
-                    .size(24.dp)
-                    .noRippleClickable(onClick = onBackClick),
-            tint = ByeBooTheme.colors.gray50,
+        BackTopbar(
+            onBackClick = onBackClick,
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(26.dp)))
 
         Text(
             text = "내가 완료한 여정이에요",
             color = ByeBooTheme.colors.gray50,
             style = ByeBooTheme.typography.head1,
+            modifier = Modifier.padding(vertical = screenHeightDp(10.dp)),
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         HorizontalDivider(
             modifier =
@@ -130,6 +115,7 @@ private fun OffboardingCompletedJourneyScreen(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp)),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -137,8 +123,6 @@ private fun OffboardingCompletedJourneyScreen(
                     color = ByeBooTheme.colors.gray300,
                     style = ByeBooTheme.typography.cap2,
                 )
-
-                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
                     text = "${uiState.completedCount}개",

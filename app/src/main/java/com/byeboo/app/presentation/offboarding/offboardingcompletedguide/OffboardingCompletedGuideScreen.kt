@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,12 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -53,9 +50,9 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.component.OffboardingNewJourneyButton
@@ -146,24 +143,16 @@ private fun OffboardingCompleteGuideScreen(
                         ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                    contentDescription = null,
-                    tint = ByeBooTheme.colors.white,
-                    modifier =
-                        Modifier
-                            .size(24.dp)
-                            .align(Alignment.End)
-                            .noRippleClickable(onCloseClick),
+                CloseTopbar(
+                    onCloseClick = onCloseClick,
                 )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(34.dp)))
 
                 Column(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .height(screenHeightDp(156.dp)),
+                            .height(screenHeightDp(156.dp))
+                            .padding(vertical = screenHeightDp(18.dp)),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(

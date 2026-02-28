@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,16 +22,13 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
@@ -96,33 +90,11 @@ private fun OffboardingNewJourneyScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ).verticalScroll(rememberScrollState()),
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
-            contentDescription = null,
-            tint = ByeBooTheme.colors.gray50,
-            modifier =
-                Modifier
-                    .size(24.dp)
-                    .noRippleClickable(onClick = onBackClick),
+        BackTopbar(
+            onBackClick = onBackClick,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(26.dp)))
-
-        Text(
-            text = "어떤 여정을 시작해 볼까요?",
-            color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1,
-        )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
-        Text(
-            text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
-            color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.body6,
-        )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
+        Title()
 
         HorizontalDivider(
             modifier =
@@ -143,7 +115,7 @@ private fun OffboardingNewJourneyScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -151,8 +123,6 @@ private fun OffboardingNewJourneyScreen(
                     color = ByeBooTheme.colors.gray300,
                     style = ByeBooTheme.typography.cap2,
                 )
-
-                Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
                 Text(
                     text = "${uiState.uncompletedCount}개",
@@ -177,6 +147,29 @@ private fun OffboardingNewJourneyScreen(
 
             PreparingCard()
         }
+    }
+}
+
+@Composable
+private fun Title(modifier: Modifier = Modifier) {
+    Column(
+        modifier =
+            modifier
+                .padding(vertical = screenHeightDp(10.dp)),
+    ) {
+        Text(
+            text = "어떤 여정을 시작해 볼까요?",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.head1,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
+        Text(
+            text = "각 여정 당 30개의 퀘스트를 제공해 드려요",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body6,
+        )
     }
 }
 
