@@ -191,6 +191,7 @@ private fun QuestBehaviorCompleteScreen(
                 }
                 if (uiState.questAnswer.isNotBlank()) {
                     Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
                     ContentText(uiState.questAnswer)
                 }
             }
@@ -205,7 +206,7 @@ private fun QuestBehaviorCompleteScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                 ByeBooButton(
                     buttonText = "보리에게 답장 받기",
@@ -232,6 +233,7 @@ private fun QuestEmotionDescriptionContent(
             questEmotionDescription = questEmotionDescription,
             emotionType = emotionType,
         )
+
         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
     }
 }
