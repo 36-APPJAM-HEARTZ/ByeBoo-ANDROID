@@ -38,9 +38,17 @@ object NetworkModule {
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
-    fun providesConverterFactory(): Converter.Factory = Json.asConverterFactory(
-        "application/json".toMediaType()
-    )
+    fun providesConverterFactory(): Converter.Factory {
+        val json = Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            isLenient = true
+        }
+
+        return json.asConverterFactory(
+            "application/json".toMediaType(),
+        )
+    }
 
     @Provides
     @Singleton
