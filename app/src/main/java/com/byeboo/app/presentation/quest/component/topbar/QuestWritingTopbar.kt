@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.component
+package com.byeboo.app.presentation.quest.component.topbar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -24,7 +24,7 @@ fun QuestWritingTopBar(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier.padding(horizontal = screenWidthDp(22.dp)),
+        modifier = modifier.padding(horizontal = screenWidthDp(22.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

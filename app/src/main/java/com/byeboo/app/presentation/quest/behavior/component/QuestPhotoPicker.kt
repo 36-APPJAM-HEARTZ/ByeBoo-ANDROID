@@ -44,7 +44,6 @@ internal fun QuestPhotoPicker(
     Box(
         modifier =
             modifier
-                //.width(screenWidthDp(312.dp))
                 .fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))

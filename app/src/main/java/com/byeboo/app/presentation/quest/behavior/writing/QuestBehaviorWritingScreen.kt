@@ -50,7 +50,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.QuestWritingTopBar
+import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
@@ -251,7 +251,7 @@ private fun QuestBehaviorWritingScreen(
                 isPhotoQuestion = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 14.dp)
+                    .padding(bottom = screenHeightDp(14.dp))
 
             )
         }

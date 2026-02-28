@@ -142,7 +142,7 @@ fun CommonJourneyScreen(
                             )
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                             ByeBooButton(
-                                onClick = { onCommonQuestClick(0) },
+                                onClick = { onCommonQuestClick(0) }, // TODO : 답변 작성 화면 이동
                                 buttonText = "답변 작성하기",
                                 buttonStyle = ByeBooTheme.typography.body2,
                                 buttonTextColor = ByeBooTheme.colors.primary500,
