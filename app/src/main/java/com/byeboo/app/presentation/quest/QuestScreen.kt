@@ -87,7 +87,7 @@ fun QuestRoute(
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         onMyAnswersClick = viewModel::onMyAnswersClicked,
-        onCommonQuestClick = {/* 이동 관련 로직 뷰모델에 작성 */},
+        onCommonQuestClick = { /* 이동 관련 로직 뷰모델에 작성 */ },
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,
