@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.all
+package com.byeboo.app.presentation.quest.review.common.other
 
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel

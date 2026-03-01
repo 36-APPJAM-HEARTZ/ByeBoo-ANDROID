@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.all
+package com.byeboo.app.presentation.quest.review.common.other
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CommonAnswerViewModel
+class CommonOtherAnswerViewModel
     @Inject
     constructor() : ViewModel() {
         private val _uiState = MutableStateFlow(CommonAnswerState())

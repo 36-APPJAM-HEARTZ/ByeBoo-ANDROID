@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.all
+package com.byeboo.app.presentation.quest.review.common.other
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -28,11 +28,11 @@ import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTop
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun CommonAnswerRoute(
+fun CommonOtherAnswerRoute(
     navigateToQuest: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: CommonAnswerViewModel = hiltViewModel(),
+    viewModel: CommonOtherAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
@@ -46,7 +46,7 @@ fun CommonAnswerRoute(
         }
     }
 
-    CommonAnswerScreen(
+    CommonOtherAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
         onClickMoreOptions = viewModel::onClickMoreOptions,
@@ -58,7 +58,7 @@ fun CommonAnswerRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CommonAnswerScreen(
+private fun CommonOtherAnswerScreen(
     uiState: CommonAnswerState,
     paddingValues: PaddingValues,
     onClickMoreOptions: () -> Unit,

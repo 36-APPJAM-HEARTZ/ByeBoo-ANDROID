@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestCommonViewModel
+class QuestCommonWritingViewModel
     @Inject
     constructor() : ViewModel() {
         private val _uiState = MutableStateFlow(QuestCommonState())
