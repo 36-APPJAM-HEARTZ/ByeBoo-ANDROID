@@ -56,6 +56,8 @@ fun MyAnswerItem(
                 text = answer.question,
                 color = ByeBooTheme.colors.gray100,
                 style = ByeBooTheme.typography.sub3,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
 
