@@ -13,8 +13,8 @@ import com.byeboo.app.presentation.quest.common.navigation.questCommonGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
 import com.byeboo.app.presentation.quest.review.QuestReviewRoute
 import com.byeboo.app.presentation.quest.review.common.other.CommonOtherAnswerRoute
-import com.byeboo.app.presentation.quest.review.common.personal.MyAnswerDetailRoute
 import com.byeboo.app.presentation.quest.review.common.personal.MyAnswerRoute
+import com.byeboo.app.presentation.quest.review.common.personal.detail.MyAnswerDetailRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
