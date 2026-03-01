@@ -26,8 +26,8 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestReview
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
-import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
+import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
