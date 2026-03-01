@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.record.writing
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
@@ -51,6 +52,6 @@ sealed interface QuestRecordingSideEffect {
     data object NavigateUp : QuestRecordingSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestRecordingSideEffect
 }

@@ -47,6 +47,9 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.review.my.QuestReviewSideEffect
+import com.byeboo.app.presentation.quest.review.my.QuestReviewState
+import com.byeboo.app.presentation.quest.review.my.QuestReviewViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -70,15 +73,13 @@ fun QuestReviewRoute(
                         effect.questId,
                         true,
                     )
-
                 is QuestReviewSideEffect.NavigateToQuestBehaviorEdit ->
                     navigateToQuestBehaviorEdit(
                         effect.questId,
                         true,
                         effect.imageKey,
                     )
-
-                is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -224,21 +225,6 @@ private fun QuestReviewScreen(
                         )
                     }
                 }
-            }
-
-            if (!canScroll) {
-                ByeBooButton(
-                    buttonText = "보리에게 답장 받기",
-                    buttonTextColor = ByeBooTheme.colors.white,
-                    buttonStyle = ByeBooTheme.typography.body2,
-                    buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                    onClick = { /*Todo: ai 버튼 연결 */ },
-                    modifier =
-                        Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(horizontal = screenWidthDp(24.dp))
-                            .padding(bottom = screenHeightDp(10.dp)),
-                )
             }
         }
     }

@@ -56,7 +56,7 @@ fun OffboardingQuestCompletedRoute(
                         effect.questId,
                         effect.journey,
                     )
-                is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

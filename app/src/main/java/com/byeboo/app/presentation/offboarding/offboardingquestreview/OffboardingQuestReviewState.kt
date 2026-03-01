@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestreview
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
@@ -38,6 +39,6 @@ sealed interface OffboardingQuestReviewSideEffect {
     ) : OffboardingQuestReviewSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : OffboardingQuestReviewSideEffect
 }

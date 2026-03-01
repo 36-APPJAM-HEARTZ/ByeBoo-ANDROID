@@ -12,6 +12,9 @@ import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.common.navigation.questCommonGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
 import com.byeboo.app.presentation.quest.review.QuestReviewRoute
+import com.byeboo.app.presentation.quest.review.common.other.CommonOtherAnswerRoute
+import com.byeboo.app.presentation.quest.review.common.personal.MyAnswerRoute
+import com.byeboo.app.presentation.quest.review.common.personal.detail.MyAnswerDetailRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
@@ -41,13 +44,31 @@ fun NavController.navigateToQuestReview(
     navigate(QuestReview(questId), navOptions)
 }
 
+fun NavController.navigateToQuestCommonAnswer(
+    answerId: Long,
+    navOptions: NavOptions? = null,
+) {
+    navigate(QuestCommonAnswer(answerId), navOptions)
+}
+
+fun NavController.navigateToQuestMyAnswers(navOptions: NavOptions? = null) {
+    navigate(QuestMyAnswers, navOptions)
+}
+
+fun NavController.navigateToQuestMyAnswerDetail(
+    answerId: Long,
+    navOptions: NavOptions? = null,
+) {
+    navigate(QuestMyAnswersDetail(answerId), navOptions)
+}
+
 fun NavGraphBuilder.questGraph(
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
-    navigateToQuestCommon: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
@@ -55,6 +76,9 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
+    navigateToQuestCommonAnswer: (Long) -> Unit,
+    navigateToQuestMyAnswers: () -> Unit,
+    navigateToQuestMyAnswerDetail: (Long) -> Unit,
     navigateToQuestCommonComplete: (Long) -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -72,8 +96,10 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
-                navigateToQuestCommon = navigateToQuestCommon,
+                navigateToQuestCommonWriting = navigateToQuestCommonWriting,
                 navigateToQuestReview = navigateToQuestReview,
+                navigateToCommonAnswer = navigateToQuestCommonAnswer,
+                navigateToQuestMyAnswers = navigateToQuestMyAnswers,
                 paddingValues = paddingValues,
             )
         }
@@ -90,6 +116,26 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
+                paddingValues = paddingValues,
+            )
+        }
+
+        composable<QuestCommonAnswer> {
+            CommonOtherAnswerRoute(
+                navigateToQuest = navigateToQuest,
+                paddingValues = paddingValues,
+            )
+        }
+
+        composable<QuestMyAnswers> {
+            MyAnswerRoute(
+                navigateToQuestMyAnswerDetail = navigateToQuestMyAnswerDetail,
+                paddingValues = paddingValues,
+            )
+        }
+
+        composable<QuestMyAnswersDetail> {
+            MyAnswerDetailRoute(
                 paddingValues = paddingValues,
             )
         }

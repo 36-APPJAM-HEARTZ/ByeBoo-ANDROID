@@ -80,7 +80,7 @@ fun QuestBehaviorCompleteRoute(
                     }
                 }
 
-                is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestBehaviorCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

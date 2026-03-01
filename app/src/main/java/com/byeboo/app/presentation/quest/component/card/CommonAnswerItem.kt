@@ -15,11 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
@@ -28,14 +30,18 @@ import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 fun CommonAnswerItem(
     answer: CommonAnswerModel,
     modifier: Modifier = Modifier,
+    isExpanded: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(12.dp))
                 .background(
                     color = ByeBooTheme.colors.whiteAlpha5,
-                    shape = RoundedCornerShape(12.dp),
+                ).noRippleClickable(
+                    onClick = onClick,
                 ).padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(16.dp),
@@ -65,16 +71,18 @@ fun CommonAnswerItem(
             text = answer.content,
             style = ByeBooTheme.typography.body3,
             color = ByeBooTheme.colors.gray100,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
+            maxLines = if (isExpanded) Int.MAX_VALUE else 2,
+            overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        if (!isExpanded) {
+            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        Text(
-            text = answer.displayTime,
-            style = ByeBooTheme.typography.cap2,
-            color = ByeBooTheme.colors.gray400,
-        )
+            Text(
+                text = answer.displayTime,
+                style = ByeBooTheme.typography.cap2,
+                color = ByeBooTheme.colors.gray400,
+            )
+        }
     }
 }

@@ -16,12 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 
 @Composable
 fun CustomSnackBar(
-    message: String,
+    customSnackBarType: CustomSnackBarType,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -35,7 +35,7 @@ fun CustomSnackBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_alert),
+            imageVector = ImageVector.vectorResource(id = customSnackBarType.icon),
             contentDescription = "알림",
             tint = Color.Unspecified,
         )
@@ -43,7 +43,7 @@ fun CustomSnackBar(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = message,
+            text = customSnackBarType.message,
             style = ByeBooTheme.typography.body6,
             color = ByeBooTheme.colors.gray50,
         )

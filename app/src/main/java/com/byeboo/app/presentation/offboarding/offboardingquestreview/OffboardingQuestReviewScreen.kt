@@ -83,7 +83,7 @@ fun OffboardingQuestReviewRoute(
                         true,
                         effect.imageKey,
                     )
-                is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

@@ -36,8 +36,10 @@ fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
-    navigateToQuestCommon: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
+    navigateToCommonAnswer: (Long) -> Unit,
+    navigateToQuestMyAnswers: () -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestViewModel = hiltViewModel(),
 ) {
@@ -67,12 +69,14 @@ fun QuestRoute(
                     navigateToQuestRecording(effect.questId)
                 is QuestSideEffect.NavigateToQuestBehavior ->
                     navigateToQuestBehavior(effect.questId)
-                is QuestSideEffect.NavigateToQuestCommon ->
-                    navigateToQuestCommon(effect.questId)
+                is QuestSideEffect.NavigateToQuestCommonWriting ->
+                    navigateToQuestCommonWriting(effect.questId)
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
+                is QuestSideEffect.NavigateToQuestMyAnswers ->
+                    navigateToQuestMyAnswers()
                 is QuestSideEffect.ShowSnackBar ->
-                    showSnackBar(effect.message)
+                    showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -81,12 +85,14 @@ fun QuestRoute(
         uiState = uiState,
         listState = listState,
         paddingValues = paddingValues,
-        onQuestClick = viewModel::onQuestClick,
-        onCommonQuestClick = navigateToQuestCommon,
+        onQuestClick = viewModel::onQuestClicked,
+        onMyAnswersClick = viewModel::onMyAnswersClicked,
+        onCommonQuestClick = navigateToQuestCommonWriting, // TODO: 이동 관련 로직 뷰모델에 작성
         onDismissModal = viewModel::onQuitDismissModal,
-        onTipClick = viewModel::onTipClick,
+        onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClicked,
+        onCommonAnswerClick = navigateToCommonAnswer,
         onDateChange = viewModel::onDateChange,
     )
 }
@@ -97,11 +103,13 @@ private fun QuestScreen(
     listState: LazyListState,
     paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
+    onMyAnswersClick: () -> Unit,
     onCommonQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
     onTipClick: () -> Unit,
     onQuestStart: () -> Unit,
     onTabClick: (QuestTab) -> Unit,
+    onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
 ) {
     if (uiState.myJourneyState.showQuitModal) {
@@ -150,6 +158,8 @@ private fun QuestScreen(
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
+                    onMyAnswersClick = onMyAnswersClick,
+                    onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,
                     onCommonQuestClick = onCommonQuestClick,
                 )

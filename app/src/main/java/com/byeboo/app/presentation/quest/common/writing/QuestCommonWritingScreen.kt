@@ -45,7 +45,7 @@ fun QuestCommonRoute(
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: QuestCommonViewModel = hiltViewModel(),
+    viewModel: QuestCommonWritingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -143,6 +143,9 @@ private fun QuestCommonScreen(
         QuestWritingFooter(
             currentCharCount = uiState.questAnswer.length,
             isPhotoQuestion = false,
+            modifier =
+                Modifier
+                    .padding(horizontal = screenWidthDp(24.dp)),
         )
     }
 }

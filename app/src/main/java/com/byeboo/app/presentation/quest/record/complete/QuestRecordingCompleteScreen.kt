@@ -63,7 +63,7 @@ fun QuestRecordingCompleteRoute(
                     }
                 }
 
-                is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

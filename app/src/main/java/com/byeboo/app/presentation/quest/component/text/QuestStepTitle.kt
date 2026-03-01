@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -18,6 +19,7 @@ fun QuestStepTitle(
     stepTitle: String,
 ) {
     Row(
+        horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SmallTag(

@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.home
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.home.HomeStatus
 
@@ -31,6 +32,6 @@ sealed interface HomeSideEffect {
     data object NavigateToOffboardingNewJourney : HomeSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : HomeSideEffect
 }

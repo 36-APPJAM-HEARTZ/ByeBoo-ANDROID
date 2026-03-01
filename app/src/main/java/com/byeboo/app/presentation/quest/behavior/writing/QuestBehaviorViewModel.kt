@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
@@ -90,7 +91,9 @@ class QuestBehaviorViewModel
                         }
                     }.onFailure {
                         _sideEffect.emit(
-                            QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestBehaviorSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }
@@ -111,7 +114,9 @@ class QuestBehaviorViewModel
                         }
                     }.onFailure {
                         _sideEffect.emit(
-                            QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestBehaviorSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }
@@ -169,7 +174,9 @@ class QuestBehaviorViewModel
                     }
                 }.onFailure {
                     _sideEffect.emit(
-                        QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        QuestBehaviorSideEffect.ShowSnackBar(
+                            snackBarType = CustomSnackBarType.ALERT,
+                        ),
                     )
                 }
             }
@@ -242,7 +249,9 @@ class QuestBehaviorViewModel
                     _sideEffect.emit(QuestBehaviorSideEffect.CompleteAndClear(questId))
                 }.onFailure {
                     _sideEffect.emit(
-                        QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        QuestBehaviorSideEffect.ShowSnackBar(
+                            snackBarType = CustomSnackBarType.ALERT,
+                        ),
                     )
                 }
                 _uiState.update { it.copy(isUploading = false) }
@@ -363,7 +372,9 @@ class QuestBehaviorViewModel
                         )
                     }.onFailure {
                         _sideEffect.emit(
-                            QuestBehaviorSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestBehaviorSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }

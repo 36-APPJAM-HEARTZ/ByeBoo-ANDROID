@@ -27,3 +27,11 @@ data class CommonAnswerModel(
     val displayTime: String,
     val content: String,
 )
+
+@Immutable
+data class MyAnswerModel(
+    val answerId: Long,
+    val question: String,
+    val writtenAt: String,
+    val content: String,
+)

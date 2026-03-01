@@ -10,7 +10,7 @@ import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.Ques
 import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.QuestCommonWriting
 import com.byeboo.app.presentation.quest.common.writing.QuestCommonRoute
 
-fun NavController.navigateToQuestCommon(
+fun NavController.navigateToQuestCommonWriting(
     questId: Long,
     navOptions: NavOptions? = null,
 ) {

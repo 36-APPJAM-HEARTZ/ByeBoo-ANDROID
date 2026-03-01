@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.auth.userinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
@@ -147,7 +148,9 @@ class UserInfoViewModel
                 } else {
                     hasSubmitted = false
                     _sideEffect.emit(
-                        UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                        UserInfoSideEffect.ShowSnackBar(
+                            snackBarType = CustomSnackBarType.ALERT,
+                        ),
                     )
                 }
             }

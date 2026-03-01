@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.behavior.complete
 
 import android.net.Uri
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 
 data class QuestBehaviorCompleteState(
@@ -27,6 +28,6 @@ sealed interface QuestBehaviorCompleteSideEffect {
     data object ShowInAppReview : QuestBehaviorCompleteSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestBehaviorCompleteSideEffect
 }

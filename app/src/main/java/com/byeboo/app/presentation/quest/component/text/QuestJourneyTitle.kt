@@ -1,9 +1,8 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,14 +28,13 @@ fun QuestJourneyTitle(
             Modifier
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(19.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp)),
     ) {
         MiddleTag(
             middleTagType = MiddleTagType.QUEST_START_DAY,
             text = dayCount.toString(),
             textStyle = ByeBooTheme.typography.cap2,
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             buildAnnotatedString {
@@ -51,8 +49,6 @@ fun QuestJourneyTitle(
             color = ByeBooTheme.colors.gray50,
             style = ByeBooTheme.typography.head1,
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
 
         Text(
             text = "오늘도 한 걸음 나아가 볼까요?",
