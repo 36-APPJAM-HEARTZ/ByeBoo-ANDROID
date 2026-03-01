@@ -4,6 +4,8 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 
 data class CommonAnswerState(
+    val createdAt: String,
+    val questQuestion: String,
     val answer: CommonAnswerModel =
         CommonAnswerModel(
             answerId = 0L,

@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.personal
+package com.byeboo.app.presentation.quest.review.common.personal.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
-import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
 
@@ -31,7 +31,7 @@ import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTop
 fun MyAnswerDetailRoute(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: MyAnswerViewModel = hiltViewModel(),
+    viewModel: MyDetailAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -48,7 +48,7 @@ fun MyAnswerDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MyAnswerDetailScreen(
-    uiState: MyAnswerState,
+    uiState: MyDetailAnswerState,
     paddingValues: PaddingValues,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
@@ -56,7 +56,6 @@ private fun MyAnswerDetailScreen(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
-    val answerState = uiState.answers.first()
 
     Column(
         modifier =
@@ -74,18 +73,15 @@ private fun MyAnswerDetailScreen(
             onClickMoreOptions = onClickMoreOptions,
         )
 
-        // Todo: QuestWritingTitle 컴포넌트로 교체
-        QuestTitle(
-            stepNumber = 2,
-            questNumber = 10,
-            createdAt = answerState.writtenAt,
-            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
+        QuestCommonTitle(
+            createdAt = uiState.answer.writtenAt,
+            questQuestion = uiState.answer.question,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         MyAnswerContent(
-            content = answerState.content,
+            content = uiState.answer.content,
         )
     }
 

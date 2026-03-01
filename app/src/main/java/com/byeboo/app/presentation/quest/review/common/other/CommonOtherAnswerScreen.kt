@@ -22,7 +22,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.card.CommonAnswerItem
-import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
 import kotlinx.coroutines.flow.collectLatest
@@ -84,11 +84,9 @@ private fun CommonOtherAnswerScreen(
             onClickMoreOptions = onClickMoreOptions,
         )
 
-        QuestTitle(
-            stepNumber = 2,
-            questNumber = 10,
-            createdAt = "2025-06-01",
-            questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
+        QuestCommonTitle(
+            createdAt = uiState.createdAt,
+            questQuestion = uiState.questQuestion,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
