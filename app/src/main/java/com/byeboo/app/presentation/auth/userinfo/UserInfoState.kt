@@ -17,7 +17,6 @@ sealed interface UserInfoSideEffect {
     data object NavigateToLoading : UserInfoSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : UserInfoSideEffect
 }

@@ -174,8 +174,7 @@ class QuestViewModel
                     }.onFailure { t ->
                         _sideEffect.emit(
                             QuestSideEffect.ShowSnackBar(
-                                message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                                iconType = CustomSnackBarType.ALERT,
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }
@@ -234,7 +233,7 @@ class QuestViewModel
             _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
         }
 
-        fun onTipClick() {
+        fun onTipClicked() {
             val quest = uiState.value.myJourneyState.selectedQuest ?: return
             viewModelScope.launch {
                 mixpanelUtil.trackEvent(
@@ -260,7 +259,7 @@ class QuestViewModel
             }
         }
 
-        fun onQuestClick(questId: Long) {
+        fun onQuestClicked(questId: Long) {
             viewModelScope.launch {
                 val quest =
                     uiState.value.myJourneyState.questGroups
@@ -287,7 +286,7 @@ class QuestViewModel
             }
         }
 
-        fun onMyAnswersClick() {
+        fun onMyAnswersClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
             }

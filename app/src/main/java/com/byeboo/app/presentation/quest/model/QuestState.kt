@@ -40,8 +40,7 @@ sealed interface QuestSideEffect {
     data object NavigateToQuestMyAnswers : QuestSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : QuestSideEffect
 }
 

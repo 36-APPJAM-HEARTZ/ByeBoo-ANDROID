@@ -27,7 +27,6 @@ sealed interface OffboardingJourneySideEffect {
     ) : OffboardingJourneySideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : OffboardingJourneySideEffect
 }

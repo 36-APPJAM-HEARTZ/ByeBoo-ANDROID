@@ -48,14 +48,13 @@ fun MainScreen(
     val status by viewModel.journeyStatus.collectAsStateWithLifecycle()
     val isMoveToQuestHome by viewModel.questHomeNavigation.collectAsStateWithLifecycle()
 
-    val onShowSnackBar: (String, CustomSnackBarType) -> Unit = { message, type ->
+    val onShowSnackBar: (CustomSnackBarType) -> Unit = { type ->
         scope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
             val job =
                 launch {
                     snackBarHostState.showSnackbar(
                         CustomSnackBarVisuals(
-                            message = message,
                             type = type,
                         ),
                     )
@@ -138,8 +137,8 @@ fun MainScreen(
                             .padding(bottom = snackBarBottomInset),
                 ) { snackBar ->
                     val customVisuals = snackBar.visuals as? CustomSnackBarVisuals
-                    val iconType = customVisuals?.type ?: CustomSnackBarType.ALERT
-                    CustomSnackBar(message = snackBar.visuals.message, iconType = iconType)
+                    val type = customVisuals?.type ?: CustomSnackBarType.ALERT
+                    CustomSnackBar(customSnackBarType = type)
                 }
             },
             bottomBar = {

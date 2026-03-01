@@ -79,7 +79,7 @@ fun QuestReviewRoute(
                         true,
                         effect.imageKey,
                     )
-                is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

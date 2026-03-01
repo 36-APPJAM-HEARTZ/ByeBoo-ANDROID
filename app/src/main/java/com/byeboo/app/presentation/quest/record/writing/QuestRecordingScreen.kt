@@ -85,7 +85,7 @@ fun QuestRecordingRoute(
                     )
 
                 is QuestRecordingSideEffect.NavigateUp -> navigateUp()
-                is QuestRecordingSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is QuestRecordingSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

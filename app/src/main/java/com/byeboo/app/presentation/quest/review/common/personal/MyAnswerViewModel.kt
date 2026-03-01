@@ -2,7 +2,7 @@ package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -64,7 +64,7 @@ class MyAnswerViewModel
                 ),
             )
 
-        fun onMyAnswerContentClick(answerId: Long) {
+        fun onMyAnswerContentClicked(answerId: Long) {
             viewModelScope.launch {
                 _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
             }
@@ -78,14 +78,13 @@ class MyAnswerViewModel
             _uiState.update { it.copy(showBottomSheet = false) }
         }
 
-        fun onOptionClick(option: OptionType) {
+        fun onOptionClicked(option: MyPostOption) {
             onDismissBottomSheet()
 
             viewModelScope.launch {
                 when (option) {
-                    OptionType.EDIT -> { /* TODO 수정 화면 이동 */ }
-                    OptionType.DELETE -> { /* TODO 삭제 모달 띄우기 */ }
-                    else -> {}
+                    MyPostOption.EDIT -> { /* TODO 수정 화면 이동 */ }
+                    MyPostOption.DELETE -> { /* TODO 삭제 모달 띄우기 */ }
                 }
             }
         }

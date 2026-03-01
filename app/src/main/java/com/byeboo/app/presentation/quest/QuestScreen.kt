@@ -76,7 +76,7 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
                     navigateToQuestMyAnswers()
                 is QuestSideEffect.ShowSnackBar ->
-                    showSnackBar(effect.message, effect.iconType)
+                    showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -85,11 +85,11 @@ fun QuestRoute(
         uiState = uiState,
         listState = listState,
         paddingValues = paddingValues,
-        onQuestClick = viewModel::onQuestClick,
-        onMyAnswersClick = viewModel::onMyAnswersClick,
+        onQuestClick = viewModel::onQuestClicked,
+        onMyAnswersClick = viewModel::onMyAnswersClicked,
         onCommonQuestClick = {/* 이동 관련 로직 뷰모델에 작성 */},
         onDismissModal = viewModel::onQuitDismissModal,
-        onTipClick = viewModel::onTipClick,
+        onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClicked,
         onCommonAnswerClick = navigateToCommonAnswer,

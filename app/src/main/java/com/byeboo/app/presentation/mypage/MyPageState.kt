@@ -38,7 +38,6 @@ sealed interface MyPageSideEffect {
     data object NavigateToBlockedUsers : MyPageSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : MyPageSideEffect
 }

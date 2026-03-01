@@ -92,8 +92,7 @@ constructor(
                 }.onFailure {
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar(
-                            message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                            iconType = CustomSnackBarType.ALERT,
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }
@@ -116,8 +115,7 @@ constructor(
                 }.onFailure {
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar(
-                            message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                            iconType = CustomSnackBarType.ALERT,
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }
@@ -177,8 +175,7 @@ constructor(
             }.onFailure {
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.ShowSnackBar(
-                        "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                        iconType = CustomSnackBarType.ALERT,
+                        snackBarType = CustomSnackBarType.ALERT,
                     ),
                 )
             }
@@ -253,8 +250,7 @@ constructor(
             }.onFailure {
                 _sideEffect.emit(
                     QuestBehaviorSideEffect.ShowSnackBar(
-                        message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                        iconType = CustomSnackBarType.ALERT,
+                        snackBarType = CustomSnackBarType.ALERT,
                     ),
                 )
             }
@@ -377,8 +373,7 @@ constructor(
                 }.onFailure {
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar(
-                            message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
-                            iconType = CustomSnackBarType.ALERT,
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }

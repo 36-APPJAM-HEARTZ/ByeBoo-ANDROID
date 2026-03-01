@@ -35,7 +35,6 @@ sealed interface QuestReviewSideEffect {
     ) : QuestReviewSideEffect
 
     data class ShowSnackBar(
-        val message: String,
-        val iconType: CustomSnackBarType,
+        val snackBarType: CustomSnackBarType,
     ) : QuestReviewSideEffect
 }

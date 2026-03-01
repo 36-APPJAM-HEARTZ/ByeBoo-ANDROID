@@ -143,7 +143,7 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
                 is MyPageSideEffect.NavigateToBlockedUsers -> navigateToBlockedUsers()
-                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

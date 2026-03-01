@@ -46,7 +46,7 @@ fun HomeAmuletRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is HomeAmuletSideEffect.NavigateToHomeOnboarding -> navigateToHomeOnboarding()
-                is HomeAmuletSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is HomeAmuletSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

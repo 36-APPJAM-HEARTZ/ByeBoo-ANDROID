@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,7 +23,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.card.CommonAnswerItem
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
-import com.byeboo.app.presentation.quest.component.type.OptionType
+import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
 import kotlinx.coroutines.flow.collectLatest
 
@@ -40,7 +41,7 @@ fun CommonAnswerRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is CommonAnswerSideEffect.NavigateToQuest -> navigateToQuest()
-                is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.message, effect.iconType)
+                is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -50,7 +51,7 @@ fun CommonAnswerRoute(
         paddingValues = paddingValues,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
-        onOptionClick = { option -> viewModel.onOptionClick(option) },
+        onOptionClick = { option -> viewModel.onOptionClicked(option) },
         modifier = modifier,
     )
 }
@@ -62,7 +63,7 @@ private fun CommonAnswerScreen(
     paddingValues: PaddingValues,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
-    onOptionClick: (OptionType) -> Unit,
+    onOptionClick: (OtherPostOption) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -81,7 +82,6 @@ private fun CommonAnswerScreen(
     ) {
         AnswerDetailTopBar(
             onClickMoreOptions = onClickMoreOptions,
-            modifier = modifier,
         )
 
         QuestTitle(
@@ -91,7 +91,7 @@ private fun CommonAnswerScreen(
             questQuestion = "그 사람이 싫어하기에 내가 포기해야만 했던 일은 무엇일까?",
         )
 
-        Spacer(modifier = Modifier.padding(bottom = screenHeightDp(10.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
         CommonAnswerItem(
             answer = uiState.answer,
@@ -100,8 +100,8 @@ private fun CommonAnswerScreen(
     }
 
     MoreOptionsBottomSheet(
-        topOption = OptionType.BLOCK,
-        bottomOption = OptionType.REPORT,
+        topOption = OtherPostOption.BLOCK,
+        bottomOption = OtherPostOption.REPORT,
         onOptionClick = onOptionClick,
         showBottomSheet = uiState.showBottomSheet,
         onDismissRequest = onDismissBottomSheet,
