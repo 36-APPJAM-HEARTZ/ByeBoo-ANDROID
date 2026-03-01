@@ -2,7 +2,6 @@ package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -96,7 +95,7 @@ fun MyAnswerScreen(
                 Text(
                     text =
                         buildAnnotatedString {
-                            append("하츠핑하츠님의")
+                            append("${uiState.userName}님의")
                             append("\n")
                             append("공통퀘스트 답변이에요")
                         },
@@ -108,18 +107,17 @@ fun MyAnswerScreen(
 
             if (uiState.answers.isEmpty()) {
                 item {
-                    Box(
+                    Column(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
                                 .padding(top = screenHeightDp(184.dp)),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
                             text = "아직 작성한 답변이 없어요!",
                             style = ByeBooTheme.typography.body6,
                             color = ByeBooTheme.colors.gray400,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }

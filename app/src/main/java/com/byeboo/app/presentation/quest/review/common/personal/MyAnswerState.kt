@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class MyAnswerState(
+    val userName: String = "",
     val answers: ImmutableList<MyAnswerModel> = persistentListOf(),
     val showBottomSheet: Boolean = false,
 )
