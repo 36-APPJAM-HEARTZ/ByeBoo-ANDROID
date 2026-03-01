@@ -67,6 +67,10 @@ class MyAnswerViewModel
                 ),
             )
 
+        fun onBackClicked() {
+            // TODO: 이동로직 구현
+        }
+
         fun onMyAnswerContentClicked(answerId: Long) {
             viewModelScope.launch {
                 _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))

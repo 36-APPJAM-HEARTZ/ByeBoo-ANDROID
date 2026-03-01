@@ -39,6 +39,7 @@ import coil.request.ImageRequest
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -114,22 +115,9 @@ private fun QuestBehaviorCompleteScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = "back button",
-                tint = ByeBooTheme.colors.white,
-                modifier = modifier.clickable(onClick = onCloseClick),
-            )
-        }
-
-        Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
+        CloseTopbar(
+            onCloseClick = onCloseClick
+        )
 
         LazyColumn(
             modifier = modifier.fillMaxWidth(),

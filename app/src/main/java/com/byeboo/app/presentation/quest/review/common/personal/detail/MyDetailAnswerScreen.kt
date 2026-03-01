@@ -30,7 +30,6 @@ import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTop
 @Composable
 fun MyAnswerDetailRoute(
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -38,10 +37,10 @@ fun MyAnswerDetailRoute(
     MyAnswerDetailScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
-        modifier = modifier,
     )
 }
 
@@ -50,6 +49,7 @@ fun MyAnswerDetailRoute(
 private fun MyAnswerDetailScreen(
     uiState: MyDetailAnswerState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (MyPostOption) -> Unit,
@@ -70,6 +70,7 @@ private fun MyAnswerDetailScreen(
                 ),
     ) {
         AnswerDetailTopBar(
+            onBackClick = onBackClick,
             onClickMoreOptions = onClickMoreOptions,
         )
 

@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -98,21 +99,9 @@ private fun QuestRecordingCompleteScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = null,
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCloseClick),
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+        CloseTopbar(
+            onCloseClick = onCloseClick
+        )
 
         Column(
             modifier =
