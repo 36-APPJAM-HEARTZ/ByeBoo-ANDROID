@@ -71,7 +71,7 @@ class OffboardingQuestReviewViewModel
             }
         }
 
-        fun onCancelClicked() {
+        fun onBackClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(
                     OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(
