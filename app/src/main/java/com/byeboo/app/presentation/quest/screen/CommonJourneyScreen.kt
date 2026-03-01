@@ -42,6 +42,7 @@ fun CommonJourneyScreen(
     onMyAnswersClick: () -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
+    onCommonQuestClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -141,7 +142,7 @@ fun CommonJourneyScreen(
                             )
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                             ByeBooButton(
-                                onClick = { /* TODO : 답변 작성 화면 이동 */ },
+                                onClick = { onCommonQuestClick(0) }, // TODO : 답변 작성 화면 이동
                                 buttonText = "답변 작성하기",
                                 buttonStyle = ByeBooTheme.typography.body2,
                                 buttonTextColor = ByeBooTheme.colors.primary500,

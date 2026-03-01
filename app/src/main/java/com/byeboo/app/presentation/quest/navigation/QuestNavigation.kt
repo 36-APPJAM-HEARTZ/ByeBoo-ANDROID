@@ -9,11 +9,12 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
+import com.byeboo.app.presentation.quest.common.navigation.questCommonGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
+import com.byeboo.app.presentation.quest.review.QuestReviewRoute
 import com.byeboo.app.presentation.quest.review.common.all.CommonAnswerRoute
 import com.byeboo.app.presentation.quest.review.common.personal.MyAnswerDetailRoute
 import com.byeboo.app.presentation.quest.review.common.personal.MyAnswerRoute
-import com.byeboo.app.presentation.quest.review.my.QuestReviewRoute
 import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
@@ -67,6 +68,7 @@ fun NavGraphBuilder.questGraph(
     navigateToHome: () -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
@@ -77,6 +79,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
+    navigateToQuestCommonComplete: (Long) -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -93,6 +96,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
                 navigateToQuestBehavior = navigateToQuestBehavior,
+                navigateToQuestCommonWriting = navigateToQuestCommonWriting,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
@@ -152,6 +156,13 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestBehaviorComplete = navigateToQuestBehaviorComplete,
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
+            navigateUp = navigateUp,
+            paddingValues = paddingValues,
+        )
+
+        questCommonGraph(
+            navigateToQuest = navigateToQuest,
+            navigateToQuestCommonComplete = navigateToQuestCommonComplete,
             navigateUp = navigateUp,
             paddingValues = paddingValues,
         )

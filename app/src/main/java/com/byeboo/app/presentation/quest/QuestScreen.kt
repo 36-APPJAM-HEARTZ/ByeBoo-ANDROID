@@ -36,6 +36,7 @@ fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
@@ -68,6 +69,8 @@ fun QuestRoute(
                     navigateToQuestRecording(effect.questId)
                 is QuestSideEffect.NavigateToQuestBehavior ->
                     navigateToQuestBehavior(effect.questId)
+                is QuestSideEffect.NavigateToQuestCommonWriting ->
+                    navigateToQuestCommonWriting(effect.questId)
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
@@ -84,6 +87,7 @@ fun QuestRoute(
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClick,
         onMyAnswersClick = viewModel::onMyAnswersClick,
+        onCommonQuestClick = {/* 이동 관련 로직 뷰모델에 작성 */},
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClick,
         onQuestStart = viewModel::onQuestStart,
@@ -100,6 +104,7 @@ private fun QuestScreen(
     paddingValues: PaddingValues,
     onQuestClick: (Long) -> Unit,
     onMyAnswersClick: () -> Unit,
+    onCommonQuestClick: (Long) -> Unit,
     onDismissModal: () -> Unit,
     onTipClick: () -> Unit,
     onQuestStart: () -> Unit,
@@ -156,6 +161,7 @@ private fun QuestScreen(
                     onMyAnswersClick = onMyAnswersClick,
                     onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,
+                    onCommonQuestClick = onCommonQuestClick,
                 )
             }
         }

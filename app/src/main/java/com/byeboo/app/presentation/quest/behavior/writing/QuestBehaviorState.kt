@@ -1,10 +1,11 @@
-package com.byeboo.app.presentation.quest.behavior
+package com.byeboo.app.presentation.quest.behavior.writing
 
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestWritingState
+import java.time.LocalDate
 
 data class QuestBehaviorState(
     val stepNumber: Long = 0,
@@ -14,7 +15,7 @@ data class QuestBehaviorState(
     val question: String = "",
     val imageCount: Int = 0,
     val createdAt: String =
-        java.time.LocalDate
+        LocalDate
             .now()
             .toString(),
     val questAnswer: String = "",
@@ -31,10 +32,23 @@ data class QuestBehaviorState(
     val isUploading: Boolean = false,
     val isEditMode: Boolean = false,
     val originalAnswer: String = "",
-    val isCompleteButtonEnabled: Boolean = false,
-    val hasAnswerChanged: Boolean = false,
     val fromOffboarding: Boolean = false,
-)
+    val showCompleteModal: Boolean = false,
+) {
+    val hasAnswerChanged: Boolean
+        get() = questAnswer != originalAnswer
+
+    val isCompleteButtonEnabled: Boolean get() {
+        val hasImage = imageCount > 0
+
+        return if (isEditMode) {
+            val imageChanged = selectedImageUri != null
+            hasAnswerChanged || imageChanged
+        } else {
+            hasImage
+        }
+    }
+}
 
 sealed interface QuestBehaviorSideEffect {
     data object NavigateToQuest : QuestBehaviorSideEffect

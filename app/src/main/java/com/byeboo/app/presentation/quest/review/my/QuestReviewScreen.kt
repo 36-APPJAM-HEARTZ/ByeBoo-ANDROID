@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.my
+package com.byeboo.app.presentation.quest.review
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +38,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
@@ -43,6 +47,9 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.review.my.QuestReviewSideEffect
+import com.byeboo.app.presentation.quest.review.my.QuestReviewState
+import com.byeboo.app.presentation.quest.review.my.QuestReviewViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -98,6 +105,11 @@ private fun QuestReviewScreen(
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+    val canScroll by remember {
+        derivedStateOf { listState.canScrollForward || listState.canScrollBackward }
+    }
+
     Column(
         modifier =
             modifier
@@ -132,78 +144,87 @@ private fun QuestReviewScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding =
-                PaddingValues(
-                    start = screenWidthDp(24.dp),
-                    end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(28.dp),
-                ),
-        ) {
-            item {
-                QuestTitle(
-                    stepNumber = uiState.stepNumber,
-                    questNumber = uiState.questNumber,
-                    createdAt = uiState.createdAt,
-                    questQuestion = uiState.question,
-                )
-
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-            }
-
-            if (uiState.imageUrl.isNullOrBlank()) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding =
+                    PaddingValues(
+                        start = screenWidthDp(24.dp),
+                        end = screenWidthDp(24.dp),
+                        bottom = screenHeightDp(28.dp),
+                    ),
+            ) {
                 item {
-                    ContentText(
-                        text = uiState.answer,
+                    QuestTitle(
+                        stepNumber = uiState.stepNumber,
+                        questNumber = uiState.questNumber,
+                        createdAt = uiState.createdAt,
+                        questQuestion = uiState.question,
                     )
+
+                    Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
                 }
-            } else {
-                item {
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(12.dp)),
-                    ) {
-                        SubcomposeAsyncImage(
+
+                if (uiState.imageUrl.isNullOrBlank()) {
+                    item { ContentText(text = uiState.answer) }
+                } else {
+                    item {
+                        Column(
                             modifier =
                                 Modifier
-                                    .fillMaxWidth(),
-                            model =
-                                ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(uiState.imageUrl)
-                                    .memoryCachePolicy(CachePolicy.DISABLED)
-                                    .diskCachePolicy(CachePolicy.DISABLED)
-                                    .build(),
-                            contentDescription = "uploaded image",
-                            contentScale = ContentScale.Crop,
-                            loading = {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator()
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.answer.isNotBlank()) {
-                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-                        ContentText(uiState.answer)
+                                    .fillMaxWidth()
+                                    .aspectRatio(1f)
+                                    .clip(RoundedCornerShape(12.dp)),
+                        ) {
+                            SubcomposeAsyncImage(
+                                modifier = Modifier.fillMaxWidth(),
+                                model =
+                                    ImageRequest
+                                        .Builder(LocalContext.current)
+                                        .data(uiState.imageUrl)
+                                        .memoryCachePolicy(CachePolicy.DISABLED)
+                                        .diskCachePolicy(CachePolicy.DISABLED)
+                                        .build(),
+                                contentDescription = "uploaded image",
+                                contentScale = ContentScale.Crop,
+                                loading = {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center,
+                                    ) { CircularProgressIndicator() }
+                                },
+                            )
+                        }
+                        if (uiState.answer.isNotBlank()) {
+                            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+                            ContentText(uiState.answer)
+                        }
                     }
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+                item {
+                    Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-                QuestEmotionDescriptionContent(
-                    questEmotionDescription = uiState.emotionDescription,
-                    emotionType = uiState.selectedEmotion,
-                )
+                    QuestEmotionDescriptionContent(
+                        questEmotionDescription = uiState.emotionDescription,
+                        emotionType = uiState.selectedEmotion,
+                    )
+                }
+
+                if (canScroll) {
+                    item {
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+                        ByeBooButton(
+                            buttonText = "보리에게 답장 받기",
+                            buttonTextColor = ByeBooTheme.colors.white,
+                            buttonStyle = ByeBooTheme.typography.body2,
+                            buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                            onClick = { /*Todo: ai 버튼 연결 */ },
+                        )
+                    }
+                }
             }
         }
     }
