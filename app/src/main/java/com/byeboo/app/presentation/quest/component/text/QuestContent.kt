@@ -1,11 +1,9 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +29,10 @@ fun QuestContent(
         modifier =
             Modifier
                 .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Row(
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -41,15 +41,12 @@ fun QuestContent(
                 tint = Color.Unspecified,
             )
 
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
-
             Text(
                 text = titleText,
                 color = ByeBooTheme.colors.gray200,
                 style = ByeBooTheme.typography.body2,
             )
         }
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         ContentText(text = contentText)
     }

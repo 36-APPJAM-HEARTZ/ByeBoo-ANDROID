@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.model
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 
 sealed class QuestState {
@@ -28,12 +29,18 @@ sealed interface QuestSideEffect {
         val questId: Long,
     ) : QuestSideEffect
 
+    data class NavigateToQuestCommonWriting(
+        val questId: Long,
+    ) : QuestSideEffect
+
     data class NavigateToQuestReview(
         val questId: Long,
     ) : QuestSideEffect
 
+    data object NavigateToQuestMyAnswers : QuestSideEffect
+
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestSideEffect
 }
 

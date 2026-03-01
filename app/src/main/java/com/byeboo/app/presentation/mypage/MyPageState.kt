@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.mypage
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 
 @Immutable
 data class MyPageState(
@@ -37,6 +38,6 @@ sealed interface MyPageSideEffect {
     data object NavigateToBlockedUsers : MyPageSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : MyPageSideEffect
 }

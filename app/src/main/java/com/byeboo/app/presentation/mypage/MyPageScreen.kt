@@ -143,7 +143,7 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
                 is MyPageSideEffect.NavigateToBlockedUsers -> navigateToBlockedUsers()
-                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -499,7 +499,6 @@ private fun ByeBooUniverseSection(
             style = ByeBooTheme.typography.body2,
         )
     }
-
     Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 }
 

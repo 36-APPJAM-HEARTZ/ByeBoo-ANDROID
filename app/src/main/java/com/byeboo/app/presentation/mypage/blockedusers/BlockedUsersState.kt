@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.mypage.blockedusers
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.presentation.mypage.type.User
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -15,6 +16,6 @@ sealed interface BlockedUsersSideEffect {
     data object NavigateUp : BlockedUsersSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : BlockedUsersSideEffect
 }

@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.start
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 
 @Immutable
@@ -16,6 +17,6 @@ sealed interface QuestStartSideEffect {
     data object NavigateToHome : QuestStartSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestStartSideEffect
 }

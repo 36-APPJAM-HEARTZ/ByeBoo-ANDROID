@@ -1,7 +1,9 @@
-package com.byeboo.app.presentation.quest.record
+package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
+import java.time.LocalDate
 
 @Immutable
 data class QuestRecordingCompleteState(
@@ -9,7 +11,7 @@ data class QuestRecordingCompleteState(
     val stepNumber: Long = 0,
     val questNumber: Long = 0,
     val createdAt: String =
-        java.time.LocalDate
+        LocalDate
             .now()
             .toString(),
     val question: String = "",
@@ -26,6 +28,6 @@ sealed interface QuestRecordingCompleteSideEffect {
     data object ShowInAppReview : QuestRecordingCompleteSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestRecordingCompleteSideEffect
 }

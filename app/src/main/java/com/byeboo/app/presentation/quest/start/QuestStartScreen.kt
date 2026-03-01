@@ -39,7 +39,7 @@ fun QuestStartRoute(
             when (effect) {
                 is QuestStartSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestStartSideEffect.NavigateToHome -> navigateToHome()
-                is QuestStartSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestStartSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

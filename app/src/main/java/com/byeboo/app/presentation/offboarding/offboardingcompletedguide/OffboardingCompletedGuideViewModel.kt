@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingcompletedguide
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
@@ -54,7 +55,7 @@ class OffboardingCompletedGuideViewModel
                     .catch { e ->
                         _sideEffect.emit(
                             OffboardingCompletedGuideSideEffect.ShowSnackBar(
-                                "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }.collect { name ->
@@ -68,7 +69,7 @@ class OffboardingCompletedGuideViewModel
                 }.onFailure { e ->
                     _sideEffect.emit(
                         OffboardingCompletedGuideSideEffect.ShowSnackBar(
-                            "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                            snackBarType = CustomSnackBarType.ALERT,
                         ),
                     )
                 }
