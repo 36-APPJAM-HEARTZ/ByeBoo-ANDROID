@@ -9,3 +9,7 @@ data class CommonQuestAnswer(
     val writtenAt: LocalDateTime,
     val content: String,
 )
+
+data class QuestCommonAnswerRequestModel(
+    val answer: String,
+)
