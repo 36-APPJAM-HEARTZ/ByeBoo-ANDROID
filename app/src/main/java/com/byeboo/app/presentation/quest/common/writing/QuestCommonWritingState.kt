@@ -6,10 +6,13 @@ import com.byeboo.app.domain.model.quest.QuestWritingState
 
 @Immutable
 data class QuestCommonState(
+    val questId: Long = 0,
     val question: String = "",
     val questAnswer: String = "",
     val originalAnswer: String = "",
     val isEditMode: Boolean = false,
+    val showCompleteModal: Boolean = false,
+    val showQuitModal: Boolean = false,
     val contentsState: QuestWritingState = QuestWritingState.Empty,
 ) {
     val hasAnswerChanged: Boolean
@@ -22,5 +25,6 @@ data class QuestCommonState(
 }
 
 sealed interface QuestCommonSideEffect {
-    data object NavigateToQuest
+    data object NavigateToQuest : QuestCommonSideEffect
+    data object NavigateToUp : QuestCommonSideEffect
 }

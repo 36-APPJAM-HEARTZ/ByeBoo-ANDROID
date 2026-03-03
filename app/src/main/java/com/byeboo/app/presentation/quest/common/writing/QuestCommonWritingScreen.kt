@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,18 +30,22 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.modal.QuestCompleteModal
+import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
 import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestCommonRoute(
-    navigateToQuest: () -> Unit,
+    navigateToQuestFromComplete: () -> Unit,
     navigateToQuestCommonComplete: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
@@ -48,6 +53,43 @@ fun QuestCommonRoute(
     viewModel: QuestCommonWritingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when(effect) {
+                is QuestCommonSideEffect.NavigateToQuest -> navigateToQuestFromComplete()
+                is QuestCommonSideEffect.NavigateToUp -> navigateUp()
+            }
+        }
+    }
+
+    if (uiState.showQuitModal) {
+        QuestQuitModal(
+            onDismissRequest = viewModel::onDismissQuitModal,
+            stayButton = viewModel::onDismissQuitModal,
+            quitButton = {
+                viewModel.onDismissQuitModal()
+                viewModel.onQuitClicked()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp))
+        )
+    }
+
+
+    if (uiState.showCompleteModal) {
+        QuestCompleteModal(
+            onDismissRequest = viewModel::onDismissCompleteModal,
+            onNoClick = {
+                viewModel.onDismissCompleteModal()
+            },
+            onYesClick = viewModel::onSaveClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp))
+        )
+    }
 
     QuestCommonScreen(
         uiState = uiState,
