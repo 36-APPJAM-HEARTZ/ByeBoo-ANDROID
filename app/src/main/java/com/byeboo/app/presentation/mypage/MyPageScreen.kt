@@ -349,6 +349,7 @@ private fun MyPageScreen(
 @Composable
 private fun MyPageTopbar(modifier: Modifier = Modifier) {
     ByeBooTopbar(
+        title = "내 정보",
         textColor = ByeBooTheme.colors.gray50,
         textStyle = ByeBooTheme.typography.sub1,
         modifier =

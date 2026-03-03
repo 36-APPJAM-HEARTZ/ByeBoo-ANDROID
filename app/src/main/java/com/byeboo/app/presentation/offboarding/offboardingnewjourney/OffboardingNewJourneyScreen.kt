@@ -160,7 +160,7 @@ private fun Title(modifier: Modifier = Modifier) {
         Text(
             text = "어떤 여정을 시작해 볼까요?",
             color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1,
+            style = ByeBooTheme.typography.head2,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
