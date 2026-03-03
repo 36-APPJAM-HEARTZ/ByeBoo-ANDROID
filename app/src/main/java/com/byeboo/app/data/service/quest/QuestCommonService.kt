@@ -1,10 +1,14 @@
 package com.byeboo.app.data.service.quest
 
+import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerDto
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface QuestCommonService {
     @POST("/api/v1/common-quests/{questId}")
@@ -13,4 +17,9 @@ interface QuestCommonService {
         @Body request: QuestCommonRequestDto,
     ) : NullableBaseResponse<Unit>
 
+    @GET("/api/v1/users/me/common-quests")
+    suspend fun getQuestMyCommonAnswer(
+        @Query("cursor") cursor: Long?,
+        @Query("limit") limit: Int = 10,
+    ) : BaseResponse<QuestMyCommonAnswerDto>
 }
