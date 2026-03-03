@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,6 +55,7 @@ fun MyAnswerRoute(
     MyAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onLoadAnswers = viewModel::loadMyAnswers,
         onMyAnswerContentClick = viewModel::onMyAnswerContentClicked,
     )
 }
@@ -58,10 +63,29 @@ fun MyAnswerRoute(
 @Composable
 fun MyAnswerScreen(
     uiState: MyAnswerState,
+    onLoadAnswers: () -> Unit,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+
+    val hasMyAnswers = remember {
+        derivedStateOf {
+            val totalItems = listState.layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+
+            totalItems > 0 && lastVisibleItemIndex >= totalItems - 2
+        }
+    }
+
+    LaunchedEffect(hasMyAnswers.value) {
+        if (hasMyAnswers.value) {
+            onLoadAnswers()
+        }
+    }
+
+
     Column(
         modifier =
             modifier
@@ -74,6 +98,7 @@ fun MyAnswerScreen(
                 ),
     ) {
         LazyColumn(
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
             contentPadding =
                 PaddingValues(bottom = screenHeightDp(25.dp)),
