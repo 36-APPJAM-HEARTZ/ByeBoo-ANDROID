@@ -5,6 +5,7 @@ import com.byeboo.app.data.repositoryimpl.auth.AuthRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.TokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.mypage.BlockedUsersRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
@@ -20,6 +21,7 @@ import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
+import com.byeboo.app.domain.repository.mypage.BlockedUsersRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
 import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
@@ -108,4 +110,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindFcmTokenRepository(fcmTokenRepositoryImpl: FcmTokenRepositoryImpl): FcmTokenRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBlockedUsersRepository(blockedUsersRepositoryImpl: BlockedUsersRepositoryImpl): BlockedUsersRepository
 }
