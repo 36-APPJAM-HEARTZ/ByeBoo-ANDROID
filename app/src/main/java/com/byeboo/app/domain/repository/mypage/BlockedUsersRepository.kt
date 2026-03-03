@@ -4,4 +4,6 @@ import com.byeboo.app.domain.model.mypage.BlockedUsersModel
 
 interface BlockedUsersRepository {
     suspend fun getBlockedUsers(): Result<BlockedUsersModel>
+
+    suspend fun unblockUser(blockId: Long): Result<Unit>
 }

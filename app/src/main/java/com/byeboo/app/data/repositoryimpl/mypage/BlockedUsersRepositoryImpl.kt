@@ -13,6 +13,18 @@ class BlockedUsersRepositoryImpl
     ) : BlockedUsersRepository {
         override suspend fun getBlockedUsers(): Result<BlockedUsersModel> =
             runCatching {
-                blockedUsersDataSource.getBlockedUsers().data?.toDomain() ?: throw IllegalStateException()
+                blockedUsersDataSource.getBlockedUsers().data?.toDomain()
+                    ?: throw IllegalStateException()
+            }
+
+        override suspend fun unblockUser(blockId: Long): Result<Unit> =
+            runCatching {
+                val response = blockedUsersDataSource.unblockUser(blockId)
+
+                if (!response.success) {
+                    throw IllegalStateException(response.message)
+                }
+
+                Unit
             }
     }
