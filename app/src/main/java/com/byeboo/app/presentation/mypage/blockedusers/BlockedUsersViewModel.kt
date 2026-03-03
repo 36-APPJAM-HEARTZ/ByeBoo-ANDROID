@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.mypage.blockedusers
 
-import android.util.Log.e
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -95,22 +93,19 @@ class BlockedUsersViewModel
             val currentState = _uiState.value as? UiState.Success ?: return
             val userId = currentState.data.selectedUserId ?: return
 
-            Timber.d("UNBLOCK userId=$userId")
-
             viewModelScope.launch {
                 onDismissModal()
                 unblockUserUseCase(blockId = userId)
                     .onSuccess {
-                        val before = ((_uiState.value as? UiState.Success)?.data?.blockedUserLists?.size)
-                        Timber.d("UNBLOCK before size=$before userId=$userId")
-
-                        _uiState.updateSuccess { state ->
-                            val newList = state.blockedUserLists.filterNot { it.blockedUserId == userId }.toImmutableList()
-                            Timber.d("UNBLOCK after size=${newList.size}")
-                            state.copy(blockedUserLists = newList)
+                        _uiState.updateSuccess {
+                            it.copy(
+                                blockedUserLists =
+                                    it.blockedUserLists
+                                        .filterNot { user -> user.blockedUserId == userId }
+                                        .toImmutableList(),
+                            )
                         }
-                    }.onFailure { e ->
-                        Timber.e(e, "unblock failed")
+                    }.onFailure {
                         _sideEffect.emit(
                             BlockedUsersSideEffect.ShowSnackBar(
                                 snackBarType = CustomSnackBarType.ALERT,
