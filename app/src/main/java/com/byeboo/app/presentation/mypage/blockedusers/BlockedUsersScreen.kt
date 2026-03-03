@@ -38,8 +38,8 @@ import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.domain.model.mypage.BlockedUserModel
 import com.byeboo.app.presentation.mypage.component.modal.BlockedUserModal
-import com.byeboo.app.presentation.mypage.type.User
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -115,7 +115,7 @@ private fun BlockedUsersScreen(
         )
 
         BlockedUsersSection(
-            userLists = state.userLists,
+            userLists = state.blockedUserLists,
             onUnblockClick = onUnblockClick,
         )
     }
@@ -154,7 +154,7 @@ private fun BlockedUsersHeader(
 
 @Composable
 private fun ColumnScope.BlockedUsersSection(
-    userLists: ImmutableList<User>,
+    userLists: ImmutableList<BlockedUserModel>,
     onUnblockClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -180,11 +180,11 @@ private fun ColumnScope.BlockedUsersSection(
     ) {
         items(
             items = userLists,
-            key = { it.id },
+            key = { it.blockedUserId },
         ) { user ->
             BlockedUser(
-                blockedUsername = user.name,
-                onUnblockClick = { onUnblockClick(user.id) },
+                blockedUsername = user.blockedUserName,
+                onUnblockClick = { onUnblockClick(user.blockedUserId) },
             )
         }
     }
