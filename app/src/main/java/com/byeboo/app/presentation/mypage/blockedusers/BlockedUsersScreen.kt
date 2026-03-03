@@ -70,7 +70,7 @@ fun BlockedUsersRoute(
                 BlockedUserModal(
                     onDismissRequest = viewModel::onDismissModal,
                     onNoClick = viewModel::onDismissModal,
-                    onYesClick = viewModel::fetchBlockedUser,
+                    onYesClick = viewModel::unblockUser,
                     modifier =
                         Modifier
                             .fillMaxWidth()

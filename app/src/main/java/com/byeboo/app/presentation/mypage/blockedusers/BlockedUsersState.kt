@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class BlockedUsersState(
+    val selectedUserId: Long? = null,
     val blockedUserLists: ImmutableList<BlockedUserModel> = persistentListOf(),
     val showBlockedModal: Boolean = false,
 )
