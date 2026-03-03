@@ -157,6 +157,9 @@ fun MainNavHost(
             navigateToQuestCommonWriting = { questId ->
                 navigator.navigateToQuestCommonWriting(questId = questId)
             },
+            navigateToQuestFromComplete = {
+                navigator.navigateToQuestFromComplete()
+            },
             navigateUp = navigator::navigateUp,
             paddingValues = paddingValues,
         )

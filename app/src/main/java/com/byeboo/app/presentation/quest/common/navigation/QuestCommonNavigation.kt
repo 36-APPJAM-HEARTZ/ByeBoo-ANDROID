@@ -30,7 +30,7 @@ fun NavController.navigateToQuestCommonComplete(
 }
 
 fun NavGraphBuilder.questCommonGraph(
-    navigateToQuest: () -> Unit,
+    navigateToQuestFromComplete: () -> Unit,
     navigateToQuestCommonComplete: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
@@ -38,7 +38,7 @@ fun NavGraphBuilder.questCommonGraph(
     routeNavigation<QuestCommonRoute, QuestCommonWriting> {
         composable<QuestCommonWriting> {
             QuestCommonRoute(
-                navigateToQuest = navigateToQuest,
+                navigateToQuestFromComplete = navigateToQuestFromComplete,
                 navigateToQuestCommonComplete = navigateToQuestCommonComplete,
                 navigateUp = navigateUp,
                 paddingValues = paddingValues,

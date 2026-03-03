@@ -292,6 +292,23 @@ class QuestViewModel
             }
         }
 
+        fun onCommonQuestCompleted() {
+            _uiState.update {
+                it.copy(
+                    selectedTab = QuestTab.COMMON_JOURNEY,
+                    showCompleteModal = true
+                )
+            }
+        }
+
+        fun closeCompleteModal() {
+            _uiState.update {
+                it.copy(
+                    showCompleteModal = false
+                )
+            }
+        }
+
         private suspend fun handleCompletedQuestClick(quest: Quest) {
             mixpanelUtil.trackEvent(
                 "quest_box_click",

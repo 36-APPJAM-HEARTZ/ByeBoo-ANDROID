@@ -29,6 +29,7 @@ import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBeha
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
 import com.byeboo.app.presentation.quest.navigation.Quest
+import com.byeboo.app.presentation.quest.navigation.QuestResultKey
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswerDetail
@@ -145,6 +146,13 @@ class MainNavigator(
 
     fun navigateToQuest(options: NavOptions) {
         navController.navigate(route = Quest, navOptions = options)
+    }
+
+    fun navigateToQuestFromComplete() {
+        navController.getBackStackEntry<Quest>()
+            .savedStateHandle[QuestResultKey.COMMON_COMPLETED] = true
+
+        navController.popBackStack()
     }
 
     fun navigateToQuestTip(

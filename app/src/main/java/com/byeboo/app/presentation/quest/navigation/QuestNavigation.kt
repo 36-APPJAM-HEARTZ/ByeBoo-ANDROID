@@ -80,6 +80,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
     navigateToQuestCommonComplete: (Long) -> Unit,
+    navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -91,7 +92,7 @@ fun NavGraphBuilder.questGraph(
             )
         }
 
-        composable<Quest> {
+        composable<Quest> { backStackEntry ->
             QuestRoute(
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
@@ -100,6 +101,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                navBackStackEntry = backStackEntry,
                 paddingValues = paddingValues,
             )
         }
@@ -161,7 +163,7 @@ fun NavGraphBuilder.questGraph(
         )
 
         questCommonGraph(
-            navigateToQuest = navigateToQuest,
+            navigateToQuestFromComplete = navigateToQuestFromComplete,
             navigateToQuestCommonComplete = navigateToQuestCommonComplete,
             navigateUp = navigateUp,
             paddingValues = paddingValues,
