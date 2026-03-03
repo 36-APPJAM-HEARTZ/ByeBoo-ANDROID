@@ -18,6 +18,10 @@ class MyDetailAnswerViewModel
         private val _uiState = MutableStateFlow(MyDetailAnswerState())
         val uiState: StateFlow<MyDetailAnswerState> = _uiState.asStateFlow()
 
+        fun onBackClicked() {
+            // TODO: 이동로직 구현
+        }
+
         fun onClickMoreOptions() {
             _uiState.update { it.copy(showBottomSheet = true) }
         }

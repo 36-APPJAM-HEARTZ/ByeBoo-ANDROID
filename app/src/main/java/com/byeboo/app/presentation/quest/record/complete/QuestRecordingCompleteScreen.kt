@@ -2,33 +2,26 @@ package com.byeboo.app.presentation.quest.record.complete
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -98,21 +91,9 @@ private fun QuestRecordingCompleteScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = null,
-                tint = ByeBooTheme.colors.white,
-                modifier = Modifier.clickable(onClick = onCloseClick),
-            )
-        }
-
-        Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+        CloseTopbar(
+            onCloseClick = onCloseClick,
+        )
 
         Column(
             modifier =
