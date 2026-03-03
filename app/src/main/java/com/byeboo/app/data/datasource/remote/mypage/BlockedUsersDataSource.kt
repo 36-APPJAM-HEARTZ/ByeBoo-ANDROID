@@ -5,4 +5,6 @@ import com.byeboo.app.data.dto.response.mypage.BlockedUsersResponseDto
 
 interface BlockedUsersDataSource {
     suspend fun getBlockedUsers(): NullableBaseResponse<BlockedUsersResponseDto>
+
+    suspend fun unblockUser(blockId: Long): NullableBaseResponse<Unit>
 }

@@ -12,4 +12,6 @@ class BlockedUsersDataSourceImpl
         private val blockedUsersService: BlockedUsersService,
     ) : BlockedUsersDataSource {
         override suspend fun getBlockedUsers(): NullableBaseResponse<BlockedUsersResponseDto> = blockedUsersService.getBlockedUsers()
+
+        override suspend fun unblockUser(blockId: Long): NullableBaseResponse<Unit> = blockedUsersService.unblockUser(blockId)
     }
