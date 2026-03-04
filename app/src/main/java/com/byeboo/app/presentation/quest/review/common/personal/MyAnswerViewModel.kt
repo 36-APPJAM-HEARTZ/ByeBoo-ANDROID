@@ -4,11 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
-import com.byeboo.app.presentation.offboarding.offboardingquestcompleted.QuestCompletedSideEffect
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +37,21 @@ constructor(
             }
         }
 
+        viewModelScope.launch {
+            questCommonRepository.answersFlow.collect { answerModels ->
+                val answers = answerModels.map {
+                    MyAnswerModel(
+                        answerId = it.answerId,
+                        question = it.question,
+                        writtenAt = it.writtenAt,
+                        content = it.content
+                    )
+                }.toPersistentList()
+                _uiState.update { it.copy(answers = answers) }
+            }
+
+        }
+
         loadMyAnswers()
     }
 
@@ -54,18 +66,9 @@ constructor(
             questCommonRepository.getQuestCommonMyAnswer(
                 cursor = state.nextCursor
             ).onSuccess { response ->
-                val newAnswer = response.answers.map {
-                    MyAnswerModel(
-                        answerId = it.answerId,
-                        question = it.question,
-                        writtenAt = it.writtenAt,
-                        content = it.content
-                    )
-                }
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        answers = (it.answers + newAnswer).toPersistentList(),
                         nextCursor = response.nextCursor,
                         hasNext = response.hasNext
                     )
