@@ -8,3 +8,9 @@ data class QuestCommonRequestDto(
     @SerialName("answer")
     val answer: String
 )
+
+@Serializable
+data class QuestCommonEditRequestDto(
+    @SerialName("answer")
+    val answer: String
+)
