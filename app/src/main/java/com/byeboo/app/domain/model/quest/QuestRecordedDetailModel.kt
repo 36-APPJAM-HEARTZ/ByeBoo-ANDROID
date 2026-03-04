@@ -10,5 +10,5 @@ data class QuestRecordedDetailModel(
     val imageKey: String? = null,
     val imageUrl: String? = null,
     val emotionDescription: String,
-    val aiAnswerExists: Boolean,
+    val isExistedAiAnswer: Boolean,
 )
