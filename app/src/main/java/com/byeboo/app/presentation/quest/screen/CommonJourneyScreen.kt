@@ -28,6 +28,7 @@ import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -39,6 +40,7 @@ import java.time.LocalDate
 @Composable
 fun CommonJourneyScreen(
     state: CommonJourneyState,
+    isLoading: Boolean,
     onMyAnswersClick: () -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
@@ -75,8 +77,7 @@ fun CommonJourneyScreen(
                     MiddleTag(
                         middleTagType = MiddleTagType.MY_ANSWERS,
                         textStyle = ByeBooTheme.typography.cap1,
-                        modifier =
-                            Modifier.noRippleClickable(onClick = onMyAnswersClick),
+                        modifier = Modifier.noRippleClickable(onClick = onMyAnswersClick),
                     )
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                     HorizontalDivider(
@@ -103,17 +104,31 @@ fun CommonJourneyScreen(
                 }
             }
 
-            item {
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = screenWidthDp(24.dp)),
-                ) {
-                    if (state.question.isNotEmpty()) {
+            if (isLoading) {
+                item {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight(0.5f),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        androidx.compose.material3.CircularProgressIndicator(
+                            color = ByeBooTheme.colors.primary500,
+                        )
+                    }
+                }
+            } else {
+                item {
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = screenWidthDp(24.dp)),
+                    ) {
                         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
-                        val isToday = state.selectedDate == LocalDate.now()
+                        val isToday = state.selectedDate.isEqual(TimeUtil.getNowKst())
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -124,7 +139,6 @@ fun CommonJourneyScreen(
                                 style = ByeBooTheme.typography.body1,
                                 color = ByeBooTheme.colors.primary200,
                             )
-
                             Text(
                                 text = state.question,
                                 style = ByeBooTheme.typography.sub3,
@@ -133,7 +147,7 @@ fun CommonJourneyScreen(
                             )
                         }
 
-                        if (isToday && !state.isMyAnswerDone) {
+                        if (isToday && !state.isMyAnswerDone && state.question.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
                             Text(
                                 text = "23:59까지 답변 가능해요",
@@ -142,7 +156,7 @@ fun CommonJourneyScreen(
                             )
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                             ByeBooButton(
-                                onClick = { onCommonQuestClick(0) }, // TODO : 답변 작성 화면 이동
+                                onClick = { onCommonQuestClick(0) },
                                 buttonText = "답변 작성하기",
                                 buttonStyle = ByeBooTheme.typography.body2,
                                 buttonTextColor = ByeBooTheme.colors.primary500,
@@ -160,38 +174,38 @@ fun CommonJourneyScreen(
                         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
                     }
                 }
-            }
 
-            if (state.answers.isEmpty()) {
-                item {
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.5f),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = "아직 작성된 답변이 없어요!",
-                            style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray400,
-                            textAlign = TextAlign.Center,
+                if (state.answers.isEmpty()) {
+                    item {
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .fillParentMaxHeight(0.5f),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "아직 작성된 답변이 없어요!",
+                                style = ByeBooTheme.typography.body6,
+                                color = ByeBooTheme.colors.gray400,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+                    }
+                } else {
+                    items(
+                        items = state.answers,
+                        key = { it.answerId },
+                    ) { answer ->
+                        CommonAnswerItem(
+                            answer = answer,
+                            onClick = { onAnswerClick(answer.answerId) },
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = screenWidthDp(24.dp))
+                                    .padding(bottom = screenHeightDp(24.dp)),
                         )
                     }
-                }
-            } else {
-                items(
-                    items = state.answers,
-                    key = { it.answerId },
-                ) { answer ->
-                    CommonAnswerItem(
-                        answer = answer,
-                        onClick = { onAnswerClick(1) }, // TODO: 네비 수정
-                        modifier =
-                            Modifier
-                                .padding(horizontal = screenWidthDp(24.dp))
-                                .padding(bottom = screenHeightDp(24.dp)),
-                    )
                 }
             }
         }
