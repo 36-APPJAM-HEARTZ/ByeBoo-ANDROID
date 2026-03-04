@@ -15,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.core.util.screenWidthDp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -25,8 +26,8 @@ fun QuestDateSelector(
     onDateChange: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val today = LocalDate.now()
-    val isToday = selectedDate.isEqual(today)
+    val isFirstDay = selectedDate <= TimeUtil.QUEST_START_DATE
+    val isToday = selectedDate >= TimeUtil.getNowKst()
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -37,9 +38,15 @@ fun QuestDateSelector(
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = { onDateChange(selectedDate.minusDays(1)) }) {
+        IconButton(
+            onClick = { onDateChange(selectedDate.minusDays(1)) },
+            enabled = !isFirstDay,
+        ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_date_left),
+                imageVector =
+                    ImageVector.vectorResource(
+                        id = if (isFirstDay) R.drawable.ic_date_left_disabled else R.drawable.ic_date_left_enabled,
+                    ),
                 contentDescription = "이전 날짜",
                 tint = Color.Unspecified,
             )
