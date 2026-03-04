@@ -1,4 +1,4 @@
-package com.byeboo.app.domain.usecase
+package com.byeboo.app.domain.usecase.quest
 
 import com.byeboo.app.domain.model.quest.BehaviorAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestBehaviorEditModel
