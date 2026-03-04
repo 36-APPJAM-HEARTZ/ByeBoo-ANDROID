@@ -14,6 +14,6 @@ class QuestAiAnswerDataSourceImpl
         override suspend fun postAiAnswer(questId: Long): NullableBaseResponse<QuestAiAnswerResponseDto> =
             questAiAnswerService.postAiAnswer(questId = questId)
 
-    override suspend fun getAiAnswer(questId: Long): NullableBaseResponse<QuestAiAnswerResponseDto> =
-        questAiAnswerService.getAiAnswer(questId = questId)
+        override suspend fun getAiAnswer(questId: Long): NullableBaseResponse<QuestAiAnswerResponseDto> =
+            questAiAnswerService.getAiAnswer(questId = questId)
     }
