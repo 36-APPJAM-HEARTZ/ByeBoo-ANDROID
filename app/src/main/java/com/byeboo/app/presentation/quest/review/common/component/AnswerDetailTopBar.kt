@@ -18,6 +18,7 @@ import com.byeboo.app.core.util.screenHeightDp
 
 @Composable
 fun AnswerDetailTopBar(
+    onBackClick: () -> Unit,
     onClickMoreOptions: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -34,7 +35,7 @@ fun AnswerDetailTopBar(
             tint = ByeBooTheme.colors.gray50,
             modifier =
                 Modifier.noRippleClickable(
-                    // Todo: 뒤로가기
+                    onClick = onBackClick
                 ),
         )
 
