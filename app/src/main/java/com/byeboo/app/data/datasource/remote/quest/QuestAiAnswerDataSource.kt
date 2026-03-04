@@ -5,4 +5,5 @@ import com.byeboo.app.data.dto.response.quest.QuestAiAnswerResponseDto
 
 interface QuestAiAnswerDataSource {
     suspend fun postAiAnswer(questId: Long): NullableBaseResponse<QuestAiAnswerResponseDto>
+    suspend fun getAiAnswer(questId: Long): NullableBaseResponse<QuestAiAnswerResponseDto>
 }
