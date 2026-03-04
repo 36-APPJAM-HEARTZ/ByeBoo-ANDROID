@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun MyAnswerDetailRoute(
     navigateUp: () -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
+    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
@@ -56,6 +57,7 @@ fun MyAnswerDetailRoute(
             when (effect) {
                 is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
+                is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit -> navigateToQuestCommonEdit(effect.answerId, effect.isEditMode)
             }
         }
     }

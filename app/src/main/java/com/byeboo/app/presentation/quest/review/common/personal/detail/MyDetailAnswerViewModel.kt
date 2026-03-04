@@ -75,7 +75,7 @@ constructor(
 
         viewModelScope.launch {
             when (option) {
-                MyPostOption.EDIT -> { // TODO 수정 화면 이동
+                MyPostOption.EDIT -> {
                     _sideEffect.emit(
                         MyDetailAnswerSideEffect.NavigateToQuestCommonEdit(
                             answerId = answerId, isEditMode = true
@@ -83,7 +83,7 @@ constructor(
                     )
                 }
 
-                MyPostOption.DELETE -> { // TODO 삭제 모달 띄우기
+                MyPostOption.DELETE -> {
                     _uiState.update { it.copy(showDeleteModal = true) }
                 }
             }
@@ -96,13 +96,12 @@ constructor(
 
     fun onQuestDeleteClicked() {
         viewModelScope.launch {
-            _sideEffect.emit(MyDetailAnswerSideEffect.NavigateToQuestMyAnswers)
+            questCommonRepository.deleteQuestCommonAnswer(answerId = answerId)
+                .onSuccess {
+                    _uiState.update { it.copy(showDeleteModal = false) }
+                    _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
+                }
         }
-    }
-
-
-    companion object {
-        private const val ANSWER_ID = "answer_id"
     }
 
 }
