@@ -7,6 +7,7 @@ import com.byeboo.app.data.service.auth.UserService
 import com.byeboo.app.data.service.notification.NotificationService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
+import com.byeboo.app.data.service.quest.QuestAiAnswerService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
 import com.byeboo.app.data.service.quest.QuestDetailService
 import com.byeboo.app.data.service.quest.QuestRecordedDetailService
@@ -107,5 +108,12 @@ object ServiceModule {
     fun providesNotificationService(retrofit: Retrofit): NotificationService =
         retrofit.create(
             NotificationService::class.java,
+        )
+
+    @Provides
+    @Singleton
+    fun providesQuestAiAnswerService(retrofit: Retrofit): QuestAiAnswerService =
+        retrofit.create(
+            QuestAiAnswerService::class.java,
         )
 }
