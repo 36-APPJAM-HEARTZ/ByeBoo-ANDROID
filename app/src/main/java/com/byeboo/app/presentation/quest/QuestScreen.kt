@@ -158,6 +158,7 @@ private fun QuestScreen(
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
+                    isLoading = uiState.isLoading,
                     onMyAnswersClick = onMyAnswersClick,
                     onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,

@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.core.util.getFormattedDate
-import com.byeboo.app.domain.model.quest.CommonQuestAnswer
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.quest.CommonQuestRepository
 import com.byeboo.app.domain.usecase.QuestUseCase
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
@@ -17,10 +18,9 @@ import com.byeboo.app.presentation.quest.model.QuestTab
 import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +41,7 @@ class QuestViewModel
     constructor(
         private val questUseCase: QuestUseCase,
         private val userRepository: UserRepository,
+        private val commonQuestRepository: CommonQuestRepository,
         private val mixpanelUtil: MixpanelUtil,
         private val mapper: QuestUiModelMapper,
     ) : ViewModel() {
@@ -51,6 +51,8 @@ class QuestViewModel
         private val _sideEffect = MutableSharedFlow<QuestSideEffect>()
         val sideEffect: SharedFlow<QuestSideEffect> = _sideEffect.asSharedFlow()
 
+        private val commonQuestCache = mutableMapOf<LocalDate, CommonJourneyState>()
+        private var fetchJob: Job? = null
         private var countdownJob: Job? = null
 
         init {
@@ -60,78 +62,80 @@ class QuestViewModel
                 }
             }
             loadQuests()
-            onDateChange(LocalDate.now())
+            onDateChange(uiState.value.commonJourneyState.selectedDate)
         }
-
-        private fun getTodayDummyAnswers(): ImmutableList<CommonQuestAnswer> =
-            persistentListOf(
-                CommonQuestAnswer(
-                    answerId = 1,
-                    writer = "장원영",
-                    profileIcon = "SADNESS",
-                    writtenAt = LocalDateTime.now().minusMinutes(0),
-                    content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝이라는 생각에 눈물이 멈추지 않았습니다.",
-                ),
-                CommonQuestAnswer(
-                    answerId = 2,
-                    writer = "아이유",
-                    profileIcon = "SO_SO",
-                    writtenAt = LocalDateTime.now().minusMinutes(25),
-                    content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝이라는 생각에 눈물이 멈추지 않았습니다.",
-                ),
-                CommonQuestAnswer(
-                    answerId = 3,
-                    writer = "제니",
-                    profileIcon = "RELIEVED",
-                    writtenAt = LocalDateTime.now().minusHours(3),
-                    content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝이라는 생각에 눈물이 멈추지 않았습니다.",
-                ),
-                CommonQuestAnswer(
-                    answerId = 4,
-                    writer = "카리나",
-                    profileIcon = "SELF_UNDERSTANDING",
-                    writtenAt = LocalDateTime.now().minusDays(1),
-                    content = "헤어진 첫날 밤이었어요. 혼자 집에 있는데 갑자기 모든 게 현실로 다가왔고, 이제 정말 끝이라는 생각에 눈물이 멈추지 않았습니다.",
-                ),
-            )
 
         fun onTabClicked(tab: QuestTab) {
             _uiState.update { it.copy(selectedTab = tab) }
         }
 
-        // / TODO: api 연동시 dummy가 아닌 usecase에서 호출
         fun onDateChange(newDate: LocalDate) {
-            _uiState.update { currentState ->
-                val isToday = newDate == LocalDate.now()
-                val domainAnswers = if (isToday) getTodayDummyAnswers() else persistentListOf()
+            if (!TimeUtil.isValidDateRange(newDate)) return
 
-                val uiAnswers =
-                    domainAnswers
-                        .map { answer ->
-                            CommonAnswerModel(
-                                answerId = answer.answerId,
-                                writer = answer.writer,
-                                profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
-                                content = answer.content,
-                            )
-                        }.toImmutableList()
-
-                currentState.copy(
-                    commonJourneyState =
-                        currentState.commonJourneyState.copy(
-                            selectedDate = newDate,
-                            question =
-                                if (isToday) {
-                                    "연애에서 반복된 문제 패턴 3가지를 생각해보아요"
-                                } else {
-                                    "${newDate.monthValue}월 ${newDate.dayOfMonth}일의 공통 질문입니다."
-                                },
-                            answerCount = if (isToday) 124 else 0,
-                            answers = uiAnswers,
-                        ),
+            _uiState.update { state ->
+                state.copy(
+                    commonJourneyState = state.commonJourneyState.copy(selectedDate = newDate),
                 )
             }
+
+            val cachedData = commonQuestCache[newDate]
+            if (cachedData != null) {
+                fetchJob?.cancel()
+                _uiState.update { state ->
+                    state.copy(commonJourneyState = cachedData, isLoading = false)
+                }
+                return
+            }
+
+            fetchJob?.cancel()
+            fetchJob =
+                viewModelScope.launch {
+                    _uiState.update { it.copy(isLoading = true) }
+                    delay(300)
+                    fetchCommonQuests(newDate)
+                }
+        }
+
+        private suspend fun fetchCommonQuests(date: LocalDate) {
+            commonQuestRepository
+                .getCommonQuests(
+                    date = date.toString(),
+                    cursor = null,
+                    limit = 20,
+                ).onSuccess { domainModel ->
+                    val uiAnswers =
+                        domainModel.answers
+                            .map { answer ->
+                                CommonAnswerModel(
+                                    answerId = answer.answerId,
+                                    writer = answer.writer,
+                                    profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                    content = answer.content,
+                                )
+                            }.toImmutableList()
+
+                    val updatedCommonState =
+                        uiState.value.commonJourneyState.copy(
+                            question = domainModel.question,
+                            answerCount = domainModel.answerCount.toInt(),
+                            answers = uiAnswers,
+                            isMyAnswerDone = domainModel.isAnswered,
+                            selectedDate = date,
+                        )
+
+                    commonQuestCache[date] = updatedCommonState
+
+                    _uiState.update { state ->
+                        state.copy(
+                            isLoading = false,
+                            commonJourneyState = updatedCommonState,
+                        )
+                    }
+                }.onFailure { t ->
+                    _uiState.update { it.copy(isLoading = false) }
+                    _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                }
         }
 
         private fun loadQuests() {
