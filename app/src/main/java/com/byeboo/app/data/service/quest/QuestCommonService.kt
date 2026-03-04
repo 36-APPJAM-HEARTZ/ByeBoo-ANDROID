@@ -2,10 +2,12 @@ package com.byeboo.app.data.service.quest
 
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
+import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerDto
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -22,4 +24,10 @@ interface QuestCommonService {
         @Query("cursor") cursor: Long?,
         @Query("limit") limit: Int = 10,
     ) : BaseResponse<QuestMyCommonAnswerDto>
+
+    @PATCH("/api/v1/common-quests/{answerId}")
+    suspend fun patchQuestCommonAnswer(
+        @Path("answerId") answerId: Long,
+        @Body request: QuestCommonEditRequestDto
+    ) : NullableBaseResponse<Unit>
 }
