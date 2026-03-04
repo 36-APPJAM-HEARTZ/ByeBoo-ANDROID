@@ -52,7 +52,6 @@ fun QuestReviewRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: QuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +86,7 @@ fun QuestReviewRoute(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onEditClick = { viewModel.onEditClicked(uiState.questType) },
-        modifier = modifier,
+        onAiAnswerClick = viewModel::onAiAnswerClicked,
     )
 }
 
@@ -97,6 +96,7 @@ private fun QuestReviewScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
+    onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -192,11 +192,11 @@ private fun QuestReviewScreen(
                         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                         ByeBooButton(
-                            buttonText = "보리에게 답장 받기",
+                            buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                             buttonTextColor = ByeBooTheme.colors.white,
                             buttonStyle = ByeBooTheme.typography.body2,
                             buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                            onClick = { /*Todo: ai 버튼 연결 */ },
+                            onClick = onAiAnswerClick,
                         )
                     }
                 }

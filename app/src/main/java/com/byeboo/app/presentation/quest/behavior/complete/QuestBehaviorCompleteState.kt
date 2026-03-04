@@ -18,6 +18,7 @@ data class QuestBehaviorCompleteState(
     val selectedImageUri: Uri? = null,
     val emotionDescription: String = "",
     val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
+    val isExistedAiAnswer: Boolean = false,
 )
 
 sealed interface QuestBehaviorCompleteSideEffect {

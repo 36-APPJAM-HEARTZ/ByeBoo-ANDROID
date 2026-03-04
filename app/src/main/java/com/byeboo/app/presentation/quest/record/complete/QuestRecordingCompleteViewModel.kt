@@ -47,8 +47,8 @@ class QuestRecordingCompleteViewModel
 
         private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
-                val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
-                result
+                questRecordedDetailRepository
+                    .getQuestRecordedDetail(questIdArg)
                     .onSuccess { detail ->
                         _uiState.update {
                             it.copy(
@@ -59,6 +59,7 @@ class QuestRecordingCompleteViewModel
                                 answer = detail.questAnswer,
                                 selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
+                                isExistedAiAnswer = detail.isExistedAiAnswer,
                             )
                         }
                     }.onFailure {
@@ -94,5 +95,8 @@ class QuestRecordingCompleteViewModel
                     }
                 }
             }
+        }
+
+        fun onAiAnswerClicked() {
         }
     }

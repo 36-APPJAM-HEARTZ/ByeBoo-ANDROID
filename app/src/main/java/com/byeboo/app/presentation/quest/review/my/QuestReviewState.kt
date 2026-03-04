@@ -18,6 +18,7 @@ data class QuestReviewState(
     val emotionDescription: String = "",
     val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
     val questType: QuestType = QuestType.RECORDING,
+    val isExistedAiAnswer: Boolean = false,
 )
 
 sealed interface QuestReviewSideEffect {

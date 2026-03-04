@@ -80,30 +80,27 @@ class QuestReviewViewModel
 
         private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
-                val result =
-                    questRecordedDetailRepository.getQuestRecordedDetail(
+                questRecordedDetailRepository
+                    .getQuestRecordedDetail(
                         uiState.value.questId,
-                    )
-                result
-                    .onSuccess { detail ->
+                    ).onSuccess { detail ->
                         _uiState.update {
-                            val newState =
-                                it.copy(
-                                    stepNumber = detail.stepNumber,
-                                    questNumber = detail.questNumber,
-                                    createdAt = detail.createdAt,
-                                    question = detail.question,
-                                    answer = detail.questAnswer,
-                                    imageKey = detail.imageKey.orEmpty(),
-                                    imageUrl = detail.imageUrl.orEmpty(),
-                                    selectedEmotion =
-                                        EmotionChipType.fromKorean(
-                                            detail.questEmotionState,
-                                        ),
-                                    emotionDescription = detail.emotionDescription,
-                                    questType = if (detail.imageUrl == null) QuestType.RECORDING else QuestType.ACTIVE,
-                                )
-                            newState
+                            it.copy(
+                                stepNumber = detail.stepNumber,
+                                questNumber = detail.questNumber,
+                                createdAt = detail.createdAt,
+                                question = detail.question,
+                                answer = detail.questAnswer,
+                                imageKey = detail.imageKey.orEmpty(),
+                                imageUrl = detail.imageUrl.orEmpty(),
+                                selectedEmotion =
+                                    EmotionChipType.fromKorean(
+                                        detail.questEmotionState,
+                                    ),
+                                emotionDescription = detail.emotionDescription,
+                                questType = if (detail.imageUrl == null) QuestType.RECORDING else QuestType.ACTIVE,
+                                isExistedAiAnswer = detail.isExistedAiAnswer,
+                            )
                         }
                     }.onFailure {
                         _sideEffect.emit(
@@ -113,5 +110,8 @@ class QuestReviewViewModel
                         )
                     }
             }
+        }
+
+        fun onAiAnswerClicked() {
         }
     }

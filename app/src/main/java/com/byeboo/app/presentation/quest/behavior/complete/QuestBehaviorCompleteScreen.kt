@@ -49,7 +49,6 @@ fun QuestBehaviorCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestBehaviorCompleteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +86,7 @@ fun QuestBehaviorCompleteRoute(
         paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
-        modifier = modifier,
+        onAiAnswerClick = viewModel::onAiAnswerClicked,
     )
 }
 
@@ -97,6 +96,7 @@ private fun QuestBehaviorCompleteScreen(
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
+    onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -191,11 +191,11 @@ private fun QuestBehaviorCompleteScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                 ByeBooButton(
-                    buttonText = "보리에게 답장 받기",
+                    buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                    onClick = { /*Todo: ai 버튼 연결 */ },
+                    onClick = onAiAnswerClick,
                 )
             }
         }
