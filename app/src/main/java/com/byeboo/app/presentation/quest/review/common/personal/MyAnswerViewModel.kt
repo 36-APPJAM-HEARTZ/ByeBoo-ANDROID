@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.presentation.offboarding.offboardingquestcompleted.QuestCompletedSideEffect
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -21,26 +22,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyAnswerViewModel
-    @Inject
-    constructor(
-        private val userRepository: UserRepository,
-        private val questCommonRepository: QuestCommonRepository
-    ) : ViewModel() {
-        private val _uiState = MutableStateFlow(MyAnswerState())
-        val uiState: StateFlow<MyAnswerState> = _uiState.asStateFlow()
+@Inject
+constructor(
+    private val userRepository: UserRepository,
+    private val questCommonRepository: QuestCommonRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(MyAnswerState())
+    val uiState: StateFlow<MyAnswerState> = _uiState.asStateFlow()
 
-        private val _sideEffect = MutableSharedFlow<MyAnswerSideEffect>()
-        val sideEffect: SharedFlow<MyAnswerSideEffect> = _sideEffect.asSharedFlow()
+    private val _sideEffect = MutableSharedFlow<MyAnswerSideEffect>()
+    val sideEffect: SharedFlow<MyAnswerSideEffect> = _sideEffect.asSharedFlow()
 
-        init {
-            viewModelScope.launch {
-                userRepository.getNickname().collect { userName ->
-                    _uiState.update { it.copy(userName = userName) }
-                }
+    init {
+        viewModelScope.launch {
+            userRepository.getNickname().collect { userName ->
+                _uiState.update { it.copy(userName = userName) }
             }
-
-            loadMyAnswers()
         }
+
+        loadMyAnswers()
+    }
 
     fun loadMyAnswers() {
         val state = _uiState.value
@@ -75,9 +76,15 @@ class MyAnswerViewModel
         }
     }
 
-        fun onMyAnswerContentClicked(answerId: Long) {
-            viewModelScope.launch {
-                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
-            }
+    fun onBackClicked() {
+        viewModelScope.launch {
+            _sideEffect.emit(MyAnswerSideEffect.NavigateUp)
         }
     }
+
+    fun onMyAnswerContentClicked(answerId: Long) {
+        viewModelScope.launch {
+            _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
+        }
+    }
+}

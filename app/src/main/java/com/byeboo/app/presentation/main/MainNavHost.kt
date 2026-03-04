@@ -146,12 +146,12 @@ fun MainNavHost(
                 )
             },
             navigateToQuestMyAnswers = {
-                navigator.navigateToQuestMyAnswers(navOptions = clearStackNavOptions)
+                navigator.navigateToQuestMyAnswers(navOptions = keepStackNavOptions)
             },
             navigateToQuestMyAnswerDetail = { answerId ->
                 navigator.navigateToQuestMyAnswerDetail(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions,
+                    navOptions = keepStackNavOptions,
                 )
             },
             navigateToQuestCommonWriting = { questId ->

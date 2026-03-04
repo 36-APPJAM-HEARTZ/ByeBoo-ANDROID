@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MyAnswerRoute(
+    navigateUp: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
     paddingValues: PaddingValues,
     viewModel: MyAnswerViewModel = hiltViewModel(),
@@ -46,6 +47,7 @@ fun MyAnswerRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
+                is MyAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyAnswerSideEffect.NavigateToQuestMyAnswerDetail ->
                     navigateToQuestMyAnswerDetail(effect.answerId)
             }
@@ -56,6 +58,7 @@ fun MyAnswerRoute(
         uiState = uiState,
         paddingValues = paddingValues,
         onLoadAnswers = viewModel::loadMyAnswers,
+        onBackClick = viewModel::onBackClicked,
         onMyAnswerContentClick = viewModel::onMyAnswerContentClicked,
     )
 }
@@ -64,6 +67,7 @@ fun MyAnswerRoute(
 fun MyAnswerScreen(
     uiState: MyAnswerState,
     onLoadAnswers: () -> Unit,
+    onBackClick: () -> Unit,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
@@ -110,9 +114,7 @@ fun MyAnswerScreen(
                     contentDescription = null,
                     tint = ByeBooTheme.colors.gray50,
                     modifier =
-                        Modifier.noRippleClickable(
-                            // Todo: 뒤로가기
-                        ),
+                        Modifier.noRippleClickable(onClick = onBackClick),
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))

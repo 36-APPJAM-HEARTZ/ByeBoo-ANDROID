@@ -13,4 +13,16 @@ data class MyDetailAnswerState(
             content = "",
         ),
     val showBottomSheet: Boolean = false,
+    val showDeleteModal: Boolean = false
 )
+
+interface MyDetailAnswerSideEffect {
+    data object NavigateUp : MyDetailAnswerSideEffect
+    data object NavigateToQuestMyAnswers: MyDetailAnswerSideEffect
+
+    data class NavigateToQuestCommonEdit(
+        val answerId: Long,
+        val isEditMode: Boolean
+    ) : MyDetailAnswerSideEffect
+
+}

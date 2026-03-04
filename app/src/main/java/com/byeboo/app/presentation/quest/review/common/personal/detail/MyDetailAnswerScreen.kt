@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,12 +24,17 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
+import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
+import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MyAnswerDetailRoute(
+    navigateUp: () -> Unit,
+    navigateToQuestMyAnswers: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
@@ -38,11 +44,35 @@ fun MyAnswerDetailRoute(
     MyAnswerDetailScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
         modifier = modifier,
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
+                is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
+                is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
+            }
+        }
+    }
+
+    if (uiState.showDeleteModal) {
+        QuestDeleteModal(
+            onDismissRequest = viewModel::onDismissDeleteModal,
+            onNoClick = viewModel::onDismissDeleteModal,
+            onYesClick = {
+                viewModel.onDismissDeleteModal()
+                viewModel.onQuestDeleteClicked()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(48.dp))
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +80,7 @@ fun MyAnswerDetailRoute(
 private fun MyAnswerDetailScreen(
     uiState: MyDetailAnswerState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (MyPostOption) -> Unit,
@@ -70,6 +101,7 @@ private fun MyAnswerDetailScreen(
                 ),
     ) {
         AnswerDetailTopBar(
+            onBackClick = onBackClick,
             onClickMoreOptions = onClickMoreOptions,
         )
 

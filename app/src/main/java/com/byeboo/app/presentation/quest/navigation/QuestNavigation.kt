@@ -131,6 +131,7 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswers> {
             MyAnswerRoute(
+                navigateUp = navigateUp,
                 navigateToQuestMyAnswerDetail = navigateToQuestMyAnswerDetail,
                 paddingValues = paddingValues,
             )
@@ -138,6 +139,8 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswersDetail> {
             MyAnswerDetailRoute(
+                navigateUp = navigateUp,
+                navigateToQuestMyAnswers = navigateToQuestMyAnswers,
                 paddingValues = paddingValues,
             )
         }
