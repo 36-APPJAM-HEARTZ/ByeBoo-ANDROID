@@ -15,4 +15,9 @@ class QuestAiAnswerRepositoryImpl
             runCatching {
                 questAiAnswerDataSource.postAiAnswer(questId = questId).data?.toDomain() ?: throw IllegalStateException()
             }
+
+    override suspend fun getAiAnswer(questId: Long): Result<QuestAiAnswerModel> =
+        runCatching{
+            questAiAnswerDataSource.getAiAnswer(questId = questId).data?.toDomain() ?: throw IllegalStateException()
+        }
     }
