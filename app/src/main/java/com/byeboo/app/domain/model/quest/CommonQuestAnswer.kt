@@ -27,3 +27,7 @@ data class QuestAnswerModel(
     val writtenAt: String = LocalDate.now().toString(),
     val content: String
 )
+
+data class QuestCommonAnswerEditModel(
+    val answer: String
+)
