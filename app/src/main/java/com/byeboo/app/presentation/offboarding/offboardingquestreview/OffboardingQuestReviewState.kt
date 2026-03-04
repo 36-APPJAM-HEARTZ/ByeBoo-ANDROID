@@ -18,6 +18,7 @@ data class OffboardingQuestReviewState(
     val emotionDescription: String = "",
     val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
     val questType: QuestType = QuestType.RECORDING,
+    val isExistedAiAnswer: Boolean = false,
 )
 
 sealed interface OffboardingQuestReviewSideEffect {

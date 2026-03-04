@@ -42,7 +42,7 @@ class OffboardingQuestReviewViewModel
             get() = _sideEffect.asSharedFlow()
 
         init {
-            observeQuestRecordedDetail()
+            loadQuestRecordedDetail()
         }
 
         fun onEditClicked(questType: QuestType) {
@@ -81,7 +81,7 @@ class OffboardingQuestReviewViewModel
             }
         }
 
-        private fun observeQuestRecordedDetail() {
+        private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
                 questRecordedDetailRepository
                     .observeQuestRecordedDetail(questIdArg)
@@ -103,9 +103,13 @@ class OffboardingQuestReviewViewModel
                                     } else {
                                         QuestType.ACTIVE
                                     },
+                                isExistedAiAnswer = detail.isExistedAiAnswer,
                             )
                         }
                     }
             }
+        }
+
+        fun onAiAnswerClicked() {
         }
     }

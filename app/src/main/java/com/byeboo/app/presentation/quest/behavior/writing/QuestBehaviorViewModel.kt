@@ -17,7 +17,7 @@ import com.byeboo.app.domain.model.quest.QuestWritingState
 import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
-import com.byeboo.app.domain.usecase.UploadImageUseCase
+import com.byeboo.app.domain.usecase.quest.UploadImageUseCase
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

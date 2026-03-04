@@ -8,7 +8,7 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.model.quest.CommonQuestAnswer
 import com.byeboo.app.domain.repository.auth.UserRepository
-import com.byeboo.app.domain.usecase.QuestUseCase
+import com.byeboo.app.domain.usecase.quest.QuestUseCase
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
