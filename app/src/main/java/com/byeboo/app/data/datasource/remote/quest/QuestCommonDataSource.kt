@@ -18,4 +18,8 @@ interface QuestCommonDataSource {
         answerId: Long,
         request: QuestCommonEditRequestDto
     ): NullableBaseResponse<Unit>
+
+    suspend fun deleteQuestCommonAnswer(
+        answerId: Long,
+    ): NullableBaseResponse<Unit>
 }

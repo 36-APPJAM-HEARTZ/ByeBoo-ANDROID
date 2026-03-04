@@ -35,4 +35,10 @@ class QuestCommonDataSourceImpl @Inject constructor(
             answerId = answerId,
             request = request
         )
+
+    override suspend fun deleteQuestCommonAnswer(answerId: Long): NullableBaseResponse<Unit> =
+        questCommonService.deleteQuestCommonAnswer(
+            answerId = answerId
+        )
+
 }
