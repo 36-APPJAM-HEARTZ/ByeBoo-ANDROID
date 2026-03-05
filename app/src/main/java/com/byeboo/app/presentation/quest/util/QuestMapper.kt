@@ -84,24 +84,27 @@ class QuestUiModelMapper
             return Duration.between(now, openAt).toMinutes().coerceAtLeast(0)
         }
 
-        fun formatWrittenTime(writtenAt: LocalDateTime): String {
-            val now = LocalDateTime.now()
-            val today = LocalDate.now()
-            val writtenDate = writtenAt.toLocalDate()
+        fun formatWrittenTime(writtenAt: LocalDateTime?): String {
+            if (writtenAt == null) return ""
 
-            return if (writtenDate.isEqual(today)) {
-                val minutes = ChronoUnit.MINUTES.between(writtenAt, now)
-                val hours = ChronoUnit.HOURS.between(writtenAt, now)
+            return runCatching {
+                val now = LocalDateTime.now()
+                val today = LocalDate.now()
+                val writtenDate = writtenAt.toLocalDate()
 
-                when {
-                    minutes < 60 -> {
-                        if (minutes < 1) "방금전" else "${minutes}분 전"
+                if (writtenDate.isEqual(today)) {
+                    val minutes = ChronoUnit.MINUTES.between(writtenAt, now)
+                    val hours = ChronoUnit.HOURS.between(writtenAt, now)
+
+                    when {
+                        minutes < 1 -> "방금 전"
+                        minutes < 60 -> "${minutes}분 전"
+                        else -> "${hours}시간 전"
                     }
-                    else -> "${hours}시간 전"
+                } else {
+                    writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
                 }
-            } else {
-                writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
-            }
+            }.getOrDefault("")
         }
 
         fun mapToIconRes(iconName: String): Int = ProfileIconType.fromName(iconName).iconResId
