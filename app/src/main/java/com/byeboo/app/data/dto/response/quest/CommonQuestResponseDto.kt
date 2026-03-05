@@ -16,7 +16,7 @@ data class CommonQuestResponseDto(
     @SerialName("hasNext")
     val hasNext: Boolean,
     @SerialName("nextCursor")
-    val nextCursor: Long,
+    val nextCursor: Long?,
     @SerialName("questId")
     val questId: Long,
 )

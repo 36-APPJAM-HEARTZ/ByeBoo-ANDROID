@@ -8,7 +8,7 @@ data class CommonQuestModel(
     val answers: List<CommonQuestAnswer>,
     val isAnswered: Boolean,
     val hasNext: Boolean,
-    val nextCursor: Long,
+    val nextCursor: Long?,
     val questId: Long,
 )
 
