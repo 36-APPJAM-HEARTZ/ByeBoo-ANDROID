@@ -73,69 +73,67 @@ class QuestViewModel
             if (!TimeUtil.isValidDateRange(newDate)) return
 
             _uiState.update { state ->
-                state.copy(
-                    commonJourneyState = state.commonJourneyState.copy(selectedDate = newDate),
-                )
+                state.copy(commonJourneyState = state.commonJourneyState.copy(selectedDate = newDate))
             }
 
             val cachedData = commonQuestCache[newDate]
-            if (cachedData != null) {
-                fetchJob?.cancel()
-                _uiState.update { state ->
-                    state.copy(commonJourneyState = cachedData, isLoading = false)
-                }
-                return
-            }
+            val isToday = newDate == TimeUtil.getNowKst()
 
             fetchJob?.cancel()
+
+            if (cachedData != null && !isToday) {
+                _uiState.update { it.copy(commonJourneyState = cachedData, isLoading = false) }
+            } else {
+                _uiState.update { it.copy(isLoading = true) }
+            }
+
             fetchJob =
                 viewModelScope.launch {
-                    _uiState.update { it.copy(isLoading = true) }
                     delay(300)
                     fetchCommonQuests(newDate)
                 }
         }
 
         private suspend fun fetchCommonQuests(date: LocalDate) {
-            commonQuestRepository
-                .getCommonQuests(
-                    date = date.toString(),
-                    cursor = null,
-                    limit = 20,
-                ).onSuccess { domainModel ->
-                    val uiAnswers =
-                        domainModel.answers
-                            .map { answer ->
-                                CommonAnswerModel(
-                                    answerId = answer.answerId,
-                                    writer = answer.writer,
-                                    profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
-                                    content = answer.content,
-                                )
-                            }.toImmutableList()
+            runCatching {
+                commonQuestRepository
+                    .getCommonQuests(
+                        date = date.toString(),
+                        cursor = null,
+                        limit = 20,
+                    ).getOrThrow()
+            }.map { domainModel ->
+                val uiAnswers =
+                    domainModel.answers
+                        .map { answer ->
+                            CommonAnswerModel(
+                                answerId = answer.answerId,
+                                writer = answer.writer,
+                                profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                content = answer.content,
+                            )
+                        }.toImmutableList()
 
-                    val updatedCommonState =
-                        uiState.value.commonJourneyState.copy(
-                            question = domainModel.question,
-                            answerCount = domainModel.answerCount.toInt(),
-                            answers = uiAnswers,
-                            isMyAnswerDone = domainModel.isAnswered,
-                            selectedDate = date,
-                        )
+                uiState.value.commonJourneyState.copy(
+                    question = domainModel.question,
+                    answerCount = domainModel.answerCount.toInt(),
+                    answers = uiAnswers,
+                    isMyAnswerDone = domainModel.isAnswered,
+                    selectedDate = date,
+                )
+            }.onSuccess { updatedCommonState ->
+                commonQuestCache[date] = updatedCommonState
+                _uiState.update { state ->
+                    state.copy(isLoading = false, commonJourneyState = updatedCommonState)
+                }
+            }.onFailure { t ->
+                _uiState.update { it.copy(isLoading = false) }
 
-                    commonQuestCache[date] = updatedCommonState
-
-                    _uiState.update { state ->
-                        state.copy(
-                            isLoading = false,
-                            commonJourneyState = updatedCommonState,
-                        )
-                    }
-                }.onFailure { t ->
-                    _uiState.update { it.copy(isLoading = false) }
+                if (commonQuestCache[date] == null) {
                     _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                 }
+            }
         }
 
         private fun loadQuests() {
