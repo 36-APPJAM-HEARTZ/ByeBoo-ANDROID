@@ -49,6 +49,7 @@ fun CommonOtherAnswerRoute(
     CommonOtherAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
@@ -61,6 +62,7 @@ fun CommonOtherAnswerRoute(
 private fun CommonOtherAnswerScreen(
     uiState: CommonAnswerState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (OtherPostOption) -> Unit,
@@ -81,6 +83,7 @@ private fun CommonOtherAnswerScreen(
                 ),
     ) {
         AnswerDetailTopBar(
+            onBackClick = onBackClick,
             onClickMoreOptions = onClickMoreOptions,
         )
 
