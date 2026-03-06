@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -38,21 +41,21 @@ constructor(
     }
 
     fun loadMyDetailAnswer() {
-        val cachedAnswers = questCommonRepository.getCachedMyAnswer(answerId = answerId)
-
-        if (cachedAnswers != null) {
-            _uiState.update {
-                it.copy(
-                    answer = it.answer.copy(
-                        answerId = cachedAnswers.answerId,
-                        question = cachedAnswers.question,
-                        writtenAt = cachedAnswers.writtenAt,
-                        content = cachedAnswers.content
+        questCommonRepository.answersFlow
+            .mapNotNull { value -> value.find { it.answerId == answerId} }
+            .onEach { cachedAnswer ->
+                _uiState.update { state ->
+                    state.copy(
+                        answer = state.answer.copy(
+                            answerId = cachedAnswer.answerId,
+                            question = cachedAnswer.question,
+                            writtenAt = cachedAnswer.writtenAt,
+                            content = cachedAnswer.content
+                        )
                     )
-                )
+                }
             }
-        }
-
+            .launchIn(viewModelScope)
     }
 
     fun onClickMoreOptions() {
@@ -65,7 +68,7 @@ constructor(
 
     fun onBackClicked() {
         viewModelScope.launch {
-            _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
+            _sideEffect.emit(MyDetailAnswerSideEffect.NavigateToQuestMyAnswers)
         }
 
     }
