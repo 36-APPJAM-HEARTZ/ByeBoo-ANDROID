@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,18 +30,11 @@ class OffboardingQuestReviewViewModel
     ) : ViewModel() {
         private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
         private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().journeyType
-        private val _uiState =
-            MutableStateFlow(
-                OffboardingQuestReviewState(
-                    questId = questIdArg,
-                ),
-            )
-        val uiState: StateFlow<OffboardingQuestReviewState>
-            get() = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(OffboardingQuestReviewState())
+        val uiState: StateFlow<OffboardingQuestReviewState> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<OffboardingQuestReviewSideEffect>()
-        val sideEffect: SharedFlow<OffboardingQuestReviewSideEffect>
-            get() = _sideEffect.asSharedFlow()
+        val sideEffect: SharedFlow<OffboardingQuestReviewSideEffect> = _sideEffect.asSharedFlow()
 
         init {
             loadQuestRecordedDetail()
@@ -50,7 +45,7 @@ class OffboardingQuestReviewViewModel
                 _sideEffect.emit(
                     if (questType == QuestType.RECORDING) {
                         OffboardingQuestReviewSideEffect.NavigateToQuestRecordingEdit(
-                            questId = uiState.value.questId,
+                            questId = questIdArg,
                             isEditMode = true,
                             fromOffboarding = true,
                         )
@@ -61,7 +56,7 @@ class OffboardingQuestReviewViewModel
                             }
 
                         OffboardingQuestReviewSideEffect.NavigateToQuestBehaviorEdit(
-                            questId = uiState.value.questId,
+                            questId = questIdArg,
                             isEditMode = true,
                             fromOffboarding = true,
                             imageKey = imageKey,
@@ -83,11 +78,28 @@ class OffboardingQuestReviewViewModel
 
         private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        isLoading = true,
+                    )
+                }
+
                 questRecordedDetailRepository
                     .observeQuestRecordedDetail(questIdArg)
-                    .collect { detail ->
+                    .catch {
+                        _uiState.update {
+                            it.copy(isLoading = false)
+                        }
+
+                        _sideEffect.emit(
+                            OffboardingQuestReviewSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
+                        )
+                    }.collect { detail ->
                         _uiState.update {
                             it.copy(
+                                isLoading = false,
                                 stepNumber = detail.stepNumber,
                                 questNumber = detail.questNumber,
                                 createdAt = detail.createdAt,
@@ -111,5 +123,13 @@ class OffboardingQuestReviewViewModel
         }
 
         fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    OffboardingQuestReviewSideEffect.NavigateToQuestAiAnswer(
+                        questId = questIdArg,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                    ),
+                )
+            }
         }
     }

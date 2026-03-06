@@ -6,7 +6,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
 
 data class QuestReviewState(
-    val questId: Long = 0,
+    val isLoading: Boolean = true,
     val stepNumber: Long = 0,
     val questNumber: Long = 0,
     val createdAt: String = LocalDate.now().toString(),
@@ -33,6 +33,11 @@ sealed interface QuestReviewSideEffect {
         val questId: Long,
         val isEditMode: Boolean,
         val imageKey: String,
+    ) : QuestReviewSideEffect
+
+    data class NavigateToQuestAiAnswer(
+        val questId: Long,
+        val isExistedAiAnswer: Boolean,
     ) : QuestReviewSideEffect
 
     data class ShowSnackBar(

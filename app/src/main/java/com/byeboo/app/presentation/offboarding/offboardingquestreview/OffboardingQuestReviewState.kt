@@ -6,7 +6,7 @@ import com.byeboo.app.core.model.quest.QuestType
 import java.time.LocalDate
 
 data class OffboardingQuestReviewState(
-    val questId: Long = 0,
+    val isLoading: Boolean = true,
     val stepNumber: Long = 0,
     val questNumber: Long = 0,
     val createdAt: String = LocalDate.now().toString(),
@@ -37,6 +37,11 @@ sealed interface OffboardingQuestReviewSideEffect {
         val isEditMode: Boolean,
         val fromOffboarding: Boolean,
         val imageKey: String,
+    ) : OffboardingQuestReviewSideEffect
+
+    data class NavigateToQuestAiAnswer(
+        val questId: Long,
+        val isExistedAiAnswer: Boolean,
     ) : OffboardingQuestReviewSideEffect
 
     data class ShowSnackBar(

@@ -26,6 +26,11 @@ sealed interface QuestBehaviorCompleteSideEffect {
 
     data object NavigateToOffboardingCompletedGuide : QuestBehaviorCompleteSideEffect
 
+    data class NavigateToQuestAiAnswer(
+        val questId: Long,
+        val isExistedAiAnswer: Boolean,
+    ) : QuestBehaviorCompleteSideEffect
+
     data object ShowInAppReview : QuestBehaviorCompleteSideEffect
 
     data class ShowSnackBar(

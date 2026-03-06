@@ -48,6 +48,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestTitle
 fun QuestBehaviorCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestBehaviorCompleteViewModel = hiltViewModel(),
 ) {
@@ -68,6 +69,11 @@ fun QuestBehaviorCompleteRoute(
             when (effect) {
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer ->
+                    navigateToQuestAiAnswer(
+                        effect.questId,
+                        effect.isExistedAiAnswer,
+                    )
                 is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->
                         inAppReview(activity)

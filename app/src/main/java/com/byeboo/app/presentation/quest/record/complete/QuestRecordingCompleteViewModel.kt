@@ -98,5 +98,13 @@ class QuestRecordingCompleteViewModel
         }
 
         fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestRecordingCompleteSideEffect.NavigateToQuestAiAnswer(
+                        questId = uiState.value.questId,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                    ),
+                )
+            }
         }
     }

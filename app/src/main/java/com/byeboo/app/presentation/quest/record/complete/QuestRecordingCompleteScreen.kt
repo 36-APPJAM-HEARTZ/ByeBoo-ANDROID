@@ -36,6 +36,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestTitle
 fun QuestRecordingCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel(),
 ) {
@@ -49,6 +50,11 @@ fun QuestRecordingCompleteRoute(
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestRecordingCompleteSideEffect.NavigateToQuestAiAnswer ->
+                    navigateToQuestAiAnswer(
+                        effect.questId,
+                        effect.isExistedAiAnswer,
+                    )
                 is QuestRecordingCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->
                         inAppReview(activity)

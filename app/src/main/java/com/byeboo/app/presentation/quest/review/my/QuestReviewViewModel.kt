@@ -27,20 +27,13 @@ class QuestReviewViewModel
         private val questRecordedDetailRepository: QuestRecordedDetailRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
-        val questIdArg: Long = savedStateHandle.toRoute<QuestReview>().questId
+        private val questIdArg: Long = savedStateHandle.toRoute<QuestReview>().questId
 
-        private val _uiState =
-            MutableStateFlow(
-                QuestReviewState(
-                    questId = questIdArg,
-                ),
-            )
-        val uiState: StateFlow<QuestReviewState>
-            get() = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestReviewState())
+        val uiState: StateFlow<QuestReviewState> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<QuestReviewSideEffect>()
-        val sideEffect: SharedFlow<QuestReviewSideEffect>
-            get() = _sideEffect.asSharedFlow()
+        val sideEffect: SharedFlow<QuestReviewSideEffect> = _sideEffect.asSharedFlow()
 
         init {
             loadQuestRecordedDetail()
@@ -51,7 +44,7 @@ class QuestReviewViewModel
                 _sideEffect.emit(
                     if (questType == QuestType.RECORDING) {
                         QuestReviewSideEffect.NavigateToQuestRecordingEdit(
-                            questId = uiState.value.questId,
+                            questId = questIdArg,
                             isEditMode = true,
                         )
                     } else {
@@ -61,7 +54,7 @@ class QuestReviewViewModel
                             }
 
                         QuestReviewSideEffect.NavigateToQuestBehaviorEdit(
-                            questId = uiState.value.questId,
+                            questId = questIdArg,
                             isEditMode = true,
                             imageKey = imageKey,
                         )
@@ -80,12 +73,19 @@ class QuestReviewViewModel
 
         private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        isLoading = true,
+                    )
+                }
+
                 questRecordedDetailRepository
                     .getQuestRecordedDetail(
-                        uiState.value.questId,
+                        questId = questIdArg,
                     ).onSuccess { detail ->
                         _uiState.update {
                             it.copy(
+                                isLoading = false,
                                 stepNumber = detail.stepNumber,
                                 questNumber = detail.questNumber,
                                 createdAt = detail.createdAt,
@@ -103,6 +103,10 @@ class QuestReviewViewModel
                             )
                         }
                     }.onFailure {
+                        _uiState.update {
+                            it.copy(isLoading = false)
+                        }
+
                         _sideEffect.emit(
                             QuestReviewSideEffect.ShowSnackBar(
                                 snackBarType = CustomSnackBarType.ALERT,
@@ -113,5 +117,13 @@ class QuestReviewViewModel
         }
 
         fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestReviewSideEffect.NavigateToQuestAiAnswer(
+                        questId = questIdArg,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                    ),
+                )
+            }
         }
     }

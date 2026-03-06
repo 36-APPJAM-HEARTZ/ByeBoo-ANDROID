@@ -26,6 +26,11 @@ sealed interface QuestRecordingCompleteSideEffect {
 
     data object NavigateToOffboardingCompletedGuide : QuestRecordingCompleteSideEffect
 
+    data class NavigateToQuestAiAnswer(
+        val questId: Long,
+        val isExistedAiAnswer: Boolean,
+    ) : QuestRecordingCompleteSideEffect
+
     data object ShowInAppReview : QuestRecordingCompleteSideEffect
 
     data class ShowSnackBar(

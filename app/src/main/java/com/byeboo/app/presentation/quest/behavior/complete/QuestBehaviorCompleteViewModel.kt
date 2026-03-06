@@ -99,5 +99,13 @@ class QuestBehaviorCompleteViewModel
         }
 
         fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
+                        questId = uiState.value.questId,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                    ),
+                )
+            }
         }
     }

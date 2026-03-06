@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,13 +30,23 @@ import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.aianswer.type.QuestAiAnswerStatusType
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuestAiAnswerRoute(
     paddingValues: PaddingValues,
+    navigateToQuest: () -> Unit,
     viewModel: QuestAiAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
+                is QuestAiAnswerSideEffect.NavigateToQuest -> navigateToQuest()
+            }
+        }
+    }
 
     when (val state = uiState) {
         is UiState.Loading ->
@@ -114,8 +125,8 @@ private fun QuestAiAnswer(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 184.dp, bottom = 22.dp),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(top = screenHeightDp(184.dp), bottom = screenHeightDp(22.dp)),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
