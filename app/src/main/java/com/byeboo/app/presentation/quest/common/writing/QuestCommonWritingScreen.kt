@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
@@ -46,7 +45,6 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun QuestCommonRoute(
     navigateToQuestFromComplete: () -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
