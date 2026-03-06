@@ -58,6 +58,16 @@ class QuestCommonRepositoryImpl @Inject constructor(
                 answerId = answerId,
                 request = request.toData()
             )
+
+            _answersFlow.update { currentList ->
+                currentList.map { item ->
+                    if (item.answerId == answerId) {
+                        item.copy(content = request.answer)
+                    } else {
+                        item
+                    }
+                }
+            }
         }
 
     override suspend fun deleteQuestCommonAnswer(answerId: Long): Result<Unit> =
