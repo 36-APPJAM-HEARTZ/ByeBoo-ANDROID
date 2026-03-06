@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.collectLatest
 fun CommonOtherAnswerRoute(
     navigateToQuest: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: CommonOtherAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,7 +52,6 @@ fun CommonOtherAnswerRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
-        modifier = modifier,
     )
 }
 

@@ -45,12 +45,9 @@ class CommonOtherAnswerViewModel
             _uiState.update { it.copy(answer = dummyAnswer) }
         }
 
-    fun onBackClicked() {
-        viewModelScope.launch {
-            // Todo: 뒤로 가기 사이드 이펙트 처리
+        fun onBackClicked() {
+            // TODO: 이동로직 구현
         }
-
-    }
 
         fun onClickMoreOptions() {
             _uiState.update { it.copy(showBottomSheet = true) }

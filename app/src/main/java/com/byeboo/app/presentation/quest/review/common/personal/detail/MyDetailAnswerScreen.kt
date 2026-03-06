@@ -37,7 +37,6 @@ fun MyAnswerDetailRoute(
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -49,7 +48,6 @@ fun MyAnswerDetailRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
-        modifier = modifier,
     )
 
     LaunchedEffect(Unit) {

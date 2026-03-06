@@ -1,12 +1,12 @@
 package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.lifecycle.ViewModel
+import kotlinx.collections.immutable.toPersistentList
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

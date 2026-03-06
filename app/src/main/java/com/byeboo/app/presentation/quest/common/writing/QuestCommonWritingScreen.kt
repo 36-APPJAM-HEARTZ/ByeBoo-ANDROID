@@ -39,7 +39,7 @@ import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
-import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopBar
+import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopbar
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -134,7 +134,7 @@ private fun QuestCommonScreen(
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        QuestWritingTopBar(
+        QuestWritingTopbar(
             isEnabled = uiState.isCompleteButtonEnabled,
             onBackClick = onBackClick,
             onCompleteClick = onCompleteClick,

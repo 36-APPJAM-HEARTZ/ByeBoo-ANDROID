@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -47,6 +46,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.topbar.ByeBooTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.hasNotificationPermission
@@ -253,18 +253,7 @@ private fun MyPageScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Text(
-            text = "내 정보",
-            color = ByeBooTheme.colors.white,
-            style = ByeBooTheme.typography.sub1,
-            textAlign = TextAlign.Center,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(ByeBooTheme.colors.background)
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(43.dp), bottom = screenHeightDp(16.dp)),
-        )
+        MyPageTopbar()
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -355,6 +344,19 @@ private fun MyPageScreen(
             }
         }
     }
+}
+
+@Composable
+private fun MyPageTopbar(modifier: Modifier = Modifier) {
+    ByeBooTopbar(
+        title = "내 정보",
+        textColor = ByeBooTheme.colors.gray50,
+        textStyle = ByeBooTheme.typography.sub1,
+        modifier =
+            modifier
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = screenHeightDp(43.dp)),
+    )
 }
 
 @Composable
