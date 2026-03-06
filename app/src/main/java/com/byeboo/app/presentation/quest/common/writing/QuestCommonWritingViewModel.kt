@@ -1,10 +1,14 @@
 package com.byeboo.app.presentation.quest.common.writing
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
+import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +24,7 @@ import javax.inject.Inject
 class QuestCommonWritingViewModel
     @Inject
     constructor(
+        savedStateHandle: SavedStateHandle,
         private val questCommonRepository: QuestCommonRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(QuestCommonState())
@@ -28,12 +33,35 @@ class QuestCommonWritingViewModel
         private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
         val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
 
+        private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
+        private val questId = routeArgs.questId
+        private val answerId = routeArgs.answerId
+        private val isEditMode = routeArgs.isEditMode
+
+        init {
+            if (isEditMode && answerId != -1L) {
+                loadRecordedContent()
+            }
+        }
+
+    private fun loadRecordedContent() {
+        val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
+
+        if (cachedAnswer != null) {
+            _uiState.update {
+                it.copy(
+                    questAnswer = cachedAnswer.content
+                )
+            }
+        }
+    }
+
         fun onBackClicked() {
             _uiState.update { it.copy(showQuitModal = true) }
         }
 
         fun onCompleteClicked() {
-            if (uiState.value.isEditMode) {
+            if (isEditMode) {
                 onSaveEditClicked()
             } else {
                 _uiState.update { it.copy(showCompleteModal = true) }
@@ -64,7 +92,8 @@ class QuestCommonWritingViewModel
                         answer = questAnswer
                     )
 
-                val result = questCommonRepository.uploadQuestCommonAnswer(questId = 69, request = request)
+                // Todo : 머지 후, questId = questId 로 수정 예정
+                val result = questCommonRepository.uploadQuestCommonAnswer(questId = 72, request = request)
 
                 result.onSuccess {
                     // 나가지기
@@ -79,7 +108,22 @@ class QuestCommonWritingViewModel
         }
 
         private fun onSaveEditClicked() {
+            val state = uiState.value
+            val questAnswer = state.questAnswer
 
+            viewModelScope.launch {
+                val request = QuestCommonAnswerEditModel(answer = questAnswer)
+                val result = questCommonRepository.patchQuestCommonAnswer(
+                    answerId = answerId,
+                    request = request
+                )
+
+                result.onSuccess {
+                    _uiState.update { it.copy(isEditMode = false) }
+                    _uiState.update { it.copy(questAnswer = questAnswer) }
+                    _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+                }
+            }
         }
 
         fun onDismissQuitModal() {

@@ -12,11 +12,15 @@ import com.byeboo.app.presentation.quest.common.writing.QuestCommonRoute
 
 fun NavController.navigateToQuestCommonWriting(
     questId: Long,
+    answerId: Long,
+    isEditMode: Boolean,
     navOptions: NavOptions? = null,
 ) {
     navigate(
         QuestCommonWriting(
             questId = questId,
+            answerId = answerId,
+            isEditMode = isEditMode,
         ),
         navOptions,
     )
@@ -31,7 +35,6 @@ fun NavController.navigateToQuestCommonComplete(
 
 fun NavGraphBuilder.questCommonGraph(
     navigateToQuestFromComplete: () -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -39,7 +42,6 @@ fun NavGraphBuilder.questCommonGraph(
         composable<QuestCommonWriting> {
             QuestCommonRoute(
                 navigateToQuestFromComplete = navigateToQuestFromComplete,
-                navigateToQuestCommonComplete = navigateToQuestCommonComplete,
                 navigateUp = navigateUp,
                 paddingValues = paddingValues,
             )

@@ -197,9 +197,18 @@ class MainNavigator(
         )
     }
 
-    fun navigateToQuestCommonWriting(questId: Long) {
+    fun navigateToQuestCommonWriting(
+        questId: Long = -1L,
+        answerId: Long = -1L,
+        isEditMode: Boolean = false,
+        navOptions: NavOptions? = null,
+    )
+    {
         navController.navigateToQuestCommonWriting(
             questId = questId,
+            answerId = answerId,
+            isEditMode = isEditMode,
+            navOptions = navOptions
         )
     }
 
@@ -235,12 +244,6 @@ class MainNavigator(
         navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
     }
 
-    fun navigateToQuestCommonComplete(
-        questId: Long,
-        navOptions: NavOptions? = null,
-    ) {
-        navController.navigateToQuestCommonComplete(questId = questId, navOptions = navOptions)
-    }
 
     fun navigateToQuestReview(
         questId: Long,

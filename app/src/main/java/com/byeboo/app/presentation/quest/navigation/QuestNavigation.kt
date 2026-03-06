@@ -74,12 +74,12 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
+    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
     navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -141,6 +141,7 @@ fun NavGraphBuilder.questGraph(
             MyAnswerDetailRoute(
                 navigateUp = navigateUp,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                navigateToQuestCommonEdit = navigateToQuestCommonEdit,
                 paddingValues = paddingValues,
             )
         }
@@ -167,7 +168,6 @@ fun NavGraphBuilder.questGraph(
 
         questCommonGraph(
             navigateToQuestFromComplete = navigateToQuestFromComplete,
-            navigateToQuestCommonComplete = navigateToQuestCommonComplete,
             navigateUp = navigateUp,
             paddingValues = paddingValues,
         )

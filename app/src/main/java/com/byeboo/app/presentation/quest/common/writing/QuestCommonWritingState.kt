@@ -7,6 +7,7 @@ import com.byeboo.app.domain.model.quest.QuestWritingState
 @Immutable
 data class QuestCommonState(
     val questId: Long = 0,
+    val answerId: Long = 0,
     val question: String = "",
     val questAnswer: String = "",
     val originalAnswer: String = "",

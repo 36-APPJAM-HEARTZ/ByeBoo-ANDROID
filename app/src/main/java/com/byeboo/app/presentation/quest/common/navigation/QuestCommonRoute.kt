@@ -8,6 +8,8 @@ sealed class QuestCommonRoute : Route {
     @Serializable
     data class QuestCommonWriting(
         val questId: Long,
+        val answerId: Long,
+        val isEditMode: Boolean,
     ) : QuestCommonRoute()
 
     @Serializable
