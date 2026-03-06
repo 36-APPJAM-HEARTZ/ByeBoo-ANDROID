@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MyAnswerRoute(
     navigateUp: () -> Unit,
+    navigateToQuest: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
     paddingValues: PaddingValues,
     viewModel: MyAnswerViewModel = hiltViewModel(),
@@ -48,6 +49,7 @@ fun MyAnswerRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is MyAnswerSideEffect.NavigateUp -> navigateUp()
+                is MyAnswerSideEffect.NavigateToQuest -> navigateToQuest()
                 is MyAnswerSideEffect.NavigateToQuestMyAnswerDetail ->
                     navigateToQuestMyAnswerDetail(effect.answerId)
             }

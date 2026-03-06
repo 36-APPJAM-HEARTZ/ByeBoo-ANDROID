@@ -17,6 +17,7 @@ data class MyAnswerState(
 
 sealed interface MyAnswerSideEffect {
     data object NavigateUp : MyAnswerSideEffect
+    data object NavigateToQuest : MyAnswerSideEffect
     data class NavigateToQuestMyAnswerDetail(
         val answerId: Long,
     ) : MyAnswerSideEffect

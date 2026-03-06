@@ -81,7 +81,7 @@ constructor(
 
     fun onBackClicked() {
         viewModelScope.launch {
-            _sideEffect.emit(MyAnswerSideEffect.NavigateUp)
+            _sideEffect.emit(MyAnswerSideEffect.NavigateToQuest)
         }
     }
 
