@@ -83,7 +83,7 @@ fun OffboardingQuestReviewRoute(
                         effect.questId,
                         effect.isExistedAiAnswer,
                         effect.aiAnswerOrigin,
-                        effect.questType
+                        effect.questType,
                     )
                 is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }

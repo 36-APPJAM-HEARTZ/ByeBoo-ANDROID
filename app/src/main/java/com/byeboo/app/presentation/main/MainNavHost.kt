@@ -250,7 +250,7 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin, questType->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin, questType ->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
