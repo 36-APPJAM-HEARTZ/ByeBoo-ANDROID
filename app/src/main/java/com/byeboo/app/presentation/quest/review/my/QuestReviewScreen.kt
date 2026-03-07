@@ -41,7 +41,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.review.my.QuestReviewSideEffect
 import com.byeboo.app.presentation.quest.review.my.QuestReviewState
 import com.byeboo.app.presentation.quest.review.my.QuestReviewViewModel
@@ -54,7 +54,7 @@ fun QuestReviewRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
-    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerEntryPoint) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     viewModel: QuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,7 +81,7 @@ fun QuestReviewRoute(
                     navigateToQuestAiAnswer(
                         effect.questId,
                         effect.isExistedAiAnswer,
-                        effect.aiAnswerEntryPoint,
+                        effect.aiAnswerOrigin,
                     )
 
                 is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)

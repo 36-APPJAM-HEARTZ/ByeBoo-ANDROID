@@ -9,7 +9,7 @@ import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -104,7 +104,7 @@ class QuestRecordingCompleteViewModel
                     QuestRecordingCompleteSideEffect.NavigateToQuestAiAnswer(
                         questId = uiState.value.questId,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
-                        aiAnswerEntryPoint = AiAnswerEntryPoint.QUEST,
+                        aiAnswerOrigin = AiAnswerOrigin.QUEST,
                     ),
                 )
             }

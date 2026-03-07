@@ -8,7 +8,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.navigation.QuestReview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -123,7 +123,7 @@ class QuestReviewViewModel
                     QuestReviewSideEffect.NavigateToQuestAiAnswer(
                         questId = questIdArg,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
-                        aiAnswerEntryPoint = AiAnswerEntryPoint.QUEST,
+                        aiAnswerOrigin = AiAnswerOrigin.QUEST,
                     ),
                 )
             }

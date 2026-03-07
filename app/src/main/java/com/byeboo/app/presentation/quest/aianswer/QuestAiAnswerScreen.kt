@@ -28,6 +28,7 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.aianswer.type.QuestAiAnswerStatusType
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun QuestAiAnswerRoute(
     paddingValues: PaddingValues,
     navigateToQuest: () -> Unit,
+    navigateToOffboardingQuest: (QuestType) -> Unit,
     viewModel: QuestAiAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -45,7 +47,7 @@ fun QuestAiAnswerRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestAiAnswerSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestAiAnswerSideEffect.NavigateToOffboarding -> {}
+                is QuestAiAnswerSideEffect.NavigateToOffboardingQuest -> navigateToOffboardingQuest(effect.questType)
             }
         }
     }

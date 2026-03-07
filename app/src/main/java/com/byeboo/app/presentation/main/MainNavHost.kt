@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
 import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
@@ -41,6 +42,14 @@ fun MainNavHost(
         navOptions {
             launchSingleTop = true
             restoreState = true
+        }
+    val offboardingReviewToAiNavOptions =
+        navOptions {
+            popUpTo(OffboardingQuestReview) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = false
         }
 
     NavHost(
@@ -162,7 +171,13 @@ fun MainNavHost(
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
-                    aiAnswerEntryPoint = aiAnswerEntryPoint,
+                    aiAnswerOrigin = aiAnswerEntryPoint,
+                    navOptions = clearStackNavOptions,
+                )
+            },
+            navigateToOffboardingQuestCompleted = { questType ->
+                navigator.navigateToOffboardingQuestCompleted(
+                    questType = questType,
                     navOptions = clearStackNavOptions,
                 )
             },
@@ -239,8 +254,8 @@ fun MainNavHost(
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
-                    aiAnswerEntryPoint = aiAnswerEntryPoint,
-                    navOptions = clearStackNavOptions,
+                    aiAnswerOrigin = aiAnswerEntryPoint,
+                    navOptions = offboardingReviewToAiNavOptions,
                 )
             },
             paddingValues = paddingValues,

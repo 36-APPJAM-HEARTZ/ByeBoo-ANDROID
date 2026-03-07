@@ -9,7 +9,7 @@ import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,7 @@ class OffboardingQuestReviewViewModel
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
-        private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().questType
+        private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().questType
         private val _uiState = MutableStateFlow(OffboardingQuestReviewState())
         val uiState: StateFlow<OffboardingQuestReviewState> = _uiState.asStateFlow()
 
@@ -71,7 +71,7 @@ class OffboardingQuestReviewViewModel
             viewModelScope.launch {
                 _sideEffect.emit(
                     OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(
-                        journey = journeyTypeArg,
+                        journey = questTypeArg,
                     ),
                 )
             }
@@ -129,7 +129,7 @@ class OffboardingQuestReviewViewModel
                     OffboardingQuestReviewSideEffect.NavigateToQuestAiAnswer(
                         questId = questIdArg,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
-                        aiAnswerEntryPoint = AiAnswerEntryPoint.OFFBOARDING,
+                        aiAnswerOrigin = AiAnswerOrigin.Offboarding(questType = questTypeArg),
                     ),
                 )
             }

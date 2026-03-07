@@ -3,7 +3,7 @@ package com.byeboo.app.presentation.offboarding.offboardingquestreview
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import java.time.LocalDate
 
 data class OffboardingQuestReviewState(
@@ -43,7 +43,7 @@ sealed interface OffboardingQuestReviewSideEffect {
     data class NavigateToQuestAiAnswer(
         val questId: Long,
         val isExistedAiAnswer: Boolean,
-        val aiAnswerEntryPoint: AiAnswerEntryPoint,
+        val aiAnswerOrigin: AiAnswerOrigin,
     ) : OffboardingQuestReviewSideEffect
 
     data class ShowSnackBar(

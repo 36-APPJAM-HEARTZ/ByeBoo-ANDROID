@@ -3,7 +3,7 @@ package com.byeboo.app.presentation.quest.record.complete
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import java.time.LocalDate
 
 @Immutable
@@ -30,7 +30,7 @@ sealed interface QuestRecordingCompleteSideEffect {
     data class NavigateToQuestAiAnswer(
         val questId: Long,
         val isExistedAiAnswer: Boolean,
-        val aiAnswerEntryPoint: AiAnswerEntryPoint,
+        val aiAnswerOrigin: AiAnswerOrigin,
     ) : QuestRecordingCompleteSideEffect
 
     data object ShowInAppReview : QuestRecordingCompleteSideEffect

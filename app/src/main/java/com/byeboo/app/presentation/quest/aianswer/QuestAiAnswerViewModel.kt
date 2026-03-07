@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.domain.usecase.quest.GetAiAnswerUseCase
 import com.byeboo.app.domain.usecase.quest.PostAiAnswerUseCase
-import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.navigation.QuestAiAnswer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +30,7 @@ class QuestAiAnswerViewModel
         private val args = savedStateHandle.toRoute<QuestAiAnswer>()
         private val questIdArg = args.questId
         private val isExistedAiAnswerArg = args.isExistedAiAnswer
-        private val aiAnswerEntryPointArg = args.aiAnswerEntryPoint
+        private val aiAnswerEntryPointArg = args.aiAnswerOrigin
 
         private val _uiState =
             MutableStateFlow(
@@ -84,9 +84,12 @@ class QuestAiAnswerViewModel
 
         fun onCloseClicked() {
             viewModelScope.launch {
-                if (aiAnswerEntryPointArg == AiAnswerEntryPoint.QUEST) {
-                    _sideEffect.emit(QuestAiAnswerSideEffect.NavigateToQuest)
-                } else {
+                when (aiAnswerEntryPointArg) {
+                    is AiAnswerOrigin.Quest -> _sideEffect.emit(QuestAiAnswerSideEffect.NavigateToQuest)
+                    is AiAnswerOrigin.Offboarding ->
+                        _sideEffect.emit(
+                            QuestAiAnswerSideEffect.NavigateToOffboardingQuest(questType = aiAnswerEntryPointArg.questType),
+                        )
                 }
             }
         }
