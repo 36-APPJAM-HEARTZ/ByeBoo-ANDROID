@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.behavior.complete
 import android.net.Uri
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 
 data class QuestBehaviorCompleteState(
     val questId: Long = 0,
@@ -29,6 +30,7 @@ sealed interface QuestBehaviorCompleteSideEffect {
     data class NavigateToQuestAiAnswer(
         val questId: Long,
         val isExistedAiAnswer: Boolean,
+        val aiAnswerEntryPoint: AiAnswerEntryPoint,
     ) : QuestBehaviorCompleteSideEffect
 
     data object ShowInAppReview : QuestBehaviorCompleteSideEffect

@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.review.my
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 import java.time.LocalDate
 
 data class QuestReviewState(
@@ -38,6 +39,7 @@ sealed interface QuestReviewSideEffect {
     data class NavigateToQuestAiAnswer(
         val questId: Long,
         val isExistedAiAnswer: Boolean,
+        val aiAnswerEntryPoint: AiAnswerEntryPoint,
     ) : QuestReviewSideEffect
 
     data class ShowSnackBar(

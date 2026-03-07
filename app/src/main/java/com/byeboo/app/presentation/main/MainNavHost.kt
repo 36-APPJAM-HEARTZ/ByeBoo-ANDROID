@@ -158,10 +158,11 @@ fun MainNavHost(
                 navigator.navigateToQuestCommonWriting(questId = questId)
             },
             navigateUp = navigator::navigateUp,
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer ->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerEntryPoint ->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerEntryPoint = aiAnswerEntryPoint,
                     navOptions = clearStackNavOptions,
                 )
             },
@@ -234,10 +235,11 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer ->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerEntryPoint ->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerEntryPoint = aiAnswerEntryPoint,
                     navOptions = clearStackNavOptions,
                 )
             },

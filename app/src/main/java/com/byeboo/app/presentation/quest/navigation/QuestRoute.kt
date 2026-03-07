@@ -43,4 +43,5 @@ data class QuestMyAnswersDetail(
 data class QuestAiAnswer(
     val questId: Long,
     val isExistedAiAnswer: Boolean,
+    val aiAnswerEntryPoint: AiAnswerEntryPoint,
 ) : Route

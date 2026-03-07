@@ -10,6 +10,7 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -104,6 +105,7 @@ class QuestBehaviorCompleteViewModel
                     QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
                         questId = uiState.value.questId,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                        aiAnswerEntryPoint = AiAnswerEntryPoint.QUEST,
                     ),
                 )
             }

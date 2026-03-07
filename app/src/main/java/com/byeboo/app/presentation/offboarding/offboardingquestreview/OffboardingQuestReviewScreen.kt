@@ -42,6 +42,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 import com.byeboo.app.presentation.quest.review.my.component.QuestReviewTopbar
 import kotlinx.coroutines.flow.collectLatest
 
@@ -51,7 +52,7 @@ fun OffboardingQuestReviewRoute(
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
-    navigateToQuestAiAnswer: (Long, Boolean) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerEntryPoint) -> Unit,
     viewModel: OffboardingQuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,6 +82,7 @@ fun OffboardingQuestReviewRoute(
                     navigateToQuestAiAnswer(
                         effect.questId,
                         effect.isExistedAiAnswer,
+                        effect.aiAnswerEntryPoint,
                     )
                 is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }

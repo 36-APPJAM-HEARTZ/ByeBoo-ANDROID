@@ -43,12 +43,13 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 
 @Composable
 fun QuestBehaviorCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
-    navigateToQuestAiAnswer: (Long, Boolean) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerEntryPoint) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestBehaviorCompleteViewModel = hiltViewModel(),
 ) {
@@ -73,6 +74,7 @@ fun QuestBehaviorCompleteRoute(
                     navigateToQuestAiAnswer(
                         effect.questId,
                         effect.isExistedAiAnswer,
+                        effect.aiAnswerEntryPoint,
                     )
                 is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->

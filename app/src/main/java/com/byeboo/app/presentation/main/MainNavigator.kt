@@ -28,6 +28,7 @@ import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBeha
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
+import com.byeboo.app.presentation.quest.navigation.AiAnswerEntryPoint
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestAiAnswer
@@ -245,9 +246,15 @@ class MainNavigator(
     fun navigateToQuestAiAnswer(
         questId: Long,
         isExistedAiAnswer: Boolean,
+        aiAnswerEntryPoint: AiAnswerEntryPoint,
         navOptions: NavOptions? = null,
     ) {
-        navController.navigateToQuestAiAnswer(questId = questId, isExistedAiAnswer = isExistedAiAnswer, navOptions = navOptions)
+        navController.navigateToQuestAiAnswer(
+            questId = questId,
+            isExistedAiAnswer = isExistedAiAnswer,
+            aiAnswerEntryPoint = aiAnswerEntryPoint,
+            navOptions = navOptions,
+        )
     }
 
     fun navigateToMyPage(navOptions: NavOptions? = null) {
