@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.aianswer
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,10 @@ fun QuestAiAnswerRoute(
                 is QuestAiAnswerSideEffect.NavigateToQuest -> navigateToQuest()
             }
         }
+    }
+
+    BackHandler {
+        navigateToQuest()
     }
 
     when (val state = uiState) {
