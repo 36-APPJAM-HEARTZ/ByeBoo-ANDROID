@@ -7,8 +7,10 @@ object DateUtil {
     private val defaultFormatter =
         DateTimeFormatter.ofPattern("yyyy. MM. dd.")
 
-    fun formatToDotDate(createdAt: String): String =
-        LocalDate
-            .parse(createdAt)
-            .format(defaultFormatter)
+    fun formatToDotDate(date: String): String {
+        return runCatching {
+            if (date.isBlank()) return ""
+            LocalDate.parse(date).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+        }.getOrElse { "" }
+    }
 }
