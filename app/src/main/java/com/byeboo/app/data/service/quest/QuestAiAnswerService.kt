@@ -12,7 +12,7 @@ interface QuestAiAnswerService {
         @Path("questId") questId: Long,
     ): NullableBaseResponse<QuestAiAnswerResponseDto>
 
-    @GET("/api/v1/quests/{questId}/ai-answer ")
+    @GET("/api/v1/quests/{questId}/ai-answer")
     suspend fun getAiAnswer(
         @Path("questId") questId: Long,
     ): NullableBaseResponse<QuestAiAnswerResponseDto>
