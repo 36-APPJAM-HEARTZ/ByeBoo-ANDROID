@@ -53,7 +53,7 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToOffboardingQuestCompletedFromReview: (QuestType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
-    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin, QuestType) -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<OffboardingCompletedGuide> {

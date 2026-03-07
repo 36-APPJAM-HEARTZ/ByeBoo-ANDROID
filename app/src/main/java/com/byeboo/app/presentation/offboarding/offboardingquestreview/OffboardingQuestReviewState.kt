@@ -44,6 +44,7 @@ sealed interface OffboardingQuestReviewSideEffect {
         val questId: Long,
         val isExistedAiAnswer: Boolean,
         val aiAnswerOrigin: AiAnswerOrigin,
+        val questType: QuestType,
     ) : OffboardingQuestReviewSideEffect
 
     data class ShowSnackBar(

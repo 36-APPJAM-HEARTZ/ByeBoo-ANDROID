@@ -67,9 +67,10 @@ fun NavController.navigateToQuestAiAnswer(
     questId: Long,
     isExistedAiAnswer: Boolean,
     aiAnswerOrigin: AiAnswerOrigin,
+    questType: QuestType? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(QuestAiAnswer(questId = questId, isExistedAiAnswer = isExistedAiAnswer, aiAnswerOrigin = aiAnswerOrigin), navOptions)
+    navigate(QuestAiAnswer(questId = questId, isExistedAiAnswer = isExistedAiAnswer, aiAnswerOrigin = aiAnswerOrigin, questType = questType), navOptions)
 }
 
 fun NavGraphBuilder.questGraph(

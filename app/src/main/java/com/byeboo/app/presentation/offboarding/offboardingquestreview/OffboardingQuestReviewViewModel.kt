@@ -129,7 +129,8 @@ class OffboardingQuestReviewViewModel
                     OffboardingQuestReviewSideEffect.NavigateToQuestAiAnswer(
                         questId = questIdArg,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
-                        aiAnswerOrigin = AiAnswerOrigin.Offboarding(questType = questTypeArg),
+                        aiAnswerOrigin = AiAnswerOrigin.OFFBOARDING,
+                        questType = questTypeArg,
                     ),
                 )
             }

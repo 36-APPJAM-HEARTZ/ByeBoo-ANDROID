@@ -31,6 +31,7 @@ class QuestAiAnswerViewModel
         private val questIdArg = args.questId
         private val isExistedAiAnswerArg = args.isExistedAiAnswer
         private val aiAnswerEntryPointArg = args.aiAnswerOrigin
+        private val questTypeArg = args.questType
 
         private val _uiState =
             MutableStateFlow(
@@ -85,10 +86,15 @@ class QuestAiAnswerViewModel
         fun onCloseClicked() {
             viewModelScope.launch {
                 when (aiAnswerEntryPointArg) {
-                    is AiAnswerOrigin.Quest -> _sideEffect.emit(QuestAiAnswerSideEffect.NavigateToQuest)
-                    is AiAnswerOrigin.Offboarding ->
+                    AiAnswerOrigin.QUEST -> _sideEffect.emit(QuestAiAnswerSideEffect.NavigateToQuest)
+                    AiAnswerOrigin.OFFBOARDING ->
                         _sideEffect.emit(
-                            QuestAiAnswerSideEffect.NavigateToOffboardingQuest(questType = aiAnswerEntryPointArg.questType),
+                            QuestAiAnswerSideEffect.NavigateToOffboardingQuest(
+                                questType =
+                                    requireNotNull(questTypeArg) {
+                                        "Offboarding entry requires questType"
+                                    },
+                            ),
                         )
                 }
             }

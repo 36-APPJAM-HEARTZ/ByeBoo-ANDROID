@@ -45,7 +45,7 @@ fun MainNavHost(
         }
     val offboardingReviewToAiNavOptions =
         navOptions {
-            popUpTo(OffboardingQuestReview) {
+            popUpTo<OffboardingQuestReview> {
                 inclusive = true
             }
             launchSingleTop = true
@@ -167,11 +167,11 @@ fun MainNavHost(
                 navigator.navigateToQuestCommonWriting(questId = questId)
             },
             navigateUp = navigator::navigateUp,
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerEntryPoint ->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
-                    aiAnswerOrigin = aiAnswerEntryPoint,
+                    aiAnswerOrigin = aiAnswerOrigin,
                     navOptions = clearStackNavOptions,
                 )
             },
@@ -250,11 +250,12 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerEntryPoint ->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin, questType->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
-                    aiAnswerOrigin = aiAnswerEntryPoint,
+                    aiAnswerOrigin = aiAnswerOrigin,
+                    questType = questType,
                     navOptions = offboardingReviewToAiNavOptions,
                 )
             },
