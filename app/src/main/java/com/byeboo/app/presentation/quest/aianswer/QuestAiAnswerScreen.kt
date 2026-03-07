@@ -25,9 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.aianswer.type.QuestAiAnswerStatusType
@@ -45,37 +45,42 @@ fun QuestAiAnswerRoute(
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
                 is QuestAiAnswerSideEffect.NavigateToQuest -> navigateToQuest()
+                is QuestAiAnswerSideEffect.NavigateToOffboarding -> {}
             }
         }
     }
 
     BackHandler {
-        navigateToQuest()
+        viewModel.onCloseClicked()
     }
 
-    when (val state = uiState) {
-        is UiState.Loading ->
-            QuestAiAnswerStatusScreen(
-                paddingValues = paddingValues,
-                onCloseClick = viewModel::onCloseClicked,
-                statusType = QuestAiAnswerStatusType.LOADING,
-            )
+    when {
+        uiState.isLoading -> {
+            when (uiState.isExistedAiAnswer) {
+                true -> LoadingScreen()
 
-        is UiState.Failure ->
+                false ->
+                    QuestAiAnswerStatusScreen(
+                        paddingValues = paddingValues,
+                        onCloseClick = viewModel::onCloseClicked,
+                        statusType = QuestAiAnswerStatusType.LOADING,
+                    )
+            }
+        }
+
+        uiState.isFailure ->
             QuestAiAnswerStatusScreen(
                 paddingValues = paddingValues,
                 onCloseClick = viewModel::onCloseClicked,
                 statusType = QuestAiAnswerStatusType.FAIL,
             )
 
-        is UiState.Success ->
+        else ->
             QuestAiAnswerScreen(
-                uiState = state.data,
+                uiState = uiState,
                 paddingValues = paddingValues,
                 onCloseClick = viewModel::onCloseClicked,
             )
-
-        else -> Unit
     }
 }
 
