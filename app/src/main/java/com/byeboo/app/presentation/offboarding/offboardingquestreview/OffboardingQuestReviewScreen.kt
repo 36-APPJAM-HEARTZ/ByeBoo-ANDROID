@@ -52,7 +52,7 @@ fun OffboardingQuestReviewRoute(
     navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
-    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin, QuestType) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     viewModel: OffboardingQuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -83,7 +83,6 @@ fun OffboardingQuestReviewRoute(
                         effect.questId,
                         effect.isExistedAiAnswer,
                         effect.aiAnswerOrigin,
-                        effect.questType,
                     )
                 is OffboardingQuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }

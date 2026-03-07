@@ -247,14 +247,12 @@ class MainNavigator(
         questId: Long,
         isExistedAiAnswer: Boolean,
         aiAnswerOrigin: AiAnswerOrigin,
-        questType: QuestType? = null,
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestAiAnswer(
             questId = questId,
             isExistedAiAnswer = isExistedAiAnswer,
             aiAnswerOrigin = aiAnswerOrigin,
-            questType = questType,
             navOptions = navOptions,
         )
     }

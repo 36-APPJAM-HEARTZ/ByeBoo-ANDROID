@@ -175,12 +175,6 @@ fun MainNavHost(
                     navOptions = clearStackNavOptions,
                 )
             },
-            navigateToOffboardingQuestCompleted = { questType ->
-                navigator.navigateToOffboardingQuestCompleted(
-                    questType = questType,
-                    navOptions = clearStackNavOptions,
-                )
-            },
             paddingValues = paddingValues,
         )
 
@@ -250,12 +244,11 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin, questType ->
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
                 navigator.navigateToQuestAiAnswer(
                     questId = questId,
                     isExistedAiAnswer = isExistedAiAnswer,
                     aiAnswerOrigin = aiAnswerOrigin,
-                    questType = questType,
                     navOptions = offboardingReviewToAiNavOptions,
                 )
             },

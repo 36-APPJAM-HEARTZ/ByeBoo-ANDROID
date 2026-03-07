@@ -130,7 +130,6 @@ class OffboardingQuestReviewViewModel
                         questId = questIdArg,
                         isExistedAiAnswer = uiState.value.isExistedAiAnswer,
                         aiAnswerOrigin = AiAnswerOrigin.OFFBOARDING,
-                        questType = questTypeArg,
                     ),
                 )
             }

@@ -89,12 +89,7 @@ class QuestAiAnswerViewModel
                     AiAnswerOrigin.QUEST -> _sideEffect.emit(QuestAiAnswerSideEffect.NavigateToQuest)
                     AiAnswerOrigin.OFFBOARDING ->
                         _sideEffect.emit(
-                            QuestAiAnswerSideEffect.NavigateToOffboardingQuest(
-                                questType =
-                                    requireNotNull(questTypeArg) {
-                                        "Offboarding entry requires questType"
-                                    },
-                            ),
+                            QuestAiAnswerSideEffect.NavigateUp,
                         )
                 }
             }
