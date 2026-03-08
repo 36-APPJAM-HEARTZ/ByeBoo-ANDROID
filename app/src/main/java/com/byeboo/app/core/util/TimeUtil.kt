@@ -1,6 +1,7 @@
 package com.byeboo.app.core.util
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 object TimeUtil {
@@ -14,4 +15,6 @@ object TimeUtil {
         val today = getNowKst()
         return !date.isBefore(QUEST_START_DATE) && !date.isAfter(today)
     }
+
+    fun getNowLocalDateTimeKst(): LocalDateTime = LocalDateTime.now(KST_ZONE)
 }

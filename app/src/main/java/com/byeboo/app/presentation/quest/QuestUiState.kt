@@ -33,7 +33,10 @@ data class MyJourneyState(
 data class CommonJourneyState(
     val selectedDate: LocalDate = TimeUtil.getNowKst(),
     val question: String = "",
+    val questId: Long = 0L,
     val answerCount: Int = 0,
     val answers: ImmutableList<CommonAnswerModel> = persistentListOf(),
     val isMyAnswerDone: Boolean = false,
+    val hasNext: Boolean = false,
+    val nextCursor: Long? = null,
 )

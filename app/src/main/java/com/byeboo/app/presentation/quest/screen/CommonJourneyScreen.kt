@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -45,9 +48,24 @@ fun CommonJourneyScreen(
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
     onCommonQuestClick: (Long) -> Unit,
+    onLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+
+    val shouldLoadMore =
+        remember {
+            derivedStateOf {
+                val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+                lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 5
+            }
+        }
+
+    LaunchedEffect(shouldLoadMore.value) {
+        if (shouldLoadMore.value && state.hasNext && !isLoading) {
+            onLoadMore()
+        }
+    }
 
     LaunchedEffect(state.selectedDate) {
         listState.scrollToItem(0)
@@ -104,7 +122,7 @@ fun CommonJourneyScreen(
                 }
             }
 
-            if (isLoading) {
+            if (isLoading && state.answers.isEmpty()) {
                 item {
                     Box(
                         modifier =
@@ -113,9 +131,7 @@ fun CommonJourneyScreen(
                                 .fillParentMaxHeight(0.5f),
                         contentAlignment = Alignment.Center,
                     ) {
-                        androidx.compose.material3.CircularProgressIndicator(
-                            color = ByeBooTheme.colors.primary500,
-                        )
+                        CircularProgressIndicator(color = ByeBooTheme.colors.primary500)
                     }
                 }
             } else {
@@ -156,7 +172,7 @@ fun CommonJourneyScreen(
                             )
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
                             ByeBooButton(
-                                onClick = { onCommonQuestClick(0) },
+                                onClick = { onCommonQuestClick(state.questId) },
                                 buttonText = "답변 작성하기",
                                 buttonStyle = ByeBooTheme.typography.body2,
                                 buttonTextColor = ByeBooTheme.colors.primary500,
@@ -205,6 +221,20 @@ fun CommonJourneyScreen(
                                     .padding(horizontal = screenWidthDp(24.dp))
                                     .padding(bottom = screenHeightDp(24.dp)),
                         )
+                    }
+
+                    if (isLoading) {
+                        item {
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = screenHeightDp(16.dp)),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(color = ByeBooTheme.colors.primary500)
+                            }
+                        }
                     }
                 }
             }

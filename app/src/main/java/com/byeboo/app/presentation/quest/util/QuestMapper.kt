@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.util
 import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.quest.QuestData
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
@@ -11,7 +12,6 @@ import com.byeboo.app.presentation.quest.model.QuestState
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -88,18 +88,19 @@ class QuestUiModelMapper
             if (writtenAt == null) return ""
 
             return runCatching {
-                val now = LocalDateTime.now()
-                val today = LocalDate.now()
+                val nowKst = TimeUtil.getNowLocalDateTimeKst()
+                val todayKst = TimeUtil.getNowKst()
                 val writtenDate = writtenAt.toLocalDate()
 
-                if (writtenDate.isEqual(today)) {
-                    val minutes = ChronoUnit.MINUTES.between(writtenAt, now)
-                    val hours = ChronoUnit.HOURS.between(writtenAt, now)
+                if (writtenDate.isEqual(todayKst)) {
+                    val minutes = ChronoUnit.MINUTES.between(writtenAt, nowKst)
+                    val hours = ChronoUnit.HOURS.between(writtenAt, nowKst)
 
                     when {
                         minutes < 1 -> "방금 전"
                         minutes < 60 -> "${minutes}분 전"
-                        else -> "${hours}시간 전"
+                        hours < 24 -> "${hours}시간 전"
+                        else -> writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
                     }
                 } else {
                     writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))

@@ -6,7 +6,6 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.TimeUtil
-import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.CommonQuestRepository
 import com.byeboo.app.domain.usecase.QuestUseCase
@@ -117,10 +116,13 @@ class QuestViewModel
 
                 uiState.value.commonJourneyState.copy(
                     question = domainModel.question,
+                    questId = domainModel.questId,
                     answerCount = domainModel.answerCount.toInt(),
                     answers = uiAnswers,
                     isMyAnswerDone = domainModel.isAnswered,
                     selectedDate = date,
+                    hasNext = domainModel.hasNext,
+                    nextCursor = domainModel.nextCursor,
                 )
             }.onSuccess { updatedCommonState ->
                 commonQuestCache[date] = updatedCommonState
@@ -128,10 +130,53 @@ class QuestViewModel
                     state.copy(isLoading = false, commonJourneyState = updatedCommonState)
                 }
             }.onFailure { t ->
+                if (t is kotlinx.coroutines.CancellationException) throw t
+
                 _uiState.update { it.copy(isLoading = false) }
 
-                if (commonQuestCache[date] == null) {
+                val fallback = commonQuestCache[date]
+                if (fallback != null) {
+                    _uiState.update { it.copy(commonJourneyState = fallback) }
+                } else {
                     _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                }
+            }
+        }
+
+        fun loadNextPage() {
+            val currentState = uiState.value.commonJourneyState
+            if (!currentState.hasNext || currentState.nextCursor == null || uiState.value.isLoading) return
+
+            viewModelScope.launch {
+                runCatching {
+                    commonQuestRepository
+                        .getCommonQuests(
+                            date = currentState.selectedDate.toString(),
+                            cursor = currentState.nextCursor,
+                            limit = 20,
+                        ).getOrThrow()
+                }.onSuccess { domainModel ->
+                    val moreAnswers =
+                        domainModel.answers.map { answer ->
+                            CommonAnswerModel(
+                                answerId = answer.answerId,
+                                writer = answer.writer,
+                                profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                content = answer.content,
+                            )
+                        }
+
+                    _uiState.update { state ->
+                        val updatedState =
+                            state.commonJourneyState.copy(
+                                answers = (state.commonJourneyState.answers + moreAnswers).toImmutableList(),
+                                hasNext = domainModel.hasNext,
+                                nextCursor = domainModel.nextCursor,
+                            )
+                        commonQuestCache[currentState.selectedDate] = updatedState
+                        state.copy(commonJourneyState = updatedState)
+                    }
                 }
             }
         }
@@ -167,18 +212,12 @@ class QuestViewModel
                             countdownJob =
                                 QuestCountdownTimer
                                     .countdownFlow(output.openAt, output.serverNow)
-                                    .onEach { minutes ->
-                                        updateTimerLockedMinutes(minutes)
-                                    }.onCompletion {
-                                        viewModelScope.launch { unlockTimerLocked() }
-                                    }.launchIn(viewModelScope)
+                                    .onEach { minutes -> updateTimerLockedMinutes(minutes) }
+                                    .onCompletion { viewModelScope.launch { unlockTimerLocked() } }
+                                    .launchIn(viewModelScope)
                         }
-                    }.onFailure { t ->
-                        _sideEffect.emit(
-                            QuestSideEffect.ShowSnackBar(
-                                snackBarType = CustomSnackBarType.ALERT,
-                            ),
-                        )
+                    }.onFailure {
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
             }
         }
@@ -200,10 +239,7 @@ class QuestViewModel
                                         }.toImmutableList(),
                             )
                         }.toImmutableList()
-
-                state.copy(
-                    myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups),
-                )
+                state.copy(myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups))
             }
         }
 
@@ -224,10 +260,7 @@ class QuestViewModel
                                         }.toImmutableList(),
                             )
                         }.toImmutableList()
-
-                state.copy(
-                    myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups),
-                )
+                state.copy(myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups))
             }
         }
 
@@ -252,11 +285,8 @@ class QuestViewModel
             viewModelScope.launch {
                 _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
                 when (quest.type) {
-                    QuestType.RECORDING ->
-                        _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
-
-                    QuestType.ACTIVE ->
-                        _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
+                    QuestType.RECORDING -> _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
+                    QuestType.ACTIVE -> _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
                 }
             }
         }
@@ -268,22 +298,16 @@ class QuestViewModel
                         .flatMap { it.quests }
                         .find { it.questId == questId }
 
-                when (quest?.state) {
-                    is QuestState.Available ->
-                        _uiState.update {
-                            it.copy(
-                                myJourneyState =
-                                    it.myJourneyState.copy(
-                                        selectedQuest = quest,
-                                        showQuitModal = true,
-                                    ),
-                            )
-                        }
-
-                    is QuestState.Complete ->
-                        handleCompletedQuestClick(quest)
-
-                    else -> Unit
+                if (quest?.state is QuestState.Available) {
+                    _uiState.update {
+                        it.copy(myJourneyState = it.myJourneyState.copy(selectedQuest = quest, showQuitModal = true))
+                    }
+                } else if (quest?.state is QuestState.Complete) {
+                    mixpanelUtil.trackEvent(
+                        "quest_box_click",
+                        mapOf("quest_number" to quest.questNumber),
+                    )
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
                 }
             }
         }
@@ -294,26 +318,19 @@ class QuestViewModel
             }
         }
 
-        private suspend fun handleCompletedQuestClick(quest: Quest) {
-            mixpanelUtil.trackEvent(
-                "quest_box_click",
-                mapOf("quest_number" to quest.questNumber),
-            )
-            _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
-        }
-
         private fun trackQuest(quest: Quest) {
             val questType =
                 when (quest.type) {
                     QuestType.RECORDING -> "질문형"
                     QuestType.ACTIVE -> "행동형"
                 }
-
             mixpanelUtil.trackEvent(
                 eventName = "quest_write_pageview",
                 properties =
                     mapOf(
-                        "quest_start_at" to getFormattedDate(),
+                        "quest_start_at" to
+                            com.byeboo.app.core.util
+                                .getFormattedDate(),
                         "quest_number" to quest.questNumber,
                         "quest_type" to questType,
                     ),

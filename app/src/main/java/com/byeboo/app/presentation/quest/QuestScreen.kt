@@ -94,6 +94,7 @@ fun QuestRoute(
         onTabClick = viewModel::onTabClicked,
         onCommonAnswerClick = navigateToCommonAnswer,
         onDateChange = viewModel::onDateChange,
+        onLoadMore = viewModel::loadNextPage,
     )
 }
 
@@ -111,6 +112,7 @@ private fun QuestScreen(
     onTabClick: (QuestTab) -> Unit,
     onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     if (uiState.myJourneyState.showQuitModal) {
         QuestModal(
@@ -163,6 +165,7 @@ private fun QuestScreen(
                     onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,
                     onCommonQuestClick = onCommonQuestClick,
+                    onLoadMore = onLoadMore,
                 )
             }
         }
