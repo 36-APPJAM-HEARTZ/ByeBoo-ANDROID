@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class QuestCommonRepositoryImpl @Inject constructor(
@@ -21,6 +22,9 @@ class QuestCommonRepositoryImpl @Inject constructor(
     private val _answersFlow = MutableStateFlow<List<QuestAnswerModel>>(emptyList())
     override val answersFlow: StateFlow<List<QuestAnswerModel>>
         get() = _answersFlow.asStateFlow()
+
+    private var currentCursor: Long? = null
+    private var hasNextPage: Boolean = true
 
     override suspend fun uploadQuestCommonAnswer(
         questId: Long,
@@ -33,21 +37,27 @@ class QuestCommonRepositoryImpl @Inject constructor(
             )
         }
 
-    override suspend fun getQuestCommonMyAnswer(cursor: Long?): Result<QuestCommonMyAnswerModel> =
+    override suspend fun getQuestCommonMyAnswer(): Result<QuestCommonMyAnswerModel> =
         runCatching {
-            val response = questCommonDataSource.getQuestCommonMyAnswer(cursor)
+            if (!hasNextPage) return Result.failure(IllegalStateException())
+
+            val response = questCommonDataSource.getQuestCommonMyAnswer(currentCursor)
             val domainModel = response.data.toDomain()
 
             _answersFlow.update { currentList ->
-                if (cursor == null){
+                if (currentCursor == null) {
                     domainModel.answers
                 } else {
                     currentList + domainModel.answers
                 }
             }
 
+            currentCursor = domainModel.nextCursor
+            hasNextPage = domainModel.hasNext
+
             domainModel
         }
+
 
     override suspend fun patchQuestCommonAnswer(
         answerId: Long,

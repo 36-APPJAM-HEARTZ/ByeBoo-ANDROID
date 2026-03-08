@@ -1,12 +1,13 @@
 package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.lifecycle.ViewModel
-import kotlinx.collections.immutable.toPersistentList
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -64,17 +65,16 @@ constructor(
 
         viewModelScope.launch {
             questCommonRepository.getQuestCommonMyAnswer(
-                cursor = state.nextCursor
             ).onSuccess { response ->
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        nextCursor = response.nextCursor,
                         hasNext = response.hasNext
                     )
                 }
             }.onFailure {
                 _uiState.update { it.copy(isLoading = false) }
+                _sideEffect.emit(MyAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
             }
         }
     }

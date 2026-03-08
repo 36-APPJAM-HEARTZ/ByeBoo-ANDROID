@@ -14,9 +14,7 @@ interface QuestCommonRepository {
         request: QuestCommonAnswerRequestModel,
     ): Result<Unit>
 
-    suspend fun getQuestCommonMyAnswer(
-        cursor: Long?,
-    ): Result<QuestCommonMyAnswerModel>
+    suspend fun getQuestCommonMyAnswer(): Result<QuestCommonMyAnswerModel>
 
     suspend fun patchQuestCommonAnswer(
         answerId: Long,
