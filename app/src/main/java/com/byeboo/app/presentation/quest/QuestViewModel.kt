@@ -81,8 +81,13 @@ class QuestViewModel
 
             if (cachedData != null && !isToday) {
                 _uiState.update {
-                    it.copy(commonJourneyState = cachedData, isLoading = false)
+                    it.copy(commonJourneyState = cachedData, isLoading = true)
                 }
+                fetchJob =
+                    viewModelScope.launch {
+                        delay(300)
+                        fetchCommonQuests(newDate)
+                    }
             } else {
                 _uiState.update { state ->
                     state.copy(
@@ -191,7 +196,7 @@ class QuestViewModel
 
                         _uiState.update { state ->
                             if (state.commonJourneyState.selectedDate != requestDate) {
-                                return@update state.copy(isLoading = false)
+                                return@update state
                             }
 
                             val updatedState =
