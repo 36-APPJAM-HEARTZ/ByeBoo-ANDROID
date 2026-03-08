@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,6 +53,7 @@ class QuestViewModel
 
         private val commonQuestCache = mutableMapOf<LocalDate, CommonJourneyState>()
         private var fetchJob: Job? = null
+        private var paginationJob: Job? = null
         private var countdownJob: Job? = null
 
         init {
@@ -72,25 +74,33 @@ class QuestViewModel
             if (!TimeUtil.isValidDateRange(newDate)) return
 
             _uiState.update { state ->
-                state.copy(commonJourneyState = state.commonJourneyState.copy(selectedDate = newDate))
+                state.copy(
+                    commonJourneyState =
+                        state.commonJourneyState.copy(
+                            selectedDate = newDate,
+                            answers = emptyList<CommonAnswerModel>().toImmutableList(),
+                            hasNext = false,
+                            nextCursor = null,
+                        ),
+                )
             }
 
             val cachedData = commonQuestCache[newDate]
             val isToday = newDate == TimeUtil.getNowKst()
 
             fetchJob?.cancel()
+            paginationJob?.cancel()
 
             if (cachedData != null && !isToday) {
                 _uiState.update { it.copy(commonJourneyState = cachedData, isLoading = false) }
             } else {
                 _uiState.update { it.copy(isLoading = true) }
+                fetchJob =
+                    viewModelScope.launch {
+                        delay(300)
+                        fetchCommonQuests(newDate)
+                    }
             }
-
-            fetchJob =
-                viewModelScope.launch {
-                    delay(300)
-                    fetchCommonQuests(newDate)
-                }
         }
 
         private suspend fun fetchCommonQuests(date: LocalDate) {
@@ -127,13 +137,15 @@ class QuestViewModel
             }.onSuccess { updatedCommonState ->
                 commonQuestCache[date] = updatedCommonState
                 _uiState.update { state ->
-                    state.copy(isLoading = false, commonJourneyState = updatedCommonState)
+                    if (state.commonJourneyState.selectedDate == date) {
+                        state.copy(isLoading = false, commonJourneyState = updatedCommonState)
+                    } else {
+                        state
+                    }
                 }
             }.onFailure { t ->
-                if (t is kotlinx.coroutines.CancellationException) throw t
-
+                if (t is CancellationException) throw t
                 _uiState.update { it.copy(isLoading = false) }
-
                 val fallback = commonQuestCache[date]
                 if (fallback != null) {
                     _uiState.update { it.copy(commonJourneyState = fallback) }
@@ -145,40 +157,54 @@ class QuestViewModel
 
         fun loadNextPage() {
             val currentState = uiState.value.commonJourneyState
+            val requestDate = currentState.selectedDate
+
             if (!currentState.hasNext || currentState.nextCursor == null || uiState.value.isLoading) return
 
-            viewModelScope.launch {
-                runCatching {
-                    commonQuestRepository
-                        .getCommonQuests(
-                            date = currentState.selectedDate.toString(),
-                            cursor = currentState.nextCursor,
-                            limit = 20,
-                        ).getOrThrow()
-                }.onSuccess { domainModel ->
-                    val moreAnswers =
-                        domainModel.answers.map { answer ->
-                            CommonAnswerModel(
-                                answerId = answer.answerId,
-                                writer = answer.writer,
-                                profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
-                                content = answer.content,
-                            )
-                        }
+            paginationJob?.cancel()
+            paginationJob =
+                viewModelScope.launch {
+                    _uiState.update { it.copy(isLoading = true) }
 
-                    _uiState.update { state ->
-                        val updatedState =
-                            state.commonJourneyState.copy(
-                                answers = (state.commonJourneyState.answers + moreAnswers).toImmutableList(),
-                                hasNext = domainModel.hasNext,
-                                nextCursor = domainModel.nextCursor,
-                            )
-                        commonQuestCache[currentState.selectedDate] = updatedState
-                        state.copy(commonJourneyState = updatedState)
+                    runCatching {
+                        commonQuestRepository
+                            .getCommonQuests(
+                                date = requestDate.toString(),
+                                cursor = currentState.nextCursor,
+                                limit = 20,
+                            ).getOrThrow()
+                    }.onSuccess { domainModel ->
+                        val moreAnswers =
+                            domainModel.answers.map { answer ->
+                                CommonAnswerModel(
+                                    answerId = answer.answerId,
+                                    writer = answer.writer,
+                                    profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                    content = answer.content,
+                                )
+                            }
+
+                        _uiState.update { state ->
+                            if (state.commonJourneyState.selectedDate != requestDate) {
+                                return@update state.copy(isLoading = false)
+                            }
+
+                            val updatedState =
+                                state.commonJourneyState.copy(
+                                    answers = (state.commonJourneyState.answers + moreAnswers).toImmutableList(),
+                                    hasNext = domainModel.hasNext,
+                                    nextCursor = domainModel.nextCursor,
+                                )
+                            commonQuestCache[requestDate] = updatedState
+                            state.copy(commonJourneyState = updatedState, isLoading = false)
+                        }
+                    }.onFailure { t ->
+                        if (t is CancellationException) throw t
+                        _uiState.update { it.copy(isLoading = false) }
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
                 }
-            }
         }
 
         private fun loadQuests() {
