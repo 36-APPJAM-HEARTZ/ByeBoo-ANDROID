@@ -16,6 +16,7 @@ data class QuestUiState(
     val isLoading: Boolean = false,
     val myJourneyState: MyJourneyState = MyJourneyState(),
     val commonJourneyState: CommonJourneyState = CommonJourneyState(),
+    val showCompleteModal: Boolean = false,
 )
 
 data class MyJourneyState(
