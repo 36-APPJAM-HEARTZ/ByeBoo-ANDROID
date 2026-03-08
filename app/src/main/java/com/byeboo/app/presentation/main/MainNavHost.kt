@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
 import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
@@ -41,6 +42,14 @@ fun MainNavHost(
         navOptions {
             launchSingleTop = true
             restoreState = true
+        }
+    val offboardingReviewToAiNavOptions =
+        navOptions {
+            popUpTo<OffboardingQuestReview> {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = false
         }
 
     NavHost(
@@ -162,6 +171,14 @@ fun MainNavHost(
                 navigator.navigateToQuestFromComplete()
             },
             navigateUp = navigator::navigateUp,
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
+                navigator.navigateToQuestAiAnswer(
+                    questId = questId,
+                    isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerOrigin = aiAnswerOrigin,
+                    navOptions = clearStackNavOptions,
+                )
+            },
             paddingValues = paddingValues,
         )
 
@@ -229,6 +246,14 @@ fun MainNavHost(
                     fromOffboarding = fromOffboarding,
                     imageKey = imageKey,
                     navOptions = keepStackNavOptions,
+                )
+            },
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
+                navigator.navigateToQuestAiAnswer(
+                    questId = questId,
+                    isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerOrigin = aiAnswerOrigin,
+                    navOptions = offboardingReviewToAiNavOptions,
                 )
             },
             paddingValues = paddingValues,

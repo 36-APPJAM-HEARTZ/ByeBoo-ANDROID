@@ -27,9 +27,11 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.QuestResultKey
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestAiAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswerDetail
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswers
@@ -248,6 +250,20 @@ class MainNavigator(
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestReview(questId = questId, navOptions = navOptions)
+    }
+
+    fun navigateToQuestAiAnswer(
+        questId: Long,
+        isExistedAiAnswer: Boolean,
+        aiAnswerOrigin: AiAnswerOrigin,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestAiAnswer(
+            questId = questId,
+            isExistedAiAnswer = isExistedAiAnswer,
+            aiAnswerOrigin = aiAnswerOrigin,
+            navOptions = navOptions,
+        )
     }
 
     fun navigateToMyPage(navOptions: NavOptions? = null) {

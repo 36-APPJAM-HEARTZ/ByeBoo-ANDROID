@@ -31,13 +31,14 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 
 @Composable
 fun QuestRecordingCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,6 +51,12 @@ fun QuestRecordingCompleteRoute(
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestRecordingCompleteSideEffect.NavigateToQuestAiAnswer ->
+                    navigateToQuestAiAnswer(
+                        effect.questId,
+                        effect.isExistedAiAnswer,
+                        effect.aiAnswerOrigin,
+                    )
                 is QuestRecordingCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->
                         inAppReview(activity)
@@ -67,7 +74,7 @@ fun QuestRecordingCompleteRoute(
         uiState = uiState,
         paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
-        modifier = modifier,
+        onAiAnswerClick = viewModel::onAiAnswerClicked,
     )
 }
 
@@ -76,6 +83,7 @@ private fun QuestRecordingCompleteScreen(
     uiState: QuestRecordingCompleteState,
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
+    onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -122,11 +130,11 @@ private fun QuestRecordingCompleteScreen(
         }
 
         ByeBooButton(
-            buttonText = "보리에게 답장 받기",
+            buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
             buttonTextColor = ByeBooTheme.colors.white,
             buttonStyle = ByeBooTheme.typography.body2,
             buttonBackgroundColor = ByeBooTheme.colors.primary300,
-            onClick = { /*Todo: ai 버튼 연결 */ },
+            onClick = onAiAnswerClick,
         )
     }
 }

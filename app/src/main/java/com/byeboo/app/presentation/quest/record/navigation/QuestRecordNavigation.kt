@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.record.complete.QuestRecordingCompleteRoute
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingComplete
 import com.byeboo.app.presentation.quest.record.navigation.QuestRecord.QuestRecordingWriting
@@ -41,6 +42,7 @@ fun NavGraphBuilder.questRecordGraph(
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -60,6 +62,7 @@ fun NavGraphBuilder.questRecordGraph(
             QuestRecordingCompleteRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
+                navigateToQuestAiAnswer = navigateToQuestAiAnswer,
                 paddingValues = paddingValues,
             )
         }

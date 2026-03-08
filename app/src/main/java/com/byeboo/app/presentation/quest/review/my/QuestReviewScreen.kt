@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
@@ -40,6 +41,7 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.review.my.QuestReviewSideEffect
 import com.byeboo.app.presentation.quest.review.my.QuestReviewState
 import com.byeboo.app.presentation.quest.review.my.QuestReviewViewModel
@@ -52,7 +54,7 @@ fun QuestReviewRoute(
     navigateToQuest: () -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
-    modifier: Modifier = Modifier,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     viewModel: QuestReviewViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,12 +69,21 @@ fun QuestReviewRoute(
                         effect.questId,
                         true,
                     )
+
                 is QuestReviewSideEffect.NavigateToQuestBehaviorEdit ->
                     navigateToQuestBehaviorEdit(
                         effect.questId,
                         true,
                         effect.imageKey,
                     )
+
+                is QuestReviewSideEffect.NavigateToQuestAiAnswer ->
+                    navigateToQuestAiAnswer(
+                        effect.questId,
+                        effect.isExistedAiAnswer,
+                        effect.aiAnswerOrigin,
+                    )
+
                 is QuestReviewSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
@@ -82,13 +93,17 @@ fun QuestReviewRoute(
         navigateToQuest()
     }
 
-    QuestReviewScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onBackClick = viewModel::onBackClicked,
-        onEditClick = { viewModel.onEditClicked(uiState.questType) },
-        modifier = modifier,
-    )
+    if (uiState.isLoading) {
+        LoadingScreen()
+    } else {
+        QuestReviewScreen(
+            uiState = uiState,
+            paddingValues = paddingValues,
+            onBackClick = viewModel::onBackClicked,
+            onEditClick = { viewModel.onEditClicked(uiState.questType) },
+            onAiAnswerClick = viewModel::onAiAnswerClicked,
+        )
+    }
 }
 
 @Composable
@@ -97,6 +112,7 @@ private fun QuestReviewScreen(
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
+    onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -127,7 +143,7 @@ private fun QuestReviewScreen(
                     PaddingValues(
                         start = screenWidthDp(24.dp),
                         end = screenWidthDp(24.dp),
-                        bottom = screenHeightDp(28.dp),
+                        bottom = if (canScroll) screenHeightDp(28.dp) else screenHeightDp(90.dp),
                     ),
             ) {
                 item {
@@ -142,7 +158,9 @@ private fun QuestReviewScreen(
                 }
 
                 if (uiState.imageUrl.isNullOrBlank()) {
-                    item { ContentText(text = uiState.answer) }
+                    item {
+                        ContentText(text = uiState.answer)
+                    }
                 } else {
                     item {
                         Column(
@@ -167,10 +185,13 @@ private fun QuestReviewScreen(
                                     Box(
                                         modifier = Modifier.fillMaxSize(),
                                         contentAlignment = Alignment.Center,
-                                    ) { CircularProgressIndicator() }
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
                                 },
                             )
                         }
+
                         if (uiState.answer.isNotBlank()) {
                             Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
                             ContentText(uiState.answer)
@@ -192,14 +213,29 @@ private fun QuestReviewScreen(
                         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                         ByeBooButton(
-                            buttonText = "보리에게 답장 받기",
+                            buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                             buttonTextColor = ByeBooTheme.colors.white,
                             buttonStyle = ByeBooTheme.typography.body2,
                             buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                            onClick = { /*Todo: ai 버튼 연결 */ },
+                            onClick = onAiAnswerClick,
                         )
                     }
                 }
+            }
+
+            if (!canScroll) {
+                ByeBooButton(
+                    buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
+                    buttonTextColor = ByeBooTheme.colors.white,
+                    buttonStyle = ByeBooTheme.typography.body2,
+                    buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                    onClick = onAiAnswerClick,
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(bottom = screenHeightDp(10.dp)),
+                )
             }
         }
     }

@@ -10,6 +10,7 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,8 +47,8 @@ class QuestBehaviorCompleteViewModel
 
         private fun loadQuestRecordedDetail() {
             viewModelScope.launch {
-                val result = questRecordedDetailRepository.getQuestRecordedDetail(questIdArg)
-                result
+                questRecordedDetailRepository
+                    .getQuestRecordedDetail(questIdArg)
                     .onSuccess { detail ->
                         _uiState.update {
                             it.copy(
@@ -59,6 +60,7 @@ class QuestBehaviorCompleteViewModel
                                 imageUrl = detail.imageUrl.orEmpty(),
                                 selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
+                                isExistedAiAnswer = detail.isExistedAiAnswer,
                             )
                         }
                     }.onFailure {
@@ -94,6 +96,18 @@ class QuestBehaviorCompleteViewModel
                         _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
                     }
                 }
+            }
+        }
+
+        fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
+                        questId = uiState.value.questId,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                        aiAnswerOrigin = AiAnswerOrigin.QUEST,
+                    ),
+                )
             }
         }
     }

@@ -38,3 +38,11 @@ data object QuestMyAnswers : Route
 data class QuestMyAnswersDetail(
     val answerId: Long,
 ) : Route
+
+@Serializable
+data class QuestAiAnswer(
+    val questId: Long,
+    val isExistedAiAnswer: Boolean,
+    val aiAnswerOrigin: AiAnswerOrigin,
+    val questType: QuestType? = null,
+) : Route

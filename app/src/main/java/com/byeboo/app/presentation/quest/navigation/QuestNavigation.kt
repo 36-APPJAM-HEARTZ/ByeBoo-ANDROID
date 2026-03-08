@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
+import com.byeboo.app.presentation.quest.aianswer.QuestAiAnswerRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.common.navigation.questCommonGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
@@ -64,6 +65,18 @@ fun NavController.navigateToQuestMyAnswerDetail(
     navigate(QuestMyAnswersDetail(answerId), navOptions)
 }
 
+fun NavController.navigateToQuestAiAnswer(
+    questId: Long,
+    isExistedAiAnswer: Boolean,
+    aiAnswerOrigin: AiAnswerOrigin,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        QuestAiAnswer(questId = questId, isExistedAiAnswer = isExistedAiAnswer, aiAnswerOrigin = aiAnswerOrigin),
+        navOptions,
+    )
+}
+
 fun NavGraphBuilder.questGraph(
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
@@ -82,6 +95,7 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
 ) {
@@ -127,6 +141,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
+                navigateToQuestAiAnswer = navigateToQuestAiAnswer,
                 paddingValues = paddingValues,
             )
         }
@@ -163,6 +178,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
+            navigateToQuestAiAnswer = navigateToQuestAiAnswer,
             paddingValues = paddingValues,
         )
 
@@ -173,6 +189,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
+            navigateToQuestAiAnswer = navigateToQuestAiAnswer,
             paddingValues = paddingValues,
         )
 
@@ -181,5 +198,13 @@ fun NavGraphBuilder.questGraph(
             navigateUp = navigateUp,
             paddingValues = paddingValues,
         )
+
+        composable<QuestAiAnswer> {
+            QuestAiAnswerRoute(
+                navigateToQuest = navigateToQuest,
+                navigateUp = navigateUp,
+                paddingValues = paddingValues,
+            )
+        }
     }
 }

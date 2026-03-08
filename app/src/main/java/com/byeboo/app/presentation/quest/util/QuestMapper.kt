@@ -3,7 +3,7 @@ package com.byeboo.app.presentation.quest.util
 import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.domain.model.quest.QuestData
+import com.byeboo.app.domain.model.quest.QuestDataModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
 import com.byeboo.app.presentation.quest.model.QuestOutput
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class QuestUiModelMapper
     @Inject
     constructor() {
-        fun mapToPresentationModel(data: QuestData): QuestOutput {
+        fun mapToPresentationModel(data: QuestDataModel): QuestOutput {
             val inProgress = data.inProgressQuest
             val currentStep = inProgress.currentStep
             val serverNow = inProgress.currentTime

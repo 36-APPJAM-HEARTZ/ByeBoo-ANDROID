@@ -12,6 +12,7 @@ import com.byeboo.app.presentation.offboarding.offboardingcompletedjourney.Offbo
 import com.byeboo.app.presentation.offboarding.offboardingnewjourney.OffboardingNewJourneyRoute
 import com.byeboo.app.presentation.offboarding.offboardingquestcompleted.OffboardingQuestCompletedRoute
 import com.byeboo.app.presentation.offboarding.offboardingquestreview.OffboardingQuestReviewRoute
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import kotlinx.serialization.Serializable
 
 fun NavController.navigateToOffboardingCompletedGuide(navOptions: NavOptions? = null) {
@@ -52,6 +53,7 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToOffboardingQuestCompletedFromReview: (QuestType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<OffboardingCompletedGuide> {
@@ -93,6 +95,7 @@ fun NavGraphBuilder.offboardingGraph(
             navigateToOffboardingQuestCompleted = navigateToOffboardingQuestCompletedFromReview,
             navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
             navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
+            navigateToQuestAiAnswer = navigateToQuestAiAnswer,
         )
     }
 }
@@ -114,5 +117,5 @@ data class OffboardingQuestCompleted(
 @Serializable
 data class OffboardingQuestReview(
     val questId: Long,
-    val journeyType: QuestType,
+    val questType: QuestType,
 ) : Route
