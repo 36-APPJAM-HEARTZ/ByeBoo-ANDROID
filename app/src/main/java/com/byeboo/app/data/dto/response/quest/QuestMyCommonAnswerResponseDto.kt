@@ -10,7 +10,7 @@ data class QuestMyCommonAnswerResponseDto(
     @SerialName("nextCursor")
     val nextCursor: Long,
     @SerialName("answers")
-    val answers: List<QuestAnswerItemResponseDto>
+    val answers: List<QuestAnswerItemResponseDto>,
 )
 
 @Serializable

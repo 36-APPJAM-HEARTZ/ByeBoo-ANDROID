@@ -202,13 +202,12 @@ class MainNavigator(
         answerId: Long? = 0,
         isEditMode: Boolean = false,
         navOptions: NavOptions? = null,
-    )
-    {
+    ) {
         navController.navigateToQuestCommonWriting(
             questId = questId,
             answerId = answerId,
             isEditMode = isEditMode,
-            navOptions = navOptions
+            navOptions = navOptions,
         )
     }
 
@@ -243,7 +242,6 @@ class MainNavigator(
     ) {
         navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
     }
-
 
     fun navigateToQuestReview(
         questId: Long,

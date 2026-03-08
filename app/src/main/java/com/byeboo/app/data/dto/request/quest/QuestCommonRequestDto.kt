@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestCommonRequestDto(
     @SerialName("answer")
-    val answer: String
+    val answer: String,
 )
 
 @Serializable
 data class QuestCommonEditRequestDto(
     @SerialName("answer")
-    val answer: String
+    val answer: String,
 )

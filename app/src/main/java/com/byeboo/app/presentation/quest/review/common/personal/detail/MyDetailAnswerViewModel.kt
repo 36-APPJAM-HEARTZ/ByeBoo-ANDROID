@@ -24,92 +24,90 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MyDetailAnswerViewModel
-@Inject
-constructor(
-    savedStateHandle: SavedStateHandle,
-    private val questCommonRepository: QuestCommonRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(MyDetailAnswerState())
-    val uiState: StateFlow<MyDetailAnswerState> = _uiState.asStateFlow()
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val questCommonRepository: QuestCommonRepository,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(MyDetailAnswerState())
+        val uiState: StateFlow<MyDetailAnswerState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<MyDetailAnswerSideEffect>()
-    val sideEffect: SharedFlow<MyDetailAnswerSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<MyDetailAnswerSideEffect>()
+        val sideEffect: SharedFlow<MyDetailAnswerSideEffect> = _sideEffect.asSharedFlow()
 
-    private val answerId: Long = savedStateHandle.toRoute<QuestMyAnswersDetail>().answerId
+        private val answerId: Long = savedStateHandle.toRoute<QuestMyAnswersDetail>().answerId
 
-    init {
-        loadMyDetailAnswer()
-    }
-
-    fun loadMyDetailAnswer() {
-        questCommonRepository.answersFlow
-            .mapNotNull { value -> value.find { it.answerId == answerId} }
-            .onEach { cachedAnswer ->
-                _uiState.update { state ->
-                    state.copy(
-                        answer = state.answer.copy(
-                            answerId = cachedAnswer.answerId,
-                            question = cachedAnswer.question,
-                            writtenAt = cachedAnswer.writtenAt,
-                            content = cachedAnswer.content
-                        )
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
-    fun onClickMoreOptions() {
-        _uiState.update { it.copy(showBottomSheet = true) }
-    }
-
-    fun onDismissBottomSheet() {
-        _uiState.update { it.copy(showBottomSheet = false) }
-    }
-
-    fun onBackClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(MyDetailAnswerSideEffect.NavigateToQuestMyAnswers)
+        init {
+            loadMyDetailAnswer()
         }
 
-    }
-
-    fun onOptionClicked(option: MyPostOption) {
-        onDismissBottomSheet()
-
-        viewModelScope.launch {
-            when (option) {
-                MyPostOption.EDIT -> {
-                    _sideEffect.emit(
-                        MyDetailAnswerSideEffect.NavigateToQuestCommonEdit(
-                            answerId = answerId, isEditMode = true
+        fun loadMyDetailAnswer() {
+            questCommonRepository.answersFlow
+                .mapNotNull { value -> value.find { it.answerId == answerId } }
+                .onEach { cachedAnswer ->
+                    _uiState.update { state ->
+                        state.copy(
+                            answer =
+                                state.answer.copy(
+                                    answerId = cachedAnswer.answerId,
+                                    question = cachedAnswer.question,
+                                    writtenAt = cachedAnswer.writtenAt,
+                                    content = cachedAnswer.content,
+                                ),
                         )
-                    )
-                }
+                    }
+                }.launchIn(viewModelScope)
+        }
 
-                MyPostOption.DELETE -> {
-                    _uiState.update { it.copy(showDeleteModal = true) }
-                }
+        fun onClickMoreOptions() {
+            _uiState.update { it.copy(showBottomSheet = true) }
+        }
+
+        fun onDismissBottomSheet() {
+            _uiState.update { it.copy(showBottomSheet = false) }
+        }
+
+        fun onBackClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(MyDetailAnswerSideEffect.NavigateToQuestMyAnswers)
             }
         }
-    }
 
-    fun onDismissDeleteModal() {
-        _uiState.update { it.copy(showDeleteModal = false) }
-    }
+        fun onOptionClicked(option: MyPostOption) {
+            onDismissBottomSheet()
 
-    fun onQuestDeleteClicked() {
-        viewModelScope.launch {
-            questCommonRepository.deleteQuestCommonAnswer(answerId = answerId)
-                .onSuccess {
-                    _uiState.update { it.copy(showDeleteModal = false) }
-                    _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
-                }.onFailure {
-                    _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+            viewModelScope.launch {
+                when (option) {
+                    MyPostOption.EDIT -> {
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.NavigateToQuestCommonEdit(
+                                answerId = answerId,
+                                isEditMode = true,
+                            ),
+                        )
+                    }
+
+                    MyPostOption.DELETE -> {
+                        _uiState.update { it.copy(showDeleteModal = true) }
+                    }
                 }
+            }
+        }
+
+        fun onDismissDeleteModal() {
+            _uiState.update { it.copy(showDeleteModal = false) }
+        }
+
+        fun onQuestDeleteClicked() {
+            viewModelScope.launch {
+                questCommonRepository
+                    .deleteQuestCommonAnswer(answerId = answerId)
+                    .onSuccess {
+                        _uiState.update { it.copy(showDeleteModal = false) }
+                        _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
+                    }.onFailure {
+                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                    }
+            }
         }
     }
-
-}
-
-

@@ -10,24 +10,25 @@ import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
 
 fun QuestCommonAnswerRequestModel.toData(): QuestCommonRequestDto =
     QuestCommonRequestDto(
-        answer = this.answer
+        answer = this.answer,
     )
 
 fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
     QuestCommonMyAnswerModel(
         hasNext = this.hasNext,
         nextCursor = this.nextCursor,
-        answers = this.answers.map {
-            QuestAnswerModel(
-                question = it.question,
-                answerId = it.answerId,
-                writtenAt = it.writtenAt.split("T")[0],
-                content = it.content
-            )
-        }
+        answers =
+            this.answers.map {
+                QuestAnswerModel(
+                    question = it.question,
+                    answerId = it.answerId,
+                    writtenAt = it.writtenAt.split("T")[0],
+                    content = it.content,
+                )
+            },
     )
 
 fun QuestCommonAnswerEditModel.toData(): QuestCommonEditRequestDto =
     QuestCommonEditRequestDto(
-        answer = this.answer
+        answer = this.answer,
     )

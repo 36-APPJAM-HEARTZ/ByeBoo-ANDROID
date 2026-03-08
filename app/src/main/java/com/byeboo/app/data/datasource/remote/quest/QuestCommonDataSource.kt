@@ -16,10 +16,8 @@ interface QuestCommonDataSource {
 
     suspend fun patchQuestCommonAnswer(
         answerId: Long,
-        request: QuestCommonEditRequestDto
+        request: QuestCommonEditRequestDto,
     ): NullableBaseResponse<Unit>
 
-    suspend fun deleteQuestCommonAnswer(
-        answerId: Long,
-    ): NullableBaseResponse<Unit>
+    suspend fun deleteQuestCommonAnswer(answerId: Long): NullableBaseResponse<Unit>
 }

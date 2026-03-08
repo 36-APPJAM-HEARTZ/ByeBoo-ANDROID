@@ -13,16 +13,19 @@ data class MyAnswerState(
     val showBottomSheet: Boolean = false,
     val isLoading: Boolean = false,
     val nextCursor: Long? = null,
-    val hasNext: Boolean  = true
+    val hasNext: Boolean = true,
 )
 
 sealed interface MyAnswerSideEffect {
     data object NavigateUp : MyAnswerSideEffect
+
     data object NavigateToQuest : MyAnswerSideEffect
+
     data class NavigateToQuestMyAnswerDetail(
         val answerId: Long,
     ) : MyAnswerSideEffect
+
     data class ShowSnackBar(
-        val snackBarType: CustomSnackBarType
+        val snackBarType: CustomSnackBarType,
     ) : MyAnswerSideEffect
 }

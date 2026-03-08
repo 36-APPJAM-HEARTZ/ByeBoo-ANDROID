@@ -56,7 +56,7 @@ fun QuestCommonRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
-            when(effect) {
+            when (effect) {
                 is QuestCommonSideEffect.NavigateToQuest -> navigateToQuestFromComplete()
                 is QuestCommonSideEffect.NavigateToUp -> navigateUp()
                 is QuestCommonSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
@@ -72,21 +72,22 @@ fun QuestCommonRoute(
                 viewModel.onDismissQuitModal()
                 viewModel.onQuitClicked()
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
         )
     }
-
 
     if (uiState.showCompleteModal) {
         QuestCompleteModal(
             onDismissRequest = viewModel::onDismissCompleteModal,
             onNoClick = viewModel::onDismissCompleteModal,
             onYesClick = viewModel::onSaveClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
         )
     }
 

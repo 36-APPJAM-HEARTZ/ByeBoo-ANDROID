@@ -18,22 +18,22 @@ interface QuestCommonService {
     suspend fun uploadQuestCommonAnswer(
         @Path("questId") questId: Long,
         @Body request: QuestCommonRequestDto,
-    ) : NullableBaseResponse<Unit>
+    ): NullableBaseResponse<Unit>
 
     @GET("/api/v1/users/me/common-quests")
     suspend fun getQuestMyCommonAnswer(
         @Query("cursor") cursor: Long?,
         @Query("limit") limit: Int = 10,
-    ) : BaseResponse<QuestMyCommonAnswerResponseDto>
+    ): BaseResponse<QuestMyCommonAnswerResponseDto>
 
     @PATCH("/api/v1/common-quests/{answerId}")
     suspend fun patchQuestCommonAnswer(
         @Path("answerId") answerId: Long,
-        @Body request: QuestCommonEditRequestDto
-    ) : NullableBaseResponse<Unit>
+        @Body request: QuestCommonEditRequestDto,
+    ): NullableBaseResponse<Unit>
 
     @DELETE("/api/v1/common-quests/{answerId}")
     suspend fun deleteQuestCommonAnswer(
         @Path("answerId") answerId: Long,
-    ) : NullableBaseResponse<Unit>
+    ): NullableBaseResponse<Unit>
 }

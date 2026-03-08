@@ -45,17 +45,17 @@ class QuestCommonWritingViewModel
             }
         }
 
-    private fun loadRecordedContent(answerId: Long) {
-        val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
+        private fun loadRecordedContent(answerId: Long) {
+            val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
 
-        if (cachedAnswer != null) {
-            _uiState.update {
-                it.copy(
-                    questAnswer = cachedAnswer.content
-                )
+            if (cachedAnswer != null) {
+                _uiState.update {
+                    it.copy(
+                        questAnswer = cachedAnswer.content,
+                    )
+                }
             }
         }
-    }
 
         fun onBackClicked() {
             _uiState.update { it.copy(showQuitModal = true) }
@@ -90,22 +90,20 @@ class QuestCommonWritingViewModel
             viewModelScope.launch {
                 val request =
                     QuestCommonAnswerRequestModel(
-                        answer = questAnswer
+                        answer = questAnswer,
                     )
 
                 // Todo : 머지 후, questId = questId 로 수정 예정
                 val result = questCommonRepository.uploadQuestCommonAnswer(questId = 72, request = request)
 
-                result.onSuccess {
-                    _uiState.update { it.copy(showCompleteModal = false) }
-                    _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
-
-                }.onFailure {
-                    _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
-                }
+                result
+                    .onSuccess {
+                        _uiState.update { it.copy(showCompleteModal = false) }
+                        _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
+                    }.onFailure {
+                        _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                    }
             }
-
-
         }
 
         private fun onSaveEditClicked() {
@@ -115,20 +113,24 @@ class QuestCommonWritingViewModel
 
             viewModelScope.launch {
                 val request = QuestCommonAnswerEditModel(answer = questAnswer)
-                val result = questCommonRepository.patchQuestCommonAnswer(
-                    answerId = answerId,
-                    request = request
-                )
+                val result =
+                    questCommonRepository.patchQuestCommonAnswer(
+                        answerId = answerId,
+                        request = request,
+                    )
 
-                result.onSuccess {
-                    _uiState.update { it.copy(
-                        questAnswer = questAnswer,
-                        isEditMode = false)
+                result
+                    .onSuccess {
+                        _uiState.update {
+                            it.copy(
+                                questAnswer = questAnswer,
+                                isEditMode = false,
+                            )
+                        }
+                        _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+                    }.onFailure {
+                        _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                     }
-                    _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
-                }.onFailure {
-                    _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
-                }
             }
         }
 
@@ -140,9 +142,9 @@ class QuestCommonWritingViewModel
             _uiState.update { it.copy(showCompleteModal = false) }
         }
 
-    fun onQuitClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+        fun onQuitClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+            }
         }
-    }
     }

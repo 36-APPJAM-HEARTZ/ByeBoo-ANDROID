@@ -28,7 +28,9 @@ data class QuestCommonState(
 
 sealed interface QuestCommonSideEffect {
     data object NavigateToQuest : QuestCommonSideEffect
+
     data object NavigateToUp : QuestCommonSideEffect
+
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
     ) : QuestCommonSideEffect

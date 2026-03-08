@@ -1,6 +1,5 @@
 package com.byeboo.app.domain.model.quest
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class CommonQuestAnswer(
@@ -18,16 +17,16 @@ data class QuestCommonAnswerRequestModel(
 data class QuestCommonMyAnswerModel(
     val hasNext: Boolean,
     val nextCursor: Long?,
-    val answers: List<QuestAnswerModel>
+    val answers: List<QuestAnswerModel>,
 )
 
 data class QuestAnswerModel(
     val question: String,
     val answerId: Long,
     val writtenAt: String,
-    val content: String
+    val content: String,
 )
 
 data class QuestCommonAnswerEditModel(
-    val answer: String
+    val answer: String,
 )

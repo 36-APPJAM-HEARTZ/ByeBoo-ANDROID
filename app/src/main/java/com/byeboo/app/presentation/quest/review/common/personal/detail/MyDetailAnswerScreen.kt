@@ -42,7 +42,6 @@ fun MyAnswerDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
 
-
     MyAnswerDetailScreen(
         uiState = uiState,
         paddingValues = paddingValues,
@@ -58,7 +57,7 @@ fun MyAnswerDetailRoute(
                 is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
                 is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit -> navigateToQuestCommonEdit(effect.answerId, effect.isEditMode)
-                is MyDetailAnswerSideEffect.ShowSnackBar ->  showSnackBar(effect.snackBarType)
+                is MyDetailAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -68,9 +67,10 @@ fun MyAnswerDetailRoute(
             onDismissRequest = viewModel::onDismissDeleteModal,
             onNoClick = viewModel::onDismissDeleteModal,
             onYesClick = viewModel::onQuestDeleteClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(48.dp))
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
         )
     }
 }

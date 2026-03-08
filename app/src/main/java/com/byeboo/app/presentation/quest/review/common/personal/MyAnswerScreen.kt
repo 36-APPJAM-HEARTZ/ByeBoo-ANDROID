@@ -72,21 +72,24 @@ fun MyAnswerScreen(
 ) {
     val listState = rememberLazyListState()
 
-    val hasMyAnswers = remember {
-        derivedStateOf {
-            val totalItems = listState.layoutInfo.totalItemsCount
-            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+    val hasMyAnswers =
+        remember {
+            derivedStateOf {
+                val totalItems = listState.layoutInfo.totalItemsCount
+                val lastVisibleItemIndex =
+                    listState.layoutInfo.visibleItemsInfo
+                        .lastOrNull()
+                        ?.index ?: 0
 
-            totalItems > 0 && lastVisibleItemIndex >= totalItems - 2
+                totalItems > 0 && lastVisibleItemIndex >= totalItems - 2
+            }
         }
-    }
 
     LaunchedEffect(hasMyAnswers.value) {
         if (hasMyAnswers.value) {
             onLoadAnswers()
         }
     }
-
 
     Column(
         modifier =

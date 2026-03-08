@@ -21,9 +21,7 @@ interface QuestCommonRepository {
         request: QuestCommonAnswerEditModel,
     ): Result<Unit>
 
-    suspend fun deleteQuestCommonAnswer(
-        answerId: Long
-    ): Result<Unit>
+    suspend fun deleteQuestCommonAnswer(answerId: Long): Result<Unit>
 
     fun getCachedMyAnswer(answerId: Long): QuestAnswerModel?
 }

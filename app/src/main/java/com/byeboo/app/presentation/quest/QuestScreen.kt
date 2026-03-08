@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavBackStackEntry
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -28,7 +27,6 @@ import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.tab.QuestTabRow
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestTab
-import com.byeboo.app.presentation.quest.navigation.QuestResultKey.COMMON_COMPLETED
 import com.byeboo.app.presentation.quest.screen.CommonJourneyScreen
 import com.byeboo.app.presentation.quest.screen.MyJourneyScreen
 import kotlinx.coroutines.delay
@@ -52,8 +50,6 @@ fun QuestRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val showSnackBar = LocalSnackBarTrigger.current
-
-
 
     LaunchedEffect(uiState.myJourneyState.currentStepIndex) {
         val questGroups = uiState.myJourneyState.questGroups
@@ -98,7 +94,7 @@ fun QuestRoute(
 
     if (uiState.showCompleteModal) {
         QuestCompleteDialog(
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         LaunchedEffect(Unit) {
