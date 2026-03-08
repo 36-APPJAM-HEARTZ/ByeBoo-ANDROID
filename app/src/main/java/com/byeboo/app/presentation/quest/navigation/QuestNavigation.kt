@@ -95,7 +95,6 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
     navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
