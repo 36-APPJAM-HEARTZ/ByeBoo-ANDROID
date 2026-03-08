@@ -26,7 +26,6 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestReview
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
-import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
 import com.byeboo.app.presentation.quest.navigation.Quest
 import com.byeboo.app.presentation.quest.navigation.QuestResultKey
@@ -149,8 +148,9 @@ class MainNavigator(
     }
 
     fun navigateToQuestFromComplete() {
-        navController.getBackStackEntry<Quest>()
-            .savedStateHandle[QuestResultKey.COMMON_COMPLETED] = true
+        navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set(QuestResultKey.COMMON_COMPLETED, true)
 
         navController.popBackStack()
     }
@@ -198,8 +198,8 @@ class MainNavigator(
     }
 
     fun navigateToQuestCommonWriting(
-        questId: Long = -1L,
-        answerId: Long = -1L,
+        questId: Long? = 0,
+        answerId: Long? = 0,
         isEditMode: Boolean = false,
         navOptions: NavOptions? = null,
     )

@@ -2,7 +2,7 @@ package com.byeboo.app.data.mapper.quest
 
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
-import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerDto
+import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
@@ -13,7 +13,7 @@ fun QuestCommonAnswerRequestModel.toData(): QuestCommonRequestDto =
         answer = this.answer
     )
 
-fun QuestMyCommonAnswerDto.toDomain(): QuestCommonMyAnswerModel =
+fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
     QuestCommonMyAnswerModel(
         hasNext = this.hasNext,
         nextCursor = this.nextCursor,

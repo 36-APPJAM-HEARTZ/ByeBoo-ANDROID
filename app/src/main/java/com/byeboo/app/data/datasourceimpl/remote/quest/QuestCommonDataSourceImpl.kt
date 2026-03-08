@@ -5,7 +5,7 @@ import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
-import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerDto
+import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.data.service.quest.QuestCommonService
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class QuestCommonDataSourceImpl @Inject constructor(
         )
 
 
-    override suspend fun getQuestCommonMyAnswer(cursor: Long?): BaseResponse<QuestMyCommonAnswerDto> =
+    override suspend fun getQuestCommonMyAnswer(cursor: Long?): BaseResponse<QuestMyCommonAnswerResponseDto> =
         questCommonService.getQuestMyCommonAnswer(
             cursor = cursor
         )

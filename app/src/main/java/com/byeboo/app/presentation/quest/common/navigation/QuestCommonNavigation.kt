@@ -11,8 +11,8 @@ import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute.Ques
 import com.byeboo.app.presentation.quest.common.writing.QuestCommonRoute
 
 fun NavController.navigateToQuestCommonWriting(
-    questId: Long,
-    answerId: Long,
+    questId: Long?,
+    answerId: Long?,
     isEditMode: Boolean,
     navOptions: NavOptions? = null,
 ) {
@@ -24,13 +24,6 @@ fun NavController.navigateToQuestCommonWriting(
         ),
         navOptions,
     )
-}
-
-fun NavController.navigateToQuestCommonComplete(
-    questId: Long,
-    navOptions: NavOptions? = null,
-) {
-    navigate(QuestCommonComplete(questId), navOptions)
 }
 
 fun NavGraphBuilder.questCommonGraph(

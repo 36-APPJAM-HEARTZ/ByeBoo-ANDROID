@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.presentation.quest.component.card.MyAnswerItem
@@ -37,6 +38,7 @@ fun MyAnswerRoute(
     viewModel: MyAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -45,6 +47,7 @@ fun MyAnswerRoute(
                 is MyAnswerSideEffect.NavigateToQuest -> navigateToQuest()
                 is MyAnswerSideEffect.NavigateToQuestMyAnswerDetail ->
                     navigateToQuestMyAnswerDetail(effect.answerId)
+                is MyAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }

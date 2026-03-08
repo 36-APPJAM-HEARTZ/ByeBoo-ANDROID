@@ -4,7 +4,7 @@ import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
-import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerDto
+import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -24,7 +24,7 @@ interface QuestCommonService {
     suspend fun getQuestMyCommonAnswer(
         @Query("cursor") cursor: Long?,
         @Query("limit") limit: Int = 10,
-    ) : BaseResponse<QuestMyCommonAnswerDto>
+    ) : BaseResponse<QuestMyCommonAnswerResponseDto>
 
     @PATCH("/api/v1/common-quests/{answerId}")
     suspend fun patchQuestCommonAnswer(

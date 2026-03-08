@@ -4,17 +4,17 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class QuestMyCommonAnswerDto(
+data class QuestMyCommonAnswerResponseDto(
     @SerialName("hasNext")
     val hasNext: Boolean,
     @SerialName("nextCursor")
     val nextCursor: Long,
     @SerialName("answers")
-    val answers: List<QuestAnswerItemDto>
+    val answers: List<QuestAnswerItemResponseDto>
 )
 
 @Serializable
-data class QuestAnswerItemDto(
+data class QuestAnswerItemResponseDto(
     @SerialName("question")
     val question: String,
     @SerialName("answerId")

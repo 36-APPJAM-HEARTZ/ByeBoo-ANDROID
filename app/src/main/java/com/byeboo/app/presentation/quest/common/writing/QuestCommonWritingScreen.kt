@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
@@ -51,12 +52,14 @@ fun QuestCommonRoute(
     viewModel: QuestCommonWritingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when(effect) {
                 is QuestCommonSideEffect.NavigateToQuest -> navigateToQuestFromComplete()
                 is QuestCommonSideEffect.NavigateToUp -> navigateUp()
+                is QuestCommonSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -79,9 +82,7 @@ fun QuestCommonRoute(
     if (uiState.showCompleteModal) {
         QuestCompleteModal(
             onDismissRequest = viewModel::onDismissCompleteModal,
-            onNoClick = {
-                viewModel.onDismissCompleteModal()
-            },
+            onNoClick = viewModel::onDismissCompleteModal,
             onYesClick = viewModel::onSaveClicked,
             modifier = Modifier
                 .fillMaxWidth()

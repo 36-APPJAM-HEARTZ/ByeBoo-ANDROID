@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
@@ -35,16 +36,16 @@ class QuestCommonWritingViewModel
 
         private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
         private val questId = routeArgs.questId
-        private val answerId = routeArgs.answerId
+        private val answerId: Long? = routeArgs.answerId
         private val isEditMode = routeArgs.isEditMode
 
         init {
-            if (isEditMode && answerId != -1L) {
-                loadRecordedContent()
+            if (isEditMode && answerId != null) {
+                loadRecordedContent(answerId = answerId)
             }
         }
 
-    private fun loadRecordedContent() {
+    private fun loadRecordedContent(answerId: Long) {
         val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
 
         if (cachedAnswer != null) {
@@ -96,11 +97,11 @@ class QuestCommonWritingViewModel
                 val result = questCommonRepository.uploadQuestCommonAnswer(questId = 72, request = request)
 
                 result.onSuccess {
-                    // 나가지기
-                    // 공통여정 화면에서 카드 띄우기
                     _uiState.update { it.copy(showCompleteModal = false) }
                     _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
 
+                }.onFailure {
+                    _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                 }
             }
 
@@ -110,6 +111,7 @@ class QuestCommonWritingViewModel
         private fun onSaveEditClicked() {
             val state = uiState.value
             val questAnswer = state.questAnswer
+            val answerId = answerId ?: return
 
             viewModelScope.launch {
                 val request = QuestCommonAnswerEditModel(answer = questAnswer)
@@ -119,9 +121,13 @@ class QuestCommonWritingViewModel
                 )
 
                 result.onSuccess {
-                    _uiState.update { it.copy(isEditMode = false) }
-                    _uiState.update { it.copy(questAnswer = questAnswer) }
+                    _uiState.update { it.copy(
+                        questAnswer = questAnswer,
+                        isEditMode = false)
+                    }
                     _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+                }.onFailure {
+                    _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                 }
             }
         }

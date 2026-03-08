@@ -24,7 +24,7 @@ data class QuestCommonMyAnswerModel(
 data class QuestAnswerModel(
     val question: String,
     val answerId: Long,
-    val writtenAt: String = LocalDate.now().toString(),
+    val writtenAt: String,
     val content: String
 )
 

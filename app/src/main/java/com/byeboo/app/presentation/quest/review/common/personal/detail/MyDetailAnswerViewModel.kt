@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
@@ -103,6 +104,8 @@ constructor(
                 .onSuccess {
                     _uiState.update { it.copy(showDeleteModal = false) }
                     _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
+                }.onFailure {
+                    _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                 }
         }
     }

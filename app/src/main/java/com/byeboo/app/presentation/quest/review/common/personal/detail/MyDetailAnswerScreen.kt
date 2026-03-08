@@ -20,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
-import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
@@ -40,6 +40,8 @@ fun MyAnswerDetailRoute(
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
+
 
     MyAnswerDetailScreen(
         uiState = uiState,
@@ -56,6 +58,7 @@ fun MyAnswerDetailRoute(
                 is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
                 is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit -> navigateToQuestCommonEdit(effect.answerId, effect.isEditMode)
+                is MyDetailAnswerSideEffect.ShowSnackBar ->  showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -64,10 +67,7 @@ fun MyAnswerDetailRoute(
         QuestDeleteModal(
             onDismissRequest = viewModel::onDismissDeleteModal,
             onNoClick = viewModel::onDismissDeleteModal,
-            onYesClick = {
-                viewModel.onDismissDeleteModal()
-                viewModel.onQuestDeleteClicked()
-            },
+            onYesClick = viewModel::onQuestDeleteClicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = screenWidthDp(48.dp))
@@ -94,7 +94,7 @@ private fun MyAnswerDetailScreen(
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),

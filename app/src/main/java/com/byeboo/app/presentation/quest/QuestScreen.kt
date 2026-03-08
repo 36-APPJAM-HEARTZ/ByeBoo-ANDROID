@@ -45,16 +45,15 @@ fun QuestRoute(
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     paddingValues: PaddingValues,
-    navBackStackEntry: NavBackStackEntry,
+    isCommonAnswerCompleted: Boolean,
+    onCommonAnswerCompleted: () -> Unit,
     viewModel: QuestViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val showSnackBar = LocalSnackBarTrigger.current
 
-    val isCommonAnswerCompleted by navBackStackEntry.savedStateHandle
-        .getStateFlow(COMMON_COMPLETED, false)
-        .collectAsStateWithLifecycle()
+
 
     LaunchedEffect(uiState.myJourneyState.currentStepIndex) {
         val questGroups = uiState.myJourneyState.questGroups
@@ -93,7 +92,7 @@ fun QuestRoute(
     LaunchedEffect(isCommonAnswerCompleted) {
         if (isCommonAnswerCompleted) {
             viewModel.onCommonQuestCompleted()
-            navBackStackEntry.savedStateHandle[COMMON_COMPLETED] = false
+            onCommonAnswerCompleted()
         }
     }
 
@@ -114,7 +113,7 @@ fun QuestRoute(
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         onMyAnswersClick = viewModel::onMyAnswersClicked,
-        onCommonQuestClick = navigateToQuestCommonWriting, // TODO: 이동 관련 로직 뷰모델에 작성
+        onCommonQuestClick = viewModel::onCommonQuestClicked, // TODO: 이동 관련 로직 뷰모델에 작성
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,

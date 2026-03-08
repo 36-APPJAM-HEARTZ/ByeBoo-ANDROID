@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.review.common.personal.detail
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 
 @Immutable
@@ -23,6 +24,9 @@ interface MyDetailAnswerSideEffect {
     data class NavigateToQuestCommonEdit(
         val answerId: Long,
         val isEditMode: Boolean
+    ) : MyDetailAnswerSideEffect
+    data class ShowSnackBar(
+        val snackBarType: CustomSnackBarType,
     ) : MyDetailAnswerSideEffect
 
 }
