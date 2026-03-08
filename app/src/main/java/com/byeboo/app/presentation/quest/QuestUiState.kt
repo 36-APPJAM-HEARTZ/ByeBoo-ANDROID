@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest
 
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
@@ -31,9 +32,12 @@ data class MyJourneyState(
 )
 
 data class CommonJourneyState(
-    val selectedDate: LocalDate = LocalDate.now(),
+    val selectedDate: LocalDate = TimeUtil.getNowKst(),
     val question: String = "",
+    val questId: Long = 0L,
     val answerCount: Int = 0,
     val answers: ImmutableList<CommonAnswerModel> = persistentListOf(),
     val isMyAnswerDone: Boolean = false,
+    val hasNext: Boolean = false,
+    val nextCursor: Long? = null,
 )
