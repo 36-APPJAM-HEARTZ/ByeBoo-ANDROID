@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.usecase.quest.GetAiAnswerUseCase
 import com.byeboo.app.domain.usecase.quest.PostAiAnswerUseCase
 import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
@@ -78,9 +77,6 @@ class QuestAiAnswerViewModel
                                 isLoading = false,
                                 isFailure = true,
                             )
-                        }
-                        if (isExistedAiAnswerArg) {
-                            _sideEffect.emit(QuestAiAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                         }
                     }
             }
