@@ -30,7 +30,7 @@ fun QuestCommonTitle(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(horizontal = screenWidthDp(24.dp), vertical = screenHeightDp(10.dp)),
+                .padding(vertical = screenHeightDp(10.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Text(

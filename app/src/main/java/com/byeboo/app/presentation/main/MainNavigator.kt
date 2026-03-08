@@ -26,9 +26,9 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestReview
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
-import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonComplete
 import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
 import com.byeboo.app.presentation.quest.navigation.Quest
+import com.byeboo.app.presentation.quest.navigation.QuestResultKey
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswerDetail
@@ -147,6 +147,14 @@ class MainNavigator(
         navController.navigate(route = Quest, navOptions = options)
     }
 
+    fun navigateToQuestFromComplete() {
+        navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set(QuestResultKey.COMMON_COMPLETED, true)
+
+        navController.popBackStack()
+    }
+
     fun navigateToQuestTip(
         questId: Long,
         questType: QuestType,
@@ -189,9 +197,17 @@ class MainNavigator(
         )
     }
 
-    fun navigateToQuestCommonWriting(questId: Long) {
+    fun navigateToQuestCommonWriting(
+        questId: Long? = 0,
+        answerId: Long? = 0,
+        isEditMode: Boolean = false,
+        navOptions: NavOptions? = null,
+    ) {
         navController.navigateToQuestCommonWriting(
             questId = questId,
+            answerId = answerId,
+            isEditMode = isEditMode,
+            navOptions = navOptions,
         )
     }
 
@@ -225,13 +241,6 @@ class MainNavigator(
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
-    }
-
-    fun navigateToQuestCommonComplete(
-        questId: Long,
-        navOptions: NavOptions? = null,
-    ) {
-        navController.navigateToQuestCommonComplete(questId = questId, navOptions = navOptions)
     }
 
     fun navigateToQuestReview(

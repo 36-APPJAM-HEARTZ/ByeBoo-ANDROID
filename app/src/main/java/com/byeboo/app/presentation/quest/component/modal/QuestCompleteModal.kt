@@ -20,6 +20,7 @@ fun QuestCompleteModal(
         onLeftButtonText = "아니오",
         onRightButtonClick = onYesClick,
         onRightButtonText = "예",
+        modalSubText = "완료하면 다른 사용자에게 공개돼요.",
         dialogProperties = dialogProperties,
         modifier = modifier,
     )

@@ -1,6 +1,8 @@
 package com.byeboo.app.presentation.quest.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -74,12 +76,13 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
+    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
+    navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -91,7 +94,11 @@ fun NavGraphBuilder.questGraph(
             )
         }
 
-        composable<Quest> {
+        composable<Quest> { backStackEntry ->
+            val isCommonAnswerCompleted by backStackEntry.savedStateHandle
+                .getStateFlow(QuestResultKey.COMMON_COMPLETED, false)
+                .collectAsStateWithLifecycle()
+
             QuestRoute(
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
@@ -100,6 +107,10 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                isCommonAnswerCompleted = isCommonAnswerCompleted,
+                onCommonAnswerCompleted = {
+                    backStackEntry.savedStateHandle[QuestResultKey.COMMON_COMPLETED] = false
+                },
                 paddingValues = paddingValues,
             )
         }
@@ -129,6 +140,8 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswers> {
             MyAnswerRoute(
+                navigateUp = navigateUp,
+                navigateToQuest = navigateToQuest,
                 navigateToQuestMyAnswerDetail = navigateToQuestMyAnswerDetail,
                 paddingValues = paddingValues,
             )
@@ -136,6 +149,9 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswersDetail> {
             MyAnswerDetailRoute(
+                navigateUp = navigateUp,
+                navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                navigateToQuestCommonEdit = navigateToQuestCommonEdit,
                 paddingValues = paddingValues,
             )
         }
@@ -161,8 +177,7 @@ fun NavGraphBuilder.questGraph(
         )
 
         questCommonGraph(
-            navigateToQuest = navigateToQuest,
-            navigateToQuestCommonComplete = navigateToQuestCommonComplete,
+            navigateToQuestFromComplete = navigateToQuestFromComplete,
             navigateUp = navigateUp,
             paddingValues = paddingValues,
         )

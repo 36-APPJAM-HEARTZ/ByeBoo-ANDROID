@@ -9,6 +9,7 @@ import com.byeboo.app.data.service.notification.NotificationService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
 import com.byeboo.app.data.service.quest.QuestBehaviorService
+import com.byeboo.app.data.service.quest.QuestCommonService
 import com.byeboo.app.data.service.quest.QuestDetailService
 import com.byeboo.app.data.service.quest.QuestRecordedDetailService
 import com.byeboo.app.data.service.quest.QuestRecordingService
@@ -115,5 +116,12 @@ object ServiceModule {
     fun providesBlockedUsersService(retrofit: Retrofit): BlockedUsersService =
         retrofit.create(
             BlockedUsersService::class.java,
+        )
+
+    @Provides
+    @Singleton
+    fun providesQuestCommonService(retrofit: Retrofit): QuestCommonService =
+        retrofit.create(
+            QuestCommonService::class.java,
         )
 }
