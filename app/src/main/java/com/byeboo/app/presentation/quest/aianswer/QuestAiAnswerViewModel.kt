@@ -79,7 +79,7 @@ class QuestAiAnswerViewModel
                                 isFailure = true,
                             )
                         }
-                        if (isExistedAiAnswerArg){
+                        if (isExistedAiAnswerArg) {
                             _sideEffect.emit(QuestAiAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                         }
                     }

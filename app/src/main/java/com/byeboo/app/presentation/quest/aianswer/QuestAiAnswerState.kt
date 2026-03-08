@@ -13,6 +13,7 @@ sealed interface QuestAiAnswerSideEffect {
     data object NavigateToQuest : QuestAiAnswerSideEffect
 
     data object NavigateUp : QuestAiAnswerSideEffect
+
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
     ) : QuestAiAnswerSideEffect
