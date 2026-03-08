@@ -4,6 +4,7 @@ import com.byeboo.app.core.network.qualifier.Auth
 import com.byeboo.app.data.service.NewJourneyService
 import com.byeboo.app.data.service.auth.AuthService
 import com.byeboo.app.data.service.auth.UserService
+import com.byeboo.app.data.service.mypage.BlockedUsersService
 import com.byeboo.app.data.service.notification.NotificationService
 import com.byeboo.app.data.service.offboarding.OffboardingJourneyService
 import com.byeboo.app.data.service.offboarding.OffboardingQuestCompletedService
@@ -115,5 +116,12 @@ object ServiceModule {
     fun providesQuestAiAnswerService(retrofit: Retrofit): QuestAiAnswerService =
         retrofit.create(
             QuestAiAnswerService::class.java,
+        )
+
+    @Provides
+    @Singleton
+    fun providesBlockedUsersService(retrofit: Retrofit): BlockedUsersService =
+        retrofit.create(
+            BlockedUsersService::class.java,
         )
 }

@@ -2,10 +2,14 @@ package com.byeboo.app.presentation.mypage.blockedusers
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.state.UiState
 import com.byeboo.app.core.util.updateSuccess
+import com.byeboo.app.domain.usecase.mypage.GetBlockedUsersUseCase
+import com.byeboo.app.domain.usecase.mypage.UnblockUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class BlockedUsersViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(
+        private val getBlockedUsersUseCase: GetBlockedUsersUseCase,
+        private val unblockUserUseCase: UnblockUserUseCase,
+    ) : ViewModel() {
         private val _uiState = MutableStateFlow<UiState<BlockedUsersState>>(UiState.Loading)
         val uiState: StateFlow<UiState<BlockedUsersState>> = _uiState.asStateFlow()
 
@@ -30,20 +37,37 @@ class BlockedUsersViewModel
 
         private fun loadBlockedUsers() {
             viewModelScope.launch {
-                _uiState.value =
-                    UiState.Success(
-                        BlockedUsersState(
-                            userLists = persistentListOf(), // 빈 리스트
-                            showBlockedModal = false,
-                        ),
-                    )
+                getBlockedUsersUseCase()
+                    .onSuccess { result ->
+                        _uiState.value =
+                            UiState.Success(
+                                BlockedUsersState(
+                                    blockedUserLists = result.blockedUsers.toImmutableList(),
+                                    showBlockedModal = false,
+                                ),
+                            )
+                    }.onFailure {
+                        _uiState.value =
+                            UiState.Success(
+                                BlockedUsersState(
+                                    blockedUserLists = persistentListOf(),
+                                    showBlockedModal = false,
+                                ),
+                            )
+
+                        _sideEffect.emit(
+                            BlockedUsersSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
+                        )
+                    }
             }
         }
 
-        // TODO: 서버 연결할 때, userId 관련 코드 수정 예정
         fun onUnblockClicked(userId: Long) {
             _uiState.updateSuccess {
                 it.copy(
+                    selectedUserId = userId,
                     showBlockedModal = true,
                 )
             }
@@ -65,6 +89,29 @@ class BlockedUsersViewModel
             }
         }
 
-        fun fetchBlockedUser() {
+        fun unblockUser() {
+            val currentState = _uiState.value as? UiState.Success ?: return
+            val userId = currentState.data.selectedUserId ?: return
+
+            viewModelScope.launch {
+                onDismissModal()
+                unblockUserUseCase(blockId = userId)
+                    .onSuccess {
+                        _uiState.updateSuccess {
+                            it.copy(
+                                blockedUserLists =
+                                    it.blockedUserLists
+                                        .filterNot { user -> user.blockedUserId == userId }
+                                        .toImmutableList(),
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            BlockedUsersSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
+                        )
+                    }
+            }
         }
     }
