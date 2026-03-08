@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
 import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.navigation.questGraph
 import com.byeboo.app.presentation.splash.navigation.splashGraph
@@ -41,6 +42,14 @@ fun MainNavHost(
         navOptions {
             launchSingleTop = true
             restoreState = true
+        }
+    val offboardingReviewToAiNavOptions =
+        navOptions {
+            popUpTo<OffboardingQuestReview> {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = false
         }
 
     NavHost(
@@ -121,6 +130,13 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
+            navigateToQuestCommonEdit = { answerId, isEditMode ->
+                navigator.navigateToQuestCommonWriting(
+                    answerId = answerId,
+                    isEditMode = isEditMode,
+                    navOptions = keepStackNavOptions,
+                )
+            },
             navigateToQuestTip = { questId, questType ->
                 navigator.navigateToQuestTip(
                     questId = questId,
@@ -129,12 +145,6 @@ fun MainNavHost(
             },
             navigateToQuestBehaviorComplete = { questId ->
                 navigator.navigateToQuestBehaviorComplete(
-                    questId = questId,
-                    navOptions = clearStackNavOptions,
-                )
-            },
-            navigateToQuestCommonComplete = { questId ->
-                navigator.navigateToQuestCommonComplete(
                     questId = questId,
                     navOptions = clearStackNavOptions,
                 )
@@ -151,13 +161,24 @@ fun MainNavHost(
             navigateToQuestMyAnswerDetail = { answerId ->
                 navigator.navigateToQuestMyAnswerDetail(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions,
+                    navOptions = keepStackNavOptions,
                 )
             },
             navigateToQuestCommonWriting = { questId ->
                 navigator.navigateToQuestCommonWriting(questId = questId)
             },
+            navigateToQuestFromComplete = {
+                navigator.navigateToQuestFromComplete()
+            },
             navigateUp = navigator::navigateUp,
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
+                navigator.navigateToQuestAiAnswer(
+                    questId = questId,
+                    isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerOrigin = aiAnswerOrigin,
+                    navOptions = clearStackNavOptions,
+                )
+            },
             paddingValues = paddingValues,
         )
 
@@ -225,6 +246,14 @@ fun MainNavHost(
                     fromOffboarding = fromOffboarding,
                     imageKey = imageKey,
                     navOptions = keepStackNavOptions,
+                )
+            },
+            navigateToQuestAiAnswer = { questId, isExistedAiAnswer, aiAnswerOrigin ->
+                navigator.navigateToQuestAiAnswer(
+                    questId = questId,
+                    isExistedAiAnswer = isExistedAiAnswer,
+                    aiAnswerOrigin = aiAnswerOrigin,
+                    navOptions = offboardingReviewToAiNavOptions,
                 )
             },
             paddingValues = paddingValues,

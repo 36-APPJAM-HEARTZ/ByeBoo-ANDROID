@@ -338,11 +338,7 @@ class QuestViewModel
                         it.copy(myJourneyState = it.myJourneyState.copy(selectedQuest = quest, showQuitModal = true))
                     }
                 } else if (quest?.state is QuestState.Complete) {
-                    mixpanelUtil.trackEvent(
-                        "quest_box_click",
-                        mapOf("quest_number" to quest.questNumber),
-                    )
-                    _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
+                    handleCompletedQuestClick(quest)
                 }
             }
         }
@@ -351,6 +347,37 @@ class QuestViewModel
             viewModelScope.launch {
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
             }
+        }
+
+        fun onCommonQuestClicked(questId: Long) {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId = questId))
+            }
+        }
+
+        fun onCommonQuestCompleted() {
+            _uiState.update {
+                it.copy(
+                    selectedTab = QuestTab.COMMON_JOURNEY,
+                    showCompleteModal = true,
+                )
+            }
+        }
+
+        fun closeCompleteModal() {
+            _uiState.update {
+                it.copy(
+                    showCompleteModal = false,
+                )
+            }
+        }
+
+        private suspend fun handleCompletedQuestClick(quest: Quest) {
+            mixpanelUtil.trackEvent(
+                "quest_box_click",
+                mapOf("quest_number" to quest.questNumber),
+            )
+            _sideEffect.emit(QuestSideEffect.NavigateToQuestReview(quest.questId))
         }
 
         private fun trackQuest(quest: Quest) {

@@ -5,9 +5,12 @@ import com.byeboo.app.data.repositoryimpl.auth.AuthRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.TokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.mypage.BlockedUsersRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.CommonQuestRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.QuestAiAnswerRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.quest.QuestCommonRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestInProgressRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestRecordedDetailRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestStateRepositoryImpl
@@ -21,10 +24,13 @@ import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
+import com.byeboo.app.domain.repository.mypage.BlockedUsersRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
 import com.byeboo.app.domain.repository.quest.CommonQuestRepository
+import com.byeboo.app.domain.repository.quest.QuestAiAnswerRepository
 import com.byeboo.app.domain.repository.quest.QuestBehaviorRepository
+import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailBehaviorRepository
 import com.byeboo.app.domain.repository.quest.QuestDetailRecordingRepository
 import com.byeboo.app.domain.repository.quest.QuestInProgressRepository
@@ -114,4 +120,16 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindFcmTokenRepository(fcmTokenRepositoryImpl: FcmTokenRepositoryImpl): FcmTokenRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindQuestAiAnswerRepository(questAiAnswerRepositoryImpl: QuestAiAnswerRepositoryImpl): QuestAiAnswerRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBlockedUsersRepository(blockedUsersRepositoryImpl: BlockedUsersRepositoryImpl): BlockedUsersRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindQuestCommonRepository(questCommonRepositoryImpl: QuestCommonRepositoryImpl): QuestCommonRepository
 }

@@ -14,35 +14,65 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
+import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MyAnswerDetailRoute(
+    navigateUp: () -> Unit,
+    navigateToQuestMyAnswers: () -> Unit,
+    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: MyDetailAnswerViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
 
     MyAnswerDetailScreen(
         uiState = uiState,
         paddingValues = paddingValues,
+        onBackClick = viewModel::onBackClicked,
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
-        modifier = modifier,
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
+                is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
+                is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
+                is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit -> navigateToQuestCommonEdit(effect.answerId, effect.isEditMode)
+                is MyDetailAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
+            }
+        }
+    }
+
+    if (uiState.showDeleteModal) {
+        QuestDeleteModal(
+            onDismissRequest = viewModel::onDismissDeleteModal,
+            onNoClick = viewModel::onDismissDeleteModal,
+            onYesClick = viewModel::onQuestDeleteClicked,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +80,7 @@ fun MyAnswerDetailRoute(
 private fun MyAnswerDetailScreen(
     uiState: MyDetailAnswerState,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit,
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (MyPostOption) -> Unit,
@@ -63,13 +94,14 @@ private fun MyAnswerDetailScreen(
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
                 .verticalScroll(scrollState)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
         AnswerDetailTopBar(
+            onBackClick = onBackClick,
             onClickMoreOptions = onClickMoreOptions,
         )
 

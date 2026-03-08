@@ -52,9 +52,8 @@ class OffboardingQuestCompletedViewModel
             nickname: String,
         ) {
             viewModelScope.launch {
-                val result = offboardingQuestCompletedRepository.getCompletedQuest(journey)
-
-                result
+                offboardingQuestCompletedRepository
+                    .getCompletedQuest(journey)
                     .onSuccess { detail ->
                         _uiState.update { detail.toUiState(journey = journey, nickname = nickname) }
                     }.onFailure {

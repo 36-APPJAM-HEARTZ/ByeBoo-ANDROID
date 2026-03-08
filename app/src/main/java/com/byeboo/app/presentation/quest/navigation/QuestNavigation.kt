@@ -1,6 +1,8 @@
 package com.byeboo.app.presentation.quest.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -8,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
+import com.byeboo.app.presentation.quest.aianswer.QuestAiAnswerRoute
 import com.byeboo.app.presentation.quest.behavior.navigation.questBehaviorGraph
 import com.byeboo.app.presentation.quest.common.navigation.questCommonGraph
 import com.byeboo.app.presentation.quest.record.navigation.questRecordGraph
@@ -62,6 +65,18 @@ fun NavController.navigateToQuestMyAnswerDetail(
     navigate(QuestMyAnswersDetail(answerId), navOptions)
 }
 
+fun NavController.navigateToQuestAiAnswer(
+    questId: Long,
+    isExistedAiAnswer: Boolean,
+    aiAnswerOrigin: AiAnswerOrigin,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        QuestAiAnswer(questId = questId, isExistedAiAnswer = isExistedAiAnswer, aiAnswerOrigin = aiAnswerOrigin),
+        navOptions,
+    )
+}
+
 fun NavGraphBuilder.questGraph(
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
@@ -74,12 +89,14 @@ fun NavGraphBuilder.questGraph(
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
+    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     navigateToQuestMyAnswerDetail: (Long) -> Unit,
-    navigateToQuestCommonComplete: (Long) -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
+    navigateToQuestFromComplete: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<Quest, QuestStart> {
@@ -91,7 +108,11 @@ fun NavGraphBuilder.questGraph(
             )
         }
 
-        composable<Quest> {
+        composable<Quest> { backStackEntry ->
+            val isCommonAnswerCompleted by backStackEntry.savedStateHandle
+                .getStateFlow(QuestResultKey.COMMON_COMPLETED, false)
+                .collectAsStateWithLifecycle()
+
             QuestRoute(
                 navigateToQuestTip = navigateToQuestTip,
                 navigateToQuestRecording = navigateToQuestRecording,
@@ -100,6 +121,10 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                isCommonAnswerCompleted = isCommonAnswerCompleted,
+                onCommonAnswerCompleted = {
+                    backStackEntry.savedStateHandle[QuestResultKey.COMMON_COMPLETED] = false
+                },
                 paddingValues = paddingValues,
             )
         }
@@ -116,6 +141,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuest = navigateToQuest,
                 navigateToQuestRecordingEdit = navigateToQuestRecordingEdit,
                 navigateToQuestBehaviorEdit = navigateToQuestBehaviorEdit,
+                navigateToQuestAiAnswer = navigateToQuestAiAnswer,
                 paddingValues = paddingValues,
             )
         }
@@ -129,6 +155,8 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswers> {
             MyAnswerRoute(
+                navigateUp = navigateUp,
+                navigateToQuest = navigateToQuest,
                 navigateToQuestMyAnswerDetail = navigateToQuestMyAnswerDetail,
                 paddingValues = paddingValues,
             )
@@ -136,6 +164,9 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestMyAnswersDetail> {
             MyAnswerDetailRoute(
+                navigateUp = navigateUp,
+                navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                navigateToQuestCommonEdit = navigateToQuestCommonEdit,
                 paddingValues = paddingValues,
             )
         }
@@ -147,6 +178,7 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
+            navigateToQuestAiAnswer = navigateToQuestAiAnswer,
             paddingValues = paddingValues,
         )
 
@@ -157,14 +189,22 @@ fun NavGraphBuilder.questGraph(
             navigateToQuestReview = navigateToQuestReview,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateUp = navigateUp,
+            navigateToQuestAiAnswer = navigateToQuestAiAnswer,
             paddingValues = paddingValues,
         )
 
         questCommonGraph(
-            navigateToQuest = navigateToQuest,
-            navigateToQuestCommonComplete = navigateToQuestCommonComplete,
+            navigateToQuestFromComplete = navigateToQuestFromComplete,
             navigateUp = navigateUp,
             paddingValues = paddingValues,
         )
+
+        composable<QuestAiAnswer> {
+            QuestAiAnswerRoute(
+                navigateToQuest = navigateToQuest,
+                navigateUp = navigateUp,
+                paddingValues = paddingValues,
+            )
+        }
     }
 }

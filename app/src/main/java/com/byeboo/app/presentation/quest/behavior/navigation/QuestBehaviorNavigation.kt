@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.quest.behavior.complete.QuestBehaviorComplete
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorComplete
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior.QuestBehaviorWriting
 import com.byeboo.app.presentation.quest.behavior.writing.QuestBehaviorWritingRoute
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 
 fun NavController.navigateToQuestBehavior(
     questId: Long,
@@ -44,6 +45,7 @@ fun NavGraphBuilder.questBehaviorGraph(
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
 ) {
     routeNavigation<QuestBehavior, QuestBehaviorWriting> {
@@ -62,6 +64,7 @@ fun NavGraphBuilder.questBehaviorGraph(
             QuestBehaviorCompleteRoute(
                 navigateToQuest = navigateToQuest,
                 navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
+                navigateToQuestAiAnswer = navigateToQuestAiAnswer,
                 paddingValues = paddingValues,
             )
         }

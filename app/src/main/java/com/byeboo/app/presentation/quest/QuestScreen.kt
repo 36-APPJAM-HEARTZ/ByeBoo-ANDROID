@@ -22,12 +22,14 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.tab.QuestTabRow
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestTab
 import com.byeboo.app.presentation.quest.screen.CommonJourneyScreen
 import com.byeboo.app.presentation.quest.screen.MyJourneyScreen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalDate
 
@@ -41,6 +43,8 @@ fun QuestRoute(
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     paddingValues: PaddingValues,
+    isCommonAnswerCompleted: Boolean,
+    onCommonAnswerCompleted: () -> Unit,
     viewModel: QuestViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,13 +85,31 @@ fun QuestRoute(
         }
     }
 
+    LaunchedEffect(isCommonAnswerCompleted) {
+        if (isCommonAnswerCompleted) {
+            viewModel.onCommonQuestCompleted()
+            onCommonAnswerCompleted()
+        }
+    }
+
+    if (uiState.showCompleteModal) {
+        QuestCompleteDialog(
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
+        )
+
+        LaunchedEffect(Unit) {
+            delay(2000L)
+            viewModel.closeCompleteModal()
+        }
+    }
+
     QuestScreen(
         uiState = uiState,
         listState = listState,
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         onMyAnswersClick = viewModel::onMyAnswersClicked,
-        onCommonQuestClick = navigateToQuestCommonWriting, // TODO: 이동 관련 로직 뷰모델에 작성
+        onCommonQuestClick = viewModel::onCommonQuestClicked, // TODO: 이동 관련 로직 뷰모델에 작성
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,

@@ -3,12 +3,10 @@ package com.byeboo.app.presentation.quest.behavior.complete
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,17 +16,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,9 +31,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -48,13 +43,14 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 
 @Composable
 fun QuestBehaviorCompleteRoute(
     navigateToQuest: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
+    navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestBehaviorCompleteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -74,6 +70,12 @@ fun QuestBehaviorCompleteRoute(
             when (effect) {
                 is QuestBehaviorCompleteSideEffect.NavigateToQuest -> navigateToQuest()
                 is QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
+                is QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer ->
+                    navigateToQuestAiAnswer(
+                        effect.questId,
+                        effect.isExistedAiAnswer,
+                        effect.aiAnswerOrigin,
+                    )
                 is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->
                         inAppReview(activity)
@@ -92,7 +94,7 @@ fun QuestBehaviorCompleteRoute(
         paddingValues = paddingValues,
         onCloseClick = viewModel::onCloseClicked,
         imageUri = imageUri,
-        modifier = modifier,
+        onAiAnswerClick = viewModel::onAiAnswerClicked,
     )
 }
 
@@ -102,6 +104,7 @@ private fun QuestBehaviorCompleteScreen(
     paddingValues: PaddingValues,
     onCloseClick: () -> Unit,
     imageUri: Uri?,
+    onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -114,22 +117,9 @@ private fun QuestBehaviorCompleteScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-                contentDescription = "back button",
-                tint = ByeBooTheme.colors.white,
-                modifier = modifier.clickable(onClick = onCloseClick),
-            )
-        }
-
-        Spacer(modifier = modifier.height(screenHeightDp(16.dp)))
+        CloseTopbar(
+            onCloseClick = onCloseClick,
+        )
 
         LazyColumn(
             modifier = modifier.fillMaxWidth(),
@@ -209,11 +199,11 @@ private fun QuestBehaviorCompleteScreen(
                 Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                 ByeBooButton(
-                    buttonText = "보리에게 답장 받기",
+                    buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
-                    onClick = { /*Todo: ai 버튼 연결 */ },
+                    onClick = onAiAnswerClick,
                 )
             }
         }
