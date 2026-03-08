@@ -73,18 +73,6 @@ class QuestViewModel
         fun onDateChange(newDate: LocalDate) {
             if (!TimeUtil.isValidDateRange(newDate)) return
 
-            _uiState.update { state ->
-                state.copy(
-                    commonJourneyState =
-                        state.commonJourneyState.copy(
-                            selectedDate = newDate,
-                            answers = emptyList<CommonAnswerModel>().toImmutableList(),
-                            hasNext = false,
-                            nextCursor = null,
-                        ),
-                )
-            }
-
             val cachedData = commonQuestCache[newDate]
             val isToday = newDate == TimeUtil.getNowKst()
 
@@ -92,9 +80,25 @@ class QuestViewModel
             paginationJob?.cancel()
 
             if (cachedData != null && !isToday) {
-                _uiState.update { it.copy(commonJourneyState = cachedData, isLoading = false) }
+                _uiState.update {
+                    it.copy(commonJourneyState = cachedData, isLoading = false)
+                }
             } else {
-                _uiState.update { it.copy(isLoading = true) }
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = true,
+                        commonJourneyState =
+                            CommonJourneyState(
+                                selectedDate = newDate,
+                                answers = emptyList<CommonAnswerModel>().toImmutableList(),
+                                question = "",
+                                answerCount = 0,
+                                hasNext = false,
+                                nextCursor = null,
+                            ),
+                    )
+                }
+
                 fetchJob =
                     viewModelScope.launch {
                         delay(300)
