@@ -58,19 +58,12 @@ class MyAnswerViewModel
         }
 
         private fun loadInitialAnswers() {
-            _uiState.update { it.copy(isLoading = true, hasNext = true, nextCursor = null) }
-
+            _uiState.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 questCommonRepository
-                    .getQuestCommonMyAnswer(cursor = null)
-                    .onSuccess { response ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                hasNext = response.hasNext,
-                                nextCursor = response.nextCursor,
-                            )
-                        }
+                    .refreshMyAnswers()
+                    .onSuccess {
+                        _uiState.update { it.copy(isLoading = false) }
                     }.onFailure {
                         _uiState.update { it.copy(isLoading = false) }
                         _sideEffect.emit(MyAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
@@ -79,23 +72,14 @@ class MyAnswerViewModel
         }
 
         fun loadMyAnswers() {
-            val state = _uiState.value
-
-            if (state.isLoading || !state.hasNext) return
+            if (_uiState.value.isLoading) return
 
             _uiState.update { it.copy(isLoading = true) }
-
             viewModelScope.launch {
                 questCommonRepository
-                    .getQuestCommonMyAnswer(cursor = state.nextCursor)
-                    .onSuccess { response ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                hasNext = response.hasNext,
-                                nextCursor = response.nextCursor,
-                            )
-                        }
+                    .loadMyAnswers()
+                    .onSuccess {
+                        _uiState.update { it.copy(isLoading = false) }
                     }.onFailure {
                         _uiState.update { it.copy(isLoading = false) }
                         _sideEffect.emit(MyAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))

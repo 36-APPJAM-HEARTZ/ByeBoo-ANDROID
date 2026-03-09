@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -105,14 +107,11 @@ fun MyAnswerScreen(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding =
-                PaddingValues(bottom = screenHeightDp(25.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(25.dp)),
             modifier = Modifier.fillMaxWidth(),
         ) {
             item {
-                BackTopbar(
-                    onBackClick = onBackClick,
-                )
+                BackTopbar(onBackClick = onBackClick)
             }
             item {
                 Text(
@@ -128,31 +127,51 @@ fun MyAnswerScreen(
                 )
             }
 
-            if (uiState.answers.isEmpty()) {
-                item {
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(top = screenHeightDp(184.dp)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text = "아직 작성한 답변이 없어요!",
-                            style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray400,
-                        )
+            when {
+                uiState.isLoading && uiState.answers.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .fillParentMaxHeight(0.7f),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                color = ByeBooTheme.colors.primary500,
+                            )
+                        }
                     }
                 }
-            } else {
-                items(
-                    items = uiState.answers,
-                    key = { it.answerId },
-                ) { answer ->
-                    MyAnswerItem(
-                        answer = answer,
-                        onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) },
-                    )
+
+                uiState.answers.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .fillParentMaxHeight(0.7f),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "아직 작성한 답변이 없어요!",
+                                style = ByeBooTheme.typography.body6,
+                                color = ByeBooTheme.colors.gray400,
+                            )
+                        }
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = uiState.answers,
+                        key = { it.answerId },
+                    ) { answer ->
+                        MyAnswerItem(
+                            answer = answer,
+                            onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) },
+                        )
+                    }
                 }
             }
         }

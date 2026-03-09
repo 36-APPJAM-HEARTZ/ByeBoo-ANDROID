@@ -5,7 +5,6 @@ import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
-import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -19,7 +18,9 @@ interface QuestCommonRepository {
         request: QuestCommonAnswerRequestModel,
     ): Result<Unit>
 
-    suspend fun getQuestCommonMyAnswer(cursor: Long? = null): Result<QuestCommonMyAnswerModel>
+    suspend fun refreshMyAnswers(): Result<Unit>
+
+    suspend fun loadMyAnswers(): Result<Unit>
 
     suspend fun patchQuestCommonAnswer(
         answerId: Long,
