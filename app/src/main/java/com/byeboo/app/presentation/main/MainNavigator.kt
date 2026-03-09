@@ -200,8 +200,8 @@ class MainNavigator(
     }
 
     fun navigateToQuestCommonWriting(
-        questId: Long? = 0,
-        answerId: Long? = 0,
+        questId: Long,
+        answerId: Long? = null,
         isEditMode: Boolean = false,
         navOptions: NavOptions? = null,
     ) {

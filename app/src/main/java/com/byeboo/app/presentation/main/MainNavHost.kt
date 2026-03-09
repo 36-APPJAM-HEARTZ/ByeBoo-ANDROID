@@ -132,6 +132,7 @@ fun MainNavHost(
             },
             navigateToQuestCommonEdit = { answerId, isEditMode ->
                 navigator.navigateToQuestCommonWriting(
+                    questId = 0L,
                     answerId = answerId,
                     isEditMode = isEditMode,
                     navOptions = keepStackNavOptions,
@@ -152,11 +153,11 @@ fun MainNavHost(
             navigateToQuestCommonAnswer = { answerId ->
                 navigator.navigateToQuestCommonAnswer(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions,
+                    navOptions = keepStackNavOptions,
                 )
             },
             navigateToQuestMyAnswers = {
-                navigator.navigateToQuestMyAnswers(navOptions = clearStackNavOptions)
+                navigator.navigateToQuestMyAnswers(navOptions = keepStackNavOptions)
             },
             navigateToQuestMyAnswerDetail = { answerId ->
                 navigator.navigateToQuestMyAnswerDetail(
@@ -165,7 +166,10 @@ fun MainNavHost(
                 )
             },
             navigateToQuestCommonWriting = { questId ->
-                navigator.navigateToQuestCommonWriting(questId = questId)
+                navigator.navigateToQuestCommonWriting(questId = questId,
+                    answerId = null,
+                    isEditMode = false
+                )
             },
             navigateToQuestFromComplete = {
                 navigator.navigateToQuestFromComplete()
