@@ -13,17 +13,17 @@ enum class QuestType(
 ) {
     RECORDING(
         "RECORDING",
-        "감정 직면",
+        "이별 극복",
         "FACE_EMOTION",
         R.drawable.img_recording_amulet_front,
         R.drawable.img_recording_amulet_back,
     ),
     ACTIVE(
         "ACTIVE",
-        "감정 정리",
+        "재회 준비",
         "PROCESS_EMOTION",
-        R.drawable.img_active_amulet_front,
-        R.drawable.img_active_amulet_back,
+        R.drawable.img_reunion_amulet_front,
+        R.drawable.img_reunion_amulet_back,
     ),
     ;
 

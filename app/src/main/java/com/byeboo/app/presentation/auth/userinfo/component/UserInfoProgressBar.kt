@@ -27,7 +27,7 @@ fun StepProgressBar(
         horizontalArrangement = Arrangement.spacedBy(screenWidthDp(6.dp)),
         modifier = modifier.padding(vertical = screenHeightDp(13.dp)),
     ) {
-        repeat(3) { index ->
+        repeat(2) { index ->
             Box(
                 modifier =
                     Modifier

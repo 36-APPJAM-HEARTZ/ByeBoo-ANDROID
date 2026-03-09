@@ -11,19 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
-import com.byeboo.app.domain.model.auth.QuestStyle
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.UserInfoQuestCard
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UserInfoQuestScreen(
-    selectedQuest: QuestStyle?,
-    onQuestSelect: (QuestStyle) -> Unit,
+    selectedQuest: OnboardingQuestStyle?,
+    onQuestSelect: (OnboardingQuestStyle) -> Unit,
 ) {
     val quests =
         persistentListOf(
-            QuestStyle.RECORDING,
-            QuestStyle.ACTIVE,
+            OnboardingQuestStyle.REUNION,
+            OnboardingQuestStyle.RECORDING,
         )
 
     Column {
@@ -31,11 +33,11 @@ fun UserInfoQuestScreen(
             title = "퀘스트 방식",
             guideText = "을 골라주세요",
             contentText = "나에게 맞는 방식으로 퀘스트를 받아볼 수 있어요.",
-            bottom = 20.dp,
+            bottom = screenHeightDp(20.dp),
         )
         Row(
-            modifier = Modifier.padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(12.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             quests.forEach { quest ->
@@ -48,13 +50,13 @@ fun UserInfoQuestScreen(
                     title = quest.displayText,
                     content =
                         when (quest) {
-                            QuestStyle.RECORDING -> "질문을 통해\n상황과 감정을\n정리해요"
-                            QuestStyle.ACTIVE -> "작은 미션을 통해\n몸과 마음을\n가볍게 해요"
+                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+                            OnboardingQuestStyle.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
                         },
                     imageRes =
                         when (quest) {
-                            QuestStyle.RECORDING -> R.drawable.ic_book
-                            QuestStyle.ACTIVE -> R.drawable.ic_shoes
+                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
+                            OnboardingQuestStyle.RECORDING -> R.drawable.img_bori_overcome
                         },
                     isSelected = selectedQuest == quest,
                     onCardClick = onCardClick,
