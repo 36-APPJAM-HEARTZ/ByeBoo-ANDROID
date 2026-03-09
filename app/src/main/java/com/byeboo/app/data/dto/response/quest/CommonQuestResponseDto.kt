@@ -34,3 +34,19 @@ data class QuestAnswerDto(
     @SerialName("content")
     val content: String,
 )
+
+@Serializable
+data class QuestCommonAnswerDetailResponseDto(
+    @SerialName("question")
+    val question: String,
+    @SerialName("writer")
+    val writer: String,
+    @SerialName("writtenAt")
+    val writtenAt: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("profileIcon")
+    val profileIcon: String,
+    @SerialName("writerId")
+    val writerId: Long,
+)
