@@ -43,7 +43,6 @@ import java.time.LocalDate
 @Composable
 fun CommonJourneyScreen(
     state: CommonJourneyState,
-    isLoading: Boolean,
     onMyAnswersClick: () -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
@@ -53,16 +52,15 @@ fun CommonJourneyScreen(
 ) {
     val listState = rememberLazyListState()
 
-    val shouldLoadMore =
-        remember {
-            derivedStateOf {
-                val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-                lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 5
-            }
+    val shouldLoadMore = remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null && lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 5
         }
+    }
 
     LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value && state.hasNext && !isLoading) {
+        if (shouldLoadMore.value && state.hasNext && !state.isLoading && !state.isPaginationLoading) {
             onLoadMore()
         }
     }
@@ -81,10 +79,9 @@ fun CommonJourneyScreen(
         ) {
             item {
                 Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = screenWidthDp(24.dp)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     DescriptionText(
                         title = "함께 이별을 극복하는 공간이에요",
@@ -108,11 +105,10 @@ fun CommonJourneyScreen(
 
             stickyHeader {
                 Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(ByeBooTheme.colors.background)
-                            .padding(horizontal = screenWidthDp(24.dp)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(ByeBooTheme.colors.background)
+                        .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     QuestDateSelector(
                         selectedDate = state.selectedDate,
@@ -122,13 +118,12 @@ fun CommonJourneyScreen(
                 }
             }
 
-            if (isLoading && state.answers.isEmpty()) {
+            if (state.isLoading && state.answers.isEmpty()) {
                 item {
                     Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.5f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillParentMaxHeight(0.5f),
                         contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator(color = ByeBooTheme.colors.primary500)
@@ -137,10 +132,9 @@ fun CommonJourneyScreen(
             } else {
                 item {
                     Column(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = screenWidthDp(24.dp)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = screenWidthDp(24.dp)),
                     ) {
                         Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
@@ -194,10 +188,9 @@ fun CommonJourneyScreen(
                 if (state.answers.isEmpty()) {
                     item {
                         Box(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .fillParentMaxHeight(0.5f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillParentMaxHeight(0.5f),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
@@ -216,20 +209,18 @@ fun CommonJourneyScreen(
                         CommonAnswerItem(
                             answer = answer,
                             onClick = { onAnswerClick(answer.answerId) },
-                            modifier =
-                                Modifier
-                                    .padding(horizontal = screenWidthDp(24.dp))
-                                    .padding(bottom = screenHeightDp(24.dp)),
+                            modifier = Modifier
+                                .padding(horizontal = screenWidthDp(24.dp))
+                                .padding(bottom = screenHeightDp(24.dp)),
                         )
                     }
 
-                    if (isLoading) {
+                    if (state.isPaginationLoading) {
                         item {
                             Box(
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = screenHeightDp(16.dp)),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = screenHeightDp(16.dp)),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator(color = ByeBooTheme.colors.primary500)
