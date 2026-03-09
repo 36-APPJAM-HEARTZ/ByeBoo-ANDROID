@@ -3,7 +3,7 @@ package com.byeboo.app.presentation.home.homeamulet
 import com.byeboo.app.R
 
 data class HomeAmuletState(
-    val journey: AmuletType = AmuletType.EMOTION_FACE,
+    val journey: AmuletType = AmuletType.RECORDING,
     val journeyDescription: String = "",
     val canFlip: Boolean = false,
 )
@@ -21,19 +21,19 @@ enum class AmuletType(
     val frontImg: Int,
     val backImg: Int,
 ) {
-    EMOTION_FACE(
-        "감정 직면",
-        R.drawable.img_recording_amulet_front,
-        R.drawable.img_recording_amulet_back,
+    REUNION(
+        journeyName = "재회 준비",
+        frontImg = R.drawable.img_reunion_amulet_front,
+        backImg = R.drawable.img_reunion_amulet_back,
     ),
-    EMOTION_ORGANIZE(
-        "감정 정리",
-        R.drawable.img_active_amulet_front,
-        R.drawable.img_active_amulet_back,
-    ),
-    ;
+    RECORDING(
+    journeyName = "이별 극복",
+    frontImg = R.drawable.img_recording_amulet_front,
+    backImg = R.drawable.img_recording_amulet_back,
+    );
 
     companion object {
-        fun from(journeyName: String): AmuletType = entries.find { it.journeyName == journeyName } ?: EMOTION_FACE
+        fun from(journeyName: String): AmuletType =
+            entries.find { it.journeyName == journeyName } ?: RECORDING
     }
 }

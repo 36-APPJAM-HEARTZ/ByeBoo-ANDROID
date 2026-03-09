@@ -51,7 +51,7 @@ class HomeViewModel
 
         private fun loadInitialData() {
             viewModelScope.launch {
-                val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+                val journey = questStateRepository.getUserJourney() ?: "재회 준비"
                 val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
 
                 var status = HomeStatus.INITIAL_START

@@ -1,7 +1,5 @@
 package com.byeboo.app.domain.model.quest
 
-import com.byeboo.app.domain.model.auth.QuestStyle
-
 data class QuestDetailModel(
     val step: String,
     val stepNumber: Long,
@@ -9,3 +7,16 @@ data class QuestDetailModel(
     val questStyle: QuestStyle,
     val question: String,
 )
+
+enum class QuestStyle(
+    val displayText: String,
+) {
+    RECORDING("질문형"),
+    ACTIVE("행동형"),
+}
+
+fun QuestStyle.toJourneyText(): String =
+    when (this) {
+        QuestStyle.RECORDING -> "질문형"
+        QuestStyle.ACTIVE -> "행동형"
+    }

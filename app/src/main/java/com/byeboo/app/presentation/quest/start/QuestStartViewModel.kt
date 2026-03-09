@@ -52,7 +52,7 @@ class QuestStartViewModel
                 }
             }
             viewModelScope.launch {
-                val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+                val journey = questStateRepository.getUserJourney() ?: "재회 준비"
                 _uiState.update { it.copy(journeyName = journey) }
             }
             _uiState.update {
