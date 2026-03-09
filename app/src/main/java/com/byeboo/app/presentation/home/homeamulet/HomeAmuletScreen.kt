@@ -122,14 +122,16 @@ private fun HomeAmuletScreen(
                     }
                 }
 
-                HomeAmuletCard(
-                    frontImageRes = uiState.journey.frontImg,
-                    backImageRes = uiState.journey.backImg,
-                    description = uiState.journeyDescription,
-                    isFlipped = isFlipped,
-                    onFlip = onFlip,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                uiState.journey?.let { journey ->
+                    HomeAmuletCard(
+                        frontImageRes = journey.frontImg,
+                        backImageRes = journey.backImg,
+                        description = uiState.journeyDescription,
+                        isFlipped = isFlipped,
+                        onFlip = onFlip,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 Box(
                     modifier = Modifier.height(screenHeightDp(80.dp)),

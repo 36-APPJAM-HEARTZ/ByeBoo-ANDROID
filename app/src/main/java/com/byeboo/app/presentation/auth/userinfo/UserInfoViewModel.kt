@@ -83,43 +83,47 @@ class UserInfoViewModel
             )
         }
 
-    fun finishUserInfo() {
-        if (hasSubmitted) return
-        hasSubmitted = true
+        fun finishUserInfo() {
+            if (hasSubmitted) return
+            hasSubmitted = true
 
-        viewModelScope.launch {
-            if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
-                hasSubmitted = false
-                return@launch
-            }
-            val userInfo = UserInfoModel(
-                name = _uiState.value.nickname,
-                questStyle = _uiState.value.selectedQuest?.name.orEmpty(),
-            )
-
-            val result = userRepository.updateUserInfo(userInfo)
-
-            if (result.isSuccess) {
-                _uiState.value.selectedQuest?.let { selectedQuest ->
-                    trackQuestSelected(selectedQuest)
-                    questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
-                    userRepository.setUserRegistered(true)
+            viewModelScope.launch {
+                if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
+                    hasSubmitted = false
+                    return@launch
                 }
-                saveFcmToken()
+                val userInfo =
+                    UserInfoModel(
+                        name = _uiState.value.nickname,
+                        questStyle =
+                            _uiState.value.selectedQuest
+                                ?.name
+                                .orEmpty(),
+                    )
 
-                val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
-                if (isRegisteredUser) {
-                    fcmTokenRepository.allowQuestAlarm()
+                val result = userRepository.updateUserInfo(userInfo)
+
+                if (result.isSuccess) {
+                    _uiState.value.selectedQuest?.let { selectedQuest ->
+                        trackQuestSelected(selectedQuest)
+                        questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
+                        userRepository.setUserRegistered(true)
+                    }
+                    saveFcmToken()
+
+                    val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
+                    if (isRegisteredUser) {
+                        fcmTokenRepository.allowQuestAlarm()
+                    }
+                    _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
+                } else {
+                    hasSubmitted = false
+                    _sideEffect.emit(
+                        UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                    )
                 }
-                _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
-            } else {
-                hasSubmitted = false
-                _sideEffect.emit(
-                    UserInfoSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
-                )
             }
         }
-    }
 
         private fun saveFcmToken() {
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
