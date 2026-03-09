@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.BuildConfig
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
@@ -139,11 +140,21 @@ class MyPageViewModel
             }
         }
 
+        fun onBlockedUsersClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(MyPageSideEffect.NavigateToBlockedUsers)
+            }
+        }
+
         private fun emitOpenUrl(url: String) {
             viewModelScope.launch {
                 _sideEffect.emit(MyPageSideEffect.OpenUrl(url))
             }
         }
+
+        fun onBreakupSupportChatClicked() = emitOpenUrl(BuildConfig.BYEBOO_SUPPORT_CHAT)
+
+        fun onInstagramClicked() = emitOpenUrl(BuildConfig.BYEBOO_INSTAGRAM)
 
         fun onAskingByeBooClicked() = emitOpenUrl(BuildConfig.BYEBOO_ASKING)
 
@@ -180,7 +191,9 @@ class MyPageViewModel
                         _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
                     }.onFailure {
                         _sideEffect.emit(
-                            MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            MyPageSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }
@@ -196,7 +209,9 @@ class MyPageViewModel
                         _sideEffect.emit(MyPageSideEffect.NavigateToSplash)
                     }.onFailure {
                         _sideEffect.emit(
-                            MyPageSideEffect.ShowSnackBar(message = "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            MyPageSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }

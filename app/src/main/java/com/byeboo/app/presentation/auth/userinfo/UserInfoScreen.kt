@@ -63,7 +63,7 @@ fun UserInfoRoute(
             when (effect) {
                 is UserInfoSideEffect.NavigateToLoading -> navigateToLoading()
                 is UserInfoSideEffect.ShowSnackBar -> {
-                    showSnackBar(effect.message)
+                    showSnackBar(effect.snackBarType)
                 }
             }
         }

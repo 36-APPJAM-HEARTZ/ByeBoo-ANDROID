@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
@@ -51,10 +52,10 @@ fun QuestTipRoute(
     val showSnackBar = LocalSnackBarTrigger.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
                 is QuestTipSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(sideEffect.message)
+                is QuestTipSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -94,7 +95,10 @@ private fun QuestTipScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        QuestTipHeader(onCloseClick = onCloseClick)
+        CloseTopbar(
+            onCloseClick = onCloseClick,
+            title = "퀘스트 작성 TIP",
+        )
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),

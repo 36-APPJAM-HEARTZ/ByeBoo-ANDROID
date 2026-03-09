@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.tip
 
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -26,6 +27,6 @@ sealed interface QuestTipSideEffect {
     data object NavigateToQuest : QuestTipSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : QuestTipSideEffect
 }

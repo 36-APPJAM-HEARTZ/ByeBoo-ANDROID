@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -22,7 +22,6 @@ import coil.compose.AsyncImage
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
-import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 internal fun QuestPhotoPicker(
@@ -43,7 +42,7 @@ internal fun QuestPhotoPicker(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(96.dp))
+                .fillMaxWidth()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = ByeBooTheme.colors.whiteAlpha5),
@@ -52,6 +51,7 @@ internal fun QuestPhotoPicker(
             imageUrl = imageUrl,
             isUploaded = uploadedImage,
             onImageClick = { photoPickerLauncher.launch("image/*") },
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -66,8 +66,6 @@ private fun ImageUploadButton(
     Box(
         modifier =
             modifier
-                .width(screenWidthDp(96.dp))
-                .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
                 .noRippleClickable { onImageClick() },
         contentAlignment = Alignment.Center,
@@ -88,7 +86,7 @@ private fun ImageUploadButton(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus),
                         contentDescription = null,
-                        tint = ByeBooTheme.colors.primary300,
+                        tint = ByeBooTheme.colors.gray500,
                     )
                 }
             }

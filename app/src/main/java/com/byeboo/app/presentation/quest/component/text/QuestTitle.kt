@@ -3,10 +3,8 @@ package com.byeboo.app.presentation.quest.component.text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -15,10 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.component.tag.SmallTag
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun QuestTitle(
@@ -29,7 +26,7 @@ fun QuestTitle(
 ) {
     val date =
         remember(createdAt) {
-            LocalDate.parse(createdAt).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+            DateUtil.formatToDotDate(createdAt)
         }
     Column(
         modifier =
@@ -39,11 +36,10 @@ fun QuestTitle(
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Row(
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SmallTag(tagText = "STEP $stepNumber", tagColor = ByeBooTheme.colors.gray500)
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
             Text(
                 text = "${questNumber}번째 퀘스트",

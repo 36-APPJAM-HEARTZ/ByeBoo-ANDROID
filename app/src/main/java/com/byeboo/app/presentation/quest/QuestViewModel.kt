@@ -1,20 +1,27 @@
 package com.byeboo.app.presentation.quest
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
-import com.byeboo.app.core.util.getFormattedDate
+import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
-import com.byeboo.app.domain.usecase.QuestUseCase
+import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.domain.usecase.quest.QuestUseCase
+import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestState
+import com.byeboo.app.presentation.quest.model.QuestTab
 import com.byeboo.app.presentation.quest.util.QuestCountdownTimer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,34 +33,198 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 @HiltViewModel
 class QuestViewModel
     @Inject
     constructor(
+        private val savedStateHandle: SavedStateHandle,
         private val questUseCase: QuestUseCase,
-        private val mapper: QuestUiModelMapper,
         private val userRepository: UserRepository,
+        private val commonQuestRepository: QuestCommonRepository,
         private val mixpanelUtil: MixpanelUtil,
+        private val mapper: QuestUiModelMapper,
     ) : ViewModel() {
-        private val _uiState = MutableStateFlow(QuestUiState())
+        private val _uiState =
+            MutableStateFlow(
+                QuestUiState(
+                    selectedTab =
+                        savedStateHandle
+                            .get<String>("selectedTab")
+                            ?.let { QuestTab.valueOf(it) }
+                            ?: QuestTab.MY_JOURNEY,
+                ),
+            )
         val uiState: StateFlow<QuestUiState> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<QuestSideEffect>()
         val sideEffect: SharedFlow<QuestSideEffect> = _sideEffect.asSharedFlow()
 
+        private var fetchJob: Job? = null
+        private var paginationJob: Job? = null
         private var countdownJob: Job? = null
 
         init {
             viewModelScope.launch {
                 userRepository.getNickname().collect { nickname ->
-                    _uiState.update {
-                        it.copy(userName = nickname)
-                    }
+                    _uiState.update { it.copy(userName = nickname) }
                 }
             }
             loadQuests()
+            refetchCommonQuests(uiState.value.commonJourneyState.selectedDate)
+            observeAnswerSubmitted()
+            observeRefreshEvent()
+        }
+
+        fun onTabClicked(tab: QuestTab) {
+            savedStateHandle["selectedTab"] = tab.name
+            _uiState.update { it.copy(selectedTab = tab) }
+        }
+
+        fun onDateChange(newDate: LocalDate) {
+            if (!TimeUtil.isValidDateRange(newDate)) return
+
+            paginationJob?.cancel()
+
+            _uiState.update { state ->
+                state.copy(
+                    commonJourneyState =
+                        CommonJourneyState(
+                            selectedDate = newDate,
+                            isLoading = true,
+                        ),
+                )
+            }
+            refetchCommonQuests(newDate)
+        }
+
+        private fun refetchCommonQuests(date: LocalDate) {
+            fetchJob?.cancel()
+            fetchJob =
+                viewModelScope.launch {
+                    delay(100)
+                    fetchCommonQuests(date)
+                }
+        }
+
+        private suspend fun fetchCommonQuests(date: LocalDate) {
+            runCatching {
+                commonQuestRepository
+                    .getCommonQuests(
+                        date = date.toString(),
+                        cursor = null,
+                        limit = 20,
+                    ).getOrThrow()
+            }.map { domainModel ->
+                val uiAnswers =
+                    domainModel.answers
+                        .map { answer ->
+                            CommonAnswerModel(
+                                answerId = answer.answerId,
+                                writer = answer.writer,
+                                profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                content = answer.content,
+                            )
+                        }.toImmutableList()
+
+                uiState.value.commonJourneyState.copy(
+                    isLoading = false,
+                    isPaginationLoading = false,
+                    question = domainModel.question,
+                    questId = domainModel.questId,
+                    answerCount = domainModel.answerCount.toInt(),
+                    answers = uiAnswers,
+                    isMyAnswerDone = domainModel.isAnswered,
+                    selectedDate = date,
+                    hasNext = domainModel.hasNext,
+                    nextCursor = domainModel.nextCursor,
+                )
+            }.onSuccess { updatedCommonState ->
+                _uiState.update { state ->
+                    if (state.commonJourneyState.selectedDate == date) {
+                        state.copy(commonJourneyState = updatedCommonState)
+                    } else {
+                        state
+                    }
+                }
+            }.onFailure { t ->
+                if (t is CancellationException) throw t
+                _uiState.update { state ->
+                    state.copy(
+                        commonJourneyState =
+                            state.commonJourneyState.copy(
+                                isLoading = false,
+                                isPaginationLoading = false,
+                            ),
+                    )
+                }
+                _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+            }
+        }
+
+        fun loadNextPage() {
+            val currentState = uiState.value.commonJourneyState
+            val requestDate = currentState.selectedDate
+
+            if (currentState.isLoading ||
+                currentState.isPaginationLoading ||
+                !currentState.hasNext ||
+                currentState.nextCursor == null
+            ) {
+                return
+            }
+
+            paginationJob?.cancel()
+            paginationJob =
+                viewModelScope.launch {
+                    _uiState.update { it.copy(commonJourneyState = it.commonJourneyState.copy(isPaginationLoading = true)) }
+
+                    runCatching {
+                        commonQuestRepository
+                            .getCommonQuests(
+                                date = requestDate.toString(),
+                                cursor = currentState.nextCursor,
+                                limit = 20,
+                            ).getOrThrow()
+                    }.onSuccess { domainModel ->
+                        val moreAnswers =
+                            domainModel.answers.map { answer ->
+                                CommonAnswerModel(
+                                    answerId = answer.answerId,
+                                    writer = answer.writer,
+                                    profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                    content = answer.content,
+                                )
+                            }
+
+                        _uiState.update { state ->
+                            if (state.commonJourneyState.selectedDate != requestDate) {
+                                return@update state.copy(
+                                    commonJourneyState = state.commonJourneyState.copy(isPaginationLoading = false),
+                                )
+                            }
+
+                            state.copy(
+                                commonJourneyState =
+                                    state.commonJourneyState.copy(
+                                        answers = (state.commonJourneyState.answers + moreAnswers).toImmutableList(),
+                                        hasNext = domainModel.hasNext,
+                                        nextCursor = domainModel.nextCursor,
+                                        isPaginationLoading = false,
+                                    ),
+                            )
+                        }
+                    }.onFailure { t ->
+                        if (t is CancellationException) throw t
+                        _uiState.update { it.copy(commonJourneyState = it.commonJourneyState.copy(isPaginationLoading = false)) }
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }
+                }
         }
 
         private fun loadQuests() {
@@ -70,11 +241,14 @@ class QuestViewModel
                         )
                         _uiState.update {
                             it.copy(
-                                questGroups = output.questGroups,
-                                currentStepIndex = output.activeStepIndex,
-                                progressPeriod = output.progressPeriod,
-                                journeyTitle = output.journeyTitle,
-                                completedQuestCount = output.questCompletedCount,
+                                myJourneyState =
+                                    it.myJourneyState.copy(
+                                        questGroups = output.questGroups,
+                                        currentStepIndex = output.activeStepIndex,
+                                        progressPeriod = output.progressPeriod,
+                                        journeyTitle = output.journeyTitle,
+                                        completedQuestCount = output.questCompletedCount,
+                                    ),
                                 error = null,
                             )
                         }
@@ -84,119 +258,132 @@ class QuestViewModel
                             countdownJob =
                                 QuestCountdownTimer
                                     .countdownFlow(output.openAt, output.serverNow)
-                                    .onEach { minutes ->
-                                        updateTimerLockedMinutes(minutes)
-                                    }.onCompletion {
-                                        viewModelScope.launch { unlockTimerLocked() }
-                                    }.launchIn(viewModelScope)
+                                    .onEach { minutes -> updateTimerLockedMinutes(minutes) }
+                                    .onCompletion { viewModelScope.launch { unlockTimerLocked() } }
+                                    .launchIn(viewModelScope)
                         }
-                    }.onFailure { t ->
-                        _sideEffect.emit(
-                            QuestSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
-                        )
+                    }.onFailure {
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
             }
         }
 
         private fun updateTimerLockedMinutes(minutes: Long) {
             _uiState.update { state ->
-                state.copy(
-                    questGroups =
-                        state.questGroups
-                            .map { group ->
-                                group.copy(
-                                    quests =
-                                        group.quests
-                                            .map { quest ->
-                                                if (quest.state is QuestState.TimerLocked) {
-                                                    quest.copy(
-                                                        state =
-                                                            quest.state.copy(
-                                                                remainTime = minutes,
-                                                            ),
-                                                    )
-                                                } else {
-                                                    quest
-                                                }
-                                            }.toImmutableList(),
-                                )
-                            }.toImmutableList(),
-                )
+                val updatedGroups =
+                    state.myJourneyState.questGroups
+                        .map { group ->
+                            group.copy(
+                                quests =
+                                    group.quests
+                                        .map { quest ->
+                                            if (quest.state is QuestState.TimerLocked) {
+                                                quest.copy(state = quest.state.copy(remainTime = minutes))
+                                            } else {
+                                                quest
+                                            }
+                                        }.toImmutableList(),
+                            )
+                        }.toImmutableList()
+                state.copy(myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups))
             }
         }
 
         private fun unlockTimerLocked() {
             _uiState.update { state ->
-                state.copy(
-                    questGroups =
-                        state.questGroups
-                            .map { group ->
-                                group.copy(
-                                    quests =
-                                        group.quests
-                                            .map { quest ->
-                                                if (quest.state is QuestState.TimerLocked) {
-                                                    quest.copy(state = QuestState.Available)
-                                                } else {
-                                                    quest
-                                                }
-                                            }.toImmutableList(),
-                                )
-                            }.toImmutableList(),
-                )
+                val updatedGroups =
+                    state.myJourneyState.questGroups
+                        .map { group ->
+                            group.copy(
+                                quests =
+                                    group.quests
+                                        .map { quest ->
+                                            if (quest.state is QuestState.TimerLocked) {
+                                                quest.copy(state = QuestState.Available)
+                                            } else {
+                                                quest
+                                            }
+                                        }.toImmutableList(),
+                            )
+                        }.toImmutableList()
+                state.copy(myJourneyState = state.myJourneyState.copy(questGroups = updatedGroups))
             }
         }
 
         fun onQuitDismissModal() {
-            _uiState.update { it.copy(showQuitModal = false) }
+            _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
         }
 
-        fun onTipClick() {
-            val quest = uiState.value.selectedQuest ?: return
+        fun onTipClicked() {
+            val quest = uiState.value.myJourneyState.selectedQuest ?: return
             viewModelScope.launch {
                 mixpanelUtil.trackEvent(
                     eventName = "quest_tip_pageview",
-                    properties =
-                        mapOf(
-                            "quest_number" to quest.questNumber,
-                        ),
+                    properties = mapOf("quest_number" to quest.questNumber),
                 )
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestTip(quest.questId, quest.type))
             }
         }
 
         fun onQuestStart() {
-            val quest = uiState.value.selectedQuest ?: return
+            val quest = uiState.value.myJourneyState.selectedQuest ?: return
             trackQuest(quest)
             viewModelScope.launch {
-                _uiState.update { it.copy(showQuitModal = false) }
+                _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
                 when (quest.type) {
-                    QuestType.RECORDING ->
-                        _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
-
-                    QuestType.ACTIVE ->
-                        _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
+                    QuestType.RECORDING -> _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
+                    QuestType.ACTIVE -> _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
                 }
             }
         }
 
-        fun onQuestClick(questId: Long) {
+        fun onQuestClicked(questId: Long) {
             viewModelScope.launch {
                 val quest =
-                    uiState.value.questGroups
+                    uiState.value.myJourneyState.questGroups
                         .flatMap { it.quests }
                         .find { it.questId == questId }
 
-                when (quest?.state) {
-                    is QuestState.Available ->
-                        _uiState.update { it.copy(selectedQuest = quest, showQuitModal = true) }
-
-                    is QuestState.Complete ->
-                        handleCompletedQuestClick(quest)
-
-                    else -> Unit
+                if (quest?.state is QuestState.Available) {
+                    _uiState.update {
+                        it.copy(myJourneyState = it.myJourneyState.copy(selectedQuest = quest, showQuitModal = true))
+                    }
+                } else if (quest?.state is QuestState.Complete) {
+                    handleCompletedQuestClick(quest)
                 }
             }
+        }
+
+        fun onMyAnswersClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswers)
+            }
+        }
+
+        fun onOtherAnswerClicked(answerId: Long) {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
+            }
+        }
+
+        fun onCommonQuestClicked(questId: Long) {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId))
+            }
+        }
+
+        fun onCommonQuestCompleted() {
+            savedStateHandle["selectedTab"] = QuestTab.COMMON_JOURNEY.name
+            _uiState.update {
+                it.copy(
+                    selectedTab = QuestTab.COMMON_JOURNEY,
+                    showCompleteModal = true,
+                )
+            }
+        }
+
+        fun closeCompleteModal() {
+            _uiState.update { it.copy(showCompleteModal = false) }
         }
 
         private suspend fun handleCompletedQuestClick(quest: Quest) {
@@ -213,7 +400,6 @@ class QuestViewModel
                     QuestType.RECORDING -> "질문형"
                     QuestType.ACTIVE -> "행동형"
                 }
-
             mixpanelUtil.trackEvent(
                 eventName = "quest_write_pageview",
                 properties =
@@ -223,5 +409,24 @@ class QuestViewModel
                         "quest_type" to questType,
                     ),
             )
+        }
+
+        private fun observeRefreshEvent() {
+            viewModelScope.launch {
+                commonQuestRepository.refreshEvent.collect {
+                    val currentDate = uiState.value.commonJourneyState.selectedDate
+                    refetchCommonQuests(currentDate)
+                }
+            }
+        }
+
+        private fun observeAnswerSubmitted() {
+            viewModelScope.launch {
+                commonQuestRepository.answerSubmittedEvent.collect {
+                    val today = TimeUtil.getNowKst()
+                    refetchCommonQuests(today)
+                    onCommonQuestCompleted()
+                }
+            }
         }
     }

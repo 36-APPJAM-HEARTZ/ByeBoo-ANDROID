@@ -1,11 +1,13 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestreview
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import java.time.LocalDate
 
 data class OffboardingQuestReviewState(
-    val questId: Long = 0,
+    val isLoading: Boolean = true,
     val stepNumber: Long = 0,
     val questNumber: Long = 0,
     val createdAt: String = LocalDate.now().toString(),
@@ -17,6 +19,7 @@ data class OffboardingQuestReviewState(
     val emotionDescription: String = "",
     val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
     val questType: QuestType = QuestType.RECORDING,
+    val isExistedAiAnswer: Boolean = false,
 )
 
 sealed interface OffboardingQuestReviewSideEffect {
@@ -37,7 +40,13 @@ sealed interface OffboardingQuestReviewSideEffect {
         val imageKey: String,
     ) : OffboardingQuestReviewSideEffect
 
+    data class NavigateToQuestAiAnswer(
+        val questId: Long,
+        val isExistedAiAnswer: Boolean,
+        val aiAnswerOrigin: AiAnswerOrigin,
+    ) : OffboardingQuestReviewSideEffect
+
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : OffboardingQuestReviewSideEffect
 }

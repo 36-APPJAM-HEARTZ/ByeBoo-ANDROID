@@ -15,6 +15,7 @@ import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
 import com.byeboo.app.presentation.home.navigation.navigateToHome
 import com.byeboo.app.presentation.home.navigation.navigateToHomeAmulet
 import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
+import com.byeboo.app.presentation.mypage.navigation.navigateToBlockedUsers
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
@@ -25,8 +26,15 @@ import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQ
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingQuestReview
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehavior
 import com.byeboo.app.presentation.quest.behavior.navigation.navigateToQuestBehaviorComplete
+import com.byeboo.app.presentation.quest.common.navigation.navigateToQuestCommonWriting
+import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import com.byeboo.app.presentation.quest.navigation.Quest
+import com.byeboo.app.presentation.quest.navigation.QuestResultKey
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestAiAnswer
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswerDetail
+import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswers
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestStart
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestTip
@@ -141,6 +149,14 @@ class MainNavigator(
         navController.navigate(route = Quest, navOptions = options)
     }
 
+    fun navigateToQuestFromComplete() {
+        navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set(QuestResultKey.COMMON_COMPLETED, true)
+
+        navController.popBackStack()
+    }
+
     fun navigateToQuestTip(
         questId: Long,
         questType: QuestType,
@@ -183,6 +199,20 @@ class MainNavigator(
         )
     }
 
+    fun navigateToQuestCommonWriting(
+        questId: Long,
+        answerId: Long? = null,
+        isEditMode: Boolean = false,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestCommonWriting(
+            questId = questId,
+            answerId = answerId,
+            isEditMode = isEditMode,
+            navOptions = navOptions,
+        )
+    }
+
     fun navigateToQuestRecordingComplete(
         questId: Long,
         navOptions: NavOptions? = null,
@@ -197,11 +227,43 @@ class MainNavigator(
         navController.navigateToQuestBehaviorComplete(questId = questId, navOptions = navOptions)
     }
 
+    fun navigateToQuestCommonAnswer(
+        answerId: Long,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestCommonAnswer(answerId = answerId, navOptions = navOptions)
+    }
+
+    fun navigateToQuestMyAnswers(navOptions: NavOptions? = null) {
+        navController.navigateToQuestMyAnswers(navOptions = navOptions)
+    }
+
+    fun navigateToQuestMyAnswerDetail(
+        answerId: Long,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
+    }
+
     fun navigateToQuestReview(
         questId: Long,
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestReview(questId = questId, navOptions = navOptions)
+    }
+
+    fun navigateToQuestAiAnswer(
+        questId: Long,
+        isExistedAiAnswer: Boolean,
+        aiAnswerOrigin: AiAnswerOrigin,
+        navOptions: NavOptions? = null,
+    ) {
+        navController.navigateToQuestAiAnswer(
+            questId = questId,
+            isExistedAiAnswer = isExistedAiAnswer,
+            aiAnswerOrigin = aiAnswerOrigin,
+            navOptions = navOptions,
+        )
     }
 
     fun navigateToMyPage(navOptions: NavOptions? = null) {
@@ -210,6 +272,10 @@ class MainNavigator(
 
     fun navigateToEditProfile(navOptions: NavOptions) {
         navController.navigateToEditProfile(navOptions)
+    }
+
+    fun navigateToBlockedUsers(navOptions: NavOptions) {
+        navController.navigateToBlockedUsers(navOptions)
     }
 
     fun navigateToTutorial(navOptions: NavOptions) {

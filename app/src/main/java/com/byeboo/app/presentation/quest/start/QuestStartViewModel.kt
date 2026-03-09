@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
-import com.byeboo.app.core.util.getFormattedDate
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.NewJourneyRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -88,7 +89,9 @@ class QuestStartViewModel
                         _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
                     } else {
                         _sideEffect.emit(
-                            QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestStartSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
                 }
@@ -125,7 +128,9 @@ class QuestStartViewModel
                         _sideEffect.emit(QuestStartSideEffect.NavigateToQuest)
                     }.onFailure { e ->
                         _sideEffect.emit(
-                            QuestStartSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            QuestStartSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }

@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.home.homeamulet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
@@ -68,7 +69,9 @@ class HomeAmuletViewModel
                         )
                     }.onFailure {
                         _sideEffect.emit(
-                            HomeAmuletSideEffect.ShowSnackBar("서버에 연결할 수 없습니다. 잠시 후 시도해 주세요."),
+                            HomeAmuletSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
             }

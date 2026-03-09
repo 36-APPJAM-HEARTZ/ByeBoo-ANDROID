@@ -1,7 +1,6 @@
 package com.byeboo.app.presentation.offboarding.offboardingquestcompleted
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,20 +12,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.tag.MiddleTag
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
+import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.type.MiddleTagType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -56,7 +51,7 @@ fun OffboardingQuestCompletedRoute(
                         effect.questId,
                         effect.journey,
                     )
-                is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is QuestCompletedSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -89,14 +84,8 @@ private fun OffboardingQuestCompletedScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cancel),
-            contentDescription = null,
-            tint = ByeBooTheme.colors.white,
-            modifier =
-                Modifier
-                    .align(Alignment.End)
-                    .clickable(onClick = onCancelClick),
+        CloseTopbar(
+            onCloseClick = onCancelClick,
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))

@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.offboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
@@ -67,7 +68,7 @@ class OffboardingJourneyViewModel
                     }.onFailure { e ->
                         _sideEffect.emit(
                             OffboardingJourneySideEffect.ShowSnackBar(
-                                "서버에 연결할 수 없습니다. 잠시 후 시도해 주세요.",
+                                snackBarType = CustomSnackBarType.ALERT,
                             ),
                         )
                     }

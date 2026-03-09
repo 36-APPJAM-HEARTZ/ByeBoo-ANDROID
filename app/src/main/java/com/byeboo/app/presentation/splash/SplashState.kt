@@ -1,5 +1,7 @@
 package com.byeboo.app.presentation.splash
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+
 sealed interface SplashStateSideEffect {
     data object ShowLoginButton : SplashStateSideEffect
 
@@ -16,6 +18,6 @@ sealed interface SplashStateSideEffect {
     data object RequestNotificationPermission : SplashStateSideEffect
 
     data class ShowSnackBar(
-        val message: String,
+        val snackBarType: CustomSnackBarType,
     ) : SplashStateSideEffect
 }

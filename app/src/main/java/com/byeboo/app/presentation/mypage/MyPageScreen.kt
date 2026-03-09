@@ -39,24 +39,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
+import com.byeboo.app.core.designsystem.component.topbar.ByeBooTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.hasNotificationPermission
 import com.byeboo.app.core.util.openUrl
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.mypage.component.BasicNotificationModal
-import com.byeboo.app.presentation.mypage.component.MyPageModal
 import com.byeboo.app.presentation.mypage.component.NotificationToggle
+import com.byeboo.app.presentation.mypage.component.modal.BasicNotificationModal
+import com.byeboo.app.presentation.mypage.component.modal.DeleteAccountModal
+import com.byeboo.app.presentation.mypage.component.modal.LogoutModal
 
 @Composable
 fun MyPageRoute(
@@ -64,6 +64,7 @@ fun MyPageRoute(
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToSplash: () -> Unit,
+    navigateToBlockedUsers: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: MyPageViewModel = hiltViewModel(),
@@ -141,7 +142,8 @@ fun MyPageRoute(
                 is MyPageSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is MyPageSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is MyPageSideEffect.NavigateToSplash -> navigateToSplash()
-                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.message)
+                is MyPageSideEffect.NavigateToBlockedUsers -> navigateToBlockedUsers()
+                is MyPageSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
     }
@@ -179,33 +181,26 @@ fun MyPageRoute(
     }
 
     if (uiState.showLogoutModal) {
-        MyPageModal(
+        LogoutModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            myPageModalMainText = "로그아웃하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.LOGOUT) },
-            onConfirmClick = viewModel::confirmLogout,
-            onConfirmText = "로그아웃",
+            onLogoutClick = viewModel::confirmLogout,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
     if (uiState.showDeleteAccountModal) {
-        MyPageModal(
+        DeleteAccountModal(
             onDismissRequest = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            myPageModalMainText = "정말 탈퇴하시겠어요?",
             onCancelClick = { viewModel.onDismissModal(ModalType.DELETE_ACCOUNT) },
-            onConfirmClick = viewModel::confirmWithdraw,
-            onConfirmText = "탈퇴하기",
-            myPageModalSubText = "탈퇴 시 모든 데이터가 삭제됩니다.",
+            onDeleteAccountClick = viewModel::confirmWithdraw,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = screenWidthDp(48.dp)),
-            dialogProperties = DialogProperties(usePlatformDefaultWidth = false),
         )
     }
 
@@ -218,6 +213,9 @@ fun MyPageRoute(
         onAskingByeBooClick = viewModel::onAskingByeBooClicked,
         onServiceWithByeBooClick = viewModel::onServiceWithByeBooClicked,
         onAlarmToggleClick = onAlarmToggleClicked,
+        onBreakupSupportChatClick = viewModel::onBreakupSupportChatClicked,
+        onInstagramClick = viewModel::onInstagramClicked,
+        onBlockedUsersClick = viewModel::onBlockedUsersClicked,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClicked,
         onTermsOfServiceClick = viewModel::onTermsOfServiceClicked,
         onLogoutClick = viewModel::onLogoutClicked,
@@ -236,6 +234,9 @@ private fun MyPageScreen(
     onAskingByeBooClick: () -> Unit,
     onServiceWithByeBooClick: () -> Unit,
     onAlarmToggleClick: (Boolean) -> Unit,
+    onBreakupSupportChatClick: () -> Unit,
+    onInstagramClick: () -> Unit,
+    onBlockedUsersClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -252,18 +253,7 @@ private fun MyPageScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        Text(
-            text = "내 정보",
-            color = ByeBooTheme.colors.white,
-            style = ByeBooTheme.typography.sub1,
-            textAlign = TextAlign.Center,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(ByeBooTheme.colors.background)
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(top = screenHeightDp(43.dp), bottom = screenHeightDp(16.dp)),
-        )
+        MyPageTopbar()
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -327,6 +317,19 @@ private fun MyPageScreen(
             }
 
             item {
+                CommunitySection(
+                    onBreakupSupportChatClick = onBreakupSupportChatClick,
+                    onInstagramClick = onInstagramClick,
+                )
+            }
+
+            item {
+                SettingsSection(
+                    onBlockedUsersClick = onBlockedUsersClick,
+                )
+            }
+
+            item {
                 TermsSection(
                     onPrivacyPolicyClick = onPrivacyPolicyClick,
                     onTermsOfServiceClick = onTermsOfServiceClick,
@@ -341,6 +344,19 @@ private fun MyPageScreen(
             }
         }
     }
+}
+
+@Composable
+private fun MyPageTopbar(modifier: Modifier = Modifier) {
+    ByeBooTopbar(
+        title = "내 정보",
+        textColor = ByeBooTheme.colors.gray50,
+        textStyle = ByeBooTheme.typography.sub1,
+        modifier =
+            modifier
+                .padding(horizontal = screenWidthDp(24.dp))
+                .padding(top = screenHeightDp(43.dp)),
+    )
 }
 
 @Composable
@@ -493,10 +509,11 @@ private fun AskingSection(
     onServiceWithByeBooClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(36.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = screenHeightDp(36.dp), bottom = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -519,7 +536,6 @@ private fun AskingSection(
             modifier = Modifier.clickable(onClick = onServiceWithByeBooClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -528,10 +544,11 @@ private fun NotificationSection(
     onAlarmToggleClick: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -571,7 +588,68 @@ private fun NotificationSection(
             }
         }
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+}
+
+@Composable
+private fun CommunitySection(
+    onBreakupSupportChatClick: () -> Unit,
+    onInstagramClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+    ) {
+        Text(
+            text = "참여하기",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1,
+        )
+
+        Text(
+            text = "이별 극복 소통방",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onBreakupSupportChatClick),
+        )
+
+        Text(
+            text = "공식 인스타그램",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onInstagramClick),
+        )
+    }
+}
+
+@Composable
+private fun SettingsSection(
+    onBlockedUsersClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+    ) {
+        Text(
+            text = "관리",
+            color = ByeBooTheme.colors.gray400,
+            style = ByeBooTheme.typography.body1,
+        )
+
+        Text(
+            text = "차단 사용자 목록",
+            color = ByeBooTheme.colors.gray50,
+            style = ByeBooTheme.typography.body3,
+            modifier = Modifier.clickable(onClick = onBlockedUsersClick),
+        )
+    }
 }
 
 @Composable
@@ -580,10 +658,11 @@ private fun TermsSection(
     onTermsOfServiceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(vertical = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(
@@ -606,7 +685,6 @@ private fun TermsSection(
             modifier = Modifier.clickable(onClick = onTermsOfServiceClick),
         )
     }
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 }
 
 @Composable
@@ -615,10 +693,11 @@ private fun AccountSection(
     onDeleteAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
-
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(top = screenHeightDp(24.dp)),
         verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
     ) {
         Text(

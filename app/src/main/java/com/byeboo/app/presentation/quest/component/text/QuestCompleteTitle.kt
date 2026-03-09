@@ -1,12 +1,10 @@
 package com.byeboo.app.presentation.quest.component.text
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,13 +29,13 @@ fun QuestCompleteTitle(
                 .fillMaxWidth()
                 .padding(vertical = screenHeightDp(10.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
     ) {
         Row(
+            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SmallTag(tagText = "STEP $stepNumber")
-
-            Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
             Text(
                 text = "${questNumber}번째 퀘스트",
@@ -47,16 +45,12 @@ fun QuestCompleteTitle(
             )
         }
 
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
-
         Text(
             text = createdAt,
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.body5,
             textAlign = TextAlign.Center,
         )
-
-        Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
 
         Text(
             text = questQuestion,
