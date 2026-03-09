@@ -6,15 +6,9 @@ import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 data class CommonAnswerState(
     val createdAt: String = "",
     val questQuestion: String = "",
-    val answer: CommonAnswerModel =
-        CommonAnswerModel(
-            answerId = 0L,
-            writer = "",
-            profileIconRes = 0,
-            displayTime = "",
-            content = "",
-        ),
+    val answer: CommonAnswerModel? = null,
     val showBottomSheet: Boolean = false,
+    val writerId: Long = 0L,
 )
 
 sealed interface CommonAnswerSideEffect {

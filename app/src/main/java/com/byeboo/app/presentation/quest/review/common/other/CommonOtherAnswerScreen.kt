@@ -92,10 +92,12 @@ private fun CommonOtherAnswerScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        CommonAnswerItem(
-            answer = uiState.answer,
-            isExpanded = true,
-        )
+        uiState.answer?.let { answer ->
+            CommonAnswerItem(
+                answer = answer,
+                isExpanded = true,
+            )
+        }
     }
 
     MoreOptionsBottomSheet(
