@@ -21,7 +21,7 @@ enum class TutorialContent(
     ),
     FOURTH_CONTENT(
         image = R.drawable.img_tutorial_4,
-        content = "제가 모아둔 감정돌을 디디돌 삼아\n한 걸음 한 걸음 미래로 나아가주세요.",
+        content = "제가 모아둔 감정돌을 디딤돌 삼아\n한 걸음 한 걸음 미래로 나아가주세요.",
     ),
     FIFTH_CONTENT(
         image = R.drawable.img_tutorial_5,
