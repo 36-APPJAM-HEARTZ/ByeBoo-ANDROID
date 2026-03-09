@@ -14,7 +14,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.util.formatHourMinutes
+import com.byeboo.app.core.util.DateUtil.formatHourMinutes
 
 @Composable
 fun CompleteContent(
