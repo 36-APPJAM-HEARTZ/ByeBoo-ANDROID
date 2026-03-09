@@ -40,7 +40,7 @@ import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
-import com.byeboo.app.domain.model.auth.QuestStyle
+import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.StepProgressBar
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
 import com.byeboo.app.presentation.auth.userinfo.screen.UserInfoNicknameScreen
@@ -87,7 +87,7 @@ private fun UserInfoScreen(
     pagerState: PagerState,
     onNicknameChange: (String) -> Unit,
     onNicknameComplete: () -> Unit,
-    onQuestSelect: (QuestStyle) -> Unit,
+    onQuestSelect: (OnboardingQuestStyle) -> Unit,
     onSubmit: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,

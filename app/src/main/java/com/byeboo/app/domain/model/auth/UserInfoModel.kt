@@ -2,7 +2,6 @@ package com.byeboo.app.domain.model.auth
 
 data class UserInfoModel(
     val name: String,
-    val feeling: String,
     val questStyle: String,
 )
 
@@ -11,15 +10,15 @@ data class UserJourney(
     val description: String,
 )
 
-enum class QuestStyle(
+enum class OnboardingQuestStyle(
     val displayText: String,
-) {
-    RECORDING("재회 준비"),
-    ACTIVE("이별 극복"),
+    ) {
+    REUNION("재회 준비"),
+    RECORDING("이별 극복")
 }
 
-fun QuestStyle.toJourneyText(): String =
+fun OnboardingQuestStyle.toJourneyText(): String =
     when (this) {
-        QuestStyle.RECORDING -> "감정 직면"
-        QuestStyle.ACTIVE -> "감정 정리"
+        OnboardingQuestStyle.REUNION -> "재회 준비"
+        OnboardingQuestStyle.RECORDING -> "이별 극복"
     }

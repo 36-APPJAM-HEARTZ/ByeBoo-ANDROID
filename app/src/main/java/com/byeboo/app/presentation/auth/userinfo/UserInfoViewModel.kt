@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
-import com.byeboo.app.domain.model.auth.QuestStyle
+import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.domain.model.auth.UserInfoModel
 import com.byeboo.app.domain.model.auth.toJourneyText
 import com.byeboo.app.domain.model.notification.FcmTokenModel
@@ -63,21 +63,21 @@ class UserInfoViewModel
             mixpanelUtil.trackEvent("nickname_complete")
         }
 
-        fun updateQuest(quest: QuestStyle) {
+        fun updateQuest(quest: OnboardingQuestStyle) {
             _uiState.update {
                 it.copy(selectedQuest = quest)
             }
         }
 
-        private fun trackQuestSelected(questStyle: QuestStyle) {
+        private fun trackQuestSelected(questStyle: OnboardingQuestStyle) {
             mixpanelUtil.trackEvent(
                 eventName = "quest_type_complete",
                 properties =
                     mapOf(
                         "quest_type" to
                             when (questStyle) {
-                                QuestStyle.RECORDING -> "질문형"
-                                QuestStyle.ACTIVE -> "행동형"
+                                OnboardingQuestStyle.RECORDING -> "이별 극복"
+                                OnboardingQuestStyle.REUNION -> "재회 준비"
                             },
                     ),
             )
@@ -92,11 +92,8 @@ class UserInfoViewModel
                 hasSubmitted = false
                 return@launch
             }
-
-            // TODO: 서버 필드명 확정 시 수정 필요
             val userInfo = UserInfoModel(
                 name = _uiState.value.nickname,
-                feeling = "",
                 questStyle = _uiState.value.selectedQuest?.name.orEmpty(),
             )
 

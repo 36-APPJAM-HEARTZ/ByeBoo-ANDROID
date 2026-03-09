@@ -13,19 +13,19 @@ import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.auth.QuestStyle
+import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.UserInfoQuestCard
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UserInfoQuestScreen(
-    selectedQuest: QuestStyle?,
-    onQuestSelect: (QuestStyle) -> Unit,
+    selectedQuest: OnboardingQuestStyle?,
+    onQuestSelect: (OnboardingQuestStyle) -> Unit,
 ) {
     val quests =
         persistentListOf(
-            QuestStyle.RECORDING,
-            QuestStyle.ACTIVE,
+            OnboardingQuestStyle.REUNION,
+            OnboardingQuestStyle.RECORDING,
         )
 
     Column {
@@ -50,13 +50,13 @@ fun UserInfoQuestScreen(
                     title = quest.displayText,
                     content =
                         when (quest) {
-                            QuestStyle.RECORDING -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
-                            QuestStyle.ACTIVE -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
+                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+                            OnboardingQuestStyle.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
                         },
                     imageRes =
                         when (quest) {
-                            QuestStyle.RECORDING -> R.drawable.img_bori_reunion
-                            QuestStyle.ACTIVE -> R.drawable.img_bori_overcome
+                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
+                            OnboardingQuestStyle.RECORDING -> R.drawable.img_bori_overcome
                         },
                     isSelected = selectedQuest == quest,
                     onCardClick = onCardClick,
