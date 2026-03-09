@@ -166,9 +166,10 @@ fun MainNavHost(
                 )
             },
             navigateToQuestCommonWriting = { questId ->
-                navigator.navigateToQuestCommonWriting(questId = questId,
+                navigator.navigateToQuestCommonWriting(
+                    questId = questId,
                     answerId = null,
-                    isEditMode = false
+                    isEditMode = false,
                 )
             },
             navigateToQuestFromComplete = {

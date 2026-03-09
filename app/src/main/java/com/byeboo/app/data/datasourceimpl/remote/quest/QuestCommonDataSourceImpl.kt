@@ -50,14 +50,11 @@ class QuestCommonDataSourceImpl
             limit: Int,
         ): BaseResponse<CommonQuestResponseDto> = questCommonService.getCommonQuests(date, cursor, limit)
 
-    override suspend fun getQuestCommonAnswerDetail(
-        answerId: Long
-    ): BaseResponse<QuestCommonAnswerDetailResponseDto> =
-        questCommonService.getQuestCommonAnswerDetail(answerId)
+        override suspend fun getQuestCommonAnswerDetail(answerId: Long): BaseResponse<QuestCommonAnswerDetailResponseDto> =
+            questCommonService.getQuestCommonAnswerDetail(answerId)
 
-    override suspend fun updateBlockedUser(blockedUserId: Long): NullableBaseResponse<Unit> =
-        questCommonService.updateBlockedUser(blockedUserId)
+        override suspend fun updateBlockedUser(blockedUserId: Long): NullableBaseResponse<Unit> =
+            questCommonService.updateBlockedUser(blockedUserId)
 
-    override suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit> =
-        questCommonService.reportCommonQuest(answerId)
+        override suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit> = questCommonService.reportCommonQuest(answerId)
     }

@@ -69,5 +69,5 @@ fun QuestCommonAnswerDetailResponseDto.toDomain(): QuestAnswerDetailModel =
         writerId = this.writerId,
         profileIcon = this.profileIcon,
         content = this.content,
-        writtenAt = LocalDate.parse(this.writtenAt, DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay()
+        writtenAt = LocalDate.parse(this.writtenAt, DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay(),
     )

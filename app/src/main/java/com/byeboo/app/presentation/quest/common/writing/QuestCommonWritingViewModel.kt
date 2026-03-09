@@ -23,126 +23,130 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestCommonWritingViewModel
-@Inject
-constructor(
-    savedStateHandle: SavedStateHandle,
-    private val questCommonRepository: QuestCommonRepository,
-) : ViewModel() {
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val questCommonRepository: QuestCommonRepository,
+    ) : ViewModel() {
+        private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
+        private val questId: Long = routeArgs.questId
+        private val answerId: Long? = routeArgs.answerId
+        private val isEditMode: Boolean = routeArgs.isEditMode
 
-    private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
-    private val questId: Long = routeArgs.questId
-    private val answerId: Long? = routeArgs.answerId
-    private val isEditMode: Boolean = routeArgs.isEditMode
+        private val _uiState = MutableStateFlow(QuestCommonState(questId = questId, isEditMode = isEditMode))
+        val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(QuestCommonState(questId = questId, isEditMode = isEditMode))
-    val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
+        private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
+        val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
-    val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
-
-    init {
-        if (isEditMode && answerId != null) {
-            loadRecordedContent(answerId = answerId)
-        }
-    }
-
-    private fun loadRecordedContent(answerId: Long) {
-        val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
-        if (cachedAnswer != null) {
-            _uiState.update {
-                it.copy(
-                    questAnswer = cachedAnswer.content,
-                    originalAnswer = cachedAnswer.content
-                )
+        init {
+            if (isEditMode && answerId != null) {
+                loadRecordedContent(answerId = answerId)
             }
         }
-    }
 
-    fun onBackClicked() {
-        _uiState.update { it.copy(showQuitModal = true) }
-    }
-
-    fun onCompleteClicked() {
-        if (isEditMode) {
-            onSaveEditClicked()
-        } else {
-            _uiState.update { it.copy(showCompleteModal = true) }
-        }
-    }
-
-    fun updateContent(
-        isFocused: Boolean,
-        questAnswer: String,
-    ) {
-        val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
-        _uiState.update { prev ->
-            prev.copy(
-                questAnswer = questAnswer,
-                contentsState = contentState,
-            )
-        }
-    }
-    fun onSaveClicked() {
-        val questAnswer = uiState.value.questAnswer
-
-        viewModelScope.launch {
-            _uiState.update { it.copy(showCompleteModal = false) }
-
-            val request = QuestCommonAnswerRequestModel(answer = questAnswer)
-            val result = questCommonRepository.uploadQuestCommonAnswer(
-                questId = questId,
-                request = request
-            )
-
-            result.onSuccess {
-                _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
-            }.onFailure { exception ->
-                _sideEffect.emit(
-                    QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception))
-                )
-            }
-        }
-    }
-
-    private fun onSaveEditClicked() {
-        val state = uiState.value
-        val questAnswer = state.questAnswer
-        val currentAnswerId = answerId ?: return
-
-        viewModelScope.launch {
-            val request = QuestCommonAnswerEditModel(answer = questAnswer)
-            val result = questCommonRepository.patchQuestCommonAnswer(
-                answerId = currentAnswerId,
-                request = request,
-            )
-
-            result.onSuccess {
+        private fun loadRecordedContent(answerId: Long) {
+            val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
+            if (cachedAnswer != null) {
                 _uiState.update {
                     it.copy(
-                        questAnswer = questAnswer,
-                        isEditMode = false,
+                        questAnswer = cachedAnswer.content,
+                        originalAnswer = cachedAnswer.content,
                     )
                 }
-                _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
-            }.onFailure { exception ->
-                _sideEffect.emit(
-                    QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception))
+            }
+        }
+
+        fun onBackClicked() {
+            _uiState.update { it.copy(showQuitModal = true) }
+        }
+
+        fun onCompleteClicked() {
+            if (isEditMode) {
+                onSaveEditClicked()
+            } else {
+                _uiState.update { it.copy(showCompleteModal = true) }
+            }
+        }
+
+        fun updateContent(
+            isFocused: Boolean,
+            questAnswer: String,
+        ) {
+            val contentState = QuestContentLengthValidator.validate(isFocused, questAnswer)
+            _uiState.update { prev ->
+                prev.copy(
+                    questAnswer = questAnswer,
+                    contentsState = contentState,
                 )
             }
         }
-    }
 
-    fun onDismissQuitModal() {
-        _uiState.update { it.copy(showQuitModal = false) }
-    }
+        fun onSaveClicked() {
+            val questAnswer = uiState.value.questAnswer
 
-    fun onDismissCompleteModal() {
-        _uiState.update { it.copy(showCompleteModal = false) }
-    }
+            viewModelScope.launch {
+                _uiState.update { it.copy(showCompleteModal = false) }
 
-    fun onQuitClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+                val request = QuestCommonAnswerRequestModel(answer = questAnswer)
+                val result =
+                    questCommonRepository.uploadQuestCommonAnswer(
+                        questId = questId,
+                        request = request,
+                    )
+
+                result
+                    .onSuccess {
+                        _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        private fun onSaveEditClicked() {
+            val state = uiState.value
+            val questAnswer = state.questAnswer
+            val currentAnswerId = answerId ?: return
+
+            viewModelScope.launch {
+                val request = QuestCommonAnswerEditModel(answer = questAnswer)
+                val result =
+                    questCommonRepository.patchQuestCommonAnswer(
+                        answerId = currentAnswerId,
+                        request = request,
+                    )
+
+                result
+                    .onSuccess {
+                        _uiState.update {
+                            it.copy(
+                                questAnswer = questAnswer,
+                                isEditMode = false,
+                            )
+                        }
+                        _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        fun onDismissQuitModal() {
+            _uiState.update { it.copy(showQuitModal = false) }
+        }
+
+        fun onDismissCompleteModal() {
+            _uiState.update { it.copy(showCompleteModal = false) }
+        }
+
+        fun onQuitClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
+            }
         }
     }
-}

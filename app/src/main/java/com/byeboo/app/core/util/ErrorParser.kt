@@ -1,8 +1,8 @@
 package com.byeboo.app.core.util
 
 object ErrorParser {
-    fun getErrorMessage(throwable: Throwable): String {
-        return if (throwable is retrofit2.HttpException) {
+    fun getErrorMessage(throwable: Throwable): String =
+        if (throwable is retrofit2.HttpException) {
             try {
                 val errorBody = throwable.response()?.errorBody()?.string()
                 val regex = """"message"\s*:\s*"([^"]+)"""".toRegex()
@@ -13,5 +13,4 @@ object ErrorParser {
         } else {
             throwable.message ?: "네트워크 연결을 확인해 주세요."
         }
-    }
 }

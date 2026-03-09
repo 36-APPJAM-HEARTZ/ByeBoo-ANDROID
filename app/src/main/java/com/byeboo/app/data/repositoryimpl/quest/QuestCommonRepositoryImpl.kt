@@ -20,139 +20,148 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class QuestCommonRepositoryImpl @Inject constructor(
-    private val questCommonDataSource: QuestCommonDataSource,
-) : QuestCommonRepository {
-    private val _answersFlow = MutableStateFlow<List<QuestAnswerModel>>(emptyList())
-    override val answersFlow: StateFlow<List<QuestAnswerModel>>
-        get() = _answersFlow.asStateFlow()
-    private val _answerSubmittedEvent = MutableSharedFlow<Long>()
-    override val answerSubmittedEvent: SharedFlow<Long> = _answerSubmittedEvent.asSharedFlow()
-    private val _refreshEvent = MutableSharedFlow<Unit>()
-    override val refreshEvent: SharedFlow<Unit> = _refreshEvent.asSharedFlow()
+class QuestCommonRepositoryImpl
+    @Inject
+    constructor(
+        private val questCommonDataSource: QuestCommonDataSource,
+    ) : QuestCommonRepository {
+        private val _answersFlow = MutableStateFlow<List<QuestAnswerModel>>(emptyList())
+        override val answersFlow: StateFlow<List<QuestAnswerModel>>
+            get() = _answersFlow.asStateFlow()
+        private val _answerSubmittedEvent = MutableSharedFlow<Long>()
+        override val answerSubmittedEvent: SharedFlow<Long> = _answerSubmittedEvent.asSharedFlow()
+        private val _refreshEvent = MutableSharedFlow<Unit>()
+        override val refreshEvent: SharedFlow<Unit> = _refreshEvent.asSharedFlow()
 
-    private var currentCursor: Long? = null
-    private var hasNextPage: Boolean = true
+        private var currentCursor: Long? = null
+        private var hasNextPage: Boolean = true
 
-    override suspend fun uploadQuestCommonAnswer(
-        questId: Long,
-        request: QuestCommonAnswerRequestModel,
-    ): Result<Unit> = runCatching {
-        val response = questCommonDataSource.uploadQuestCommonAnswer(
-            questId = questId,
-            request = request.toData(),
-        )
-        if (!response.success) throw Exception(response.message)
-        _answerSubmittedEvent.emit(questId)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+        override suspend fun uploadQuestCommonAnswer(
+            questId: Long,
+            request: QuestCommonAnswerRequestModel,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questCommonDataSource.uploadQuestCommonAnswer(
+                        questId = questId,
+                        request = request.toData(),
+                    )
+                if (!response.success) throw Exception(response.message)
+                _answerSubmittedEvent.emit(questId)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun getQuestCommonMyAnswer(cursor: Long?): Result<QuestCommonMyAnswerModel> = runCatching {
-        if (cursor == null) {
-            currentCursor = null
-            hasNextPage = true
-            _answersFlow.update { emptyList() }
-        }
+        override suspend fun getQuestCommonMyAnswer(cursor: Long?): Result<QuestCommonMyAnswerModel> =
+            runCatching {
+                if (cursor == null) {
+                    currentCursor = null
+                    hasNextPage = true
+                    _answersFlow.update { emptyList() }
+                }
 
-        if (!hasNextPage) throw IllegalStateException("No more pages")
+                if (!hasNextPage) throw IllegalStateException("No more pages")
 
-        val response = questCommonDataSource.getQuestCommonMyAnswer(currentCursor)
-        if (!response.success) throw Exception(response.message)
+                val response = questCommonDataSource.getQuestCommonMyAnswer(currentCursor)
+                if (!response.success) throw Exception(response.message)
 
-        val domainModel = response.data.toDomain()
-        _answersFlow.update { currentList ->
-            if (currentCursor == null) domainModel.answers else currentList + domainModel.answers
-        }
-        currentCursor = domainModel.nextCursor
-        hasNextPage = domainModel.hasNext
-        domainModel
-    }.fold(
-        onSuccess = { Result.success(it) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+                val domainModel = response.data.toDomain()
+                _answersFlow.update { currentList ->
+                    if (currentCursor == null) domainModel.answers else currentList + domainModel.answers
+                }
+                currentCursor = domainModel.nextCursor
+                hasNextPage = domainModel.hasNext
+                domainModel
+            }.fold(
+                onSuccess = { Result.success(it) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun patchQuestCommonAnswer(
-        answerId: Long,
-        request: QuestCommonAnswerEditModel,
-    ): Result<Unit> = runCatching {
-        val response = questCommonDataSource.patchQuestCommonAnswer(
-            answerId = answerId,
-            request = request.toData(),
-        )
-        if (!response.success) throw Exception(response.message)
+        override suspend fun patchQuestCommonAnswer(
+            answerId: Long,
+            request: QuestCommonAnswerEditModel,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questCommonDataSource.patchQuestCommonAnswer(
+                        answerId = answerId,
+                        request = request.toData(),
+                    )
+                if (!response.success) throw Exception(response.message)
 
-        _answersFlow.update { currentList ->
-            currentList.map { item ->
-                if (item.answerId == answerId) item.copy(content = request.answer) else item
-            }
-        }
-        _refreshEvent.emit(Unit)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+                _answersFlow.update { currentList ->
+                    currentList.map { item ->
+                        if (item.answerId == answerId) item.copy(content = request.answer) else item
+                    }
+                }
+                _refreshEvent.emit(Unit)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun deleteQuestCommonAnswer(answerId: Long): Result<Unit> = runCatching {
-        val response = questCommonDataSource.deleteQuestCommonAnswer(answerId = answerId)
-        if (!response.success) throw Exception(response.message)
+        override suspend fun deleteQuestCommonAnswer(answerId: Long): Result<Unit> =
+            runCatching {
+                val response = questCommonDataSource.deleteQuestCommonAnswer(answerId = answerId)
+                if (!response.success) throw Exception(response.message)
 
-        _answersFlow.update { currentList ->
-            currentList.filter { it.answerId != answerId }
-        }
-        _refreshEvent.emit(Unit)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+                _answersFlow.update { currentList ->
+                    currentList.filter { it.answerId != answerId }
+                }
+                _refreshEvent.emit(Unit)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun getCommonQuests(
-        date: String,
-        cursor: Long?,
-        limit: Int,
-    ): Result<CommonQuestModel> = runCatching {
-        val response = questCommonDataSource.getCommonQuests(date, cursor, limit)
-        if (!response.success) throw Exception(response.message)
-        response.data.toDomain()
-    }.fold(
-        onSuccess = { Result.success(it) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+        override suspend fun getCommonQuests(
+            date: String,
+            cursor: Long?,
+            limit: Int,
+        ): Result<CommonQuestModel> =
+            runCatching {
+                val response = questCommonDataSource.getCommonQuests(date, cursor, limit)
+                if (!response.success) throw Exception(response.message)
+                response.data.toDomain()
+            }.fold(
+                onSuccess = { Result.success(it) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun getCommonQuestAnswerDetail(answerId: Long): Result<QuestAnswerDetailModel> =
-        runCatching {
-            val response = questCommonDataSource.getQuestCommonAnswerDetail(answerId)
+        override suspend fun getCommonQuestAnswerDetail(answerId: Long): Result<QuestAnswerDetailModel> =
+            runCatching {
+                val response = questCommonDataSource.getQuestCommonAnswerDetail(answerId)
 
-            if (!response.success) throw Exception(response.message)
+                if (!response.success) throw Exception(response.message)
 
-            response.data.toDomain()
-        }.fold(
-            onSuccess = { Result.success(it) },
-            onFailure = {
-                Result.failure(Exception(ErrorParser.getErrorMessage(it)))
-            }
-        )
+                response.data.toDomain()
+            }.fold(
+                onSuccess = { Result.success(it) },
+                onFailure = {
+                    Result.failure(Exception(ErrorParser.getErrorMessage(it)))
+                },
+            )
 
-    override suspend fun updateBlockedUser(blockedUserId: Long): Result<Unit> = runCatching {
-        val response = questCommonDataSource.updateBlockedUser(blockedUserId)
-        if (!response.success) throw Exception(response.message)
-        _refreshEvent.emit(Unit)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+        override suspend fun updateBlockedUser(blockedUserId: Long): Result<Unit> =
+            runCatching {
+                val response = questCommonDataSource.updateBlockedUser(blockedUserId)
+                if (!response.success) throw Exception(response.message)
+                _refreshEvent.emit(Unit)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun reportCommonQuest(answerId: Long): Result<Unit> = runCatching {
-        val response = questCommonDataSource.reportCommonQuest(answerId)
-        if (!response.success) throw Exception(response.message)
-        _refreshEvent.emit(Unit)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
-    )
+        override suspend fun reportCommonQuest(answerId: Long): Result<Unit> =
+            runCatching {
+                val response = questCommonDataSource.reportCommonQuest(answerId)
+                if (!response.success) throw Exception(response.message)
+                _refreshEvent.emit(Unit)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override fun getCachedMyAnswer(answerId: Long): QuestAnswerModel? =
-        _answersFlow.value.find { it.answerId == answerId }
-
-}
+        override fun getCachedMyAnswer(answerId: Long): QuestAnswerModel? = _answersFlow.value.find { it.answerId == answerId }
+    }

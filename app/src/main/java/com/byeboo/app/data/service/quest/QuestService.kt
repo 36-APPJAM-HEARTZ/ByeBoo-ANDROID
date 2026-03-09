@@ -24,5 +24,4 @@ interface QuestService {
     // 진행중인 전체 퀘스트 조회
     @GET("/api/v1/quests/all/progress")
     suspend fun getInProgressQuest(): BaseResponse<QuestInProgressResponseDto>
-
 }

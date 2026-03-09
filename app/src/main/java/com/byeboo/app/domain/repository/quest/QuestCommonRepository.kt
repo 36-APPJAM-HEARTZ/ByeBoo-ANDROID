@@ -41,6 +41,4 @@ interface QuestCommonRepository {
     suspend fun reportCommonQuest(answerId: Long): Result<Unit>
 
     fun getCachedMyAnswer(answerId: Long): QuestAnswerModel?
-
-
 }

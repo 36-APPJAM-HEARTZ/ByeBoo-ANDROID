@@ -11,5 +11,4 @@ sealed class QuestCommonRoute : Route {
         val answerId: Long? = null,
         val isEditMode: Boolean = false,
     ) : QuestCommonRoute()
-
 }

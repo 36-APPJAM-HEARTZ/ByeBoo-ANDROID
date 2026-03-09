@@ -23,107 +23,108 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CommonOtherAnswerViewModel
-@Inject
-constructor(
-    savedStateHandle: SavedStateHandle,
-    private val commonQuestRepository: QuestCommonRepository,
-    private val mapper: QuestUiModelMapper,
-) : ViewModel() {
-    private val routeArgs = savedStateHandle.toRoute<QuestCommonAnswer>()
-    private val answerId: Long = routeArgs.answerId
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val commonQuestRepository: QuestCommonRepository,
+        private val mapper: QuestUiModelMapper,
+    ) : ViewModel() {
+        private val routeArgs = savedStateHandle.toRoute<QuestCommonAnswer>()
+        private val answerId: Long = routeArgs.answerId
 
-    private val _uiState = MutableStateFlow(CommonAnswerState())
-    val uiState: StateFlow<CommonAnswerState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(CommonAnswerState())
+        val uiState: StateFlow<CommonAnswerState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
-    val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
+        val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        loadCommonAnswer()
-    }
+        init {
+            loadCommonAnswer()
+        }
 
-    private fun loadCommonAnswer() {
-        viewModelScope.launch {
-            commonQuestRepository.getCommonQuestAnswerDetail(answerId)
-                .onSuccess { domainModel ->
+        private fun loadCommonAnswer() {
+            viewModelScope.launch {
+                commonQuestRepository
+                    .getCommonQuestAnswerDetail(answerId)
+                    .onSuccess { domainModel ->
 
-                    _uiState.update { state ->
-                        state.copy(
-                            questQuestion = domainModel.question,
-                            createdAt = mapper.formatDetailDate(domainModel.writtenAt),
-                            writerId = domainModel.writerId,
-                            answer = CommonAnswerModel(
-                                answerId = answerId,
-                                writer = domainModel.writer,
-                                profileIconRes = mapper.mapToIconRes(domainModel.profileIcon),
-                                displayTime = mapper.formatDetailDate(domainModel.writtenAt),
-                                content = domainModel.content
+                        _uiState.update { state ->
+                            state.copy(
+                                questQuestion = domainModel.question,
+                                createdAt = mapper.formatDetailDate(domainModel.writtenAt),
+                                writerId = domainModel.writerId,
+                                answer =
+                                    CommonAnswerModel(
+                                        answerId = answerId,
+                                        writer = domainModel.writer,
+                                        profileIconRes = mapper.mapToIconRes(domainModel.profileIcon),
+                                        displayTime = mapper.formatDetailDate(domainModel.writtenAt),
+                                        content = domainModel.content,
+                                    ),
                             )
+                        }
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.ShowSnackBar(
+                                CustomSnackBarType.error(exception),
+                            ),
                         )
                     }
-                }
-                .onFailure { exception ->
-                    _sideEffect.emit(
-                        CommonAnswerSideEffect.ShowSnackBar(
-                            CustomSnackBarType.error(exception)
-                        )
-                    )
-                }
+            }
         }
-    }
 
-    fun onBackClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+        fun onBackClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+            }
         }
-    }
 
-    fun onClickMoreOptions() {
-        _uiState.update { it.copy(showBottomSheet = true) }
-    }
+        fun onClickMoreOptions() {
+            _uiState.update { it.copy(showBottomSheet = true) }
+        }
 
-    fun onDismissBottomSheet() {
-        _uiState.update { it.copy(showBottomSheet = false) }
-    }
+        fun onDismissBottomSheet() {
+            _uiState.update { it.copy(showBottomSheet = false) }
+        }
 
-    fun onOptionClicked(option: OtherPostOption) {
-        onDismissBottomSheet()
-        val currentWriterId = uiState.value.writerId
-        viewModelScope.launch {
-            when (option) {
-                OtherPostOption.BLOCK -> {
-                    commonQuestRepository.updateBlockedUser(currentWriterId)
-                        .onSuccess {
-                            _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
-                            _sideEffect.emit(
-                                CommonAnswerSideEffect.ShowSnackBar(
-                                    snackBarType = CustomSnackBarType.SUCCESS("차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요."),
-                                ),
-                            )
-                        }
-                        .onFailure { exception ->
-                            _sideEffect.emit(
-                                CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception))
-                            )
-                        }
-                }
+        fun onOptionClicked(option: OtherPostOption) {
+            onDismissBottomSheet()
+            val currentWriterId = uiState.value.writerId
+            viewModelScope.launch {
+                when (option) {
+                    OtherPostOption.BLOCK -> {
+                        commonQuestRepository
+                            .updateBlockedUser(currentWriterId)
+                            .onSuccess {
+                                _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+                                _sideEffect.emit(
+                                    CommonAnswerSideEffect.ShowSnackBar(
+                                        snackBarType = CustomSnackBarType.SUCCESS("차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요."),
+                                    ),
+                                )
+                            }.onFailure { exception ->
+                                _sideEffect.emit(
+                                    CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                                )
+                            }
+                    }
 
-                OtherPostOption.REPORT -> {
-                    commonQuestRepository.reportCommonQuest(answerId)
-                        .onSuccess {
-                            _sideEffect.emit(
-                                CommonAnswerSideEffect.ShowSnackBar(
-                                    snackBarType = CustomSnackBarType.SUCCESS("신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요."),
-                                ),
-                            )
-                        }
-                        .onFailure { exception ->
-                            _sideEffect.emit(
-                                CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception))
-                            )
-                        }
+                    OtherPostOption.REPORT -> {
+                        commonQuestRepository
+                            .reportCommonQuest(answerId)
+                            .onSuccess {
+                                _sideEffect.emit(
+                                    CommonAnswerSideEffect.ShowSnackBar(
+                                        snackBarType = CustomSnackBarType.SUCCESS("신고가 접수되었어요. 처리 결과는 알림을 통해 알려드려요."),
+                                    ),
+                                )
+                            }.onFailure { exception ->
+                                _sideEffect.emit(
+                                    CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                                )
+                            }
+                    }
                 }
             }
         }
     }
-}

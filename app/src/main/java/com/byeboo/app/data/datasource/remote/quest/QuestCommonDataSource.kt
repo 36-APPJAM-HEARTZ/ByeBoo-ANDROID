@@ -29,9 +29,7 @@ interface QuestCommonDataSource {
         limit: Int,
     ): BaseResponse<CommonQuestResponseDto>
 
-    suspend fun getQuestCommonAnswerDetail(
-        answerId: Long
-    ): BaseResponse<QuestCommonAnswerDetailResponseDto>
+    suspend fun getQuestCommonAnswerDetail(answerId: Long): BaseResponse<QuestCommonAnswerDetailResponseDto>
 
     suspend fun updateBlockedUser(blockedUserId: Long): NullableBaseResponse<Unit>
 

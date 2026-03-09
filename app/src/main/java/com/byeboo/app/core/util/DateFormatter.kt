@@ -7,7 +7,6 @@ import java.util.Date
 import java.util.Locale
 
 object DateUtil {
-
     fun formatToDotDate(date: String): String {
         return runCatching {
             if (date.isBlank()) return ""
@@ -25,5 +24,4 @@ object DateUtil {
         val sdf = SimpleDateFormat("yyyy. MM. dd a hh:mm:ss", Locale.KOREA)
         return sdf.format(Date(timestamp))
     }
-
 }
