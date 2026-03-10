@@ -40,7 +40,6 @@ fun OffboardingCompletedJourneyRoute(
     navigateUp: () -> Unit,
     navigateToOffboardingQuestCompleted: (JourneyType) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,7 +63,6 @@ fun OffboardingCompletedJourneyRoute(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
-        modifier = modifier,
     )
 }
 

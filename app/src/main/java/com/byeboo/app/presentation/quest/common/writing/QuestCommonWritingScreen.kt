@@ -49,7 +49,6 @@ fun QuestCommonRoute(
     navigateToQuestFromComplete: () -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestCommonWritingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -100,7 +99,6 @@ fun QuestCommonRoute(
         onBackClick = viewModel::onBackClicked,
         onCompleteClick = viewModel::onCompleteClicked,
         onUpdateContent = viewModel::updateContent,
-        modifier = modifier,
     )
 }
 

@@ -40,7 +40,6 @@ fun OffboardingNewJourneyRoute(
     navigateToQuestStart: (JourneyType?) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
     offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel(),
 ) {
@@ -67,7 +66,6 @@ fun OffboardingNewJourneyRoute(
                 type,
             )
         },
-        modifier = modifier,
     )
 }
 
