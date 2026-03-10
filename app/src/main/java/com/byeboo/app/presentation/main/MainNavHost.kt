@@ -130,9 +130,10 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestCommonEdit = { answerId, isEditMode ->
+            navigateToQuestCommonEdit = { answerId, question, isEditMode ->
                 navigator.navigateToQuestCommonWriting(
                     questId = 0L,
+                    question = question,
                     answerId = answerId,
                     isEditMode = isEditMode,
                     navOptions = keepStackNavOptions,
@@ -165,9 +166,10 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestCommonWriting = { questId ->
+            navigateToQuestCommonWriting = { questId, question ->
                 navigator.navigateToQuestCommonWriting(
                     questId = questId,
+                    question = question,
                     answerId = null,
                     isEditMode = false,
                 )

@@ -12,6 +12,7 @@ import com.byeboo.app.presentation.quest.common.writing.QuestCommonRoute
 
 fun NavController.navigateToQuestCommonWriting(
     questId: Long,
+    question: String,
     answerId: Long? = null,
     isEditMode: Boolean = false,
     navOptions: NavOptions? = null,
@@ -19,6 +20,7 @@ fun NavController.navigateToQuestCommonWriting(
     navigate(
         QuestCommonWriting(
             questId = questId,
+            question = question,
             answerId = answerId,
             isEditMode = isEditMode,
         ),

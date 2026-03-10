@@ -24,6 +24,7 @@ interface MyDetailAnswerSideEffect {
 
     data class NavigateToQuestCommonEdit(
         val answerId: Long,
+        val question: String,
         val isEditMode: Boolean,
     ) : MyDetailAnswerSideEffect
 

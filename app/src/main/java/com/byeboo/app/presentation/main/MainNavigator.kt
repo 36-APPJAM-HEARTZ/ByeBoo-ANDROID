@@ -201,12 +201,14 @@ class MainNavigator(
 
     fun navigateToQuestCommonWriting(
         questId: Long,
+        question: String,
         answerId: Long? = null,
         isEditMode: Boolean = false,
         navOptions: NavOptions? = null,
     ) {
         navController.navigateToQuestCommonWriting(
             questId = questId,
+            question = question,
             answerId = answerId,
             isEditMode = isEditMode,
             navOptions = navOptions,

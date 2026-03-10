@@ -38,7 +38,7 @@ fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
-    navigateToQuestCommonWriting: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long, String) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
@@ -74,7 +74,7 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestBehavior ->
                     navigateToQuestBehavior(effect.questId)
                 is QuestSideEffect.NavigateToQuestCommonWriting ->
-                    navigateToQuestCommonWriting(effect.questId)
+                    navigateToQuestCommonWriting(effect.questId, effect.question)
                 is QuestSideEffect.NavigateToCommonAnswerDetail ->
                     navigateToCommonAnswer(effect.answerId)
                 is QuestSideEffect.NavigateToQuestReview ->

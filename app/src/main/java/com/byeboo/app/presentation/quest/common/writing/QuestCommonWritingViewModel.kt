@@ -32,8 +32,9 @@ class QuestCommonWritingViewModel
         private val questId: Long = routeArgs.questId
         private val answerId: Long? = routeArgs.answerId
         private val isEditMode: Boolean = routeArgs.isEditMode
+        private val question: String = routeArgs.question
 
-        private val _uiState = MutableStateFlow(QuestCommonState(questId = questId, isEditMode = isEditMode))
+        private val _uiState = MutableStateFlow(QuestCommonState(questId = questId, question = question, isEditMode = isEditMode))
         val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()

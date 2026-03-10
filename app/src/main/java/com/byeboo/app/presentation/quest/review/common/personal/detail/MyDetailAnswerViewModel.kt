@@ -77,11 +77,13 @@ class MyDetailAnswerViewModel
             onDismissBottomSheet()
 
             viewModelScope.launch {
+                val question = _uiState.value.answer.question
                 when (option) {
                     MyPostOption.EDIT -> {
                         _sideEffect.emit(
                             MyDetailAnswerSideEffect.NavigateToQuestCommonEdit(
                                 answerId = answerId,
+                                question = question,
                                 isEditMode = true,
                             ),
                         )

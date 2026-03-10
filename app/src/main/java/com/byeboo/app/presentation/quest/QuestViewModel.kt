@@ -368,7 +368,8 @@ class QuestViewModel
 
         fun onCommonQuestClicked(questId: Long) {
             viewModelScope.launch {
-                _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId))
+                val question = _uiState.value.commonJourneyState.question
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId, question))
             }
         }
 
