@@ -56,7 +56,12 @@ fun MyAnswerDetailRoute(
             when (effect) {
                 is MyDetailAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyDetailAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
-                is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit -> navigateToQuestCommonEdit(effect.answerId, effect.question, effect.isEditMode)
+                is MyDetailAnswerSideEffect.NavigateToQuestCommonEdit ->
+                    navigateToQuestCommonEdit(
+                        effect.answerId,
+                        effect.question,
+                        effect.isEditMode,
+                    )
                 is MyDetailAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
