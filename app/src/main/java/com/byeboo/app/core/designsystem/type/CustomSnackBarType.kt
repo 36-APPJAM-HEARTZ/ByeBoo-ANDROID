@@ -14,6 +14,13 @@ sealed class CustomSnackBarType(
             message = message,
         )
 
+    class BadWord(
+        message: String = "비속어나 부적절한 단어가 포함된 닉네임은 등록할 수 없어요.",
+    ) : CustomSnackBarType(
+            icon = R.drawable.ic_alert,
+            message = message,
+        )
+
     class SUCCESS(
         message: String,
     ) : CustomSnackBarType(
@@ -23,6 +30,7 @@ sealed class CustomSnackBarType(
 
     companion object {
         val ALERT = ALERT()
+        val BAD_WORD = BadWord()
 
         fun error(exception: Throwable): ALERT {
             val msg = exception.message

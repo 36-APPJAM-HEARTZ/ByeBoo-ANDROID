@@ -1,7 +1,6 @@
 package com.byeboo.app.presentation.auth.userinfo
 
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.domain.model.auth.Feeling
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 
@@ -14,6 +13,8 @@ data class UserInfoState(
 
 sealed interface UserInfoSideEffect {
     data object NavigateToLoading : UserInfoSideEffect
+
+    data object NavigateToNextPage : UserInfoSideEffect
 
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,

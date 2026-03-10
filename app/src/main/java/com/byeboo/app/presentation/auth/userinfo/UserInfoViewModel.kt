@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.domain.model.auth.BadWordValidator
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
@@ -35,6 +36,7 @@ class UserInfoViewModel
         private val userRepository: UserRepository,
         private val questStateRepository: QuestStateRepository,
         private val fcmTokenRepository: FcmTokenRepository,
+        private val badWordValidator: BadWordValidator,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(UserInfoState())
@@ -61,7 +63,21 @@ class UserInfoViewModel
         }
 
         fun onNicknameComplete() {
+            val nickname = _uiState.value.nickname
+
+            if (badWordValidator.contains(nickname)) {
+                viewModelScope.launch {
+                    _sideEffect.emit(
+                        UserInfoSideEffect.ShowSnackBar(CustomSnackBarType.BAD_WORD),
+                    )
+                }
+                return
+            }
+
             mixpanelUtil.trackEvent("nickname_complete")
+            viewModelScope.launch {
+                _sideEffect.emit(UserInfoSideEffect.NavigateToNextPage)
+            }
         }
 
         fun updateQuest(quest: OnboardingQuestStyle) {

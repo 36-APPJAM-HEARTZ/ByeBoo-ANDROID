@@ -18,6 +18,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun CustomSnackBar(
@@ -31,7 +33,7 @@ fun CustomSnackBar(
                 .background(
                     color = ByeBooTheme.colors.blackAlpha80,
                     shape = RoundedCornerShape(12.dp),
-                ).padding(horizontal = 16.dp, vertical = 12.dp),
+                ).padding(horizontal = screenHeightDp(16.dp), vertical = screenHeightDp(12.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -40,7 +42,7 @@ fun CustomSnackBar(
             tint = Color.Unspecified,
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
         Text(
             text = customSnackBarType.message,

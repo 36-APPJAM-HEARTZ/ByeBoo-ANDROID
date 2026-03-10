@@ -62,6 +62,9 @@ fun UserInfoRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is UserInfoSideEffect.NavigateToLoading -> navigateToLoading()
+                is UserInfoSideEffect.NavigateToNextPage -> {
+                    pagerState.scrollToPage(1)
+                }
                 is UserInfoSideEffect.ShowSnackBar -> {
                     showSnackBar(effect.snackBarType)
                 }
@@ -198,13 +201,10 @@ private fun UserInfoScreen(
                 isEnabled = isStepValid,
                 buttonText = if (pagerState.currentPage == 0) "다음으로" else "완료하기",
                 onClick = {
-                    coroutineScope.launch {
-                        if (pagerState.currentPage == 0) {
-                            onNicknameComplete()
-                            pagerState.scrollToPage(1)
-                        } else {
-                            onSubmit()
-                        }
+                    if (pagerState.currentPage == 0) {
+                        onNicknameComplete()
+                    } else {
+                        onSubmit()
                     }
                 },
             )
