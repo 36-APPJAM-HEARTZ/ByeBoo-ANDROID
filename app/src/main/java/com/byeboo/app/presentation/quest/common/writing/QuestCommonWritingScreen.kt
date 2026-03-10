@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.common.writing
 
 import android.view.KeyEvent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -90,6 +91,8 @@ fun QuestCommonRoute(
                     .padding(horizontal = screenWidthDp(48.dp)),
         )
     }
+
+    BackHandler { viewModel.onBackClicked() }
 
     QuestCommonScreen(
         uiState = uiState,
