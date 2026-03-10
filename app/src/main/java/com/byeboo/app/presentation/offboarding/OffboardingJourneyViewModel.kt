@@ -3,7 +3,7 @@ package com.byeboo.app.presentation.offboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.offboarding.OffboardingJourneyRepository
 import com.byeboo.app.presentation.offboarding.util.OffboardingJourneyMapper
@@ -42,7 +42,7 @@ class OffboardingJourneyViewModel
             }
         }
 
-        fun onJourneyCompletedCardClicked(journey: QuestType) {
+        fun onJourneyCompletedCardClicked(journey: JourneyType) {
             viewModelScope.launch {
                 mixpanelUtil.trackEvent(
                     "journey_review_all_pageview",

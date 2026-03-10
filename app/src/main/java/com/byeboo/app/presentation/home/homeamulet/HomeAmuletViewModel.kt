@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.home.homeamulet
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
@@ -39,7 +40,7 @@ class HomeAmuletViewModel
             viewModelScope.launch {
                 val localJourney: String? = questStateRepository.getUserJourney()
                 if (localJourney != null) {
-                    val amuletType = AmuletType.from(localJourney)
+                    val amuletType = JourneyType.fromJourneyName(localJourney)
                     _uiState.update { it.copy(journey = amuletType) }
                 }
             }
@@ -50,7 +51,7 @@ class HomeAmuletViewModel
                 userRepository
                     .getUserJourney()
                     .onSuccess { data ->
-                        val amuletType = AmuletType.from(data.journey)
+                        val amuletType = JourneyType.fromJourneyName(data.journey)
 
                         _uiState.update {
                             it.copy(

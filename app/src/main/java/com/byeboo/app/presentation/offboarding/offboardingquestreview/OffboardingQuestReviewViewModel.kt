@@ -30,7 +30,7 @@ class OffboardingQuestReviewViewModel
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
         private val questIdArg = savedStateHandle.toRoute<OffboardingQuestReview>().questId
-        private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().questType
+        private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestReview>().journeyType
         private val _uiState = MutableStateFlow(OffboardingQuestReviewState())
         val uiState: StateFlow<OffboardingQuestReviewState> = _uiState.asStateFlow()
 
@@ -71,7 +71,7 @@ class OffboardingQuestReviewViewModel
             viewModelScope.launch {
                 _sideEffect.emit(
                     OffboardingQuestReviewSideEffect.NavigateToOffboardingQuestCompleted(
-                        journey = questTypeArg,
+                        journey = journeyTypeArg,
                     ),
                 )
             }

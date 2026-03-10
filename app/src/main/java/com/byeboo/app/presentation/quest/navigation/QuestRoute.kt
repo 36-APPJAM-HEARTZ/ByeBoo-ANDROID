@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.quest.navigation
 
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.navigation.MainTabRoute
 import com.byeboo.app.core.navigation.Route
@@ -12,7 +13,7 @@ data object Quest : MainTabRoute {
 
 @Serializable
 data class QuestStart(
-    val questType: QuestType? = null,
+    val journeyType: JourneyType? = null,
 ) : Route
 
 @Serializable

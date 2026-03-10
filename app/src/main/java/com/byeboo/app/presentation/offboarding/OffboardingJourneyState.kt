@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.offboarding
 
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
 import com.byeboo.app.presentation.offboarding.model.JourneyStatus
 import kotlinx.collections.immutable.ImmutableList
@@ -23,7 +23,7 @@ sealed interface OffboardingJourneySideEffect {
     data object NavigateUp : OffboardingJourneySideEffect
 
     data class NavigateToOffboardingQuestCompleted(
-        val journey: QuestType,
+        val journey: JourneyType,
     ) : OffboardingJourneySideEffect
 
     data class ShowSnackBar(

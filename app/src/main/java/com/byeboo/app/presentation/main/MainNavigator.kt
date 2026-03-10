@@ -9,6 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.auth.navigation.navigateToLoading
 import com.byeboo.app.presentation.auth.navigation.navigateToUserInfo
@@ -94,9 +95,9 @@ class MainNavigator(
         }
     }
 
-    fun navigateToOffboardingQuestCompletedFromReview(questType: QuestType) {
-        navController.navigate(OffboardingQuestCompleted(questType)) {
-            popUpTo(OffboardingQuestCompleted(questType)) {
+    fun navigateToOffboardingQuestCompletedFromReview(journeyType: JourneyType) {
+        navController.navigate(OffboardingQuestCompleted(journeyType)) {
+            popUpTo(OffboardingQuestCompleted(journeyType)) {
                 inclusive = true
             }
             launchSingleTop = true
@@ -139,10 +140,10 @@ class MainNavigator(
     }
 
     fun navigateToQuestStart(
-        questType: QuestType? = null,
+        journeyType: JourneyType? = null,
         navOptions: NavOptions,
     ) {
-        navController.navigateToQuestStart(questType = questType, navOptions = navOptions)
+        navController.navigateToQuestStart(journeyType = journeyType, navOptions = navOptions)
     }
 
     fun navigateToQuest(options: NavOptions) {
@@ -297,18 +298,18 @@ class MainNavigator(
     }
 
     fun navigateToOffboardingQuestCompleted(
-        questType: QuestType,
+        journeyType: JourneyType,
         navOptions: NavOptions,
     ) {
         navController.navigateToOffboardingQuestCompleted(
-            questType = questType,
+            journeyType = journeyType,
             navOptions = navOptions,
         )
     }
 
     fun navigateToOffboardingQuestReview(
         questId: Long,
-        journey: QuestType,
+        journey: JourneyType,
     ) {
         navController.navigateToOffboardingQuestReview(questId = questId, journey = journey)
     }

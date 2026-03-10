@@ -1,6 +1,5 @@
 package com.byeboo.app.core.model.quest
 
-import com.byeboo.app.R
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,22 +7,16 @@ enum class QuestType(
     val questStyle: String,
     val journeyName: String,
     val journeyType: String,
-    val frontImg: Int,
-    val backImg: Int,
 ) {
     RECORDING(
-        "RECORDING",
-        "이별 극복",
-        "FACE_EMOTION",
-        R.drawable.img_recording_amulet_front,
-        R.drawable.img_recording_amulet_back,
+        questStyle = "RECORDING",
+        journeyName = "이별 극복",
+        journeyType = "FACE_EMOTION",
     ),
     ACTIVE(
-        "ACTIVE",
-        "재회 준비",
-        "PROCESS_EMOTION",
-        R.drawable.img_reunion_amulet_front,
-        R.drawable.img_reunion_amulet_back,
+        questStyle = "ACTIVE",
+        journeyName = "감정 정리",
+        journeyType = "PROCESS_EMOTION",
     ),
     ;
 

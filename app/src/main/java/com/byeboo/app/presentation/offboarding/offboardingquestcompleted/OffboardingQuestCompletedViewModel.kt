@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.offboarding.OffboardingQuestCompletedRepository
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
@@ -28,7 +28,7 @@ class OffboardingQuestCompletedViewModel
         private val offboardingQuestCompletedRepository: OffboardingQuestCompletedRepository,
         savedStateHandle: SavedStateHandle,
     ) : ViewModel() {
-        private val questTypeArg = savedStateHandle.toRoute<OffboardingQuestCompleted>().questType
+        private val journeyTypeArg = savedStateHandle.toRoute<OffboardingQuestCompleted>().journeyType
 
         private val _uiState = MutableStateFlow(QuestCompletedState())
         val uiState: StateFlow<QuestCompletedState> = _uiState.asStateFlow()
@@ -42,13 +42,13 @@ class OffboardingQuestCompletedViewModel
                     _uiState.update {
                         it.copy(userName = nickname)
                     }
-                    loadQuests(journey = questTypeArg, nickname = nickname)
+                    loadQuests(journey = journeyTypeArg, nickname = nickname)
                 }
             }
         }
 
         private fun loadQuests(
-            journey: QuestType,
+            journey: JourneyType,
             nickname: String,
         ) {
             viewModelScope.launch {
@@ -77,7 +77,7 @@ class OffboardingQuestCompletedViewModel
         fun onQuestClicked(questId: Long) {
             viewModelScope.launch {
                 _sideEffect.emit(
-                    QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, questTypeArg),
+                    QuestCompletedSideEffect.NavigateToOffboardingQuestReview(questId, journeyTypeArg),
                 )
             }
         }

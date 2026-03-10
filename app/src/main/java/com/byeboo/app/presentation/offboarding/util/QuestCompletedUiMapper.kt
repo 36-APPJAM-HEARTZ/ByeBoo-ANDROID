@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.offboarding.util
 
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestCompletedModel
 import com.byeboo.app.presentation.offboarding.model.QuestCompleted
@@ -10,7 +11,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 fun QuestCompletedModel.toUiState(
-    journey: QuestType,
+    journey: JourneyType,
     nickname: String = "하츠핑",
 ): QuestCompletedState {
     val groups: ImmutableList<QuestCompletedGroup> =
@@ -41,6 +42,6 @@ fun QuestCompletedModel.toUiState(
         questGroups = groups,
         progressPeriod = progressPeriod.orEmpty(),
         userName = nickname,
-        questType = journey,
+        journeyType = journey,
     )
 }

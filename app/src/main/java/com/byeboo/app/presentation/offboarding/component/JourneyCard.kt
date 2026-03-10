@@ -16,15 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun JourneyCard(
-    journeyType: QuestType,
-    onJourneyCardClick: (QuestType) -> Unit,
+    journeyType: JourneyType,
+    onJourneyCardClick: (JourneyType) -> Unit,
     chipBackgroundColor: Color,
     chipTextColor: Color,
     journeyTitleTextColor: Color,
@@ -34,14 +34,16 @@ fun JourneyCard(
 ) {
     val journeyTypeText =
         when (journeyType) {
-            QuestType.RECORDING -> "질문형"
-            QuestType.ACTIVE -> "행동형"
+            JourneyType.RECORDING -> "이별"
+            JourneyType.ACTIVE -> "행동"
+            JourneyType.REUNION -> "재회"
         }
 
     val journeyTitle =
         when (journeyType) {
-            QuestType.RECORDING -> "감정 직면 여정"
-            QuestType.ACTIVE -> "감정 정리 여정"
+            JourneyType.RECORDING -> "이별 극복 여정"
+            JourneyType.ACTIVE -> "감정 정리 여정"
+            JourneyType.REUNION -> "재회 준비 여정"
         }
 
     Row(

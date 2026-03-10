@@ -64,7 +64,7 @@ class OffboardingCompletedGuideViewModel
             }
             viewModelScope.launch {
                 runCatching {
-                    val journey = questStateRepository.getUserJourney() ?: "감정 직면"
+                    val journey = questStateRepository.getUserJourney() ?: "이별 극복"
                     _uiState.update { it.copy(journeyName = journey) }
                 }.onFailure { e ->
                     _sideEffect.emit(

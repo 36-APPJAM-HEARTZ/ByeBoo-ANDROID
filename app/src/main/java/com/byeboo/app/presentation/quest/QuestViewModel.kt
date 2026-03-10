@@ -333,6 +333,7 @@ class QuestViewModel
                 when (quest.type) {
                     QuestType.RECORDING -> _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
                     QuestType.ACTIVE -> _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
+                    else -> Unit
                 }
             }
         }
@@ -400,6 +401,7 @@ class QuestViewModel
                 when (quest.type) {
                     QuestType.RECORDING -> "질문형"
                     QuestType.ACTIVE -> "행동형"
+                    else -> Unit
                 }
             mixpanelUtil.trackEvent(
                 eventName = "quest_write_pageview",
