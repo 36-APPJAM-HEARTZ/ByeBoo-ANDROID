@@ -28,6 +28,7 @@ import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.MyAnswerItem
 import kotlinx.coroutines.flow.collectLatest
 
@@ -98,7 +99,7 @@ fun MyAnswerScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
