@@ -69,7 +69,7 @@ class MyDetailAnswerViewModel
 
         fun onBackClicked() {
             viewModelScope.launch {
-                _sideEffect.emit(MyDetailAnswerSideEffect.NavigateToQuestMyAnswers)
+                _sideEffect.emit(MyDetailAnswerSideEffect.NavigateUp)
             }
         }
 
