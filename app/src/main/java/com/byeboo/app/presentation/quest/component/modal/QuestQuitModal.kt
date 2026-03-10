@@ -21,6 +21,7 @@ fun QuestQuitModal(
         onRightButtonClick = stayButton,
         onRightButtonText = "머무르기",
         dialogProperties = dialogProperties,
+        modalSubText = "작성하시던 내용은 저장되지 않아요.",
         modifier = modifier,
     )
 }
