@@ -33,7 +33,7 @@ fun CustomSnackBar(
                 .background(
                     color = ByeBooTheme.colors.blackAlpha80,
                     shape = RoundedCornerShape(12.dp),
-                ).padding(horizontal = screenHeightDp(16.dp), vertical = screenHeightDp(12.dp)),
+                ).padding(horizontal = screenWidthDp(16.dp), vertical = screenHeightDp(12.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
