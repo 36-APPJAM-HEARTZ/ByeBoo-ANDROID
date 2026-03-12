@@ -46,8 +46,10 @@ class QuestCommonWritingViewModel
             }
         }
 
-        private fun loadRecordedContent(answerId: Long) {
+    private fun loadRecordedContent(answerId: Long) {
+        viewModelScope.launch {
             val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
+
             if (cachedAnswer != null) {
                 _uiState.update {
                     it.copy(
@@ -55,8 +57,23 @@ class QuestCommonWritingViewModel
                         originalAnswer = cachedAnswer.content,
                     )
                 }
+            } else {
+                questCommonRepository.getCommonQuestAnswerDetail(answerId)
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                questAnswer = detail.content,
+                                originalAnswer = detail.content,
+                                question = detail.question
+                            )
+                        }
+                    }
+                    .onFailure {
+                        _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }
             }
         }
+    }
 
         fun onBackClicked() {
             _uiState.update { it.copy(showQuitModal = true) }
