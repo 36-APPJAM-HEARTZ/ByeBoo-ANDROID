@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.review.common.personal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
@@ -46,7 +47,7 @@ class MyAnswerViewModel
                                 MyAnswerModel(
                                     answerId = it.answerId,
                                     question = it.question,
-                                    writtenAt = it.writtenAt,
+                                    writtenAt = DateUtil.formatToDotDate(it.writtenAt),
                                     content = it.content,
                                 )
                             }.toPersistentList()
