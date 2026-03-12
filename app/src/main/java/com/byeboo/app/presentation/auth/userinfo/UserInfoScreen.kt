@@ -35,12 +35,12 @@ import com.byeboo.app.core.designsystem.component.backhandler.ByeBooBackHandler
 import com.byeboo.app.core.designsystem.component.button.ByeBooActivationButton
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
-import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.StepProgressBar
 import com.byeboo.app.presentation.auth.userinfo.model.toValidationState
 import com.byeboo.app.presentation.auth.userinfo.screen.UserInfoNicknameScreen
@@ -90,7 +90,7 @@ private fun UserInfoScreen(
     pagerState: PagerState,
     onNicknameChange: (String) -> Unit,
     onNicknameComplete: () -> Unit,
-    onQuestSelect: (OnboardingQuestStyle) -> Unit,
+    onQuestSelect: (JourneyType) -> Unit,
     onSubmit: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
