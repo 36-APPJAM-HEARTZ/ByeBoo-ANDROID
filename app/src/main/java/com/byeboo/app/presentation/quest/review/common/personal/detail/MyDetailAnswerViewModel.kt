@@ -40,24 +40,57 @@ class MyDetailAnswerViewModel
 
         init {
             loadMyDetailAnswer()
+            observeRefreshEvent()
         }
 
-        fun loadMyDetailAnswer() {
+        private fun loadMyDetailAnswer() {
             questCommonRepository.answersFlow
-                .mapNotNull { value -> value.find { it.answerId == answerId } }
-                .onEach { cachedAnswer ->
+                .mapNotNull { list -> list.find { it.answerId == answerId } }
+                .onEach { updated ->
                     _uiState.update { state ->
                         state.copy(
                             answer =
                                 state.answer.copy(
-                                    answerId = cachedAnswer.answerId,
-                                    question = cachedAnswer.question,
-                                    writtenAt = DateUtil.formatToDotDate(cachedAnswer.writtenAt),
-                                    content = cachedAnswer.content,
+                                    content = updated.content,
+                                    question = updated.question,
+                                    writtenAt = DateUtil.formatToDotDate(updated.writtenAt),
                                 ),
                         )
                     }
                 }.launchIn(viewModelScope)
+
+            viewModelScope.launch {
+                val cached = questCommonRepository.getCachedMyAnswer(answerId)
+                if (cached != null) {
+                    _uiState.update { state ->
+                        state.copy(
+                            answer =
+                                state.answer.copy(
+                                    answerId = cached.answerId,
+                                    question = cached.question,
+                                    writtenAt = cached.writtenAt,
+                                    content = cached.content,
+                                ),
+                        )
+                    }
+                } else {
+                    questCommonRepository
+                        .getCommonQuestAnswerDetail(answerId)
+                        .onSuccess { detail ->
+                            _uiState.update { state ->
+                                state.copy(
+                                    answer =
+                                        state.answer.copy(
+                                            answerId = answerId,
+                                            question = detail.question,
+                                            writtenAt = detail.writtenAt.toString(),
+                                            content = detail.content,
+                                        ),
+                                )
+                            }
+                        }
+                }
+            }
         }
 
         fun onClickMoreOptions() {
@@ -89,7 +122,6 @@ class MyDetailAnswerViewModel
                             ),
                         )
                     }
-
                     MyPostOption.DELETE -> {
                         _uiState.update { it.copy(showDeleteModal = true) }
                     }
@@ -111,6 +143,31 @@ class MyDetailAnswerViewModel
                     }.onFailure {
                         _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
                     }
+            }
+        }
+
+        private fun observeRefreshEvent() {
+            viewModelScope.launch {
+                questCommonRepository.refreshEvent.collect {
+                    val cached = questCommonRepository.getCachedMyAnswer(answerId)
+                    if (cached == null) {
+                        questCommonRepository
+                            .getCommonQuestAnswerDetail(answerId)
+                            .onSuccess { detail ->
+                                _uiState.update { state ->
+                                    state.copy(
+                                        answer =
+                                            state.answer.copy(
+                                                answerId = answerId,
+                                                question = detail.question,
+                                                writtenAt = detail.writtenAt.toString(),
+                                                content = detail.content,
+                                            ),
+                                    )
+                                }
+                            }
+                    }
+                }
             }
         }
     }

@@ -61,12 +61,11 @@ fun MyJourneyScreen(
 
         LazyColumn(
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
                     end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(37.dp),
+                    bottom = screenHeightDp(24.dp),
                 ),
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -92,8 +91,13 @@ fun MyJourneyScreen(
                 val questChunks = group.quests.chunked(3)
                 questChunks.forEachIndexed { chunkIndex, questChunk ->
                     item("quest_row_${stepIndex}_$chunkIndex") {
+                        val isLastChunk = chunkIndex == questChunks.lastIndex
+
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = screenHeightDp(if (isLastChunk) 16.dp else 20.dp)),
                             horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
                         ) {
                             questChunk.forEach { quest ->

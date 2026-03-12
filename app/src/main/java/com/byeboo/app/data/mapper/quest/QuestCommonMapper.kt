@@ -60,6 +60,7 @@ fun QuestAnswerDto.toDomain(): CommonQuestAnswer =
         writer = this.writer,
         writtenAt = LocalDateTime.parse(this.writtenAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
         content = this.content,
+        writerId = this.writerId,
     )
 
 fun QuestCommonAnswerDetailResponseDto.toDomain(): QuestAnswerDetailModel =

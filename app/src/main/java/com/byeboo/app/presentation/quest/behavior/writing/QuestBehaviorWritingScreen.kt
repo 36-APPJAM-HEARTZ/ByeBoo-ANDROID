@@ -292,7 +292,7 @@ private fun QuestPhotoSection(
             )
 
             Text(
-                text = "($imageCount/1)",
+                text = "$imageCount/1",
                 color = ByeBooTheme.colors.gray400,
                 style = ByeBooTheme.typography.body6,
             )

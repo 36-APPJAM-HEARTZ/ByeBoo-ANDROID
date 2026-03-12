@@ -41,6 +41,7 @@ fun QuestRoute(
     navigateToQuestCommonWriting: (Long, String) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToCommonAnswer: (Long) -> Unit,
+    navigateToMyAnswerDetail: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
     paddingValues: PaddingValues,
     isCommonAnswerCompleted: Boolean,
@@ -77,6 +78,8 @@ fun QuestRoute(
                     navigateToQuestCommonWriting(effect.questId, effect.question)
                 is QuestSideEffect.NavigateToCommonAnswerDetail ->
                     navigateToCommonAnswer(effect.answerId)
+                is QuestSideEffect.NavigateToQuestMyAnswersDetail ->
+                    navigateToMyAnswerDetail(effect.answerId)
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToQuestMyAnswers ->

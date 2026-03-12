@@ -37,6 +37,7 @@ fun JourneyCard(
             JourneyType.RECORDING -> "이별"
             JourneyType.ACTIVE -> "행동"
             JourneyType.REUNION -> "재회"
+            JourneyType.UNKNOWN -> ""
         }
 
     val journeyTitle =
@@ -44,6 +45,7 @@ fun JourneyCard(
             JourneyType.RECORDING -> "이별 극복 여정"
             JourneyType.ACTIVE -> "감정 정리 여정"
             JourneyType.REUNION -> "재회 준비 여정"
+            JourneyType.UNKNOWN -> ""
         }
 
     Row(

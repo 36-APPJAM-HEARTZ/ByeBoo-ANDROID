@@ -11,22 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.UserInfoQuestCard
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UserInfoQuestScreen(
-    selectedQuest: OnboardingQuestStyle?,
-    onQuestSelect: (OnboardingQuestStyle) -> Unit,
+    selectedQuest: JourneyType?,
+    onQuestSelect: (JourneyType) -> Unit,
 ) {
     val quests =
         persistentListOf(
-            OnboardingQuestStyle.REUNION,
-            OnboardingQuestStyle.RECORDING,
+            JourneyType.RECORDING,
+            JourneyType.REUNION,
         )
+
+    val selectedQuests = selectedQuest?.takeIf { it in quests }
 
     Column {
         DescriptionText(
@@ -47,18 +49,10 @@ fun UserInfoQuestScreen(
                     }
 
                 UserInfoQuestCard(
-                    title = quest.displayText,
-                    content =
-                        when (quest) {
-                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
-                            OnboardingQuestStyle.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
-                        },
-                    imageRes =
-                        when (quest) {
-                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
-                            OnboardingQuestStyle.RECORDING -> R.drawable.img_bori_overcome
-                        },
-                    isSelected = selectedQuest == quest,
+                    title = quest.journeyName,
+                    content = quest.userInfoContent(),
+                    imageRes = quest.userInfoImageRes(),
+                    isSelected = selectedQuests == quest,
                     onCardClick = onCardClick,
                     modifier = Modifier.weight(1f),
                 )
@@ -66,3 +60,17 @@ fun UserInfoQuestScreen(
         }
     }
 }
+
+private fun JourneyType.userInfoContent(): String =
+    when (this) {
+        JourneyType.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
+        JourneyType.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+        else -> ""
+    }
+
+private fun JourneyType.userInfoImageRes(): Int =
+    when (this) {
+        JourneyType.RECORDING -> R.drawable.img_bori_overcome
+        JourneyType.REUNION -> R.drawable.img_bori_reunion
+        else -> R.drawable.img_bori_reunion
+    }
