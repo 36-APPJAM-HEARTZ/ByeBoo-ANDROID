@@ -18,6 +18,7 @@ data class CommonQuestAnswer(
     val writer: String,
     val writtenAt: LocalDateTime,
     val content: String,
+    val writerId: Long,
 )
 
 data class QuestCommonAnswerRequestModel(

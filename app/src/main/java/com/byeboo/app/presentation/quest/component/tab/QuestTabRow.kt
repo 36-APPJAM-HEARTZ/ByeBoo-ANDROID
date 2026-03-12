@@ -18,8 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -94,7 +93,7 @@ private fun QuestTabItem(
             horizontalArrangement = Arrangement.spacedBy(screenWidthDp(2.dp)),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = iconRes),
+                painter = painterResource(id = iconRes),
                 contentDescription = label,
                 tint = Color.Unspecified,
                 modifier = Modifier.size(24.dp),

@@ -33,6 +33,8 @@ data class QuestAnswerDto(
     val writtenAt: String,
     @SerialName("content")
     val content: String,
+    @SerialName("writerId")
+    val writerId: Long,
 )
 
 @Serializable

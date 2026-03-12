@@ -8,3 +8,6 @@ ktlint_standard_function-naming = disabled
 
 [app/src/main/java/**/core/designsystem/**/*.kt]
 ktlint_standard_function-naming = disabled
+
+[app/src/main/java/**/core/util/**/*.kt]
+ktlint_standard_function-naming = disabled
