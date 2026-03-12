@@ -94,18 +94,18 @@ private fun OffboardingQuestCompletedScreen(
             textStyle = ByeBooTheme.typography.cap2,
         )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
         DescriptionText(
             nicknameText = "${uiState.userName}님의",
             title = "${uiState.journeyType.journeyName} 여정",
             guideText = "이에요",
             contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
-            bottom = 18.dp,
+            bottom = 16.dp,
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = screenHeightDp(21.dp)),
+            contentPadding = PaddingValues(bottom = screenHeightDp(24.dp)),
             modifier = Modifier.fillMaxWidth(),
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->
@@ -113,10 +113,9 @@ private fun OffboardingQuestCompletedScreen(
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = ByeBooTheme.colors.whiteAlpha5,
-                        modifier = Modifier.padding(vertical = screenHeightDp(8.dp)),
                     )
 
-                    Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+                    Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
                     QuestStepTitle(
                         stepNumber = (stepIndex + 1).toLong(),
@@ -129,6 +128,8 @@ private fun OffboardingQuestCompletedScreen(
                 val questChunks = group.quests.chunked(3)
                 questChunks.forEachIndexed { chunkIndex, questChunk ->
                     item("quest_row_${stepIndex}_$chunkIndex") {
+                        val isLastChunk = chunkIndex == questChunks.lastIndex
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
@@ -147,7 +148,12 @@ private fun OffboardingQuestCompletedScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+                        Spacer(
+                            modifier =
+                                Modifier.height(
+                                    screenHeightDp(if (isLastChunk) 16.dp else 20.dp),
+                                ),
+                        )
                     }
                 }
             }
