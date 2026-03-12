@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
@@ -21,11 +19,6 @@ fun QuestCommonTitle(
     questQuestion: String,
     modifier: Modifier = Modifier,
 ) {
-    val date =
-        remember(createdAt) {
-            DateUtil.formatToDotDate(createdAt)
-        }
-
     Column(
         modifier =
             modifier
@@ -40,7 +33,7 @@ fun QuestCommonTitle(
         )
 
         Text(
-            text = date,
+            text = createdAt,
             color = ByeBooTheme.colors.gray500,
             style = ByeBooTheme.typography.body6,
         )
