@@ -131,11 +131,10 @@ private fun QuestCommonScreen(
                         false
                     }
                 }.addFocusCleaner(focusManager)
-                .imePadding()
                 .padding(
-                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                    bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                ),
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp)
+                )
+                .imePadding(),
     ) {
         QuestWritingTopbar(
             isEnabled = uiState.isCompleteButtonEnabled,
@@ -143,52 +142,55 @@ private fun QuestCommonScreen(
             onCompleteClick = onCompleteClick,
         )
 
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f, false)
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = screenWidthDp(24.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-            QuestWritingTitle(
-                question = uiState.question,
-            )
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f, false)
+                        .verticalScroll(scrollState)
+                        .padding(horizontal = screenWidthDp(24.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+                QuestWritingTitle(
+                    question = uiState.question,
+                )
 
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = ByeBooTheme.colors.gray800,
-            )
+                Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = ByeBooTheme.colors.gray800,
+                )
 
-            QuestTextField(
-                value = uiState.questAnswer,
-                onValueChange = {
-                    if (it.length <= 500) {
-                        onUpdateContent(isFocused.value, it)
-                    }
-                },
-                placeholder = "글로 적다 보면, 스스로에게 한 걸음 더 가까워질 수 있어요.",
-                onFocusChanged = {
-                    isFocused.value = it
-                },
-                scrollState = scrollState,
-            )
-            Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
-        }
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+                QuestTextField(
+                    value = uiState.questAnswer,
+                    onValueChange = {
+                        if (it.length <= 500) {
+                            onUpdateContent(isFocused.value, it)
+                        }
+                    },
+                    placeholder = "글로 적다 보면, 스스로에게 한 걸음 더 가까워질 수 있어요.",
+                    onFocusChanged = {
+                        isFocused.value = it
+                    },
+                    scrollState = scrollState,
+                )
+                Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
+            }
+
 
         QuestWritingFooter(
             currentCharCount = uiState.questAnswer.length,
             isPhotoQuestion = false,
             modifier =
                 Modifier
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = screenHeightDp(16.dp)),
         )
     }
 }
