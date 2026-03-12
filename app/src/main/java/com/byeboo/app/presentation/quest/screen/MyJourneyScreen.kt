@@ -65,7 +65,7 @@ fun MyJourneyScreen(
                 PaddingValues(
                     start = screenWidthDp(24.dp),
                     end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(37.dp),
+                    bottom = screenHeightDp(24.dp),
                 ),
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -93,32 +93,26 @@ fun MyJourneyScreen(
                     item("quest_row_${stepIndex}_$chunkIndex") {
                         val isLastChunk = chunkIndex == questChunks.lastIndex
 
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
-                            ) {
-                                questChunk.forEach { quest ->
-                                    QuestBox(
-                                        modifier = Modifier.weight(1f),
-                                        questId = quest.questId,
-                                        questNumber = quest.questNumber,
-                                        state = quest.state,
-                                        onQuestClick = { onQuestClick(quest.questId) },
-                                    )
-                                }
-
-                                repeat(3 - questChunk.size) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                }
+                        Row(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = screenHeightDp(if (isLastChunk) 16.dp else 20.dp)),
+                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
+                        ) {
+                            questChunk.forEach { quest ->
+                                QuestBox(
+                                    modifier = Modifier.weight(1f),
+                                    questId = quest.questId,
+                                    questNumber = quest.questNumber,
+                                    state = quest.state,
+                                    onQuestClick = { onQuestClick(quest.questId) },
+                                )
                             }
 
-                            Spacer(
-                                modifier =
-                                    Modifier.height(
-                                        screenHeightDp(if (isLastChunk) 16.dp else 20.dp),
-                                    ),
-                            )
+                            repeat(3 - questChunk.size) {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
                         }
                     }
                 }

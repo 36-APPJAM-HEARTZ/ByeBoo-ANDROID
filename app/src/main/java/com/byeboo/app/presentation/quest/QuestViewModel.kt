@@ -367,10 +367,10 @@ class QuestViewModel
             viewModelScope.launch {
                 val selectedAnswer =
                     uiState.value.commonJourneyState.answers
-                        .find { it.answerId == answerId }
+                        .find { it.answerId == answerId } ?: return@launch
                 val myUserId = userRepository.getUserId()
 
-                if (selectedAnswer != null && selectedAnswer.writerId == myUserId) {
+                if (selectedAnswer.writerId == myUserId) {
                     _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswersDetail(answerId))
                 } else {
                     _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
