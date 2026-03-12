@@ -28,6 +28,8 @@ fun UserInfoQuestScreen(
             JourneyType.REUNION,
         )
 
+    val selectedQuests = selectedQuest?.takeIf { it in quests }
+
     Column {
         DescriptionText(
             title = "퀘스트 방식",
@@ -48,19 +50,9 @@ fun UserInfoQuestScreen(
 
                 UserInfoQuestCard(
                     title = quest.journeyName,
-                    content =
-                        when (quest) {
-                            JourneyType.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
-                            JourneyType.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
-                            else -> ""
-                        },
-                    imageRes =
-                        when (quest) {
-                            JourneyType.RECORDING -> R.drawable.img_bori_overcome
-                            JourneyType.REUNION -> R.drawable.img_bori_reunion
-                            else -> R.drawable.img_bori_reunion
-                        },
-                    isSelected = selectedQuest == quest,
+                    content = quest.userInfoContent(),
+                    imageRes = quest.userInfoImageRes(),
+                    isSelected = selectedQuests == quest,
                     onCardClick = onCardClick,
                     modifier = Modifier.weight(1f),
                 )
@@ -68,3 +60,17 @@ fun UserInfoQuestScreen(
         }
     }
 }
+
+private fun JourneyType.userInfoContent(): String =
+    when (this) {
+        JourneyType.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
+        JourneyType.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+        else -> ""
+    }
+
+private fun JourneyType.userInfoImageRes(): Int =
+    when (this) {
+        JourneyType.RECORDING -> R.drawable.img_bori_overcome
+        JourneyType.REUNION -> R.drawable.img_bori_reunion
+        else -> R.drawable.img_bori_reunion
+    }

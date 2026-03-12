@@ -104,7 +104,20 @@ class UserInfoViewModel
             if (hasSubmitted) return
             val currentState = _uiState.value
 
+            val supportedJourneys =
+                setOf(
+                    JourneyType.RECORDING,
+                    JourneyType.REUNION,
+                )
+
             if (currentState.nicknameValidation != NicknameValidationResult.Valid || currentState.selectedQuest == null) {
+                return
+            }
+
+            if (currentState.selectedQuest !in supportedJourneys) {
+                viewModelScope.launch {
+                    _sideEffect.emit(UserInfoSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                }
                 return
             }
 
