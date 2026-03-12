@@ -41,9 +41,10 @@ fun QuestDateSelector(
             enabled = !isFirstDay,
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    id = if (isFirstDay) R.drawable.ic_date_left_disabled else R.drawable.ic_date_left_enabled,
-                ),
+                imageVector =
+                    ImageVector.vectorResource(
+                        id = if (isFirstDay) R.drawable.ic_date_left_disabled else R.drawable.ic_date_left_enabled,
+                    ),
                 contentDescription = "이전 날짜",
                 tint = Color.Unspecified,
             )
@@ -54,7 +55,7 @@ fun QuestDateSelector(
             style = ByeBooTheme.typography.body2,
             color = ByeBooTheme.colors.gray50,
             textAlign = TextAlign.Center,
-            modifier = Modifier.width(screenWidthDp(70.dp))
+            modifier = Modifier.width(screenWidthDp(70.dp)),
         )
 
         IconButton(
@@ -62,9 +63,10 @@ fun QuestDateSelector(
             enabled = !isToday,
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    id = if (isToday) R.drawable.ic_date_right_disabled else R.drawable.ic_date_right_enabled,
-                ),
+                imageVector =
+                    ImageVector.vectorResource(
+                        id = if (isToday) R.drawable.ic_date_right_disabled else R.drawable.ic_date_right_enabled,
+                    ),
                 contentDescription = "다음 날짜",
                 tint = Color.Unspecified,
             )

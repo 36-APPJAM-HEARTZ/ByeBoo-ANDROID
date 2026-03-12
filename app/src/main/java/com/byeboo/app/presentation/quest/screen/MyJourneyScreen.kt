@@ -114,9 +114,10 @@ fun MyJourneyScreen(
                             }
 
                             Spacer(
-                                modifier = Modifier.height(
-                                    screenHeightDp(if (isLastChunk) 16.dp else 20.dp)
-                                )
+                                modifier =
+                                    Modifier.height(
+                                        screenHeightDp(if (isLastChunk) 16.dp else 20.dp),
+                                    ),
                             )
                         }
                     }
