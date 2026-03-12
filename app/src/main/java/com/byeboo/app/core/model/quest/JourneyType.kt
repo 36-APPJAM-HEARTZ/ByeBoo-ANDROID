@@ -26,12 +26,16 @@ enum class JourneyType(
         journeyType = "PREPARE_REUNION",
         frontImg = R.drawable.img_reunion_amulet_front,
         backImg = R.drawable.img_reunion_amulet_back,
-    ), ;
+    ),
+
+    UNKNOWN(
+        journeyName = "알 수 없음",
+        journeyType = "UNKNOWN",
+    ),
+    ;
 
     companion object {
         fun fromJourneyName(journeyName: String): JourneyType =
             JourneyType.entries.find { it.journeyName == journeyName } ?: JourneyType.RECORDING
-
-        fun fromStyle(style: String): JourneyType = JourneyType.entries.find { it.name == style } ?: JourneyType.RECORDING
     }
 }

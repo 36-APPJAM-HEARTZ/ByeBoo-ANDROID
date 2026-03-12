@@ -1,11 +1,11 @@
 package com.byeboo.app.data.mapper.auth
 
 import com.byeboo.app.core.model.auth.TokenEntity
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.data.dto.response.auth.KakaoLoginResponseDto
 import com.byeboo.app.data.dto.response.auth.TokenReissueResponseDto
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.auth.AuthResult
-import com.byeboo.app.domain.model.auth.JourneyType
 
 fun KakaoLoginResponseDto.toDomain(): AuthResult =
     AuthResult(
@@ -19,9 +19,9 @@ fun KakaoLoginResponseDto.toDomain(): AuthResult =
 
 internal fun String?.toJourneyType(): JourneyType =
     when (this) {
-        "FACE_EMOTION" -> JourneyType.FACE_EMOTION
-        "PROCESS_EMOTION" -> JourneyType.PROCESS_EMOTION
-        "PREPARE_REUNION" -> JourneyType.PREPARE_REUNION
+        "FACE_EMOTION" -> JourneyType.RECORDING
+        "PROCESS_EMOTION" -> JourneyType.ACTIVE
+        "PREPARE_REUNION" -> JourneyType.REUNION
         else -> JourneyType.UNKNOWN
     }
 
