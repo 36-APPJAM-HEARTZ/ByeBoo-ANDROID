@@ -57,6 +57,7 @@ class CommonOtherAnswerViewModel
                                     CommonAnswerModel(
                                         answerId = answerId,
                                         writer = domainModel.writer,
+                                        writerId = domainModel.writerId,
                                         profileIconRes = mapper.mapToIconRes(domainModel.profileIcon),
                                         displayTime = mapper.formatDetailDate(domainModel.writtenAt),
                                         content = domainModel.content,

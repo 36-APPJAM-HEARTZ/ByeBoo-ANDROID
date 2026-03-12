@@ -16,9 +16,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -41,23 +38,39 @@ class MyDetailAnswerViewModel
             loadMyDetailAnswer()
         }
 
-        fun loadMyDetailAnswer() {
-            questCommonRepository.answersFlow
-                .mapNotNull { value -> value.find { it.answerId == answerId } }
-                .onEach { cachedAnswer ->
-                    _uiState.update { state ->
-                        state.copy(
-                            answer =
-                                state.answer.copy(
-                                    answerId = cachedAnswer.answerId,
-                                    question = cachedAnswer.question,
-                                    writtenAt = cachedAnswer.writtenAt,
-                                    content = cachedAnswer.content,
-                                ),
+    fun loadMyDetailAnswer() {
+        viewModelScope.launch {
+            val cached = questCommonRepository.getCachedMyAnswer(answerId)
+            if (cached != null) {
+                _uiState.update { state ->
+                    state.copy(
+                        answer = state.answer.copy(
+                            answerId = cached.answerId,
+                            question = cached.question,
+                            writtenAt = cached.writtenAt,
+                            content = cached.content,
                         )
+                    )
+                }
+            } else {
+                questCommonRepository.getCommonQuestAnswerDetail(answerId)
+                    .onSuccess { detail ->
+                        _uiState.update { state ->
+                            state.copy(
+                                answer = state.answer.copy(
+                                    answerId = answerId,
+                                    question = detail.question,
+                                    writtenAt = detail.writtenAt.toString(),
+                                    content = detail.content,
+                                )
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
-                }.launchIn(viewModelScope)
+            }
         }
+    }
 
         fun onClickMoreOptions() {
             _uiState.update { it.copy(showBottomSheet = true) }

@@ -124,6 +124,7 @@ class QuestViewModel
                         .map { answer ->
                             CommonAnswerModel(
                                 answerId = answer.answerId,
+                                writerId = answer.writerId,
                                 writer = answer.writer,
                                 profileIconRes = mapper.mapToIconRes(answer.profileIcon),
                                 displayTime = mapper.formatWrittenTime(answer.writtenAt),
@@ -196,6 +197,7 @@ class QuestViewModel
                                 CommonAnswerModel(
                                     answerId = answer.answerId,
                                     writer = answer.writer,
+                                    writerId = answer.writerId,
                                     profileIconRes = mapper.mapToIconRes(answer.profileIcon),
                                     displayTime = mapper.formatWrittenTime(answer.writtenAt),
                                     content = answer.content,
@@ -361,11 +363,18 @@ class QuestViewModel
             }
         }
 
-        fun onOtherAnswerClicked(answerId: Long) {
-            viewModelScope.launch {
+    fun onOtherAnswerClicked(answerId: Long) {
+        viewModelScope.launch {
+            val selectedAnswer = uiState.value.commonJourneyState.answers.find { it.answerId == answerId }
+            val myUserId = userRepository.getUserId()
+
+            if (selectedAnswer != null && selectedAnswer.writerId == myUserId) {
+                _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswersDetail(answerId))
+            } else {
                 _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
             }
         }
+    }
 
         fun onCommonQuestClicked(questId: Long) {
             viewModelScope.launch {

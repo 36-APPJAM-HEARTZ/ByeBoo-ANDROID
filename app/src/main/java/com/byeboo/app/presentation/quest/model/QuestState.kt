@@ -29,6 +29,8 @@ sealed interface QuestSideEffect {
         val questId: Long,
     ) : QuestSideEffect
 
+    data class NavigateToQuestMyAnswersDetail(val answerId: Long) : QuestSideEffect
+
     data class NavigateToCommonAnswerDetail(
         val answerId: Long,
     ) : QuestSideEffect

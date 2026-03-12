@@ -121,6 +121,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToQuestCommonWriting = navigateToQuestCommonWriting,
                 navigateToQuestReview = navigateToQuestReview,
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
+                navigateToMyAnswerDetail = navigateToQuestMyAnswerDetail,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
                 isCommonAnswerCompleted = isCommonAnswerCompleted,
                 onCommonAnswerCompleted = {
