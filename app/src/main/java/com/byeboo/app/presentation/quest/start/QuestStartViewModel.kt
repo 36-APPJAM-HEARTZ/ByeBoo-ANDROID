@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
@@ -34,7 +34,7 @@ class QuestStartViewModel
         savedStateHandle: SavedStateHandle,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
-        private val questTypeArg = savedStateHandle.toRoute<QuestStart>().questType
+        private val journeyTypeArg = savedStateHandle.toRoute<QuestStart>().journeyType
 
         private val _uiState = MutableStateFlow(QuestStartState())
         val uiState: StateFlow<QuestStartState> = _uiState.asStateFlow()
@@ -57,12 +57,12 @@ class QuestStartViewModel
                 _uiState.update { it.copy(journeyName = journey) }
             }
             _uiState.update {
-                it.copy(questType = questTypeArg)
+                it.copy(journeyType = journeyTypeArg)
             }
         }
 
         fun onStartClicked() {
-            val journey = uiState.value.questType
+            val journey = uiState.value.journeyType
 
             if (journey == null) {
                 viewModelScope.launch {
@@ -106,7 +106,7 @@ class QuestStartViewModel
             }
         }
 
-        private fun postNewJourney(journey: QuestType) {
+        private fun postNewJourney(journey: JourneyType) {
             val journeyType = journey.journeyType
             val journeyName = journey.journeyName
 

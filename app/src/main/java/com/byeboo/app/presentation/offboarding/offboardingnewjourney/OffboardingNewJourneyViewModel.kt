@@ -2,7 +2,7 @@ package com.byeboo.app.presentation.offboarding.offboardingnewjourney
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
@@ -29,7 +29,7 @@ class OffboardingNewJourneyViewModel
             }
         }
 
-        fun postNewJourney(journey: QuestType) {
+        fun postNewJourney(journey: JourneyType) {
             val journeyName = journey.journeyName
 
             viewModelScope.launch {

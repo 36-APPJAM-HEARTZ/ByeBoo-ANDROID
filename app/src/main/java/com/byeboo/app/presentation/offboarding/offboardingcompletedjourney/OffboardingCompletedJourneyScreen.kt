@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneySideEffect
@@ -38,9 +38,8 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 @Composable
 fun OffboardingCompletedJourneyRoute(
     navigateUp: () -> Unit,
-    navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
+    navigateToOffboardingQuestCompleted: (JourneyType) -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,7 +63,6 @@ fun OffboardingCompletedJourneyRoute(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onJourneyCompletedCardClick = viewModel::onJourneyCompletedCardClicked,
-        modifier = modifier,
     )
 }
 
@@ -73,7 +71,7 @@ private fun OffboardingCompletedJourneyScreen(
     uiState: OffboardingJourneyState,
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    onJourneyCompletedCardClick: (QuestType) -> Unit,
+    onJourneyCompletedCardClick: (JourneyType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(

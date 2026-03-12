@@ -78,7 +78,7 @@ fun MainNavHost(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = questNavOptions,
                 )
             },
@@ -218,7 +218,7 @@ fun MainNavHost(
             },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = keepStackNavOptions,
                 )
             },
@@ -231,7 +231,7 @@ fun MainNavHost(
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey ->
                 navigator.navigateToOffboardingQuestCompleted(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = keepStackNavOptions,
                 )
             },

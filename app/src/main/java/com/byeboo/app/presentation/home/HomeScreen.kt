@@ -50,7 +50,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
@@ -63,7 +63,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun HomeRoute(
     navigateToQuest: () -> Unit,
-    navigateToQuestStart: (QuestType?) -> Unit,
+    navigateToQuestStart: (JourneyType?) -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
