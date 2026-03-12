@@ -9,9 +9,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
@@ -34,16 +34,13 @@ fun QuestTextField(
     onFocusChanged: ((Boolean) -> Unit)? = null,
 ) {
     val isFocused = remember { mutableStateOf(false) }
-    val lastLineBottom = remember { mutableStateOf(0) }
+    val lineCount = remember { mutableIntStateOf(1) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(isFocused.value) {
+    LaunchedEffect(lineCount.intValue) {
         if (isFocused.value) {
-            snapshotFlow { scrollState.maxValue }
-                .collect {
-                    scrollState.scrollTo(it)
-                }
+           scrollState.animateScrollTo(scrollState.maxValue)
         }
     }
 
@@ -85,8 +82,7 @@ fun QuestTextField(
             innerTextField()
         },
         onTextLayout = { layoutResult ->
-            lastLineBottom.value =
-                layoutResult.getLineBottom(layoutResult.lineCount - 1).toInt()
+           lineCount.intValue = layoutResult.lineCount
         },
     )
 }
