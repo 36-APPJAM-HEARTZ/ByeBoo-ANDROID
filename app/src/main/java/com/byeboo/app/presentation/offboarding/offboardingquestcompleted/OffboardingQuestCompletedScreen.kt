@@ -131,7 +131,10 @@ private fun OffboardingQuestCompletedScreen(
                         val isLastChunk = chunkIndex == questChunks.lastIndex
 
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = screenHeightDp(if (isLastChunk) 16.dp else 20.dp)),
                             horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
                         ) {
                             questChunk.forEach { quest ->
@@ -147,13 +150,6 @@ private fun OffboardingQuestCompletedScreen(
                                 Spacer(modifier = Modifier.weight(1f))
                             }
                         }
-
-                        Spacer(
-                            modifier =
-                                Modifier.height(
-                                    screenHeightDp(if (isLastChunk) 16.dp else 20.dp),
-                                ),
-                        )
                     }
                 }
             }

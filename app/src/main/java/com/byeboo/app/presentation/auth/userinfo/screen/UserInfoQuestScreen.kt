@@ -11,21 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.text.DescriptionText
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.presentation.auth.userinfo.component.UserInfoQuestCard
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun UserInfoQuestScreen(
-    selectedQuest: OnboardingQuestStyle?,
-    onQuestSelect: (OnboardingQuestStyle) -> Unit,
+    selectedQuest: JourneyType?,
+    onQuestSelect: (JourneyType) -> Unit,
 ) {
     val quests =
         persistentListOf(
-            OnboardingQuestStyle.RECORDING,
-            OnboardingQuestStyle.REUNION,
+            JourneyType.RECORDING,
+            JourneyType.REUNION,
         )
 
     Column {
@@ -47,16 +47,18 @@ fun UserInfoQuestScreen(
                     }
 
                 UserInfoQuestCard(
-                    title = quest.displayText,
+                    title = quest.journeyName,
                     content =
                         when (quest) {
-                            OnboardingQuestStyle.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
-                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+                            JourneyType.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
+                            JourneyType.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
+                            else -> ""
                         },
                     imageRes =
                         when (quest) {
-                            OnboardingQuestStyle.RECORDING -> R.drawable.img_bori_overcome
-                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
+                            JourneyType.RECORDING -> R.drawable.img_bori_overcome
+                            JourneyType.REUNION -> R.drawable.img_bori_reunion
+                            else -> R.drawable.img_bori_reunion
                         },
                     isSelected = selectedQuest == quest,
                     onCardClick = onCardClick,

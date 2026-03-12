@@ -3,13 +3,12 @@ package com.byeboo.app.presentation.auth.userinfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.auth.BadWordValidator
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
-import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.domain.model.auth.UserInfoModel
-import com.byeboo.app.domain.model.auth.toJourneyText
 import com.byeboo.app.domain.model.notification.FcmTokenModel
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
@@ -80,21 +79,22 @@ class UserInfoViewModel
             }
         }
 
-        fun updateQuest(quest: OnboardingQuestStyle) {
+        fun updateQuest(quest: JourneyType) {
             _uiState.update {
                 it.copy(selectedQuest = quest)
             }
         }
 
-        private fun trackQuestSelected(questStyle: OnboardingQuestStyle) {
+        private fun trackQuestSelected(questStyle: JourneyType) {
             mixpanelUtil.trackEvent(
                 eventName = "quest_type_complete",
                 properties =
                     mapOf(
                         "quest_type" to
                             when (questStyle) {
-                                OnboardingQuestStyle.RECORDING -> "이별 극복"
-                                OnboardingQuestStyle.REUNION -> "재회 준비"
+                                JourneyType.RECORDING -> "이별 극복"
+                                JourneyType.REUNION -> "재회 준비"
+                                else -> ""
                             },
                     ),
             )
@@ -121,7 +121,7 @@ class UserInfoViewModel
 
                 if (result.isSuccess) {
                     trackQuestSelected(currentState.selectedQuest)
-                    questStateRepository.updateUserJourney(currentState.selectedQuest.toJourneyText())
+                    questStateRepository.updateUserJourney(currentState.selectedQuest.journeyName)
                     userRepository.setUserRegistered(true)
 
                     saveFcmToken()
