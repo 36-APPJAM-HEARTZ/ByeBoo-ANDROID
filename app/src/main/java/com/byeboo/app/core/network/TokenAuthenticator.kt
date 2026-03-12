@@ -31,6 +31,7 @@ class TokenAuthenticator
 
                 if (newAuthenticatedToken == null) {
                     tokenRepository.clearTokens()
+                    tokenRepository.setLoginSplash(true)
                     return@runBlocking null
                 }
 

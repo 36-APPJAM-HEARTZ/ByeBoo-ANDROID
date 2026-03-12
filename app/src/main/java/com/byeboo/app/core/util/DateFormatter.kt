@@ -10,7 +10,7 @@ object DateUtil {
     fun formatToDotDate(date: String): String {
         return runCatching {
             if (date.isBlank()) return ""
-            LocalDate.parse(date).format(DateTimeFormatter.ofPattern("yyyy. MM. dd"))
+            LocalDate.parse(date).format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
         }.getOrElse { "" }
     }
 

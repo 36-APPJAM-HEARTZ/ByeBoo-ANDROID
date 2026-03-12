@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -131,11 +132,11 @@ private fun QuestCommonScreen(
                         false
                     }
                 }.addFocusCleaner(focusManager)
-                .imePadding()
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                ),
+                ).imePadding()
+                .consumeWindowInsets(paddingValues),
     ) {
         QuestWritingTopbar(
             isEnabled = uiState.isCompleteButtonEnabled,
@@ -188,7 +189,8 @@ private fun QuestCommonScreen(
             isPhotoQuestion = false,
             modifier =
                 Modifier
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = screenHeightDp(14.dp)),
         )
     }
 }

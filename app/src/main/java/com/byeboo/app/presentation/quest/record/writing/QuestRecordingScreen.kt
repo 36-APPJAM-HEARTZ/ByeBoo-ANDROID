@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,13 +42,11 @@ import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
-import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
 import com.byeboo.app.presentation.quest.component.text.textfield.QuestTextField
 import com.byeboo.app.presentation.quest.component.topbar.QuestWritingTopbar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -105,20 +104,6 @@ fun QuestRecordingRoute(
         )
     }
 
-    if (uiState.showCompleteModal) {
-        QuestCompleteDialog(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-        )
-
-        LaunchedEffect(Unit) {
-            delay(2000L)
-            viewModel.onCompleteModalTimeout()
-        }
-    }
-
     BackHandler { viewModel.onBackClicked() }
 
     QuestRecordingScreen(
@@ -168,11 +153,11 @@ private fun QuestRecordingScreen(
                         false
                     }
                 }.addFocusCleaner(focusManager)
-                .imePadding()
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                ),
+                ).imePadding()
+                .consumeWindowInsets(paddingValues),
     ) {
         QuestWritingTopbar(
             isEnabled = uiState.isCompleteButtonEnabled,
@@ -227,7 +212,8 @@ private fun QuestRecordingScreen(
             isPhotoQuestion = false,
             modifier =
                 Modifier
-                    .padding(horizontal = screenWidthDp(24.dp)),
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = screenHeightDp(14.dp)),
         )
     }
 

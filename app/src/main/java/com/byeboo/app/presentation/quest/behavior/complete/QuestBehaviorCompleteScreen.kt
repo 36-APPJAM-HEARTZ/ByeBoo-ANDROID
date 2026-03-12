@@ -41,9 +41,11 @@ import com.byeboo.app.core.util.findActivity
 import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
 import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
+import kotlinx.coroutines.delay
 
 @Composable
 fun QuestBehaviorCompleteRoute(
@@ -87,6 +89,17 @@ fun QuestBehaviorCompleteRoute(
         }
     }
 
+    if (uiState.showCompleteModal) {
+        QuestCompleteDialog(
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
+        )
+
+        LaunchedEffect(Unit) {
+            delay(2000L)
+            viewModel.closeCompleteModal()
+        }
+    }
+
     BackHandler { viewModel.onCloseClicked() }
 
     QuestBehaviorCompleteScreen(
@@ -112,6 +125,7 @@ private fun QuestBehaviorCompleteScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
+                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),

@@ -166,12 +166,8 @@ class QuestBehaviorViewModel
                                 "after_emotion_type" to emotion,
                             ),
                     )
-                    _uiState.update {
-                        it.copy(
-                            showBottomSheet = false,
-                            showCompleteModal = true,
-                        )
-                    }
+                    _uiState.update { it.copy(showBottomSheet = false) }
+                    _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
                 }.onFailure {
                     _sideEffect.emit(
                         QuestBehaviorSideEffect.ShowSnackBar(
@@ -187,16 +183,6 @@ class QuestBehaviorViewModel
                 uploadWithoutImageChange()
             } else {
                 uploadEditedImage(context)
-            }
-        }
-
-        fun onCompleteModalTimeout() {
-            val questId = _uiState.value.questId
-
-            _uiState.update { it.copy(showBottomSheet = false) }
-
-            viewModelScope.launch {
-                _sideEffect.emit(QuestBehaviorSideEffect.NavigateToQuestBehaviorComplete(questId))
             }
         }
 

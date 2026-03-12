@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
@@ -52,7 +53,7 @@ class MyDetailAnswerViewModel
                                 state.answer.copy(
                                     content = updated.content,
                                     question = updated.question,
-                                    writtenAt = updated.writtenAt,
+                                    writtenAt = DateUtil.formatToDotDate(updated.writtenAt),
                                 ),
                         )
                     }

@@ -61,6 +61,7 @@ class QuestBehaviorCompleteViewModel
                                 selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
                                 emotionDescription = detail.emotionDescription,
                                 isExistedAiAnswer = detail.isExistedAiAnswer,
+                                showCompleteModal = true,
                             )
                         }
                     }.onFailure {
@@ -109,5 +110,9 @@ class QuestBehaviorCompleteViewModel
                     ),
                 )
             }
+        }
+
+        fun closeCompleteModal() {
+            _uiState.update { it.copy(showCompleteModal = false) }
         }
     }

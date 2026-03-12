@@ -29,9 +29,11 @@ import com.byeboo.app.core.util.findActivity
 import com.byeboo.app.core.util.inAppReview
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.card.QuestEmotionDescriptionCard
 import com.byeboo.app.presentation.quest.component.text.QuestTitle
 import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
+import kotlinx.coroutines.delay
 
 @Composable
 fun QuestRecordingCompleteRoute(
@@ -65,6 +67,17 @@ fun QuestRecordingCompleteRoute(
 
                 is QuestRecordingCompleteSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
+        }
+    }
+
+    if (uiState.showCompleteModal) {
+        QuestCompleteDialog(
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
+        )
+
+        LaunchedEffect(Unit) {
+            delay(2000L)
+            viewModel.closeCompleteModal()
         }
     }
 

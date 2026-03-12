@@ -41,8 +41,10 @@ class QuestRecordingViewModel
             checkNotNull(
                 savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().questId,
             )
-        private val isEditModeArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().isEditMode
-        private val fromOffboardingArg: Boolean = savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().fromOffboarding
+        private val isEditModeArg: Boolean =
+            savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().isEditMode
+        private val fromOffboardingArg: Boolean =
+            savedStateHandle.toRoute<QuestRecord.QuestRecordingWriting>().fromOffboarding
 
         private val _uiState =
             MutableStateFlow(
@@ -144,12 +146,11 @@ class QuestRecordingViewModel
                                     "after_emotion_type" to emotion,
                                 ),
                         )
-                        _uiState.update {
-                            it.copy(
-                                showBottomSheet = false,
-                                showCompleteModal = true,
-                            )
-                        }
+                        _uiState.update { it.copy(showBottomSheet = false) }
+
+                        _sideEffect.emit(
+                            QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
+                        )
                     }.onFailure {
                         _sideEffect.emit(
                             QuestRecordingSideEffect.ShowSnackBar(
@@ -157,18 +158,6 @@ class QuestRecordingViewModel
                             ),
                         )
                     }
-            }
-        }
-
-        fun onCompleteModalTimeout() {
-            val questId = _uiState.value.questId
-
-            _uiState.update { it.copy(showCompleteModal = false) }
-
-            viewModelScope.launch {
-                _sideEffect.emit(
-                    QuestRecordingSideEffect.NavigateToQuestRecordingComplete(questId),
-                )
             }
         }
 
