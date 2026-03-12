@@ -102,43 +102,38 @@ class UserInfoViewModel
 
         fun finishUserInfo() {
             if (hasSubmitted) return
+            val currentState = _uiState.value
+
+            if (currentState.nicknameValidation != NicknameValidationResult.Valid || currentState.selectedQuest == null) {
+                return
+            }
+
             hasSubmitted = true
 
             viewModelScope.launch {
-                if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
-                    hasSubmitted = false
-                    return@launch
-                }
                 val userInfo =
                     UserInfoModel(
-                        name = _uiState.value.nickname,
-                        questStyle =
-                            _uiState.value.selectedQuest
-                                ?.name
-                                .orEmpty(),
+                        name = currentState.nickname,
+                        questStyle = currentState.selectedQuest.name,
                     )
 
                 val result = userRepository.updateUserInfo(userInfo)
 
                 if (result.isSuccess) {
-                    _uiState.value.selectedQuest?.let { selectedQuest ->
-                        trackQuestSelected(selectedQuest)
-                        questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
-                        userRepository.setUserRegistered(true)
-                    }
+                    trackQuestSelected(currentState.selectedQuest)
+                    questStateRepository.updateUserJourney(currentState.selectedQuest.toJourneyText())
+                    userRepository.setUserRegistered(true)
+
                     saveFcmToken()
 
-                    val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
-                    if (isRegisteredUser) {
+                    if (fcmTokenRepository.isAlarmEnabled()) {
                         fcmTokenRepository.allowQuestAlarm()
                     }
                     _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
                 } else {
                     hasSubmitted = false
                     _sideEffect.emit(
-                        UserInfoSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT,
-                        ),
+                        UserInfoSideEffect.ShowSnackBar(CustomSnackBarType.ALERT),
                     )
                 }
             }
