@@ -49,7 +49,7 @@ fun QuestTitle(
         }
 
         Text(
-            text = "$date",
+            text = date,
             color = ByeBooTheme.colors.gray500,
             style = ByeBooTheme.typography.body6,
         )
