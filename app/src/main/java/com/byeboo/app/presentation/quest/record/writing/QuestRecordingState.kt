@@ -22,7 +22,6 @@ data class QuestRecordingState(
     val isEditMode: Boolean = false,
     val originalAnswer: String = "",
     val fromOffboarding: Boolean = false,
-    val showCompleteModal: Boolean = false,
 ) {
     val hasAnswerChanged: Boolean
         get() = questAnswer != originalAnswer
