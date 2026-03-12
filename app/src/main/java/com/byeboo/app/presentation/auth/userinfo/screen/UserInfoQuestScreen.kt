@@ -24,8 +24,8 @@ fun UserInfoQuestScreen(
 ) {
     val quests =
         persistentListOf(
-            OnboardingQuestStyle.REUNION,
             OnboardingQuestStyle.RECORDING,
+            OnboardingQuestStyle.REUNION,
         )
 
     Column {
@@ -50,13 +50,13 @@ fun UserInfoQuestScreen(
                     title = quest.displayText,
                     content =
                         when (quest) {
-                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
                             OnboardingQuestStyle.RECORDING -> "질문과 미션을 통해\n나만의 삶을\n회복해 나가요"
+                            OnboardingQuestStyle.REUNION -> "X와의 재회를 위해\n나를 먼저 돌아보고\n상대를 이해해요"
                         },
                     imageRes =
                         when (quest) {
-                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
                             OnboardingQuestStyle.RECORDING -> R.drawable.img_bori_overcome
+                            OnboardingQuestStyle.REUNION -> R.drawable.img_bori_reunion
                         },
                     isSelected = selectedQuest == quest,
                     onCardClick = onCardClick,

@@ -22,6 +22,7 @@ data class Quest(
 @Immutable
 data class CommonAnswerModel(
     val answerId: Long,
+    val writerId: Long,
     val writer: String,
     @DrawableRes val profileIconRes: Int,
     val displayTime: String,

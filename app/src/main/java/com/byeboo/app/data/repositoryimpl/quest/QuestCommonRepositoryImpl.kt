@@ -93,9 +93,13 @@ class QuestCommonRepositoryImpl
                         request = request.toData(),
                     )
                 if (!response.success) throw Exception(response.message)
-                _answersFlow.update { currentList ->
-                    currentList.map { item ->
-                        if (item.answerId == answerId) item.copy(content = request.answer) else item
+
+                val exists = _answersFlow.value.any { it.answerId == answerId }
+                if (exists) {
+                    _answersFlow.update { currentList ->
+                        currentList.map { item ->
+                            if (item.answerId == answerId) item.copy(content = request.answer) else item
+                        }
                     }
                 }
                 _refreshEvent.emit(Unit)
