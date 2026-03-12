@@ -17,7 +17,7 @@ class OffboardingJourneyMapper
                     model.uncompletedCards.forEach { card ->
                         add(
                             JourneyCard(
-                                journeyType = JourneyType.fromJourneyName(card.style),
+                                journeyType = JourneyType.fromStyle(card.style),
                                 status = JourneyStatus.UNCOMPLETED,
                             ),
                         )
@@ -26,7 +26,7 @@ class OffboardingJourneyMapper
                     model.completedCards.forEach { card ->
                         add(
                             JourneyCard(
-                                journeyType = JourneyType.fromJourneyName(card.style),
+                                journeyType = JourneyType.fromStyle(card.style),
                                 status = JourneyStatus.COMPLETED,
                             ),
                         )

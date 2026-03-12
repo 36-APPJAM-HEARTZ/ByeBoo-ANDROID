@@ -35,7 +35,8 @@ enum class JourneyType(
     ;
 
     companion object {
-        fun fromJourneyName(journeyName: String): JourneyType =
-            JourneyType.entries.find { it.journeyName == journeyName } ?: JourneyType.RECORDING
+        fun fromJourneyName(journeyName: String): JourneyType = JourneyType.entries.find { it.journeyName == journeyName } ?: UNKNOWN
+
+        fun fromStyle(style: String): JourneyType = JourneyType.entries.find { it.name == style } ?: UNKNOWN
     }
 }
