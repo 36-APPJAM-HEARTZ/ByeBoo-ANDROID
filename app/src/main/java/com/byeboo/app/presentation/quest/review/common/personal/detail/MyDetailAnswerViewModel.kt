@@ -38,39 +38,42 @@ class MyDetailAnswerViewModel
             loadMyDetailAnswer()
         }
 
-    fun loadMyDetailAnswer() {
-        viewModelScope.launch {
-            val cached = questCommonRepository.getCachedMyAnswer(answerId)
-            if (cached != null) {
-                _uiState.update { state ->
-                    state.copy(
-                        answer = state.answer.copy(
-                            answerId = cached.answerId,
-                            question = cached.question,
-                            writtenAt = cached.writtenAt,
-                            content = cached.content,
+        fun loadMyDetailAnswer() {
+            viewModelScope.launch {
+                val cached = questCommonRepository.getCachedMyAnswer(answerId)
+                if (cached != null) {
+                    _uiState.update { state ->
+                        state.copy(
+                            answer =
+                                state.answer.copy(
+                                    answerId = cached.answerId,
+                                    question = cached.question,
+                                    writtenAt = cached.writtenAt,
+                                    content = cached.content,
+                                ),
                         )
-                    )
-                }
-            } else {
-                questCommonRepository.getCommonQuestAnswerDetail(answerId)
-                    .onSuccess { detail ->
-                        _uiState.update { state ->
-                            state.copy(
-                                answer = state.answer.copy(
-                                    answerId = answerId,
-                                    question = detail.question,
-                                    writtenAt = detail.writtenAt.toString(),
-                                    content = detail.content,
-                                )
-                            )
-                        }
-                    }.onFailure {
-                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
+                } else {
+                    questCommonRepository
+                        .getCommonQuestAnswerDetail(answerId)
+                        .onSuccess { detail ->
+                            _uiState.update { state ->
+                                state.copy(
+                                    answer =
+                                        state.answer.copy(
+                                            answerId = answerId,
+                                            question = detail.question,
+                                            writtenAt = detail.writtenAt.toString(),
+                                            content = detail.content,
+                                        ),
+                                )
+                            }
+                        }.onFailure {
+                            _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                        }
+                }
             }
         }
-    }
 
         fun onClickMoreOptions() {
             _uiState.update { it.copy(showBottomSheet = true) }
