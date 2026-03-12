@@ -91,7 +91,7 @@ fun QuestBehaviorCompleteRoute(
 
     if (uiState.showCompleteModal) {
         QuestCompleteDialog(
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         LaunchedEffect(Unit) {

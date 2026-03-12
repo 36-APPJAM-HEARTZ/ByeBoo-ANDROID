@@ -42,7 +42,6 @@ import com.byeboo.app.core.util.addFocusCleaner
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.ByeBooBottomSheet
-import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestQuitModal
 import com.byeboo.app.presentation.quest.component.text.QuestWritingFooter
 import com.byeboo.app.presentation.quest.component.text.QuestWritingTitle
@@ -157,8 +156,7 @@ private fun QuestRecordingScreen(
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                )
-                .imePadding()
+                ).imePadding()
                 .consumeWindowInsets(paddingValues),
     ) {
         QuestWritingTopbar(

@@ -175,8 +175,7 @@ private fun QuestBehaviorWritingScreen(
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = if (isImeVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                )
-                .imePadding()
+                ).imePadding()
                 .consumeWindowInsets(paddingValues),
     ) {
         QuestWritingTopbar(
@@ -230,7 +229,6 @@ private fun QuestBehaviorWritingScreen(
 
             Spacer(modifier = Modifier.height(screenHeightDp(32.dp)))
 
-
             if (!isImeVisible) {
                 QuestWritingFooter(
                     currentCharCount = uiState.questAnswer.length,
@@ -241,7 +239,6 @@ private fun QuestBehaviorWritingScreen(
                             .padding(bottom = screenHeightDp(14.dp)),
                 )
             }
-
         }
 
         if (isImeVisible) {

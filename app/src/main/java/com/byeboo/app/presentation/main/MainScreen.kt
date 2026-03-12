@@ -70,11 +70,12 @@ fun MainScreen(
         }
     }
 
-    val snackBarBottomInset = when {
-        isImeVisible -> screenHeightDp(12.dp)
-        showBottomBar -> screenHeightDp(8.dp)
-        else -> screenHeightDp(68.dp)
-    }
+    val snackBarBottomInset =
+        when {
+            isImeVisible -> screenHeightDp(12.dp)
+            showBottomBar -> screenHeightDp(8.dp)
+            else -> screenHeightDp(68.dp)
+        }
 
     val navOptions =
         navOptions {

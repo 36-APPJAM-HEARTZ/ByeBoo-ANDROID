@@ -40,7 +40,7 @@ fun QuestTextField(
 
     LaunchedEffect(lineCount.intValue) {
         if (isFocused.value) {
-           scrollState.animateScrollTo(scrollState.maxValue)
+            scrollState.animateScrollTo(scrollState.maxValue)
         }
     }
 
@@ -82,7 +82,7 @@ fun QuestTextField(
             innerTextField()
         },
         onTextLayout = { layoutResult ->
-           lineCount.intValue = layoutResult.lineCount
+            lineCount.intValue = layoutResult.lineCount
         },
     )
 }

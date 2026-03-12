@@ -24,95 +24,95 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestBehaviorCompleteViewModel
-@Inject
-constructor(
-    private val questRecordedDetailRepository: QuestRecordedDetailRepository,
-    savedStateHandle: SavedStateHandle,
-    private val mixpanelUtil: MixpanelUtil,
-) : ViewModel() {
-    private val questIdArg: Long =
-        checkNotNull(
-            savedStateHandle.toRoute<QuestBehavior.QuestBehaviorComplete>().questId,
-        )
+    @Inject
+    constructor(
+        private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+        savedStateHandle: SavedStateHandle,
+        private val mixpanelUtil: MixpanelUtil,
+    ) : ViewModel() {
+        private val questIdArg: Long =
+            checkNotNull(
+                savedStateHandle.toRoute<QuestBehavior.QuestBehaviorComplete>().questId,
+            )
 
-    private val _uiState = MutableStateFlow(QuestBehaviorCompleteState(questId = questIdArg))
-    val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(QuestBehaviorCompleteState(questId = questIdArg))
+        val uiState: StateFlow<QuestBehaviorCompleteState> = _uiState.asStateFlow()
 
-    private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
-    val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect.asSharedFlow()
+        private val _sideEffect = MutableSharedFlow<QuestBehaviorCompleteSideEffect>()
+        val sideEffect: SharedFlow<QuestBehaviorCompleteSideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        loadQuestRecordedDetail()
-    }
+        init {
+            loadQuestRecordedDetail()
+        }
 
-    private fun loadQuestRecordedDetail() {
-        viewModelScope.launch {
-            questRecordedDetailRepository
-                .getQuestRecordedDetail(questIdArg)
-                .onSuccess { detail ->
-                    _uiState.update {
-                        it.copy(
-                            stepNumber = detail.stepNumber,
-                            questNumber = detail.questNumber,
-                            createdAt = detail.createdAt,
-                            question = detail.question,
-                            questAnswer = detail.questAnswer,
-                            imageUrl = detail.imageUrl.orEmpty(),
-                            selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
-                            emotionDescription = detail.emotionDescription,
-                            isExistedAiAnswer = detail.isExistedAiAnswer,
-                            showCompleteModal = true
+        private fun loadQuestRecordedDetail() {
+            viewModelScope.launch {
+                questRecordedDetailRepository
+                    .getQuestRecordedDetail(questIdArg)
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                stepNumber = detail.stepNumber,
+                                questNumber = detail.questNumber,
+                                createdAt = detail.createdAt,
+                                question = detail.question,
+                                questAnswer = detail.questAnswer,
+                                imageUrl = detail.imageUrl.orEmpty(),
+                                selectedEmotion = EmotionChipType.fromKorean(detail.questEmotionState),
+                                emotionDescription = detail.emotionDescription,
+                                isExistedAiAnswer = detail.isExistedAiAnswer,
+                                showCompleteModal = true,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(
+                            QuestBehaviorCompleteSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
                         )
                     }
-                }.onFailure {
+            }
+        }
+
+        fun onCloseClicked() {
+            if (uiState.value.questNumber == 30L) {
+                viewModelScope.launch {
+                    mixpanelUtil.trackEvent(
+                        eventName = "journey_complete_pageview",
+                        properties =
+                            mapOf(
+                                "journey_end_at" to getFormattedDate(),
+                                "journey_type" to "감정 정리",
+                            ),
+                    )
                     _sideEffect.emit(
-                        QuestBehaviorCompleteSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT,
-                        ),
+                        QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide,
                     )
                 }
-        }
-    }
+            } else {
+                viewModelScope.launch {
+                    _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
 
-    fun onCloseClicked() {
-        if (uiState.value.questNumber == 30L) {
-            viewModelScope.launch {
-                mixpanelUtil.trackEvent(
-                    eventName = "journey_complete_pageview",
-                    properties =
-                        mapOf(
-                            "journey_end_at" to getFormattedDate(),
-                            "journey_type" to "감정 정리",
-                        ),
-                )
-                _sideEffect.emit(
-                    QuestBehaviorCompleteSideEffect.NavigateToOffboardingCompletedGuide,
-                )
-            }
-        } else {
-            viewModelScope.launch {
-                _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
-
-                if (uiState.value.questId == 1L) {
-                    _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
+                    if (uiState.value.questId == 1L) {
+                        _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
+                    }
                 }
             }
         }
-    }
 
-    fun onAiAnswerClicked() {
-        viewModelScope.launch {
-            _sideEffect.emit(
-                QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
-                    questId = uiState.value.questId,
-                    isExistedAiAnswer = uiState.value.isExistedAiAnswer,
-                    aiAnswerOrigin = AiAnswerOrigin.QUEST,
-                ),
-            )
+        fun onAiAnswerClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
+                        questId = uiState.value.questId,
+                        isExistedAiAnswer = uiState.value.isExistedAiAnswer,
+                        aiAnswerOrigin = AiAnswerOrigin.QUEST,
+                    ),
+                )
+            }
+        }
+
+        fun closeCompleteModal() {
+            _uiState.update { it.copy(showCompleteModal = false) }
         }
     }
-
-    fun closeCompleteModal() {
-        _uiState.update { it.copy(showCompleteModal = false) }
-    }
-}
