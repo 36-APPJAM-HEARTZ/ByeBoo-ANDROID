@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.quest.component.tab
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -31,11 +33,7 @@ fun QuestDateSelector(
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement =
-            Arrangement.spacedBy(
-                space = screenWidthDp(20.dp),
-                alignment = Alignment.CenterHorizontally,
-            ),
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconButton(
@@ -43,10 +41,9 @@ fun QuestDateSelector(
             enabled = !isFirstDay,
         ) {
             Icon(
-                imageVector =
-                    ImageVector.vectorResource(
-                        id = if (isFirstDay) R.drawable.ic_date_left_disabled else R.drawable.ic_date_left_enabled,
-                    ),
+                imageVector = ImageVector.vectorResource(
+                    id = if (isFirstDay) R.drawable.ic_date_left_disabled else R.drawable.ic_date_left_enabled,
+                ),
                 contentDescription = "이전 날짜",
                 tint = Color.Unspecified,
             )
@@ -56,6 +53,8 @@ fun QuestDateSelector(
             text = selectedDate.format(DateTimeFormatter.ofPattern("M월 d일")),
             style = ByeBooTheme.typography.body2,
             color = ByeBooTheme.colors.gray50,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(screenWidthDp(70.dp))
         )
 
         IconButton(
@@ -63,15 +62,9 @@ fun QuestDateSelector(
             enabled = !isToday,
         ) {
             Icon(
-                imageVector =
-                    ImageVector.vectorResource(
-                        id =
-                            if (isToday) {
-                                R.drawable.ic_date_right_disabled
-                            } else {
-                                R.drawable.ic_date_right_enabled
-                            },
-                    ),
+                imageVector = ImageVector.vectorResource(
+                    id = if (isToday) R.drawable.ic_date_right_disabled else R.drawable.ic_date_right_enabled,
+                ),
                 contentDescription = "다음 날짜",
                 tint = Color.Unspecified,
             )
