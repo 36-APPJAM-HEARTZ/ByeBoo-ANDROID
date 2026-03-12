@@ -2,7 +2,11 @@ package com.byeboo.app.presentation.main
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -35,6 +39,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
@@ -47,6 +52,7 @@ fun MainScreen(
     val showBottomBar = navigator.showBottomBar()
     val status by viewModel.journeyStatus.collectAsStateWithLifecycle()
     val isMoveToQuestHome by viewModel.questHomeNavigation.collectAsStateWithLifecycle()
+    val isImeVisible = WindowInsets.isImeVisible
 
     val onShowSnackBar: (CustomSnackBarType) -> Unit = { type ->
         scope.launch {
@@ -64,12 +70,11 @@ fun MainScreen(
         }
     }
 
-    val snackBarBottomInset =
-        if (showBottomBar) {
-            screenHeightDp(8.dp)
-        } else {
-            screenHeightDp(68.dp)
-        }
+    val snackBarBottomInset = when {
+        isImeVisible -> screenHeightDp(12.dp)
+        showBottomBar -> screenHeightDp(8.dp)
+        else -> screenHeightDp(68.dp)
+    }
 
     val navOptions =
         navOptions {
@@ -133,6 +138,7 @@ fun MainScreen(
                     hostState = snackBarHostState,
                     modifier =
                         Modifier
+                            .imePadding()
                             .padding(horizontal = screenWidthDp(24.dp))
                             .padding(bottom = snackBarBottomInset),
                 ) { snackBar ->
