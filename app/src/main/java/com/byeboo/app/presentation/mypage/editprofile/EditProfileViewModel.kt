@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.mypage.editprofile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.domain.model.auth.BadWordValidator
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class EditProfileViewModel
     @Inject
     constructor(
-        val userRepository: UserRepository,
+        private val userRepository: UserRepository,
+        private val badWordValidator: BadWordValidator,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(EditProfileState())
         val uiState: StateFlow<EditProfileState> = _uiState.asStateFlow()
@@ -67,8 +69,15 @@ class EditProfileViewModel
         }
 
         fun finishEditProfile(nickname: String) {
+            if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return
+
             viewModelScope.launch {
-                if (NicknameValidator.validate(nickname) != NicknameValidationResult.Valid) return@launch
+                if (badWordValidator.contains(nickname)) {
+                    _sideEffect.emit(
+                        EditProfileSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.BAD_WORD),
+                    )
+                    return@launch
+                }
 
                 userRepository
                     .updateUserNickname(nickname)
