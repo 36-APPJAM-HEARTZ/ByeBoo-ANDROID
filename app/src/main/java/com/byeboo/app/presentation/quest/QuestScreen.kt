@@ -78,9 +78,8 @@ fun QuestRoute(
                     navigateToQuestCommonWriting(effect.questId, effect.question)
                 is QuestSideEffect.NavigateToCommonAnswerDetail ->
                     navigateToCommonAnswer(effect.answerId)
-                is QuestSideEffect.NavigateToQuestMyAnswersDetail -> {
+                is QuestSideEffect.NavigateToQuestMyAnswersDetail ->
                     navigateToMyAnswerDetail(effect.answerId)
-                }
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
