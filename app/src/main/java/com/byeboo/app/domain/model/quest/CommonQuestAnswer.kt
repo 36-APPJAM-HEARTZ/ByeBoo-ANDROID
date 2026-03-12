@@ -37,6 +37,15 @@ data class QuestAnswerModel(
     val content: String,
 )
 
+data class QuestAnswerDetailModel(
+    val question: String,
+    val writer: String,
+    val writerId: Long,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
+)
+
 data class QuestCommonAnswerEditModel(
     val answer: String,
 )

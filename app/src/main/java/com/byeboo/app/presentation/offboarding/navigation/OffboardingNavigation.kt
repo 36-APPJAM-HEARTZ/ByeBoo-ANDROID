@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.navigation.Route
 import com.byeboo.app.presentation.offboarding.offboardingcompletedguide.OffboardingCompletedGuideRoute
 import com.byeboo.app.presentation.offboarding.offboardingcompletedjourney.OffboardingCompletedJourneyRoute
@@ -28,15 +28,15 @@ fun NavController.navigateToOffboardingCompletedJourney(navOptions: NavOptions? 
 }
 
 fun NavController.navigateToOffboardingQuestCompleted(
-    questType: QuestType,
+    journeyType: JourneyType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(OffboardingQuestCompleted(questType), navOptions)
+    navigate(OffboardingQuestCompleted(journeyType), navOptions)
 }
 
 fun NavController.navigateToOffboardingQuestReview(
     questId: Long,
-    journey: QuestType,
+    journey: JourneyType,
     navOptions: NavOptions? = null,
 ) {
     navigate(OffboardingQuestReview(questId, journey), navOptions)
@@ -46,11 +46,11 @@ fun NavGraphBuilder.offboardingGraph(
     navigateToHome: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
-    navigateToQuestStart: (QuestType?) -> Unit,
-    navigateToOffboardingQuestReview: (Long, QuestType) -> Unit,
+    navigateToQuestStart: (JourneyType?) -> Unit,
+    navigateToOffboardingQuestReview: (Long, JourneyType) -> Unit,
     navigateUp: () -> Unit,
-    navigateToOffboardingQuestCompleted: (QuestType) -> Unit,
-    navigateToOffboardingQuestCompletedFromReview: (QuestType) -> Unit,
+    navigateToOffboardingQuestCompleted: (JourneyType) -> Unit,
+    navigateToOffboardingQuestCompletedFromReview: (JourneyType) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, Boolean, String) -> Unit,
     navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
@@ -111,11 +111,11 @@ data object OffboardingCompletedJourney : Route
 
 @Serializable
 data class OffboardingQuestCompleted(
-    val questType: QuestType,
+    val journeyType: JourneyType,
 ) : Route
 
 @Serializable
 data class OffboardingQuestReview(
     val questId: Long,
-    val questType: QuestType,
+    val journeyType: JourneyType,
 ) : Route

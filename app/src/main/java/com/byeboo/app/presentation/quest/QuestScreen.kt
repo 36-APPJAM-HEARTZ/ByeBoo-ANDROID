@@ -38,7 +38,7 @@ fun QuestRoute(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
-    navigateToQuestCommonWriting: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long, String) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
@@ -74,7 +74,9 @@ fun QuestRoute(
                 is QuestSideEffect.NavigateToQuestBehavior ->
                     navigateToQuestBehavior(effect.questId)
                 is QuestSideEffect.NavigateToQuestCommonWriting ->
-                    navigateToQuestCommonWriting(effect.questId)
+                    navigateToQuestCommonWriting(effect.questId, effect.question)
+                is QuestSideEffect.NavigateToCommonAnswerDetail ->
+                    navigateToCommonAnswer(effect.answerId)
                 is QuestSideEffect.NavigateToQuestReview ->
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
@@ -109,12 +111,12 @@ fun QuestRoute(
         paddingValues = paddingValues,
         onQuestClick = viewModel::onQuestClicked,
         onMyAnswersClick = viewModel::onMyAnswersClicked,
-        onCommonQuestClick = viewModel::onCommonQuestClicked, // TODO: 이동 관련 로직 뷰모델에 작성
+        onCommonQuestClick = viewModel::onCommonQuestClicked,
         onDismissModal = viewModel::onQuitDismissModal,
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClicked,
-        onCommonAnswerClick = navigateToCommonAnswer,
+        onCommonAnswerClick = viewModel::onOtherAnswerClicked,
         onDateChange = viewModel::onDateChange,
         onLoadMore = viewModel::loadNextPage,
     )
@@ -182,7 +184,6 @@ private fun QuestScreen(
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(
                     state = uiState.commonJourneyState,
-                    isLoading = uiState.isLoading,
                     onMyAnswersClick = onMyAnswersClick,
                     onAnswerClick = onCommonAnswerClick,
                     onDateChange = onDateChange,

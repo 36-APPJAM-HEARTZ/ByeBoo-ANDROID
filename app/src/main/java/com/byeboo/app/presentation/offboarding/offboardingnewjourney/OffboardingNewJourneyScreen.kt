@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.core.designsystem.component.topbar.BackTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
@@ -37,10 +37,9 @@ import com.byeboo.app.presentation.offboarding.component.JourneyCard
 
 @Composable
 fun OffboardingNewJourneyRoute(
-    navigateToQuestStart: (QuestType?) -> Unit,
+    navigateToQuestStart: (JourneyType?) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: OffboardingJourneyViewModel = hiltViewModel(),
     offboardingNewJourneyViewModel: OffboardingNewJourneyViewModel = hiltViewModel(),
 ) {
@@ -67,7 +66,6 @@ fun OffboardingNewJourneyRoute(
                 type,
             )
         },
-        modifier = modifier,
     )
 }
 
@@ -76,7 +74,7 @@ private fun OffboardingNewJourneyScreen(
     uiState: OffboardingJourneyState,
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    onJourneyUncompletedCardClick: (QuestType) -> Unit,
+    onJourneyUncompletedCardClick: (JourneyType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(

@@ -4,7 +4,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 
 data class OffboardingCompletedGuideState(
     val nickname: String = "하츠핑",
-    val journeyName: String = "감정 직면",
+    val journeyName: String = "이별 극복",
 )
 
 sealed interface OffboardingCompletedGuideSideEffect {

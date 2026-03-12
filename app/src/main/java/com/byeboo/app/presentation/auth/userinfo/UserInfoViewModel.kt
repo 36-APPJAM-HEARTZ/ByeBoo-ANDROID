@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
-import com.byeboo.app.domain.model.auth.Feeling
+import com.byeboo.app.domain.model.auth.BadWordValidator
 import com.byeboo.app.domain.model.auth.NicknameValidationResult
 import com.byeboo.app.domain.model.auth.NicknameValidator
-import com.byeboo.app.domain.model.auth.QuestStyle
+import com.byeboo.app.domain.model.auth.OnboardingQuestStyle
 import com.byeboo.app.domain.model.auth.UserInfoModel
 import com.byeboo.app.domain.model.auth.toJourneyText
 import com.byeboo.app.domain.model.notification.FcmTokenModel
@@ -36,6 +36,7 @@ class UserInfoViewModel
         private val userRepository: UserRepository,
         private val questStateRepository: QuestStateRepository,
         private val fcmTokenRepository: FcmTokenRepository,
+        private val badWordValidator: BadWordValidator,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(UserInfoState())
@@ -62,46 +63,38 @@ class UserInfoViewModel
         }
 
         fun onNicknameComplete() {
-            mixpanelUtil.trackEvent("nickname_complete")
-        }
+            val nickname = _uiState.value.nickname
 
-        fun updateEmotion(emotion: Feeling) {
-            _uiState.update {
-                it.copy(selectedEmotion = emotion)
+            if (badWordValidator.contains(nickname)) {
+                viewModelScope.launch {
+                    _sideEffect.emit(
+                        UserInfoSideEffect.ShowSnackBar(CustomSnackBarType.BAD_WORD),
+                    )
+                }
+                return
+            }
+
+            mixpanelUtil.trackEvent("nickname_complete")
+            viewModelScope.launch {
+                _sideEffect.emit(UserInfoSideEffect.NavigateToNextPage)
             }
         }
 
-        fun onCurrentEmotionComplete() {
-            mixpanelUtil.trackEvent("current_emotion_complete")
-        }
-
-        fun updateQuest(quest: QuestStyle) {
+        fun updateQuest(quest: OnboardingQuestStyle) {
             _uiState.update {
                 it.copy(selectedQuest = quest)
             }
         }
 
-        fun resetEmotion() {
-            _uiState.update {
-                it.copy(selectedEmotion = null)
-            }
-        }
-
-        fun resetQuest() {
-            _uiState.update {
-                it.copy(selectedQuest = null)
-            }
-        }
-
-        private fun trackQuestSelected(questStyle: QuestStyle) {
+        private fun trackQuestSelected(questStyle: OnboardingQuestStyle) {
             mixpanelUtil.trackEvent(
                 eventName = "quest_type_complete",
                 properties =
                     mapOf(
                         "quest_type" to
                             when (questStyle) {
-                                QuestStyle.RECORDING -> "질문형"
-                                QuestStyle.ACTIVE -> "행동형"
+                                OnboardingQuestStyle.RECORDING -> "이별 극복"
+                                OnboardingQuestStyle.REUNION -> "재회 준비"
                             },
                     ),
             )
@@ -109,48 +102,38 @@ class UserInfoViewModel
 
         fun finishUserInfo() {
             if (hasSubmitted) return
+            val currentState = _uiState.value
+
+            if (currentState.nicknameValidation != NicknameValidationResult.Valid || currentState.selectedQuest == null) {
+                return
+            }
+
             hasSubmitted = true
 
             viewModelScope.launch {
-                if (_uiState.value.nicknameValidation != NicknameValidationResult.Valid) {
-                    hasSubmitted = false
-                    return@launch
-                }
-
                 val userInfo =
                     UserInfoModel(
-                        name = _uiState.value.nickname,
-                        feeling =
-                            _uiState.value.selectedEmotion
-                                ?.name
-                                .orEmpty(),
-                        questStyle =
-                            _uiState.value.selectedQuest
-                                ?.name
-                                .orEmpty(),
+                        name = currentState.nickname,
+                        questStyle = currentState.selectedQuest.name,
                     )
 
                 val result = userRepository.updateUserInfo(userInfo)
 
                 if (result.isSuccess) {
-                    _uiState.value.selectedQuest?.let { selectedQuest ->
-                        trackQuestSelected(selectedQuest)
-                        questStateRepository.updateUserJourney(selectedQuest.toJourneyText())
-                        userRepository.setUserRegistered(true)
-                    }
+                    trackQuestSelected(currentState.selectedQuest)
+                    questStateRepository.updateUserJourney(currentState.selectedQuest.toJourneyText())
+                    userRepository.setUserRegistered(true)
+
                     saveFcmToken()
 
-                    val isRegisteredUser = fcmTokenRepository.isAlarmEnabled()
-                    if (isRegisteredUser) {
+                    if (fcmTokenRepository.isAlarmEnabled()) {
                         fcmTokenRepository.allowQuestAlarm()
                     }
                     _sideEffect.emit(UserInfoSideEffect.NavigateToLoading)
                 } else {
                     hasSubmitted = false
                     _sideEffect.emit(
-                        UserInfoSideEffect.ShowSnackBar(
-                            snackBarType = CustomSnackBarType.ALERT,
-                        ),
+                        UserInfoSideEffect.ShowSnackBar(CustomSnackBarType.ALERT),
                     )
                 }
             }

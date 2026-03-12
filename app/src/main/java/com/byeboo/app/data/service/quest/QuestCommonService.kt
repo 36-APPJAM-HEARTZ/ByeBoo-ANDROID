@@ -4,6 +4,8 @@ import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -34,6 +36,28 @@ interface QuestCommonService {
 
     @DELETE("/api/v1/common-quests/{answerId}")
     suspend fun deleteQuestCommonAnswer(
+        @Path("answerId") answerId: Long,
+    ): NullableBaseResponse<Unit>
+
+    @GET("/api/v1/common-quests")
+    suspend fun getCommonQuests(
+        @Query("date") date: String,
+        @Query("cursor") cursor: Long?,
+        @Query("limit") limit: Int = 10,
+    ): BaseResponse<CommonQuestResponseDto>
+
+    @GET("/api/v1/common-quests/{answerId}")
+    suspend fun getQuestCommonAnswerDetail(
+        @Path("answerId") answerId: Long,
+    ): BaseResponse<QuestCommonAnswerDetailResponseDto>
+
+    @POST("/api/v1/blocks/{blockedUserId}")
+    suspend fun updateBlockedUser(
+        @Path("blockedUserId") blockedUserId: Long,
+    ): NullableBaseResponse<Unit>
+
+    @POST("/api/v1/reports/common-quests/{answerId}")
+    suspend fun reportCommonQuest(
         @Path("answerId") answerId: Long,
     ): NullableBaseResponse<Unit>
 }

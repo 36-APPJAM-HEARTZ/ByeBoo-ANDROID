@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 data class UserInfoRequestDto(
     @SerialName("name")
     val name: String,
-    @SerialName("feeling")
-    val feeling: String,
     @SerialName("questStyle")
     val questStyle: String,
 )

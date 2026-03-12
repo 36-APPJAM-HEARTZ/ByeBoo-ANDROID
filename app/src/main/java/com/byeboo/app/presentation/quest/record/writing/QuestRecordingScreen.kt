@@ -58,7 +58,6 @@ fun QuestRecordingRoute(
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestRecordingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -132,7 +131,6 @@ fun QuestRecordingRoute(
         onSaveClick = viewModel::onSaveClicked,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
-        modifier = modifier,
     )
 }
 

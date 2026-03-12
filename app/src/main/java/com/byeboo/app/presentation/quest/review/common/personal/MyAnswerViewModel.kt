@@ -54,26 +54,32 @@ class MyAnswerViewModel
                 }
             }
 
-            loadMyAnswers()
+            loadInitialAnswers()
+        }
+
+        private fun loadInitialAnswers() {
+            _uiState.update { it.copy(isLoading = true) }
+            viewModelScope.launch {
+                questCommonRepository
+                    .refreshMyAnswers()
+                    .onSuccess {
+                        _uiState.update { it.copy(isLoading = false) }
+                    }.onFailure {
+                        _uiState.update { it.copy(isLoading = false) }
+                        _sideEffect.emit(MyAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                    }
+            }
         }
 
         fun loadMyAnswers() {
-            val state = _uiState.value
-
-            if (state.isLoading || !state.hasNext) return
+            if (_uiState.value.isLoading) return
 
             _uiState.update { it.copy(isLoading = true) }
-
             viewModelScope.launch {
                 questCommonRepository
-                    .getQuestCommonMyAnswer()
-                    .onSuccess { response ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                hasNext = response.hasNext,
-                            )
-                        }
+                    .loadMyAnswers()
+                    .onSuccess {
+                        _uiState.update { it.copy(isLoading = false) }
                     }.onFailure {
                         _uiState.update { it.copy(isLoading = false) }
                         _sideEffect.emit(MyAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
@@ -83,7 +89,7 @@ class MyAnswerViewModel
 
         fun onBackClicked() {
             viewModelScope.launch {
-                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuest)
+                _sideEffect.emit(MyAnswerSideEffect.NavigateUp)
             }
         }
 

@@ -28,16 +28,17 @@ class QuestCommonWritingViewModel
         savedStateHandle: SavedStateHandle,
         private val questCommonRepository: QuestCommonRepository,
     ) : ViewModel() {
-        private val _uiState = MutableStateFlow(QuestCommonState())
+        private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
+        private val questId: Long = routeArgs.questId
+        private val answerId: Long? = routeArgs.answerId
+        private val isEditMode: Boolean = routeArgs.isEditMode
+        private val question: String = routeArgs.question
+
+        private val _uiState = MutableStateFlow(QuestCommonState(questId = questId, question = question, isEditMode = isEditMode))
         val uiState: StateFlow<QuestCommonState> = _uiState.asStateFlow()
 
         private val _sideEffect = MutableSharedFlow<QuestCommonSideEffect>()
         val sideEffect: SharedFlow<QuestCommonSideEffect> = _sideEffect.asSharedFlow()
-
-        private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
-        private val questId = routeArgs.questId
-        private val answerId: Long? = routeArgs.answerId
-        private val isEditMode = routeArgs.isEditMode
 
         init {
             if (isEditMode && answerId != null) {
@@ -47,11 +48,11 @@ class QuestCommonWritingViewModel
 
         private fun loadRecordedContent(answerId: Long) {
             val cachedAnswer = questCommonRepository.getCachedMyAnswer(answerId = answerId)
-
             if (cachedAnswer != null) {
                 _uiState.update {
                     it.copy(
                         questAnswer = cachedAnswer.content,
+                        originalAnswer = cachedAnswer.content,
                     )
                 }
             }
@@ -83,25 +84,25 @@ class QuestCommonWritingViewModel
         }
 
         fun onSaveClicked() {
-            val state = uiState.value
-            val questId = state.questId
-            val questAnswer = state.questAnswer
+            val questAnswer = uiState.value.questAnswer
 
             viewModelScope.launch {
-                val request =
-                    QuestCommonAnswerRequestModel(
-                        answer = questAnswer,
-                    )
+                _uiState.update { it.copy(showCompleteModal = false) }
 
-                // Todo : 머지 후, questId = questId 로 수정 예정
-                val result = questCommonRepository.uploadQuestCommonAnswer(questId = 72, request = request)
+                val request = QuestCommonAnswerRequestModel(answer = questAnswer)
+                val result =
+                    questCommonRepository.uploadQuestCommonAnswer(
+                        questId = questId,
+                        request = request,
+                    )
 
                 result
                     .onSuccess {
-                        _uiState.update { it.copy(showCompleteModal = false) }
                         _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
-                    }.onFailure {
-                        _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
                     }
             }
         }
@@ -109,13 +110,13 @@ class QuestCommonWritingViewModel
         private fun onSaveEditClicked() {
             val state = uiState.value
             val questAnswer = state.questAnswer
-            val answerId = answerId ?: return
+            val currentAnswerId = answerId ?: return
 
             viewModelScope.launch {
                 val request = QuestCommonAnswerEditModel(answer = questAnswer)
                 val result =
                     questCommonRepository.patchQuestCommonAnswer(
-                        answerId = answerId,
+                        answerId = currentAnswerId,
                         request = request,
                     )
 
@@ -128,8 +129,10 @@ class QuestCommonWritingViewModel
                             )
                         }
                         _sideEffect.emit(QuestCommonSideEffect.NavigateToUp)
-                    }.onFailure {
-                        _sideEffect.emit(QuestCommonSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            QuestCommonSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
                     }
             }
         }

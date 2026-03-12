@@ -1,6 +1,6 @@
 package com.byeboo.app.data.repositoryimpl.quest
 
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingQuestCompletedDataSource
 import com.byeboo.app.data.mapper.quest.toDomain
 import com.byeboo.app.domain.model.quest.QuestCompletedModel
@@ -12,7 +12,7 @@ class OffboardingQuestCompletedRepositoryImpl
     constructor(
         private val offboardingQuestCompletedDataSource: OffboardingQuestCompletedDataSource,
     ) : OffboardingQuestCompletedRepository {
-        override suspend fun getCompletedQuest(journey: QuestType): Result<QuestCompletedModel> =
+        override suspend fun getCompletedQuest(journey: JourneyType): Result<QuestCompletedModel> =
             runCatching {
                 val response = offboardingQuestCompletedDataSource.getCompletedQuest(journey)
                 response.data.toDomain()

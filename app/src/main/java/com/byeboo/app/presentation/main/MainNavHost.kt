@@ -78,7 +78,7 @@ fun MainNavHost(
             navigateToQuest = { navigator.navigateToQuest(questNavOptions) },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = questNavOptions,
                 )
             },
@@ -130,8 +130,10 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestCommonEdit = { answerId, isEditMode ->
+            navigateToQuestCommonEdit = { answerId, question, isEditMode ->
                 navigator.navigateToQuestCommonWriting(
+                    questId = 0L,
+                    question = question,
                     answerId = answerId,
                     isEditMode = isEditMode,
                     navOptions = keepStackNavOptions,
@@ -152,11 +154,11 @@ fun MainNavHost(
             navigateToQuestCommonAnswer = { answerId ->
                 navigator.navigateToQuestCommonAnswer(
                     answerId = answerId,
-                    navOptions = clearStackNavOptions,
+                    navOptions = keepStackNavOptions,
                 )
             },
             navigateToQuestMyAnswers = {
-                navigator.navigateToQuestMyAnswers(navOptions = clearStackNavOptions)
+                navigator.navigateToQuestMyAnswers(navOptions = keepStackNavOptions)
             },
             navigateToQuestMyAnswerDetail = { answerId ->
                 navigator.navigateToQuestMyAnswerDetail(
@@ -164,8 +166,13 @@ fun MainNavHost(
                     navOptions = keepStackNavOptions,
                 )
             },
-            navigateToQuestCommonWriting = { questId ->
-                navigator.navigateToQuestCommonWriting(questId = questId)
+            navigateToQuestCommonWriting = { questId, question ->
+                navigator.navigateToQuestCommonWriting(
+                    questId = questId,
+                    question = question,
+                    answerId = null,
+                    isEditMode = false,
+                )
             },
             navigateToQuestFromComplete = {
                 navigator.navigateToQuestFromComplete()
@@ -211,7 +218,7 @@ fun MainNavHost(
             },
             navigateToQuestStart = { journey ->
                 navigator.navigateToQuestStart(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = keepStackNavOptions,
                 )
             },
@@ -224,7 +231,7 @@ fun MainNavHost(
             navigateUp = navigator::navigateUp,
             navigateToOffboardingQuestCompleted = { journey ->
                 navigator.navigateToOffboardingQuestCompleted(
-                    questType = journey,
+                    journeyType = journey,
                     navOptions = keepStackNavOptions,
                 )
             },

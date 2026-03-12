@@ -43,7 +43,6 @@ import java.time.LocalDate
 @Composable
 fun CommonJourneyScreen(
     state: CommonJourneyState,
-    isLoading: Boolean,
     onMyAnswersClick: () -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onAnswerClick: (Long) -> Unit,
@@ -62,7 +61,7 @@ fun CommonJourneyScreen(
         }
 
     LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value && state.hasNext && !isLoading) {
+        if (shouldLoadMore.value && state.hasNext && !state.isLoading && !state.isPaginationLoading) {
             onLoadMore()
         }
     }
@@ -122,7 +121,7 @@ fun CommonJourneyScreen(
                 }
             }
 
-            if (isLoading && state.answers.isEmpty()) {
+            if (state.isLoading && state.answers.isEmpty()) {
                 item {
                     Box(
                         modifier =
@@ -223,7 +222,7 @@ fun CommonJourneyScreen(
                         )
                     }
 
-                    if (isLoading) {
+                    if (state.isPaginationLoading) {
                         item {
                             Box(
                                 modifier =

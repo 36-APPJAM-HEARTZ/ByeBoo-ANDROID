@@ -12,8 +12,6 @@ data class MyAnswerState(
     val answers: ImmutableList<MyAnswerModel> = persistentListOf(),
     val showBottomSheet: Boolean = false,
     val isLoading: Boolean = false,
-    val nextCursor: Long? = null,
-    val hasNext: Boolean = true,
 )
 
 sealed interface MyAnswerSideEffect {

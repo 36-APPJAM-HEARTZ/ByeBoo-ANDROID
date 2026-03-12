@@ -2,13 +2,13 @@ package com.byeboo.app.presentation.quest.start
 
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 
 @Immutable
 data class QuestStartState(
     val nickname: String = "하츠핑",
-    val journeyName: String = "감정 직면",
-    val questType: QuestType? = null,
+    val journeyName: String = "재회 준비",
+    val journeyType: JourneyType? = null,
 )
 
 sealed interface QuestStartSideEffect {

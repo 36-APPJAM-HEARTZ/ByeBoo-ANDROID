@@ -8,7 +8,6 @@ import com.byeboo.app.domain.model.auth.UserJourney
 fun UserInfoModel.toData(): UserInfoRequestDto =
     UserInfoRequestDto(
         name = this.name,
-        feeling = this.feeling,
         questStyle = this.questStyle,
     )
 

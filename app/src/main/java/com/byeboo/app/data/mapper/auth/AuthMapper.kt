@@ -21,6 +21,7 @@ internal fun String?.toJourneyType(): JourneyType =
     when (this) {
         "FACE_EMOTION" -> JourneyType.FACE_EMOTION
         "PROCESS_EMOTION" -> JourneyType.PROCESS_EMOTION
+        "PREPARE_REUNION" -> JourneyType.PREPARE_REUNION
         else -> JourneyType.UNKNOWN
     }
 

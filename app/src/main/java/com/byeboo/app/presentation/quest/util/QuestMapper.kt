@@ -109,6 +109,13 @@ class QuestUiModelMapper
         }
 
         fun mapToIconRes(iconName: String): Int = ProfileIconType.fromName(iconName).iconResId
+
+        fun formatDetailDate(writtenAt: LocalDateTime?): String {
+            if (writtenAt == null) return ""
+            return runCatching {
+                writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
+            }.getOrDefault("")
+        }
     }
 
 enum class ProfileIconType(

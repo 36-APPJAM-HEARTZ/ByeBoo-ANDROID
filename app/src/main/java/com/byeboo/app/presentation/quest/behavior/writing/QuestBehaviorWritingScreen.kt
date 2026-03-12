@@ -69,7 +69,6 @@ fun QuestBehaviorWritingRoute(
     navigateToQuestReview: (Long) -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestBehaviorViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -144,7 +143,6 @@ fun QuestBehaviorWritingRoute(
         onCompleteClick = viewModel::onCompleteClicked,
         onBottomSheetDismiss = viewModel::closeBottomSheet,
         onEmotionSelected = { selectedEmotion -> viewModel.updateSelectedEmotion(selectedEmotion) },
-        modifier = modifier,
     )
 }
 

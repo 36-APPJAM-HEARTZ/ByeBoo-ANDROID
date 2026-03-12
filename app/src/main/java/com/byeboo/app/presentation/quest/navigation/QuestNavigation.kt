@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
@@ -22,10 +23,10 @@ import com.byeboo.app.presentation.quest.start.QuestStartRoute
 import com.byeboo.app.presentation.quest.tip.QuestTipRoute
 
 fun NavController.navigateToQuestStart(
-    questType: QuestType? = null,
+    journeyType: JourneyType? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(QuestStart(questType), navOptions)
+    navigate(QuestStart(journeyType), navOptions)
 }
 
 fun NavController.navigateToQuest(navOptions: NavOptions? = null) {
@@ -83,13 +84,13 @@ fun NavGraphBuilder.questGraph(
     navigateToHome: () -> Unit,
     navigateToQuestRecording: (Long) -> Unit,
     navigateToQuestBehavior: (Long) -> Unit,
-    navigateToQuestCommonWriting: (Long) -> Unit,
+    navigateToQuestCommonWriting: (Long, String) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestRecordingComplete: (Long) -> Unit,
     navigateToQuestRecordingEdit: (Long, Boolean) -> Unit,
     navigateToQuestBehaviorEdit: (Long, Boolean, String) -> Unit,
-    navigateToQuestCommonEdit: (Long, Boolean) -> Unit,
+    navigateToQuestCommonEdit: (Long, String, Boolean) -> Unit,
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestCommonAnswer: (Long) -> Unit,
@@ -148,7 +149,7 @@ fun NavGraphBuilder.questGraph(
 
         composable<QuestCommonAnswer> {
             CommonOtherAnswerRoute(
-                navigateToQuest = navigateToQuest,
+                navigateToQuest = navigateUp,
                 paddingValues = paddingValues,
             )
         }

@@ -14,7 +14,6 @@ data class QuestUiState(
     val selectedTab: QuestTab = QuestTab.MY_JOURNEY,
     val userName: String = "",
     val error: String? = null,
-    val isLoading: Boolean = false,
     val myJourneyState: MyJourneyState = MyJourneyState(),
     val commonJourneyState: CommonJourneyState = CommonJourneyState(),
     val showCompleteModal: Boolean = false,
@@ -40,4 +39,6 @@ data class CommonJourneyState(
     val isMyAnswerDone: Boolean = false,
     val hasNext: Boolean = false,
     val nextCursor: Long? = null,
+    val isLoading: Boolean = false,
+    val isPaginationLoading: Boolean = false,
 )

@@ -8,7 +8,7 @@ data class QuestMyCommonAnswerResponseDto(
     @SerialName("hasNext")
     val hasNext: Boolean,
     @SerialName("nextCursor")
-    val nextCursor: Long,
+    val nextCursor: Long?,
     @SerialName("answers")
     val answers: List<QuestAnswerItemResponseDto>,
 )

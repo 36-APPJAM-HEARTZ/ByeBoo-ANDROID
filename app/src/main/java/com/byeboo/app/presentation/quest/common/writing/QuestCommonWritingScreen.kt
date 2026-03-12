@@ -1,6 +1,7 @@
 package com.byeboo.app.presentation.quest.common.writing
 
 import android.view.KeyEvent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,7 +49,6 @@ fun QuestCommonRoute(
     navigateToQuestFromComplete: () -> Unit,
     navigateUp: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: QuestCommonWritingViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -91,13 +91,14 @@ fun QuestCommonRoute(
         )
     }
 
+    BackHandler { viewModel.onBackClicked() }
+
     QuestCommonScreen(
         uiState = uiState,
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onCompleteClick = viewModel::onCompleteClicked,
         onUpdateContent = viewModel::updateContent,
-        modifier = modifier,
     )
 }
 

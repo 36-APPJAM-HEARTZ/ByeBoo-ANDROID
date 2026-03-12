@@ -1,7 +1,7 @@
 package com.byeboo.app.presentation.home
 
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.domain.model.home.HomeStatus
 
 data class HomeUiState(
@@ -22,7 +22,7 @@ sealed interface HomeSideEffect {
     data object NavigateToQuest : HomeSideEffect
 
     data class NavigateToQuestStart(
-        val journey: QuestType?,
+        val journey: JourneyType?,
     ) : HomeSideEffect
 
     data object NavigateToTutorial : HomeSideEffect

@@ -1,6 +1,6 @@
 package com.byeboo.app.presentation.offboarding.util
 
-import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.domain.model.offboarding.OffboardingJourneyModel
 import com.byeboo.app.presentation.offboarding.OffboardingJourneyState
 import com.byeboo.app.presentation.offboarding.model.JourneyCard
@@ -17,7 +17,7 @@ class OffboardingJourneyMapper
                     model.uncompletedCards.forEach { card ->
                         add(
                             JourneyCard(
-                                journeyType = QuestType.fromQuestStyle(card.style),
+                                journeyType = JourneyType.fromStyle(card.style),
                                 status = JourneyStatus.UNCOMPLETED,
                             ),
                         )
@@ -26,7 +26,7 @@ class OffboardingJourneyMapper
                     model.completedCards.forEach { card ->
                         add(
                             JourneyCard(
-                                journeyType = QuestType.fromQuestStyle(card.style),
+                                journeyType = JourneyType.fromStyle(card.style),
                                 status = JourneyStatus.COMPLETED,
                             ),
                         )

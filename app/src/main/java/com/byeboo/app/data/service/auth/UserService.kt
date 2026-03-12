@@ -11,7 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 
 interface UserService {
-    @PATCH("/api/v1/users")
+    @PATCH("/api/v2/users")
     suspend fun updateUserInfo(
         @Body request: UserInfoRequestDto,
     ): BaseResponse<UserInfoResponseDto>

@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.offboarding.offboardingquestreview
 
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.designsystem.type.EmotionChipType
+import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import java.time.LocalDate
@@ -24,7 +25,7 @@ data class OffboardingQuestReviewState(
 
 sealed interface OffboardingQuestReviewSideEffect {
     data class NavigateToOffboardingQuestCompleted(
-        val journey: QuestType,
+        val journey: JourneyType,
     ) : OffboardingQuestReviewSideEffect
 
     data class NavigateToQuestRecordingEdit(

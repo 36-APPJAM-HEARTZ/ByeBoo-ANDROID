@@ -66,7 +66,6 @@ fun OffboardingCompletedGuideRoute(
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
     viewModel: OffboardingCompletedGuideViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -95,7 +94,6 @@ fun OffboardingCompletedGuideRoute(
         onNewJourneyClick = viewModel::onNewJourneyClicked,
         onCompletedJourneyClick = viewModel::onCompletedJourneyClicked,
         isInitialAnimation = isInitialAnimation,
-        modifier = modifier,
     )
 }
 
