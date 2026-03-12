@@ -101,7 +101,7 @@ private fun LoadingScreen(
                             .toSpanStyle()
                             .copy(color = ByeBooTheme.colors.gray50),
                 ) {
-                    append("님에게 꼭 맞는\n이별 극복 여정을 찾는 중...")
+                    append("님에게 꼭 맞는\n극복 여정을 찾는 중...")
                 }
             },
             style = ByeBooTheme.typography.body3,
