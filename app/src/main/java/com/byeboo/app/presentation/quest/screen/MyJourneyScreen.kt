@@ -61,7 +61,6 @@ fun MyJourneyScreen(
 
         LazyColumn(
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
@@ -92,23 +91,33 @@ fun MyJourneyScreen(
                 val questChunks = group.quests.chunked(3)
                 questChunks.forEachIndexed { chunkIndex, questChunk ->
                     item("quest_row_${stepIndex}_$chunkIndex") {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
-                        ) {
-                            questChunk.forEach { quest ->
-                                QuestBox(
-                                    modifier = Modifier.weight(1f),
-                                    questId = quest.questId,
-                                    questNumber = quest.questNumber,
-                                    state = quest.state,
-                                    onQuestClick = { onQuestClick(quest.questId) },
-                                )
+                        val isLastChunk = chunkIndex == questChunks.lastIndex
+
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(21.dp)),
+                            ) {
+                                questChunk.forEach { quest ->
+                                    QuestBox(
+                                        modifier = Modifier.weight(1f),
+                                        questId = quest.questId,
+                                        questNumber = quest.questNumber,
+                                        state = quest.state,
+                                        onQuestClick = { onQuestClick(quest.questId) },
+                                    )
+                                }
+
+                                repeat(3 - questChunk.size) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
                             }
 
-                            repeat(3 - questChunk.size) {
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
+                            Spacer(
+                                modifier = Modifier.height(
+                                    screenHeightDp(if (isLastChunk) 16.dp else 20.dp)
+                                )
+                            )
                         }
                     }
                 }
