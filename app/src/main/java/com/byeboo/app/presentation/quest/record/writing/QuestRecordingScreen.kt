@@ -105,20 +105,6 @@ fun QuestRecordingRoute(
         )
     }
 
-    if (uiState.showCompleteModal) {
-        QuestCompleteDialog(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-        )
-
-        LaunchedEffect(Unit) {
-            delay(2000L)
-            viewModel.onCompleteModalTimeout()
-        }
-    }
-
     BackHandler { viewModel.onBackClicked() }
 
     QuestRecordingScreen(
