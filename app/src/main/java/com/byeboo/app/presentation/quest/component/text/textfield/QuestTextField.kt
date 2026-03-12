@@ -38,7 +38,7 @@ fun QuestTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(isFocused.value,lineCount.intValue) {
+    LaunchedEffect(isFocused.value, lineCount.intValue) {
         if (isFocused.value) {
             scrollState.animateScrollTo(scrollState.maxValue)
         }
