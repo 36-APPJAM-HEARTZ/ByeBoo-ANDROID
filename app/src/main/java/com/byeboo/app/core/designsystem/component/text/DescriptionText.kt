@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
-import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
 fun DescriptionText(
@@ -33,12 +32,7 @@ fun DescriptionText(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(
-                    top = screenHeightDp(top),
-                    bottom = screenHeightDp(bottom),
-                    start = screenWidthDp(start),
-                    end = screenWidthDp(end),
-                ),
+                .padding(top = top, bottom = bottom, start = start, end = end),
     ) {
         Text(
             text =
