@@ -378,7 +378,7 @@ private fun NicknameSection(
                 ),
     ) {
         Text(
-            text = nickname,
+            text = "${nickname}님",
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.body3,
         )

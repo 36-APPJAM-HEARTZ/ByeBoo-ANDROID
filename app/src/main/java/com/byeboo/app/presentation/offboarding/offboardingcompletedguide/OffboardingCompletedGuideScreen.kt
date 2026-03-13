@@ -143,6 +143,7 @@ private fun OffboardingCompleteGuideScreen(
             ) {
                 CloseTopbar(
                     onCloseClick = onCloseClick,
+                    backgroundColor = Color.Unspecified,
                 )
 
                 Column(
