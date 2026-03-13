@@ -99,7 +99,6 @@ fun MyAnswerScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -108,7 +107,12 @@ fun MyAnswerScreen(
         LazyColumn(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-            contentPadding = PaddingValues(bottom = screenHeightDp(25.dp)),
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(25.dp),
+                ),
             modifier = Modifier.fillMaxWidth(),
         ) {
             item {
