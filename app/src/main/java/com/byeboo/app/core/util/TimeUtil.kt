@@ -7,7 +7,7 @@ import java.time.ZoneId
 object TimeUtil {
     private val KST_ZONE = ZoneId.of("Asia/Seoul")
 
-    val QUEST_START_DATE: LocalDate = LocalDate.of(2026, 3, 3)
+    val QUEST_START_DATE: LocalDate = LocalDate.of(2026, 3, 6)
 
     fun getNowKst(): LocalDate = LocalDate.now(KST_ZONE)
 
