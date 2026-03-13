@@ -391,6 +391,7 @@ class QuestViewModel
                 it.copy(
                     selectedTab = QuestTab.COMMON_JOURNEY,
                     showCompleteModal = true,
+                    commonJourneyState = it.commonJourneyState.copy(isMyAnswerDone = true),
                 )
             }
         }
