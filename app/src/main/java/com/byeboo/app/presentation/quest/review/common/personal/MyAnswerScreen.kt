@@ -1,12 +1,13 @@
 package com.byeboo.app.presentation.quest.review.common.personal
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -106,7 +107,6 @@ fun MyAnswerScreen(
     ) {
         LazyColumn(
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
             contentPadding =
                 PaddingValues(
                     start = screenWidthDp(24.dp),
@@ -118,6 +118,7 @@ fun MyAnswerScreen(
             item {
                 BackTopbar(onBackClick = onBackClick)
             }
+
             item {
                 Text(
                     text =
@@ -172,6 +173,8 @@ fun MyAnswerScreen(
                         items = uiState.answers,
                         key = { it.answerId },
                     ) { answer ->
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
                         MyAnswerItem(
                             answer = answer,
                             onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) },
