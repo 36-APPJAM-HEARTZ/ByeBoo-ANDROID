@@ -42,7 +42,7 @@ fun QuestAiAnswerStatusScreen(
     ) {
         CloseTopbar(
             onCloseClick = onCloseClick,
-            modifier = Modifier.padding(screenWidthDp(24.dp)),
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         QuestAiAnswerStatusContent(
