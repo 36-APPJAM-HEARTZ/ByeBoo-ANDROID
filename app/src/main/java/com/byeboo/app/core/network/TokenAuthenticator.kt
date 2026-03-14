@@ -23,7 +23,13 @@ class TokenAuthenticator
             runBlocking {
                 if (responseCount(response) >= 2) return@runBlocking null
 
-                val refreshToken = tokenRepository.getRefreshToken().firstOrNull() ?: return@runBlocking null
+                val refreshToken = tokenRepository.getRefreshToken().firstOrNull()
+
+                if (refreshToken.isNullOrEmpty()) {
+                    tokenRepository.clearTokens()
+                    tokenRepository.setLoginSplash(true)
+                    return@runBlocking null
+                }
 
                 val result = authRepository.reissueAccessToken(refreshToken)
 
