@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
@@ -106,13 +107,17 @@ fun QuestBehaviorCompleteRoute(
 
     BackHandler { viewModel.onCloseClicked() }
 
-    QuestBehaviorCompleteScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onCloseClick = viewModel::onCloseClicked,
-        imageUri = imageUri,
-        onAiAnswerClick = viewModel::onAiAnswerClicked,
-    )
+    if (uiState.isLoading) {
+        LoadingScreen()
+    } else {
+        QuestBehaviorCompleteScreen(
+            uiState = uiState,
+            paddingValues = paddingValues,
+            onCloseClick = viewModel::onCloseClicked,
+            imageUri = imageUri,
+            onAiAnswerClick = viewModel::onAiAnswerClicked,
+        )
+    }
 }
 
 @Composable
@@ -146,6 +151,7 @@ private fun QuestBehaviorCompleteScreen(
 
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
+                state = listState,
                 modifier = modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 contentPadding =

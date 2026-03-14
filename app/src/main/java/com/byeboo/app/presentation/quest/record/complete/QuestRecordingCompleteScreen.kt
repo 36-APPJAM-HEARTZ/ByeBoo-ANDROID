@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
@@ -87,12 +88,16 @@ fun QuestRecordingCompleteRoute(
 
     BackHandler { viewModel.onCloseClicked() }
 
-    QuestRecordingCompleteScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onCloseClick = viewModel::onCloseClicked,
-        onAiAnswerClick = viewModel::onAiAnswerClicked,
-    )
+    if (uiState.isLoading) {
+        LoadingScreen()
+    } else {
+        QuestRecordingCompleteScreen(
+            uiState = uiState,
+            paddingValues = paddingValues,
+            onCloseClick = viewModel::onCloseClicked,
+            onAiAnswerClick = viewModel::onAiAnswerClicked,
+        )
+    }
 }
 
 @Composable
