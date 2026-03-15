@@ -53,6 +53,7 @@ fun OffboardingCompletedJourneyRoute(
                     navigateToOffboardingQuestCompleted(
                         effect.journey,
                     )
+
                 is OffboardingJourneySideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
@@ -79,79 +80,87 @@ private fun OffboardingCompletedJourneyScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
-                ).verticalScroll(rememberScrollState()),
+                ),
     ) {
         BackTopbar(
             onBackClick = onBackClick,
-        )
-
-        Text(
-            text = "내가 완료한 여정이에요",
-            color = ByeBooTheme.colors.gray50,
-            style = ByeBooTheme.typography.head1,
-            modifier = Modifier.padding(vertical = screenHeightDp(10.dp)),
-        )
-
-        HorizontalDivider(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            thickness = 1.dp,
-            color = ByeBooTheme.colors.gray800,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(20.dp)),
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+                    .verticalScroll(state = rememberScrollState())
+                    .padding(horizontal = screenWidthDp(24.dp)),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(screenHeightDp(8.dp)),
-                verticalAlignment = Alignment.CenterVertically,
+            Text(
+                text = "내가 완료한 여정이에요",
+                color = ByeBooTheme.colors.gray50,
+                style = ByeBooTheme.typography.head1,
+                modifier = Modifier.padding(vertical = screenHeightDp(10.dp)),
+            )
+
+            HorizontalDivider(
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
+                thickness = 1.dp,
+                color = ByeBooTheme.colors.gray800,
+            )
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = screenHeightDp(20.dp)),
+                verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
             ) {
-                Text(
-                    text = "완료",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "완료",
+                        color = ByeBooTheme.colors.gray300,
+                        style = ByeBooTheme.typography.cap2,
+                    )
 
-                Text(
-                    text = "${uiState.completedCount}개",
-                    color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2,
-                )
-            }
-
-            (uiState.completedCards).forEach { card ->
-                key(card) {
-                    JourneyCard(
-                        journeyType = card.journeyType,
-                        onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
-                        chipBackgroundColor = ByeBooTheme.colors.whiteAlpha5,
-                        chipTextColor = ByeBooTheme.colors.gray300,
-                        journeyTitleTextColor = ByeBooTheme.colors.gray300,
-                        journeyCardTextStyle = ByeBooTheme.typography.body3,
+                    Text(
+                        text = "${uiState.completedCount}개",
+                        color = ByeBooTheme.colors.gray500,
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
-            }
 
-            if (uiState.completedCount == 0) {
-                Spacer(modifier = Modifier.height(screenHeightDp(176.dp)))
+                (uiState.completedCards).forEach { card ->
+                    key(card) {
+                        JourneyCard(
+                            journeyType = card.journeyType,
+                            onJourneyCardClick = { onJourneyCompletedCardClick(card.journeyType) },
+                            chipBackgroundColor = ByeBooTheme.colors.whiteAlpha5,
+                            chipTextColor = ByeBooTheme.colors.gray300,
+                            journeyTitleTextColor = ByeBooTheme.colors.gray300,
+                            journeyCardTextStyle = ByeBooTheme.typography.body3,
+                        )
+                    }
+                }
 
-                Text(
-                    text = "아직 완료된 여정이 없어요!",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.body3,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                )
+                if (uiState.completedCount == 0) {
+                    Spacer(modifier = Modifier.height(screenHeightDp(176.dp)))
+
+                    Text(
+                        text = "아직 완료된 여정이 없어요!",
+                        color = ByeBooTheme.colors.gray300,
+                        style = ByeBooTheme.typography.body3,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }

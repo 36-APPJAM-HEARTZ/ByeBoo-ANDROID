@@ -91,12 +91,15 @@ fun CommonJourneyScreen(
                         contentText = "공통 퀘스트를 통해 나의 이야기를 솔직히 털어놓고,\n타인의 답변도 확인해 보세요",
                         bottom = screenHeightDp(16.dp),
                     )
+
                     MiddleTag(
                         middleTagType = MiddleTagType.MY_ANSWERS,
                         textStyle = ByeBooTheme.typography.cap1,
                         modifier = Modifier.noRippleClickable(onClick = onMyAnswersClick),
                     )
+
                     Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = ByeBooTheme.colors.gray800,
@@ -154,6 +157,7 @@ fun CommonJourneyScreen(
                                 style = ByeBooTheme.typography.body1,
                                 color = ByeBooTheme.colors.primary200,
                             )
+
                             Text(
                                 text = state.question,
                                 style = ByeBooTheme.typography.sub3,
@@ -164,12 +168,15 @@ fun CommonJourneyScreen(
 
                         if (isToday && !state.isMyAnswerDone && state.question.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(screenHeightDp(12.dp)))
+
                             Text(
                                 text = "23:59까지 답변 가능해요",
                                 style = ByeBooTheme.typography.cap2,
                                 color = ByeBooTheme.colors.gray400,
                             )
+
                             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+
                             ByeBooButton(
                                 onClick = { onCommonQuestClick(state.questId) },
                                 buttonText = "답변 작성하기",
@@ -181,11 +188,13 @@ fun CommonJourneyScreen(
                         }
 
                         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
+
                         Text(
                             text = "${state.answerCount}개의 답변",
                             style = ByeBooTheme.typography.cap2,
                             color = ByeBooTheme.colors.gray400,
                         )
+
                         Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
                     }
                 }

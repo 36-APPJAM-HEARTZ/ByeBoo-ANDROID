@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.key
@@ -30,6 +31,7 @@ import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreInterceptKeyBeforeSoftKeyboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -138,6 +140,15 @@ private fun QuestRecordingScreen(
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
     val isImeVisible = WindowInsets.ime.getBottom(density) > 0
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var openBottomSheetAfterImeClosed by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isImeVisible, openBottomSheetAfterImeClosed) {
+        if (!isImeVisible && openBottomSheetAfterImeClosed) {
+            openBottomSheetAfterImeClosed = false
+            onCompleteClick()
+        }
+    }
 
     Column(
         modifier =
@@ -162,7 +173,20 @@ private fun QuestRecordingScreen(
         QuestWritingTopbar(
             isEnabled = uiState.isCompleteButtonEnabled,
             onBackClick = onBackClick,
-            onCompleteClick = onCompleteClick,
+            onCompleteClick = {
+                if (uiState.isEditMode) {
+                    onCompleteClick()
+                } else {
+                    if (isImeVisible) {
+                        openBottomSheetAfterImeClosed = true
+                        focusManager.clearFocus(force = true)
+                        keyboardController?.hide()
+                        isFocused.value = false
+                    } else {
+                        onCompleteClick()
+                    }
+                }
+            },
         )
 
         Column(

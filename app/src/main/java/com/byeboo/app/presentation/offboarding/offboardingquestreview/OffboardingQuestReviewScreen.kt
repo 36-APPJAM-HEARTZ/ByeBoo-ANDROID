@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -116,8 +115,15 @@ private fun OffboardingQuestReviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    val canScroll by remember {
-        derivedStateOf { listState.canScrollForward || listState.canScrollBackward }
+    val isScrollStateReady by remember {
+        androidx.compose.runtime.derivedStateOf {
+            listState.layoutInfo.totalItemsCount > 0
+        }
+    }
+    val hasScroll by remember {
+        androidx.compose.runtime.derivedStateOf {
+            listState.canScrollForward || listState.canScrollBackward
+        }
     }
 
     Column(
@@ -135,7 +141,11 @@ private fun OffboardingQuestReviewScreen(
             onEditClick = onEditClick,
         )
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize(),
+        ) {
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
@@ -143,7 +153,7 @@ private fun OffboardingQuestReviewScreen(
                     PaddingValues(
                         start = screenWidthDp(24.dp),
                         end = screenWidthDp(24.dp),
-                        bottom = if (canScroll) screenHeightDp(28.dp) else screenHeightDp(90.dp),
+                        bottom = if (isScrollStateReady && hasScroll) screenHeightDp(28.dp) else screenHeightDp(90.dp),
                     ),
             ) {
                 item {
@@ -208,7 +218,7 @@ private fun OffboardingQuestReviewScreen(
                     )
                 }
 
-                if (canScroll) {
+                if (isScrollStateReady && hasScroll) {
                     item {
                         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
@@ -223,7 +233,7 @@ private fun OffboardingQuestReviewScreen(
                 }
             }
 
-            if (!canScroll) {
+            if (isScrollStateReady && !hasScroll) {
                 ByeBooButton(
                     buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                     buttonTextColor = ByeBooTheme.colors.white,

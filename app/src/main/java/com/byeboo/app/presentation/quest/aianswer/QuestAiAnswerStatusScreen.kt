@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
+import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.aianswer.type.QuestAiAnswerStatusType
 
 @Composable
@@ -41,6 +42,7 @@ fun QuestAiAnswerStatusScreen(
     ) {
         CloseTopbar(
             onCloseClick = onCloseClick,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         QuestAiAnswerStatusContent(

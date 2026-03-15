@@ -62,6 +62,7 @@ class QuestRecordingCompleteViewModel
                                 emotionDescription = detail.emotionDescription,
                                 isExistedAiAnswer = detail.isExistedAiAnswer,
                                 showCompleteModal = true,
+                                isLoading = false,
                             )
                         }
                     }.onFailure {

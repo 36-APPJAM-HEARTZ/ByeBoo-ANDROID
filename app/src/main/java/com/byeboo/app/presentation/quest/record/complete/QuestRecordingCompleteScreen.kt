@@ -5,20 +5,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
@@ -83,12 +88,16 @@ fun QuestRecordingCompleteRoute(
 
     BackHandler { viewModel.onCloseClicked() }
 
-    QuestRecordingCompleteScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onCloseClick = viewModel::onCloseClicked,
-        onAiAnswerClick = viewModel::onAiAnswerClicked,
-    )
+    if (uiState.isLoading) {
+        LoadingScreen()
+    } else {
+        QuestRecordingCompleteScreen(
+            uiState = uiState,
+            paddingValues = paddingValues,
+            onCloseClick = viewModel::onCloseClicked,
+            onAiAnswerClick = viewModel::onAiAnswerClicked,
+        )
+    }
 }
 
 @Composable
@@ -100,13 +109,15 @@ private fun QuestRecordingCompleteScreen(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
+    val canScroll by remember {
+        derivedStateOf { scrollState.maxValue > 0 }
+    }
 
     Column(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -114,6 +125,7 @@ private fun QuestRecordingCompleteScreen(
     ) {
         CloseTopbar(
             onCloseClick = onCloseClick,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         Column(
@@ -121,7 +133,8 @@ private fun QuestRecordingCompleteScreen(
                 Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .verticalScroll(state = scrollState),
+                    .verticalScroll(state = scrollState)
+                    .padding(horizontal = screenWidthDp(24.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
         ) {
@@ -140,15 +153,24 @@ private fun QuestRecordingCompleteScreen(
                 questEmotionDescription = uiState.emotionDescription,
                 emotionType = uiState.selectedEmotion,
             )
-        }
 
-        ByeBooButton(
-            buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
-            buttonTextColor = ByeBooTheme.colors.white,
-            buttonStyle = ByeBooTheme.typography.body2,
-            buttonBackgroundColor = ByeBooTheme.colors.primary300,
-            onClick = onAiAnswerClick,
-        )
+            if (canScroll) {
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+            } else {
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            ByeBooButton(
+                buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
+                buttonTextColor = ByeBooTheme.colors.white,
+                buttonStyle = ByeBooTheme.typography.body2,
+                buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                onClick = onAiAnswerClick,
+                modifier =
+                    Modifier
+                        .padding(bottom = screenHeightDp(10.dp)),
+            )
+        }
     }
 }
 

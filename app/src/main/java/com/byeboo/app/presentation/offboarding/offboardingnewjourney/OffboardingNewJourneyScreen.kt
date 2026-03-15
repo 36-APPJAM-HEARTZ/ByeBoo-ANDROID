@@ -52,6 +52,7 @@ fun OffboardingNewJourneyRoute(
                     navigateToQuestStart(
                         effect.journey,
                     )
+
                 is OffboardingNewJourneySideEffect.NavigateUp -> navigateUp()
             }
         }
@@ -82,68 +83,76 @@ private fun OffboardingNewJourneyScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
-                ).verticalScroll(rememberScrollState()),
+                ),
     ) {
         BackTopbar(
             onBackClick = onBackClick,
-        )
-
-        Title()
-
-        HorizontalDivider(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            thickness = 1.dp,
-            color = ByeBooTheme.colors.gray800,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = screenHeightDp(20.dp)),
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
+                    .verticalScroll(state = rememberScrollState())
+                    .padding(horizontal = screenWidthDp(24.dp)),
         ) {
-            Row(
+            Title()
+
+            HorizontalDivider(
                 modifier =
                     Modifier
                         .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
-                verticalAlignment = Alignment.CenterVertically,
+                thickness = 1.dp,
+                color = ByeBooTheme.colors.gray800,
+            )
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = screenHeightDp(20.dp)),
+                verticalArrangement = Arrangement.spacedBy(screenHeightDp(16.dp)),
             ) {
-                Text(
-                    text = "미완료",
-                    color = ByeBooTheme.colors.gray300,
-                    style = ByeBooTheme.typography.cap2,
-                )
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(8.dp)),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "미완료",
+                        color = ByeBooTheme.colors.gray300,
+                        style = ByeBooTheme.typography.cap2,
+                    )
 
-                Text(
-                    text = "${uiState.uncompletedCount}개",
-                    color = ByeBooTheme.colors.gray500,
-                    style = ByeBooTheme.typography.body2,
-                )
-            }
-
-            (uiState.uncompletedCards).forEach { card ->
-                key(card) {
-                    JourneyCard(
-                        journeyType = card.journeyType,
-                        onJourneyCardClick = { onJourneyUncompletedCardClick(card.journeyType) },
-                        chipBackgroundColor = ByeBooTheme.colors.primary300,
-                        chipTextColor = ByeBooTheme.colors.white,
-                        journeyTitleTextColor = ByeBooTheme.colors.white,
-                        journeyCardTextStyle = ByeBooTheme.typography.body2,
-                        borderColor = ByeBooTheme.colors.primary300,
+                    Text(
+                        text = "${uiState.uncompletedCount}개",
+                        color = ByeBooTheme.colors.gray500,
+                        style = ByeBooTheme.typography.body2,
                     )
                 }
-            }
 
-            PreparingCard()
+                (uiState.uncompletedCards).forEach { card ->
+                    key(card.journeyType) {
+                        JourneyCard(
+                            journeyType = card.journeyType,
+                            onJourneyCardClick = { onJourneyUncompletedCardClick(card.journeyType) },
+                            chipBackgroundColor = ByeBooTheme.colors.primary300,
+                            chipTextColor = ByeBooTheme.colors.white,
+                            journeyTitleTextColor = ByeBooTheme.colors.white,
+                            journeyCardTextStyle = ByeBooTheme.typography.body2,
+                            borderColor = ByeBooTheme.colors.primary300,
+                        )
+                    }
+                }
+
+                PreparingCard()
+            }
         }
     }
 }

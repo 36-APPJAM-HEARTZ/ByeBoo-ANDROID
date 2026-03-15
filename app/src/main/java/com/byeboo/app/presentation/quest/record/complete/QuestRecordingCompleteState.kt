@@ -21,6 +21,7 @@ data class QuestRecordingCompleteState(
     val selectedEmotion: EmotionChipType = EmotionChipType.EMOTION_NEUTRAL,
     val isExistedAiAnswer: Boolean = false,
     val showCompleteModal: Boolean = false,
+    val isLoading: Boolean = true,
 )
 
 sealed interface QuestRecordingCompleteSideEffect {
