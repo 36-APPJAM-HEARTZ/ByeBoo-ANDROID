@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TokenRepository {
     val tokenExpiredEvent: Flow<Unit>
+
     fun getAccessToken(): Flow<String>
 
     fun getRefreshToken(): Flow<String>

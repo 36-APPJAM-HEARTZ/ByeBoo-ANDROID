@@ -132,7 +132,7 @@ private fun QuestBehaviorCompleteScreen(
     ) {
         CloseTopbar(
             onCloseClick = onCloseClick,
-            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp))
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         LazyColumn(

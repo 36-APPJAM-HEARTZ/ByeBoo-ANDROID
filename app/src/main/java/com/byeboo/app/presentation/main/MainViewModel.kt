@@ -36,6 +36,7 @@ class MainViewModel
         val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
 
         val tokenExpiredEvent: Flow<Unit> = tokenRepository.tokenExpiredEvent
+
         fun trackJourneyStart() {
             viewModelScope.launch {
                 val journey = questStateRepository.getUserJourney() ?: "추적 실패"
