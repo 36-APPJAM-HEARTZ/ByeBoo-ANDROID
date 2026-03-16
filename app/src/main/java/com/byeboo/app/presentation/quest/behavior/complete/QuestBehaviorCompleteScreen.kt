@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.component.button.ByeBooButton
 import com.byeboo.app.core.designsystem.component.text.ContentText
 import com.byeboo.app.core.designsystem.component.topbar.CloseTopbar
@@ -78,6 +82,7 @@ fun QuestBehaviorCompleteRoute(
                         effect.isExistedAiAnswer,
                         effect.aiAnswerOrigin,
                     )
+
                 is QuestBehaviorCompleteSideEffect.ShowInAppReview -> {
                     activity?.let { activity ->
                         inAppReview(activity)
@@ -102,13 +107,17 @@ fun QuestBehaviorCompleteRoute(
 
     BackHandler { viewModel.onCloseClicked() }
 
-    QuestBehaviorCompleteScreen(
-        uiState = uiState,
-        paddingValues = paddingValues,
-        onCloseClick = viewModel::onCloseClicked,
-        imageUri = imageUri,
-        onAiAnswerClick = viewModel::onAiAnswerClicked,
-    )
+    if (uiState.isLoading) {
+        LoadingScreen()
+    } else {
+        QuestBehaviorCompleteScreen(
+            uiState = uiState,
+            paddingValues = paddingValues,
+            onCloseClick = viewModel::onCloseClicked,
+            imageUri = imageUri,
+            onAiAnswerClick = viewModel::onAiAnswerClicked,
+        )
+    }
 }
 
 @Composable
@@ -120,6 +129,11 @@ private fun QuestBehaviorCompleteScreen(
     onAiAnswerClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+    val canScroll by remember {
+        derivedStateOf { listState.canScrollForward || listState.canScrollBackward }
+    }
+
     Column(
         modifier =
             modifier
@@ -135,89 +149,109 @@ private fun QuestBehaviorCompleteScreen(
             modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
-        LazyColumn(
-            modifier = modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding =
-                PaddingValues(
-                    start = screenWidthDp(24.dp),
-                    end = screenWidthDp(24.dp),
-                    bottom = screenHeightDp(24.dp),
-                ),
-        ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
-                ) {
-                    QuestTitle(
-                        stepNumber = uiState.stepNumber,
-                        questNumber = uiState.questNumber,
-                        createdAt = uiState.createdAt,
-                        questQuestion = uiState.question,
-                    )
-                }
-            }
-
-            item {
-                Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(12.dp)),
-                ) {
-                    if (imageUri != null) {
-                        SubcomposeAsyncImage(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth(),
-                            model =
-                                ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(imageUri)
-                                    .memoryCachePolicy(CachePolicy.DISABLED)
-                                    .diskCachePolicy(CachePolicy.DISABLED)
-                                    .build(),
-                            contentDescription = "uploaded image",
-                            contentScale = ContentScale.Crop,
-                            loading = {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator()
-                                }
-                            },
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = listState,
+                modifier = modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding =
+                    PaddingValues(
+                        start = screenWidthDp(24.dp),
+                        end = screenWidthDp(24.dp),
+                        bottom = screenHeightDp(24.dp),
+                    ),
+            ) {
+                item {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
+                    ) {
+                        QuestTitle(
+                            stepNumber = uiState.stepNumber,
+                            questNumber = uiState.questNumber,
+                            createdAt = uiState.createdAt,
+                            questQuestion = uiState.question,
                         )
                     }
                 }
-                if (uiState.questAnswer.isNotBlank()) {
+
+                item {
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(12.dp)),
+                    ) {
+                        if (imageUri != null) {
+                            SubcomposeAsyncImage(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth(),
+                                model =
+                                    ImageRequest
+                                        .Builder(LocalContext.current)
+                                        .data(imageUri)
+                                        .memoryCachePolicy(CachePolicy.DISABLED)
+                                        .diskCachePolicy(CachePolicy.DISABLED)
+                                        .build(),
+                                contentDescription = "uploaded image",
+                                contentScale = ContentScale.Crop,
+                                loading = {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
+                                },
+                            )
+                        }
+                    }
+                    if (uiState.questAnswer.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+                        ContentText(uiState.questAnswer)
+                    }
+                }
+
+                item {
                     Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-                    ContentText(uiState.questAnswer)
+                    QuestEmotionDescriptionContent(
+                        questEmotionDescription = uiState.emotionDescription,
+                        emotionType = uiState.selectedEmotion,
+                    )
+                }
+
+                if (canScroll) {
+                    item {
+                        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+                        ByeBooButton(
+                            buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
+                            buttonTextColor = ByeBooTheme.colors.white,
+                            buttonStyle = ByeBooTheme.typography.body2,
+                            buttonBackgroundColor = ByeBooTheme.colors.primary300,
+                            onClick = onAiAnswerClick,
+                        )
+                    }
                 }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-
-                QuestEmotionDescriptionContent(
-                    questEmotionDescription = uiState.emotionDescription,
-                    emotionType = uiState.selectedEmotion,
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-
+            if (!canScroll) {
                 ByeBooButton(
                     buttonText = if (uiState.isExistedAiAnswer) "보리의 답장 보러가기" else "보리에게 답장받기",
                     buttonTextColor = ByeBooTheme.colors.white,
                     buttonStyle = ByeBooTheme.typography.body2,
                     buttonBackgroundColor = ByeBooTheme.colors.primary300,
                     onClick = onAiAnswerClick,
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(bottom = screenHeightDp(10.dp)),
                 )
             }
         }

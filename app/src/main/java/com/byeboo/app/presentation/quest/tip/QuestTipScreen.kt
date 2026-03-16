@@ -91,6 +91,7 @@ private fun QuestTipScreen(
         CloseTopbar(
             onCloseClick = onCloseClick,
             title = "퀘스트 작성 TIP",
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         LazyColumn(

@@ -76,36 +76,47 @@ private fun OffboardingQuestCompletedScreen(
             modifier
                 .fillMaxSize()
                 .background(ByeBooTheme.colors.background)
-                .padding(horizontal = screenWidthDp(24.dp))
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
                     bottom = paddingValues.calculateBottomPadding(),
                 ),
     ) {
-        CloseTopbar(
-            onCloseClick = onCancelClick,
-        )
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(24.dp)),
+        ) {
+            CloseTopbar(
+                onCloseClick = onCancelClick,
+            )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
 
-        MiddleTag(
-            middleTagType = MiddleTagType.QUEST_PERIOD,
-            text = uiState.progressPeriod,
-            textStyle = ByeBooTheme.typography.cap2,
-        )
+            MiddleTag(
+                middleTagType = MiddleTagType.QUEST_PERIOD,
+                text = uiState.progressPeriod,
+                textStyle = ByeBooTheme.typography.cap2,
+            )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
-        DescriptionText(
-            nicknameText = "${uiState.userName}님의",
-            title = "${uiState.journeyType.journeyName} 여정",
-            guideText = "이에요",
-            contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
-            bottom = 16.dp,
-        )
+            DescriptionText(
+                nicknameText = "${uiState.userName}님의",
+                title = "${uiState.journeyType.journeyName} 여정",
+                guideText = "이에요",
+                contentText = "30개의 퀘스트를 돌아보며 성장을 체감할 수 있어요.",
+                bottom = 16.dp,
+            )
+        }
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = screenHeightDp(24.dp)),
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(24.dp),
+                ),
             modifier = Modifier.fillMaxWidth(),
         ) {
             uiState.questGroups.forEachIndexed { stepIndex, group ->

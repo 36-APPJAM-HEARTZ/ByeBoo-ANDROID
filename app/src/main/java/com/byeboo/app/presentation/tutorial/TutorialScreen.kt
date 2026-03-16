@@ -65,6 +65,7 @@ private fun TutorialScreen(
     ) {
         CloseTopbar(
             onCloseClick = onCloseClick,
+            modifier = Modifier.padding(horizontal = screenWidthDp(24.dp)),
         )
 
         Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))

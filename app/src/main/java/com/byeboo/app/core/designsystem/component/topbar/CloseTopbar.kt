@@ -18,6 +18,7 @@ fun CloseTopbar(
     title: String? = null,
     textColor: Color = ByeBooTheme.colors.white,
     textStyle: TextStyle = ByeBooTheme.typography.sub1,
+    backgroundColor: Color = ByeBooTheme.colors.background,
 ) {
     ByeBooTopbar(
         title = title,
@@ -34,6 +35,7 @@ fun CloseTopbar(
                     ),
             )
         },
+        backgroundColor = backgroundColor,
         modifier = modifier,
     )
 }
