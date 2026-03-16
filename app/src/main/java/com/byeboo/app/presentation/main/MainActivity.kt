@@ -8,8 +8,12 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,9 +29,26 @@ class MainActivity : ComponentActivity() {
 
         viewModel.handleIntent(intent)
 
+        observeTokenExpiredEvent()
+
         setContent {
             ByeBooTheme {
                 MainScreen()
+            }
+        }
+    }
+
+    private fun observeTokenExpiredEvent() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.tokenExpiredEvent.collect {
+                    val intent =
+                        Intent(this@MainActivity, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
     }

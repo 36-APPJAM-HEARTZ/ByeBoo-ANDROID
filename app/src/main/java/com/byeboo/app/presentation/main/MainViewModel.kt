@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
+import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.DESTINATION
 import com.byeboo.app.fcm.ByebooNotificationHandler.Companion.QUEST_HOME
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +24,7 @@ class MainViewModel
     @Inject
     constructor(
         private val questStateRepository: QuestStateRepository,
+        private val tokenRepository: TokenRepository,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
         val journeyStatus: StateFlow<JourneyStatusType> =
@@ -31,6 +34,8 @@ class MainViewModel
 
         private val _questHomeNavigation = MutableStateFlow<Boolean>(false)
         val questHomeNavigation: StateFlow<Boolean> = _questHomeNavigation.asStateFlow()
+
+        val tokenExpiredEvent: Flow<Unit> = tokenRepository.tokenExpiredEvent
 
         fun trackJourneyStart() {
             viewModelScope.launch {

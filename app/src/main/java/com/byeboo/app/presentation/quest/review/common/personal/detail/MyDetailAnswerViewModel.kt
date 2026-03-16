@@ -68,7 +68,7 @@ class MyDetailAnswerViewModel
                                 state.answer.copy(
                                     answerId = cached.answerId,
                                     question = cached.question,
-                                    writtenAt = cached.writtenAt,
+                                    writtenAt = DateUtil.formatToDotDate(cached.writtenAt),
                                     content = cached.content,
                                 ),
                         )

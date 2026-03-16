@@ -2,8 +2,11 @@ package com.byeboo.app.core.network
 
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -16,33 +19,68 @@ class TokenAuthenticator
         private val tokenRepository: TokenRepository,
         private val authRepository: AuthRepository,
     ) : Authenticator {
+        private val mutex = Mutex()
+
         override fun authenticate(
             route: Route?,
             response: Response,
-        ): Request? =
-            runBlocking {
-                if (responseCount(response) >= 2) return@runBlocking null
+        ): Request? {
+            if (responseCount(response) >= 2) return null
 
-                val refreshToken = tokenRepository.getRefreshToken().firstOrNull() ?: return@runBlocking null
+            return runBlocking(Dispatchers.IO) {
+                try {
+                    mutex.withLock {
+                        val currentAccessToken =
+                            tokenRepository.getAccessToken().firstOrNull().orEmpty()
+                        val requestAccessToken =
+                            response.request
+                                .header(AUTHORIZATION)
+                                ?.substringAfter(BEARER)
+                                ?.trim()
+                                .orEmpty()
 
-                val result = authRepository.reissueAccessToken(refreshToken)
+                        if (currentAccessToken != requestAccessToken) {
+                            return@runBlocking response.request
+                                .newBuilder()
+                                .removeHeader(AUTHORIZATION)
+                                .addHeader(AUTHORIZATION, "$BEARER $currentAccessToken")
+                                .build()
+                        }
 
-                val newAuthenticatedToken = result.getOrNull()
+                        val refreshToken = tokenRepository.getRefreshToken().firstOrNull().orEmpty()
 
-                if (newAuthenticatedToken == null) {
+                        if (refreshToken.isEmpty()) {
+                            tokenRepository.clearTokens()
+                            tokenRepository.setLoginSplash(true)
+                            return@runBlocking null
+                        }
+
+                        val result = authRepository.reissueAccessToken(refreshToken)
+                        val newAuthenticatedToken = result.getOrNull()
+
+                        if (newAuthenticatedToken == null) {
+                            tokenRepository.clearTokens()
+                            tokenRepository.setLoginSplash(true)
+                            return@runBlocking null
+                        }
+
+                        tokenRepository.saveTokens(newAuthenticatedToken)
+
+                        return@runBlocking response.request
+                            .newBuilder()
+                            .removeHeader(AUTHORIZATION)
+                            .addHeader(
+                                AUTHORIZATION,
+                                "$BEARER ${newAuthenticatedToken.accessToken}",
+                            ).build()
+                    }
+                } catch (e: Exception) {
                     tokenRepository.clearTokens()
                     tokenRepository.setLoginSplash(true)
                     return@runBlocking null
                 }
-
-                tokenRepository.saveTokens(newAuthenticatedToken)
-
-                response.request
-                    .newBuilder()
-                    .removeHeader(AUTHORIZATION)
-                    .addHeader(AUTHORIZATION, "$BEARER ${newAuthenticatedToken.accessToken}")
-                    .build()
             }
+        }
 
         private fun responseCount(response: Response): Int {
             var response: Response? = response

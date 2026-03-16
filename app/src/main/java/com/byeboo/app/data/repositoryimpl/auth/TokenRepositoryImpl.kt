@@ -4,6 +4,8 @@ import com.byeboo.app.core.model.auth.TokenEntity
 import com.byeboo.app.data.datasource.local.TokenDataSource
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
@@ -12,7 +14,12 @@ class TokenRepositoryImpl
     constructor(
         private val tokenDataSource: TokenDataSource,
     ) : TokenRepository {
-        @Volatile private var cachedAccessToken: String = ""
+        @Volatile
+        private var cachedAccessToken: String = ""
+
+        private val _tokenExpiredEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+        override val tokenExpiredEvent: Flow<Unit> = _tokenExpiredEvent.asSharedFlow()
 
         override fun getAccessToken(): Flow<String> = tokenDataSource.getAccessToken()
 
@@ -40,6 +47,9 @@ class TokenRepositoryImpl
 
         override suspend fun setLoginSplash(show: Boolean) {
             tokenDataSource.setLoginSplash(show)
+            if (show) {
+                _tokenExpiredEvent.tryEmit(Unit)
+            }
         }
 
         override suspend fun restartSplash(): Boolean = tokenDataSource.restartSplash()
