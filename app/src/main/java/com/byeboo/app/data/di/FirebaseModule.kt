@@ -11,15 +11,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object FirebaseModule {
-
     @Provides
     @Singleton
     fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
         remoteConfig.setConfigSettingsAsync(
-            FirebaseRemoteConfigSettings.Builder()
+            FirebaseRemoteConfigSettings
+                .Builder()
                 .setMinimumFetchIntervalInSeconds(3600)
-                .build()
+                .build(),
         )
         return remoteConfig
     }

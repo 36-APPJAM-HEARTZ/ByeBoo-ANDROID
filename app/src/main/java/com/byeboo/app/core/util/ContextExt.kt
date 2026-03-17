@@ -19,15 +19,16 @@ fun Context.hasNotificationPermission(): Boolean =
     }
 
 fun Context.navigateToPlayStore() {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")).apply {
-        setPackage("com.android.vending")
-    }
+    val intent =
+        Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")).apply {
+            setPackage("com.android.vending")
+        }
 
     runCatching {
         startActivity(intent)
     }.onFailure {
         startActivity(
-            Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")),
         )
     }
 }

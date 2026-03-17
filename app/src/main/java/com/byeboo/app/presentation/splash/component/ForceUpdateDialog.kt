@@ -29,24 +29,26 @@ fun ForceUpdateDialog() {
 
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(
-            dismissOnBackPress = false,
-            dismissOnClickOutside = false
-        )
+        properties =
+            DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
+            ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(ByeBooTheme.colors.background)
-                .padding(vertical = screenHeightDp(24.dp),horizontal = screenWidthDp(24.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(ByeBooTheme.colors.background)
+                    .padding(vertical = screenHeightDp(24.dp), horizontal = screenWidthDp(24.dp)),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "새로운 업데이트가 있어요",
                 style = ByeBooTheme.typography.sub3,
                 color = ByeBooTheme.colors.gray50,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -55,7 +57,7 @@ fun ForceUpdateDialog() {
                 text = "더 나은 바이부를 만나보세요",
                 style = ByeBooTheme.typography.body3,
                 color = ByeBooTheme.colors.gray400,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(16.dp)))
@@ -65,7 +67,7 @@ fun ForceUpdateDialog() {
                 buttonText = "업데이트 하러 가기",
                 buttonStyle = ByeBooTheme.typography.body2,
                 buttonTextColor = ByeBooTheme.colors.white,
-                buttonBackgroundColor = ByeBooTheme.colors.primary300
+                buttonBackgroundColor = ByeBooTheme.colors.primary300,
             )
         }
     }
