@@ -8,6 +8,7 @@ import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.notification.FcmTokenModel
 import com.byeboo.app.domain.repository.auth.TokenRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
+import com.byeboo.app.domain.repository.config.ConfigRepository
 import com.byeboo.app.domain.repository.fcm.FcmTokenRepository
 import com.byeboo.app.domain.usecase.LoginUseCase
 import com.byeboo.app.domain.usecase.ReissueAccessTokenUseCase
@@ -30,6 +31,7 @@ import javax.inject.Inject
 class SplashViewModel
     @Inject
     constructor(
+        private val configRepository: ConfigRepository,
         private val tokenRepository: TokenRepository,
         private val userRepository: UserRepository,
         private val fcmTokenRepository: FcmTokenRepository,
@@ -45,6 +47,12 @@ class SplashViewModel
 
         init {
             viewModelScope.launch {
+                val minVersion = configRepository.getMinVersionCode()
+                if (configRepository.isUpdateRequired(minVersion)) {
+                    _sideEffect.emit(SplashStateSideEffect.ShowForceUpdateDialog)
+                    return@launch
+                }
+
                 tokenRepository.initCachedAccessToken()
 
                 if (tokenRepository.restartSplash()) {

@@ -47,6 +47,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.splash.component.ForceUpdateDialog
 import com.kakao.sdk.user.UserApiClient
 
 @Composable
@@ -62,6 +63,8 @@ fun SplashRoute(
     val showSnackBar = LocalSnackBarTrigger.current
     var showLoginButton by remember { mutableStateOf(false) }
 
+    var isUpdateRequired by remember { mutableStateOf(false) }
+
     val permissionLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission(),
@@ -73,6 +76,9 @@ fun SplashRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
+                is SplashStateSideEffect.ShowForceUpdateDialog -> {
+                    isUpdateRequired = true
+                }
                 is SplashStateSideEffect.ShowLoginButton -> {
                     showLoginButton = true
                 }
@@ -105,6 +111,10 @@ fun SplashRoute(
                 is SplashStateSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
+    }
+
+    if (isUpdateRequired) {
+        ForceUpdateDialog()
     }
 
     SplashScreen(
