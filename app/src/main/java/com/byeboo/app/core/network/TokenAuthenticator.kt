@@ -51,7 +51,7 @@ class TokenAuthenticator
 
                         if (refreshToken.isEmpty()) {
                             tokenRepository.clearTokens()
-                            tokenRepository.setLoginSplash(true)
+                            tokenRepository.setLoginSplash(show = true, isTokenExpired = true)
                             return@runBlocking null
                         }
 
@@ -60,7 +60,7 @@ class TokenAuthenticator
 
                         if (newAuthenticatedToken == null) {
                             tokenRepository.clearTokens()
-                            tokenRepository.setLoginSplash(true)
+                            tokenRepository.setLoginSplash(show = true, isTokenExpired = true)
                             return@runBlocking null
                         }
 
@@ -76,7 +76,7 @@ class TokenAuthenticator
                     }
                 } catch (e: Exception) {
                     tokenRepository.clearTokens()
-                    tokenRepository.setLoginSplash(true)
+                    tokenRepository.setLoginSplash(show = true, isTokenExpired = true)
                     return@runBlocking null
                 }
             }
