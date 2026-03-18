@@ -9,6 +9,7 @@ import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
+import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +29,7 @@ class MyDetailAnswerViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val mapper: QuestUiModelMapper,
         private val questCommonRepository: QuestCommonRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(MyDetailAnswerState())
@@ -83,7 +85,7 @@ class MyDetailAnswerViewModel
                                         state.answer.copy(
                                             answerId = answerId,
                                             question = detail.question,
-                                            writtenAt = detail.writtenAt.toString(),
+                                            writtenAt = mapper.formatDetailDate(detail.writtenAt),
                                             content = detail.content,
                                         ),
                                 )
