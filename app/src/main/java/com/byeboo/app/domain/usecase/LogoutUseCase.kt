@@ -26,7 +26,7 @@ class LogoutUseCase
                 fcmTokenRepository.deleteFcmToken(FcmTokenModel(fcmToken))
                 tokenRepository.clearTokens()
                 userRepository.clear()
-                tokenRepository.setLoginSplash(true)
+                tokenRepository.setLoginSplash(show = true, isTokenExpired = false)
             }
             return logoutResult
         }
