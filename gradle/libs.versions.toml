@@ -4,8 +4,8 @@
 compileSdk = "36"
 minSdk = "28"
 targetSdk = "35"
-versionCode = "3"
-versionName = "1.0.2"
+versionCode = "10"
+versionName = "2.0.1"
 
 # Kotlin
 agp = "8.9.2"
@@ -72,6 +72,9 @@ datastore = "1.1.7"
 
 # in-app
 googlePlayInappReview = "2.0.2"
+
+# Google Play Update
+googlePlayAppUpdate = "2.1.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -147,6 +150,12 @@ google-play-inapp-review-ktx = { group = "com.google.android.play", name = "revi
 # DataStore
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
+
+# Firebase Remote Config
+google-firebase-config = { group = "com.google.firebase", name = "firebase-config" }
+
+# Google Play App Update
+google-play-app-update = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "googlePlayAppUpdate" }
 
 [bundles]
 androidx = [
