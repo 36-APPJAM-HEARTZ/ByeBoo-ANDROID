@@ -82,6 +82,10 @@ class QuestViewModel
         fun onTabClicked(tab: QuestTab) {
             savedStateHandle["selectedTab"] = tab.name
             _uiState.update { it.copy(selectedTab = tab) }
+
+            if (tab == QuestTab.COMMON_JOURNEY) {
+                mixpanelUtil.trackEvent("common_journey_pageview")
+            }
         }
 
         fun onDateChange(newDate: LocalDate) {
@@ -373,6 +377,7 @@ class QuestViewModel
                 if (selectedAnswer.writerId == myUserId) {
                     _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswersDetail(answerId))
                 } else {
+                    mixpanelUtil.trackEvent("common_journey_others_answer_pageview")
                     _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
                 }
             }
@@ -380,6 +385,8 @@ class QuestViewModel
 
         fun onCommonQuestClicked(questId: Long) {
             viewModelScope.launch {
+                mixpanelUtil.trackEvent("common_journey_write_click")
+
                 val question = _uiState.value.commonJourneyState.question
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId, question))
             }
@@ -411,8 +418,8 @@ class QuestViewModel
         private fun trackQuest(quest: Quest) {
             val questType =
                 when (quest.type) {
-                    QuestType.RECORDING -> "질문형"
-                    QuestType.ACTIVE -> "행동형"
+                    QuestType.RECORDING -> "이별 극복"
+                    QuestType.ACTIVE -> "재회 준비"
                     else -> Unit
                 }
             mixpanelUtil.trackEvent(

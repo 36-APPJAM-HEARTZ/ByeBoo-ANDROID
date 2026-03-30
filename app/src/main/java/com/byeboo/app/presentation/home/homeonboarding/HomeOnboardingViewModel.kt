@@ -47,7 +47,6 @@ class HomeOnboardingViewModel
                         ),
                 )
 
-                mixpanelUtil.trackEvent("onboarding_complete")
                 delay(500)
                 _sideEffect.emit(HomeOnboardingSideEffect.NavigateToHome)
             }

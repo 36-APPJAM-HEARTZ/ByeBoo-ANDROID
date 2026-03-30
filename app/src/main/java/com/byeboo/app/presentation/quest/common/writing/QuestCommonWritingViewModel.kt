@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
@@ -27,6 +28,7 @@ class QuestCommonWritingViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         private val questCommonRepository: QuestCommonRepository,
+        private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
         private val routeArgs = savedStateHandle.toRoute<QuestCommonRoute.QuestCommonWriting>()
         private val questId: Long = routeArgs.questId
@@ -115,6 +117,7 @@ class QuestCommonWritingViewModel
 
                 result
                     .onSuccess {
+                        mixpanelUtil.trackEvent(eventName = "common_journey_write_success")
                         _sideEffect.emit(QuestCommonSideEffect.NavigateToQuest)
                     }.onFailure { exception ->
                         _sideEffect.emit(

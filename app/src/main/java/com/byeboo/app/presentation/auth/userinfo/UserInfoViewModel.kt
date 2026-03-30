@@ -85,21 +85,6 @@ class UserInfoViewModel
             }
         }
 
-        private fun trackQuestSelected(questStyle: JourneyType) {
-            mixpanelUtil.trackEvent(
-                eventName = "quest_type_complete",
-                properties =
-                    mapOf(
-                        "quest_type" to
-                            when (questStyle) {
-                                JourneyType.RECORDING -> "이별 극복"
-                                JourneyType.REUNION -> "재회 준비"
-                                else -> ""
-                            },
-                    ),
-            )
-        }
-
         fun finishUserInfo() {
             if (hasSubmitted) return
             val currentState = _uiState.value
@@ -133,7 +118,6 @@ class UserInfoViewModel
                 val result = userRepository.updateUserInfo(userInfo)
 
                 if (result.isSuccess) {
-                    trackQuestSelected(currentState.selectedQuest)
                     questStateRepository.updateUserJourney(currentState.selectedQuest.journeyName)
                     userRepository.setUserRegistered(true)
 
