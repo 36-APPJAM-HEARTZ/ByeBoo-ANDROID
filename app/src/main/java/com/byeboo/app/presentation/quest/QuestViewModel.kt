@@ -418,8 +418,8 @@ class QuestViewModel
         private fun trackQuest(quest: Quest) {
             val questType =
                 when (quest.type) {
-                    QuestType.RECORDING -> "이별 극복"
-                    QuestType.ACTIVE -> "재회 준비"
+                    QuestType.RECORDING -> "질문형"
+                    QuestType.ACTIVE -> "행동형"
                     else -> Unit
                 }
             mixpanelUtil.trackEvent(
