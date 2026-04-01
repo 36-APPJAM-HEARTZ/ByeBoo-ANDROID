@@ -138,6 +138,7 @@ class QuestBehaviorViewModel
                 val imageUrl = state.selectedImageUri ?: return@launch
                 val questId = state.questId
                 val answer = state.questAnswer
+                val questNumber = uiState.value.questNumber
                 val emotion = state.selectedEmotion?.toData().orEmpty()
 
                 runCatching {
@@ -164,6 +165,17 @@ class QuestBehaviorViewModel
                                 "quest_number" to questId,
                                 "quest_type" to "행동형",
                                 "after_emotion_type" to emotion,
+                            ),
+                    )
+
+                    val answer = uiState.value.questAnswer
+                    mixpanelUtil.trackEvent(
+                        eventName = "quest_write_success",
+                        properties =
+                            mapOf(
+                                "quest_length" to answer.length,
+                                "quest_number" to questNumber,
+                                "quest_type" to "행동형",
                             ),
                     )
                     _uiState.update { it.copy(showBottomSheet = false) }
@@ -213,16 +225,6 @@ class QuestBehaviorViewModel
                         isEditMode = true,
                     ).getOrThrow()
                 }.onSuccess {
-                    mixpanelUtil.trackEvent(
-                        eventName = "quest_edit",
-                        properties =
-                            mapOf(
-                                "quest_end_at" to getFormattedDate(),
-                                "quest_number" to questId,
-                                "quest_type" to "행동형",
-                            ),
-                    )
-
                     questRecordedDetailRepository.getQuestRecordedDetail(questId)
 
                     _sideEffect.emit(
@@ -339,16 +341,6 @@ class QuestBehaviorViewModel
 
                 result
                     .onSuccess {
-                        mixpanelUtil.trackEvent(
-                            eventName = "quest_edit",
-                            properties =
-                                mapOf(
-                                    "quest_end_at" to getFormattedDate(),
-                                    "quest_number" to questId,
-                                    "quest_type" to "행동형",
-                                ),
-                        )
-
                         _sideEffect.emit(
                             if (uiState.value.fromOffboarding) {
                                 QuestBehaviorSideEffect.NavigateUp
@@ -367,17 +359,6 @@ class QuestBehaviorViewModel
         }
 
         private fun openBottomSheet() {
-            val questNumber = uiState.value.questNumber
-            val answer = uiState.value.questAnswer
-            mixpanelUtil.trackEvent(
-                eventName = "quest_write_success",
-                properties =
-                    mapOf(
-                        "quest_length" to answer.length,
-                        "quest_number" to questNumber,
-                        "quest_type" to "행동형",
-                    ),
-            )
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 

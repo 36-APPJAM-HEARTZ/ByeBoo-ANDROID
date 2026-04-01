@@ -45,7 +45,10 @@ class TokenRepositoryImpl
             cachedAccessToken = token
         }
 
-        override suspend fun setLoginSplash(show: Boolean, isTokenExpired: Boolean) {
+        override suspend fun setLoginSplash(
+            show: Boolean,
+            isTokenExpired: Boolean,
+        ) {
             tokenDataSource.setLoginSplash(show)
             if (isTokenExpired) {
                 _tokenExpiredEvent.tryEmit(Unit)

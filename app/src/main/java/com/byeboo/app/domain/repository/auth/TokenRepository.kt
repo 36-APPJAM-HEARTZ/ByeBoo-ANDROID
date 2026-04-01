@@ -20,7 +20,10 @@ interface TokenRepository {
 
     fun getCachedAccessToken(): String
 
-    suspend fun setLoginSplash(show: Boolean, isTokenExpired: Boolean)
+    suspend fun setLoginSplash(
+        show: Boolean,
+        isTokenExpired: Boolean,
+    )
 
     suspend fun restartSplash(): Boolean
 }

@@ -9,6 +9,7 @@ import com.byeboo.app.core.designsystem.type.EmotionChipType
 import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.repository.quest.QuestRecordedDetailRepository
+import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.presentation.quest.behavior.navigation.QuestBehavior
 import com.byeboo.app.presentation.quest.navigation.AiAnswerOrigin
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class QuestBehaviorCompleteViewModel
     @Inject
     constructor(
         private val questRecordedDetailRepository: QuestRecordedDetailRepository,
+        private val questStateRepository: QuestStateRepository,
         savedStateHandle: SavedStateHandle,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
@@ -83,7 +85,7 @@ class QuestBehaviorCompleteViewModel
                         properties =
                             mapOf(
                                 "journey_end_at" to getFormattedDate(),
-                                "journey_type" to "감정 정리",
+                                "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패"),
                             ),
                     )
                     _sideEffect.emit(
@@ -103,6 +105,8 @@ class QuestBehaviorCompleteViewModel
 
         fun onAiAnswerClicked() {
             viewModelScope.launch {
+                mixpanelUtil.trackEvent("ai_reply_request_click")
+
                 _sideEffect.emit(
                     QuestBehaviorCompleteSideEffect.NavigateToQuestAiAnswer(
                         questId = uiState.value.questId,

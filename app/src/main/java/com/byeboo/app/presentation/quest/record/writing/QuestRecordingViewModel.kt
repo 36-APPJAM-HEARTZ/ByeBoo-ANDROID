@@ -146,6 +146,16 @@ class QuestRecordingViewModel
                                     "after_emotion_type" to emotion,
                                 ),
                         )
+
+                        mixpanelUtil.trackEvent(
+                            eventName = "quest_write_success",
+                            properties =
+                                mapOf(
+                                    "quest_length" to answer.length,
+                                    "quest_number" to questNumber,
+                                    "quest_type" to "질문형",
+                                ),
+                        )
                         _uiState.update { it.copy(showBottomSheet = false) }
 
                         _sideEffect.emit(
@@ -265,17 +275,6 @@ class QuestRecordingViewModel
         }
 
         private fun openBottomSheet() {
-            val questNumber = uiState.value.questNumber
-            val answer = uiState.value.questAnswer
-            mixpanelUtil.trackEvent(
-                eventName = "quest_complete",
-                properties =
-                    mapOf(
-                        "quest_length" to answer.length,
-                        "quest_number" to questNumber,
-                        "quest_type" to "질문형",
-                    ),
-            )
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 
