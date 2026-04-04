@@ -2,7 +2,9 @@ package com.byeboo.app.core.model.quest
 
 import androidx.annotation.DrawableRes
 import com.byeboo.app.R
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class JourneyType(
     val journeyName: String,
     val journeyType: String,
