@@ -49,7 +49,7 @@ fun OffboardingNewJourneyButton(
         Spacer(modifier = Modifier.width(screenWidthDp(8.dp)))
 
         Text(
-            text = "새로운 이별 극복 여정 시작하기",
+            text = "새로운 여정 시작하기",
             color = ByeBooTheme.colors.white,
             style = ByeBooTheme.typography.body2,
         )
