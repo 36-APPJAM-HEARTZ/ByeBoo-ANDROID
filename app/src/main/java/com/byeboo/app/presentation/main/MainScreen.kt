@@ -99,11 +99,7 @@ fun MainScreen(
                         navigator.navigateToQuestStart(null, navOptions)
                     }
 
-                    JourneyStatusType.COMPLETED -> {
-                        navigator.navigateToOffboardingCompletedGuide(navOptions)
-                    }
-
-                    JourneyStatusType.IN_PROGRESS -> {
+                    JourneyStatusType.IN_PROGRESS, JourneyStatusType.COMPLETED -> {
                         navigator.navigateToQuest(navOptions)
                     }
                 }
