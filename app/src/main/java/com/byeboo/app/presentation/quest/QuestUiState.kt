@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.quest
 
 import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.JourneyStatusType
+import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
@@ -11,6 +12,8 @@ import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 
 data class QuestUiState(
+    val isStatusLoading: Boolean = true,
+    val status: HomeStatus = HomeStatus.INITIAL_START,
     val selectedTab: QuestTab = QuestTab.MY_JOURNEY,
     val userName: String = "",
     val error: String? = null,

@@ -48,6 +48,8 @@ sealed interface QuestSideEffect {
 
     data object NavigateToQuestMyAnswers : QuestSideEffect
 
+    data object NavigateToOffboardingCompletedGuide : QuestSideEffect
+
     data class ShowSnackBar(
         val snackBarType: CustomSnackBarType,
     ) : QuestSideEffect
