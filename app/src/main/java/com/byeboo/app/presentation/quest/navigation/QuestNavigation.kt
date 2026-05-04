@@ -123,6 +123,7 @@ fun NavGraphBuilder.questGraph(
                 navigateToCommonAnswer = navigateToQuestCommonAnswer,
                 navigateToMyAnswerDetail = navigateToQuestMyAnswerDetail,
                 navigateToQuestMyAnswers = navigateToQuestMyAnswers,
+                navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
                 isCommonAnswerCompleted = isCommonAnswerCompleted,
                 onCommonAnswerCompleted = {
                     backStackEntry.savedStateHandle[QuestResultKey.COMMON_COMPLETED] = false

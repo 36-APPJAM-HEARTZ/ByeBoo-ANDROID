@@ -44,6 +44,7 @@ fun NavController.navigateToOffboardingQuestReview(
 
 fun NavGraphBuilder.offboardingGraph(
     navigateToHome: () -> Unit,
+    navigateToQuest: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     navigateToQuestStart: (JourneyType?) -> Unit,
@@ -59,6 +60,7 @@ fun NavGraphBuilder.offboardingGraph(
     composable<OffboardingCompletedGuide> {
         OffboardingCompletedGuideRoute(
             navigateToHome = navigateToHome,
+            navigateToQuest = navigateToQuest,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
             navigateToOffboardingCompletedJourney = navigateToOffboardingCompletedJourney,
             paddingValues = paddingValues,
