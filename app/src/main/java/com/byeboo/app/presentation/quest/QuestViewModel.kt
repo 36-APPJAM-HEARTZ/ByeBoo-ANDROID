@@ -244,14 +244,16 @@ class QuestViewModel
                     .getQuestCount()
                     .onSuccess { model ->
                         status = HomeStatus.from(model.userCurrentStatus)
-                    }
 
-                _uiState.update {
-                    it.copy(
-                        status = status,
-                        isStatusLoading = false,
-                    )
-                }
+                        _uiState.update {
+                            it.copy(
+                                status = status,
+                                isStatusLoading = false,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }
 
                 if (status != HomeStatus.JOURNEY_COMPLETE) {
                     loadQuests()
