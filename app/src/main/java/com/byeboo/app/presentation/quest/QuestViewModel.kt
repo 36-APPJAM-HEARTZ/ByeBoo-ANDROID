@@ -8,8 +8,10 @@ import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.core.util.TimeUtil
+import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import com.byeboo.app.domain.usecase.quest.QuestUseCase
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
@@ -43,6 +45,7 @@ class QuestViewModel
     constructor(
         private val savedStateHandle: SavedStateHandle,
         private val questUseCase: QuestUseCase,
+        private val questStateRepository: QuestStateRepository,
         private val userRepository: UserRepository,
         private val commonQuestRepository: QuestCommonRepository,
         private val mixpanelUtil: MixpanelUtil,
@@ -73,7 +76,7 @@ class QuestViewModel
                     _uiState.update { it.copy(userName = nickname) }
                 }
             }
-            loadQuests()
+            loadQuestStatus()
             refetchCommonQuests(uiState.value.commonJourneyState.selectedDate)
             observeAnswerSubmitted()
             observeRefreshEvent()
@@ -233,6 +236,31 @@ class QuestViewModel
                 }
         }
 
+        private fun loadQuestStatus() {
+            viewModelScope.launch {
+                var status = HomeStatus.INITIAL_START
+
+                questStateRepository
+                    .getQuestCount()
+                    .onSuccess { model ->
+                        status = HomeStatus.from(model.userCurrentStatus)
+
+                        _uiState.update {
+                            it.copy(
+                                status = status,
+                                isStatusLoading = false,
+                            )
+                        }
+                    }.onFailure {
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }
+
+                if (status != HomeStatus.JOURNEY_COMPLETE) {
+                    loadQuests()
+                }
+            }
+        }
+
         private fun loadQuests() {
             viewModelScope.launch {
                 runCatching { questUseCase() }
@@ -389,6 +417,12 @@ class QuestViewModel
 
                 val question = _uiState.value.commonJourneyState.question
                 _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonWriting(questId, question))
+            }
+        }
+
+        fun onMeetingBoriClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(QuestSideEffect.NavigateToOffboardingCompletedGuide)
             }
         }
 

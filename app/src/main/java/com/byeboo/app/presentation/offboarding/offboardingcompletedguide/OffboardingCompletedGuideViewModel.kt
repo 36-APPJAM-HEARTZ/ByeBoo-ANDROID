@@ -84,6 +84,14 @@ class OffboardingCompletedGuideViewModel
             }
         }
 
+        fun onBackClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    OffboardingCompletedGuideSideEffect.NavigateToQuest,
+                )
+            }
+        }
+
         fun onNewJourneyClicked() {
             viewModelScope.launch {
                 savedStateHandle[ANIMATION_PLAYED] = true

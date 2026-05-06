@@ -17,17 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.byeboo.app.core.designsystem.component.LoadingScreen
 import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.presentation.quest.component.card.QuestCompleteDialog
 import com.byeboo.app.presentation.quest.component.modal.QuestModal
 import com.byeboo.app.presentation.quest.component.tab.QuestTabRow
 import com.byeboo.app.presentation.quest.model.QuestSideEffect
 import com.byeboo.app.presentation.quest.model.QuestTab
 import com.byeboo.app.presentation.quest.screen.CommonJourneyScreen
+import com.byeboo.app.presentation.quest.screen.JourneyCompleteScreen
 import com.byeboo.app.presentation.quest.screen.MyJourneyScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +46,7 @@ fun QuestRoute(
     navigateToCommonAnswer: (Long) -> Unit,
     navigateToMyAnswerDetail: (Long) -> Unit,
     navigateToQuestMyAnswers: () -> Unit,
+    navigateToOffboardingCompletedGuide: () -> Unit,
     paddingValues: PaddingValues,
     isCommonAnswerCompleted: Boolean,
     onCommonAnswerCompleted: () -> Unit,
@@ -84,6 +88,8 @@ fun QuestRoute(
                     navigateToQuestReview(effect.questId)
                 is QuestSideEffect.NavigateToQuestMyAnswers ->
                     navigateToQuestMyAnswers()
+                is QuestSideEffect.NavigateToOffboardingCompletedGuide ->
+                    navigateToOffboardingCompletedGuide()
                 is QuestSideEffect.ShowSnackBar ->
                     showSnackBar(effect.snackBarType)
             }
@@ -108,6 +114,11 @@ fun QuestRoute(
         }
     }
 
+    if (uiState.isStatusLoading) {
+        LoadingScreen()
+        return
+    }
+
     QuestScreen(
         uiState = uiState,
         listState = listState,
@@ -119,6 +130,7 @@ fun QuestRoute(
         onTipClick = viewModel::onTipClicked,
         onQuestStart = viewModel::onQuestStart,
         onTabClick = viewModel::onTabClicked,
+        onMeetingBoriClick = viewModel::onMeetingBoriClicked,
         onCommonAnswerClick = viewModel::onOtherAnswerClicked,
         onDateChange = viewModel::onDateChange,
         onLoadMore = viewModel::loadNextPage,
@@ -137,6 +149,7 @@ private fun QuestScreen(
     onTipClick: () -> Unit,
     onQuestStart: () -> Unit,
     onTabClick: (QuestTab) -> Unit,
+    onMeetingBoriClick: () -> Unit,
     onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onLoadMore: () -> Unit,
@@ -177,12 +190,22 @@ private fun QuestScreen(
 
         when (uiState.selectedTab) {
             QuestTab.MY_JOURNEY -> {
-                MyJourneyScreen(
-                    state = uiState.myJourneyState,
-                    userName = uiState.userName,
-                    listState = listState,
-                    onQuestClick = onQuestClick,
-                )
+                when (uiState.status) {
+                    HomeStatus.JOURNEY_COMPLETE -> {
+                        JourneyCompleteScreen(
+                            username = uiState.userName,
+                            onClick = onMeetingBoriClick,
+                        )
+                    }
+                    else -> {
+                        MyJourneyScreen(
+                            state = uiState.myJourneyState,
+                            userName = uiState.userName,
+                            listState = listState,
+                            onQuestClick = onQuestClick,
+                        )
+                    }
+                }
             }
             QuestTab.COMMON_JOURNEY -> {
                 CommonJourneyScreen(

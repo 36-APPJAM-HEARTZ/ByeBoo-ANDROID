@@ -63,6 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OffboardingCompletedGuideRoute(
     navigateToHome: () -> Unit,
+    navigateToQuest: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToOffboardingCompletedJourney: () -> Unit,
     paddingValues: PaddingValues,
@@ -76,6 +77,7 @@ fun OffboardingCompletedGuideRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is OffboardingCompletedGuideSideEffect.NavigateToHome -> navigateToHome()
+                is OffboardingCompletedGuideSideEffect.NavigateToQuest -> navigateToQuest()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
                 is OffboardingCompletedGuideSideEffect.NavigateToOffboardingCompletedJourney -> navigateToOffboardingCompletedJourney()
                 is OffboardingCompletedGuideSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
@@ -84,7 +86,7 @@ fun OffboardingCompletedGuideRoute(
     }
 
     BackHandler {
-        viewModel.onCloseClicked()
+        viewModel.onBackClicked()
     }
 
     OffboardingCompleteGuideScreen(
