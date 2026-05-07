@@ -90,13 +90,12 @@ class QuestRecordingCompleteViewModel
                     )
                 }
             }
-            if (uiState.value.questNumber == 1L) {
-                viewModelScope.launch {
-                    _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
-                }
-            }
 
             viewModelScope.launch {
+                if (uiState.value.questNumber == 1L) {
+                    _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
+                }
+
                 _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
             }
         }

@@ -91,13 +91,11 @@ class QuestBehaviorCompleteViewModel
                 }
             }
 
-            if (uiState.value.questId == 1L) {
-                viewModelScope.launch {
+            viewModelScope.launch {
+                if (uiState.value.questId == 1L) {
                     _sideEffect.emit(QuestBehaviorCompleteSideEffect.ShowInAppReview)
                 }
-            }
 
-            viewModelScope.launch {
                 _sideEffect.emit(QuestBehaviorCompleteSideEffect.NavigateToQuest)
             }
         }
