@@ -88,17 +88,15 @@ class QuestRecordingCompleteViewModel
                                 "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패"),
                             ),
                     )
-                    _sideEffect.emit(
-                        QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide,
-                    )
                 }
-            } else {
-                viewModelScope.launch {
-                    _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
-                    if (uiState.value.questNumber == 1L) {
-                        _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
-                    }
+            }
+
+            viewModelScope.launch {
+                if (uiState.value.questNumber == 1L) {
+                    _sideEffect.emit(QuestRecordingCompleteSideEffect.ShowInAppReview)
                 }
+
+                _sideEffect.emit(QuestRecordingCompleteSideEffect.NavigateToQuest)
             }
         }
 

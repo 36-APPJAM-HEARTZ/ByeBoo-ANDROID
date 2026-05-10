@@ -43,7 +43,6 @@ fun NavGraphBuilder.questBehaviorGraph(
     navigateToQuestTip: (Long, QuestType) -> Unit,
     navigateToQuestBehaviorComplete: (Long) -> Unit,
     navigateToQuestReview: (Long) -> Unit,
-    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateUp: () -> Unit,
     navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
@@ -63,7 +62,6 @@ fun NavGraphBuilder.questBehaviorGraph(
         composable<QuestBehaviorComplete> {
             QuestBehaviorCompleteRoute(
                 navigateToQuest = navigateToQuest,
-                navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
                 navigateToQuestAiAnswer = navigateToQuestAiAnswer,
                 paddingValues = paddingValues,
             )

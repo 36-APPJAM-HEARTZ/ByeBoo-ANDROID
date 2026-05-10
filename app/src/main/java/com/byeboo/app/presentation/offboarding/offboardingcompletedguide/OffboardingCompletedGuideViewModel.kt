@@ -79,14 +79,6 @@ class OffboardingCompletedGuideViewModel
         fun onCloseClicked() {
             viewModelScope.launch {
                 _sideEffect.emit(
-                    OffboardingCompletedGuideSideEffect.NavigateToHome,
-                )
-            }
-        }
-
-        fun onBackClicked() {
-            viewModelScope.launch {
-                _sideEffect.emit(
                     OffboardingCompletedGuideSideEffect.NavigateToQuest,
                 )
             }

@@ -27,8 +27,6 @@ data class QuestBehaviorCompleteState(
 sealed interface QuestBehaviorCompleteSideEffect {
     data object NavigateToQuest : QuestBehaviorCompleteSideEffect
 
-    data object NavigateToOffboardingCompletedGuide : QuestBehaviorCompleteSideEffect
-
     data class NavigateToQuestAiAnswer(
         val questId: Long,
         val isExistedAiAnswer: Boolean,

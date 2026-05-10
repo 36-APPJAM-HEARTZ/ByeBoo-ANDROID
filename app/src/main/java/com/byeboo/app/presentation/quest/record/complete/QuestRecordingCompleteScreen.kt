@@ -43,7 +43,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun QuestRecordingCompleteRoute(
     navigateToQuest: () -> Unit,
-    navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToQuestAiAnswer: (Long, Boolean, AiAnswerOrigin) -> Unit,
     paddingValues: PaddingValues,
     viewModel: QuestRecordingCompleteViewModel = hiltViewModel(),
@@ -57,7 +56,6 @@ fun QuestRecordingCompleteRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is QuestRecordingCompleteSideEffect.NavigateToQuest -> navigateToQuest()
-                is QuestRecordingCompleteSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is QuestRecordingCompleteSideEffect.NavigateToQuestAiAnswer ->
                     navigateToQuestAiAnswer(
                         effect.questId,

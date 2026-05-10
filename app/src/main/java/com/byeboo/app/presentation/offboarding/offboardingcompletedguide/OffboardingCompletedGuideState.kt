@@ -8,8 +8,6 @@ data class OffboardingCompletedGuideState(
 )
 
 sealed interface OffboardingCompletedGuideSideEffect {
-    data object NavigateToHome : OffboardingCompletedGuideSideEffect
-
     data object NavigateToQuest : OffboardingCompletedGuideSideEffect
 
     data object NavigateToOffboardingNewJourney : OffboardingCompletedGuideSideEffect
