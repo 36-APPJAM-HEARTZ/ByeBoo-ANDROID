@@ -16,6 +16,7 @@ data class HomeUiState(
     val isBubbleClicked: Boolean = false,
     val showBubble: Boolean = true,
     val isBubbleEnabled: Boolean = true,
+    val hasNewNotification: Boolean = false
 )
 
 sealed interface HomeSideEffect {
