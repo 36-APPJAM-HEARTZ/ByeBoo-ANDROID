@@ -44,4 +44,7 @@ data class CommonJourneyState(
     val nextCursor: Long? = null,
     val isLoading: Boolean = false,
     val isPaginationLoading: Boolean = false,
+    val heartCount: Int = 0,
+    val commentCount: Int = 0,
+    val isClicked: Boolean = false,
 )

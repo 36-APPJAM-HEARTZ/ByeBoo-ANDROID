@@ -52,6 +52,7 @@ fun CommonOtherAnswerRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
+        onHeartClick = viewModel::onHeartClicked,
     )
 }
 
@@ -64,6 +65,7 @@ private fun CommonOtherAnswerScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (OtherPostOption) -> Unit,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -95,6 +97,7 @@ private fun CommonOtherAnswerScreen(
         uiState.answer?.let { answer ->
             CommonAnswerItem(
                 answer = answer,
+                onHeartClick = onHeartClick,
                 isExpanded = true,
             )
         }

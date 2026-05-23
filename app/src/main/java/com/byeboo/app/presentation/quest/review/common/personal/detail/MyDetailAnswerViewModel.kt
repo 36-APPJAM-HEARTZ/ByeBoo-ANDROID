@@ -85,8 +85,8 @@ class MyDetailAnswerViewModel
                                         state.answer.copy(
                                             answerId = answerId,
                                             question = detail.question,
-                                            writtenAt = mapper.formatDetailDate(detail.writtenAt),
-                                            content = detail.content,
+                                            writtenAt = mapper.formatDetailDate(detail.answer.writtenAt),
+                                            content = detail.answer.content,
                                         ),
                                 )
                             }
@@ -148,6 +148,9 @@ class MyDetailAnswerViewModel
             }
         }
 
+        fun onHeartClicked() {
+        }
+
         private fun observeRefreshEvent() {
             viewModelScope.launch {
                 questCommonRepository.refreshEvent.collect {
@@ -162,8 +165,8 @@ class MyDetailAnswerViewModel
                                             state.answer.copy(
                                                 answerId = answerId,
                                                 question = detail.question,
-                                                writtenAt = detail.writtenAt.toString(),
-                                                content = detail.content,
+                                                writtenAt = mapper.formatDetailDate(detail.answer.writtenAt),
+                                                content = detail.answer.content,
                                             ),
                                     )
                                 }

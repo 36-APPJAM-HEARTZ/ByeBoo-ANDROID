@@ -20,11 +20,14 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.button.ReactionCountButton
 import com.byeboo.app.presentation.quest.model.MyAnswerModel
 
 @Composable
 fun MyAnswerItem(
     answer: MyAnswerModel,
+    onHeartClick: () -> Unit,
+    onCommentClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     onMyAnswerContentClick: (Long) -> Unit = {},
 ) {
@@ -77,6 +80,17 @@ fun MyAnswerItem(
             text = answer.writtenAt,
             color = ByeBooTheme.colors.gray400,
             style = ByeBooTheme.typography.cap2,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+        ReactionCountButton(
+            isLiked = answer.isLiked,
+            heartCount = answer.heartCount,
+            onHeartClick = onHeartClick,
+            commentCount = answer.commentCount,
+            onCommentClick = onCommentClick,
+            answerId = answer.answerId,
         )
     }
 }

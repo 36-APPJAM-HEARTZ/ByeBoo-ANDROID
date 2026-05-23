@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -24,6 +25,7 @@ import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.button.ReactionCountButton
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
 import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
@@ -49,6 +51,7 @@ fun MyAnswerDetailRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
+        onHeartClick = viewModel::onHeartClicked,
     )
 
     LaunchedEffect(Unit) {
@@ -89,6 +92,7 @@ private fun MyAnswerDetailScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (MyPostOption) -> Unit,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -119,6 +123,10 @@ private fun MyAnswerDetailScreen(
 
         MyAnswerContent(
             content = uiState.answer.content,
+            isLiked = uiState.answer.isLiked,
+            heartCount = uiState.answer.heartCount,
+            onHeartClick = onHeartClick,
+            commentCount = uiState.answer.commentCount,
         )
     }
 
@@ -134,6 +142,10 @@ private fun MyAnswerDetailScreen(
 @Composable
 private fun MyAnswerContent(
     content: String,
+    isLiked: Boolean,
+    heartCount: Int,
+    onHeartClick: () -> Unit,
+    commentCount: Int,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -152,6 +164,16 @@ private fun MyAnswerContent(
             text = content,
             color = ByeBooTheme.colors.gray100,
             style = ByeBooTheme.typography.body3,
+        )
+
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
+        ReactionCountButton(
+            isLiked = isLiked,
+            heartCount = heartCount,
+            onHeartClick = onHeartClick,
+            commentCount = commentCount,
+            modifier = Modifier.align(Alignment.End),
         )
     }
 }

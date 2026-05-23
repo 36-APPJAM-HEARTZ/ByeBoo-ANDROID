@@ -20,22 +20,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.component.ReactionCount
+import com.byeboo.app.presentation.quest.component.button.ReactionCountButton
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 
 @Composable
 fun CommonAnswerItem(
     answer: CommonAnswerModel,
-    heartCount: Int,
-    commentCount: Int,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     onClick: () -> Unit = {},
+    onCommentClick: (Long) -> Unit = {},
 ) {
     Column(
         modifier =
@@ -44,11 +43,9 @@ fun CommonAnswerItem(
                 .clip(shape = RoundedCornerShape(12.dp))
                 .background(
                     color = ByeBooTheme.colors.whiteAlpha5,
-                )
-                .noRippleClickable(
+                ).noRippleClickable(
                     onClick = onClick,
-                )
-                .padding(
+                ).padding(
                     horizontal = screenWidthDp(24.dp),
                     vertical = screenHeightDp(16.dp),
                 ),
@@ -81,48 +78,30 @@ fun CommonAnswerItem(
             overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis,
         )
 
-        if (!isExpanded) {
-            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (!isExpanded) {
                 Text(
                     text = answer.displayTime,
                     style = ByeBooTheme.typography.cap2,
                     color = ByeBooTheme.colors.gray400,
                 )
-
-                ReactionCountButton(
-                    heartCount = heartCount,
-                    commentCount = commentCount
-                )
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            ReactionCountButton(
+                isLiked = answer.isLiked,
+                heartCount = answer.heartCount,
+                onHeartClick = onHeartClick,
+                commentCount = answer.commentCount,
+                onCommentClick = onCommentClick,
+                answerId = answer.answerId,
+            )
         }
     }
-}
-
-// TODO: 클릭 영역 + 클릭 시 색깔 변경
-@Composable
-private fun ReactionCountButton(
-    heartCount: Int,
-    commentCount: Int,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(screenWidthDp(16.dp))
-    ) {
-        ReactionCount(
-            iconImg = R.drawable.ic_heart,
-            count = heartCount
-        )
-    }
-
-    ReactionCount(
-        iconImg = R.drawable.ic_comment,
-        count = commentCount
-    )
 }
