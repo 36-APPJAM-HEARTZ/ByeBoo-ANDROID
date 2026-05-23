@@ -13,7 +13,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -32,27 +34,28 @@ fun NotificationCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                color = if (notification.isRead) ByeBooTheme.colors.whiteAlpha5 else ByeBooTheme.colors.primary300Alpha20,
-                shape = RoundedCornerShape(12.dp)
-            )
-            .padding(
-                horizontal = screenWidthDp(24.dp),
-                vertical = screenHeightDp(12.dp)
-            )
-            .noRippleClickable { onClick(notification.landingLink) }
+            .noRippleClickable { onClick(notification.landingLink) },
+        color = if (notification.isRead) ByeBooTheme.colors.whiteAlpha5 else ByeBooTheme.colors.primary300Alpha20,
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
+            modifier = Modifier
+                .padding(
+                    horizontal = screenWidthDp(24.dp),
+                    vertical = screenHeightDp(16.dp)
+                ),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp))
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp))
+                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp)),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(
                         id = notification.iconResId
                     ),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Color.Unspecified
                 )
 
                 Text(
