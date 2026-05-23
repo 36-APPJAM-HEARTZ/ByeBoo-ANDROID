@@ -15,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
+import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
@@ -35,7 +36,7 @@ fun ReactionCountButton(
             iconImg = if (isLiked) R.drawable.ic_purple_heart else R.drawable.ic_white_heart,
             count = heartCount,
             modifier =
-                Modifier.clickable(
+                Modifier.noRippleClickable(
                     onClick = onHeartClick,
                 ),
         )
@@ -44,7 +45,7 @@ fun ReactionCountButton(
             iconImg = R.drawable.ic_comment,
             count = commentCount,
             modifier =
-                Modifier.clickable {
+                Modifier.noRippleClickable() {
                     onCommentClick(answerId)
                 },
         )
