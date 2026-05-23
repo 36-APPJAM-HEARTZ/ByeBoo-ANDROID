@@ -39,14 +39,14 @@ interface QuestCommonService {
         @Path("answerId") answerId: Long,
     ): NullableBaseResponse<Unit>
 
-    @GET("/api/v1/common-quests")
+    @GET("/api/v2/common-quests")
     suspend fun getCommonQuests(
         @Query("date") date: String,
         @Query("cursor") cursor: Long?,
         @Query("limit") limit: Int = 10,
     ): BaseResponse<CommonQuestResponseDto>
 
-    @GET("/api/v1/common-quests/{answerId}")
+    @GET("/api/v2/common-quests/{answerId}")
     suspend fun getQuestCommonAnswerDetail(
         @Path("answerId") answerId: Long,
     ): BaseResponse<QuestCommonAnswerDetailResponseDto>
