@@ -2,20 +2,12 @@ package com.byeboo.app.presentation.quest.review.common.personal.detail
 
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
-import com.byeboo.app.presentation.quest.model.MyAnswerModel
+import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 
 @Immutable
 data class MyDetailAnswerState(
-    val answer: MyAnswerModel =
-        MyAnswerModel(
-            answerId = 0L,
-            question = "",
-            writtenAt = "",
-            content = "",
-            isLiked = false,
-            heartCount = 0,
-            commentCount = 0,
-        ),
+    val questQuestion: String = "",
+    val answer: CommonAnswerModel? = null,
     val showBottomSheet: Boolean = false,
     val showDeleteModal: Boolean = false,
 )

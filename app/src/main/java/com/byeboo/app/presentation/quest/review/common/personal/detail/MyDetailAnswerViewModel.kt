@@ -8,6 +8,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
+import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,57 +46,53 @@ class MyDetailAnswerViewModel
             observeRefreshEvent()
         }
 
-        private fun loadMyDetailAnswer() {
-            questCommonRepository.answersFlow
-                .mapNotNull { list -> list.find { it.answerId == answerId } }
-                .onEach { updated ->
-                    _uiState.update { state ->
-                        state.copy(
-                            answer =
-                                state.answer.copy(
-                                    content = updated.content,
-                                    question = updated.question,
-                                    writtenAt = DateUtil.formatToDotDate(updated.writtenAt),
-                                ),
-                        )
-                    }
-                }.launchIn(viewModelScope)
-
-            viewModelScope.launch {
-                val cached = questCommonRepository.getCachedMyAnswer(answerId)
-                if (cached != null) {
-                    _uiState.update { state ->
-                        state.copy(
-                            answer =
-                                state.answer.copy(
-                                    answerId = cached.answerId,
-                                    question = cached.question,
-                                    writtenAt = DateUtil.formatToDotDate(cached.writtenAt),
-                                    content = cached.content,
-                                ),
-                        )
-                    }
-                } else {
-                    questCommonRepository
-                        .getCommonQuestAnswerDetail(answerId)
-                        .onSuccess { detail ->
-                            _uiState.update { state ->
-                                state.copy(
-                                    answer =
-                                        state.answer.copy(
-                                            answerId = answerId,
-                                            question = detail.question,
-                                            writtenAt = mapper.formatDetailDate(detail.answer.writtenAt),
-                                            content = detail.answer.content,
-                                        ),
-                                )
-                            }
-                        }
+    private fun loadMyDetailAnswer() {
+        questCommonRepository.answersFlow
+            .mapNotNull { list -> list.find { it.answerId == answerId } }
+            .onEach { updated ->
+                _uiState.update { state ->
+                    state.copy(
+                        questQuestion = updated.question,
+                        answer =
+                            state.answer?.copy(
+                                content = updated.content,
+                                displayTime = DateUtil.formatToDotDate(updated.writtenAt),
+                            ),
+                    )
                 }
             }
+            .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            questCommonRepository
+                .getCommonQuestAnswerDetail(answerId)
+                .onSuccess { detail ->
+                    val answer = detail.answer
+
+                    _uiState.update {
+                        it.copy(
+                            questQuestion = detail.question,
+                            answer =
+                                CommonAnswerModel(
+                                    heartCount = answer.heartCount,
+                                    commentCount = answer.commentCount,
+                                    isLiked = answer.isLiked,
+                                    answerId = answerId,
+                                    writerId = answer.writerId,
+                                    writer = answer.writer,
+                                    profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                    displayTime = mapper.formatDetailDate(answer.writtenAt),
+                                    content = answer.content,
+                                ),
+                        )
+                    }
+                }
         }
+    }
 
         fun onClickMoreOptions() {
+            if (_uiState.value.answer == null) return
+
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 
@@ -113,7 +110,7 @@ class MyDetailAnswerViewModel
             onDismissBottomSheet()
 
             viewModelScope.launch {
-                val question = _uiState.value.answer.question
+                val question = _uiState.value.questQuestion
                 when (option) {
                     MyPostOption.EDIT -> {
                         _sideEffect.emit(
@@ -161,11 +158,11 @@ class MyDetailAnswerViewModel
                             .onSuccess { detail ->
                                 _uiState.update { state ->
                                     state.copy(
+                                        questQuestion = detail.question,
                                         answer =
-                                            state.answer.copy(
+                                            state.answer?.copy(
                                                 answerId = answerId,
-                                                question = detail.question,
-                                                writtenAt = mapper.formatDetailDate(detail.answer.writtenAt),
+                                                displayTime = mapper.formatDetailDate(detail.answer.writtenAt),
                                                 content = detail.answer.content,
                                             ),
                                     )
