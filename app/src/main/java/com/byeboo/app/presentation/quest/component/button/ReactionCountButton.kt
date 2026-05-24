@@ -2,7 +2,6 @@ package com.byeboo.app.presentation.quest.component.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -45,7 +44,7 @@ fun ReactionCountButton(
             iconImg = R.drawable.ic_comment,
             count = commentCount,
             modifier =
-                Modifier.noRippleClickable() {
+                Modifier.noRippleClickable {
                     onCommentClick(answerId)
                 },
         )
