@@ -52,7 +52,6 @@ class CommonOtherAnswerViewModel
                             state.copy(
                                 questQuestion = domainModel.question,
                                 createdAt = mapper.formatDetailDate(answer.writtenAt),
-                                writerId = answer.writerId,
                                 answer =
                                     CommonAnswerModel(
                                         heartCount = answer.heartCount,
@@ -107,7 +106,7 @@ class CommonOtherAnswerViewModel
 
         fun onOptionClicked(option: OtherPostOption) {
             onDismissBottomSheet()
-            val currentWriterId = uiState.value.writerId
+            val currentWriterId = uiState.value.answer?.writerId ?: return
             viewModelScope.launch {
                 when (option) {
                     OtherPostOption.BLOCK -> {
