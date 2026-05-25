@@ -85,6 +85,8 @@ class MyDetailAnswerViewModel
                                     ),
                             )
                         }
+                    }.onFailure {
+                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
             }
         }
@@ -145,6 +147,7 @@ class MyDetailAnswerViewModel
         }
 
         fun onHeartClicked() {
+            // TODO: 하트 클릭
         }
 
         private fun observeRefreshEvent() {
@@ -166,6 +169,8 @@ class MyDetailAnswerViewModel
                                             ),
                                     )
                                 }
+                            }.onFailure {
+                                _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                             }
                     }
                 }
