@@ -65,8 +65,8 @@ class QuestCommonWritingViewModel
                         .onSuccess { detail ->
                             _uiState.update {
                                 it.copy(
-                                    questAnswer = detail.content,
-                                    originalAnswer = detail.content,
+                                    questAnswer = detail.answer.content,
+                                    originalAnswer = detail.answer.content,
                                     question = detail.question,
                                 )
                             }

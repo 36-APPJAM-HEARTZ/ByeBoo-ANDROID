@@ -47,20 +47,22 @@ class CommonOtherAnswerViewModel
                 commonQuestRepository
                     .getCommonQuestAnswerDetail(answerId)
                     .onSuccess { domainModel ->
-
+                        val answer = domainModel.answer
                         _uiState.update { state ->
                             state.copy(
                                 questQuestion = domainModel.question,
-                                createdAt = mapper.formatDetailDate(domainModel.writtenAt),
-                                writerId = domainModel.writerId,
+                                createdAt = mapper.formatDetailDate(answer.writtenAt),
                                 answer =
                                     CommonAnswerModel(
+                                        heartCount = answer.heartCount,
+                                        commentCount = answer.commentCount,
+                                        isLiked = answer.isLiked,
                                         answerId = answerId,
-                                        writer = domainModel.writer,
-                                        writerId = domainModel.writerId,
-                                        profileIconRes = mapper.mapToIconRes(domainModel.profileIcon),
-                                        displayTime = mapper.formatDetailDate(domainModel.writtenAt),
-                                        content = domainModel.content,
+                                        writer = answer.writer,
+                                        writerId = answer.writerId,
+                                        profileIconRes = mapper.mapToIconRes(answer.profileIcon),
+                                        displayTime = mapper.formatDetailDate(answer.writtenAt),
+                                        content = answer.content,
                                     ),
                             )
                         }
@@ -88,9 +90,23 @@ class CommonOtherAnswerViewModel
             _uiState.update { it.copy(showBottomSheet = false) }
         }
 
+        fun onHeartClicked() {
+            // TODO: 하트 API 연동
+            _uiState.update { state ->
+                val answer = state.answer ?: return@update state
+
+                state.copy(
+                    answer =
+                        answer.copy(
+                            isLiked = !answer.isLiked,
+                        ),
+                )
+            }
+        }
+
         fun onOptionClicked(option: OtherPostOption) {
             onDismissBottomSheet()
-            val currentWriterId = uiState.value.writerId
+            val currentWriterId = uiState.value.answer?.writerId ?: return
             viewModelScope.launch {
                 when (option) {
                     OtherPostOption.BLOCK -> {

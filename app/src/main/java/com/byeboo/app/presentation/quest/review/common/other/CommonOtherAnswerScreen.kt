@@ -39,9 +39,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -84,6 +82,7 @@ fun CommonOtherAnswerRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
+        onHeartClick = viewModel::onHeartClicked,
     )
 }
 
@@ -96,6 +95,7 @@ private fun CommonOtherAnswerScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (OtherPostOption) -> Unit,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -136,13 +136,14 @@ private fun CommonOtherAnswerScreen(
 
             Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-            uiState.answer?.let { answer ->
-                CommonAnswerItem(
-                    answer = answer,
-                    isExpanded = true,
-                )
-            }
+        uiState.answer?.let { answer ->
+            CommonAnswerItem(
+                answer = answer,
+                onHeartClick = onHeartClick,
+                isExpanded = true,
+            )
         }
+    }
 
         CommentInputBar(
             commentText = commentText,

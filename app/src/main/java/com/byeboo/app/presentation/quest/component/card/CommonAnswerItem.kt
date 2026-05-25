@@ -24,14 +24,17 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.quest.component.button.ReactionCountButton
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 
 @Composable
 fun CommonAnswerItem(
     answer: CommonAnswerModel,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     onClick: () -> Unit = {},
+    onCommentClick: (Long) -> Unit = {},
 ) {
     Column(
         modifier =
@@ -75,13 +78,29 @@ fun CommonAnswerItem(
             overflow = if (isExpanded) TextOverflow.Visible else TextOverflow.Ellipsis,
         )
 
-        if (!isExpanded) {
-            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-            Text(
-                text = answer.displayTime,
-                style = ByeBooTheme.typography.cap2,
-                color = ByeBooTheme.colors.gray400,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (!isExpanded) {
+                Text(
+                    text = answer.displayTime,
+                    style = ByeBooTheme.typography.cap2,
+                    color = ByeBooTheme.colors.gray400,
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            ReactionCountButton(
+                isLiked = answer.isLiked,
+                heartCount = answer.heartCount,
+                onHeartClick = onHeartClick,
+                commentCount = answer.commentCount,
+                onCommentClick = onCommentClick,
+                answerId = answer.answerId,
             )
         }
     }

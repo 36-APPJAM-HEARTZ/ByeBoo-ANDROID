@@ -9,7 +9,6 @@ data class CommonAnswerState(
     val questQuestion: String = "",
     val answer: CommonAnswerModel? = null,
     val showBottomSheet: Boolean = false,
-    val writerId: Long = 0L,
 )
 
 sealed interface CommonAnswerSideEffect {

@@ -130,6 +130,9 @@ class QuestViewModel
                     domainModel.answers
                         .map { answer ->
                             CommonAnswerModel(
+                                heartCount = answer.heartCount,
+                                commentCount = answer.commentCount,
+                                isLiked = answer.isLiked,
                                 answerId = answer.answerId,
                                 writerId = answer.writerId,
                                 writer = answer.writer,
@@ -202,6 +205,9 @@ class QuestViewModel
                         val moreAnswers =
                             domainModel.answers.map { answer ->
                                 CommonAnswerModel(
+                                    heartCount = answer.heartCount,
+                                    commentCount = answer.commentCount,
+                                    isLiked = answer.isLiked,
                                     answerId = answer.answerId,
                                     writer = answer.writer,
                                     writerId = answer.writerId,
@@ -439,6 +445,10 @@ class QuestViewModel
 
         fun closeCompleteModal() {
             _uiState.update { it.copy(showCompleteModal = false) }
+        }
+
+        fun onHeartClicked() {
+            // TODO: 하트 api 연동
         }
 
         private suspend fun handleCompletedQuestClick(quest: Quest) {
