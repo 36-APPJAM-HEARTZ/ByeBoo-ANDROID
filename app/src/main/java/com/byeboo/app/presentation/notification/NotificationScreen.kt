@@ -34,9 +34,8 @@ import com.byeboo.app.core.util.screenWidthDp
 fun NotificationRoute(
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    viewModel: NotificationViewModel = hiltViewModel()
+    viewModel: NotificationViewModel = hiltViewModel(),
 ) {
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     NotificationScreen(
@@ -44,7 +43,7 @@ fun NotificationRoute(
         paddingValues = paddingValues,
         onBackClick = { /*Todo : back action */ },
         onAllReadClick = {},
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -54,17 +53,18 @@ private fun NotificationScreen(
     onBackClick: () -> Unit,
     onAllReadClick: () -> Unit,
     paddingValues: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = ByeBooTheme.colors.background)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = paddingValues.calculateBottomPadding()
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(color = ByeBooTheme.colors.background)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = paddingValues.calculateBottomPadding(),
+                ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NotificationTopBar(onBackClick = onBackClick)
 
@@ -77,9 +77,7 @@ private fun NotificationScreen(
 }
 
 @Composable
-private fun NotificationTopBar(
-    onBackClick: () -> Unit,
-) {
+private fun NotificationTopBar(onBackClick: () -> Unit) {
     ByeBooTopbar(
         navigationIcon = {
             Icon(
@@ -92,34 +90,34 @@ private fun NotificationTopBar(
                         .noRippleClickable(onClick = onBackClick),
             )
         },
-        title = "알림"
+        title = "알림",
     )
 }
 
 @Composable
-private fun NotificationListHeader(
-    onAllReadClick: () -> Unit,
-) {
+private fun NotificationListHeader(onAllReadClick: () -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = screenWidthDp(24.dp)),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = screenWidthDp(24.dp)),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "최근 30일까지만 보여요",
             color = ByeBooTheme.colors.gray300,
-            style = ByeBooTheme.typography.cap1
+            style = ByeBooTheme.typography.cap1,
         )
 
         Text(
             text = "모두 읽기",
             color = ByeBooTheme.colors.gray300,
             style = ByeBooTheme.typography.cap1,
-            modifier = Modifier.noRippleClickable(
-                onClick = {} //Todo : 클릭 시 동작
-            )
+            modifier =
+                Modifier.noRippleClickable(
+                    onClick = {}, // Todo : 클릭 시 동작
+                ),
         )
     }
 }
@@ -127,15 +125,16 @@ private fun NotificationListHeader(
 @Composable
 private fun NotificationSection(
     uiState: NotificationUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (uiState.notificationList.isNotEmpty()) {
         LazyColumn(
-            contentPadding = PaddingValues(
-                start = screenWidthDp(24.dp),
-                end = screenWidthDp(24.dp),
-                bottom = screenHeightDp(24.dp)
-            ),
+            contentPadding =
+                PaddingValues(
+                    start = screenWidthDp(24.dp),
+                    end = screenWidthDp(24.dp),
+                    bottom = screenHeightDp(24.dp),
+                ),
             verticalArrangement = Arrangement.spacedBy(screenHeightDp(20.dp)),
         ) {
             items(
@@ -144,14 +143,14 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { notification.landingLink }
+                    onClick = { notification.landingLink },
                 )
             }
         }
     } else {
         Column(
             modifier = modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.weight(171f))
 

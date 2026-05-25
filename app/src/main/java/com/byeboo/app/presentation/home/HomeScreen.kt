@@ -110,7 +110,7 @@ fun HomeRoute(
         paddingValues = paddingValues,
         onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         onLottieClick = viewModel::onLottieClicked,
-        onNotificationIconClick = {/*Todo: 알림*/ }
+        onNotificationIconClick = { /*Todo: 알림*/ },
     )
 }
 
@@ -192,15 +192,17 @@ private fun HomeScreen(
                             ),
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(
-                            id = if (uiState.hasNewNotification) R.drawable.ic_new_notification else R.drawable.ic_notification
-                        ),
+                        imageVector =
+                            ImageVector.vectorResource(
+                                id = if (uiState.hasNewNotification) R.drawable.ic_new_notification else R.drawable.ic_notification,
+                            ),
                         contentDescription = null,
                         tint = Color.Unspecified,
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(bottom = screenHeightDp(12.dp))
-                            .noRippleClickable(onClick = onNotificationIconClick)
+                        modifier =
+                            Modifier
+                                .align(Alignment.End)
+                                .padding(bottom = screenHeightDp(12.dp))
+                                .noRippleClickable(onClick = onNotificationIconClick),
                     )
                     when (uiState.status) {
                         HomeStatus.INITIAL_START -> {

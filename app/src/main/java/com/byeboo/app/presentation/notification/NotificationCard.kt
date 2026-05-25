@@ -1,6 +1,5 @@
 package com.byeboo.app.presentation.notification
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,46 +28,49 @@ import com.byeboo.app.presentation.quest.util.iconResId
 fun NotificationCard(
     notification: NotificationModel,
     onClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .noRippleClickable { onClick(notification.landingLink) },
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .noRippleClickable { onClick(notification.landingLink) },
         color = if (notification.isRead) ByeBooTheme.colors.whiteAlpha5 else ByeBooTheme.colors.primary300Alpha20,
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Column(
-            modifier = Modifier
-                .padding(
-                    horizontal = screenWidthDp(24.dp),
-                    vertical = screenHeightDp(16.dp)
-                ),
-            verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp))
+            modifier =
+                Modifier
+                    .padding(
+                        horizontal = screenWidthDp(24.dp),
+                        vertical = screenHeightDp(16.dp),
+                    ),
+            verticalArrangement = Arrangement.spacedBy(screenHeightDp(12.dp)),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp)),
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.Top,
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(
-                        id = notification.iconResId
-                    ),
+                    imageVector =
+                        ImageVector.vectorResource(
+                            id = notification.iconResId,
+                        ),
                     contentDescription = null,
-                    tint = Color.Unspecified
+                    tint = Color.Unspecified,
                 )
 
                 Text(
                     text = notification.title,
                     color = ByeBooTheme.colors.gray200,
-                    style = ByeBooTheme.typography.body1
+                    style = ByeBooTheme.typography.body1,
                 )
             }
 
             Text(
                 text = notification.content,
                 color = ByeBooTheme.colors.gray100,
-                style = ByeBooTheme.typography.body6
+                style = ByeBooTheme.typography.body6,
             )
 
             Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -76,7 +78,7 @@ fun NotificationCard(
             Text(
                 text = notification.createdAt,
                 color = ByeBooTheme.colors.gray400,
-                style = ByeBooTheme.typography.cap2
+                style = ByeBooTheme.typography.cap2,
             )
         }
     }

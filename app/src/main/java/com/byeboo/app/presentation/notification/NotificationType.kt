@@ -4,5 +4,5 @@ enum class NotificationType {
     QUEST_OPEN,
     COMMENT,
     LIKE,
-    UNKNOWN
+    UNKNOWN,
 }
