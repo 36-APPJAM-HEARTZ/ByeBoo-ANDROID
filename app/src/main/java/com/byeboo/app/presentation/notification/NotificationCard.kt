@@ -48,7 +48,7 @@ fun NotificationCard(
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(screenWidthDp(4.dp)),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(

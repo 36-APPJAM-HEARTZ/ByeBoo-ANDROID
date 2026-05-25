@@ -9,6 +9,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow(NotificationUiState(false,dummyNotifications))
+    private val _uiState = MutableStateFlow(NotificationUiState())
     val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
 }
