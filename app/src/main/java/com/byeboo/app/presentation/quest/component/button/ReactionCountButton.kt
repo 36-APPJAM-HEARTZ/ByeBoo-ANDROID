@@ -24,8 +24,7 @@ fun ReactionCountButton(
     onHeartClick: () -> Unit,
     commentCount: Int,
     modifier: Modifier = Modifier,
-    onCommentClick: (Long) -> Unit = {},
-    answerId: Long = 0L,
+    onCommentClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier,
@@ -44,8 +43,10 @@ fun ReactionCountButton(
             iconImg = R.drawable.ic_comment,
             count = commentCount,
             modifier =
-                Modifier.noRippleClickable {
-                    onCommentClick(answerId)
+                if (onCommentClick != null) {
+                    Modifier.noRippleClickable { onCommentClick() }
+                } else {
+                    Modifier
                 },
         )
     }
