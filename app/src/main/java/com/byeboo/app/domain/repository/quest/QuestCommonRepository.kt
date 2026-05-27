@@ -1,5 +1,6 @@
 package com.byeboo.app.domain.repository.quest
 
+import com.byeboo.app.domain.model.quest.CommentRepliesModel
 import com.byeboo.app.domain.model.quest.CommonQuestModel
 import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
@@ -40,6 +41,18 @@ interface QuestCommonRepository {
     suspend fun updateBlockedUser(blockedUserId: Long): Result<Unit>
 
     suspend fun reportCommonQuest(answerId: Long): Result<Unit>
+
+    suspend fun uploadComment(
+        content: String,
+        targetId: Long,
+    ): Result<Unit>
+
+    suspend fun getCommentReplies(commentId: Long): Result<CommentRepliesModel>
+
+    suspend fun uploadCommentReply(
+        commentId: Long,
+        content: String,
+    ): Result<Unit>
 
     fun getCachedMyAnswer(answerId: Long): QuestAnswerModel?
 }
