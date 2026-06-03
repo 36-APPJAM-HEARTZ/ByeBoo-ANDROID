@@ -4,13 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -66,31 +66,51 @@ fun ReplyBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     if (showBottomSheet) {
-        val sheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = true,
-        )
+        val sheetState =
+            rememberModalBottomSheetState(
+                skipPartiallyExpanded = true,
+            )
 
-        val disableNestedScrollConnection = remember {
-            object : NestedScrollConnection {
-                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset = Offset.Zero
-                override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset = available
-                override suspend fun onPreFling(available: Velocity): Velocity = Velocity.Zero
-                override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity = available
+        val disableNestedScrollConnection =
+            remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset = Offset.Zero
+
+                    override fun onPostScroll(
+                        consumed: Offset,
+                        available: Offset,
+                        source: NestedScrollSource,
+                    ): Offset = available
+
+                    override suspend fun onPreFling(available: Velocity): Velocity = Velocity.Zero
+
+                    override suspend fun onPostFling(
+                        consumed: Velocity,
+                        available: Velocity,
+                    ): Velocity = available
+                }
             }
-        }
 
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
-            modifier = modifier,
+            modifier =
+                modifier
+                    .fillMaxHeight()
+                    .statusBarsPadding()
+                    .padding(top = 20.dp),
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
             containerColor = ByeBooTheme.colors.background,
             scrimColor = ByeBooTheme.colors.blackAlpha80,
             dragHandle = null,
-            contentWindowInsets = { WindowInsets(0) },
-            properties = ModalBottomSheetProperties(
-                shouldDismissOnBackPress = true
-            ),
+            contentWindowInsets = { WindowInsets(0.dp, 0.dp, 0.dp, 0.dp) },
+            properties =
+                ModalBottomSheetProperties(
+                    shouldDismissOnBackPress = true,
+                ),
         ) {
             var commentText by remember { mutableStateOf("") }
             val maxLength = 500
@@ -103,7 +123,6 @@ fun ReplyBottomSheet(
             var isKeyboardVisible by remember { mutableStateOf(false) }
 
             val focusRequester = remember { FocusRequester() }
-            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
             val scrollState = rememberScrollState()
             val coroutineScope = rememberCoroutineScope()
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -139,19 +158,21 @@ fun ReplyBottomSheet(
             // 💡 리팩토링 핵심 1: 최상위 Column에 imePadding()을 적용합니다.
             // 그래야 인풋바가 키보드에 가려지지 않고 키보드 바로 위로 반응하여 올라갑니다.
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = screenHeight * 0.85f)
-                    .imePadding()
-                    .navigationBarsPadding(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .imePadding()
+                        .navigationBarsPadding(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ByeBooDragHandle(
-                    modifier = Modifier.noRippleClickable {
-                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) onDismissRequest()
-                        }
-                    },
+                    modifier =
+                        Modifier.noRippleClickable {
+                            coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) onDismissRequest()
+                            }
+                        },
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -164,11 +185,12 @@ fun ReplyBottomSheet(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                                 contentDescription = null,
                                 tint = ByeBooTheme.colors.gray50,
-                                modifier = Modifier.noRippleClickable {
-                                    coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                                        if (!sheetState.isVisible) onDismissRequest()
-                                    }
-                                },
+                                modifier =
+                                    Modifier.noRippleClickable {
+                                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                                            if (!sheetState.isVisible) onDismissRequest()
+                                        }
+                                    },
                             )
                         },
                     )
@@ -177,11 +199,12 @@ fun ReplyBottomSheet(
                 // 💡 리팩토링 핵심 2: 내부 리스트 영역의 imePadding()은 지워줍니다.
                 // 부모 Column이 이미 반응하므로 여기서는 weight(1f)만 유지하면 영역이 자연스럽게 축소됩니다.
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .nestedScroll(disableNestedScrollConnection)
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = screenWidthDp(24.dp)),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .nestedScroll(disableNestedScrollConnection)
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     CommonReplyItem(
                         reply = reply,
@@ -203,9 +226,10 @@ fun ReplyBottomSheet(
 
                 // 인풋바 영역 및 가변 패딩 적용
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = if (isKeyboardVisible) 0.dp else screenHeightDp(16.dp))
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = if (isKeyboardVisible) 0.dp else screenHeightDp(16.dp)),
                 ) {
                     CommentInputBar(
                         commentText = commentText,
