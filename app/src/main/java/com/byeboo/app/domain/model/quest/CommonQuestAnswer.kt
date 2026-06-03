@@ -60,6 +60,7 @@ data class QuestAnswerDetailAnswerModel(
 
 data class QuestCommonDetailCommentModel(
     val commentId: Long,
+    val replyCount: Long,
     val writer: String,
     val writerId: Long,
     val profileIcon: String,
@@ -69,4 +70,28 @@ data class QuestCommonDetailCommentModel(
 
 data class QuestCommonAnswerEditModel(
     val answer: String,
+)
+
+data class CommentRepliesModel(
+    val totalCount: Int,
+    val comment: CommentDetailModel,
+    val replies: List<CommentReplyModel>,
+)
+
+data class CommentDetailModel(
+    val commentId: Long,
+    val writerId: Long,
+    val writer: String,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
+)
+
+data class CommentReplyModel(
+    val commentId: Long,
+    val writerId: Long,
+    val writer: String,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
 )

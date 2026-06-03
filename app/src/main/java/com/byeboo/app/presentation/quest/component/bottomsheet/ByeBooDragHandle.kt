@@ -17,20 +17,20 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun ByeBooDragHandle(content: @Composable () -> Unit = {}) {
+fun ByeBooDragHandle(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier =
-            Modifier
-                .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
-                .clip(shape = RoundedCornerShape(12.dp)),
+        modifier = modifier
+            .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
+            .clip(shape = RoundedCornerShape(12.dp)),
     ) {
         Box(
-            modifier =
-                Modifier
-                    .width(screenWidthDp(35.dp))
-                    .height(screenHeightDp(5.dp))
-                    .background(ByeBooTheme.colors.whiteAlpha5),
+            modifier = Modifier
+                .width(screenWidthDp(35.dp))
+                .height(screenHeightDp(5.dp))
+                .background(ByeBooTheme.colors.whiteAlpha5),
         )
         content()
     }

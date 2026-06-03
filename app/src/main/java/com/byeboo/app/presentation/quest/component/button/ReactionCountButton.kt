@@ -52,7 +52,7 @@ fun ReactionCountButton(
 }
 
 @Composable
-private fun ReactionCount(
+fun ReactionCount(
     @DrawableRes iconImg: Int,
     count: Int,
     modifier: Modifier = Modifier,
