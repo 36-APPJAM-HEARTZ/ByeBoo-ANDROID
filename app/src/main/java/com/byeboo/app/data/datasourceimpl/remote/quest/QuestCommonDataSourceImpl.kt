@@ -61,20 +61,14 @@ class QuestCommonDataSourceImpl
 
         override suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit> = questCommonService.reportCommonQuest(answerId)
 
-    override suspend fun uploadComment(
-        request: QuestCommonCommentRequestDto,
-    ): NullableBaseResponse<Unit> =
-        questCommonService.uploadComment(request)
+        override suspend fun uploadComment(request: QuestCommonCommentRequestDto): NullableBaseResponse<Unit> =
+            questCommonService.uploadComment(request)
 
-    override suspend fun uploadCommentReply(
-        commentId: Long,
-        request: QuestCommentReplyRequestDto,
-    ): NullableBaseResponse<Unit> =
-        questCommonService.uploadCommentReply(commentId, request)
+        override suspend fun uploadCommentReply(
+            commentId: Long,
+            request: QuestCommentReplyRequestDto,
+        ): NullableBaseResponse<Unit> = questCommonService.uploadCommentReply(commentId, request)
 
-    override suspend fun getCommentReplies(
-        commentId: Long,
-    ): BaseResponse<CommentRepliesResponseDto> =
-        questCommonService.getCommentReplies(commentId)
-
+        override suspend fun getCommentReplies(commentId: Long): BaseResponse<CommentRepliesResponseDto> =
+            questCommonService.getCommentReplies(commentId)
     }

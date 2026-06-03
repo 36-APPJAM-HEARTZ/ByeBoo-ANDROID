@@ -112,7 +112,6 @@ private fun CommonOtherAnswerScreen(
 
     var shouldScrollToBottom by remember { mutableStateOf(false) }
 
-
     LaunchedEffect(Unit) {
         snapshotFlow {
             imeInsets.getBottom(density) > 0
@@ -143,27 +142,28 @@ private fun CommonOtherAnswerScreen(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(ByeBooTheme.colors.background)
-            .padding(
-                top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                bottom = if (isKeyboardVisible) 0.dp else paddingValues.calculateBottomPadding(),
-            )
-            .imePadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(ByeBooTheme.colors.background)
+                .padding(
+                    top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
+                    bottom = if (isKeyboardVisible) 0.dp else paddingValues.calculateBottomPadding(),
+                ).imePadding(),
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(scrollState)
-                .padding(horizontal = screenWidthDp(24.dp))
-                .padding(bottom = screenHeightDp(16.dp))
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                    }
-                },
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = screenWidthDp(24.dp))
+                    .padding(bottom = screenHeightDp(16.dp))
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            focusManager.clearFocus()
+                            keyboardController?.hide()
+                        }
+                    },
         ) {
             AnswerDetailTopBar(
                 onBackClick = onBackClick,

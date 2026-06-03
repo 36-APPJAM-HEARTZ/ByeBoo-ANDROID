@@ -38,9 +38,7 @@ interface QuestCommonDataSource {
 
     suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit>
 
-    suspend fun uploadComment(
-        request: QuestCommonCommentRequestDto,
-    ): NullableBaseResponse<Unit>
+    suspend fun uploadComment(request: QuestCommonCommentRequestDto): NullableBaseResponse<Unit>
 
     suspend fun uploadCommentReply(
         commentId: Long,

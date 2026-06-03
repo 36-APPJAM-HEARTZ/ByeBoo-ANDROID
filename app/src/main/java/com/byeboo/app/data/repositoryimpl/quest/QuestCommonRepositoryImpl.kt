@@ -168,45 +168,49 @@ class QuestCommonRepositoryImpl
                 onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
             )
 
-    override suspend fun uploadComment(
-        content: String,
-        targetId: Long,
-    ): Result<Unit> = runCatching {
-        val response = questCommonDataSource.uploadComment(
-            QuestCommonCommentRequestDto(
-                content = content,
-                targetId = targetId,
+        override suspend fun uploadComment(
+            content: String,
+            targetId: Long,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questCommonDataSource.uploadComment(
+                        QuestCommonCommentRequestDto(
+                            content = content,
+                            targetId = targetId,
+                        ),
+                    )
+                if (!response.success) throw Exception(response.message)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
             )
-        )
-        if (!response.success) throw Exception(response.message)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
-    )
 
-    override suspend fun getCommentReplies(commentId: Long): Result<CommentRepliesModel> =
-        runCatching {
-            val response = questCommonDataSource.getCommentReplies(commentId)
-            if (!response.success) throw Exception(response.message)
-            response.data.toDomain()
-        }.fold(
-            onSuccess = { Result.success(it) },
-            onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
-        )
+        override suspend fun getCommentReplies(commentId: Long): Result<CommentRepliesModel> =
+            runCatching {
+                val response = questCommonDataSource.getCommentReplies(commentId)
+                if (!response.success) throw Exception(response.message)
+                response.data.toDomain()
+            }.fold(
+                onSuccess = { Result.success(it) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
-    override suspend fun uploadCommentReply(
-        commentId: Long,
-        content: String,
-    ): Result<Unit> = runCatching {
-        val response = questCommonDataSource.uploadCommentReply(
-            commentId = commentId,
-            request = QuestCommentReplyRequestDto(content = content),
-        )
-        if (!response.success) throw Exception(response.message)
-    }.fold(
-        onSuccess = { Result.success(Unit) },
-        onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
-    )
+        override suspend fun uploadCommentReply(
+            commentId: Long,
+            content: String,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questCommonDataSource.uploadCommentReply(
+                        commentId = commentId,
+                        request = QuestCommentReplyRequestDto(content = content),
+                    )
+                if (!response.success) throw Exception(response.message)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
 
         override fun getCachedMyAnswer(answerId: Long): QuestAnswerModel? = _answersFlow.value.find { it.answerId == answerId }
     }

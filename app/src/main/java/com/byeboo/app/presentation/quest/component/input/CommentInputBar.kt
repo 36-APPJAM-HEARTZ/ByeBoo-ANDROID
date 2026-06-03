@@ -47,9 +47,10 @@ fun CommentInputBar(
     placeholder: String = "댓글로 위로를 남겨보세요.",
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(ByeBooTheme.colors.background),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(ByeBooTheme.colors.background),
     ) {
         HorizontalDivider(
             thickness = 1.dp,
@@ -59,35 +60,40 @@ fun CommentInputBar(
         // 키보드 올라온 상태
         if (isKeyboardVisible) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = screenWidthDp(24.dp),
-                        vertical = screenHeightDp(8.dp),
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = screenWidthDp(24.dp),
+                            vertical = screenHeightDp(8.dp),
+                        ),
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = screenHeightDp(42.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = screenHeightDp(42.dp)),
                 ) {
                     BasicTextField(
                         value = commentText,
                         onValueChange = onTextChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(align = Alignment.Top, unbounded = true)
-                            .focusRequester(focusRequester),
-                        textStyle = ByeBooTheme.typography.body6.copy(
-                            color = ByeBooTheme.colors.gray100,
-                        ),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(align = Alignment.Top, unbounded = true)
+                                .focusRequester(focusRequester),
+                        textStyle =
+                            ByeBooTheme.typography.body6.copy(
+                                color = ByeBooTheme.colors.gray100,
+                            ),
                         cursorBrush = SolidColor(ByeBooTheme.colors.white),
                         minLines = 1,
                         maxLines = 5,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Default,
-                        ),
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Default,
+                            ),
                         decorationBox = { innerTextField ->
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
@@ -107,9 +113,10 @@ fun CommentInputBar(
                 }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = screenHeightDp(4.dp)),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = screenHeightDp(4.dp)),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -122,47 +129,53 @@ fun CommentInputBar(
                     Text(
                         text = "완료",
                         style = ByeBooTheme.typography.body2,
-                        color = if (isCompleteEnabled) {
-                            ByeBooTheme.colors.primary300
-                        } else {
-                            ByeBooTheme.colors.gray600
-                        },
-                        modifier = if (isCompleteEnabled) {
-                            Modifier.noRippleClickable(onClick = onCompleteClick)
-                        } else Modifier,
+                        color =
+                            if (isCompleteEnabled) {
+                                ByeBooTheme.colors.primary300
+                            } else {
+                                ByeBooTheme.colors.gray600
+                            },
+                        modifier =
+                            if (isCompleteEnabled) {
+                                Modifier.noRippleClickable(onClick = onCompleteClick)
+                            } else {
+                                Modifier
+                            },
                     )
                 }
             }
         } else {
             // 키보드 내려간 상태
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = screenWidthDp(24.dp))
-                    .padding(
-                        top = screenHeightDp(8.dp),
-                        bottom = screenHeightDp(2.dp),
-                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = screenWidthDp(24.dp))
+                        .padding(
+                            top = screenHeightDp(8.dp),
+                            bottom = screenHeightDp(2.dp),
+                        ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
             ) {
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(ByeBooTheme.colors.whiteAlpha5)
-                        .padding(
-                            horizontal = screenWidthDp(12.dp),
-                            vertical = screenHeightDp(9.5.dp),
-                        )
-                        .noRippleClickable { focusRequester.requestFocus() },
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(ByeBooTheme.colors.whiteAlpha5)
+                            .padding(
+                                horizontal = screenWidthDp(12.dp),
+                                vertical = screenHeightDp(9.5.dp),
+                            ).noRippleClickable { focusRequester.requestFocus() },
                 ) {
                     if (commentText.isNotEmpty()) {
                         Text(
                             text = commentText,
-                            style = ByeBooTheme.typography.body6.copy(
-                                color = ByeBooTheme.colors.gray100,
-                            ),
+                            style =
+                                ByeBooTheme.typography.body6.copy(
+                                    color = ByeBooTheme.colors.gray100,
+                                ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -178,32 +191,39 @@ fun CommentInputBar(
                     BasicTextField(
                         value = commentText,
                         onValueChange = onTextChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(0.dp)
-                            .focusRequester(focusRequester),
-                        textStyle = ByeBooTheme.typography.body6.copy(
-                            color = ByeBooTheme.colors.gray100,
-                        ),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(0.dp)
+                                .focusRequester(focusRequester),
+                        textStyle =
+                            ByeBooTheme.typography.body6.copy(
+                                color = ByeBooTheme.colors.gray100,
+                            ),
                         cursorBrush = SolidColor(ByeBooTheme.colors.white),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Default,
-                        ),
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Default,
+                            ),
                     )
                 }
 
                 Text(
                     text = "완료",
                     style = ByeBooTheme.typography.body2,
-                    color = if (isCompleteEnabled) {
-                        ByeBooTheme.colors.primary300
-                    } else {
-                        ByeBooTheme.colors.gray600
-                    },
-                    modifier = if (isCompleteEnabled) {
-                        Modifier.noRippleClickable(onClick = onCompleteClick)
-                    } else Modifier,
+                    color =
+                        if (isCompleteEnabled) {
+                            ByeBooTheme.colors.primary300
+                        } else {
+                            ByeBooTheme.colors.gray600
+                        },
+                    modifier =
+                        if (isCompleteEnabled) {
+                            Modifier.noRippleClickable(onClick = onCompleteClick)
+                        } else {
+                            Modifier
+                        },
                 )
             }
         }

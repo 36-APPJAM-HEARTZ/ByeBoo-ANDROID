@@ -53,50 +53,55 @@ fun CommonReplyItem(
     val gray400Color = ByeBooTheme.colors.gray400
     val body6FontSize = ByeBooTheme.typography.body6.fontSize
 
-    val displayText = remember(reply.content, isExpanded, measuredLayoutResult) {
-        buildAnnotatedString {
-            val layout = measuredLayoutResult
-            if (isExpanded || layout == null || layout.lineCount <= 5) {
-                append(reply.content)
-            } else {
-                val lastCharIndex = layout.getLineEnd(4)
-                val adjustedIndex = (lastCharIndex - 5).coerceAtLeast(0)
+    val displayText =
+        remember(reply.content, isExpanded, measuredLayoutResult) {
+            buildAnnotatedString {
+                val layout = measuredLayoutResult
+                if (isExpanded || layout == null || layout.lineCount <= 5) {
+                    append(reply.content)
+                } else {
+                    val lastCharIndex = layout.getLineEnd(4)
+                    val adjustedIndex = (lastCharIndex - 5).coerceAtLeast(0)
 
-                append(reply.content.substring(0, adjustedIndex))
-                append("... ")
+                    append(reply.content.substring(0, adjustedIndex))
+                    append("... ")
 
-                withLink(
-                    LinkAnnotation.Clickable(
-                        tag = "EXPAND",
-                        styles = TextLinkStyles(
-                            style = SpanStyle(
-                                color = gray400Color,
-                                fontSize = body6FontSize,
-                            )
+                    withLink(
+                        LinkAnnotation.Clickable(
+                            tag = "EXPAND",
+                            styles =
+                                TextLinkStyles(
+                                    style =
+                                        SpanStyle(
+                                            color = gray400Color,
+                                            fontSize = body6FontSize,
+                                        ),
+                                ),
+                            linkInteractionListener = { isExpanded = true },
                         ),
-                        linkInteractionListener = { isExpanded = true },
-                    )
-                ) {
-                    append("더보기")
+                    ) {
+                        append("더보기")
+                    }
                 }
             }
         }
-    }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = ByeBooTheme.colors.background)
-            .noRippleClickable(onClick = onClick)
-            .padding(vertical = screenHeightDp(16.dp)),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(color = ByeBooTheme.colors.background)
+                .noRippleClickable(onClick = onClick)
+                .padding(vertical = screenHeightDp(16.dp)),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = if (isReply) screenWidthDp(24.dp) else 0.dp,
-                    end = screenWidthDp(24.dp),
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = if (isReply) screenWidthDp(24.dp) else 0.dp,
+                        end = screenWidthDp(24.dp),
+                    ),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -125,9 +130,10 @@ fun CommonReplyItem(
             Spacer(modifier = Modifier.height(screenHeightDp(4.dp)))
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = screenWidthDp(20.dp)),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = screenWidthDp(20.dp)),
             ) {
                 Text(
                     text = reply.content,
@@ -169,9 +175,10 @@ fun CommonReplyItem(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_overflow_menu),
             contentDescription = null,
             tint = ByeBooTheme.colors.white,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .noRippleClickable(onClick = onMoreOptionsClick),
+            modifier =
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .noRippleClickable(onClick = onMoreOptionsClick),
         )
 
         if (isReply) {
