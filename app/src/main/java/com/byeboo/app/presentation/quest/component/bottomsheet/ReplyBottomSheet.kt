@@ -94,8 +94,24 @@ fun ReplyBottomSheet(
                 }
             }
 
+        val keyboardController = LocalSoftwareKeyboardController.current
+        val focusManager = LocalFocusManager.current
+        val clearKeyboardFocus = {
+            focusManager.clearFocus(force = true)
+            keyboardController?.hide()
+        }
+        val coroutineScope = rememberCoroutineScope()
+        val hideSheet = {
+            clearKeyboardFocus()
+            coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) onDismissRequest()
+            }
+        }
+
         ModalBottomSheet(
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = {
+                hideSheet()
+            },
             modifier =
                 modifier
                     .fillMaxHeight()
@@ -124,9 +140,6 @@ fun ReplyBottomSheet(
 
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
-            val coroutineScope = rememberCoroutineScope()
-            val keyboardController = LocalSoftwareKeyboardController.current
-            val focusManager = LocalFocusManager.current
 
             LaunchedEffect(Unit) {
                 snapshotFlow { imeInsets.getBottom(density) > 0 }
@@ -169,9 +182,7 @@ fun ReplyBottomSheet(
                 ByeBooDragHandle(
                     modifier =
                         Modifier.noRippleClickable {
-                            coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible) onDismissRequest()
-                            }
+                            hideSheet()
                         },
                 )
 
@@ -187,9 +198,7 @@ fun ReplyBottomSheet(
                                 tint = ByeBooTheme.colors.gray50,
                                 modifier =
                                     Modifier.noRippleClickable {
-                                        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                                            if (!sheetState.isVisible) onDismissRequest()
-                                        }
+                                        hideSheet()
                                     },
                             )
                         },
@@ -242,8 +251,7 @@ fun ReplyBottomSheet(
                         onCompleteClick = {
                             onCompleteComment(commentText)
                             commentText = ""
-                            keyboardController?.hide()
-                            focusManager.clearFocus()
+                            clearKeyboardFocus()
                         },
                         placeholder = "답글로 위로를 남겨보세요.",
                     )
