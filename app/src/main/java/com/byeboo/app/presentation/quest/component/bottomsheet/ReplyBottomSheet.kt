@@ -243,7 +243,6 @@ fun ReplyBottomSheet(
                     CommentInputBar(
                         commentText = commentText,
                         isKeyboardVisible = isKeyboardVisible,
-                        isKeyboardVisibleDelayed = isKeyboardVisible,
                         focusRequester = focusRequester,
                         isCompleteEnabled = isCompleteEnabled,
                         maxLength = maxLength,

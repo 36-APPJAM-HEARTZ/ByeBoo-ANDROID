@@ -37,7 +37,6 @@ import com.byeboo.app.core.util.screenWidthDp
 fun CommentInputBar(
     commentText: String,
     isKeyboardVisible: Boolean,
-    isKeyboardVisibleDelayed: Boolean,
     focusRequester: FocusRequester,
     isCompleteEnabled: Boolean,
     maxLength: Int,
