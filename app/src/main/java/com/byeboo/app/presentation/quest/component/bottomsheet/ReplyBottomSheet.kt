@@ -2,14 +2,15 @@ package com.byeboo.app.presentation.quest.component.bottomsheet
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.imeAnimationTarget
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -52,10 +53,11 @@ import com.byeboo.app.presentation.quest.component.card.CommonReplyItem
 import com.byeboo.app.presentation.quest.component.input.CommentInputBar
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ReplyBottomSheet(
     showBottomSheet: Boolean,
@@ -134,29 +136,36 @@ fun ReplyBottomSheet(
 
             val density = LocalDensity.current
             val imeInsets = WindowInsets.ime
+            val imeTarget = WindowInsets.imeAnimationTarget
+            val navBarInsets = WindowInsets.navigationBars
 
-            // 초기값 false 설정을 통해 바텀시트가 열릴 때 키보드가 없는 상태의 UI 깜빡임을 방지합니다.
+            val inputBottomPadding =
+                with(density) {
+                    maxOf(
+                        imeInsets.getBottom(density),
+                        navBarInsets.getBottom(density) + screenHeightDp(16.dp).roundToPx(),
+                    ).toDp()
+                }
+
             var isKeyboardVisible by remember { mutableStateOf(false) }
+            var contentAlpha by remember { mutableStateOf(1f) }
 
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
 
             LaunchedEffect(Unit) {
-                snapshotFlow { imeInsets.getBottom(density) > 0 }
+                snapshotFlow { imeTarget.getBottom(density) > 0 }
                     .distinctUntilChanged()
-                    .collect { visible ->
-                        if (visible) {
-                            isKeyboardVisible = true
-                        } else {
-                            kotlinx.coroutines.delay(100)
-                            isKeyboardVisible = false
-                        }
-                    }
+                    .collect { visible -> isKeyboardVisible = visible }
             }
 
             LaunchedEffect(isKeyboardVisible) {
                 if (isKeyboardVisible) {
+                    contentAlpha = 1f
                     focusRequester.requestFocus()
+                } else {
+                    delay(200)
+                    contentAlpha = 1f
                 }
             }
 
@@ -168,15 +177,12 @@ fun ReplyBottomSheet(
                 }
             }
 
-            // 💡 리팩토링 핵심 1: 최상위 Column에 imePadding()을 적용합니다.
-            // 그래야 인풋바가 키보드에 가려지지 않고 키보드 바로 위로 반응하여 올라갑니다.
             Column(
                 modifier =
                     Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .imePadding()
-                        .navigationBarsPadding(),
+                        .padding(bottom = inputBottomPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ByeBooDragHandle(
@@ -205,8 +211,6 @@ fun ReplyBottomSheet(
                     )
                 }
 
-                // 💡 리팩토링 핵심 2: 내부 리스트 영역의 imePadding()은 지워줍니다.
-                // 부모 Column이 이미 반응하므로 여기서는 weight(1f)만 유지하면 영역이 자연스럽게 축소됩니다.
                 Column(
                     modifier =
                         Modifier
@@ -233,12 +237,8 @@ fun ReplyBottomSheet(
                     }
                 }
 
-                // 인풋바 영역 및 가변 패딩 적용
                 Column(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = if (isKeyboardVisible) 0.dp else screenHeightDp(16.dp)),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     CommentInputBar(
                         commentText = commentText,
@@ -249,9 +249,11 @@ fun ReplyBottomSheet(
                         onTextChange = { if (it.length <= maxLength) commentText = it },
                         onCompleteClick = {
                             onCompleteComment(commentText)
+                            contentAlpha = 0f
                             commentText = ""
                             clearKeyboardFocus()
                         },
+                        contentAlpha = contentAlpha,
                         placeholder = "답글로 위로를 남겨보세요.",
                     )
                 }

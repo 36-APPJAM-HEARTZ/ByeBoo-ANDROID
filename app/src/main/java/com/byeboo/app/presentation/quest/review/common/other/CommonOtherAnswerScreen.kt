@@ -3,13 +3,14 @@ package com.byeboo.app.presentation.quest.review.common.other
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -44,6 +45,7 @@ import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -81,7 +83,7 @@ fun CommonOtherAnswerRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun CommonOtherAnswerScreen(
     uiState: CommonAnswerState,
@@ -105,30 +107,34 @@ private fun CommonOtherAnswerScreen(
 
     val density = LocalDensity.current
     val imeInsets = WindowInsets.ime
+    val imeTarget = WindowInsets.imeAnimationTarget
+
+    val bottomPadding =
+        with(density) {
+            maxOf(imeInsets.getBottom(density).toDp(), paddingValues.calculateBottomPadding())
+        }
+
     var isKeyboardVisible by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
     var shouldScrollToBottom by remember { mutableStateOf(false) }
+    var contentAlpha by remember { mutableStateOf(1f) }
 
     LaunchedEffect(Unit) {
-        snapshotFlow {
-            imeInsets.getBottom(density) > 0
-        }.distinctUntilChanged()
-            .collect { visible ->
-                if (visible) {
-                    isKeyboardVisible = true
-                } else {
-                    kotlinx.coroutines.delay(250)
-                    isKeyboardVisible = false
-                }
-            }
+        snapshotFlow { imeTarget.getBottom(density) > 0 }
+            .distinctUntilChanged()
+            .collect { visible -> isKeyboardVisible = visible }
     }
 
     LaunchedEffect(isKeyboardVisible) {
         if (isKeyboardVisible) {
+            contentAlpha = 1f
             focusRequester.requestFocus()
+        } else {
+            delay(200)
+            contentAlpha = 1f
         }
     }
 
@@ -148,8 +154,8 @@ private fun CommonOtherAnswerScreen(
                 .background(ByeBooTheme.colors.background)
                 .padding(
                     top = paddingValues.calculateTopPadding() + screenHeightDp(43.dp),
-                    bottom = if (isKeyboardVisible) 0.dp else paddingValues.calculateBottomPadding(),
-                ).imePadding(),
+                    bottom = bottomPadding,
+                ),
     ) {
         Column(
             modifier =
@@ -215,11 +221,13 @@ private fun CommonOtherAnswerScreen(
             },
             onCompleteClick = {
                 onCompleteComment(commentText)
+                contentAlpha = 0f
                 commentText = ""
                 keyboardController?.hide()
                 focusManager.clearFocus()
                 shouldScrollToBottom = true
             },
+            contentAlpha = contentAlpha,
         )
     }
 

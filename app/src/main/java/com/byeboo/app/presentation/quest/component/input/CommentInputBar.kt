@@ -1,5 +1,11 @@
 package com.byeboo.app.presentation.quest.component.input
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -43,88 +50,182 @@ fun CommentInputBar(
     onTextChange: (String) -> Unit,
     onCompleteClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentAlpha: Float = 1f,
     placeholder: String = "댓글로 위로를 남겨보세요.",
 ) {
     Column(
         modifier =
             modifier
                 .fillMaxWidth()
-                .background(ByeBooTheme.colors.background),
+                .background(ByeBooTheme.colors.background)
+                .alpha(contentAlpha),
     ) {
         HorizontalDivider(
             thickness = 1.dp,
             color = ByeBooTheme.colors.gray800,
         )
 
-        // 키보드 올라온 상태
-        if (isKeyboardVisible) {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = screenWidthDp(24.dp),
-                            vertical = screenHeightDp(8.dp),
-                        ),
-            ) {
-                Box(
+        AnimatedContent(
+            targetState = isKeyboardVisible,
+            transitionSpec = {
+                ContentTransform(
+                    targetContentEnter = fadeIn(animationSpec = tween(durationMillis = 200)),
+                    initialContentExit = fadeOut(animationSpec = tween(durationMillis = 200)),
+                    sizeTransform = SizeTransform(clip = false) { _, _ -> tween(durationMillis = 200) },
+                )
+            },
+            label = "",
+        ) { keyboardVisible ->
+            if (keyboardVisible) {
+                Column(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = screenHeightDp(42.dp)),
+                            .padding(
+                                horizontal = screenWidthDp(24.dp),
+                                vertical = screenHeightDp(8.dp),
+                            ),
                 ) {
-                    BasicTextField(
-                        value = commentText,
-                        onValueChange = onTextChange,
+                    Box(
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .wrapContentHeight(align = Alignment.Top, unbounded = true)
-                                .focusRequester(focusRequester),
-                        textStyle =
-                            ByeBooTheme.typography.body6.copy(
-                                color = ByeBooTheme.colors.gray100,
-                            ),
-                        cursorBrush = SolidColor(ByeBooTheme.colors.white),
-                        minLines = 1,
-                        maxLines = 5,
-                        keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Default,
-                            ),
-                        decorationBox = { innerTextField ->
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.TopStart,
-                            ) {
-                                if (commentText.isEmpty()) {
-                                    Text(
-                                        text = placeholder,
-                                        style = ByeBooTheme.typography.body6,
-                                        color = ByeBooTheme.colors.gray600,
-                                    )
+                                .defaultMinSize(minHeight = screenHeightDp(42.dp)),
+                    ) {
+                        BasicTextField(
+                            value = commentText,
+                            onValueChange = onTextChange,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(align = Alignment.Top, unbounded = true)
+                                    .focusRequester(focusRequester),
+                            textStyle =
+                                ByeBooTheme.typography.body6.copy(
+                                    color = ByeBooTheme.colors.gray100,
+                                ),
+                            cursorBrush = SolidColor(ByeBooTheme.colors.white),
+                            minLines = 1,
+                            maxLines = 5,
+                            keyboardOptions =
+                                KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Default,
+                                ),
+                            decorationBox = { innerTextField ->
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.TopStart,
+                                ) {
+                                    if (commentText.isEmpty()) {
+                                        Text(
+                                            text = placeholder,
+                                            style = ByeBooTheme.typography.body6,
+                                            color = ByeBooTheme.colors.gray600,
+                                        )
+                                    }
+                                    innerTextField()
                                 }
-                                innerTextField()
-                            }
-                        },
-                    )
-                }
+                            },
+                        )
+                    }
 
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = screenHeightDp(4.dp)),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "${commentText.length}/$maxLength",
+                            style = ByeBooTheme.typography.cap2,
+                            color = ByeBooTheme.colors.gray400,
+                        )
+                        Spacer(modifier = Modifier.width(screenWidthDp(12.dp)))
+                        Text(
+                            text = "완료",
+                            style = ByeBooTheme.typography.body2,
+                            color =
+                                if (isCompleteEnabled) {
+                                    ByeBooTheme.colors.primary300
+                                } else {
+                                    ByeBooTheme.colors.gray600
+                                },
+                            modifier =
+                                if (isCompleteEnabled) {
+                                    Modifier.noRippleClickable(onClick = onCompleteClick)
+                                } else {
+                                    Modifier
+                                },
+                        )
+                    }
+                }
+            } else {
                 Row(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(top = screenHeightDp(4.dp)),
-                    horizontalArrangement = Arrangement.End,
+                            .padding(horizontal = screenWidthDp(24.dp))
+                            .padding(
+                                top = screenHeightDp(8.dp),
+                                bottom = screenHeightDp(2.dp),
+                            ),
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
                 ) {
-                    Text(
-                        text = "${commentText.length}/$maxLength",
-                        style = ByeBooTheme.typography.cap2,
-                        color = ByeBooTheme.colors.gray400,
-                    )
-                    Spacer(modifier = Modifier.width(screenWidthDp(12.dp)))
+                    Box(
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(ByeBooTheme.colors.whiteAlpha5)
+                                .padding(
+                                    horizontal = screenWidthDp(12.dp),
+                                    vertical = screenHeightDp(9.5.dp),
+                                ).noRippleClickable { focusRequester.requestFocus() },
+                    ) {
+                        if (commentText.isNotEmpty()) {
+                            Text(
+                                text = commentText,
+                                style =
+                                    ByeBooTheme.typography.body6.copy(
+                                        color = ByeBooTheme.colors.gray100,
+                                    ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        } else {
+                            Text(
+                                text = placeholder,
+                                style = ByeBooTheme.typography.body6,
+                                color = ByeBooTheme.colors.gray600,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        BasicTextField(
+                            value = commentText,
+                            onValueChange = onTextChange,
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(0.dp)
+                                    .focusRequester(focusRequester),
+                            textStyle =
+                                ByeBooTheme.typography.body6.copy(
+                                    color = ByeBooTheme.colors.gray100,
+                                ),
+                            cursorBrush = SolidColor(ByeBooTheme.colors.white),
+                            keyboardOptions =
+                                KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Default,
+                                ),
+                        )
+                    }
+
                     Text(
                         text = "완료",
                         style = ByeBooTheme.typography.body2,
@@ -142,88 +243,6 @@ fun CommentInputBar(
                             },
                     )
                 }
-            }
-        } else {
-            // 키보드 내려간 상태
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = screenWidthDp(24.dp))
-                        .padding(
-                            top = screenHeightDp(8.dp),
-                            bottom = screenHeightDp(2.dp),
-                        ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(screenWidthDp(20.dp)),
-            ) {
-                Box(
-                    modifier =
-                        Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(ByeBooTheme.colors.whiteAlpha5)
-                            .padding(
-                                horizontal = screenWidthDp(12.dp),
-                                vertical = screenHeightDp(9.5.dp),
-                            ).noRippleClickable { focusRequester.requestFocus() },
-                ) {
-                    if (commentText.isNotEmpty()) {
-                        Text(
-                            text = commentText,
-                            style =
-                                ByeBooTheme.typography.body6.copy(
-                                    color = ByeBooTheme.colors.gray100,
-                                ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    } else {
-                        Text(
-                            text = placeholder,
-                            style = ByeBooTheme.typography.body6,
-                            color = ByeBooTheme.colors.gray600,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    BasicTextField(
-                        value = commentText,
-                        onValueChange = onTextChange,
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(0.dp)
-                                .focusRequester(focusRequester),
-                        textStyle =
-                            ByeBooTheme.typography.body6.copy(
-                                color = ByeBooTheme.colors.gray100,
-                            ),
-                        cursorBrush = SolidColor(ByeBooTheme.colors.white),
-                        keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Default,
-                            ),
-                    )
-                }
-
-                Text(
-                    text = "완료",
-                    style = ByeBooTheme.typography.body2,
-                    color =
-                        if (isCompleteEnabled) {
-                            ByeBooTheme.colors.primary300
-                        } else {
-                            ByeBooTheme.colors.gray600
-                        },
-                    modifier =
-                        if (isCompleteEnabled) {
-                            Modifier.noRippleClickable(onClick = onCompleteClick)
-                        } else {
-                            Modifier
-                        },
-                )
             }
         }
     }
