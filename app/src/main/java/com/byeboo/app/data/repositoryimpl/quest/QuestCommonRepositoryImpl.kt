@@ -12,6 +12,8 @@ import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.QuestLikeModel
+import com.byeboo.app.domain.model.quest.QuestLikeUpdateModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +37,9 @@ class QuestCommonRepositoryImpl
 
         private val _refreshEvent = MutableSharedFlow<Unit>()
         override val refreshEvent: SharedFlow<Unit> = _refreshEvent.asSharedFlow()
+
+        private val _likeUpdatedEvent = MutableSharedFlow<QuestLikeUpdateModel>()
+        override val likeUpdatedEvent: SharedFlow<QuestLikeUpdateModel> = _likeUpdatedEvent.asSharedFlow()
 
         private var currentCursor: Long? = null
         private var hasNextPage: Boolean = true
@@ -213,4 +218,22 @@ class QuestCommonRepositoryImpl
             )
 
         override fun getCachedMyAnswer(answerId: Long): QuestAnswerModel? = _answersFlow.value.find { it.answerId == answerId }
+
+        override suspend fun updateAnswerLike(answerId: Long): Result<QuestLikeModel> =
+            runCatching {
+                val response = questCommonDataSource.updateAnswerLike(answerId)
+                if (!response.success) throw Exception(response.message)
+                val result = response.data.toDomain()
+                _likeUpdatedEvent.emit(
+                    QuestLikeUpdateModel(
+                        answerId = answerId,
+                        heartCount = result.heartCount,
+                        isLiked = result.isLiked,
+                    ),
+                )
+                result
+            }.fold(
+                onSuccess = { Result.success(it) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
     }

@@ -10,6 +10,7 @@ import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.data.service.quest.QuestCommonService
 import javax.inject.Inject
@@ -71,4 +72,7 @@ class QuestCommonDataSourceImpl
 
         override suspend fun getCommentReplies(commentId: Long): BaseResponse<CommentRepliesResponseDto> =
             questCommonService.getCommentReplies(commentId)
+
+        override suspend fun updateAnswerLike(answerId: Long): BaseResponse<QuestLikeResponseDto> =
+            questCommonService.updateAnswerLike(answerId)
     }

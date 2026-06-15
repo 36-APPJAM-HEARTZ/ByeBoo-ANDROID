@@ -9,6 +9,7 @@ import com.byeboo.app.data.dto.response.quest.QuestAnswerDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonDetailAnswerDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonDetailCommentDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.data.dto.response.quest.ReplyItemDto
 import com.byeboo.app.domain.model.quest.CommentDetailModel
@@ -23,6 +24,7 @@ import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestCommonDetailCommentModel
 import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
+import com.byeboo.app.domain.model.quest.QuestLikeModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -131,6 +133,12 @@ fun ReplyItemDto.toDomain(): CommentReplyModel =
         profileIcon = this.profileIcon,
         content = this.content,
         writtenAt = this.createdAt.toLocalDateTime(),
+    )
+
+fun QuestLikeResponseDto.toDomain(): QuestLikeModel =
+    QuestLikeModel(
+        heartCount = this.likeCount,
+        isLiked = this.isLiked,
     )
 
 private fun String.toLocalDateTime(): LocalDateTime =
