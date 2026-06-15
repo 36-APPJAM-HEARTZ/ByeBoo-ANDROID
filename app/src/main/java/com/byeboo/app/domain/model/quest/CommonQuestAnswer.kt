@@ -41,6 +41,11 @@ data class QuestAnswerModel(
     val content: String,
 )
 
+data class QuestLikeModel(
+    val heartCount: Int,
+    val isLiked: Boolean,
+)
+
 data class QuestAnswerDetailModel(
     val question: String,
     val answer: QuestAnswerDetailAnswerModel,

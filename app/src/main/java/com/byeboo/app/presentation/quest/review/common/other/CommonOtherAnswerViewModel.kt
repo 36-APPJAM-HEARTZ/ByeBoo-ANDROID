@@ -106,16 +106,36 @@ class CommonOtherAnswerViewModel
         }
 
         fun onHeartClicked() {
-            // TODO: 하트 API 연동
-            _uiState.update { state ->
-                val answer = state.answer ?: return@update state
+            if (_uiState.value.isLikeLoading) return
+            val previousAnswer = _uiState.value.answer ?: return
 
-                state.copy(
-                    answer =
-                        answer.copy(
-                            isLiked = !answer.isLiked,
-                        ),
+            _uiState.update {
+                it.copy(
+                    answer = mapper.toggleLike(previousAnswer),
+                    isLikeLoading = true,
                 )
+            }
+
+            viewModelScope.launch {
+                commonQuestRepository
+                    .updateAnswerLike(answerId)
+                    .onSuccess { result ->
+                        _uiState.update { state ->
+                            state.copy(
+                                isLikeLoading = false,
+                                answer =
+                                    state.answer?.copy(
+                                        isLiked = result.isLiked,
+                                        heartCount = result.heartCount,
+                                    ),
+                            )
+                        }
+                    }.onFailure { exception ->
+                        _uiState.update { it.copy(answer = previousAnswer, isLikeLoading = false) }
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
             }
         }
 
@@ -195,11 +215,32 @@ class CommonOtherAnswerViewModel
                         content = content,
                     ).onSuccess {
                         loadCommentReplies(commentId)
+                        updateCommentReplyCount(commentId)
                     }.onFailure { exception ->
                         _sideEffect.emit(
                             CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
                         )
                     }
+            }
+        }
+
+        private fun updateCommentReplyCount(commentId: Long) {
+            _uiState.update { state ->
+                state.copy(
+                    comments =
+                        state.comments
+                            .map { comment ->
+                                if (comment.replyId == commentId) {
+                                    comment.copy(replyCount = comment.replyCount + 1)
+                                } else {
+                                    comment
+                                }
+                            }.toImmutableList(),
+                    selectedReply =
+                        state.selectedReply?.let {
+                            if (it.replyId == commentId) it.copy(replyCount = it.replyCount + 1) else it
+                        },
+                )
             }
         }
 

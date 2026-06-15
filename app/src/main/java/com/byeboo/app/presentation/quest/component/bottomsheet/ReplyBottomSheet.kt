@@ -1,5 +1,7 @@
 package com.byeboo.app.presentation.quest.component.bottomsheet
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -8,7 +10,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -135,20 +136,22 @@ fun ReplyBottomSheet(
             val isCompleteEnabled = commentText.isNotEmpty()
 
             val density = LocalDensity.current
-            val imeInsets = WindowInsets.ime
-            val imeTarget = WindowInsets.imeAnimationTarget
-            val navBarInsets = WindowInsets.navigationBars
-
-            val inputBottomPadding =
-                with(density) {
-                    maxOf(
-                        imeInsets.getBottom(density),
-                        navBarInsets.getBottom(density) + screenHeightDp(16.dp).roundToPx(),
-                    ).toDp()
-                }
 
             var isKeyboardVisible by remember { mutableStateOf(false) }
             var contentAlpha by remember { mutableStateOf(1f) }
+
+            val imeTarget = WindowInsets.imeAnimationTarget
+            val navBarInsets = WindowInsets.navigationBars
+
+            val navBottom = with(density) { navBarInsets.getBottom(density).toDp() }
+
+            val targetPadding = if (isKeyboardVisible) 0.dp else navBottom
+
+            val inputBottomPadding by animateDpAsState(
+                targetValue = targetPadding,
+                animationSpec = tween(durationMillis = 200),
+                label = "inputBottomPadding",
+            )
 
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()

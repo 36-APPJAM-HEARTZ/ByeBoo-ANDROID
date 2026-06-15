@@ -16,6 +16,7 @@ data class CommonAnswerState(
     val showReplyBottomSheet: Boolean = false,
     val selectedReply: CommonReplyModel? = null,
     val replies: ImmutableList<CommonReplyModel> = persistentListOf(),
+    val isLikeLoading: Boolean = false,
 )
 
 sealed interface CommonAnswerSideEffect {
