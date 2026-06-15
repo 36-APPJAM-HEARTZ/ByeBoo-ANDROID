@@ -62,6 +62,7 @@ fun MyAnswerRoute(
         onLoadAnswers = viewModel::loadMyAnswers,
         onBackClick = viewModel::onBackClicked,
         onMyAnswerContentClick = viewModel::onMyAnswerContentClicked,
+        onHeartClick = viewModel::onHeartClicked,
     )
 }
 
@@ -72,6 +73,7 @@ fun MyAnswerScreen(
     onBackClick: () -> Unit,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -177,6 +179,8 @@ fun MyAnswerScreen(
 
                         MyAnswerItem(
                             answer = answer,
+                            onHeartClick = onHeartClick,
+                            onCommentClick = { onMyAnswerContentClick(answer.answerId) },
                             onMyAnswerContentClick = { onMyAnswerContentClick(answer.answerId) },
                         )
                     }

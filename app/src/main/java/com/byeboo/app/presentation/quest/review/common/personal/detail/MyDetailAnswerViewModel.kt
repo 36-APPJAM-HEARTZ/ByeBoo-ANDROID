@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.DateUtil
+import com.byeboo.app.domain.model.quest.QuestAnswerDetailAnswerModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
+import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,51 +53,35 @@ class MyDetailAnswerViewModel
                 .onEach { updated ->
                     _uiState.update { state ->
                         state.copy(
+                            questQuestion = updated.question,
                             answer =
-                                state.answer.copy(
+                                state.answer?.copy(
                                     content = updated.content,
-                                    question = updated.question,
-                                    writtenAt = DateUtil.formatToDotDate(updated.writtenAt),
+                                    displayTime = DateUtil.formatToDotDate(updated.writtenAt),
                                 ),
                         )
                     }
                 }.launchIn(viewModelScope)
 
             viewModelScope.launch {
-                val cached = questCommonRepository.getCachedMyAnswer(answerId)
-                if (cached != null) {
-                    _uiState.update { state ->
-                        state.copy(
-                            answer =
-                                state.answer.copy(
-                                    answerId = cached.answerId,
-                                    question = cached.question,
-                                    writtenAt = DateUtil.formatToDotDate(cached.writtenAt),
-                                    content = cached.content,
-                                ),
-                        )
-                    }
-                } else {
-                    questCommonRepository
-                        .getCommonQuestAnswerDetail(answerId)
-                        .onSuccess { detail ->
-                            _uiState.update { state ->
-                                state.copy(
-                                    answer =
-                                        state.answer.copy(
-                                            answerId = answerId,
-                                            question = detail.question,
-                                            writtenAt = mapper.formatDetailDate(detail.writtenAt),
-                                            content = detail.content,
-                                        ),
-                                )
-                            }
+                questCommonRepository
+                    .getCommonQuestAnswerDetail(answerId)
+                    .onSuccess { detail ->
+                        _uiState.update {
+                            it.copy(
+                                questQuestion = detail.question,
+                                answer = detail.answer.toCommonAnswerModel(answerId),
+                            )
                         }
-                }
+                    }.onFailure {
+                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }
             }
         }
 
         fun onClickMoreOptions() {
+            if (_uiState.value.answer == null) return
+
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 
@@ -113,7 +99,7 @@ class MyDetailAnswerViewModel
             onDismissBottomSheet()
 
             viewModelScope.launch {
-                val question = _uiState.value.answer.question
+                val question = _uiState.value.questQuestion
                 when (option) {
                     MyPostOption.EDIT -> {
                         _sideEffect.emit(
@@ -148,6 +134,10 @@ class MyDetailAnswerViewModel
             }
         }
 
+        fun onHeartClicked() {
+            // TODO: 하트 클릭
+        }
+
         private fun observeRefreshEvent() {
             viewModelScope.launch {
                 questCommonRepository.refreshEvent.collect {
@@ -158,18 +148,28 @@ class MyDetailAnswerViewModel
                             .onSuccess { detail ->
                                 _uiState.update { state ->
                                     state.copy(
-                                        answer =
-                                            state.answer.copy(
-                                                answerId = answerId,
-                                                question = detail.question,
-                                                writtenAt = detail.writtenAt.toString(),
-                                                content = detail.content,
-                                            ),
+                                        questQuestion = detail.question,
+                                        answer = detail.answer.toCommonAnswerModel(answerId),
                                     )
                                 }
+                            }.onFailure {
+                                _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                             }
                     }
                 }
             }
         }
+
+        private fun QuestAnswerDetailAnswerModel.toCommonAnswerModel(answerId: Long): CommonAnswerModel =
+            CommonAnswerModel(
+                heartCount = heartCount,
+                commentCount = commentCount,
+                isLiked = isLiked,
+                answerId = answerId,
+                writerId = writerId,
+                writer = writer,
+                profileIconRes = mapper.mapToIconRes(profileIcon),
+                displayTime = mapper.formatDetailDate(writtenAt),
+                content = content,
+            )
     }

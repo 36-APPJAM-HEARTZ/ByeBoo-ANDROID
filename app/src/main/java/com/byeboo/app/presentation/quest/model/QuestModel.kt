@@ -21,6 +21,9 @@ data class Quest(
 
 @Immutable
 data class CommonAnswerModel(
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
     val answerId: Long,
     val writerId: Long,
     val writer: String,
@@ -35,4 +38,7 @@ data class MyAnswerModel(
     val question: String,
     val writtenAt: String,
     val content: String,
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
 )

@@ -49,6 +49,9 @@ class MyAnswerViewModel
                                     question = it.question,
                                     writtenAt = DateUtil.formatToDotDate(it.writtenAt),
                                     content = it.content,
+                                    heartCount = it.heartCount,
+                                    commentCount = it.commentCount,
+                                    isLiked = it.isLiked,
                                 )
                             }.toPersistentList()
                     _uiState.update { it.copy(answers = answers) }
@@ -98,5 +101,9 @@ class MyAnswerViewModel
             viewModelScope.launch {
                 _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
             }
+        }
+
+        fun onHeartClicked() {
+            // TODO: 하트 API 연동
         }
     }

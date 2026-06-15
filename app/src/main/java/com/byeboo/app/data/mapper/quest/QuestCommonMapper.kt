@@ -5,13 +5,17 @@ import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestAnswerDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestCommonDetailAnswerDto
+import com.byeboo.app.data.dto.response.quest.QuestCommonDetailCommentDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.domain.model.quest.CommonQuestAnswer
 import com.byeboo.app.domain.model.quest.CommonQuestModel
+import com.byeboo.app.domain.model.quest.QuestAnswerDetailAnswerModel
 import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.QuestCommonDetailCommentModel
 import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -29,6 +33,9 @@ fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
         answers =
             this.answers.map {
                 QuestAnswerModel(
+                    heartCount = it.likeCount,
+                    commentCount = it.commentCount,
+                    isLiked = it.isLiked,
                     question = it.question,
                     answerId = it.answerId,
                     writtenAt = it.writtenAt.split("T")[0],
@@ -56,6 +63,9 @@ fun CommonQuestResponseDto.toDomain(): CommonQuestModel =
 fun QuestAnswerDto.toDomain(): CommonQuestAnswer =
     CommonQuestAnswer(
         answerId = this.answerId,
+        heartCount = this.likeCount,
+        commentCount = this.commentCount,
+        isLiked = this.isLiked,
         profileIcon = this.profileIcon,
         writer = this.writer,
         writtenAt = LocalDateTime.parse(this.writtenAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
@@ -66,9 +76,35 @@ fun QuestAnswerDto.toDomain(): CommonQuestAnswer =
 fun QuestCommonAnswerDetailResponseDto.toDomain(): QuestAnswerDetailModel =
     QuestAnswerDetailModel(
         question = this.question,
+        answer = this.answer.toDomain(),
+        comments = this.comments.map { it.toDomain() },
+    )
+
+fun QuestCommonDetailAnswerDto.toDomain(): QuestAnswerDetailAnswerModel =
+    QuestAnswerDetailAnswerModel(
+        heartCount = this.likeCount,
+        commentCount = this.commentCount,
+        isLiked = this.isLiked,
         writer = this.writer,
         writerId = this.writerId,
         profileIcon = this.profileIcon,
         content = this.content,
-        writtenAt = LocalDate.parse(this.writtenAt, DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay(),
+        writtenAt = this.writtenAt.toLocalDateTime(),
     )
+
+fun QuestCommonDetailCommentDto.toDomain(): QuestCommonDetailCommentModel =
+    QuestCommonDetailCommentModel(
+        commentId = this.commentId,
+        writer = this.writer,
+        writerId = this.writerId,
+        profileIcon = this.profileIcon,
+        content = this.content,
+        writtenAt = this.writtenAt.toLocalDateTime(),
+    )
+
+private fun String.toLocalDateTime(): LocalDateTime =
+    if (contains("T")) {
+        LocalDateTime.parse(this, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    } else {
+        LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE).atStartOfDay()
+    }

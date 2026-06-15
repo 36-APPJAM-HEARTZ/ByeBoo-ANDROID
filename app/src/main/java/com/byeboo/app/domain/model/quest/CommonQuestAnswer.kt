@@ -13,6 +13,9 @@ data class CommonQuestModel(
 )
 
 data class CommonQuestAnswer(
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
     val answerId: Long,
     val profileIcon: String,
     val writer: String,
@@ -32,6 +35,9 @@ data class QuestCommonMyAnswerModel(
 )
 
 data class QuestAnswerModel(
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
     val question: String,
     val answerId: Long,
     val writtenAt: String,
@@ -40,6 +46,23 @@ data class QuestAnswerModel(
 
 data class QuestAnswerDetailModel(
     val question: String,
+    val answer: QuestAnswerDetailAnswerModel,
+    val comments: List<QuestCommonDetailCommentModel>,
+)
+
+data class QuestAnswerDetailAnswerModel(
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
+    val writer: String,
+    val writerId: Long,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
+)
+
+data class QuestCommonDetailCommentModel(
+    val commentId: Long,
     val writer: String,
     val writerId: Long,
     val profileIcon: String,

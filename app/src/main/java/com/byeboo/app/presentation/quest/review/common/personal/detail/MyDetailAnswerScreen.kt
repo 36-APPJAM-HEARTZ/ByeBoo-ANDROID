@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +23,7 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.bottomsheet.MoreOptionsBottomSheet
+import com.byeboo.app.presentation.quest.component.card.CommonAnswerItem
 import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
@@ -49,6 +48,7 @@ fun MyAnswerDetailRoute(
         onClickMoreOptions = viewModel::onClickMoreOptions,
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
+        onHeartClick = viewModel::onHeartClicked,
     )
 
     LaunchedEffect(Unit) {
@@ -89,6 +89,7 @@ private fun MyAnswerDetailScreen(
     onClickMoreOptions: () -> Unit,
     onDismissBottomSheet: () -> Unit,
     onOptionClick: (MyPostOption) -> Unit,
+    onHeartClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -110,48 +111,27 @@ private fun MyAnswerDetailScreen(
             onClickMoreOptions = onClickMoreOptions,
         )
 
-        QuestCommonTitle(
-            createdAt = uiState.answer.writtenAt,
-            questQuestion = uiState.answer.question,
-        )
+        uiState.answer?.let { answer ->
+            QuestCommonTitle(
+                createdAt = answer.displayTime,
+                questQuestion = uiState.questQuestion,
+            )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
+            Spacer(modifier = Modifier.height(screenHeightDp(10.dp)))
 
-        MyAnswerContent(
-            content = uiState.answer.content,
-        )
+            CommonAnswerItem(
+                answer = answer,
+                onHeartClick = onHeartClick,
+                isExpanded = true,
+            )
+        }
     }
 
     MoreOptionsBottomSheet(
         topOption = MyPostOption.EDIT,
         bottomOption = MyPostOption.DELETE,
         onOptionClick = onOptionClick,
-        showBottomSheet = uiState.showBottomSheet,
+        showBottomSheet = uiState.showBottomSheet && uiState.answer != null,
         onDismissRequest = onDismissBottomSheet,
     )
-}
-
-@Composable
-private fun MyAnswerContent(
-    content: String,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .background(
-                    color = ByeBooTheme.colors.whiteAlpha5,
-                    shape = RoundedCornerShape(12.dp),
-                ).padding(
-                    horizontal = screenWidthDp(24.dp),
-                    vertical = screenHeightDp(18.dp),
-                ),
-    ) {
-        Text(
-            text = content,
-            color = ByeBooTheme.colors.gray100,
-            style = ByeBooTheme.typography.body3,
-        )
-    }
 }

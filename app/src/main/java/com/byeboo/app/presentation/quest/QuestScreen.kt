@@ -134,6 +134,7 @@ fun QuestRoute(
         onCommonAnswerClick = viewModel::onOtherAnswerClicked,
         onDateChange = viewModel::onDateChange,
         onLoadMore = viewModel::loadNextPage,
+        onHeartClick = viewModel::onHeartClicked,
     )
 }
 
@@ -153,6 +154,7 @@ private fun QuestScreen(
     onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onLoadMore: () -> Unit,
+    onHeartClick: () -> Unit,
 ) {
     if (uiState.myJourneyState.showQuitModal) {
         QuestModal(
@@ -215,6 +217,7 @@ private fun QuestScreen(
                     onDateChange = onDateChange,
                     onCommonQuestClick = onCommonQuestClick,
                     onLoadMore = onLoadMore,
+                    onHeartClick = onHeartClick,
                 )
             }
         }
