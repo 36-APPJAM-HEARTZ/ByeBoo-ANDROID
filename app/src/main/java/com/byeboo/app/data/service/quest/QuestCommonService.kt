@@ -9,6 +9,7 @@ import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -79,4 +80,9 @@ interface QuestCommonService {
     suspend fun getCommentReplies(
         @Path("commentId") commentId: Long,
     ): BaseResponse<CommentRepliesResponseDto>
+
+    @POST("/api/v1/common-quests/{answerId}/likes")
+    suspend fun updateAnswerLike(
+        @Path("answerId") answerId: Long,
+    ): BaseResponse<QuestLikeResponseDto>
 }

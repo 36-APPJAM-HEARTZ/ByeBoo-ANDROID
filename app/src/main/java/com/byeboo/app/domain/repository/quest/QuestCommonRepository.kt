@@ -6,6 +6,8 @@ import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.QuestLikeModel
+import com.byeboo.app.domain.model.quest.QuestLikeUpdateModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,6 +15,7 @@ interface QuestCommonRepository {
     val answersFlow: StateFlow<List<QuestAnswerModel>>
     val answerSubmittedEvent: SharedFlow<Long>
     val refreshEvent: SharedFlow<Unit>
+    val likeUpdatedEvent: SharedFlow<QuestLikeUpdateModel>
 
     suspend fun uploadQuestCommonAnswer(
         questId: Long,
@@ -55,4 +58,6 @@ interface QuestCommonRepository {
     ): Result<Unit>
 
     fun getCachedMyAnswer(answerId: Long): QuestAnswerModel?
+
+    suspend fun updateAnswerLike(answerId: Long): Result<QuestLikeModel>
 }
