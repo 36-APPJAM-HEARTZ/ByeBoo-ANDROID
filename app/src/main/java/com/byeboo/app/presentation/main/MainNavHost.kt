@@ -11,6 +11,7 @@ import com.byeboo.app.presentation.auth.navigation.authGraph
 import com.byeboo.app.presentation.home.navigation.Home
 import com.byeboo.app.presentation.home.navigation.homeGraph
 import com.byeboo.app.presentation.mypage.navigation.myPageGraph
+import com.byeboo.app.presentation.notification.navigation.notificationGraph
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestReview
 import com.byeboo.app.presentation.offboarding.navigation.offboardingGraph
 import com.byeboo.app.presentation.quest.navigation.questGraph
@@ -95,6 +96,7 @@ fun MainNavHost(
             },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
+            navigateToNotificationList = { navigator.navigateToNotificationList(keepStackNavOptions)},
             paddingValues = paddingValues,
         )
 
@@ -269,6 +271,11 @@ fun MainNavHost(
         tutorialGraph(
             navigateToUp = navigator::navigateUp,
             paddingValues = paddingValues,
+        )
+
+        notificationGraph(
+            navigateToHome = navigator::popBackStack,
+            paddingValues = paddingValues
         )
     }
 }

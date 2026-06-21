@@ -6,3 +6,8 @@ import kotlinx.collections.immutable.persistentListOf
 data class NotificationUiState(
     val notificationList: ImmutableList<NotificationModel> = persistentListOf(),
 )
+
+
+sealed interface NotificationSideEffect {
+    data object NavigateToHome: NotificationSideEffect
+}

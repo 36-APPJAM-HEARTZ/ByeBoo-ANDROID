@@ -19,6 +19,7 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToBlockedUsers
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
+import com.byeboo.app.presentation.notification.navigation.navigateToNotificationList
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
@@ -113,6 +114,10 @@ class MainNavigator(
 
     fun navigateUp() {
         navController.navigateUp()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
     }
 
     fun navigateToTerms(navOptions: NavOptions) {
@@ -316,6 +321,10 @@ class MainNavigator(
 
     fun navigateToSplash(navOptions: NavOptions) {
         navController.navigateToSplash(navOptions)
+    }
+
+    fun navigateToNotificationList(navOptions: NavOptions) {
+        navController.navigateToNotificationList(navOptions)
     }
 }
 
