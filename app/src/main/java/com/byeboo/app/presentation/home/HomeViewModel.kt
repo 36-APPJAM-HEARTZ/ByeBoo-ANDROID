@@ -23,172 +23,180 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel
-    @Inject
-    constructor(
-        private val userRepository: UserRepository,
-        private val questStateRepository: QuestStateRepository,
-        private val mixpanelUtil: MixpanelUtil,
-    ) : ViewModel() {
-        private val _uiState = MutableStateFlow(HomeUiState())
-        val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+@Inject
+constructor(
+    private val userRepository: UserRepository,
+    private val questStateRepository: QuestStateRepository,
+    private val mixpanelUtil: MixpanelUtil,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-        private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
-        val sideEffect = _sideEffect.asSharedFlow()
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
-        init {
-            viewModelScope.launch {
-                userRepository.getNickname().distinctUntilChanged().collect { nickname ->
-                    _uiState.update {
-                        it.copy(nickname = nickname.ifEmpty { "하츠핑" })
-                    }
-                }
-            }
-            loadInitialData()
-        }
-
-        fun refresh() {
-            loadInitialData()
-        }
-
-        private fun loadInitialData() {
-            viewModelScope.launch {
-                val journey = questStateRepository.getUserJourney() ?: "재회 준비"
-                val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
-
-                var status = HomeStatus.INITIAL_START
-                var currentStep = 0L
-                var hasError = false
-
-                questStateRepository
-                    .getQuestCount()
-                    .onSuccess { model ->
-                        status = HomeStatus.from(model.userCurrentStatus)
-                        currentStep = model.count
-                        val journeyStatus = status.toJourneyStatusType()
-                        updateJourneyStatus(journeyStatus)
-                        mixpanelUtil.trackEvent(
-                            eventName = "home_pageview",
-                            properties =
-                                mapOf(
-                                    "is_first_pageview" to false,
-                                    "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패"),
-                                ),
-                        )
-                    }.onFailure { e ->
-                        val errorMessage = e.message.orEmpty()
-                        if (!errorMessage.contains("HTTP 404")) {
-                            hasError = true
-                            _sideEffect.emit(
-                                HomeSideEffect.ShowSnackBar(
-                                    snackBarType = CustomSnackBarType.ALERT,
-                                ),
-                            )
-                        }
-                    }
-
+    init {
+        viewModelScope.launch {
+            userRepository.getNickname().distinctUntilChanged().collect { nickname ->
                 _uiState.update {
-                    it.copy(
-                        journey = journey,
-                        status = status,
-                        currentStep = currentStep,
-                        totalSteps = 30,
-                        hasSeenAboutHelp = hasSeenAboutHelp,
-                        isLoading = false,
-                        hasError = hasError,
-                    )
+                    it.copy(nickname = nickname.ifEmpty { "하츠핑" })
                 }
             }
         }
+        loadInitialData()
+    }
 
-        private fun updateJourneyStatus(newStatus: JourneyStatusType) {
-            viewModelScope.launch {
-                runCatching {
-                    val oldStatus = questStateRepository.getUserJourneyStatus().first()
-                    if (oldStatus != newStatus) {
-                        questStateRepository.updateUserJourneyStatus(newStatus)
-                    }
+    fun refresh() {
+        loadInitialData()
+    }
+
+    private fun loadInitialData() {
+        viewModelScope.launch {
+            val journey = questStateRepository.getUserJourney() ?: "재회 준비"
+            val hasSeenAboutHelp = userRepository.hasSeenAboutHelp()
+
+            var status = HomeStatus.INITIAL_START
+            var currentStep = 0L
+            var hasError = false
+
+            questStateRepository
+                .getQuestCount()
+                .onSuccess { model ->
+                    status = HomeStatus.from(model.userCurrentStatus)
+                    currentStep = model.count
+                    val journeyStatus = status.toJourneyStatusType()
+                    updateJourneyStatus(journeyStatus)
+                    mixpanelUtil.trackEvent(
+                        eventName = "home_pageview",
+                        properties =
+                            mapOf(
+                                "is_first_pageview" to false,
+                                "journey_type" to (questStateRepository.getUserJourney()
+                                    ?: "추적 실패"),
+                            ),
+                    )
                 }.onFailure { e ->
+                    val errorMessage = e.message.orEmpty()
+                    if (!errorMessage.contains("HTTP 404")) {
+                        hasError = true
+                        _sideEffect.emit(
+                            HomeSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
+                        )
+                    }
                 }
-            }
-        }
 
-        private fun HomeStatus.toJourneyStatusType(): JourneyStatusType =
-            when (this) {
-                HomeStatus.INITIAL_START -> JourneyStatusType.BEFORE_START
-                HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
-                HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
-            }
-
-        fun onClickQuest() {
-            viewModelScope.launch {
-                _sideEffect.emit(HomeSideEffect.NavigateToQuest)
-            }
-        }
-
-        fun onClickQuestStart() {
-            viewModelScope.launch {
-                mixpanelUtil.trackEvent(
-                    eventName = "journey_start_pageview",
-                    properties =
-                        mapOf(
-                            "journey_type" to _uiState.value.journey,
-                        ),
+            _uiState.update {
+                it.copy(
+                    journey = journey,
+                    status = status,
+                    currentStep = currentStep,
+                    totalSteps = 30,
+                    hasSeenAboutHelp = hasSeenAboutHelp,
+                    isLoading = false,
+                    hasError = hasError,
                 )
-                _sideEffect.emit(HomeSideEffect.NavigateToQuestStart(null))
-            }
-        }
-
-        fun onHelpIconClicked() {
-            viewModelScope.launch {
-                mixpanelUtil.trackEvent("tutorial_icon_click")
-                mixpanelUtil.trackEvent("tutorial_pageview")
-                userRepository.setHasSeenAboutHelp(true)
-                _uiState.update { it.copy(hasSeenAboutHelp = true) }
-                _sideEffect.emit(HomeSideEffect.NavigateToTutorial)
-            }
-        }
-
-        fun onOffboardingNewJourneyClicked() {
-            viewModelScope.launch {
-                _sideEffect.emit(HomeSideEffect.NavigateToOffboardingNewJourney)
-            }
-        }
-
-        fun onLottieClicked() {
-            viewModelScope.launch {
-                _uiState.update {
-                    it.copy(
-                        showBubble = false,
-                    )
-                }
-
-                delay(600)
-
-                _uiState.update {
-                    it.copy(
-                        isBubbleClicked = true,
-                        isBubbleEnabled = false,
-                        showBubble = true,
-                    )
-                }
-
-                delay(3000)
-
-                _uiState.update {
-                    it.copy(
-                        showBubble = false,
-                    )
-                }
-
-                delay(600)
-
-                _uiState.update {
-                    it.copy(
-                        isBubbleClicked = false,
-                        isBubbleEnabled = true,
-                        showBubble = true,
-                    )
-                }
             }
         }
     }
+
+    private fun updateJourneyStatus(newStatus: JourneyStatusType) {
+        viewModelScope.launch {
+            runCatching {
+                val oldStatus = questStateRepository.getUserJourneyStatus().first()
+                if (oldStatus != newStatus) {
+                    questStateRepository.updateUserJourneyStatus(newStatus)
+                }
+            }.onFailure { e ->
+            }
+        }
+    }
+
+    private fun HomeStatus.toJourneyStatusType(): JourneyStatusType =
+        when (this) {
+            HomeStatus.INITIAL_START -> JourneyStatusType.BEFORE_START
+            HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
+            HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
+        }
+
+
+    fun onNotificationIconClicked() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToNotificationList)
+        }
+    }
+
+    fun onClickQuest() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToQuest)
+        }
+    }
+
+    fun onClickQuestStart() {
+        viewModelScope.launch {
+            mixpanelUtil.trackEvent(
+                eventName = "journey_start_pageview",
+                properties =
+                    mapOf(
+                        "journey_type" to _uiState.value.journey,
+                    ),
+            )
+            _sideEffect.emit(HomeSideEffect.NavigateToQuestStart(null))
+        }
+    }
+
+    fun onHelpIconClicked() {
+        viewModelScope.launch {
+            mixpanelUtil.trackEvent("tutorial_icon_click")
+            mixpanelUtil.trackEvent("tutorial_pageview")
+            userRepository.setHasSeenAboutHelp(true)
+            _uiState.update { it.copy(hasSeenAboutHelp = true) }
+            _sideEffect.emit(HomeSideEffect.NavigateToTutorial)
+        }
+    }
+
+    fun onOffboardingNewJourneyClicked() {
+        viewModelScope.launch {
+            _sideEffect.emit(HomeSideEffect.NavigateToOffboardingNewJourney)
+        }
+    }
+
+    fun onLottieClicked() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    showBubble = false,
+                )
+            }
+
+            delay(600)
+
+            _uiState.update {
+                it.copy(
+                    isBubbleClicked = true,
+                    isBubbleEnabled = false,
+                    showBubble = true,
+                )
+            }
+
+            delay(3000)
+
+            _uiState.update {
+                it.copy(
+                    showBubble = false,
+                )
+            }
+
+            delay(600)
+
+            _uiState.update {
+                it.copy(
+                    isBubbleClicked = false,
+                    isBubbleEnabled = true,
+                    showBubble = true,
+                )
+            }
+        }
+    }
+}

@@ -67,6 +67,7 @@ fun HomeRoute(
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
+    navigateToNotificationList: () -> Unit,
     paddingValues: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -95,6 +96,7 @@ fun HomeRoute(
                 is HomeSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
+                is HomeSideEffect.NavigateToNotificationList -> navigateToNotificationList()
                 is HomeSideEffect.ShowSnackBar -> {
                     showSnackBar(effect.snackBarType)
                 }
@@ -110,7 +112,7 @@ fun HomeRoute(
         paddingValues = paddingValues,
         onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         onLottieClick = viewModel::onLottieClicked,
-        onNotificationIconClick = { /*Todo: 알림*/ },
+        onNotificationIconClick = viewModel::onNotificationIconClicked,
     )
 }
 

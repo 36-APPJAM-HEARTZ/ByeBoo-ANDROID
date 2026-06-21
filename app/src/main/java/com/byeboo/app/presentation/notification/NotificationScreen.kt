@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,19 +30,31 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun NotificationRoute(
+    navigateToHome: () -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: NotificationViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+
+            when (effect) {
+                is NotificationSideEffect.NavigateToHome -> navigateToHome()
+            }
+
+        }
+    }
+
     NotificationScreen(
         uiState = uiState,
         paddingValues = paddingValues,
-        onBackClick = { /*Todo : back action */ },
+        onBackClick = viewModel::onBackClicked,
         onAllReadClick = {},
         modifier = modifier,
     )
