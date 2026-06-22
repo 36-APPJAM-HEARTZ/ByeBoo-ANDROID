@@ -15,6 +15,12 @@ data class QuestMyCommonAnswerResponseDto(
 
 @Serializable
 data class QuestAnswerItemResponseDto(
+    @SerialName("likeCount")
+    val likeCount: Int,
+    @SerialName("commentCount")
+    val commentCount: Int,
+    @SerialName("isLiked")
+    val isLiked: Boolean,
     @SerialName("question")
     val question: String,
     @SerialName("answerId")

@@ -27,7 +27,7 @@ interface QuestCommonService {
         @Body request: QuestCommonRequestDto,
     ): NullableBaseResponse<Unit>
 
-    @GET("/api/v1/users/me/common-quests")
+    @GET("/api/v2/users/me/common-quests")
     suspend fun getQuestMyCommonAnswer(
         @Query("cursor") cursor: Long?,
         @Query("limit") limit: Int = 10,

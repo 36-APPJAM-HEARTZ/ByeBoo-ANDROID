@@ -76,21 +76,28 @@ fun MyAnswerItem(
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        Text(
-            text = answer.writtenAt,
-            color = ByeBooTheme.colors.gray400,
-            style = ByeBooTheme.typography.cap2,
-        )
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = answer.writtenAt,
+                color = ByeBooTheme.colors.gray400,
+                style = ByeBooTheme.typography.cap2,
+            )
 
-        Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-
-        ReactionCountButton(
-            isLiked = answer.isLiked,
-            heartCount = answer.heartCount,
-            onHeartClick = onHeartClick,
-            commentCount = answer.commentCount,
-            onCommentClick = onCommentClick,
-            answerId = answer.answerId,
-        )
+            ReactionCountButton(
+                isLiked = answer.isLiked,
+                heartCount = answer.heartCount,
+                onHeartClick = onHeartClick,
+                commentCount = answer.commentCount,
+                onCommentClick =
+                    onCommentClick.let {
+                        { it(answer.answerId) }
+                    },
+            )
+        }
     }
 }

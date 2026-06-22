@@ -36,6 +36,9 @@ data class QuestCommonMyAnswerModel(
 )
 
 data class QuestAnswerModel(
+    val heartCount: Int,
+    val commentCount: Int,
+    val isLiked: Boolean,
     val question: String,
     val answerId: Long,
     val writtenAt: String,
