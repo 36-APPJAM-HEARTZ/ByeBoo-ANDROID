@@ -2,6 +2,7 @@ package com.byeboo.app.data.mapper.quest
 
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentDetailDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
@@ -25,6 +26,7 @@ import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestCommonDetailCommentModel
 import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
 import com.byeboo.app.domain.model.quest.QuestLikeModel
+import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -139,6 +141,12 @@ fun QuestLikeResponseDto.toDomain(): QuestLikeModel =
     QuestLikeModel(
         heartCount = this.likeCount,
         isLiked = this.isLiked,
+    )
+
+fun ReportCommentQuestModel.toData(): ReportCommonQuestRequestDto =
+    ReportCommonQuestRequestDto(
+        targetType = reportType.toString(),
+        targetId = targetId
     )
 
 private fun String.toLocalDateTime(): LocalDateTime =

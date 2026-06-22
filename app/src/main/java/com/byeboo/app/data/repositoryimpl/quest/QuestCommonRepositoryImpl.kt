@@ -14,6 +14,7 @@ import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestLikeModel
 import com.byeboo.app.domain.model.quest.QuestLikeUpdateModel
+import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -163,9 +164,9 @@ class QuestCommonRepositoryImpl
                 onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
             )
 
-        override suspend fun reportCommonQuest(answerId: Long): Result<Unit> =
+        override suspend fun reportCommonQuest(request: ReportCommentQuestModel): Result<Unit> =
             runCatching {
-                val response = questCommonDataSource.reportCommonQuest(answerId)
+                val response = questCommonDataSource.reportCommonQuest(request.toData())
                 if (!response.success) throw Exception(response.message)
                 _refreshEvent.emit(Unit)
             }.fold(

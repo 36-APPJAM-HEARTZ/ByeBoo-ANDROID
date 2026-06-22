@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.model.quest.ReportType
+import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
@@ -267,8 +270,12 @@ class CommonOtherAnswerViewModel
                     }
 
                     OtherPostOption.REPORT -> {
+                        val request = ReportCommentQuestModel(
+                            reportType = ReportType.COMMENT,
+                            targetId = answerId
+                        )
                         commonQuestRepository
-                            .reportCommonQuest(answerId)
+                            .reportCommonQuest(request)
                             .onSuccess {
                                 _sideEffect.emit(
                                     CommonAnswerSideEffect.ShowSnackBar(

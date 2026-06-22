@@ -8,6 +8,7 @@ import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
 import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestLikeModel
 import com.byeboo.app.domain.model.quest.QuestLikeUpdateModel
+import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -43,7 +44,7 @@ interface QuestCommonRepository {
 
     suspend fun updateBlockedUser(blockedUserId: Long): Result<Unit>
 
-    suspend fun reportCommonQuest(answerId: Long): Result<Unit>
+    suspend fun reportCommonQuest(request: ReportCommentQuestModel): Result<Unit>
 
     suspend fun uploadComment(
         content: String,

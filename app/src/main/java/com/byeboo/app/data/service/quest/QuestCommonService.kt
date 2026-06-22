@@ -6,6 +6,7 @@ import com.byeboo.app.data.dto.request.quest.QuestCommentReplyRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
@@ -60,9 +61,9 @@ interface QuestCommonService {
         @Path("blockedUserId") blockedUserId: Long,
     ): NullableBaseResponse<Unit>
 
-    @POST("/api/v1/reports/common-quests/{answerId}")
+    @POST("/api/v2/reports")
     suspend fun reportCommonQuest(
-        @Path("answerId") answerId: Long,
+        @Body request: ReportCommonQuestRequestDto
     ): NullableBaseResponse<Unit>
 
     @POST("/api/v1/comments")

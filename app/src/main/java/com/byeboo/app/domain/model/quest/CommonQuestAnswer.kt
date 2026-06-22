@@ -1,5 +1,6 @@
 package com.byeboo.app.domain.model.quest
 
+import com.byeboo.app.core.model.quest.ReportType
 import java.time.LocalDateTime
 
 data class CommonQuestModel(
@@ -99,4 +100,9 @@ data class CommentReplyModel(
     val profileIcon: String,
     val content: String,
     val writtenAt: LocalDateTime,
+)
+
+data class ReportCommentQuestModel(
+    val reportType: ReportType,
+    val targetId: Long
 )
