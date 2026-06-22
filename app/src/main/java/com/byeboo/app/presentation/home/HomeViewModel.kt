@@ -1,11 +1,13 @@
 package com.byeboo.app.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.home.HomeStatus
+import com.byeboo.app.domain.notification.NotificationRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +30,7 @@ class HomeViewModel
 constructor(
     private val userRepository: UserRepository,
     private val questStateRepository: QuestStateRepository,
+    private val notificationRepository: NotificationRepository,
     private val mixpanelUtil: MixpanelUtil,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -43,6 +47,15 @@ constructor(
                 }
             }
         }
+
+        viewModelScope.launch {
+            notificationRepository.checkHasUnreadNotifications().onSuccess { hasNewNotification ->
+                _uiState.update {
+                    it.copy(hasNewNotification = hasNewNotification)
+                }
+            }
+        }
+
         loadInitialData()
     }
 
