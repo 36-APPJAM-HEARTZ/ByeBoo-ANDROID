@@ -4,6 +4,7 @@ import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.notification.NotificationRequestDto
 import com.byeboo.app.data.dto.response.notification.NotificationListResponseDto
+import com.byeboo.app.data.dto.response.notification.NotificationReadStatusResponseDto
 import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -30,6 +31,10 @@ interface NotificationService {
     @PATCH("/api/v1/users/alarm")
     suspend fun allowQuestAlarm(): BaseResponse<NotificationResponseDto>
 
+    @GET("/api/v1/notifications/unread/status")
+    suspend fun getReadStatusNotification(): BaseResponse<NotificationReadStatusResponseDto>
+
     @GET("/api/v1/notifications")
     suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto>
+
 }
