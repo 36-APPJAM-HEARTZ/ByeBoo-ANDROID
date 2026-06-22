@@ -3,8 +3,10 @@ package com.byeboo.app.data.service.notification
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.request.notification.NotificationRequestDto
+import com.byeboo.app.data.dto.response.notification.NotificationListResponseDto
 import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -27,4 +29,7 @@ interface NotificationService {
 
     @PATCH("/api/v1/users/alarm")
     suspend fun allowQuestAlarm(): BaseResponse<NotificationResponseDto>
+
+    @GET("/api/v1/notifications")
+    suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto>
 }
