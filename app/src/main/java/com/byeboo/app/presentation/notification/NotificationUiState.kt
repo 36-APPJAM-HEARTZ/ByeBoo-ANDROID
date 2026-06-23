@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class NotificationUiState(
     val notificationList: ImmutableList<NotificationUiModel> = persistentListOf(),
+    val isAllNotificationRead: Boolean = false
 )
 
 sealed interface NotificationSideEffect {

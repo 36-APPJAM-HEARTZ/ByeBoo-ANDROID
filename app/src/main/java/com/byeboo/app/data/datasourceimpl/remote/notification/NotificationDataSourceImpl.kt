@@ -2,6 +2,7 @@ package com.byeboo.app.data.datasourceimpl.remote.notification
 
 import com.byeboo.app.data.datasource.remote.notification.NotificationDataSource
 import com.byeboo.app.data.dto.base.BaseResponse
+import com.byeboo.app.data.dto.base.NullableBaseResponse
 import com.byeboo.app.data.dto.response.notification.NotificationListResponseDto
 import com.byeboo.app.data.dto.response.notification.NotificationReadStatusResponseDto
 import com.byeboo.app.data.service.notification.NotificationService
@@ -15,4 +16,7 @@ class NotificationDataSourceImpl @Inject constructor(
 
     override suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto> =
         notificationService.getNotificationList()
+
+    override suspend fun patchAllNotificationsRead(): NullableBaseResponse<Unit> =
+        notificationService.updateAllNotificationRead()
 }

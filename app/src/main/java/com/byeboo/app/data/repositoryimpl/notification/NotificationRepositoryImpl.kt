@@ -31,4 +31,15 @@ class NotificationRepositoryImpl
                 throw Exception(response.message)
             }
         }
+
+    override suspend fun markAllNotificationsAsRead(): Result<Unit> =
+        runCatching {
+            val response = notificationDataSource.patchAllNotificationsRead()
+
+            if (response.success) {
+                return@runCatching
+            } else {
+                throw Exception(response.message)
+            }
+        }
 }

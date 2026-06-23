@@ -59,7 +59,7 @@ fun NotificationRoute(
         uiState = uiState,
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
-        onAllReadClick = {},
+        onAllReadClick = viewModel::onAllNotificationsReadClicked,
         modifier = modifier,
     )
 }
@@ -133,7 +133,7 @@ private fun NotificationListHeader(onAllReadClick: () -> Unit) {
             style = ByeBooTheme.typography.cap1,
             modifier =
                 Modifier.noRippleClickable(
-                    onClick = {}, // Todo : 클릭 시 동작
+                    onClick = onAllReadClick
                 ),
         )
     }
@@ -160,7 +160,7 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { notification.landingUrl },
+                    onClick = { notification.landingUrl }
                 )
             }
         }

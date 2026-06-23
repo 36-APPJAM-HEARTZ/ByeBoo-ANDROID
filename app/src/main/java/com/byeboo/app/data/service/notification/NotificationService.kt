@@ -37,4 +37,7 @@ interface NotificationService {
     @GET("/api/v1/notifications")
     suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto>
 
+    @PATCH("/api/v1/notifications/read-all")
+    suspend fun updateAllNotificationRead(): NullableBaseResponse<Unit>
+
 }

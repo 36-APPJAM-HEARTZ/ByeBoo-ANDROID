@@ -47,6 +47,23 @@ constructor(
             _sideEffect.emit(NotificationSideEffect.NavigateToHome)
         }
     }
+
+    fun onAllNotificationsReadClicked() {
+        viewModelScope.launch {
+            notificationRepository.markAllNotificationsAsRead().onSuccess {
+                _uiState.update { notificationState ->
+                    val updatedNotificationList = notificationState.notificationList.map { notification->
+                        notification.copy(isRead = true)
+                    }.toPersistentList()
+
+                    notificationState.copy(notificationList = updatedNotificationList)
+                }
+            }
+        }
+        _uiState.update { it.copy(
+            isAllNotificationRead = true
+        ) }
+    }
 }
 
 
