@@ -1,6 +1,6 @@
 package com.byeboo.app.domain.model.notification
 
-data class Notification(
+data class NotificationModel(
     val notificationId: Long,
     val content: String,
     val title: String,

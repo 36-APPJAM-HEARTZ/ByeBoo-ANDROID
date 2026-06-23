@@ -26,7 +26,7 @@ import com.byeboo.app.presentation.quest.util.iconResId
 
 @Composable
 fun NotificationCard(
-    notification: NotificationModel,
+    notification: NotificationUiModel,
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -34,7 +34,7 @@ fun NotificationCard(
         modifier =
             modifier
                 .fillMaxWidth()
-                .noRippleClickable { onClick(notification.landingLink) },
+                .noRippleClickable { onClick(notification.landingUrl) },
         color = if (notification.isRead) ByeBooTheme.colors.whiteAlpha5 else ByeBooTheme.colors.primary300Alpha20,
         shape = RoundedCornerShape(12.dp),
     ) {
@@ -54,7 +54,7 @@ fun NotificationCard(
                 Icon(
                     imageVector =
                         ImageVector.vectorResource(
-                            id = notification.iconResId,
+                            id = notification.notificationType.iconResId,
                         ),
                     contentDescription = null,
                     tint = Color.Unspecified,

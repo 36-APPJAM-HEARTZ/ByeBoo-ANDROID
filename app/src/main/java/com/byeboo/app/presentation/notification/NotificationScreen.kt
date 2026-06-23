@@ -51,6 +51,10 @@ fun NotificationRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.fetchNotificationList()
+    }
+
     NotificationScreen(
         uiState = uiState,
         paddingValues = paddingValues,
@@ -156,7 +160,7 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { notification.landingLink },
+                    onClick = { notification.landingUrl },
                 )
             }
         }

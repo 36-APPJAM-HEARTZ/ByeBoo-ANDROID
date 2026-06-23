@@ -4,7 +4,7 @@ import com.byeboo.app.data.dto.request.notification.NotificationRequestDto
 import com.byeboo.app.data.dto.response.notification.NotificationResponseDto
 import com.byeboo.app.data.dto.response.notification.NotificationsDto
 import com.byeboo.app.domain.model.notification.FcmTokenModel
-import com.byeboo.app.domain.model.notification.Notification
+import com.byeboo.app.domain.model.notification.NotificationModel
 import com.byeboo.app.domain.model.notification.NotificationSetting
 import com.byeboo.app.domain.model.notification.NotificationType
 
@@ -18,8 +18,8 @@ fun NotificationResponseDto.toDomain(): NotificationSetting =
         alarmEnabled = this.alarmEnabled,
     )
 
-fun NotificationsDto.toDomain(): Notification =
-    Notification(
+fun NotificationsDto.toDomain(): NotificationModel =
+    NotificationModel(
         notificationId = this.notificationId,
         content = this.content,
         title = this.title,

@@ -2,7 +2,7 @@ package com.byeboo.app.data.repositoryimpl.notification
 
 import com.byeboo.app.data.datasource.remote.notification.NotificationDataSource
 import com.byeboo.app.data.mapper.notification.toDomain
-import com.byeboo.app.domain.model.notification.Notification
+import com.byeboo.app.domain.model.notification.NotificationModel
 import com.byeboo.app.domain.notification.NotificationRepository
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class NotificationRepositoryImpl
             }
         }
 
-    override suspend fun getNotificationList(): Result<List<Notification>> =
+    override suspend fun getNotificationList(): Result<List<NotificationModel>> =
         runCatching {
             val response = notificationDataSource.getNotificationList()
 

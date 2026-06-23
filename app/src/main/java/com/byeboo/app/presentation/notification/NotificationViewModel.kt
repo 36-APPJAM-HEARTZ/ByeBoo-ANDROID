@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.notification.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.coroutineScope
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,11 +28,19 @@ constructor(
     val sideEffect: SharedFlow<NotificationSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        viewModelScope.launch {
-            notificationRepository.getNotificationList()
-        }
+        fetchNotificationList()
     }
 
+    fun fetchNotificationList() {
+        viewModelScope.launch {
+            notificationRepository.getNotificationList()
+                .onSuccess { domainList ->
+                    _uiState.update { it.copy(notificationList = domainList.map { domainList ->
+                        domainList.toUiModel() }.toPersistentList())
+                    }
+                }
+        }
+    }
 
     fun onBackClicked() {
         viewModelScope.launch {
