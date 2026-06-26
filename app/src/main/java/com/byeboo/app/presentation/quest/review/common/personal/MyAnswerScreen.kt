@@ -73,7 +73,7 @@ fun MyAnswerScreen(
     onBackClick: () -> Unit,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
-    onHeartClick: () -> Unit,
+    onHeartClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()

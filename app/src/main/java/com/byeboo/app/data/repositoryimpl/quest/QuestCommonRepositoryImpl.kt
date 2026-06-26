@@ -226,6 +226,19 @@ class QuestCommonRepositoryImpl
                 val response = questCommonDataSource.updateAnswerLike(answerId)
                 if (!response.success) throw Exception(response.message)
                 val result = response.data.toDomain()
+                _answersFlow.update { currentList ->
+                    currentList.map { answer ->
+                        if (answer.answerId == answerId) {
+                            answer.copy(
+                                heartCount = result.heartCount,
+                                isLiked = result.isLiked,
+                            )
+                        } else {
+                            answer
+                        }
+                    }
+                }
+
                 _likeUpdatedEvent.emit(
                     QuestLikeUpdateModel(
                         answerId = answerId,
