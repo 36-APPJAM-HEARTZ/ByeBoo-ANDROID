@@ -99,7 +99,7 @@ class MyAnswerViewModel
 
         fun onMyAnswerContentClicked(answerId: Long) {
             viewModelScope.launch {
-                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
+                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestCommonAnswer(answerId))
             }
         }
 

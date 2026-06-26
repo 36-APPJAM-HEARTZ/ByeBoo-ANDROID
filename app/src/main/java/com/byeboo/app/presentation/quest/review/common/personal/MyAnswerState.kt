@@ -19,7 +19,7 @@ sealed interface MyAnswerSideEffect {
 
     data object NavigateToQuest : MyAnswerSideEffect
 
-    data class NavigateToQuestMyAnswerDetail(
+    data class NavigateToQuestCommonAnswer(
         val answerId: Long,
     ) : MyAnswerSideEffect
 
