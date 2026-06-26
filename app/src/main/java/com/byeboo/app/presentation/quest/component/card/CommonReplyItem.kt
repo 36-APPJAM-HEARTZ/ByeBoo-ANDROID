@@ -42,9 +42,9 @@ import com.byeboo.app.presentation.quest.model.CommonReplyModel
 fun CommonReplyItem(
     reply: CommonReplyModel,
     onMoreOptionsClick: () -> Unit,
+    modifier: Modifier = Modifier,
     onCommentClick: () -> Unit = {},
     isReply: Boolean = false,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -142,7 +142,6 @@ fun CommonReplyItem(
                     maxLines = 5,
                     modifier = Modifier.fillMaxWidth(),
                     onTextLayout = { result ->
-                        val overflow = result.didOverflowHeight
                         if (measuredLayoutResult == null) measuredLayoutResult = result
                     },
                 )
