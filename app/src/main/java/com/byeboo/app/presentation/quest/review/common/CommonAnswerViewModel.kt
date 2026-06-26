@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.other
+package com.byeboo.app.presentation.quest.review.common
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,10 +6,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.ReportType
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.CommonQuestCommentEditModel
 import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
+import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.presentation.quest.component.type.MoreOptionTarget
+import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.component.type.OtherPostOption
+import com.byeboo.app.presentation.quest.component.type.PostOption
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.navigation.QuestCommonAnswer
@@ -33,6 +37,7 @@ class CommonOtherAnswerViewModel
         savedStateHandle: SavedStateHandle,
         private val commonQuestRepository: QuestCommonRepository,
         private val mapper: QuestUiModelMapper,
+        private val userRepository: UserRepository,
     ) : ViewModel() {
         private val routeArgs = savedStateHandle.toRoute<QuestCommonAnswer>()
         private val answerId: Long = routeArgs.answerId
@@ -44,7 +49,16 @@ class CommonOtherAnswerViewModel
         val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
 
         init {
+            loadCurrentUserId()
             loadCommonAnswer()
+        }
+
+        private fun loadCurrentUserId() {
+            viewModelScope.launch {
+                userRepository.getUserId()?.let { userId ->
+                    _uiState.update { it.copy(currentUserId = userId) }
+                }
+            }
         }
 
         private fun loadCommonAnswer() {
@@ -96,16 +110,16 @@ class CommonOtherAnswerViewModel
 
         fun onBackClicked() {
             viewModelScope.launch {
-                _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+                _sideEffect.emit(CommonAnswerSideEffect.NavigateUp)
             }
         }
 
-        fun onClickMoreOptions() {
-            _uiState.update { it.copy(showBottomSheet = true) }
+        fun onClickMoreOptions(target: MoreOptionTarget) {
+            _uiState.update { it.copy(selectedTarget = target) }
         }
 
         fun onDismissBottomSheet() {
-            _uiState.update { it.copy(showBottomSheet = false) }
+            _uiState.update { it.copy(selectedTarget = null) }
         }
 
         fun onHeartClicked() {
@@ -142,14 +156,14 @@ class CommonOtherAnswerViewModel
             }
         }
 
-        fun onCommentClick(reply: CommonReplyModel) {
+        fun onCommentClicked(comment: CommonReplyModel) {
             _uiState.update {
                 it.copy(
                     showReplyBottomSheet = true,
-                    selectedReply = reply,
+                    selectedComment = comment,
                 )
             }
-            loadCommentReplies(reply.replyId)
+            loadCommentReplies(commentId = comment.replyId)
         }
 
         private fun loadCommentReplies(commentId: Long) {
@@ -159,11 +173,11 @@ class CommonOtherAnswerViewModel
                     .onSuccess { result ->
                         _uiState.update {
                             it.copy(
-                                replies =
+                                selectedReplies =
                                     result.replies
                                         .map { reply ->
                                             CommonReplyModel(
-                                                replyId = reply.commentId,
+                                                replyId = reply.replyId,
                                                 writerId = reply.writerId,
                                                 writer = reply.writer,
                                                 profileIconRes = mapper.mapToIconRes(reply.profileIcon),
@@ -186,12 +200,12 @@ class CommonOtherAnswerViewModel
             _uiState.update {
                 it.copy(
                     showReplyBottomSheet = false,
-                    selectedReply = null,
+                    selectedComment = null,
                 )
             }
         }
 
-        fun onCompleteComment(content: String) {
+        fun onCommentComplete(content: String) {
             viewModelScope.launch {
                 commonQuestRepository
                     .uploadComment(
@@ -209,8 +223,8 @@ class CommonOtherAnswerViewModel
             }
         }
 
-        fun onCompleteReply(content: String) {
-            val commentId = uiState.value.selectedReply?.replyId ?: return
+        fun onReplyComplete(content: String) {
+            val commentId = uiState.value.selectedComment?.replyId ?: return
             viewModelScope.launch {
                 commonQuestRepository
                     .uploadCommentReply(
@@ -222,6 +236,48 @@ class CommonOtherAnswerViewModel
                     }.onFailure { exception ->
                         _sideEffect.emit(
                             CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        fun onEditCommentComplete(content: String) {
+            val editingComment = uiState.value.editingComment ?: return
+
+            viewModelScope.launch {
+                commonQuestRepository
+                    .updateCommonQuestComment(
+                        commentId = editingComment.target.id,
+                        request = CommonQuestCommentEditModel(content = content),
+                    ).onSuccess {
+                        _uiState.update {
+                            it.copy(
+                                editingComment = null,
+                            )
+                        }
+
+                        when (editingComment.target) {
+                            is MoreOptionTarget.Comment -> {
+                                loadCommonAnswer()
+
+                                if (_uiState.value.showReplyBottomSheet) {
+                                    loadCommentReplies(editingComment.target.id)
+                                }
+                            }
+
+                            is MoreOptionTarget.Reply -> {
+                                uiState.value.selectedComment?.replyId?.let { commentId ->
+                                    loadCommentReplies(commentId)
+                                }
+                            }
+
+                            is MoreOptionTarget.Answer -> Unit
+                        }
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.ShowSnackBar(
+                                CustomSnackBarType.error(exception),
+                            ),
                         )
                     }
             }
@@ -239,24 +295,160 @@ class CommonOtherAnswerViewModel
                                     comment
                                 }
                             }.toImmutableList(),
-                    selectedReply =
-                        state.selectedReply?.let {
+                    selectedComment =
+                        state.selectedComment?.let {
                             if (it.replyId == commentId) it.copy(replyCount = it.replyCount + 1) else it
                         },
                 )
             }
         }
 
-        fun onOptionClicked(option: OtherPostOption) {
+        fun onOptionClicked(option: PostOption) {
+            val target = uiState.value.selectedTarget ?: return
+
+            when (option) {
+                is MyPostOption -> onMyPostOptionClicked(option = option, target = target)
+                is OtherPostOption -> onOtherPostOptionClicked(option = option, target = target)
+            }
+        }
+
+        fun onMyPostOptionClicked(
+            option: MyPostOption,
+            target: MoreOptionTarget,
+        ) {
+            viewModelScope.launch {
+                when (option) {
+                    MyPostOption.EDIT -> onMyPostEditClicked(target)
+
+                    MyPostOption.DELETE -> {
+                        _uiState.update {
+                            it.copy(
+                                showDeleteModal = true,
+                                deleteTarget = target,
+                                selectedTarget = null,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun onMyPostEditClicked(target: MoreOptionTarget) {
             onDismissBottomSheet()
-            val currentWriterId = uiState.value.answer?.writerId ?: return
+
+            viewModelScope.launch {
+                when (target) {
+                    is MoreOptionTarget.Answer -> {
+                        _sideEffect.emit(
+                            CommonAnswerSideEffect.NavigateToQuestCommonEdit(
+                                answerId = answerId,
+                                question = uiState.value.questQuestion,
+                                isEditMode = true,
+                            ),
+                        )
+                    }
+                    is MoreOptionTarget.Comment,
+                    is MoreOptionTarget.Reply,
+                    -> {
+                        val content = findCommentContent(target) ?: return@launch
+
+                        _uiState.update {
+                            it.copy(
+                                editingComment =
+                                    EditingCommentState(
+                                        target = target,
+                                        content = content,
+                                    ),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun findCommentContent(target: MoreOptionTarget): String? =
+            when (target) {
+                is MoreOptionTarget.Comment ->
+                    uiState.value.comments
+                        .firstOrNull { it.replyId == target.id }
+                        ?.content
+                        ?: uiState.value.selectedComment
+                            ?.takeIf { it.replyId == target.id }
+                            ?.content
+
+                is MoreOptionTarget.Reply ->
+                    uiState.value.selectedReplies
+                        .firstOrNull { it.replyId == target.id }
+                        ?.content
+
+                is MoreOptionTarget.Answer -> null
+            }
+
+        fun onDismissDeleteModal() {
+            _uiState.update {
+                it.copy(
+                    showDeleteModal = false,
+                    deleteTarget = null,
+                )
+            }
+        }
+
+        fun onQuestDeleteClicked() {
+            val target = uiState.value.deleteTarget ?: return
+
+            viewModelScope.launch {
+                when (target) {
+                    is MoreOptionTarget.Answer -> {
+                        commonQuestRepository
+                            .deleteQuestCommonAnswer(answerId = answerId)
+                            .onSuccess {
+                                _uiState.update {
+                                    it.copy(
+                                        showDeleteModal = false,
+                                        deleteTarget = null,
+                                    )
+                                }
+                                _sideEffect.emit(CommonAnswerSideEffect.NavigateUp)
+                            }.onFailure {
+                                _sideEffect.emit(CommonAnswerSideEffect.ShowSnackBar(snackBarType = CustomSnackBarType.ALERT))
+                            }
+                    }
+                    is MoreOptionTarget.Comment,
+                    is MoreOptionTarget.Reply,
+                    -> {
+                        commonQuestRepository
+                            .deleteCommonQuestComment(commentId = target.id)
+                            .onSuccess {
+                                _uiState.update {
+                                    it.copy(
+                                        showDeleteModal = false,
+                                        deleteTarget = null,
+                                    )
+                                }
+                                loadCommonAnswer()
+                            }.onFailure { exception ->
+                                _sideEffect.emit(
+                                    CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                                )
+                            }
+                    }
+                }
+            }
+        }
+
+        fun onOtherPostOptionClicked(
+            option: OtherPostOption,
+            target: MoreOptionTarget,
+        ) {
+            onDismissBottomSheet()
+
             viewModelScope.launch {
                 when (option) {
                     OtherPostOption.BLOCK -> {
                         commonQuestRepository
-                            .updateBlockedUser(currentWriterId)
+                            .updateBlockedUser(target.writerId)
                             .onSuccess {
-                                _sideEffect.emit(CommonAnswerSideEffect.NavigateToQuest)
+                                _sideEffect.emit(CommonAnswerSideEffect.NavigateUp)
                                 _sideEffect.emit(
                                     CommonAnswerSideEffect.ShowSnackBar(
                                         snackBarType = CustomSnackBarType.SUCCESS("차단이 완료되었어요. 이에 해당 사용자의 글이 노출되지 않아요."),
@@ -270,10 +462,11 @@ class CommonOtherAnswerViewModel
                     }
 
                     OtherPostOption.REPORT -> {
-                        val request = ReportCommentQuestModel(
-                            reportType = ReportType.COMMENT,
-                            targetId = answerId
-                        )
+                        val request =
+                            ReportCommentQuestModel(
+                                reportType = target.toReportType(),
+                                targetId = target.id,
+                            )
                         commonQuestRepository
                             .reportCommonQuest(request)
                             .onSuccess {
@@ -291,4 +484,11 @@ class CommonOtherAnswerViewModel
                 }
             }
         }
+    }
+
+private fun MoreOptionTarget.toReportType(): ReportType =
+    when (this) {
+        is MoreOptionTarget.Answer -> ReportType.COMMON_QUEST
+        is MoreOptionTarget.Comment -> ReportType.COMMENT
+        is MoreOptionTarget.Reply -> ReportType.COMMENT
     }

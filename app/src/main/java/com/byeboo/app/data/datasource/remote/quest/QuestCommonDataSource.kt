@@ -7,6 +7,7 @@ import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
 import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
+import com.byeboo.app.data.dto.request.quest.UpdateCommonQuestCommentRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
@@ -50,4 +51,11 @@ interface QuestCommonDataSource {
     suspend fun getCommentReplies(commentId: Long): BaseResponse<CommentRepliesResponseDto>
 
     suspend fun updateAnswerLike(answerId: Long): BaseResponse<QuestLikeResponseDto>
+
+    suspend fun deleteCommonQuestComment(commentId: Long): NullableBaseResponse<Unit>
+
+    suspend fun updateCommonQuestComment(
+        commentId: Long,
+        request: UpdateCommonQuestCommentRequestDto,
+    ): NullableBaseResponse<Unit>
 }

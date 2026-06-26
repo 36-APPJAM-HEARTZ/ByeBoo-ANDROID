@@ -53,6 +53,7 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.CommonReplyItem
 import com.byeboo.app.presentation.quest.component.input.CommentInputBar
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
+import com.byeboo.app.presentation.quest.review.common.EditingCommentState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -62,10 +63,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReplyBottomSheet(
     showBottomSheet: Boolean,
-    reply: CommonReplyModel,
+    comment: CommonReplyModel,
     replies: ImmutableList<CommonReplyModel>,
     onDismissRequest: () -> Unit,
-    onCompleteComment: (String) -> Unit,
+    onReplyComplete: (String) -> Unit,
+    onCommentMoreOptionsClick: () -> Unit,
+    onReplyMoreOptionsClick: (CommonReplyModel) -> Unit,
+    editingComment: EditingCommentState?,
+    onEditCommentComplete: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (showBottomSheet) {
@@ -180,6 +185,20 @@ fun ReplyBottomSheet(
                 }
             }
 
+            LaunchedEffect(editingComment) {
+                val editing = editingComment ?: return@LaunchedEffect
+
+                val isEditingCurrentSheetItem =
+                    editing.target.id == comment.replyId ||
+                        replies.any { it.replyId == editing.target.id }
+
+                if (isEditingCurrentSheetItem) {
+                    commentText = editing.content
+                    focusRequester.requestFocus()
+                    keyboardController?.show()
+                }
+            }
+
             Column(
                 modifier =
                     Modifier
@@ -223,8 +242,8 @@ fun ReplyBottomSheet(
                             .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     CommonReplyItem(
-                        reply = reply,
-                        onMoreOptionsClick = {},
+                        reply = comment,
+                        onMoreOptionsClick = onCommentMoreOptionsClick,
                         onCommentClick = {},
                     )
 
@@ -233,7 +252,7 @@ fun ReplyBottomSheet(
                     replies.forEach { replyItem ->
                         CommonReplyItem(
                             reply = replyItem,
-                            onMoreOptionsClick = {},
+                            onMoreOptionsClick = { onReplyMoreOptionsClick(replyItem) },
                             onCommentClick = {},
                             isReply = true,
                         )
@@ -251,7 +270,17 @@ fun ReplyBottomSheet(
                         maxLength = maxLength,
                         onTextChange = { if (it.length <= maxLength) commentText = it },
                         onCompleteClick = {
-                            onCompleteComment(commentText)
+                            val isEditingCurrentSheetItem =
+                                editingComment?.let { editing ->
+                                    editing.target.id == comment.replyId ||
+                                        replies.any { it.replyId == editing.target.id }
+                                } == true
+
+                            if (isEditingCurrentSheetItem) {
+                                onEditCommentComplete(commentText)
+                            } else {
+                                onReplyComplete(commentText)
+                            }
                             contentAlpha = 0f
                             commentText = ""
                             clearKeyboardFocus()

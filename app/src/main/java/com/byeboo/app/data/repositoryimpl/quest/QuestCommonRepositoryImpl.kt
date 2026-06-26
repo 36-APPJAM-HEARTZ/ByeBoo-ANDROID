@@ -7,11 +7,12 @@ import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.mapper.quest.toData
 import com.byeboo.app.data.mapper.quest.toDomain
 import com.byeboo.app.domain.model.quest.CommentRepliesModel
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerEditModel
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerRequestModel
+import com.byeboo.app.domain.model.quest.CommonQuestCommentEditModel
 import com.byeboo.app.domain.model.quest.CommonQuestModel
 import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestLikeModel
 import com.byeboo.app.domain.model.quest.QuestLikeUpdateModel
 import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
@@ -47,7 +48,7 @@ class QuestCommonRepositoryImpl
 
         override suspend fun uploadQuestCommonAnswer(
             questId: Long,
-            request: QuestCommonAnswerRequestModel,
+            request: CommonQuestAnswerRequestModel,
         ): Result<Unit> =
             runCatching {
                 val response =
@@ -93,7 +94,7 @@ class QuestCommonRepositoryImpl
 
         override suspend fun patchQuestCommonAnswer(
             answerId: Long,
-            request: QuestCommonAnswerEditModel,
+            request: CommonQuestAnswerEditModel,
         ): Result<Unit> =
             runCatching {
                 val response =
@@ -235,6 +236,33 @@ class QuestCommonRepositoryImpl
                 result
             }.fold(
                 onSuccess = { Result.success(it) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
+
+        override suspend fun deleteCommonQuestComment(commentId: Long): Result<Unit> =
+            runCatching {
+                val response = questCommonDataSource.deleteCommonQuestComment(commentId)
+                if (!response.success) throw Exception(response.message)
+                _refreshEvent.emit(Unit)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
+                onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
+            )
+
+        override suspend fun updateCommonQuestComment(
+            commentId: Long,
+            request: CommonQuestCommentEditModel,
+        ): Result<Unit> =
+            runCatching {
+                val response =
+                    questCommonDataSource.updateCommonQuestComment(
+                        commentId = commentId,
+                        request = request.toData(),
+                    )
+
+                if (!response.success) throw Exception(response.message)
+            }.fold(
+                onSuccess = { Result.success(Unit) },
                 onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
             )
     }

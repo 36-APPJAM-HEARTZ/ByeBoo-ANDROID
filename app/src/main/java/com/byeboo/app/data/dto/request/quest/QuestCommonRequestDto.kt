@@ -24,7 +24,8 @@ data class QuestCommonCommentRequestDto(
 )
 
 @Serializable
-data class QuestCommentReplyRequestDto(
+data class
+QuestCommentReplyRequestDto(
     @SerialName("content")
     val content: String,
 )
@@ -34,5 +35,11 @@ data class ReportCommonQuestRequestDto(
     @SerialName("targetType")
     val targetType: String,
     @SerialName("targetId")
-    val targetId: Long
+    val targetId: Long,
+)
+
+@Serializable
+data class UpdateCommonQuestCommentRequestDto(
+    @SerialName("content")
+    val content: String,
 )
