@@ -19,6 +19,7 @@ import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.navigation.QuestCommonAnswer
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -172,7 +173,19 @@ class CommonOtherAnswerViewModel
                     .getCommentReplies(commentId)
                     .onSuccess { result ->
                         _uiState.update {
+                            val updatedComment =
+                                CommonReplyModel(
+                                    replyId = result.comment.commentId,
+                                    writerId = result.comment.writerId,
+                                    writer = result.comment.writer,
+                                    profileIconRes = mapper.mapToIconRes(result.comment.profileIcon),
+                                    displayTime = mapper.formatWrittenTime(result.comment.writtenAt),
+                                    content = result.comment.content,
+                                    replyCount = result.totalCount,
+                                )
+
                             it.copy(
+                                selectedComment = updatedComment,
                                 selectedReplies =
                                     result.replies
                                         .map { reply ->
@@ -424,6 +437,30 @@ class CommonOtherAnswerViewModel
                                         showDeleteModal = false,
                                         deleteTarget = null,
                                     )
+                                }
+
+                                when (target) {
+                                    is MoreOptionTarget.Comment -> {
+                                        loadCommonAnswer()
+
+                                        if (uiState.value.selectedComment?.replyId == target.id) {
+                                            _uiState.update {
+                                                it.copy(
+                                                    showReplyBottomSheet = false,
+                                                    selectedComment = null,
+                                                    selectedReplies = persistentListOf(),
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    is MoreOptionTarget.Reply -> {
+                                        uiState.value.selectedComment?.replyId?.let { commentId ->
+                                            loadCommentReplies(commentId)
+                                        }
+                                        loadCommonAnswer()
+                                    }
+                                    else -> Unit
                                 }
                                 loadCommonAnswer()
                             }.onFailure { exception ->
