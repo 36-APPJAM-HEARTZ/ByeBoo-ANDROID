@@ -261,6 +261,7 @@ class QuestCommonRepositoryImpl
                     )
 
                 if (!response.success) throw Exception(response.message)
+                _refreshEvent.emit(Unit)
             }.fold(
                 onSuccess = { Result.success(Unit) },
                 onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) },
