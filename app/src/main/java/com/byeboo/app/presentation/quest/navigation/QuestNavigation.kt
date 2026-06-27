@@ -1,13 +1,13 @@
 package com.byeboo.app.presentation.quest.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.JourneyType
@@ -83,6 +83,7 @@ fun NavController.navigateToQuestAiAnswer(
 }
 
 fun NavGraphBuilder.questGraph(
+    navController: NavController,
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
     navigateToHome: () -> Unit,
@@ -113,7 +114,16 @@ fun NavGraphBuilder.questGraph(
             )
         }
 
-        composable<Quest> { backStackEntry ->
+        composable<Quest>(
+            deepLinks = listOf(
+                navDeepLink<Quest>(basePath = DeepLink.Quest.QUEST_OPEN)
+            )
+        ) { backStackEntry ->
+
+            val deeplinkQuestId by backStackEntry.savedStateHandle
+                .getStateFlow<Long?>("deeplink_quest_id", null)
+                .collectAsStateWithLifecycle()
+
             val isCommonAnswerCompleted by backStackEntry.savedStateHandle
                 .getStateFlow(QuestResultKey.COMMON_COMPLETED, false)
                 .collectAsStateWithLifecycle()
@@ -214,6 +224,31 @@ fun NavGraphBuilder.questGraph(
             )
         }
 
+        composable<QuestOpenDeepLink>(
+            deepLinks = listOf(
+                navDeepLink<QuestOpenDeepLink>(basePath = DeepLink.Quest.QUEST_OPEN)
+            )
+        ) { backStackEntry ->
+            val questId = backStackEntry.toRoute<QuestOpenDeepLink>().questId
+
+            LaunchedEffect(questId) {
+                navController.navigate(Quest) {
+                    popUpTo(Quest) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+
+                navController.getBackStackEntry(Quest)
+                    .savedStateHandle["deeplink_quest_id"] = questId
+            }
+
+
+
+        }
+
+
+        /*
+
         dialog<QuestModal>(
             deepLinks = listOf(
                 navDeepLink<QuestModal>(basePath = DeepLink.Quest.QUEST_OPEN)
@@ -221,6 +256,12 @@ fun NavGraphBuilder.questGraph(
         ) { backStackEntry ->
             val questRoute = backStackEntry.toRoute<QuestModal>()
             QuestModal(questId = questRoute.questId)
+
+            QuestModal(
+
+            )
         }
+
+         */
     }
 }

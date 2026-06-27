@@ -50,4 +50,4 @@ data class QuestAiAnswer(
 
 
 @Serializable
-data class QuestModal(val questId: String) : Route
+data class QuestOpenDeepLink(val questId: Long) : Route
