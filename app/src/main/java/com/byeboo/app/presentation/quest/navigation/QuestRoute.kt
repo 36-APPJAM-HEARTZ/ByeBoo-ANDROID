@@ -47,3 +47,7 @@ data class QuestAiAnswer(
     val aiAnswerOrigin: AiAnswerOrigin,
     val questType: QuestType? = null,
 ) : Route
+
+
+@Serializable
+data class QuestModal(val questId: String) : Route

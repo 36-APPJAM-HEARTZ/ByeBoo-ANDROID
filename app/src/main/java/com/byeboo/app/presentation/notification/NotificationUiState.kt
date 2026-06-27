@@ -10,4 +10,5 @@ data class NotificationUiState(
 
 sealed interface NotificationSideEffect {
     data object NavigateToHome: NotificationSideEffect
+    data class NavigateToDeepLink(val landingUrl: String) : NotificationSideEffect
 }

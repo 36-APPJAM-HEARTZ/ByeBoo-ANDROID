@@ -16,11 +16,13 @@ fun NavController.navigateToNotificationList(navOptions: NavOptions) {
 
 fun NavGraphBuilder.notificationGraph(
     navigateToHome: () -> Unit,
+    navigateToDeepLink:(String) -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<NotificationList> {
         NotificationRoute(
             navigateToHome = navigateToHome,
+            navigateToDeepLink = navigateToDeepLink,
             paddingValues = paddingValues
         )
     }

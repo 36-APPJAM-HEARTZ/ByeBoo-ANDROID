@@ -275,6 +275,7 @@ fun MainNavHost(
 
         notificationGraph(
             navigateToHome = navigator::popBackStack,
+            navigateToDeepLink = { url -> navigator.navigateToDeepLink(url) },
             paddingValues = paddingValues
         )
     }

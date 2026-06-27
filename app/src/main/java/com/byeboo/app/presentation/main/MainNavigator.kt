@@ -1,5 +1,6 @@
 package com.byeboo.app.presentation.main
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
@@ -46,6 +47,7 @@ import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
+import timber.log.Timber
 
 class MainNavigator(
     val navController: NavHostController,
@@ -325,6 +327,15 @@ class MainNavigator(
 
     fun navigateToNotificationList(navOptions: NavOptions) {
         navController.navigateToNotificationList(navOptions)
+    }
+
+    fun navigateToDeepLink(url: String) {
+        try {
+            val uri = Uri.parse(url)
+            navController.navigate(uri)
+        } catch (e: Exception) {
+            Timber.e("MainNavigator Deeplink error  : $url")
+        }
     }
 }
 
