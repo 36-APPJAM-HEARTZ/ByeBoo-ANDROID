@@ -11,6 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface NotificationService {
     @POST("/api/v1/notification-tokens")
@@ -39,5 +40,10 @@ interface NotificationService {
 
     @PATCH("/api/v1/notifications/read-all")
     suspend fun updateAllNotificationRead(): NullableBaseResponse<Unit>
+
+    @PATCH("/api/v1/notifications/{notificationId}/read")
+    suspend fun patchNotificationRead(
+        @Path("notificationId") notificationId: Long
+    ): NullableBaseResponse<Unit>
 
 }
