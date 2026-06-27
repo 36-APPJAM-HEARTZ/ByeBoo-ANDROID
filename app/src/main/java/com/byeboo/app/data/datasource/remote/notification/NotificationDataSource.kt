@@ -9,4 +9,5 @@ interface NotificationDataSource {
     suspend fun checkHasUnreadNotifications(): BaseResponse<NotificationReadStatusResponseDto>
     suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto>
     suspend fun patchAllNotificationsRead(): NullableBaseResponse<Unit>
+    suspend fun patchNotificationRead(notificationId: Long): NullableBaseResponse<Unit>
 }

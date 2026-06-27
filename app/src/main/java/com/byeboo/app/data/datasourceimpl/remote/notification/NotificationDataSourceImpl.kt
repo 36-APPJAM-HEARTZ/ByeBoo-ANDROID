@@ -19,4 +19,8 @@ class NotificationDataSourceImpl @Inject constructor(
 
     override suspend fun patchAllNotificationsRead(): NullableBaseResponse<Unit> =
         notificationService.updateAllNotificationRead()
+
+    override suspend fun patchNotificationRead(notificationId: Long): NullableBaseResponse<Unit> =
+        notificationService.patchNotificationRead(notificationId = notificationId)
+
 }
