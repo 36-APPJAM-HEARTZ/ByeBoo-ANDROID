@@ -2,6 +2,8 @@ package com.byeboo.app.presentation.notification
 import androidx.compose.runtime.Immutable
 import com.byeboo.app.domain.model.notification.NotificationModel
 import com.byeboo.app.domain.model.notification.NotificationType
+import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
+import java.time.LocalDateTime
 
 @Immutable
 data class NotificationUiModel(
@@ -14,13 +16,17 @@ data class NotificationUiModel(
     val landingUrl: String,
 )
 
-fun NotificationModel.toUiModel(): NotificationUiModel {
+fun NotificationModel.toUiModel(mapper: QuestUiModelMapper): NotificationUiModel {
+    val localDateTime = runCatching {
+        LocalDateTime.parse(this.createdAt)
+    }.getOrNull()
+
     return NotificationUiModel(
         notificationId = this.notificationId,
         title = this.title,
         content = this.content,
         isRead = this.isRead,
-        createdAt = this.createdAt,
+        createdAt = mapper.formatWrittenTime(localDateTime),
         landingUrl = this.landingUrl,
         notificationType = this.type,
     )
