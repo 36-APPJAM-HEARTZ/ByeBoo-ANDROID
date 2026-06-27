@@ -29,10 +29,6 @@ constructor(
     private val _sideEffect = MutableSharedFlow<NotificationSideEffect>()
     val sideEffect: SharedFlow<NotificationSideEffect> = _sideEffect.asSharedFlow()
 
-    init {
-        fetchNotificationList()
-    }
-
     fun fetchNotificationList() {
         viewModelScope.launch {
             notificationRepository.getNotificationList()
@@ -74,26 +70,24 @@ constructor(
 
     fun onNotificationClicked(notification: NotificationUiModel) {
         viewModelScope.launch {
+            if (!notification.isRead) {
+                notificationRepository.markNotificationAsRead(notification.notificationId)
+                    .onSuccess { updateNotificationAsRead(notification.notificationId) }
+            }
             if (notification.landingUrl.isNotEmpty()) {
                 _sideEffect.emit(NotificationSideEffect.NavigateToDeepLink(notification.landingUrl))
             }
 
-            if (!notification.isRead) {
-                notificationRepository.markNotificationAsRead(notification.notificationId)
-                    .onSuccess {
-                        updateNotificationAsRead(notification.notificationId)
-                        _sideEffect.emit(NotificationSideEffect.NavigateToDeepLink(notification.landingUrl))
-                    }
-            }
         }
     }
 
     private fun updateNotificationAsRead(notificationId: Long) {
-        _uiState.value.notificationList.map {
-            if (it.notificationId == notificationId) {
-                it.copy(isRead = true)
-            } else it
-        }.toPersistentList()
+        _uiState.update { state ->
+            val updatedNotificationList = state.notificationList.map {
+                if (it.notificationId == notificationId) { it.copy(isRead = true) } else it
+            }.toPersistentList()
+            state.copy(notificationList = updatedNotificationList)
+        }
     }
 }
 
