@@ -115,9 +115,10 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<Quest>(
-            deepLinks = listOf(
-                navDeepLink<Quest>(basePath = DeepLink.Quest.QUEST_OPEN)
-            )
+            deepLinks =
+                listOf(
+                    navDeepLink<Quest>(basePath = DeepLink.Quest.QUEST_OPEN),
+                ),
         ) { backStackEntry ->
 
             val deeplinkQuestId by backStackEntry.savedStateHandle
@@ -164,7 +165,7 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<QuestCommonAnswer>(
-            deepLinks = listOf(navDeepLink<QuestCommonAnswer>(DeepLink.Quest.QUEST_REACTION))
+            deepLinks = listOf(navDeepLink<QuestCommonAnswer>(DeepLink.Quest.QUEST_REACTION)),
         ) {
             CommonOtherAnswerRoute(
                 navigateToQuest = navigateUp,
@@ -225,9 +226,10 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<QuestOpenDeepLink>(
-            deepLinks = listOf(
-                navDeepLink<QuestOpenDeepLink>(basePath = DeepLink.Quest.QUEST_OPEN)
-            )
+            deepLinks =
+                listOf(
+                    navDeepLink<QuestOpenDeepLink>(basePath = DeepLink.Quest.QUEST_OPEN),
+                ),
         ) { backStackEntry ->
             val questId = backStackEntry.toRoute<QuestOpenDeepLink>().questId
 
@@ -238,14 +240,11 @@ fun NavGraphBuilder.questGraph(
                     restoreState = true
                 }
 
-                navController.getBackStackEntry(Quest)
+                navController
+                    .getBackStackEntry(Quest)
                     .savedStateHandle["deeplink_quest_id"] = questId
             }
-
-
-
         }
-
 
         /*
 

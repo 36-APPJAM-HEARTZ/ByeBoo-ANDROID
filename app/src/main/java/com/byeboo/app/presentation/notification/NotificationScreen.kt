@@ -51,7 +51,6 @@ fun NotificationRoute(
                     navigateToDeepLink(effect.landingUrl)
                 }
             }
-
         }
     }
 
@@ -98,7 +97,7 @@ private fun NotificationScreen(
         NotificationSection(
             modifier = Modifier.weight(1f),
             uiState = uiState,
-            onNotificationClick = onNotificationClick
+            onNotificationClick = onNotificationClick,
         )
     }
 }
@@ -143,7 +142,7 @@ private fun NotificationListHeader(onAllReadClick: () -> Unit) {
             style = ByeBooTheme.typography.cap1,
             modifier =
                 Modifier.noRippleClickable(
-                    onClick = onAllReadClick
+                    onClick = onAllReadClick,
                 ),
         )
     }
@@ -171,7 +170,7 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { onNotificationClick(notification) }
+                    onClick = { onNotificationClick(notification) },
                 )
             }
         }

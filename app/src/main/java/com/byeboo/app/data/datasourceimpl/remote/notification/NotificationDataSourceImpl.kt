@@ -8,19 +8,18 @@ import com.byeboo.app.data.dto.response.notification.NotificationReadStatusRespo
 import com.byeboo.app.data.service.notification.NotificationService
 import javax.inject.Inject
 
-class NotificationDataSourceImpl @Inject constructor(
-    private val notificationService: NotificationService
-): NotificationDataSource {
-    override suspend fun checkHasUnreadNotifications(): BaseResponse<NotificationReadStatusResponseDto> =
-        notificationService.getReadStatusNotification()
+class NotificationDataSourceImpl
+    @Inject
+    constructor(
+        private val notificationService: NotificationService,
+    ) : NotificationDataSource {
+        override suspend fun checkHasUnreadNotifications(): BaseResponse<NotificationReadStatusResponseDto> =
+            notificationService.getReadStatusNotification()
 
-    override suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto> =
-        notificationService.getNotificationList()
+        override suspend fun getNotificationList(): BaseResponse<NotificationListResponseDto> = notificationService.getNotificationList()
 
-    override suspend fun patchAllNotificationsRead(): NullableBaseResponse<Unit> =
-        notificationService.updateAllNotificationRead()
+        override suspend fun patchAllNotificationsRead(): NullableBaseResponse<Unit> = notificationService.updateAllNotificationRead()
 
-    override suspend fun patchNotificationRead(notificationId: Long): NullableBaseResponse<Unit> =
-        notificationService.patchNotificationRead(notificationId = notificationId)
-
-}
+        override suspend fun patchNotificationRead(notificationId: Long): NullableBaseResponse<Unit> =
+            notificationService.patchNotificationRead(notificationId = notificationId)
+    }

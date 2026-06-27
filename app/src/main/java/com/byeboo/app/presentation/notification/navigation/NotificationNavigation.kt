@@ -13,21 +13,19 @@ fun NavController.navigateToNotificationList(navOptions: NavOptions) {
     navigate(NotificationList, navOptions)
 }
 
-
 fun NavGraphBuilder.notificationGraph(
     navigateToHome: () -> Unit,
-    navigateToDeepLink:(String) -> Unit,
+    navigateToDeepLink: (String) -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<NotificationList> {
         NotificationRoute(
             navigateToHome = navigateToHome,
             navigateToDeepLink = navigateToDeepLink,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }
 
-
 @Serializable
-data object NotificationList: Route
+data object NotificationList : Route

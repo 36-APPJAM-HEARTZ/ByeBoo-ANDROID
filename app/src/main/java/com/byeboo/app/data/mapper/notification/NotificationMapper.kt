@@ -26,13 +26,12 @@ fun NotificationsDto.toDomain(): NotificationModel =
         isRead = this.isRead,
         createdAt = this.createdAt,
         landingUrl = this.landingUrl,
-        type = this.notificationType.toNotificationType()
+        type = this.notificationType.toNotificationType(),
     )
 
-private fun String.toNotificationType(): NotificationType {
-    return try {
+private fun String.toNotificationType(): NotificationType =
+    try {
         NotificationType.valueOf(this)
     } catch (e: IllegalArgumentException) {
         NotificationType.UNKNOWN
     }
-}

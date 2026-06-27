@@ -17,9 +17,10 @@ data class NotificationUiModel(
 )
 
 fun NotificationModel.toUiModel(mapper: QuestUiModelMapper): NotificationUiModel {
-    val localDateTime = runCatching {
-        LocalDateTime.parse(this.createdAt)
-    }.getOrNull()
+    val localDateTime =
+        runCatching {
+            LocalDateTime.parse(this.createdAt)
+        }.getOrNull()
 
     return NotificationUiModel(
         notificationId = this.notificationId,

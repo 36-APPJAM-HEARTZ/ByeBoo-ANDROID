@@ -43,7 +43,6 @@ interface NotificationService {
 
     @PATCH("/api/v1/notifications/{notificationId}/read")
     suspend fun patchNotificationRead(
-        @Path("notificationId") notificationId: Long
+        @Path("notificationId") notificationId: Long,
     ): NullableBaseResponse<Unit>
-
 }

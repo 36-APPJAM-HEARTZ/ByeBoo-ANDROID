@@ -7,12 +7,12 @@ data class NotificationModel(
     val isRead: Boolean,
     val createdAt: String,
     val landingUrl: String,
-    val type: NotificationType
+    val type: NotificationType,
 )
 
 enum class NotificationType {
     QUEST_OPEN,
     COMMENT,
     LIKE,
-    UNKNOWN
+    UNKNOWN,
 }

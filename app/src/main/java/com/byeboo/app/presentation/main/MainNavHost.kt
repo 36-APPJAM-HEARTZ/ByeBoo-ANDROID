@@ -96,7 +96,7 @@ fun MainNavHost(
             },
             navigateToHome = { navigator.navigateToHome(clearStackNavOptions) },
             navigateToHomeOnboarding = { navigator.navigateToHomeOnboarding(clearStackNavOptions) },
-            navigateToNotificationList = { navigator.navigateToNotificationList(keepStackNavOptions)},
+            navigateToNotificationList = { navigator.navigateToNotificationList(keepStackNavOptions) },
             paddingValues = paddingValues,
         )
 
@@ -277,7 +277,7 @@ fun MainNavHost(
         notificationGraph(
             navigateToHome = navigator::popBackStack,
             navigateToDeepLink = { url -> navigator.navigateToDeepLink(url) },
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
         )
     }
 }

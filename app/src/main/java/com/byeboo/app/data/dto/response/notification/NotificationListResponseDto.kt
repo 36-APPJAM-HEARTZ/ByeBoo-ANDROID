@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotificationListResponseDto(
     @SerialName("notifications")
-    val notifications: List<NotificationsDto>
+    val notifications: List<NotificationsDto>,
 )
 
 @Serializable
@@ -24,5 +24,5 @@ data class NotificationsDto(
     @SerialName("landingUrl")
     val landingUrl: String,
     @SerialName("notificationType")
-    val notificationType: String
+    val notificationType: String,
 )
