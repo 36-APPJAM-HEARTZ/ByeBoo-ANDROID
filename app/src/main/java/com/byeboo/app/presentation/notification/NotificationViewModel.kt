@@ -50,19 +50,48 @@ constructor(
 
     fun onAllNotificationsReadClicked() {
         viewModelScope.launch {
-            notificationRepository.markAllNotificationsAsRead().onSuccess {
-                _uiState.update { notificationState ->
-                    val updatedNotificationList = notificationState.notificationList.map { notification->
-                        notification.copy(isRead = true)
-                    }.toPersistentList()
+            if (!_uiState.value.isAllNotificationRead) {
+                notificationRepository.markAllNotificationsAsRead().onSuccess {
+                    _uiState.update { notificationState ->
+                        val updatedNotificationList =
+                            notificationState.notificationList.map { notification ->
+                                notification.copy(isRead = true)
+                            }.toPersistentList()
 
-                    notificationState.copy(notificationList = updatedNotificationList)
+                        notificationState.copy(notificationList = updatedNotificationList)
+                    }
                 }
             }
+            _uiState.update {
+                it.copy(
+                    isAllNotificationRead = true
+                )
+            }
         }
-        _uiState.update { it.copy(
-            isAllNotificationRead = true
-        ) }
+    }
+
+    fun onNotificationClicked(notification: NotificationUiModel) {
+        viewModelScope.launch {
+            if (notification.landingUrl.isNotEmpty()) {
+                _sideEffect.emit(NotificationSideEffect.NavigateToDeepLink(notification.landingUrl))
+            }
+
+            if (!notification.isRead) {
+                notificationRepository.markNotificationAsRead(notification.notificationId)
+                    .onSuccess {
+                        updateNotificationAsRead(notification.notificationId)
+                        _sideEffect.emit(NotificationSideEffect.NavigateToDeepLink(notification.landingUrl))
+                    }
+            }
+        }
+    }
+
+    private fun updateNotificationAsRead(notificationId: Long) {
+        _uiState.value.notificationList.map {
+            if (it.notificationId == notificationId) {
+                it.copy(isRead = true)
+            } else it
+        }.toPersistentList()
     }
 }
 

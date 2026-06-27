@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun NotificationRoute(
     navigateToHome: () -> Unit,
+    navigateToDeepLink: (String) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: NotificationViewModel = hiltViewModel(),
@@ -46,6 +47,9 @@ fun NotificationRoute(
 
             when (effect) {
                 is NotificationSideEffect.NavigateToHome -> navigateToHome()
+                is NotificationSideEffect.NavigateToDeepLink -> {
+                    navigateToDeepLink(effect.landingUrl)
+                }
             }
 
         }
@@ -60,6 +64,7 @@ fun NotificationRoute(
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
         onAllReadClick = viewModel::onAllNotificationsReadClicked,
+        onNotificationClick = viewModel::onNotificationClicked,
         modifier = modifier,
     )
 }
@@ -69,6 +74,7 @@ private fun NotificationScreen(
     uiState: NotificationUiState,
     onBackClick: () -> Unit,
     onAllReadClick: () -> Unit,
+    onNotificationClick: (NotificationUiModel) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -89,7 +95,11 @@ private fun NotificationScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        NotificationSection(modifier = Modifier.weight(1f), uiState = uiState)
+        NotificationSection(
+            modifier = Modifier.weight(1f),
+            uiState = uiState,
+            onNotificationClick = onNotificationClick
+        )
     }
 }
 
@@ -142,6 +152,7 @@ private fun NotificationListHeader(onAllReadClick: () -> Unit) {
 @Composable
 private fun NotificationSection(
     uiState: NotificationUiState,
+    onNotificationClick: (NotificationUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (uiState.notificationList.isNotEmpty()) {
@@ -160,7 +171,7 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { notification.landingUrl }
+                    onClick = { onNotificationClick(notification) }
                 )
             }
         }
