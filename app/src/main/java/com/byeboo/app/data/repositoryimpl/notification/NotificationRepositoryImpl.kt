@@ -42,4 +42,16 @@ class NotificationRepositoryImpl
                 throw Exception(response.message)
             }
         }
+
+    override suspend fun markNotificationAsRead(notificationId: Long): Result<Unit> =
+        runCatching {
+            val response = notificationDataSource.patchNotificationRead(notificationId)
+
+            if (response.success) {
+                return@runCatching
+            } else {
+                throw Exception(response.message)
+            }
+        }
+
 }
