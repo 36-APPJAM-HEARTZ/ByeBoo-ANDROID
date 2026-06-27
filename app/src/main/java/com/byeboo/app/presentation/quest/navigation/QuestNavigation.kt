@@ -12,6 +12,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.byeboo.app.core.model.quest.JourneyType
 import com.byeboo.app.core.model.quest.QuestType
+import com.byeboo.app.core.navigation.DeepLink
 import com.byeboo.app.core.util.routeNavigation
 import com.byeboo.app.presentation.quest.QuestRoute
 import com.byeboo.app.presentation.quest.aianswer.QuestAiAnswerRoute
@@ -153,7 +154,7 @@ fun NavGraphBuilder.questGraph(
         }
 
         composable<QuestCommonAnswer>(
-            deepLinks = listOf(navDeepLink<QuestCommonAnswer>(basePath = "myapp://common-quests"))
+            deepLinks = listOf(navDeepLink<QuestCommonAnswer>(DeepLink.Quest.QUEST_REACTION))
         ) {
             CommonOtherAnswerRoute(
                 navigateToQuest = navigateUp,
@@ -215,7 +216,7 @@ fun NavGraphBuilder.questGraph(
 
         dialog<QuestModal>(
             deepLinks = listOf(
-                navDeepLink<QuestModal>(basePath = "myapp://quest")
+                navDeepLink<QuestModal>(basePath = DeepLink.Quest.QUEST_OPEN)
             )
         ) { backStackEntry ->
             val questRoute = backStackEntry.toRoute<QuestModal>()
