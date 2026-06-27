@@ -3,6 +3,7 @@ package com.byeboo.app.presentation.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.domain.notification.NotificationRepository
+import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class NotificationViewModel
 @Inject
 constructor(
-    val notificationRepository: NotificationRepository
+    val notificationRepository: NotificationRepository,
+    val questUiModelMapper: QuestUiModelMapper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NotificationUiState())
     val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
@@ -36,7 +38,7 @@ constructor(
             notificationRepository.getNotificationList()
                 .onSuccess { domainList ->
                     _uiState.update { it.copy(notificationList = domainList.map { domainList ->
-                        domainList.toUiModel() }.toPersistentList())
+                        domainList.toUiModel(questUiModelMapper) }.toPersistentList())
                     }
                 }
         }

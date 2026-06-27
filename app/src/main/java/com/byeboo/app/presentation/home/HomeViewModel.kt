@@ -39,6 +39,8 @@ constructor(
     private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
+    val hasUnreadNotification: StateFlow<Boolean> = notificationRepository.hasUnreadFlow
+
     init {
         viewModelScope.launch {
             userRepository.getNickname().distinctUntilChanged().collect { nickname ->
@@ -49,11 +51,7 @@ constructor(
         }
 
         viewModelScope.launch {
-            notificationRepository.checkHasUnreadNotifications().onSuccess { hasNewNotification ->
-                _uiState.update {
-                    it.copy(hasNewNotification = hasNewNotification)
-                }
-            }
+            notificationRepository.checkHasUnreadNotifications()
         }
 
         loadInitialData()

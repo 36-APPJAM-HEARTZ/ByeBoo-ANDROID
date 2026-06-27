@@ -72,6 +72,7 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val hasUnreadNotification by viewModel.hasUnreadNotification.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val showSnackBar = LocalSnackBarTrigger.current
 
@@ -106,6 +107,7 @@ fun HomeRoute(
 
     HomeScreen(
         uiState = uiState,
+        hasUnreadNotification = hasUnreadNotification,
         onClickQuest = viewModel::onClickQuest,
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,
@@ -119,6 +121,7 @@ fun HomeRoute(
 @Composable
 private fun HomeScreen(
     uiState: HomeUiState,
+    hasUnreadNotification: Boolean,
     onClickQuest: () -> Unit,
     onClickQuestStart: () -> Unit,
     onHelpIconClick: () -> Unit,
@@ -196,7 +199,7 @@ private fun HomeScreen(
                     Icon(
                         imageVector =
                             ImageVector.vectorResource(
-                                id = if (uiState.hasNewNotification) R.drawable.ic_new_notification else R.drawable.ic_notification,
+                                id = if (hasUnreadNotification) R.drawable.ic_new_notification else R.drawable.ic_notification,
                             ),
                         contentDescription = null,
                         tint = Color.Unspecified,
