@@ -10,10 +10,12 @@ import com.byeboo.app.domain.model.quest.QuestAnswerDetailAnswerModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
+import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.navigation.QuestMyAnswersDetail
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -48,6 +50,11 @@ class MyDetailAnswerViewModel
         }
 
         private fun loadMyDetailAnswer() {
+            observeAnswerUpdates()
+            loadAnswerDetail()
+        }
+
+        private fun observeAnswerUpdates() {
             questCommonRepository.answersFlow
                 .mapNotNull { list -> list.find { it.answerId == answerId } }
                 .onEach { updated ->
@@ -62,7 +69,9 @@ class MyDetailAnswerViewModel
                         )
                     }
                 }.launchIn(viewModelScope)
+        }
 
+        private fun loadAnswerDetail() {
             viewModelScope.launch {
                 questCommonRepository
                     .getCommonQuestAnswerDetail(answerId)
@@ -71,17 +80,31 @@ class MyDetailAnswerViewModel
                             it.copy(
                                 questQuestion = detail.question,
                                 answer = detail.answer.toCommonAnswerModel(answerId),
+                                comments =
+                                    detail.comments
+                                        .map { comment ->
+                                            CommonReplyModel(
+                                                replyId = comment.commentId,
+                                                writerId = comment.writerId,
+                                                writer = comment.writer,
+                                                profileIconRes = mapper.mapToIconRes(comment.profileIcon),
+                                                displayTime = mapper.formatWrittenTime(comment.writtenAt),
+                                                content = comment.content,
+                                                replyCount = comment.replyCount.toInt(),
+                                            )
+                                        }.toImmutableList(),
                             )
                         }
-                    }.onFailure {
-                        _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
                     }
             }
         }
 
         fun onClickMoreOptions() {
             if (_uiState.value.answer == null) return
-
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 
@@ -135,7 +158,140 @@ class MyDetailAnswerViewModel
         }
 
         fun onHeartClicked() {
-            // TODO: 하트 클릭
+            if (_uiState.value.isLikeLoading) return
+            val previousAnswer = _uiState.value.answer ?: return
+
+            _uiState.update {
+                it.copy(
+                    answer = mapper.toggleLike(previousAnswer),
+                    isLikeLoading = true,
+                )
+            }
+
+            viewModelScope.launch {
+                questCommonRepository
+                    .updateAnswerLike(answerId)
+                    .onSuccess { result ->
+                        _uiState.update { state ->
+                            state.copy(
+                                isLikeLoading = false,
+                                answer =
+                                    state.answer?.copy(
+                                        isLiked = result.isLiked,
+                                        heartCount = result.heartCount,
+                                    ),
+                            )
+                        }
+                    }.onFailure { exception ->
+                        _uiState.update { it.copy(answer = previousAnswer, isLikeLoading = false) }
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        fun onCommentClick(reply: CommonReplyModel) {
+            _uiState.update {
+                it.copy(
+                    showReplyBottomSheet = true,
+                    selectedReply = reply,
+                )
+            }
+            loadCommentReplies(reply.replyId)
+        }
+
+        private fun loadCommentReplies(commentId: Long) {
+            viewModelScope.launch {
+                questCommonRepository
+                    .getCommentReplies(commentId)
+                    .onSuccess { result ->
+                        _uiState.update {
+                            it.copy(
+                                replies =
+                                    result.replies
+                                        .map { reply ->
+                                            CommonReplyModel(
+                                                replyId = reply.commentId,
+                                                writerId = reply.writerId,
+                                                writer = reply.writer,
+                                                profileIconRes = mapper.mapToIconRes(reply.profileIcon),
+                                                displayTime = mapper.formatWrittenTime(reply.writtenAt),
+                                                content = reply.content,
+                                                replyCount = 0,
+                                            )
+                                        }.toImmutableList(),
+                            )
+                        }
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        fun onDismissReplyBottomSheet() {
+            _uiState.update {
+                it.copy(
+                    showReplyBottomSheet = false,
+                    selectedReply = null,
+                )
+            }
+        }
+
+        fun onCompleteComment(content: String) {
+            viewModelScope.launch {
+                questCommonRepository
+                    .uploadComment(
+                        content = content,
+                        targetId = answerId,
+                    ).onSuccess {
+                        loadAnswerDetail()
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        fun onCompleteReply(content: String) {
+            val commentId = uiState.value.selectedReply?.replyId ?: return
+            viewModelScope.launch {
+                questCommonRepository
+                    .uploadCommentReply(
+                        commentId = commentId,
+                        content = content,
+                    ).onSuccess {
+                        loadCommentReplies(commentId)
+                        updateCommentReplyCount(commentId)
+                    }.onFailure { exception ->
+                        _sideEffect.emit(
+                            MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
+                        )
+                    }
+            }
+        }
+
+        private fun updateCommentReplyCount(commentId: Long) {
+            _uiState.update { state ->
+                state.copy(
+                    comments =
+                        state.comments
+                            .map { comment ->
+                                if (comment.replyId == commentId) {
+                                    comment.copy(replyCount = comment.replyCount + 1)
+                                } else {
+                                    comment
+                                }
+                            }.toImmutableList(),
+                    selectedReply =
+                        state.selectedReply?.let {
+                            if (it.replyId == commentId) it.copy(replyCount = it.replyCount + 1) else it
+                        },
+                )
+            }
         }
 
         private fun observeRefreshEvent() {
@@ -143,18 +299,7 @@ class MyDetailAnswerViewModel
                 questCommonRepository.refreshEvent.collect {
                     val cached = questCommonRepository.getCachedMyAnswer(answerId)
                     if (cached == null) {
-                        questCommonRepository
-                            .getCommonQuestAnswerDetail(answerId)
-                            .onSuccess { detail ->
-                                _uiState.update { state ->
-                                    state.copy(
-                                        questQuestion = detail.question,
-                                        answer = detail.answer.toCommonAnswerModel(answerId),
-                                    )
-                                }
-                            }.onFailure {
-                                _sideEffect.emit(MyDetailAnswerSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
-                            }
+                        loadAnswerDetail()
                     }
                 }
             }

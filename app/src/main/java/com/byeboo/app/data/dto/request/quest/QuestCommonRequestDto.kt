@@ -14,3 +14,17 @@ data class QuestCommonEditRequestDto(
     @SerialName("answer")
     val answer: String,
 )
+
+@Serializable
+data class QuestCommonCommentRequestDto(
+    @SerialName("content")
+    val content: String,
+    @SerialName("targetId")
+    val targetId: Long,
+)
+
+@Serializable
+data class QuestCommentReplyRequestDto(
+    @SerialName("content")
+    val content: String,
+)

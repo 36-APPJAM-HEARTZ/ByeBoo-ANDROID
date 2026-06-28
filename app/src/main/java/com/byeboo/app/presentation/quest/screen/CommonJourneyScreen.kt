@@ -48,7 +48,7 @@ fun CommonJourneyScreen(
     onAnswerClick: (Long) -> Unit,
     onCommonQuestClick: (Long) -> Unit,
     onLoadMore: () -> Unit,
-    onHeartClick: () -> Unit,
+    onHeartClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -224,7 +224,7 @@ fun CommonJourneyScreen(
                     ) { answer ->
                         CommonAnswerItem(
                             answer = answer,
-                            onHeartClick = onHeartClick,
+                            onHeartClick = { onHeartClick(answer.answerId) },
                             onCommentClick = { onAnswerClick(answer.answerId) },
                             onClick = { onAnswerClick(answer.answerId) },
                             modifier =

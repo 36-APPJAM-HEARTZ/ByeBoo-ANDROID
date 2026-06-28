@@ -3,10 +3,14 @@ package com.byeboo.app.data.datasourceimpl.remote.quest
 import com.byeboo.app.data.datasource.remote.quest.QuestCommonDataSource
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
+import com.byeboo.app.data.dto.request.quest.QuestCommentReplyRequestDto
+import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import com.byeboo.app.data.service.quest.QuestCommonService
 import javax.inject.Inject
@@ -57,4 +61,18 @@ class QuestCommonDataSourceImpl
             questCommonService.updateBlockedUser(blockedUserId)
 
         override suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit> = questCommonService.reportCommonQuest(answerId)
+
+        override suspend fun uploadComment(request: QuestCommonCommentRequestDto): NullableBaseResponse<Unit> =
+            questCommonService.uploadComment(request)
+
+        override suspend fun uploadCommentReply(
+            commentId: Long,
+            request: QuestCommentReplyRequestDto,
+        ): NullableBaseResponse<Unit> = questCommonService.uploadCommentReply(commentId, request)
+
+        override suspend fun getCommentReplies(commentId: Long): BaseResponse<CommentRepliesResponseDto> =
+            questCommonService.getCommentReplies(commentId)
+
+        override suspend fun updateAnswerLike(answerId: Long): BaseResponse<QuestLikeResponseDto> =
+            questCommonService.updateAnswerLike(answerId)
     }

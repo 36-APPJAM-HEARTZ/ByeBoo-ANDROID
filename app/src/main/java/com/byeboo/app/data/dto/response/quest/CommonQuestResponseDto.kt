@@ -90,3 +90,53 @@ data class QuestCommonDetailCommentDto(
     @SerialName("content")
     val content: String,
 )
+
+@Serializable
+data class CommentRepliesResponseDto(
+    @SerialName("totalCount")
+    val totalCount: Int,
+    @SerialName("comment")
+    val comment: CommentDetailDto,
+    @SerialName("replies")
+    val replies: List<ReplyItemDto>,
+)
+
+@Serializable
+data class CommentDetailDto(
+    @SerialName("commentId")
+    val commentId: Long,
+    @SerialName("writerId")
+    val writerId: Long,
+    @SerialName("writer")
+    val writer: String,
+    @SerialName("profileIcon")
+    val profileIcon: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+)
+
+@Serializable
+data class ReplyItemDto(
+    @SerialName("commentId")
+    val commentId: Long,
+    @SerialName("writerId")
+    val writerId: Long,
+    @SerialName("writer")
+    val writer: String,
+    @SerialName("profileIcon")
+    val profileIcon: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+)
+
+@Serializable
+data class QuestLikeResponseDto(
+    @SerialName("likeCount")
+    val likeCount: Int,
+    @SerialName("isLiked")
+    val isLiked: Boolean,
+)

@@ -154,7 +154,7 @@ private fun QuestScreen(
     onCommonAnswerClick: (Long) -> Unit,
     onDateChange: (LocalDate) -> Unit,
     onLoadMore: () -> Unit,
-    onHeartClick: () -> Unit,
+    onHeartClick: (Long) -> Unit,
 ) {
     if (uiState.myJourneyState.showQuitModal) {
         QuestModal(
