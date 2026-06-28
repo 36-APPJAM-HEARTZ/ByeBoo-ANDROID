@@ -132,3 +132,11 @@ data class ReplyItemDto(
     @SerialName("createdAt")
     val createdAt: String,
 )
+
+@Serializable
+data class QuestLikeResponseDto(
+    @SerialName("likeCount")
+    val likeCount: Int,
+    @SerialName("isLiked")
+    val isLiked: Boolean,
+)
