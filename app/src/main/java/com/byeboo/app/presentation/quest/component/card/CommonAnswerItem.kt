@@ -34,7 +34,7 @@ fun CommonAnswerItem(
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
     onClick: () -> Unit = {},
-    onCommentClick: (Long) -> Unit = {},
+    onCommentClick: ((Long) -> Unit)? = null,
 ) {
     Column(
         modifier =
@@ -99,8 +99,10 @@ fun CommonAnswerItem(
                 heartCount = answer.heartCount,
                 onHeartClick = onHeartClick,
                 commentCount = answer.commentCount,
-                onCommentClick = onCommentClick,
-                answerId = answer.answerId,
+                onCommentClick =
+                    onCommentClick?.let {
+                        { it(answer.answerId) }
+                    },
             )
         }
     }

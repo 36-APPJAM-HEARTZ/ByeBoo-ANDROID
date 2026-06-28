@@ -41,6 +41,9 @@ fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
         answers =
             this.answers.map {
                 QuestAnswerModel(
+                    heartCount = it.likeCount,
+                    commentCount = it.commentCount,
+                    isLiked = it.isLiked,
                     question = it.question,
                     answerId = it.answerId,
                     writtenAt = it.writtenAt.split("T")[0],

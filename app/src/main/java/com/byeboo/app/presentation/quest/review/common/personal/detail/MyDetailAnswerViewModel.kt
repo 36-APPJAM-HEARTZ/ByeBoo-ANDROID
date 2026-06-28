@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.DateUtil
+import com.byeboo.app.domain.model.quest.QuestAnswerDetailAnswerModel
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.model.CommonAnswerModel
@@ -75,23 +76,10 @@ class MyDetailAnswerViewModel
                 questCommonRepository
                     .getCommonQuestAnswerDetail(answerId)
                     .onSuccess { detail ->
-                        val answer = detail.answer
-
                         _uiState.update {
                             it.copy(
                                 questQuestion = detail.question,
-                                answer =
-                                    CommonAnswerModel(
-                                        heartCount = answer.heartCount,
-                                        commentCount = answer.commentCount,
-                                        isLiked = answer.isLiked,
-                                        answerId = answerId,
-                                        writerId = answer.writerId,
-                                        writer = answer.writer,
-                                        profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                        displayTime = mapper.formatDetailDate(answer.writtenAt),
-                                        content = answer.content,
-                                    ),
+                                answer = detail.answer.toCommonAnswerModel(answerId),
                                 comments =
                                     detail.comments
                                         .map { comment ->
@@ -117,7 +105,6 @@ class MyDetailAnswerViewModel
 
         fun onClickMoreOptions() {
             if (_uiState.value.answer == null) return
-
             _uiState.update { it.copy(showBottomSheet = true) }
         }
 
@@ -317,4 +304,17 @@ class MyDetailAnswerViewModel
                 }
             }
         }
+
+        private fun QuestAnswerDetailAnswerModel.toCommonAnswerModel(answerId: Long): CommonAnswerModel =
+            CommonAnswerModel(
+                heartCount = heartCount,
+                commentCount = commentCount,
+                isLiked = isLiked,
+                answerId = answerId,
+                writerId = writerId,
+                writer = writer,
+                profileIconRes = mapper.mapToIconRes(profileIcon),
+                displayTime = mapper.formatDetailDate(writtenAt),
+                content = content,
+            )
     }

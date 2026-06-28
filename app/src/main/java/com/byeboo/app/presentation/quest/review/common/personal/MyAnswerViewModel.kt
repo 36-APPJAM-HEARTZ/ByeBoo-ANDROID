@@ -3,9 +3,12 @@ package com.byeboo.app.presentation.quest.review.common.personal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.core.util.DateUtil
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
+import com.byeboo.app.presentation.quest.model.MyAnswerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -36,22 +39,24 @@ class MyAnswerViewModel
                 }
             }
 
-            // TODO: 서버 수정 후 다시 고쳐놓을 예정
-//            viewModelScope.launch {
-//                questCommonRepository.answersFlow.collect { answerModels ->
-//                    val answers =
-//                        answerModels
-//                            .map {
-//                                MyAnswerModel(
-//                                    answerId = it.answerId,
-//                                    question = it.question,
-//                                    writtenAt = DateUtil.formatToDotDate(it.writtenAt),
-//                                    content = it.content,
-//                                )
-//                            }.toPersistentList()
-//                    _uiState.update { it.copy(answers = answers) }
-//                }
-//            }
+            viewModelScope.launch {
+                questCommonRepository.answersFlow.collect { answerModels ->
+                    val answers =
+                        answerModels
+                            .map {
+                                MyAnswerModel(
+                                    answerId = it.answerId,
+                                    question = it.question,
+                                    writtenAt = DateUtil.formatToDotDate(it.writtenAt),
+                                    content = it.content,
+                                    heartCount = it.heartCount,
+                                    commentCount = it.commentCount,
+                                    isLiked = it.isLiked,
+                                )
+                            }.toPersistentList()
+                    _uiState.update { it.copy(answers = answers) }
+                }
+            }
 
             loadInitialAnswers()
         }
