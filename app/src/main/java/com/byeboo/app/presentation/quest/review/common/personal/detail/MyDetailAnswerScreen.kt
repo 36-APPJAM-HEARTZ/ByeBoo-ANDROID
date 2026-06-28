@@ -47,7 +47,6 @@ import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
 import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -143,7 +142,6 @@ private fun MyAnswerDetailScreen(
     val focusManager = LocalFocusManager.current
 
     var shouldScrollToBottom by remember { mutableStateOf(false) }
-    var contentAlpha by remember { mutableStateOf(1f) }
 
     LaunchedEffect(Unit) {
         snapshotFlow { imeTarget.getBottom(density) > 0 }
@@ -153,11 +151,7 @@ private fun MyAnswerDetailScreen(
 
     LaunchedEffect(isKeyboardVisible) {
         if (isKeyboardVisible) {
-            contentAlpha = 1f
             focusRequester.requestFocus()
-        } else {
-            delay(200)
-            contentAlpha = 1f
         }
     }
 
@@ -180,6 +174,15 @@ private fun MyAnswerDetailScreen(
                     bottom = bottomPadding,
                 ),
     ) {
+        AnswerDetailTopBar(
+            onBackClick = onBackClick,
+            onClickMoreOptions = {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+                onClickMoreOptions()
+            },
+        )
+
         Column(
             modifier =
                 Modifier
@@ -194,15 +197,6 @@ private fun MyAnswerDetailScreen(
                         }
                     },
         ) {
-            AnswerDetailTopBar(
-                onBackClick = onBackClick,
-                onClickMoreOptions = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    onClickMoreOptions()
-                },
-            )
-
             uiState.answer?.let { answer ->
                 QuestCommonTitle(
                     createdAt = answer.displayTime,
@@ -244,13 +238,11 @@ private fun MyAnswerDetailScreen(
             },
             onCompleteClick = {
                 onCompleteComment(commentText)
-                contentAlpha = 0f
                 commentText = ""
                 keyboardController?.hide()
                 focusManager.clearFocus()
                 shouldScrollToBottom = true
             },
-            contentAlpha = contentAlpha,
         )
     }
 
