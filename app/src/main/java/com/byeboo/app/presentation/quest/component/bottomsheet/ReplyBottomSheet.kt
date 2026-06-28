@@ -269,7 +269,7 @@ fun ReplyBottomSheet(
                         val isEditingCurrentSheetItem =
                             editingComment?.let { editing ->
                                 editing.target.id == comment.replyId ||
-                                        replies.any { it.replyId == editing.target.id }
+                                    replies.any { it.replyId == editing.target.id }
                             } == true
 
                         if (isEditingCurrentSheetItem) {
