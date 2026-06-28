@@ -41,9 +41,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.topbar.ByeBooTopbar
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -54,7 +57,6 @@ import com.byeboo.app.presentation.quest.component.card.CommonReplyItem
 import com.byeboo.app.presentation.quest.component.input.CommentInputBar
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -112,14 +114,12 @@ fun ReplyBottomSheet(
         }
 
         ModalBottomSheet(
-            onDismissRequest = {
-                hideSheet()
-            },
+            onDismissRequest = { hideSheet() },
             modifier =
                 modifier
                     .fillMaxHeight()
                     .statusBarsPadding()
-                    .padding(top = 20.dp),
+                    .padding(top = screenHeightDp(20.dp)),
             sheetState = sheetState,
             shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
             containerColor = ByeBooTheme.colors.background,
@@ -138,7 +138,6 @@ fun ReplyBottomSheet(
             val density = LocalDensity.current
 
             var isKeyboardVisible by remember { mutableStateOf(false) }
-            var contentAlpha by remember { mutableStateOf(1f) }
 
             val imeTarget = WindowInsets.imeAnimationTarget
             val navBarInsets = WindowInsets.navigationBars
@@ -153,6 +152,8 @@ fun ReplyBottomSheet(
                 label = "inputBottomPadding",
             )
 
+            val view = LocalView.current
+
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
 
@@ -164,11 +165,7 @@ fun ReplyBottomSheet(
 
             LaunchedEffect(isKeyboardVisible) {
                 if (isKeyboardVisible) {
-                    contentAlpha = 1f
                     focusRequester.requestFocus()
-                } else {
-                    delay(200)
-                    contentAlpha = 1f
                 }
             }
 
@@ -189,10 +186,7 @@ fun ReplyBottomSheet(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ByeBooDragHandle(
-                    modifier =
-                        Modifier.noRippleClickable {
-                            hideSheet()
-                        },
+                    modifier = Modifier.noRippleClickable { hideSheet() },
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -205,10 +199,7 @@ fun ReplyBottomSheet(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                                 contentDescription = null,
                                 tint = ByeBooTheme.colors.gray50,
-                                modifier =
-                                    Modifier.noRippleClickable {
-                                        hideSheet()
-                                    },
+                                modifier = Modifier.noRippleClickable { hideSheet() },
                             )
                         },
                     )
@@ -240,26 +231,20 @@ fun ReplyBottomSheet(
                     }
                 }
 
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    CommentInputBar(
-                        commentText = commentText,
-                        isKeyboardVisible = isKeyboardVisible,
-                        focusRequester = focusRequester,
-                        isCompleteEnabled = isCompleteEnabled,
-                        maxLength = maxLength,
-                        onTextChange = { if (it.length <= maxLength) commentText = it },
-                        onCompleteClick = {
-                            onCompleteComment(commentText)
-                            contentAlpha = 0f
-                            commentText = ""
-                            clearKeyboardFocus()
-                        },
-                        contentAlpha = contentAlpha,
-                        placeholder = "답글로 위로를 남겨보세요.",
-                    )
-                }
+                CommentInputBar(
+                    commentText = commentText,
+                    isKeyboardVisible = isKeyboardVisible,
+                    focusRequester = focusRequester,
+                    isCompleteEnabled = isCompleteEnabled,
+                    maxLength = maxLength,
+                    onTextChange = { if (it.length <= maxLength) commentText = it },
+                    onCompleteClick = {
+                        onCompleteComment(commentText)
+                        commentText = ""
+                        ViewCompat.getWindowInsetsController(view)?.hide(WindowInsetsCompat.Type.ime())
+                    },
+                    placeholder = "답글로 위로를 남겨보세요.",
+                )
             }
         }
     }
