@@ -137,10 +137,11 @@ private fun CommentInputExpanded(
                 cursorBrush = SolidColor(ByeBooTheme.colors.white),
                 minLines = 1,
                 maxLines = 5,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Default,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Default,
+                    ),
                 decorationBox = { innerTextField ->
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -215,13 +216,15 @@ private fun CommentInputCollapsed(
         ) {
             Text(
                 text = commentText.ifEmpty { placeholder },
-                style = ByeBooTheme.typography.body6.copy(
-                    color = if (commentText.isNotEmpty()) {
-                        ByeBooTheme.colors.gray100
-                    } else {
-                        ByeBooTheme.colors.gray600
-                    },
-                ),
+                style =
+                    ByeBooTheme.typography.body6.copy(
+                        color =
+                            if (commentText.isNotEmpty()) {
+                                ByeBooTheme.colors.gray100
+                            } else {
+                                ByeBooTheme.colors.gray600
+                            },
+                    ),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -235,10 +238,11 @@ private fun CommentInputCollapsed(
                         .focusRequester(focusRequester),
                 textStyle = ByeBooTheme.typography.body6.copy(color = ByeBooTheme.colors.gray100),
                 cursorBrush = SolidColor(ByeBooTheme.colors.white),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Default,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Default,
+                    ),
             )
         }
 
