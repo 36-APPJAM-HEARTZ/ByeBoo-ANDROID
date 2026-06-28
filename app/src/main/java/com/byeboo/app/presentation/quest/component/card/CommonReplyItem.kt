@@ -47,8 +47,8 @@ fun CommonReplyItem(
     isReply: Boolean = false,
     onClick: () -> Unit = {},
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var measuredLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
+    var isExpanded by remember(reply.content) { mutableStateOf(false) }
+    var measuredLayoutResult by remember(reply.content) { mutableStateOf<TextLayoutResult?>(null) }
 
     val gray400Color = ByeBooTheme.colors.gray400
     val body6FontSize = ByeBooTheme.typography.body6.fontSize
@@ -142,7 +142,12 @@ fun CommonReplyItem(
                     maxLines = 5,
                     modifier = Modifier.fillMaxWidth(),
                     onTextLayout = { result ->
-                        if (measuredLayoutResult == null) measuredLayoutResult = result
+                        if (
+                            measuredLayoutResult?.lineCount != result.lineCount ||
+                            measuredLayoutResult?.size != result.size
+                        ) {
+                            measuredLayoutResult = result
+                        }
                     },
                 )
 

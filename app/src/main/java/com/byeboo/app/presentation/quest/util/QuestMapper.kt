@@ -120,7 +120,7 @@ class QuestUiModelMapper
 
         fun toggleLike(answer: CommonAnswerModel): CommonAnswerModel {
             val newIsLiked = !answer.isLiked
-            val newHeartCount = if (newIsLiked) answer.heartCount + 1 else answer.heartCount - 1
+            val newHeartCount = (if (newIsLiked) answer.heartCount + 1 else answer.heartCount - 1).coerceAtLeast(0)
             return answer.copy(isLiked = newIsLiked, heartCount = newHeartCount)
         }
     }

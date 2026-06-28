@@ -195,6 +195,22 @@ private fun CommonOtherAnswerScreen(
                     bottom = bottomPadding,
                 ),
     ) {
+        AnswerDetailTopBar(
+            onBackClick = onBackClick,
+            onMoreOptionsClick = {
+                focusManager.clearFocus()
+                keyboardController?.hide()
+                uiState.answer?.let { answer ->
+                    onMoreOptionsClick(
+                        MoreOptionTarget.Answer(
+                            id = answer.answerId,
+                            writerId = answer.writerId,
+                        ),
+                    )
+                }
+            },
+        )
+
         Column(
             modifier =
                 Modifier
@@ -209,22 +225,6 @@ private fun CommonOtherAnswerScreen(
                         }
                     },
         ) {
-            AnswerDetailTopBar(
-                onBackClick = onBackClick,
-                onMoreOptionsClick = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    uiState.answer?.let { answer ->
-                        onMoreOptionsClick(
-                            MoreOptionTarget.Answer(
-                                id = answer.answerId,
-                                writerId = answer.writerId,
-                            ),
-                        )
-                    }
-                },
-            )
-
             uiState.answer?.let { answer ->
                 QuestCommonTitle(
                     createdAt = answer.displayTime,
