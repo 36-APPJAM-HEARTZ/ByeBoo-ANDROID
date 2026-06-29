@@ -148,7 +148,6 @@ private fun CommonOtherAnswerScreen(
     val focusManager = LocalFocusManager.current
 
     var shouldScrollToBottom by remember { mutableStateOf(false) }
-    var contentAlpha by remember { mutableStateOf(1f) }
 
     LaunchedEffect(Unit) {
         snapshotFlow { imeTarget.getBottom(density) > 0 }
@@ -158,11 +157,7 @@ private fun CommonOtherAnswerScreen(
 
     LaunchedEffect(isKeyboardVisible) {
         if (isKeyboardVisible) {
-            contentAlpha = 1f
             focusRequester.requestFocus()
-        } else {
-            delay(200)
-            contentAlpha = 1f
         }
     }
 
@@ -278,12 +273,11 @@ private fun CommonOtherAnswerScreen(
                     onCommentComplete(commentText)
                     shouldScrollToBottom = true
                 }
-                contentAlpha = 0f
                 commentText = ""
                 keyboardController?.hide()
                 focusManager.clearFocus()
+                shouldScrollToBottom = true
             },
-            contentAlpha = contentAlpha,
         )
     }
 
