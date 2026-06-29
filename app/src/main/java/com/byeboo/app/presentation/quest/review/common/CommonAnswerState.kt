@@ -22,6 +22,7 @@ data class CommonAnswerState(
     val showReplyBottomSheet: Boolean = false,
     val showDeleteModal: Boolean = false,
     val isLikeLoading: Boolean = false,
+    val isReplySubmitting: Boolean = false,
 ) {
     val showBottomSheet: Boolean
         get() = selectedTarget != null

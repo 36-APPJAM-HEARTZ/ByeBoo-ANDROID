@@ -50,7 +50,7 @@ import com.byeboo.app.presentation.quest.component.type.OtherPostOption
 import com.byeboo.app.presentation.quest.component.type.PostOption
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -106,6 +106,7 @@ fun CommonOtherAnswerRoute(
         onCommentComplete = viewModel::onCommentComplete,
         onCommentClick = viewModel::onCommentClicked,
         onReplyComplete = viewModel::onReplyComplete,
+        replySubmissionSuccess = viewModel.replySubmissionSuccess,
         onDismissReplyBottomSheet = viewModel::onDismissReplyBottomSheet,
     )
 }
@@ -125,6 +126,7 @@ private fun CommonOtherAnswerScreen(
     onCommentClick: (CommonReplyModel) -> Unit,
     onDismissReplyBottomSheet: () -> Unit,
     onReplyComplete: (String) -> Unit,
+    replySubmissionSuccess: Flow<Unit>,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -308,6 +310,8 @@ private fun CommonOtherAnswerScreen(
             replies = uiState.selectedReplies,
             onDismissRequest = onDismissReplyBottomSheet,
             onReplyComplete = onReplyComplete,
+            isReplySubmitting = uiState.isReplySubmitting,
+            replySubmissionSuccess = replySubmissionSuccess,
             onCommentMoreOptionsClick = {
                 onMoreOptionsClick(
                     MoreOptionTarget.Comment(

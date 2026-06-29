@@ -58,6 +58,7 @@ import com.byeboo.app.presentation.quest.component.input.CommentInputBar
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.review.common.EditingCommentState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -69,6 +70,8 @@ fun ReplyBottomSheet(
     replies: ImmutableList<CommonReplyModel>,
     onDismissRequest: () -> Unit,
     onReplyComplete: (String) -> Unit,
+    isReplySubmitting: Boolean,
+    replySubmissionSuccess: Flow<Unit>,
     onCommentMoreOptionsClick: () -> Unit,
     onReplyMoreOptionsClick: (CommonReplyModel) -> Unit,
     editingComment: EditingCommentState?,
@@ -140,7 +143,7 @@ fun ReplyBottomSheet(
         ) {
             var commentText by remember { mutableStateOf("") }
             val maxLength = 500
-            val isCompleteEnabled = commentText.isNotEmpty()
+            val isCompleteEnabled = commentText.isNotEmpty() && !isReplySubmitting
 
             val density = LocalDensity.current
 
@@ -195,6 +198,16 @@ fun ReplyBottomSheet(
                     commentText = editing.content
                     focusRequester.requestFocus()
                     keyboardController?.show()
+                }
+            }
+
+            LaunchedEffect(replySubmissionSuccess) {
+                replySubmissionSuccess.collect {
+                    commentText = ""
+                    focusManager.clearFocus(force = true)
+                    ViewCompat
+                        .getWindowInsetsController(view)
+                        ?.hide(WindowInsetsCompat.Type.ime())
                 }
             }
 
@@ -277,9 +290,6 @@ fun ReplyBottomSheet(
                         } else {
                             onReplyComplete(commentText)
                         }
-
-                        commentText = ""
-                        ViewCompat.getWindowInsetsController(view)?.hide(WindowInsetsCompat.Type.ime())
                     },
                     placeholder = "답글로 위로를 남겨보세요.",
                 )

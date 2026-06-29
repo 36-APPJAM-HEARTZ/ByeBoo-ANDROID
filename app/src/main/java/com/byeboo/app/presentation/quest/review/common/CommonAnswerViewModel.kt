@@ -49,6 +49,9 @@ class CommonOtherAnswerViewModel
         private val _sideEffect = MutableSharedFlow<CommonAnswerSideEffect>()
         val sideEffect: SharedFlow<CommonAnswerSideEffect> = _sideEffect.asSharedFlow()
 
+        private val _replySubmissionSuccess = MutableSharedFlow<Unit>()
+        val replySubmissionSuccess: SharedFlow<Unit> = _replySubmissionSuccess.asSharedFlow()
+
         init {
             loadCurrentUserId()
             loadCommonAnswer()
@@ -237,16 +240,22 @@ class CommonOtherAnswerViewModel
         }
 
         fun onReplyComplete(content: String) {
+            if (_uiState.value.isReplySubmitting) return
             val commentId = uiState.value.selectedComment?.replyId ?: return
+            _uiState.update { it.copy(isReplySubmitting = true) }
+
             viewModelScope.launch {
                 commonQuestRepository
                     .uploadCommentReply(
                         commentId = commentId,
                         content = content,
                     ).onSuccess {
+                        _uiState.update { it.copy(isReplySubmitting = false) }
+                        _replySubmissionSuccess.emit(Unit)
                         loadCommentReplies(commentId)
                         updateCommentReplyCount(commentId)
                     }.onFailure { exception ->
+                        _uiState.update { it.copy(isReplySubmitting = false) }
                         _sideEffect.emit(
                             CommonAnswerSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)),
                         )
@@ -256,6 +265,11 @@ class CommonOtherAnswerViewModel
 
         fun onEditCommentComplete(content: String) {
             val editingComment = uiState.value.editingComment ?: return
+            val isReplySheetSubmission = uiState.value.showReplyBottomSheet
+            if (isReplySheetSubmission) {
+                if (_uiState.value.isReplySubmitting) return
+                _uiState.update { it.copy(isReplySubmitting = true) }
+            }
 
             viewModelScope.launch {
                 commonQuestRepository
@@ -266,7 +280,16 @@ class CommonOtherAnswerViewModel
                         _uiState.update {
                             it.copy(
                                 editingComment = null,
+                                isReplySubmitting =
+                                    if (isReplySheetSubmission) {
+                                        false
+                                    } else {
+                                        it.isReplySubmitting
+                                    },
                             )
+                        }
+                        if (isReplySheetSubmission) {
+                            _replySubmissionSuccess.emit(Unit)
                         }
 
                         when (editingComment.target) {
@@ -287,6 +310,9 @@ class CommonOtherAnswerViewModel
                             is MoreOptionTarget.Answer -> Unit
                         }
                     }.onFailure { exception ->
+                        if (isReplySheetSubmission) {
+                            _uiState.update { it.copy(isReplySubmitting = false) }
+                        }
                         _sideEffect.emit(
                             CommonAnswerSideEffect.ShowSnackBar(
                                 CustomSnackBarType.error(exception),
