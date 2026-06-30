@@ -245,22 +245,5 @@ fun NavGraphBuilder.questGraph(
                     .savedStateHandle["deeplink_quest_id"] = questId
             }
         }
-
-        /*
-
-        dialog<QuestModal>(
-            deepLinks = listOf(
-                navDeepLink<QuestModal>(basePath = DeepLink.Quest.QUEST_OPEN)
-            )
-        ) { backStackEntry ->
-            val questRoute = backStackEntry.toRoute<QuestModal>()
-            QuestModal(questId = questRoute.questId)
-
-            QuestModal(
-
-            )
-        }
-
-         */
     }
 }

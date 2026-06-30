@@ -32,6 +32,6 @@ fun NotificationsDto.toDomain(): NotificationModel =
 private fun String.toNotificationType(): NotificationType =
     try {
         NotificationType.valueOf(this)
-    } catch (e: IllegalArgumentException) {
+    } catch (_: IllegalArgumentException) {
         NotificationType.UNKNOWN
     }

@@ -334,7 +334,7 @@ class MainNavigator(
             val uri = Uri.parse(url)
             navController.navigate(uri)
         } catch (e: Exception) {
-            Timber.e("MainNavigator Deeplink error  : $url")
+            Timber.e(e, "MainNavigator Deeplink error: $url")
         }
     }
 }

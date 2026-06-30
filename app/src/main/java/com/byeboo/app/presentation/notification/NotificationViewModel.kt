@@ -38,8 +38,8 @@ class NotificationViewModel
                             it.copy(
                                 notificationList =
                                     domainList
-                                        .map { domainList ->
-                                            domainList.toUiModel(questUiModelMapper)
+                                        .map { domain ->
+                                            domain.toUiModel(questUiModelMapper)
                                         }.toPersistentList(),
                             )
                         }
@@ -64,14 +64,12 @@ class NotificationViewModel
                                         notification.copy(isRead = true)
                                     }.toPersistentList()
 
-                            notificationState.copy(notificationList = updatedNotificationList)
+                            notificationState.copy(
+                                notificationList = updatedNotificationList,
+                                isAllNotificationRead = true,
+                            )
                         }
                     }
-                }
-                _uiState.update {
-                    it.copy(
-                        isAllNotificationRead = true,
-                    )
                 }
             }
         }
