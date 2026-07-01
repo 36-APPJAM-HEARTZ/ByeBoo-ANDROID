@@ -72,7 +72,7 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val hasUnreadNotification by viewModel.hasUnreadNotification.collectAsStateWithLifecycle()
+    val hasUnreadNotifications by viewModel.hasUnreadNotifications.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val showSnackBar = LocalSnackBarTrigger.current
 
@@ -107,7 +107,7 @@ fun HomeRoute(
 
     HomeScreen(
         uiState = uiState,
-        hasUnreadNotification = hasUnreadNotification,
+        hasUnreadNotification = hasUnreadNotifications,
         onClickQuest = viewModel::onClickQuest,
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,

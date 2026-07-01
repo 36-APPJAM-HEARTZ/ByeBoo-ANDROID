@@ -37,7 +37,7 @@ class HomeViewModel
         private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
         val sideEffect = _sideEffect.asSharedFlow()
 
-        val hasUnreadNotification: StateFlow<Boolean> = notificationRepository.hasUnreadFlow
+        val hasUnreadNotifications: StateFlow<Boolean> = notificationRepository.hasUnreadFlow
 
         init {
             viewModelScope.launch {
