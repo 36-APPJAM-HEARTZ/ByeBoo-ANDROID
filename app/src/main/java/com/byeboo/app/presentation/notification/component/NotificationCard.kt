@@ -76,7 +76,7 @@ fun NotificationCard(
                 text = notification.createdAt,
                 color = ByeBooTheme.colors.gray400,
                 style = ByeBooTheme.typography.cap2,
-                modifier = Modifier.padding(top = screenHeightDp(8.dp))
+                modifier = Modifier.padding(top = screenHeightDp(8.dp)),
             )
         }
     }

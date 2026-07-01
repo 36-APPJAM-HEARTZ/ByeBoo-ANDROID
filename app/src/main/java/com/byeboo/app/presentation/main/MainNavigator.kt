@@ -1,8 +1,8 @@
 package com.byeboo.app.presentation.main
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
@@ -48,7 +48,6 @@ import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 import timber.log.Timber
-import androidx.core.net.toUri
 
 class MainNavigator(
     val navController: NavHostController,

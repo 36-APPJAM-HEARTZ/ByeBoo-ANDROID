@@ -46,8 +46,7 @@ class NotificationViewModel
                                         }.toPersistentList(),
                             )
                         }
-                    }
-                    .onFailure {
+                    }.onFailure {
                         _sideEffect.emit(
                             NotificationSideEffect.ShowSnackBar(
                                 snackBarType = CustomSnackBarType.ALERT,
@@ -83,7 +82,6 @@ class NotificationViewModel
                         }
                     }
                 }
-
             }
         }
 

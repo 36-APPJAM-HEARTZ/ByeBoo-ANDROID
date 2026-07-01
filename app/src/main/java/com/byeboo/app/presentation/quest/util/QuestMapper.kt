@@ -3,7 +3,6 @@ package com.byeboo.app.presentation.quest.util
 import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
-import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.quest.QuestDataModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
@@ -14,7 +13,6 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class QuestUiModelMapper

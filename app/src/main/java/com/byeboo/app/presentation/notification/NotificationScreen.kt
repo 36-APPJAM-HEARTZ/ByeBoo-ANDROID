@@ -47,7 +47,6 @@ fun NotificationRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val showSnackBar = LocalSnackBarTrigger.current
 
-
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
 
@@ -57,15 +56,13 @@ fun NotificationRoute(
                     navigateToDeepLink(effect.landingUrl)
                 }
                 is NotificationSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
-
             }
         }
     }
 
-
     LifecycleResumeEffect(Unit) {
         viewModel.fetchNotificationList()
-        onPauseOrDispose {  }
+        onPauseOrDispose { }
     }
 
     NotificationScreen(
