@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.util
+package com.byeboo.app.presentation.notification
 
 import androidx.annotation.DrawableRes
 import com.byeboo.app.R
