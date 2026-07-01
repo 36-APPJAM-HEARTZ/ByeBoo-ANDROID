@@ -23,13 +23,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.topbar.ByeBooTopbar
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.notification.component.NotificationCard
+import com.byeboo.app.presentation.notification.model.NotificationUiModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -41,6 +45,8 @@ fun NotificationRoute(
     viewModel: NotificationViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
+
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
@@ -50,12 +56,16 @@ fun NotificationRoute(
                 is NotificationSideEffect.NavigateToDeepLink -> {
                     navigateToDeepLink(effect.landingUrl)
                 }
+                is NotificationSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
+
             }
         }
     }
 
-    LaunchedEffect(Unit) {
+
+    LifecycleResumeEffect(Unit) {
         viewModel.fetchNotificationList()
+        onPauseOrDispose {  }
     }
 
     NotificationScreen(
