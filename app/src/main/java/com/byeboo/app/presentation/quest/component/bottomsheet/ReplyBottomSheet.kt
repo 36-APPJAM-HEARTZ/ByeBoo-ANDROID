@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -121,6 +122,8 @@ fun ReplyBottomSheet(
             }
         }
 
+        val currentReplySubmissionSuccess by rememberUpdatedState(replySubmissionSuccess)
+
         ModalBottomSheet(
             onDismissRequest = {
                 hideSheet()
@@ -167,6 +170,12 @@ fun ReplyBottomSheet(
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
 
+            val isEditingCurrentSheetItem =
+                editingComment?.target?.id?.let { editingId ->
+                    editingId == comment.replyId ||
+                        replies.any { it.replyId == editingId }
+                } == true
+
             LaunchedEffect(Unit) {
                 snapshotFlow { imeTarget.getBottom(density) > 0 }
                     .distinctUntilChanged()
@@ -187,22 +196,16 @@ fun ReplyBottomSheet(
                 }
             }
 
-            LaunchedEffect(editingComment) {
-                val editing = editingComment ?: return@LaunchedEffect
-
-                val isEditingCurrentSheetItem =
-                    editing.target.id == comment.replyId ||
-                        replies.any { it.replyId == editing.target.id }
-
+            LaunchedEffect(editingComment, isEditingCurrentSheetItem) {
                 if (isEditingCurrentSheetItem) {
-                    commentText = editing.content
+                    commentText = editingComment.content
                     focusRequester.requestFocus()
                     keyboardController?.show()
                 }
             }
 
-            LaunchedEffect(replySubmissionSuccess) {
-                replySubmissionSuccess.collect {
+            LaunchedEffect(Unit) {
+                currentReplySubmissionSuccess.collect {
                     commentText = ""
                     focusManager.clearFocus(force = true)
                     ViewCompat
@@ -279,12 +282,6 @@ fun ReplyBottomSheet(
                     maxLength = maxLength,
                     onTextChange = { if (it.length <= maxLength) commentText = it },
                     onCompleteClick = {
-                        val isEditingCurrentSheetItem =
-                            editingComment?.let { editing ->
-                                editing.target.id == comment.replyId ||
-                                    replies.any { it.replyId == editing.target.id }
-                            } == true
-
                         if (isEditingCurrentSheetItem) {
                             onEditCommentComplete(commentText)
                         } else {

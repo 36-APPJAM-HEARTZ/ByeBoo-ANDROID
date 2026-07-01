@@ -24,8 +24,7 @@ data class QuestCommonCommentRequestDto(
 )
 
 @Serializable
-data class
-QuestCommentReplyRequestDto(
+data class QuestCommentReplyRequestDto(
     @SerialName("content")
     val content: String,
 )
