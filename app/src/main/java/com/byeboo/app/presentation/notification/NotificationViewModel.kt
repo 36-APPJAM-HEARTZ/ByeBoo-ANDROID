@@ -2,7 +2,10 @@ package com.byeboo.app.presentation.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.domain.notification.NotificationRepository
+import com.byeboo.app.presentation.notification.model.NotificationUiModel
+import com.byeboo.app.presentation.notification.model.toUiModel
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -44,6 +47,13 @@ class NotificationViewModel
                             )
                         }
                     }
+                    .onFailure {
+                        _sideEffect.emit(
+                            NotificationSideEffect.ShowSnackBar(
+                                snackBarType = CustomSnackBarType.ALERT,
+                            ),
+                        )
+                    }
             }
         }
 
@@ -83,6 +93,13 @@ class NotificationViewModel
                     notificationRepository
                         .markNotificationAsRead(notification.notificationId)
                         .onSuccess { updateNotificationAsRead(notification.notificationId) }
+                        .onFailure {
+                            _sideEffect.emit(
+                                NotificationSideEffect.ShowSnackBar(
+                                    snackBarType = CustomSnackBarType.ALERT,
+                                ),
+                            )
+                        }
                 }
                 if (notification.landingUrl.isNotEmpty()) {
                     _sideEffect.emit(NotificationSideEffect.NavigateToDeepLink(notification.landingUrl))
