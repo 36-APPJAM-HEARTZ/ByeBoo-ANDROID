@@ -120,11 +120,6 @@ fun NavGraphBuilder.questGraph(
                     navDeepLink<Quest>(basePath = DeepLink.Quest.QUEST_OPEN),
                 ),
         ) { backStackEntry ->
-
-            val deeplinkQuestId by backStackEntry.savedStateHandle
-                .getStateFlow<Long?>("deeplink_quest_id", null)
-                .collectAsStateWithLifecycle()
-
             val isCommonAnswerCompleted by backStackEntry.savedStateHandle
                 .getStateFlow(QuestResultKey.COMMON_COMPLETED, false)
                 .collectAsStateWithLifecycle()
@@ -245,22 +240,5 @@ fun NavGraphBuilder.questGraph(
                     .savedStateHandle["deeplink_quest_id"] = questId
             }
         }
-
-        /*
-
-        dialog<QuestModal>(
-            deepLinks = listOf(
-                navDeepLink<QuestModal>(basePath = DeepLink.Quest.QUEST_OPEN)
-            )
-        ) { backStackEntry ->
-            val questRoute = backStackEntry.toRoute<QuestModal>()
-            QuestModal(questId = questRoute.questId)
-
-            QuestModal(
-
-            )
-        }
-
-         */
     }
 }
