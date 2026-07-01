@@ -36,11 +36,6 @@ data class QuestCommonAnswer(
 data object QuestMyAnswers : Route
 
 @Serializable
-data class QuestMyAnswersDetail(
-    val answerId: Long,
-) : Route
-
-@Serializable
 data class QuestAiAnswer(
     val questId: Long,
     val isExistedAiAnswer: Boolean,

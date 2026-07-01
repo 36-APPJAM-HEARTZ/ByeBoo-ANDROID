@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerEditModel
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerRequestModel
 import com.byeboo.app.domain.model.quest.QuestContentLengthValidator
 import com.byeboo.app.domain.repository.quest.QuestCommonRepository
 import com.byeboo.app.presentation.quest.common.navigation.QuestCommonRoute
@@ -108,7 +108,7 @@ class QuestCommonWritingViewModel
             viewModelScope.launch {
                 _uiState.update { it.copy(showCompleteModal = false) }
 
-                val request = QuestCommonAnswerRequestModel(answer = questAnswer)
+                val request = CommonQuestAnswerRequestModel(answer = questAnswer)
                 val result =
                     questCommonRepository.uploadQuestCommonAnswer(
                         questId = questId,
@@ -133,7 +133,7 @@ class QuestCommonWritingViewModel
             val currentAnswerId = answerId ?: return
 
             viewModelScope.launch {
-                val request = QuestCommonAnswerEditModel(answer = questAnswer)
+                val request = CommonQuestAnswerEditModel(answer = questAnswer)
                 val result =
                     questCommonRepository.patchQuestCommonAnswer(
                         answerId = currentAnswerId,

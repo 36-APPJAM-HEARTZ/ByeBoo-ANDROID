@@ -7,6 +7,8 @@ import com.byeboo.app.data.dto.request.quest.QuestCommentReplyRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
+import com.byeboo.app.data.dto.request.quest.UpdateCommonQuestCommentRequestDto
 import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
@@ -60,7 +62,8 @@ class QuestCommonDataSourceImpl
         override suspend fun updateBlockedUser(blockedUserId: Long): NullableBaseResponse<Unit> =
             questCommonService.updateBlockedUser(blockedUserId)
 
-        override suspend fun reportCommonQuest(answerId: Long): NullableBaseResponse<Unit> = questCommonService.reportCommonQuest(answerId)
+        override suspend fun reportCommonQuest(request: ReportCommonQuestRequestDto): NullableBaseResponse<Unit> =
+            questCommonService.reportCommonQuest(request)
 
         override suspend fun uploadComment(request: QuestCommonCommentRequestDto): NullableBaseResponse<Unit> =
             questCommonService.uploadComment(request)
@@ -75,4 +78,12 @@ class QuestCommonDataSourceImpl
 
         override suspend fun updateAnswerLike(answerId: Long): BaseResponse<QuestLikeResponseDto> =
             questCommonService.updateAnswerLike(answerId)
+
+        override suspend fun deleteCommonQuestComment(commentId: Long): NullableBaseResponse<Unit> =
+            questCommonService.deleteCommonQuestComment(commentId = commentId)
+
+        override suspend fun updateCommonQuestComment(
+            commentId: Long,
+            request: UpdateCommonQuestCommentRequestDto,
+        ): NullableBaseResponse<Unit> = questCommonService.updateCommonQuestComment(commentId = commentId, request = request)
     }

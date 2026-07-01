@@ -1,4 +1,4 @@
-package com.byeboo.app.presentation.quest.review.common.other
+package com.byeboo.app.presentation.quest.review.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imeAnimationTarget
@@ -41,17 +42,24 @@ import com.byeboo.app.presentation.quest.component.bottomsheet.ReplyBottomSheet
 import com.byeboo.app.presentation.quest.component.card.CommonAnswerItem
 import com.byeboo.app.presentation.quest.component.card.CommonReplyItem
 import com.byeboo.app.presentation.quest.component.input.CommentInputBar
+import com.byeboo.app.presentation.quest.component.modal.QuestDeleteModal
 import com.byeboo.app.presentation.quest.component.text.QuestCommonTitle
+import com.byeboo.app.presentation.quest.component.type.MoreOptionTarget
+import com.byeboo.app.presentation.quest.component.type.MyPostOption
 import com.byeboo.app.presentation.quest.component.type.OtherPostOption
+import com.byeboo.app.presentation.quest.component.type.PostOption
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
 import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTopBar
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
 fun CommonOtherAnswerRoute(
-    navigateToQuest: () -> Unit,
+    navigateUp: () -> Unit,
+    navigateToQuestMyAnswers: () -> Unit,
+    navigateToQuestCommonEdit: (Long, String, Boolean) -> Unit,
     paddingValues: PaddingValues,
     viewModel: CommonOtherAnswerViewModel = hiltViewModel(),
 ) {
@@ -61,23 +69,44 @@ fun CommonOtherAnswerRoute(
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collectLatest { effect ->
             when (effect) {
-                is CommonAnswerSideEffect.NavigateToQuest -> navigateToQuest()
+                is CommonAnswerSideEffect.NavigateUp -> navigateUp()
+                is CommonAnswerSideEffect.NavigateToQuestMyAnswers -> navigateToQuestMyAnswers()
+                is CommonAnswerSideEffect.NavigateToQuestCommonEdit ->
+                    navigateToQuestCommonEdit(
+                        effect.answerId,
+                        effect.question,
+                        effect.isEditMode,
+                    )
                 is CommonAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
+    }
+
+    if (uiState.showDeleteModal) {
+        QuestDeleteModal(
+            onDismissRequest = viewModel::onDismissDeleteModal,
+            onNoClick = viewModel::onDismissDeleteModal,
+            onYesClick = viewModel::onQuestDeleteClicked,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = screenWidthDp(48.dp)),
+        )
     }
 
     CommonOtherAnswerScreen(
         uiState = uiState,
         paddingValues = paddingValues,
         onBackClick = viewModel::onBackClicked,
-        onClickMoreOptions = viewModel::onClickMoreOptions,
+        onMoreOptionsClick = { target -> viewModel.onClickMoreOptions(target) },
         onDismissBottomSheet = viewModel::onDismissBottomSheet,
         onOptionClick = { option -> viewModel.onOptionClicked(option) },
         onHeartClick = viewModel::onHeartClicked,
-        onCompleteComment = viewModel::onCompleteComment,
-        onCommentClick = viewModel::onCommentClick,
-        onCompleteReply = viewModel::onCompleteReply,
+        onEditCommentComplete = viewModel::onEditCommentComplete,
+        onCommentComplete = viewModel::onCommentComplete,
+        onCommentClick = viewModel::onCommentClicked,
+        onReplyComplete = viewModel::onReplyComplete,
+        replySubmissionSuccess = viewModel.replySubmissionSuccess,
         onDismissReplyBottomSheet = viewModel::onDismissReplyBottomSheet,
     )
 }
@@ -88,14 +117,16 @@ private fun CommonOtherAnswerScreen(
     uiState: CommonAnswerState,
     paddingValues: PaddingValues,
     onBackClick: () -> Unit,
-    onClickMoreOptions: () -> Unit,
+    onMoreOptionsClick: (MoreOptionTarget) -> Unit,
     onDismissBottomSheet: () -> Unit,
-    onOptionClick: (OtherPostOption) -> Unit,
+    onOptionClick: (PostOption) -> Unit,
     onHeartClick: () -> Unit,
-    onCompleteComment: (String) -> Unit,
+    onEditCommentComplete: (String) -> Unit,
+    onCommentComplete: (String) -> Unit,
     onCommentClick: (CommonReplyModel) -> Unit,
     onDismissReplyBottomSheet: () -> Unit,
-    onCompleteReply: (String) -> Unit,
+    onReplyComplete: (String) -> Unit,
+    replySubmissionSuccess: Flow<Unit>,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -141,6 +172,16 @@ private fun CommonOtherAnswerScreen(
         }
     }
 
+    LaunchedEffect(uiState.editingComment) {
+        val editing = uiState.editingComment
+
+        if (editing?.target is MoreOptionTarget.Comment && !uiState.showReplyBottomSheet) {
+            commentText = editing.content
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+    }
+
     Column(
         modifier =
             modifier
@@ -153,10 +194,17 @@ private fun CommonOtherAnswerScreen(
     ) {
         AnswerDetailTopBar(
             onBackClick = onBackClick,
-            onClickMoreOptions = {
+            onMoreOptionsClick = {
                 focusManager.clearFocus()
                 keyboardController?.hide()
-                onClickMoreOptions()
+                uiState.answer?.let { answer ->
+                    onMoreOptionsClick(
+                        MoreOptionTarget.Answer(
+                            id = answer.answerId,
+                            writerId = answer.writerId,
+                        ),
+                    )
+                }
             },
         )
 
@@ -174,14 +222,14 @@ private fun CommonOtherAnswerScreen(
                         }
                     },
         ) {
-            QuestCommonTitle(
-                createdAt = uiState.createdAt,
-                questQuestion = uiState.questQuestion,
-            )
-
-            Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
-
             uiState.answer?.let { answer ->
+                QuestCommonTitle(
+                    createdAt = answer.displayTime,
+                    questQuestion = uiState.questQuestion,
+                )
+
+                Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
+
                 CommonAnswerItem(
                     answer = answer,
                     onHeartClick = onHeartClick,
@@ -194,7 +242,14 @@ private fun CommonOtherAnswerScreen(
             uiState.comments.forEach { reply ->
                 CommonReplyItem(
                     reply = reply,
-                    onMoreOptionsClick = {},
+                    onMoreOptionsClick = {
+                        onMoreOptionsClick(
+                            MoreOptionTarget.Comment(
+                                id = reply.replyId,
+                                writerId = reply.writerId,
+                            ),
+                        )
+                    },
                     onCommentClick = {
                         focusManager.clearFocus()
                         keyboardController?.hide()
@@ -214,7 +269,12 @@ private fun CommonOtherAnswerScreen(
                 if (newText.length <= maxLength) commentText = newText
             },
             onCompleteClick = {
-                onCompleteComment(commentText)
+                if (uiState.editingComment?.target is MoreOptionTarget.Comment && !uiState.showReplyBottomSheet) {
+                    onEditCommentComplete(commentText)
+                } else {
+                    onCommentComplete(commentText)
+                    shouldScrollToBottom = true
+                }
                 commentText = ""
                 keyboardController?.hide()
                 focusManager.clearFocus()
@@ -223,21 +283,53 @@ private fun CommonOtherAnswerScreen(
         )
     }
 
-    MoreOptionsBottomSheet(
-        topOption = OtherPostOption.BLOCK,
-        bottomOption = OtherPostOption.REPORT,
-        onOptionClick = onOptionClick,
-        showBottomSheet = uiState.showBottomSheet,
-        onDismissRequest = onDismissBottomSheet,
-    )
+    if (uiState.selectedTarget != null) {
+        if (uiState.isMine) {
+            MoreOptionsBottomSheet(
+                topOption = MyPostOption.EDIT,
+                bottomOption = MyPostOption.DELETE,
+                onOptionClick = onOptionClick,
+                showBottomSheet = uiState.showBottomSheet,
+                onDismissRequest = onDismissBottomSheet,
+            )
+        } else {
+            MoreOptionsBottomSheet(
+                topOption = OtherPostOption.BLOCK,
+                bottomOption = OtherPostOption.REPORT,
+                onOptionClick = onOptionClick,
+                showBottomSheet = uiState.showBottomSheet,
+                onDismissRequest = onDismissBottomSheet,
+            )
+        }
+    }
 
-    uiState.selectedReply?.let { reply ->
+    uiState.selectedComment?.let { comment ->
         ReplyBottomSheet(
             showBottomSheet = uiState.showReplyBottomSheet,
-            reply = reply,
-            replies = uiState.replies,
+            comment = comment,
+            replies = uiState.selectedReplies,
             onDismissRequest = onDismissReplyBottomSheet,
-            onCompleteComment = onCompleteReply,
+            onReplyComplete = onReplyComplete,
+            isReplySubmitting = uiState.isReplySubmitting,
+            replySubmissionSuccess = replySubmissionSuccess,
+            onCommentMoreOptionsClick = {
+                onMoreOptionsClick(
+                    MoreOptionTarget.Comment(
+                        id = comment.replyId,
+                        writerId = comment.writerId,
+                    ),
+                )
+            },
+            onReplyMoreOptionsClick = { reply ->
+                onMoreOptionsClick(
+                    MoreOptionTarget.Reply(
+                        id = reply.replyId,
+                        writerId = reply.writerId,
+                    ),
+                )
+            },
+            editingComment = uiState.editingComment,
+            onEditCommentComplete = onEditCommentComplete,
         )
     }
 }

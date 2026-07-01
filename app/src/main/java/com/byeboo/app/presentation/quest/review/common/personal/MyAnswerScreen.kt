@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun MyAnswerRoute(
     navigateUp: () -> Unit,
     navigateToQuest: () -> Unit,
-    navigateToQuestMyAnswerDetail: (Long) -> Unit,
+    navigateToQuestCommonAnswer: (Long) -> Unit,
     paddingValues: PaddingValues,
     viewModel: MyAnswerViewModel = hiltViewModel(),
 ) {
@@ -49,8 +49,8 @@ fun MyAnswerRoute(
             when (effect) {
                 is MyAnswerSideEffect.NavigateUp -> navigateUp()
                 is MyAnswerSideEffect.NavigateToQuest -> navigateToQuest()
-                is MyAnswerSideEffect.NavigateToQuestMyAnswerDetail ->
-                    navigateToQuestMyAnswerDetail(effect.answerId)
+                is MyAnswerSideEffect.NavigateToQuestCommonAnswer ->
+                    navigateToQuestCommonAnswer(effect.answerId)
                 is MyAnswerSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
             }
         }
@@ -73,7 +73,7 @@ fun MyAnswerScreen(
     onBackClick: () -> Unit,
     onMyAnswerContentClick: (Long) -> Unit,
     paddingValues: PaddingValues,
-    onHeartClick: () -> Unit,
+    onHeartClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()

@@ -42,9 +42,9 @@ import com.byeboo.app.presentation.quest.model.CommonReplyModel
 fun CommonReplyItem(
     reply: CommonReplyModel,
     onMoreOptionsClick: () -> Unit,
+    modifier: Modifier = Modifier,
     onCommentClick: () -> Unit = {},
     isReply: Boolean = false,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
     var isExpanded by remember(reply.content) { mutableStateOf(false) }

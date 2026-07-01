@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -56,7 +57,9 @@ import com.byeboo.app.core.util.screenWidthDp
 import com.byeboo.app.presentation.quest.component.card.CommonReplyItem
 import com.byeboo.app.presentation.quest.component.input.CommentInputBar
 import com.byeboo.app.presentation.quest.model.CommonReplyModel
+import com.byeboo.app.presentation.quest.review.common.EditingCommentState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -64,10 +67,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun ReplyBottomSheet(
     showBottomSheet: Boolean,
-    reply: CommonReplyModel,
+    comment: CommonReplyModel,
     replies: ImmutableList<CommonReplyModel>,
     onDismissRequest: () -> Unit,
-    onCompleteComment: (String) -> Unit,
+    onReplyComplete: (String) -> Unit,
+    isReplySubmitting: Boolean,
+    replySubmissionSuccess: Flow<Unit>,
+    onCommentMoreOptionsClick: () -> Unit,
+    onReplyMoreOptionsClick: (CommonReplyModel) -> Unit,
+    editingComment: EditingCommentState?,
+    onEditCommentComplete: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (showBottomSheet) {
@@ -113,8 +122,12 @@ fun ReplyBottomSheet(
             }
         }
 
+        val currentReplySubmissionSuccess by rememberUpdatedState(replySubmissionSuccess)
+
         ModalBottomSheet(
-            onDismissRequest = { hideSheet() },
+            onDismissRequest = {
+                hideSheet()
+            },
             modifier =
                 modifier
                     .fillMaxHeight()
@@ -133,7 +146,7 @@ fun ReplyBottomSheet(
         ) {
             var commentText by remember { mutableStateOf("") }
             val maxLength = 500
-            val isCompleteEnabled = commentText.isNotEmpty()
+            val isCompleteEnabled = commentText.isNotEmpty() && !isReplySubmitting
 
             val density = LocalDensity.current
 
@@ -157,6 +170,12 @@ fun ReplyBottomSheet(
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
 
+            val isEditingCurrentSheetItem =
+                editingComment?.target?.id?.let { editingId ->
+                    editingId == comment.replyId ||
+                        replies.any { it.replyId == editingId }
+                } == true
+
             LaunchedEffect(Unit) {
                 snapshotFlow { imeTarget.getBottom(density) > 0 }
                     .distinctUntilChanged()
@@ -177,6 +196,24 @@ fun ReplyBottomSheet(
                 }
             }
 
+            LaunchedEffect(editingComment, isEditingCurrentSheetItem) {
+                if (isEditingCurrentSheetItem) {
+                    commentText = editingComment.content
+                    focusRequester.requestFocus()
+                    keyboardController?.show()
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                currentReplySubmissionSuccess.collect {
+                    commentText = ""
+                    focusManager.clearFocus(force = true)
+                    ViewCompat
+                        .getWindowInsetsController(view)
+                        ?.hide(WindowInsetsCompat.Type.ime())
+                }
+            }
+
             Column(
                 modifier =
                     Modifier
@@ -186,7 +223,10 @@ fun ReplyBottomSheet(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ByeBooDragHandle(
-                    modifier = Modifier.noRippleClickable { hideSheet() },
+                    modifier =
+                        Modifier.noRippleClickable {
+                            hideSheet()
+                        },
                 )
 
                 Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
@@ -199,7 +239,10 @@ fun ReplyBottomSheet(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_left),
                                 contentDescription = null,
                                 tint = ByeBooTheme.colors.gray50,
-                                modifier = Modifier.noRippleClickable { hideSheet() },
+                                modifier =
+                                    Modifier.noRippleClickable {
+                                        hideSheet()
+                                    },
                             )
                         },
                     )
@@ -214,8 +257,8 @@ fun ReplyBottomSheet(
                             .padding(horizontal = screenWidthDp(24.dp)),
                 ) {
                     CommonReplyItem(
-                        reply = reply,
-                        onMoreOptionsClick = {},
+                        reply = comment,
+                        onMoreOptionsClick = onCommentMoreOptionsClick,
                         onCommentClick = {},
                     )
 
@@ -224,7 +267,7 @@ fun ReplyBottomSheet(
                     replies.forEach { replyItem ->
                         CommonReplyItem(
                             reply = replyItem,
-                            onMoreOptionsClick = {},
+                            onMoreOptionsClick = { onReplyMoreOptionsClick(replyItem) },
                             onCommentClick = {},
                             isReply = true,
                         )
@@ -239,9 +282,11 @@ fun ReplyBottomSheet(
                     maxLength = maxLength,
                     onTextChange = { if (it.length <= maxLength) commentText = it },
                     onCompleteClick = {
-                        onCompleteComment(commentText)
-                        commentText = ""
-                        ViewCompat.getWindowInsetsController(view)?.hide(WindowInsetsCompat.Type.ime())
+                        if (isEditingCurrentSheetItem) {
+                            onEditCommentComplete(commentText)
+                        } else {
+                            onReplyComplete(commentText)
+                        }
                     },
                     placeholder = "답글로 위로를 남겨보세요.",
                 )

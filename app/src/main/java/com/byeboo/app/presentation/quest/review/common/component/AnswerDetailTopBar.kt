@@ -13,7 +13,7 @@ import com.byeboo.app.core.util.noRippleClickable
 @Composable
 fun AnswerDetailTopBar(
     onBackClick: () -> Unit,
-    onClickMoreOptions: () -> Unit,
+    onMoreOptionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ByeBooTopbar(
@@ -36,7 +36,7 @@ fun AnswerDetailTopBar(
                 modifier =
                     Modifier
                         .noRippleClickable(
-                            onClick = onClickMoreOptions,
+                            onClick = onMoreOptionsClick,
                         ),
             )
         },

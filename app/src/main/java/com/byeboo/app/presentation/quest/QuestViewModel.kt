@@ -410,10 +410,10 @@ class QuestViewModel
                 val myUserId = userRepository.getUserId()
 
                 if (selectedAnswer.writerId == myUserId) {
-                    _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswersDetail(answerId))
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonAnswer(answerId))
                 } else {
                     mixpanelUtil.trackEvent("common_journey_others_answer_pageview")
-                    _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonAnswer(answerId))
                 }
             }
         }
