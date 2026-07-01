@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import com.byeboo.app.R
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.domain.model.quest.QuestDataModel
+import com.byeboo.app.presentation.quest.model.CommonAnswerModel
 import com.byeboo.app.presentation.quest.model.Quest
 import com.byeboo.app.presentation.quest.model.QuestGroup
 import com.byeboo.app.presentation.quest.model.QuestOutput
@@ -89,6 +90,12 @@ class QuestUiModelMapper
             return runCatching {
                 writtenAt.format(DateTimeFormatter.ofPattern("yyyy. MM. dd."))
             }.getOrDefault("")
+        }
+
+        fun toggleLike(answer: CommonAnswerModel): CommonAnswerModel {
+            val newIsLiked = !answer.isLiked
+            val newHeartCount = (if (newIsLiked) answer.heartCount + 1 else answer.heartCount - 1).coerceAtLeast(0)
+            return answer.copy(isLiked = newIsLiked, heartCount = newHeartCount)
         }
     }
 

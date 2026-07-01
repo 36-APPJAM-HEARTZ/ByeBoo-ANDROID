@@ -33,6 +33,17 @@ data class CommonAnswerModel(
 )
 
 @Immutable
+data class CommonReplyModel(
+    val replyId: Long,
+    val writerId: Long,
+    val writer: String,
+    @DrawableRes val profileIconRes: Int,
+    val displayTime: String,
+    val content: String,
+    val replyCount: Int,
+)
+
+@Immutable
 data class MyAnswerModel(
     val answerId: Long,
     val question: String,

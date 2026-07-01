@@ -24,7 +24,7 @@ class MyAnswerViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
-        private val questCommonRepository: QuestCommonRepository,
+        private val commonQuestRepository: QuestCommonRepository,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(MyAnswerState())
         val uiState: StateFlow<MyAnswerState> = _uiState.asStateFlow()
@@ -40,7 +40,7 @@ class MyAnswerViewModel
             }
 
             viewModelScope.launch {
-                questCommonRepository.answersFlow.collect { answerModels ->
+                commonQuestRepository.answersFlow.collect { answerModels ->
                     val answers =
                         answerModels
                             .map {
@@ -64,7 +64,7 @@ class MyAnswerViewModel
         private fun loadInitialAnswers() {
             _uiState.update { it.copy(isLoading = true) }
             viewModelScope.launch {
-                questCommonRepository
+                commonQuestRepository
                     .refreshMyAnswers()
                     .onSuccess {
                         _uiState.update { it.copy(isLoading = false) }
@@ -80,7 +80,7 @@ class MyAnswerViewModel
 
             _uiState.update { it.copy(isLoading = true) }
             viewModelScope.launch {
-                questCommonRepository
+                commonQuestRepository
                     .loadMyAnswers()
                     .onSuccess {
                         _uiState.update { it.copy(isLoading = false) }
@@ -99,11 +99,21 @@ class MyAnswerViewModel
 
         fun onMyAnswerContentClicked(answerId: Long) {
             viewModelScope.launch {
-                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestMyAnswerDetail(answerId))
+                _sideEffect.emit(MyAnswerSideEffect.NavigateToQuestCommonAnswer(answerId))
             }
         }
 
-        fun onHeartClicked() {
-            // TODO: 하트 API 연동
+        fun onHeartClicked(answerId: Long) {
+            viewModelScope.launch {
+                commonQuestRepository
+                    .updateAnswerLike(answerId)
+                    .onFailure { exception ->
+                        _sideEffect.emit(
+                            MyAnswerSideEffect.ShowSnackBar(
+                                CustomSnackBarType.error(exception),
+                            ),
+                        )
+                    }
+            }
         }
     }

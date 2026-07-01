@@ -93,3 +93,37 @@
     public static int d(...);
     public static int e(...);
 }
+
+# Kotlin Serialization
+-keep class kotlinx.serialization.internal.** { *; }
+-keepclassmembers @kotlinx.serialization.Serializable class * {
+    static ** Companion;
+    static ** INSTANCE;
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# Navigation type-safe args
+-keep class * extends androidx.navigation.NavArgs { *; }
+
+# Class Protect
+-keep class com.byeboo.app.core.model.** { *; }
+
+# DataStore
+-keep class androidx.datastore.** { *; }
+
+# Coroutines
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
+}
+-dontwarn kotlinx.coroutines.**
+
+# Mixpanel
+-keep class com.mixpanel.** { *; }
+-dontwarn com.mixpanel.**
+
+# Google Play Core
+-keep class com.google.android.play.** { *; }
+-dontwarn com.google.android.play.**
+
+# protectNavigation
+-keep class com.byeboo.app.**.navigation.** { *; }

@@ -1,5 +1,6 @@
 package com.byeboo.app.domain.model.quest
 
+import com.byeboo.app.core.model.quest.ReportType
 import java.time.LocalDateTime
 
 data class CommonQuestModel(
@@ -24,11 +25,11 @@ data class CommonQuestAnswer(
     val writerId: Long,
 )
 
-data class QuestCommonAnswerRequestModel(
+data class CommonQuestAnswerRequestModel(
     val answer: String,
 )
 
-data class QuestCommonMyAnswerModel(
+data class CommonQuestMyAnswerModel(
     val hasNext: Boolean,
     val nextCursor: Long?,
     val answers: List<QuestAnswerModel>,
@@ -44,10 +45,21 @@ data class QuestAnswerModel(
     val content: String,
 )
 
+data class QuestLikeModel(
+    val heartCount: Int,
+    val isLiked: Boolean,
+)
+
+data class QuestLikeUpdateModel(
+    val answerId: Long,
+    val heartCount: Int,
+    val isLiked: Boolean,
+)
+
 data class QuestAnswerDetailModel(
     val question: String,
     val answer: QuestAnswerDetailAnswerModel,
-    val comments: List<QuestCommonDetailCommentModel>,
+    val comments: List<CommonQuestDetailCommentModel>,
 )
 
 data class QuestAnswerDetailAnswerModel(
@@ -61,8 +73,9 @@ data class QuestAnswerDetailAnswerModel(
     val writtenAt: LocalDateTime,
 )
 
-data class QuestCommonDetailCommentModel(
+data class CommonQuestDetailCommentModel(
     val commentId: Long,
+    val replyCount: Long,
     val writer: String,
     val writerId: Long,
     val profileIcon: String,
@@ -70,6 +83,39 @@ data class QuestCommonDetailCommentModel(
     val writtenAt: LocalDateTime,
 )
 
-data class QuestCommonAnswerEditModel(
+data class CommonQuestAnswerEditModel(
     val answer: String,
+)
+
+data class CommentRepliesModel(
+    val totalCount: Int,
+    val comment: CommentDetailModel,
+    val replies: List<CommentReplyModel>,
+)
+
+data class CommentDetailModel(
+    val commentId: Long,
+    val writerId: Long,
+    val writer: String,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
+)
+
+data class CommentReplyModel(
+    val replyId: Long,
+    val writerId: Long,
+    val writer: String,
+    val profileIcon: String,
+    val content: String,
+    val writtenAt: LocalDateTime,
+)
+
+data class ReportCommentQuestModel(
+    val reportType: ReportType,
+    val targetId: Long,
+)
+
+data class CommonQuestCommentEditModel(
+    val content: String,
 )

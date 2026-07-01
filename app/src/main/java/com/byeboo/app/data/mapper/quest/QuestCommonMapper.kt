@@ -2,32 +2,44 @@ package com.byeboo.app.data.mapper.quest
 
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
+import com.byeboo.app.data.dto.request.quest.UpdateCommonQuestCommentRequestDto
+import com.byeboo.app.data.dto.response.quest.CommentDetailDto
+import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestAnswerDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonDetailAnswerDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonDetailCommentDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
+import com.byeboo.app.data.dto.response.quest.ReplyItemDto
+import com.byeboo.app.domain.model.quest.CommentDetailModel
+import com.byeboo.app.domain.model.quest.CommentRepliesModel
+import com.byeboo.app.domain.model.quest.CommentReplyModel
 import com.byeboo.app.domain.model.quest.CommonQuestAnswer
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerEditModel
+import com.byeboo.app.domain.model.quest.CommonQuestAnswerRequestModel
+import com.byeboo.app.domain.model.quest.CommonQuestCommentEditModel
+import com.byeboo.app.domain.model.quest.CommonQuestDetailCommentModel
 import com.byeboo.app.domain.model.quest.CommonQuestModel
+import com.byeboo.app.domain.model.quest.CommonQuestMyAnswerModel
 import com.byeboo.app.domain.model.quest.QuestAnswerDetailAnswerModel
 import com.byeboo.app.domain.model.quest.QuestAnswerDetailModel
 import com.byeboo.app.domain.model.quest.QuestAnswerModel
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerEditModel
-import com.byeboo.app.domain.model.quest.QuestCommonAnswerRequestModel
-import com.byeboo.app.domain.model.quest.QuestCommonDetailCommentModel
-import com.byeboo.app.domain.model.quest.QuestCommonMyAnswerModel
+import com.byeboo.app.domain.model.quest.QuestLikeModel
+import com.byeboo.app.domain.model.quest.ReportCommentQuestModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun QuestCommonAnswerRequestModel.toData(): QuestCommonRequestDto =
+fun CommonQuestAnswerRequestModel.toData(): QuestCommonRequestDto =
     QuestCommonRequestDto(
         answer = this.answer,
     )
 
-fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
-    QuestCommonMyAnswerModel(
+fun QuestMyCommonAnswerResponseDto.toDomain(): CommonQuestMyAnswerModel =
+    CommonQuestMyAnswerModel(
         hasNext = this.hasNext,
         nextCursor = this.nextCursor,
         answers =
@@ -44,7 +56,7 @@ fun QuestMyCommonAnswerResponseDto.toDomain(): QuestCommonMyAnswerModel =
             },
     )
 
-fun QuestCommonAnswerEditModel.toData(): QuestCommonEditRequestDto =
+fun CommonQuestAnswerEditModel.toData(): QuestCommonEditRequestDto =
     QuestCommonEditRequestDto(
         answer = this.answer,
     )
@@ -92,14 +104,59 @@ fun QuestCommonDetailAnswerDto.toDomain(): QuestAnswerDetailAnswerModel =
         writtenAt = this.writtenAt.toLocalDateTime(),
     )
 
-fun QuestCommonDetailCommentDto.toDomain(): QuestCommonDetailCommentModel =
-    QuestCommonDetailCommentModel(
+fun QuestCommonDetailCommentDto.toDomain(): CommonQuestDetailCommentModel =
+    CommonQuestDetailCommentModel(
         commentId = this.commentId,
+        replyCount = this.replyCount,
         writer = this.writer,
         writerId = this.writerId,
         profileIcon = this.profileIcon,
         content = this.content,
         writtenAt = this.writtenAt.toLocalDateTime(),
+    )
+
+fun CommentRepliesResponseDto.toDomain(): CommentRepliesModel =
+    CommentRepliesModel(
+        totalCount = this.totalCount,
+        comment = this.comment.toDomain(),
+        replies = this.replies.map { it.toDomain() },
+    )
+
+fun CommentDetailDto.toDomain(): CommentDetailModel =
+    CommentDetailModel(
+        commentId = this.commentId,
+        writerId = this.writerId,
+        writer = this.writer,
+        profileIcon = this.profileIcon,
+        content = this.content,
+        writtenAt = this.createdAt.toLocalDateTime(),
+    )
+
+fun ReplyItemDto.toDomain(): CommentReplyModel =
+    CommentReplyModel(
+        replyId = this.commentId,
+        writerId = this.writerId,
+        writer = this.writer,
+        profileIcon = this.profileIcon,
+        content = this.content,
+        writtenAt = this.createdAt.toLocalDateTime(),
+    )
+
+fun QuestLikeResponseDto.toDomain(): QuestLikeModel =
+    QuestLikeModel(
+        heartCount = this.likeCount,
+        isLiked = this.isLiked,
+    )
+
+fun ReportCommentQuestModel.toData(): ReportCommonQuestRequestDto =
+    ReportCommonQuestRequestDto(
+        targetType = reportType.toString(),
+        targetId = targetId,
+    )
+
+fun CommonQuestCommentEditModel.toData(): UpdateCommonQuestCommentRequestDto =
+    UpdateCommonQuestCommentRequestDto(
+        content = this.content,
     )
 
 private fun String.toLocalDateTime(): LocalDateTime =

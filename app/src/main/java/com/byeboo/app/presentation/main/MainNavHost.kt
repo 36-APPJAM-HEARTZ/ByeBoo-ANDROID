@@ -163,12 +163,6 @@ fun MainNavHost(
             navigateToQuestMyAnswers = {
                 navigator.navigateToQuestMyAnswers(navOptions = keepStackNavOptions)
             },
-            navigateToQuestMyAnswerDetail = { answerId ->
-                navigator.navigateToQuestMyAnswerDetail(
-                    answerId = answerId,
-                    navOptions = keepStackNavOptions,
-                )
-            },
             navigateToQuestCommonWriting = { questId, question ->
                 navigator.navigateToQuestCommonWriting(
                     questId = questId,

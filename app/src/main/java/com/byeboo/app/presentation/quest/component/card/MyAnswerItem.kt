@@ -26,7 +26,7 @@ import com.byeboo.app.presentation.quest.model.MyAnswerModel
 @Composable
 fun MyAnswerItem(
     answer: MyAnswerModel,
-    onHeartClick: () -> Unit,
+    onHeartClick: (Long) -> Unit,
     onCommentClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
     onMyAnswerContentClick: (Long) -> Unit = {},
@@ -91,7 +91,7 @@ fun MyAnswerItem(
             ReactionCountButton(
                 isLiked = answer.isLiked,
                 heartCount = answer.heartCount,
-                onHeartClick = onHeartClick,
+                onHeartClick = { onHeartClick(answer.answerId) },
                 commentCount = answer.commentCount,
                 onCommentClick =
                     onCommentClick.let {

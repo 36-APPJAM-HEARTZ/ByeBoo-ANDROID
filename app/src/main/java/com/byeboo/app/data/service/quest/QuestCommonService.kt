@@ -2,10 +2,16 @@ package com.byeboo.app.data.service.quest
 
 import com.byeboo.app.data.dto.base.BaseResponse
 import com.byeboo.app.data.dto.base.NullableBaseResponse
+import com.byeboo.app.data.dto.request.quest.QuestCommentReplyRequestDto
+import com.byeboo.app.data.dto.request.quest.QuestCommonCommentRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonEditRequestDto
 import com.byeboo.app.data.dto.request.quest.QuestCommonRequestDto
+import com.byeboo.app.data.dto.request.quest.ReportCommonQuestRequestDto
+import com.byeboo.app.data.dto.request.quest.UpdateCommonQuestCommentRequestDto
+import com.byeboo.app.data.dto.response.quest.CommentRepliesResponseDto
 import com.byeboo.app.data.dto.response.quest.CommonQuestResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestCommonAnswerDetailResponseDto
+import com.byeboo.app.data.dto.response.quest.QuestLikeResponseDto
 import com.byeboo.app.data.dto.response.quest.QuestMyCommonAnswerResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -56,8 +62,40 @@ interface QuestCommonService {
         @Path("blockedUserId") blockedUserId: Long,
     ): NullableBaseResponse<Unit>
 
-    @POST("/api/v1/reports/common-quests/{answerId}")
+    @POST("/api/v2/reports")
     suspend fun reportCommonQuest(
+        @Body request: ReportCommonQuestRequestDto,
+    ): NullableBaseResponse<Unit>
+
+    @POST("/api/v1/comments")
+    suspend fun uploadComment(
+        @Body request: QuestCommonCommentRequestDto,
+    ): NullableBaseResponse<Unit>
+
+    @POST("/api/v1/comments/{commentId}/replies")
+    suspend fun uploadCommentReply(
+        @Path("commentId") commentId: Long,
+        @Body request: QuestCommentReplyRequestDto,
+    ): NullableBaseResponse<Unit>
+
+    @GET("/api/v1/comments/{commentId}/replies")
+    suspend fun getCommentReplies(
+        @Path("commentId") commentId: Long,
+    ): BaseResponse<CommentRepliesResponseDto>
+
+    @POST("/api/v1/common-quests/{answerId}/likes")
+    suspend fun updateAnswerLike(
         @Path("answerId") answerId: Long,
+    ): BaseResponse<QuestLikeResponseDto>
+
+    @DELETE("/api/v1/comments/{commentId}")
+    suspend fun deleteCommonQuestComment(
+        @Path("commentId") commentId: Long,
+    ): NullableBaseResponse<Unit>
+
+    @PATCH("/api/v1/comments/{commentId}")
+    suspend fun updateCommonQuestComment(
+        @Path("commentId") commentId: Long,
+        @Body request: UpdateCommonQuestCommentRequestDto,
     ): NullableBaseResponse<Unit>
 }

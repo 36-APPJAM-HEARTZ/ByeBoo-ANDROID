@@ -17,11 +17,14 @@ import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
 
 @Composable
-fun ByeBooDragHandle(content: @Composable () -> Unit = {}) {
+fun ByeBooDragHandle(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {},
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
-            Modifier
+            modifier
                 .padding(top = screenHeightDp(5.dp), bottom = screenHeightDp(16.dp))
                 .clip(shape = RoundedCornerShape(12.dp)),
     ) {

@@ -83,6 +83,7 @@ class QuestViewModel
             refetchCommonQuests(uiState.value.commonJourneyState.selectedDate)
             observeAnswerSubmitted()
             observeRefreshEvent()
+            observeLikeUpdates()
             observeDeeplinkQuestId()
         }
 
@@ -442,10 +443,10 @@ class QuestViewModel
                 val myUserId = userRepository.getUserId()
 
                 if (selectedAnswer.writerId == myUserId) {
-                    _sideEffect.emit(QuestSideEffect.NavigateToQuestMyAnswersDetail(answerId))
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonAnswer(answerId))
                 } else {
                     mixpanelUtil.trackEvent("common_journey_others_answer_pageview")
-                    _sideEffect.emit(QuestSideEffect.NavigateToCommonAnswerDetail(answerId))
+                    _sideEffect.emit(QuestSideEffect.NavigateToQuestCommonAnswer(answerId))
                 }
             }
         }
@@ -480,8 +481,51 @@ class QuestViewModel
             _uiState.update { it.copy(showCompleteModal = false) }
         }
 
-        fun onHeartClicked() {
-            // TODO: 하트 api 연동
+        fun onHeartClicked(answerId: Long) {
+            val previousAnswer =
+                _uiState.value.commonJourneyState.answers
+                    .find { it.answerId == answerId } ?: return
+            val toggledAnswer = mapper.toggleLike(previousAnswer)
+
+            updateAnswerInList(toggledAnswer)
+
+            viewModelScope.launch {
+                commonQuestRepository
+                    .updateAnswerLike(answerId)
+                    .onFailure { exception ->
+                        updateAnswerInList(previousAnswer)
+                        _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.error(exception)))
+                    }
+            }
+        }
+
+        private fun updateAnswerInList(answer: CommonAnswerModel) {
+            _uiState.update { state ->
+                val updatedAnswers =
+                    state.commonJourneyState.answers
+                        .map { if (it.answerId == answer.answerId) answer else it }
+                        .toImmutableList()
+                state.copy(commonJourneyState = state.commonJourneyState.copy(answers = updatedAnswers))
+            }
+        }
+
+        private fun observeLikeUpdates() {
+            viewModelScope.launch {
+                commonQuestRepository.likeUpdatedEvent.collect { event ->
+                    _uiState.update { state ->
+                        val updatedAnswers =
+                            state.commonJourneyState.answers
+                                .map { answer ->
+                                    if (answer.answerId == event.answerId) {
+                                        answer.copy(heartCount = event.heartCount, isLiked = event.isLiked)
+                                    } else {
+                                        answer
+                                    }
+                                }.toImmutableList()
+                        state.copy(commonJourneyState = state.commonJourneyState.copy(answers = updatedAnswers))
+                    }
+                }
+            }
         }
 
         private suspend fun handleCompletedQuestClick(quest: Quest) {

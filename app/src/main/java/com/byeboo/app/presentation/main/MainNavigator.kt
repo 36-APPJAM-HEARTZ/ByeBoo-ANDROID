@@ -36,7 +36,6 @@ import com.byeboo.app.presentation.quest.navigation.QuestResultKey
 import com.byeboo.app.presentation.quest.navigation.navigateToQuest
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestAiAnswer
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestCommonAnswer
-import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswerDetail
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestMyAnswers
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestReview
 import com.byeboo.app.presentation.quest.navigation.navigateToQuestStart
@@ -246,13 +245,6 @@ class MainNavigator(
 
     fun navigateToQuestMyAnswers(navOptions: NavOptions? = null) {
         navController.navigateToQuestMyAnswers(navOptions = navOptions)
-    }
-
-    fun navigateToQuestMyAnswerDetail(
-        answerId: Long,
-        navOptions: NavOptions? = null,
-    ) {
-        navController.navigateToQuestMyAnswerDetail(answerId = answerId, navOptions = navOptions)
     }
 
     fun navigateToQuestReview(
