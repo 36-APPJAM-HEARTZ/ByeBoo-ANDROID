@@ -48,6 +48,7 @@ import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
 import timber.log.Timber
+import androidx.core.net.toUri
 
 class MainNavigator(
     val navController: NavHostController,
@@ -331,10 +332,10 @@ class MainNavigator(
 
     fun navigateToDeepLink(url: String) {
         try {
-            val uri = Uri.parse(url)
+            val uri = url.toUri()
             navController.navigate(uri)
         } catch (e: Exception) {
-            Timber.e("MainNavigator Deeplink error  : $url")
+            Timber.e(e, "MainNavigator Deeplink error  : $url")
         }
     }
 }
