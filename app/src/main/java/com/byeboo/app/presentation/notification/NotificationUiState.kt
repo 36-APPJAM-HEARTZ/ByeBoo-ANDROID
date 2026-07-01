@@ -1,5 +1,7 @@
 package com.byeboo.app.presentation.notification
 
+import com.byeboo.app.core.designsystem.type.CustomSnackBarType
+import com.byeboo.app.presentation.notification.model.NotificationUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -13,5 +15,9 @@ sealed interface NotificationSideEffect {
 
     data class NavigateToDeepLink(
         val landingUrl: String,
+    ) : NotificationSideEffect
+
+    data class ShowSnackBar(
+        val snackBarType: CustomSnackBarType,
     ) : NotificationSideEffect
 }
