@@ -1,5 +1,6 @@
 package com.byeboo.app.data.repositoryimpl.notification
 
+import com.byeboo.app.core.util.ErrorParser
 import com.byeboo.app.data.datasource.remote.notification.NotificationDataSource
 import com.byeboo.app.data.mapper.notification.toDomain
 import com.byeboo.app.domain.model.notification.NotificationModel
@@ -10,56 +11,60 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class NotificationRepositoryImpl
-    @Inject
-    constructor(
-        private val notificationDataSource: NotificationDataSource,
-    ) : NotificationRepository {
-        private val _hasUnreadFlow = MutableStateFlow(false)
-        override val hasUnreadFlow: StateFlow<Boolean> = _hasUnreadFlow.asStateFlow()
+@Inject
+constructor(
+    private val notificationDataSource: NotificationDataSource,
+) : NotificationRepository {
+    private val _hasUnreadFlow = MutableStateFlow(false)
+    override val hasUnreadFlow: StateFlow<Boolean> = _hasUnreadFlow.asStateFlow()
 
-        override suspend fun checkHasUnreadNotifications(): Result<Boolean> =
-            runCatching {
-                val response = notificationDataSource.checkHasUnreadNotifications()
-                if (response.success) {
-                    _hasUnreadFlow.value = response.data.hasUnread
-                    response.data.hasUnread
-                } else {
-                    throw Exception(response.message)
-                }
-            }
+    override suspend fun checkHasUnreadNotifications(): Result<Boolean> =
+        runCatching {
+            val response = notificationDataSource.checkHasUnreadNotifications()
+            if (!response.success) throw Exception(response.message)
+            _hasUnreadFlow.value = response.data.hasUnread
+            response.data.hasUnread
+        }.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
+        )
 
-        override suspend fun getNotificationList(): Result<List<NotificationModel>> =
-            runCatching {
-                val response = notificationDataSource.getNotificationList()
 
-                if (response.success) {
-                    response.data.notifications.map { it.toDomain() }
-                } else {
-                    throw Exception(response.message)
-                }
-            }
+    override suspend fun getNotificationList(): Result<List<NotificationModel>> =
+        runCatching {
+            val response = notificationDataSource.getNotificationList()
 
-        override suspend fun markAllNotificationsAsRead(): Result<Unit> =
-            runCatching {
-                val response = notificationDataSource.patchAllNotificationsRead()
+            if (!response.success) throw Exception(response.message)
+            response.data.notifications.map { it.toDomain() }
 
-                if (response.success) {
-                    _hasUnreadFlow.value = false
-                    return@runCatching
-                } else {
-                    throw Exception(response.message)
-                }
-            }
+        }.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
+        )
 
-        override suspend fun markNotificationAsRead(notificationId: Long): Result<Unit> =
-            runCatching {
-                val response = notificationDataSource.patchNotificationRead(notificationId)
 
-                if (response.success) {
-                    checkHasUnreadNotifications()
-                    return@runCatching
-                } else {
-                    throw Exception(response.message)
-                }
-            }
-    }
+    override suspend fun markAllNotificationsAsRead(): Result<Unit> =
+        runCatching {
+            val response = notificationDataSource.patchAllNotificationsRead()
+
+            if (!response.success) throw Exception(response.message)
+            _hasUnreadFlow.value = false
+            return@runCatching
+        }.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
+        )
+
+
+    override suspend fun markNotificationAsRead(notificationId: Long): Result<Unit> =
+        runCatching {
+            val response = notificationDataSource.patchNotificationRead(notificationId)
+
+            if (!response.success) throw Exception(response.message)
+            checkHasUnreadNotifications()
+            return@runCatching
+        }.fold(
+            onSuccess = { Result.success(it) },
+            onFailure = { Result.failure(Exception(ErrorParser.getErrorMessage(it))) }
+        )
+}
