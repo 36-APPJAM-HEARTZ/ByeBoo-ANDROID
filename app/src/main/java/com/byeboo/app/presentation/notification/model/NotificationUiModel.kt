@@ -1,5 +1,6 @@
-package com.byeboo.app.presentation.notification
+package com.byeboo.app.presentation.notification.model
 import androidx.compose.runtime.Immutable
+import com.byeboo.app.core.util.TimeFormatter
 import com.byeboo.app.domain.model.notification.NotificationModel
 import com.byeboo.app.domain.model.notification.NotificationType
 import com.byeboo.app.presentation.quest.util.QuestUiModelMapper
@@ -27,7 +28,7 @@ fun NotificationModel.toUiModel(mapper: QuestUiModelMapper): NotificationUiModel
         title = this.title,
         content = this.content,
         isRead = this.isRead,
-        createdAt = mapper.formatWrittenTime(localDateTime),
+        createdAt = TimeFormatter.formatWrittenTime(localDateTime),
         landingUrl = this.landingUrl,
         notificationType = this.type,
     )

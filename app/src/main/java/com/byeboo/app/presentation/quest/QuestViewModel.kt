@@ -7,6 +7,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.TimeFormatter
 import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -139,7 +140,7 @@ class QuestViewModel
                                 writerId = answer.writerId,
                                 writer = answer.writer,
                                 profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                displayTime = TimeFormatter.formatWrittenTime(answer.writtenAt),
                                 content = answer.content,
                             )
                         }.toImmutableList()
@@ -221,7 +222,7 @@ class QuestViewModel
                                     writer = answer.writer,
                                     writerId = answer.writerId,
                                     profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                    displayTime = TimeFormatter.formatWrittenTime(answer.writtenAt),
                                     content = answer.content,
                                 )
                             }
