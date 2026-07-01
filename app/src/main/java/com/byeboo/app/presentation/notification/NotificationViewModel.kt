@@ -20,8 +20,8 @@ import javax.inject.Inject
 class NotificationViewModel
     @Inject
     constructor(
-        val notificationRepository: NotificationRepository,
-        val questUiModelMapper: QuestUiModelMapper,
+        private val notificationRepository: NotificationRepository,
+        private val questUiModelMapper: QuestUiModelMapper,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(NotificationUiState())
         val uiState: StateFlow<NotificationUiState> = _uiState.asStateFlow()
@@ -66,13 +66,14 @@ class NotificationViewModel
 
                             notificationState.copy(notificationList = updatedNotificationList)
                         }
+                        _uiState.update {
+                            it.copy(
+                                isAllNotificationRead = true,
+                            )
+                        }
                     }
                 }
-                _uiState.update {
-                    it.copy(
-                        isAllNotificationRead = true,
-                    )
-                }
+
             }
         }
 
