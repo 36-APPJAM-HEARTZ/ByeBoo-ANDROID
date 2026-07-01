@@ -2,6 +2,7 @@ package com.byeboo.app.presentation.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
@@ -19,6 +20,7 @@ import com.byeboo.app.presentation.home.navigation.navigateToHomeOnboarding
 import com.byeboo.app.presentation.mypage.navigation.navigateToBlockedUsers
 import com.byeboo.app.presentation.mypage.navigation.navigateToEditProfile
 import com.byeboo.app.presentation.mypage.navigation.navigateToMyPage
+import com.byeboo.app.presentation.notification.navigation.navigateToNotificationList
 import com.byeboo.app.presentation.offboarding.navigation.OffboardingQuestCompleted
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedGuide
 import com.byeboo.app.presentation.offboarding.navigation.navigateToOffboardingCompletedJourney
@@ -44,6 +46,7 @@ import com.byeboo.app.presentation.splash.navigation.Splash
 import com.byeboo.app.presentation.splash.navigation.navigateToSplash
 import com.byeboo.app.presentation.splash.navigation.navigateToTerms
 import com.byeboo.app.presentation.tutorial.navigation.navigateToTutorial
+import timber.log.Timber
 
 class MainNavigator(
     val navController: NavHostController,
@@ -112,6 +115,10 @@ class MainNavigator(
 
     fun navigateUp() {
         navController.navigateUp()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
     }
 
     fun navigateToTerms(navOptions: NavOptions) {
@@ -308,6 +315,19 @@ class MainNavigator(
 
     fun navigateToSplash(navOptions: NavOptions) {
         navController.navigateToSplash(navOptions)
+    }
+
+    fun navigateToNotificationList(navOptions: NavOptions) {
+        navController.navigateToNotificationList(navOptions)
+    }
+
+    fun navigateToDeepLink(url: String) {
+        try {
+            val uri = url.toUri()
+            navController.navigate(uri)
+        } catch (e: Exception) {
+            Timber.e(e, "MainNavigator Deeplink error  : $url")
+        }
     }
 }
 

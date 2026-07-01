@@ -1,11 +1,9 @@
-package com.byeboo.app.presentation.notification
+package com.byeboo.app.presentation.notification.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -22,11 +20,12 @@ import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
-import com.byeboo.app.presentation.quest.util.iconResId
+import com.byeboo.app.presentation.notification.iconResId
+import com.byeboo.app.presentation.notification.model.NotificationUiModel
 
 @Composable
 fun NotificationCard(
-    notification: NotificationModel,
+    notification: NotificationUiModel,
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -34,7 +33,7 @@ fun NotificationCard(
         modifier =
             modifier
                 .fillMaxWidth()
-                .noRippleClickable { onClick(notification.landingLink) },
+                .noRippleClickable { onClick(notification.landingUrl) },
         color = if (notification.isRead) ByeBooTheme.colors.whiteAlpha5 else ByeBooTheme.colors.primary300Alpha20,
         shape = RoundedCornerShape(12.dp),
     ) {
@@ -54,7 +53,7 @@ fun NotificationCard(
                 Icon(
                     imageVector =
                         ImageVector.vectorResource(
-                            id = notification.iconResId,
+                            id = notification.notificationType.iconResId,
                         ),
                     contentDescription = null,
                     tint = Color.Unspecified,
@@ -73,12 +72,11 @@ fun NotificationCard(
                 style = ByeBooTheme.typography.body6,
             )
 
-            Spacer(modifier = Modifier.height(screenHeightDp(8.dp)))
-
             Text(
                 text = notification.createdAt,
                 color = ByeBooTheme.colors.gray400,
                 style = ByeBooTheme.typography.cap2,
+                modifier = Modifier.padding(top = screenHeightDp(8.dp)),
             )
         }
     }

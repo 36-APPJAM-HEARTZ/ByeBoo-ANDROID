@@ -7,6 +7,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.model.quest.QuestType
 import com.byeboo.app.core.util.DateUtil.getFormattedDate
 import com.byeboo.app.core.util.MixpanelUtil
+import com.byeboo.app.core.util.TimeFormatter
 import com.byeboo.app.core.util.TimeUtil
 import com.byeboo.app.domain.model.home.HomeStatus
 import com.byeboo.app.domain.repository.auth.UserRepository
@@ -30,6 +31,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -81,6 +84,7 @@ class QuestViewModel
             observeAnswerSubmitted()
             observeRefreshEvent()
             observeLikeUpdates()
+            observeDeeplinkQuestId()
         }
 
         fun onTabClicked(tab: QuestTab) {
@@ -138,7 +142,7 @@ class QuestViewModel
                                 writerId = answer.writerId,
                                 writer = answer.writer,
                                 profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                displayTime = TimeFormatter.formatWrittenTime(answer.writtenAt),
                                 content = answer.content,
                             )
                         }.toImmutableList()
@@ -193,7 +197,14 @@ class QuestViewModel
             paginationJob?.cancel()
             paginationJob =
                 viewModelScope.launch {
-                    _uiState.update { it.copy(commonJourneyState = it.commonJourneyState.copy(isPaginationLoading = true)) }
+                    _uiState.update {
+                        it.copy(
+                            commonJourneyState =
+                                it.commonJourneyState.copy(
+                                    isPaginationLoading = true,
+                                ),
+                        )
+                    }
 
                     runCatching {
                         commonQuestRepository
@@ -213,7 +224,7 @@ class QuestViewModel
                                     writer = answer.writer,
                                     writerId = answer.writerId,
                                     profileIconRes = mapper.mapToIconRes(answer.profileIcon),
-                                    displayTime = mapper.formatWrittenTime(answer.writtenAt),
+                                    displayTime = TimeFormatter.formatWrittenTime(answer.writtenAt),
                                     content = answer.content,
                                 )
                             }
@@ -221,7 +232,10 @@ class QuestViewModel
                         _uiState.update { state ->
                             if (state.commonJourneyState.selectedDate != requestDate) {
                                 return@update state.copy(
-                                    commonJourneyState = state.commonJourneyState.copy(isPaginationLoading = false),
+                                    commonJourneyState =
+                                        state.commonJourneyState.copy(
+                                            isPaginationLoading = false,
+                                        ),
                                 )
                             }
 
@@ -237,7 +251,14 @@ class QuestViewModel
                         }
                     }.onFailure { t ->
                         if (t is CancellationException) throw t
-                        _uiState.update { it.copy(commonJourneyState = it.commonJourneyState.copy(isPaginationLoading = false)) }
+                        _uiState.update {
+                            it.copy(
+                                commonJourneyState =
+                                    it.commonJourneyState.copy(
+                                        isPaginationLoading = false,
+                                    ),
+                            )
+                        }
                         _sideEffect.emit(QuestSideEffect.ShowSnackBar(CustomSnackBarType.ALERT))
                     }
                 }
@@ -372,7 +393,13 @@ class QuestViewModel
             viewModelScope.launch {
                 _uiState.update { it.copy(myJourneyState = it.myJourneyState.copy(showQuitModal = false)) }
                 when (quest.type) {
-                    QuestType.RECORDING -> _sideEffect.emit(QuestSideEffect.NavigateToQuestRecording(quest.questId))
+                    QuestType.RECORDING ->
+                        _sideEffect.emit(
+                            QuestSideEffect.NavigateToQuestRecording(
+                                quest.questId,
+                            ),
+                        )
+
                     QuestType.ACTIVE -> _sideEffect.emit(QuestSideEffect.NavigateToQuestBehavior(quest.questId))
                     else -> Unit
                 }
@@ -388,7 +415,13 @@ class QuestViewModel
 
                 if (quest?.state is QuestState.Available) {
                     _uiState.update {
-                        it.copy(myJourneyState = it.myJourneyState.copy(selectedQuest = quest, showQuitModal = true))
+                        it.copy(
+                            myJourneyState =
+                                it.myJourneyState.copy(
+                                    selectedQuest = quest,
+                                    showQuitModal = true,
+                                ),
+                        )
                     }
                 } else if (quest?.state is QuestState.Complete) {
                     handleCompletedQuestClick(quest)
@@ -538,5 +571,24 @@ class QuestViewModel
                     onCommonQuestCompleted()
                 }
             }
+        }
+
+        private fun observeDeeplinkQuestId() {
+            viewModelScope.launch {
+                savedStateHandle
+                    .getStateFlow<Long?>(KEY_DEEPLINK_QUEST_ID, null)
+                    .combine(_uiState) { questId, state ->
+                        Pair(questId, state.myJourneyState.questGroups)
+                    }.collectLatest { (questId, questGroups) ->
+                        if (questId != null && questGroups.isNotEmpty()) {
+                            onQuestClicked(questId)
+                            savedStateHandle[KEY_DEEPLINK_QUEST_ID] = null
+                        }
+                    }
+            }
+        }
+
+        companion object {
+            const val KEY_DEEPLINK_QUEST_ID = "deeplink_quest_id"
         }
     }

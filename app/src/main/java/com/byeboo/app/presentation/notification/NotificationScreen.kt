@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,27 +23,54 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.component.topbar.ByeBooTopbar
+import com.byeboo.app.core.designsystem.event.LocalSnackBarTrigger
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
 import com.byeboo.app.core.util.noRippleClickable
 import com.byeboo.app.core.util.screenHeightDp
 import com.byeboo.app.core.util.screenWidthDp
+import com.byeboo.app.presentation.notification.component.NotificationCard
+import com.byeboo.app.presentation.notification.model.NotificationUiModel
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun NotificationRoute(
+    navigateToHome: () -> Unit,
+    navigateToDeepLink: (String) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: NotificationViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showSnackBar = LocalSnackBarTrigger.current
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collectLatest { effect ->
+
+            when (effect) {
+                is NotificationSideEffect.NavigateToHome -> navigateToHome()
+                is NotificationSideEffect.NavigateToDeepLink -> {
+                    navigateToDeepLink(effect.landingUrl)
+                }
+                is NotificationSideEffect.ShowSnackBar -> showSnackBar(effect.snackBarType)
+            }
+        }
+    }
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.fetchNotificationList()
+        onPauseOrDispose { }
+    }
 
     NotificationScreen(
         uiState = uiState,
         paddingValues = paddingValues,
-        onBackClick = { /*Todo : back action */ },
-        onAllReadClick = {},
+        onBackClick = viewModel::onBackClicked,
+        onAllReadClick = viewModel::onAllNotificationsReadClicked,
+        onNotificationClick = viewModel::onNotificationClicked,
         modifier = modifier,
     )
 }
@@ -52,6 +80,7 @@ private fun NotificationScreen(
     uiState: NotificationUiState,
     onBackClick: () -> Unit,
     onAllReadClick: () -> Unit,
+    onNotificationClick: (NotificationUiModel) -> Unit,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +101,11 @@ private fun NotificationScreen(
 
         Spacer(modifier = Modifier.height(screenHeightDp(20.dp)))
 
-        NotificationSection(modifier = Modifier.weight(1f), uiState = uiState)
+        NotificationSection(
+            modifier = Modifier.weight(1f),
+            uiState = uiState,
+            onNotificationClick = onNotificationClick,
+        )
     }
 }
 
@@ -116,7 +149,7 @@ private fun NotificationListHeader(onAllReadClick: () -> Unit) {
             style = ByeBooTheme.typography.cap1,
             modifier =
                 Modifier.noRippleClickable(
-                    onClick = {}, // Todo : 클릭 시 동작
+                    onClick = onAllReadClick,
                 ),
         )
     }
@@ -125,6 +158,7 @@ private fun NotificationListHeader(onAllReadClick: () -> Unit) {
 @Composable
 private fun NotificationSection(
     uiState: NotificationUiState,
+    onNotificationClick: (NotificationUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (uiState.notificationList.isNotEmpty()) {
@@ -143,7 +177,7 @@ private fun NotificationSection(
             ) { notification ->
                 NotificationCard(
                     notification = notification,
-                    onClick = { notification.landingLink },
+                    onClick = { onNotificationClick(notification) },
                 )
             }
         }

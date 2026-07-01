@@ -67,10 +67,12 @@ fun HomeRoute(
     navigateToTutorial: () -> Unit,
     navigateToOffboardingCompletedGuide: () -> Unit,
     navigateToOffboardingNewJourney: () -> Unit,
+    navigateToNotificationList: () -> Unit,
     paddingValues: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val hasUnreadNotifications by viewModel.hasUnreadNotifications.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val showSnackBar = LocalSnackBarTrigger.current
 
@@ -95,6 +97,7 @@ fun HomeRoute(
                 is HomeSideEffect.NavigateToTutorial -> navigateToTutorial()
                 is HomeSideEffect.NavigateToOffboardingCompletedGuide -> navigateToOffboardingCompletedGuide()
                 is HomeSideEffect.NavigateToOffboardingNewJourney -> navigateToOffboardingNewJourney()
+                is HomeSideEffect.NavigateToNotificationList -> navigateToNotificationList()
                 is HomeSideEffect.ShowSnackBar -> {
                     showSnackBar(effect.snackBarType)
                 }
@@ -104,19 +107,21 @@ fun HomeRoute(
 
     HomeScreen(
         uiState = uiState,
+        hasUnreadNotification = hasUnreadNotifications,
         onClickQuest = viewModel::onClickQuest,
         onClickQuestStart = viewModel::onClickQuestStart,
         onHelpIconClick = viewModel::onHelpIconClicked,
         paddingValues = paddingValues,
         onOffboardingNewJourneyClick = viewModel::onOffboardingNewJourneyClicked,
         onLottieClick = viewModel::onLottieClicked,
-        onNotificationIconClick = { /*Todo: 알림*/ },
+        onNotificationIconClick = viewModel::onNotificationIconClicked,
     )
 }
 
 @Composable
 private fun HomeScreen(
     uiState: HomeUiState,
+    hasUnreadNotification: Boolean,
     onClickQuest: () -> Unit,
     onClickQuestStart: () -> Unit,
     onHelpIconClick: () -> Unit,
@@ -194,7 +199,7 @@ private fun HomeScreen(
                     Icon(
                         imageVector =
                             ImageVector.vectorResource(
-                                id = if (uiState.hasNewNotification) R.drawable.ic_new_notification else R.drawable.ic_notification,
+                                id = if (hasUnreadNotification) R.drawable.ic_new_notification else R.drawable.ic_notification,
                             ),
                         contentDescription = null,
                         tint = Color.Unspecified,

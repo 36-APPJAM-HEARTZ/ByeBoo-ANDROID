@@ -6,6 +6,7 @@ import com.byeboo.app.data.repositoryimpl.auth.TokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.auth.UserRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.fcm.FcmTokenRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.mypage.BlockedUsersRepositoryImpl
+import com.byeboo.app.data.repositoryimpl.notification.NotificationRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.offboarding.OffboardingJourneyRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.OffboardingQuestCompletedRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.QuestAiAnswerRepositoryImpl
@@ -18,6 +19,7 @@ import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestBehaviorRepository
 import com.byeboo.app.data.repositoryimpl.quest.behavior.QuestDetailBehaviorRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestDetailRecordingRepositoryImpl
 import com.byeboo.app.data.repositoryimpl.quest.recording.QuestRecordingRepositoryImpl
+import com.byeboo.app.domain.notification.NotificationRepository
 import com.byeboo.app.domain.repository.NewJourneyRepository
 import com.byeboo.app.domain.repository.auth.AuthRepository
 import com.byeboo.app.domain.repository.auth.TokenRepository
@@ -126,4 +128,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindQuestCommonRepository(questCommonRepositoryImpl: QuestCommonRepositoryImpl): QuestCommonRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationRepository(notificationRepositoryImpl: NotificationRepositoryImpl): NotificationRepository
 }

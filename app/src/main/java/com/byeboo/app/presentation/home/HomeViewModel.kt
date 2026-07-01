@@ -6,6 +6,7 @@ import com.byeboo.app.core.designsystem.type.CustomSnackBarType
 import com.byeboo.app.core.util.MixpanelUtil
 import com.byeboo.app.domain.model.JourneyStatusType
 import com.byeboo.app.domain.model.home.HomeStatus
+import com.byeboo.app.domain.notification.NotificationRepository
 import com.byeboo.app.domain.repository.auth.UserRepository
 import com.byeboo.app.domain.repository.quest.QuestStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class HomeViewModel
     constructor(
         private val userRepository: UserRepository,
         private val questStateRepository: QuestStateRepository,
+        private val notificationRepository: NotificationRepository,
         private val mixpanelUtil: MixpanelUtil,
     ) : ViewModel() {
         private val _uiState = MutableStateFlow(HomeUiState())
@@ -34,6 +36,8 @@ class HomeViewModel
 
         private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
         val sideEffect = _sideEffect.asSharedFlow()
+
+        val hasUnreadNotifications: StateFlow<Boolean> = notificationRepository.hasUnreadFlow
 
         init {
             viewModelScope.launch {
@@ -43,6 +47,11 @@ class HomeViewModel
                     }
                 }
             }
+
+            viewModelScope.launch {
+                notificationRepository.checkHasUnreadNotifications()
+            }
+
             loadInitialData()
         }
 
@@ -71,7 +80,10 @@ class HomeViewModel
                             properties =
                                 mapOf(
                                     "is_first_pageview" to false,
-                                    "journey_type" to (questStateRepository.getUserJourney() ?: "추적 실패"),
+                                    "journey_type" to (
+                                        questStateRepository.getUserJourney()
+                                            ?: "추적 실패"
+                                    ),
                                 ),
                         )
                     }.onFailure { e ->
@@ -118,6 +130,12 @@ class HomeViewModel
                 HomeStatus.TODAY_INCOMPLETE, HomeStatus.TODAY_COMPLETE -> JourneyStatusType.IN_PROGRESS
                 HomeStatus.JOURNEY_COMPLETE -> JourneyStatusType.COMPLETED
             }
+
+        fun onNotificationIconClicked() {
+            viewModelScope.launch {
+                _sideEffect.emit(HomeSideEffect.NavigateToNotificationList)
+            }
+        }
 
         fun onClickQuest() {
             viewModelScope.launch {

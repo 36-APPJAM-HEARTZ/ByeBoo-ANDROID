@@ -34,6 +34,7 @@ fun NavGraphBuilder.homeGraph(
     navigateToOffboardingNewJourney: () -> Unit,
     navigateToHome: () -> Unit,
     navigateToHomeOnboarding: () -> Unit,
+    navigateToNotificationList: () -> Unit,
     paddingValues: PaddingValues,
 ) {
     composable<Home> {
@@ -43,6 +44,7 @@ fun NavGraphBuilder.homeGraph(
             navigateToTutorial = navigateToTutorial,
             navigateToOffboardingCompletedGuide = navigateToOffboardingCompletedGuide,
             navigateToOffboardingNewJourney = navigateToOffboardingNewJourney,
+            navigateToNotificationList = navigateToNotificationList,
             paddingValues = paddingValues,
         )
     }

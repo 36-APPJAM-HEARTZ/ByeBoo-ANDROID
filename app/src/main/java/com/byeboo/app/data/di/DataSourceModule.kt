@@ -5,6 +5,7 @@ import com.byeboo.app.data.datasource.remote.auth.AuthRemoteDataSource
 import com.byeboo.app.data.datasource.remote.auth.UserRemoteDataSource
 import com.byeboo.app.data.datasource.remote.fcm.FcmRemoteDataSource
 import com.byeboo.app.data.datasource.remote.mypage.BlockedUsersDataSource
+import com.byeboo.app.data.datasource.remote.notification.NotificationDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingJourneyDataSource
 import com.byeboo.app.data.datasource.remote.offboarding.OffboardingQuestCompletedDataSource
 import com.byeboo.app.data.datasource.remote.quest.QuestAiAnswerDataSource
@@ -21,6 +22,7 @@ import com.byeboo.app.data.datasourceimpl.remote.auth.AuthRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.auth.UserRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.fcm.FcmRemoteDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.mypage.BlockedUsersDataSourceImpl
+import com.byeboo.app.data.datasourceimpl.remote.notification.NotificationDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingJourneyDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.offboarding.OffboardingQuestCompletedDataSourceImpl
 import com.byeboo.app.data.datasourceimpl.remote.quest.QuestAiAnswerDataSourceImpl
@@ -106,4 +108,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindsQuestAiAnswerDataSource(impl: QuestAiAnswerDataSourceImpl): QuestAiAnswerDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsNotificationDataSource(impl: NotificationDataSourceImpl): NotificationDataSource
 }
