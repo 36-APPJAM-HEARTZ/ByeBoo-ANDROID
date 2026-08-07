@@ -21,9 +21,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.pointerInput
@@ -53,7 +53,6 @@ import com.byeboo.app.presentation.quest.review.common.component.AnswerDetailTop
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 
 @Composable
 fun CommonOtherAnswerRoute(
@@ -106,6 +105,7 @@ fun CommonOtherAnswerRoute(
         onCommentComplete = viewModel::onCommentComplete,
         onCommentClick = viewModel::onCommentClicked,
         onReplyComplete = viewModel::onReplyComplete,
+        commentSubmissionSuccess = viewModel.commentSubmissionSuccess,
         replySubmissionSuccess = viewModel.replySubmissionSuccess,
         onDismissReplyBottomSheet = viewModel::onDismissReplyBottomSheet,
     )
@@ -126,11 +126,11 @@ private fun CommonOtherAnswerScreen(
     onCommentClick: (CommonReplyModel) -> Unit,
     onDismissReplyBottomSheet: () -> Unit,
     onReplyComplete: (String) -> Unit,
+    commentSubmissionSuccess: Flow<Unit>,
     replySubmissionSuccess: Flow<Unit>,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope()
     var commentText by remember { mutableStateOf("") }
     val maxLength = 500
     val isCompleteEnabled = commentText.isNotEmpty()
@@ -149,8 +149,6 @@ private fun CommonOtherAnswerScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    var shouldScrollToBottom by remember { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         snapshotFlow { imeTarget.getBottom(density) > 0 }
             .distinctUntilChanged()
@@ -163,12 +161,14 @@ private fun CommonOtherAnswerScreen(
         }
     }
 
-    LaunchedEffect(uiState.comments) {
-        if (shouldScrollToBottom) {
-            coroutineScope.launch {
-                scrollState.animateScrollTo(scrollState.maxValue)
-            }
-            shouldScrollToBottom = false
+    LaunchedEffect(commentSubmissionSuccess) {
+        commentSubmissionSuccess.collectLatest {
+            commentText = ""
+            keyboardController?.hide()
+            focusManager.clearFocus()
+
+            withFrameNanos { }
+            scrollState.animateScrollTo(scrollState.maxValue)
         }
     }
 
@@ -271,14 +271,12 @@ private fun CommonOtherAnswerScreen(
             onCompleteClick = {
                 if (uiState.editingComment?.target is MoreOptionTarget.Comment && !uiState.showReplyBottomSheet) {
                     onEditCommentComplete(commentText)
+                    commentText = ""
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
                 } else {
                     onCommentComplete(commentText)
-                    shouldScrollToBottom = true
                 }
-                commentText = ""
-                keyboardController?.hide()
-                focusManager.clearFocus()
-                shouldScrollToBottom = true
             },
         )
     }

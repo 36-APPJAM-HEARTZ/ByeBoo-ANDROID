@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -169,6 +170,7 @@ fun ReplyBottomSheet(
 
             val focusRequester = remember { FocusRequester() }
             val scrollState = rememberScrollState()
+            var shouldScrollToBottom by remember { mutableStateOf(false) }
 
             val isEditingCurrentSheetItem =
                 editingComment?.target?.id?.let { editingId ->
@@ -189,10 +191,10 @@ fun ReplyBottomSheet(
             }
 
             LaunchedEffect(replies) {
-                if (replies.isNotEmpty()) {
-                    coroutineScope.launch {
-                        scrollState.animateScrollTo(scrollState.maxValue)
-                    }
+                if (shouldScrollToBottom && replies.isNotEmpty()) {
+                    withFrameNanos { }
+                    scrollState.animateScrollTo(scrollState.maxValue)
+                    shouldScrollToBottom = false
                 }
             }
 
@@ -207,6 +209,7 @@ fun ReplyBottomSheet(
             LaunchedEffect(Unit) {
                 currentReplySubmissionSuccess.collect {
                     commentText = ""
+                    shouldScrollToBottom = true
                     focusManager.clearFocus(force = true)
                     ViewCompat
                         .getWindowInsetsController(view)

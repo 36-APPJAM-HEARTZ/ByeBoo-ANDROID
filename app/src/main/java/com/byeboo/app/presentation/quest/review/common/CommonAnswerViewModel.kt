@@ -53,6 +53,9 @@ constructor(
     private val _replySubmissionSuccess = MutableSharedFlow<Unit>()
     val replySubmissionSuccess: SharedFlow<Unit> = _replySubmissionSuccess.asSharedFlow()
 
+    private val _commentSubmissionSuccess = MutableSharedFlow<Unit>()
+    val commentSubmissionSuccess: SharedFlow<Unit> = _commentSubmissionSuccess.asSharedFlow()
+
     init {
         loadCurrentUserId()
         loadCommonAnswer()
@@ -66,7 +69,7 @@ constructor(
         }
     }
 
-    private fun loadCommonAnswer() {
+    private fun loadCommonAnswer(notifyCommentSubmissionSuccess: Boolean = false) {
         viewModelScope.launch {
             commonQuestRepository
                 .getCommonQuestAnswerDetail(answerId)
@@ -102,6 +105,10 @@ constructor(
                                         )
                                     }.toImmutableList(),
                         )
+                    }
+
+                    if (notifyCommentSubmissionSuccess) {
+                        _commentSubmissionSuccess.emit(Unit)
                     }
                 }.onFailure { exception ->
                     _sideEffect.emit(
@@ -229,7 +236,7 @@ constructor(
                     content = content,
                     targetId = answerId,
                 ).onSuccess {
-                    loadCommonAnswer()
+                    loadCommonAnswer(notifyCommentSubmissionSuccess = true)
                 }.onFailure { exception ->
                     _sideEffect.emit(
                         CommonAnswerSideEffect.ShowSnackBar(
