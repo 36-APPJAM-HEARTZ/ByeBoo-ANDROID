@@ -173,6 +173,7 @@ constructor(
             it.copy(
                 showReplyBottomSheet = true,
                 selectedComment = comment,
+                selectedReplies = persistentListOf(),
             )
         }
         loadCommentReplies(commentId = comment.replyId)

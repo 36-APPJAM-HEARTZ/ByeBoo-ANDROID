@@ -240,6 +240,12 @@ private fun CommonOtherAnswerScreen(
             Spacer(modifier = Modifier.height(screenHeightDp(24.dp)))
 
             uiState.comments.forEach { reply ->
+                val openReplyBottomSheet = {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    onCommentClick(reply)
+                }
+
                 CommonReplyItem(
                     reply = reply,
                     onMoreOptionsClick = {
@@ -250,11 +256,8 @@ private fun CommonOtherAnswerScreen(
                             ),
                         )
                     },
-                    onCommentClick = {
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                        onCommentClick(reply)
-                    },
+                    onCommentClick = openReplyBottomSheet,
+                    onClick = openReplyBottomSheet,
                 )
             }
         }
