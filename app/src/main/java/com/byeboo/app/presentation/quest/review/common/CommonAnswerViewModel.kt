@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -59,6 +60,15 @@ constructor(
     init {
         loadCurrentUserId()
         loadCommonAnswer()
+        observeRefreshEvent()
+    }
+
+    private fun observeRefreshEvent() {
+        viewModelScope.launch {
+            commonQuestRepository.refreshEvent.collect {
+                loadCommonAnswer()
+            }
+        }
     }
 
     private fun loadCurrentUserId() {
@@ -303,8 +313,6 @@ constructor(
 
                     when (editingComment.target) {
                         is MoreOptionTarget.Comment -> {
-                            loadCommonAnswer()
-
                             if (_uiState.value.showReplyBottomSheet) {
                                 loadCommentReplies(editingComment.target.id)
                             }
