@@ -23,12 +23,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import com.byeboo.app.R
 import com.byeboo.app.core.designsystem.ui.theme.ByeBooTheme
@@ -47,23 +50,22 @@ fun CommonReplyItem(
     isReply: Boolean = false,
     onClick: () -> Unit = {},
 ) {
-    var isExpanded by remember(reply.content) { mutableStateOf(false) }
-    var measuredLayoutResult by remember(reply.content) { mutableStateOf<TextLayoutResult?>(null) }
+    var isExpanded by remember(reply.replyId, reply.content) { mutableStateOf(false) }
+    var hasOverflow by remember(reply.replyId, reply.content) { mutableStateOf(false) }
+    var collapsedTextEnd by remember(reply.replyId, reply.content) { mutableStateOf(reply.content.length) }
 
     val gray400Color = ByeBooTheme.colors.gray400
     val body6FontSize = ByeBooTheme.typography.body6.fontSize
+    val bodyTextStyle = ByeBooTheme.typography.body6.copy(color = ByeBooTheme.colors.gray100)
+    val textMeasurer = rememberTextMeasurer()
 
     val displayText =
-        remember(reply.content, isExpanded, measuredLayoutResult) {
+        remember(reply.content, isExpanded, hasOverflow, collapsedTextEnd) {
             buildAnnotatedString {
-                val layout = measuredLayoutResult
-                if (isExpanded || layout == null || layout.lineCount <= 5) {
+                if (isExpanded || !hasOverflow) {
                     append(reply.content)
                 } else {
-                    val lastCharIndex = layout.getLineEnd(4)
-                    val adjustedIndex = (lastCharIndex - 5).coerceAtLeast(0)
-
-                    append(reply.content.substring(0, adjustedIndex))
+                    append(reply.content.substring(0, collapsedTextEnd).trimEnd())
                     append("... ")
 
                     withLink(
@@ -140,20 +142,57 @@ fun CommonReplyItem(
                     style = ByeBooTheme.typography.body6,
                     color = Color.Transparent,
                     maxLines = 5,
-                    modifier = Modifier.fillMaxWidth(),
+                    overflow = TextOverflow.Clip,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clearAndSetSemantics { },
                     onTextLayout = { result ->
-                        if (
-                            measuredLayoutResult?.lineCount != result.lineCount ||
-                            measuredLayoutResult?.size != result.size
-                        ) {
-                            measuredLayoutResult = result
+                        val isOverflowing = result.hasVisualOverflow
+                        if (hasOverflow != isOverflowing) {
+                            hasOverflow = isOverflowing
+                        }
+
+                        if (isOverflowing) {
+                            var low = 0
+                            var high = result.getLineEnd(4, visibleEnd = true).coerceAtMost(reply.content.length)
+                            var bestEnd = 0
+
+                            while (low <= high) {
+                                val candidateEnd = (low + high) / 2
+                                val candidate =
+                                    reply.content
+                                        .substring(0, candidateEnd)
+                                        .trimEnd() + "... 더보기"
+                                val candidateLayout =
+                                    textMeasurer.measure(
+                                        text = candidate,
+                                        style = bodyTextStyle,
+                                        overflow = TextOverflow.Clip,
+                                        maxLines = 5,
+                                        constraints = Constraints(maxWidth = result.size.width),
+                                    )
+
+                                if (!candidateLayout.hasVisualOverflow) {
+                                    bestEnd = candidateEnd
+                                    low = candidateEnd + 1
+                                } else {
+                                    high = candidateEnd - 1
+                                }
+                            }
+
+                            if (collapsedTextEnd != bestEnd) {
+                                collapsedTextEnd = bestEnd
+                            }
                         }
                     },
                 )
 
                 Text(
                     text = displayText,
-                    style = ByeBooTheme.typography.body6.copy(color = ByeBooTheme.colors.gray100),
+                    style = bodyTextStyle,
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 5,
+                    overflow = TextOverflow.Clip,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
